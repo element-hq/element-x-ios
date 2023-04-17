@@ -18,5 +18,5 @@ import Combine
 import Foundation
 
 protocol RoomTimelineProviderProtocol {
-    var itemsPublisher: CurrentValueSubject<[TimelineItemProxy], Never> { get }
+    var itemsPublisher: CurrentValuePublisher<[TimelineItemProxy], Never> { get }
 }

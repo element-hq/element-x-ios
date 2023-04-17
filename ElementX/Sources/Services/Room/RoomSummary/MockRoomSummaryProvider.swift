@@ -23,9 +23,9 @@ enum MockRoomSummaryProviderState {
 }
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
-    let roomListPublisher: CurrentValueSubject<[RoomSummary], Never>
-    let statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never>
-    let countPublisher: CurrentValueSubject<UInt, Never>
+    let roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>
+    let statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>
+    let countPublisher: CurrentValuePublisher<UInt, Never>
     
     convenience init() {
         self.init(state: .loading)

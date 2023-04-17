@@ -25,13 +25,25 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    let roomListPublisher = CurrentValueSubject<[RoomSummary], Never>([])
-    let statePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
-    let countPublisher = CurrentValueSubject<UInt, Never>(0)
+    private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
+    private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
+    private let countSubject = CurrentValueSubject<UInt, Never>(0)
+    
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+        roomListSubject.asCurrentValuePublisher()
+    }
+
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
+        stateSubject.asCurrentValuePublisher()
+    }
+
+    var countPublisher: CurrentValuePublisher<UInt, Never> {
+        countSubject.asCurrentValuePublisher()
+    }
     
     private var rooms: [RoomSummary] = [] {
         didSet {
-            roomListPublisher.send(rooms)
+            roomListSubject.send(rooms)
         }
     }
     
@@ -44,15 +56,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             buildSummaryForRoomListEntry(roomListEntry)
         }
         
-        roomListPublisher.send(rooms) // didSet not called from initialisers
+        roomListSubject.send(rooms) // didSet not called from initialisers
         
         slidingSyncViewProxy.statePublisher
             .map(RoomSummaryProviderState.init)
-            .subscribe(statePublisher)
+            .subscribe(stateSubject)
             .store(in: &cancellables)
         
         slidingSyncViewProxy.countPublisher
-            .subscribe(countPublisher)
+            .subscribe(countSubject)
             .store(in: &cancellables)
         
         slidingSyncViewProxy.diffPublisher

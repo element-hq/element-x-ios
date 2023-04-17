@@ -31,11 +31,15 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
     
-    let itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
+    private let itemsSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
+    
+    var itemsPublisher: CurrentValuePublisher<[TimelineItemProxy], Never> {
+        itemsSubject.asCurrentValuePublisher()
+    }
     
     private var itemProxies: [TimelineItemProxy] {
         didSet {
-            itemsPublisher.send(itemProxies)
+            itemsSubject.send(itemProxies)
         }
     }
     

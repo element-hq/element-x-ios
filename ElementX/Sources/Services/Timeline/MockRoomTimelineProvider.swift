@@ -17,7 +17,7 @@
 import Combine
 
 struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
-    var itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
+    var itemsPublisher = CurrentValuePublisher<[TimelineItemProxy], Never>([])
     
     private var itemProxies = [TimelineItemProxy]()
 }
