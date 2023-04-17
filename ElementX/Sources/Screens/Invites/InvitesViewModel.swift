@@ -149,7 +149,9 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     }
     
     private func displayError(_ error: RoomProxyError) {
-        #warning("Assign alertInfo here")
+        state.bindings.alertInfo = .init(id: true,
+                                         title: L10n.commonError,
+                                         message: L10n.errorUnknown)
     }
 }
 
