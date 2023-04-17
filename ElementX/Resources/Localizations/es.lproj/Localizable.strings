@@ -182,6 +182,7 @@
 "screen_create_room_action_create_room" = "Nueva sala";
 "screen_create_room_action_invite_people" = "Invitar gente";
 "screen_create_room_add_people_title" = "Añadir personas";
+"screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.";
 "screen_create_room_private_option_title" = "Private room (invite only)";
 "screen_create_room_public_option_description" = "Messages are not encrypted and anyone can read them. You can enable encryption at a later date.";
