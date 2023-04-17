@@ -142,8 +142,8 @@ class UserSessionFlowCoordinatorStateMachine {
     
     /// Attempt to move the state machine to another state through an event
     /// It will either invoke the `transitionHandler` or the `errorHandler` depending on its current state
-    func processEvent(_ event: Event) {
-        stateMachine.tryEvent(event)
+    func processEvent(_ event: Event, userInfo: EventUserInfo? = nil) {
+        stateMachine.tryEvent(event, userInfo: userInfo)
     }
     
     /// Registers a callback for processing state machine transitions
@@ -165,4 +165,8 @@ class UserSessionFlowCoordinatorStateMachine {
             return false
         }
     }
+}
+
+struct EventUserInfo {
+    let animated: Bool
 }

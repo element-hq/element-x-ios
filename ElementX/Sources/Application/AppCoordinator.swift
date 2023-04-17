@@ -267,7 +267,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
 
         if let storedAppRoute {
-            userSessionFlowCoordinator.handleAppRoute(storedAppRoute)
+            userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
     }
     
@@ -441,7 +441,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     private func handleAppRoute(_ appRoute: AppRoute) {
         if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute)
+            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
         } else {
             storedAppRoute = appRoute
         }

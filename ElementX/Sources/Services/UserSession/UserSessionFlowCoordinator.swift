@@ -64,16 +64,16 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         stateMachine.isDisplayingRoomScreen(withRoomId: roomId)
     }
 
-    func handleAppRoute(_ appRoute: AppRoute) {
+    func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch stateMachine.state {
         case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
-            navigationSplitCoordinator.setSheetCoordinator(nil)
+            navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         case .roomList, .initial:
             break
         }
         switch appRoute {
         case .room(let roomID):
-            stateMachine.processEvent(.selectRoom(roomId: roomID))
+            stateMachine.processEvent(.selectRoom(roomId: roomID), userInfo: .init(animated: animated))
         }
     }
 
@@ -83,7 +83,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
-            
+            let animated = (context.userInfo as? EventUserInfo)?.animated ?? true
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 self.presentHomeScreen()
@@ -94,31 +94,31 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                     return
                 }
                 
-                self.presentRoomWithIdentifier(selectedRoomId)
+                self.presentRoomWithIdentifier(selectedRoomId, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
                 break
 
             case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
-                self.presentSessionVerification()
+                self.presentSessionVerification(animated: animated)
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
-                self.presentSettingsScreen()
+                self.presentSettingsScreen(animated: animated)
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
-                self.presentFeedbackScreen()
+                self.presentFeedbackScreen(animated: animated)
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
                 
             case (.roomList, .showStartChatScreen, .startChatScreen):
-                self.presentStartChat()
+                self.presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
             case (.roomList, .showInvitesScreen, .invitesScreen):
-                self.presentInvitesList()
+                self.presentInvitesList(animated: animated)
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
             default:
@@ -166,7 +166,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     // MARK: Rooms
 
-    private func presentRoomWithIdentifier(_ roomIdentifier: String) {
+    private func presentRoomWithIdentifier(_ roomIdentifier: String, animated: Bool = true) {
         Task { @MainActor in
             guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
                 MXLog.error("Invalid room identifier: \(roomIdentifier)")
@@ -197,7 +197,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 }
             }
             
-            detailNavigationStackCoordinator.setRootCoordinator(coordinator) { [weak self, roomIdentifier] in
+            detailNavigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self, roomIdentifier] in
                 guard let self else { return }
                 
                 // Move the state machine to no room selected if the room currently being dimissed
@@ -210,7 +210,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
             
             if navigationSplitCoordinator.detailCoordinator == nil {
-                navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator)
+                navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
             }
         }
     }
@@ -222,7 +222,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
     // MARK: Settings
     
-    private func presentSettingsScreen() {
+    private func presentSettingsScreen(animated: Bool) {
         let settingsNavigationStackCoordinator = NavigationStackCoordinator()
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: settingsNavigationStackCoordinator)
@@ -243,7 +243,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
         }
         
-        settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator)
+        settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
         
         navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
@@ -252,7 +252,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     // MARK: Session verification
     
-    private func presentSessionVerification() {
+    private func presentSessionVerification(animated: Bool) {
         guard let sessionVerificationController = userSession.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
@@ -265,14 +265,14 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }
         
-        navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
         }
     }
     
     // MARK: Start Chat
     
-    private func presentStartChat() {
+    private func presentStartChat(animated: Bool) {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
@@ -293,14 +293,14 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
         startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
         
     // MARK: Bug reporting
     
-    private func presentFeedbackScreen(for image: UIImage? = nil) {
+    private func presentFeedbackScreen(animated: Bool, for image: UIImage? = nil) {
         let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
@@ -318,14 +318,14 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
         feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
     }
     
     // MARK: Invites list
     
-    private func presentInvitesList() {
+    private func presentInvitesList(animated: Bool) {
         let parameters = InvitesCoordinatorParameters(userSession: userSession)
         let coordinator = InvitesCoordinator(parameters: parameters)
         
@@ -333,7 +333,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             .sink { _ in }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setDetailCoordinator(coordinator) { [weak self] in
+        navigationSplitCoordinator.setDetailCoordinator(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.closedInvitesScreen)
         }
     }
