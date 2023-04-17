@@ -436,6 +436,8 @@ public enum L10n {
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Add people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
+  /// An error occurred when creating the room
+  public static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
   /// Messages in this room are encrypted. Encryption can’t be disabled afterwards.
   public static var screenCreateRoomPrivateOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_private_option_description") }
   /// Private room (invite only)
