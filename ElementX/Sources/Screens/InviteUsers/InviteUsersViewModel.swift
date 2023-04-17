@@ -72,5 +72,4 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
-    }
 }

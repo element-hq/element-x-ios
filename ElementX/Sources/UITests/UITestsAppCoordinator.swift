@@ -327,7 +327,7 @@ class MockScreen: Identifiable {
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             clientProxy.searchUsersResult = .success(.init(results: [.mockAlice], limited: true))
             clientProxy.getProfileResult = .failure(.failedGettingUserProfile)
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()), navigationStackCoordinator: navigationStackCoordinator))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:
@@ -378,7 +378,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .inviteUsers:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = InviteUsersInRoomCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
+            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }

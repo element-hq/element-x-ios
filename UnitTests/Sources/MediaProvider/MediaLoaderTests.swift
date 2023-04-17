@@ -107,8 +107,6 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func hasFirstSynced() -> Bool { fatalError() }
     
-    func getProfile(userId: String) throws -> MatrixRustSDK.UserProfile { fatalError() }
-    
     func homeserver() -> String { fatalError() }
     
     func isSoftLogout() -> Bool { fatalError() }

@@ -33,8 +33,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-
-    private var cancellables: Set<AnyCancellable> = .init()
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
