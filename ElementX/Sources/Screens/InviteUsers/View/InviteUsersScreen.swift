@@ -24,9 +24,7 @@ struct InviteUsersScreen: View {
             if !context.viewState.selectedUsers.isEmpty {
                 selectedUsersSection
             }
-            Form {
-                usersSection
-            }
+            searchContent
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -49,7 +47,9 @@ struct InviteUsersScreen: View {
         if context.viewState.hasEmptySearchResults {
             noResultsContent
         } else {
-            usersSection
+            Form {
+                usersSection
+            }
         }
     }
     
