@@ -10,28 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
-  /// Help us identify issues and improve %@ by sharing anonymous usage data.
-  /// 
-  /// You can read all our terms %@.
-  public static func analyticsOptInContent(_ p1: Any, _ p2: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_content", String(describing: p1), String(describing: p2))
-  }
-  /// here
-  public static var analyticsOptInContentLink: String { return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_content_link") }
-  /// We <b>don't</b> record or profile any account data
-  public static var analyticsOptInListItem1: String { return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_list_item_1") }
-  /// We <b>don't</b> share information with third parties
-  public static var analyticsOptInListItem2: String { return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_list_item_2") }
-  /// You can turn this off anytime in settings
-  public static var analyticsOptInListItem3: String { return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_list_item_3") }
-  /// Help improve %@
-  public static func analyticsOptInTitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_title", String(describing: p1))
-  }
-  /// Analytics
-  public static var analyticsSettings: String { return UntranslatedL10n.tr("Untranslated", "analytics_settings") }
-  /// Share analytics data
-  public static var analyticsSettingsToggleText: String { return UntranslatedL10n.tr("Untranslated", "analytics_settings_toggle_text") }
   /// Camera
   public static var mediaUploadCameraPicker: String { return UntranslatedL10n.tr("Untranslated", "media_upload_camera_picker") }
   /// Document

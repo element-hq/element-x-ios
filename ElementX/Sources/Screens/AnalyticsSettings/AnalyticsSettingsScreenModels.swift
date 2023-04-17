@@ -31,15 +31,16 @@ enum AnalyticsSettingsScreenViewAction {
 }
 
 struct AnalyticsSettingsScreenStrings {
-    let optInContent: AttributedString
+    let sectionFooter: AttributedString
     
     init(termsURL: URL) {
-        // Create the opt in content with a placeholder.
+        let content = AttributedString(L10n.screenAnalyticsHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
+        // Create the 'read terms' with a placeholder.
         let linkPlaceholder = "{link}"
-        var optInContent = AttributedString(UntranslatedL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName, linkPlaceholder))
-        optInContent.replace(linkPlaceholder,
-                             with: UntranslatedL10n.analyticsOptInContentLink,
-                             asLinkTo: termsURL)
-        self.optInContent = optInContent
+        var readTerms = AttributedString(L10n.screenAnalyticsReadTerms(linkPlaceholder))
+        readTerms.replace(linkPlaceholder,
+                          with: L10n.screenAnalyticsReadTermsContentLink,
+                          asLinkTo: termsURL)
+        sectionFooter = content + "\n\n" + readTerms
     }
 }

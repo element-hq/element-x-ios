@@ -4,17 +4,6 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
-// MARK: - Analytics
-
-"analytics_opt_in_title" = "Help improve %@";
-"analytics_opt_in_content" = "Help us identify issues and improve %@ by sharing anonymous usage data.\n\nYou can read all our terms %@.";
-"analytics_opt_in_content_link" = "here";
-"analytics_opt_in_list_item_1" = "We <b>don\'t</b> record or profile any account data";
-"analytics_opt_in_list_item_2" = "We <b>don\'t</b> share information with third parties";
-"analytics_opt_in_list_item_3" = "You can turn this off anytime in settings";
-"analytics_settings" = "Analytics";
-"analytics_settings_toggle_text" = "Share analytics data";
-
 // MARK: - Soft logout
 
 "soft_logout_forgot_password" = "Forgot password";

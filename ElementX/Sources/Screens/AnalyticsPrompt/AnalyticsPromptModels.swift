@@ -38,16 +38,18 @@ struct AnalyticsPromptViewState: BindableState {
 /// A collection of strings for the UI that need to be parsed from HTML
 struct AnalyticsPromptStrings {
     let optInContent: AttributedString
-    let point1 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem1) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem1)
-    let point2 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem2) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem2)
+    let point1 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptDataUsage) ?? AttributedString(L10n.screenAnalyticsPromptDataUsage)
+    let point2 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptThirdPartySharing) ?? AttributedString(L10n.screenAnalyticsPromptThirdPartySharing)
+    let point3 = L10n.screenAnalyticsPromptSettings
     
     init(termsURL: URL) {
+        let content = AttributedString(L10n.screenAnalyticsPromptHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
         // Create the opt in content with a placeholder.
         let linkPlaceholder = "{link}"
-        var optInContent = AttributedString(UntranslatedL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName, linkPlaceholder))
-        optInContent.replace(linkPlaceholder,
-                             with: UntranslatedL10n.analyticsOptInContentLink,
-                             asLinkTo: termsURL)
-        self.optInContent = optInContent
+        var readTerms = AttributedString(L10n.screenAnalyticsPromptReadTerms(linkPlaceholder))
+        readTerms.replace(linkPlaceholder,
+                          with: L10n.screenAnalyticsPromptReadTermsContentLink,
+                          asLinkTo: termsURL)
+        optInContent = content + "\n\n" + readTerms
     }
 }

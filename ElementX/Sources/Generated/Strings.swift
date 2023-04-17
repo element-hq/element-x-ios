@@ -120,6 +120,8 @@ public enum L10n {
   public static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
   /// About
   public static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
+  /// Analytics
+  public static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
   /// Audio
   public static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
   /// Bubbles
@@ -390,6 +392,38 @@ public enum L10n {
   public static func roomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "room_timeline_state_changes", p1)
   }
+  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
+  public static func screenAnalyticsHelpUsImprove(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_help_us_improve", String(describing: p1))
+  }
+  /// We <b>don't</b> record or profile any account data
+  public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
+  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
+  public static func screenAnalyticsPromptHelpUsImprove(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_prompt_help_us_improve", String(describing: p1))
+  }
+  /// You can read all our terms %1$@.
+  public static func screenAnalyticsPromptReadTerms(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_prompt_read_terms", String(describing: p1))
+  }
+  /// here
+  public static var screenAnalyticsPromptReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_prompt_read_terms_content_link") }
+  /// You can turn this off anytime in settings
+  public static var screenAnalyticsPromptSettings: String { return L10n.tr("Localizable", "screen_analytics_prompt_settings") }
+  /// We <b>don't</b> share information with third parties
+  public static var screenAnalyticsPromptThirdPartySharing: String { return L10n.tr("Localizable", "screen_analytics_prompt_third_party_sharing") }
+  /// Help improve %1$@
+  public static func screenAnalyticsPromptTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_prompt_title", String(describing: p1))
+  }
+  /// You can read all our terms %1$@.
+  public static func screenAnalyticsReadTerms(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_read_terms", String(describing: p1))
+  }
+  /// here
+  public static var screenAnalyticsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_read_terms_content_link") }
+  /// Share analytics data
+  public static var screenAnalyticsShareData: String { return L10n.tr("Localizable", "screen_analytics_share_data") }
   /// Attach screenshot
   public static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions
@@ -468,6 +502,18 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
+  /// Are you sure you want to decline joining %1$@?
+  public static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
+  }
+  /// Decline invite
+  public static var screenInvitesDeclineChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_chat_title") }
+  /// Are you sure you want to decline to chat with %1$@?
+  public static func screenInvitesDeclineDirectChatMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_invites_decline_direct_chat_message", String(describing: p1))
+  }
+  /// Decline chat
+  public static var screenInvitesDeclineDirectChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_direct_chat_title") }
   /// No Invites
   public static var screenInvitesEmptyList: String { return L10n.tr("Localizable", "screen_invites_empty_list") }
   /// %1$@ invited you

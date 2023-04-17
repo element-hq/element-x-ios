@@ -25,21 +25,21 @@ struct AnalyticsSettingsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(UntranslatedL10n.analyticsSettings)
+        .navigationTitle(L10n.commonAnalytics)
         .navigationBarTitleDisplayMode(.inline)
     }
     
     var analyticsSection: some View {
         Section {
             Toggle(isOn: $context.enableAnalytics) {
-                Label(UntranslatedL10n.analyticsSettingsToggleText, systemImage: "chart.bar")
+                Label(L10n.screenAnalyticsShareData, systemImage: "chart.bar")
             }
             .toggleStyle(.compoundForm)
             .onChange(of: context.enableAnalytics) { _ in
                 context.send(viewAction: .toggleAnalytics)
             }
         } footer: {
-            Text(context.viewState.strings.optInContent)
+            Text(context.viewState.strings.sectionFooter)
                 .compoundFormSectionFooter()
                 .tint(.element.links)
         }

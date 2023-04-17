@@ -59,7 +59,7 @@ struct AnalyticsPrompt: View {
             Image(uiImage: Asset.Images.analyticsLogo.image)
                 .padding(.bottom, 24)
             
-            Text(UntranslatedL10n.analyticsOptInTitle(InfoPlistReader.main.bundleDisplayName))
+            Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
@@ -84,7 +84,7 @@ struct AnalyticsPrompt: View {
         VStack(alignment: .leading, spacing: 8) {
             AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point1)
             AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point2)
-            AnalyticsPromptCheckmarkItem(string: UntranslatedL10n.analyticsOptInListItem3)
+            AnalyticsPromptCheckmarkItem(string: context.viewState.strings.point3)
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.element.body)

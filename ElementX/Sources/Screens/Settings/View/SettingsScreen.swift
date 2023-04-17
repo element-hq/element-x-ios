@@ -115,7 +115,7 @@ struct SettingsScreen: View {
             
             // Analytics
             Button { context.send(viewAction: .analytics) } label: {
-                Label(UntranslatedL10n.analyticsSettings, systemImage: "chart.bar")
+                Label(L10n.commonAnalytics, systemImage: "chart.bar")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("analyticsButton")
