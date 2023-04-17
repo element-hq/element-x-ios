@@ -32,6 +32,7 @@ enum FormRowAccessory: View {
             ProgressView()
         case .selection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.element.body)
                 .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
         }
     }
@@ -128,6 +129,10 @@ struct FormButtonStyles_Previews: PreviewProvider {
                     Text("Hello world")
                 }
                 .buttonStyle(FormButtonStyle())
+                Button { } label: {
+                    Text("Selection")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
             }
             .formSectionStyle()
 

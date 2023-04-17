@@ -23,7 +23,7 @@ enum InviteUsersViewModelAction {
 struct InviteUsersViewState: BindableState {
     var bindings = InviteUsersViewStateBindings()
     
-    var usersSection: SearchUsersSection = .init(type: .suggestions, users: [])
+    var usersSection: SearchUsersSection = .init(type: .empty, users: [])
     var selectedUsers: [UserProfile] = []
     
     var isSearching: Bool {
@@ -35,6 +35,10 @@ struct InviteUsersViewState: BindableState {
     }
     
     var scrollToLastID: String?
+    
+    func isUserSelected(_ user: UserProfile) -> Bool {
+        selectedUsers.contains { $0.userID == user.userID }
+    }
 }
 
 struct InviteUsersViewStateBindings {

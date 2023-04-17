@@ -24,7 +24,7 @@ enum StartChatViewModelAction {
 
 struct StartChatViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
-    var usersSection: SearchUsersSection = .init(type: .suggestions, users: [])
+    var usersSection: SearchUsersSection = .init(type: .empty, users: [])
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty

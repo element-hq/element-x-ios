@@ -43,7 +43,7 @@ struct InviteUsersSelectedItem: View {
     }
 }
 
-struct SelectedInvitedUserItem_Previews: PreviewProvider {
+struct InviteUsersSelectedItem_Previews: PreviewProvider {
     static var previews: some View {
         InviteUsersSelectedItem(user: .mockAlice, imageProvider: MockMediaProvider(), dismissAction: { })
     }

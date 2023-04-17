@@ -41,6 +41,8 @@ struct InviteUsersScreen: View {
         .alert(item: $context.alertInfo) { $0.alert }
     }
     
+    // MARK: - Private
+    
     /// The content shown in the form when a search query has been entered.
     @ViewBuilder
     private var searchContent: some View {
@@ -64,10 +66,10 @@ struct InviteUsersScreen: View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .tapUser(user)) } label: {
-                    SearchUsersCell(user: user,
+                    UserProfileCell(user: user,
                                     imageProvider: context.imageProvider)
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.selectedUsers.contains { $0.userID == user.userID })))
+                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
             }
         } header: {
             if let title = context.viewState.usersSection.type.title {
@@ -114,7 +116,7 @@ struct InviteUsersScreen: View {
 
 // MARK: - Previews
 
-struct InviteUsers_Previews: PreviewProvider {
+struct InviteUsersScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())

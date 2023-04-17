@@ -43,7 +43,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         case .proceed:
             break
         case .tapUser(let user):
-            if state.selectedUsers.contains(where: { $0.userID == user.userID }) {
+            if state.isUserSelected(user) {
                 deselect(user)
             } else {
                 select(user)

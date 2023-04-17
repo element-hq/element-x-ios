@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SearchUsersCell: View {
+struct UserProfileCell: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
     

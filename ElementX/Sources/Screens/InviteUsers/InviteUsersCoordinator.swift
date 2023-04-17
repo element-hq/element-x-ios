@@ -27,7 +27,7 @@ enum InviteUsersCoordinatorAction {
 
 final class InviteUsersCoordinator: CoordinatorProtocol {
     private let parameters: InviteUsersCoordinatorParameters
-    private var viewModel: InviteUsersViewModelProtocol
+    private let viewModel: InviteUsersViewModelProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
