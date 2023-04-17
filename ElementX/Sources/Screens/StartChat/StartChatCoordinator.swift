@@ -14,11 +14,13 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let navigationStackCoordinator: NavigationStackCoordinator?
 }
 
 enum StartChatCoordinatorAction {
@@ -29,8 +31,12 @@ enum StartChatCoordinatorAction {
 final class StartChatCoordinator: CoordinatorProtocol {
     private let parameters: StartChatCoordinatorParameters
     private var viewModel: StartChatViewModelProtocol
+    private let actionsSubject: PassthroughSubject<StartChatCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
-    var callback: ((StartChatCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<StartChatCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
@@ -39,20 +45,39 @@ final class StartChatCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
+        viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .close:
-                self.callback?(.close)
+                self.actionsSubject.send(.close)
             case .createRoom:
-                break
+                // before creating a room we select the users we would like to invite in that room
+                self.presentInviteUsersScreen()
             case .openRoom(let identifier):
-                self.callback?(.openRoom(withIdentifier: identifier))
+                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
             }
         }
+        .store(in: &cancellables)
     }
         
+    // MARK: - Public
+    
     func toPresentable() -> AnyView {
         AnyView(StartChatScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func presentInviteUsersScreen() {
+        let inviteParameters = InviteUsersCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = InviteUsersCoordinator(parameters: inviteParameters)
+        coordinator.actions.sink { [weak self] result in
+            switch result {
+            case .close:
+                self?.parameters.navigationStackCoordinator?.pop()
+            }
+        }
+        .store(in: &cancellables)
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
 }

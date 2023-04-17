@@ -35,10 +35,10 @@ class StartChatScreenViewModelTests: XCTestCase {
     
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
-        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        XCTAssertEqual(context.viewState.usersSection.type, .empty)
         
         await search(query: "AA")
-        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        XCTAssertEqual(context.viewState.usersSection.type, .empty)
         
         await search(query: "AAA")
         assertSearchResults(toBe: 0)

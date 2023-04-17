@@ -16,16 +16,16 @@
 
 import Foundation
 
-enum StartChatViewModelAction {
+enum InviteUsersViewModelAction {
     case close
-    case createRoom
-    case openRoom(withIdentifier: String)
 }
 
-struct StartChatViewState: BindableState {
-    var bindings = StartChatScreenViewStateBindings()
+struct InviteUsersViewState: BindableState {
+    var bindings = InviteUsersViewStateBindings()
+    
     var usersSection: SearchUsersSection = .init(type: .empty, users: [])
-
+    var selectedUsers: [UserProfile] = []
+    
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
     }
@@ -33,18 +33,24 @@ struct StartChatViewState: BindableState {
     var hasEmptySearchResults: Bool {
         isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
+    
+    var scrollToLastID: String?
+    
+    func isUserSelected(_ user: UserProfile) -> Bool {
+        selectedUsers.contains { $0.userID == user.userID }
+    }
 }
 
-struct StartChatScreenViewStateBindings {
+struct InviteUsersViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ClientProxyError>?
 }
 
-enum StartChatViewAction {
+enum InviteUsersViewAction {
     case close
-    case createRoom
-    case inviteFriends
-    case selectUser(UserProfile)
+    case proceed
+    case tapUser(UserProfile)
+    case deselectUser(UserProfile)
 }

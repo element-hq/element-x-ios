@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol StartChatViewModelProtocol {
-    var actions: AnyPublisher<StartChatViewModelAction, Never> { get }
-    var context: StartChatViewModelType.Context { get }
+protocol InviteUsersViewModelProtocol {
+    var actions: AnyPublisher<InviteUsersViewModelAction, Never> { get }
+    var context: InviteUsersViewModelType.Context { get }
 }

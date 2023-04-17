@@ -14,10 +14,18 @@
 // limitations under the License.
 //
 
-import Combine
+import ElementX
+import XCTest
 
-@MainActor
-protocol StartChatViewModelProtocol {
-    var actions: AnyPublisher<StartChatViewModelAction, Never> { get }
-    var context: StartChatViewModelType.Context { get }
+class InviteUsersScreenUITests: XCTestCase {
+    func testLanding() {
+        let app = Application.launch(.inviteUsers)
+        app.assertScreenshot(.inviteUsers)
+    }
+
+    func testSelectedUsers() {
+        let app = Application.launch(.inviteUsers)
+        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        app.assertScreenshot(.inviteUsers, step: 1)
+    }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,24 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-@MainActor
-protocol StartChatViewModelProtocol {
-    var actions: AnyPublisher<StartChatViewModelAction, Never> { get }
-    var context: StartChatViewModelType.Context { get }
+struct SearchUsersSection {
+    let type: SearchUserSectionType
+    let users: [UserProfile]
+}
+
+enum SearchUserSectionType: Equatable {
+    case searchResult
+    case suggestions
+    case empty
+    
+    var title: String? {
+        switch self {
+        case .searchResult, .empty:
+            return nil
+        case .suggestions:
+            return L10n.commonSuggestions
+        }
+    }
 }

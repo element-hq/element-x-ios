@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct StartChatSuggestedUserCell: View {
+struct UserProfileCell: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
     
