@@ -40,7 +40,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         case .accept(let invite):
             accept(invite: invite)
         case .decline(let invite):
-            decline(invite: invite)
+            startDeclineFlow(invite: invite)
         }
     }
     
@@ -108,6 +108,18 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
             
             displayErrorIfNeeded(result)
         }
+    }
+    
+    private func startDeclineFlow(invite: InvitesRoomDetails) {
+        let roomPlaceholder = invite.isDirect ? (invite.inviter?.displayName ?? invite.roomDetails.name) : invite.roomDetails.name
+        let title = invite.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
+        let message = invite.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
+        
+        state.bindings.alertInfo = .init(id: true,
+                                         title: title,
+                                         message: message,
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { self.decline(invite: invite) }))
     }
     
     private func decline(invite: InvitesRoomDetails) {

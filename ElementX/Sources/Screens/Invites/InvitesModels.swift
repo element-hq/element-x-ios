@@ -22,7 +22,7 @@ struct InvitesViewState: BindableState {
 }
 
 struct InvitesViewStateBindings {
-    var alertInfo: AlertInfo<RoomProxyError>?
+    var alertInfo: AlertInfo<Bool>?
 }
 
 struct InvitesRoomDetails {
