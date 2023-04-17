@@ -37,8 +37,8 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 logPresentationChange("Set sidebar", sidebarModule)
                 sidebarModule.coordinator?.start()
                 if let observableCoordinator = sidebarModule.coordinator as? NavigationStackCoordinator {
-                    sidebarWillChangeCancellable = observableCoordinator.$stackModules.sink { _ in
-                        self.objectWillChange.send()
+                    sidebarWillChangeCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                        self?.objectWillChange.send()
                     }
                 }
             }
@@ -63,8 +63,8 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 logPresentationChange("Set detail", detailModule)
                 detailModule.coordinator?.start()
                 if let observableCoordinator = detailModule.coordinator as? NavigationStackCoordinator {
-                    detailWillChangeCancellable = observableCoordinator.$stackModules.sink { _ in
-                        self.objectWillChange.send()
+                    detailWillChangeCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                        self?.objectWillChange.send()
                     }
                 }
             }
