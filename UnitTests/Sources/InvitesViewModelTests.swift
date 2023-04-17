@@ -32,17 +32,19 @@ class InvitesViewModelTests: XCTestCase {
         userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 
-    func testEmptyState() throws {
+    func testEmptyState() async throws {
         setupViewModel()
+        _ = await context.nextViewState()
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertTrue(invites.isEmpty)
     }
     
-    func testListState() throws {
+    func testListState() async throws {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         clientProxy.invitesSummaryProvider = summaryProvider
         clientProxy.visibleRoomsSummaryProvider = summaryProvider
         setupViewModel()
+        _ = await context.nextViewState()
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertEqual(invites.count, 2)
     }
