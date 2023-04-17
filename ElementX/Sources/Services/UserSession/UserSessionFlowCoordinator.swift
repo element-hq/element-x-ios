@@ -208,14 +208,15 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 // Move the state machine to no room selected if the room currently being dismissed
                 // is the same as the one selected in the state machine.
                 // This generally happens when popping the room screen while in a compact layout
-                if case let .roomList(selectedRoomId) = self.stateMachine.state, selectedRoomId == roomIdentifier {
+                switch self.stateMachine.state {
+                case
+                    let .roomList(selectedRoomId) where selectedRoomId == roomIdentifier,
+                    let .invitesScreen(_, selectedRoomId) where selectedRoomId == roomIdentifier:
+                    
                     self.stateMachine.processEvent(.deselectRoom)
                     self.detailNavigationStackCoordinator.setRootCoordinator(nil)
-                }
-                
-                if case let .invitesScreen(selectedRoomId: _, shownRoomId: .some(selectedRoomId)) = self.stateMachine.state, selectedRoomId == roomIdentifier {
-                    self.stateMachine.processEvent(.deselectRoom)
-                    self.detailNavigationStackCoordinator.setRootCoordinator(nil)
+                default:
+                    break
                 }
             }
             
