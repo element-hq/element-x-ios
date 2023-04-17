@@ -31,8 +31,8 @@ class StartChatScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
         usersProvider = UsersProviderMock()
-        usersProvider.fetchSuggestionsReturnValue = []
-        usersProvider.searchProfilesWithReturnValue = []
+        usersProvider.fetchSuggestionsReturnValue = .success([])
+        usersProvider.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
     }

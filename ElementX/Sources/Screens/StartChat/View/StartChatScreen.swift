@@ -135,8 +135,8 @@ struct StartChat_Previews: PreviewProvider {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let usersProvider = UsersProviderMock()
-        usersProvider.fetchSuggestionsReturnValue = [.mockAlice]
-        usersProvider.searchProfilesWithReturnValue = [.mockAlice]
+        usersProvider.fetchSuggestionsReturnValue = .success([.mockAlice])
+        usersProvider.searchProfilesWithReturnValue = .success([.mockAlice])
         let viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
         return viewModel
     }()

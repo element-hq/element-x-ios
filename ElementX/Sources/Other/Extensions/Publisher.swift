@@ -26,7 +26,7 @@ extension Publisher where Self.Failure == Never {
 }
 
 extension Publisher where Output == String, Failure == Never {
-    func delayTextOrImmediateClear() -> AnyPublisher<String, Never> {
+    func searchQuery() -> AnyPublisher<String, Never> {
         map { query in
             // debounce search queries but make sure clearing the search updates immediately
             let milliseconds = query.isEmpty ? 0 : 500

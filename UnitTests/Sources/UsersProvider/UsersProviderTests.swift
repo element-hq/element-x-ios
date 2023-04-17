@@ -31,7 +31,7 @@ class SearchProviderTest: XCTestCase {
     func testQueryShowingResults() async throws {
         clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
-        let results = await search(query: "AAA")
+        let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 1)
     }
     
@@ -39,7 +39,7 @@ class SearchProviderTest: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
         
-        let results = await search(query: "AAA")
+        let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 3)
         XCTAssertFalse(clientProxy.getProfileCalled)
     }
@@ -48,7 +48,7 @@ class SearchProviderTest: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .success(.init(userID: "@some:matrix.org"))
         
-        let results = await search(query: "@a:b.com")
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
         assertSearchResults(results, toBe: 4)
         XCTAssertTrue(clientProxy.getProfileCalled)
@@ -58,7 +58,7 @@ class SearchProviderTest: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .success(.init(userID: "@bob:matrix.org"))
         
-        let results = await search(query: "@a:b.com")
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
         assertSearchResults(results, toBe: 3)
         let firstUserID = results.first?.userID
@@ -72,7 +72,7 @@ class SearchProviderTest: XCTestCase {
         
         let results = await search(query: "@a:b.com")
         
-        assertSearchResults(results, toBe: 4)
+        XCTAssertThrowsError(try results.get())
     }
     
     // MARK: - Private
@@ -83,7 +83,7 @@ class SearchProviderTest: XCTestCase {
         XCTAssertEqual(results.isEmpty, count == 0)
     }
     
-    private func search(query: String) async -> [UserProfile] {
+    private func search(query: String) async -> Result<[UserProfile], ClientProxyError> {
         await provider.searchProfiles(with: query)
     }
     

@@ -18,6 +18,6 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol UsersProviderProtocol {
-    func searchProfiles(with searchQuery: String) async -> [UserProfile]
-    func fetchSuggestions() -> [UserProfile]
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], ClientProxyError>
+    func fetchSuggestions() async -> Result<[UserProfile], ClientProxyError>
 }

@@ -23,39 +23,42 @@ class UsersProvider: UsersProviderProtocol {
         self.clientProxy = clientProxy
     }
     
-    func fetchSuggestions() -> [UserProfile] {
-        [.mockAlice, .mockBob, .mockCharlie]
+    func fetchSuggestions() async -> Result<[UserProfile], ClientProxyError> {
+        .success([.mockAlice, .mockBob, .mockCharlie])
     }
     
-    func searchProfiles(with searchQuery: String) async -> [UserProfile] {
-        let queriedProfile = await getProfileIfPossible(with: searchQuery)
-        let searchedUsers = await clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
-        let searchResults = try? searchedUsers.get()
-        
-        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
-        let allResults = merge(localProfile: localProfile, searchResults: searchResults?.results)
-        
-        return allResults
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], ClientProxyError> {
+        do {
+            let queriedProfile = try await getProfileIfPossible(with: searchQuery)
+            let searchedUsers = await clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
+            let searchResults = try searchedUsers.get()
+            let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
+            let allResults = merge(localProfile: localProfile, searchResults: searchResults.results)
+            
+            return .success(allResults)
+        } catch {
+            return .failure(.failedSearchingUsers)
+        }
     }
     
-    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
+    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]) -> [UserProfile] {
         guard let localProfile else {
-            return searchResults ?? []
+            return searchResults
         }
         
-        let filteredSearchResult = searchResults?.filter {
+        let filteredSearchResult = searchResults.filter {
             $0.userID != localProfile.userID
-        } ?? []
+        }
 
         return [localProfile] + filteredSearchResult
     }
     
-    private func getProfileIfPossible(with searchQuery: String) async -> UserProfile? {
+    private func getProfileIfPossible(with searchQuery: String) async throws -> UserProfile? {
         guard searchQuery.isMatrixIdentifier else {
             return nil
         }
         
-        return try? await clientProxy.getProfile(for: searchQuery).get()
+        return try await clientProxy.getProfile(for: searchQuery).get()
     }
 }
 

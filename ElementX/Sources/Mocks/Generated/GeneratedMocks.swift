@@ -884,10 +884,10 @@ class UsersProviderMock: UsersProviderProtocol {
     }
     var searchProfilesWithReceivedSearchQuery: String?
     var searchProfilesWithReceivedInvocations: [String] = []
-    var searchProfilesWithReturnValue: [UserProfile]!
-    var searchProfilesWithClosure: ((String) async -> [UserProfile])?
+    var searchProfilesWithReturnValue: Result<[UserProfile], ClientProxyError>!
+    var searchProfilesWithClosure: ((String) async -> Result<[UserProfile], ClientProxyError>)?
 
-    func searchProfiles(with searchQuery: String) async -> [UserProfile] {
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], ClientProxyError> {
         searchProfilesWithCallsCount += 1
         searchProfilesWithReceivedSearchQuery = searchQuery
         searchProfilesWithReceivedInvocations.append(searchQuery)
@@ -903,13 +903,13 @@ class UsersProviderMock: UsersProviderProtocol {
     var fetchSuggestionsCalled: Bool {
         return fetchSuggestionsCallsCount > 0
     }
-    var fetchSuggestionsReturnValue: [UserProfile]!
-    var fetchSuggestionsClosure: (() -> [UserProfile])?
+    var fetchSuggestionsReturnValue: Result<[UserProfile], ClientProxyError>!
+    var fetchSuggestionsClosure: (() async -> Result<[UserProfile], ClientProxyError>)?
 
-    func fetchSuggestions() -> [UserProfile] {
+    func fetchSuggestions() async -> Result<[UserProfile], ClientProxyError> {
         fetchSuggestionsCallsCount += 1
         if let fetchSuggestionsClosure = fetchSuggestionsClosure {
-            return fetchSuggestionsClosure()
+            return await fetchSuggestionsClosure()
         } else {
             return fetchSuggestionsReturnValue
         }

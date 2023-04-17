@@ -87,7 +87,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .delayTextOrImmediateClear()
+            .searchQuery()
             .sink { [weak self] _ in
                 self?.fetchData()
             }
@@ -101,8 +101,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
         
         Task {
-            let users = await usersProvider.searchProfiles(with: searchQuery)
-            state.usersSection = .init(type: .searchResult, users: users)
+            let result = await usersProvider.searchProfiles(with: searchQuery)
+            parseResultForSection(.searchResult, result: result)
         }
     }
     
@@ -111,8 +111,19 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             state.usersSection = .init(type: .empty, users: [])
             return
         }
-        let users = usersProvider.fetchSuggestions()
-        state.usersSection = .init(type: .suggestions, users: users)
+        Task {
+            let result = await usersProvider.fetchSuggestions()
+            parseResultForSection(.suggestions, result: result)
+        }
+    }
+    
+    private func parseResultForSection(_ type: StartChatUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+        switch result {
+        case .success(let users):
+            state.usersSection = .init(type: type, users: users)
+        case .failure:
+            break
+        }
     }
     
     private func createDirectRoom(with user: UserProfile) async {
