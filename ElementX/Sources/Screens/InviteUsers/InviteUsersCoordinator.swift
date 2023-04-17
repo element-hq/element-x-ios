@@ -19,6 +19,7 @@ import SwiftUI
 
 struct InviteUsersCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let usersProvider: UsersProviderProtocol
 }
 
 enum InviteUsersCoordinatorAction {
@@ -38,7 +39,7 @@ final class InviteUsersCoordinator: CoordinatorProtocol {
     init(parameters: InviteUsersCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = InviteUsersViewModel(userSession: parameters.userSession)
+        viewModel = InviteUsersViewModel(userSession: parameters.userSession, usersProvider: parameters.usersProvider)
     }
     
     func start() {

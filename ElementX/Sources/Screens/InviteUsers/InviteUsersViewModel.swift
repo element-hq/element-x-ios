@@ -27,11 +27,14 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
+    private let usersProvider: UsersProviderProtocol
+    
+    init(userSession: UserSessionProtocol, usersProvider: UsersProviderProtocol) {
+        self.usersProvider = usersProvider
         self.userSession = userSession
         super.init(initialViewState: InviteUsersViewState(), imageProvider: userSession.mediaProvider)
         
-        fetchSuggestions()
+        setupBindings()
     }
     
     // MARK: - Public
@@ -65,11 +68,49 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
 
     // MARK: - Private
     
+    private func setupBindings() {
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .searchQuery()
+            .sink { [weak self] _ in
+                self?.fetchData()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchData() {
+        guard searchQuery.count >= 3 else {
+            fetchSuggestions()
+            return
+        }
+        
+        Task {
+            let result = await usersProvider.searchProfiles(with: searchQuery)
+            parseResultForSection(.searchResult, result: result)
+        }
+    }
+    
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        Task {
+            let result = await usersProvider.fetchSuggestions()
+            parseResultForSection(.suggestions, result: result)
+        }
+    }
+    
+    private func parseResultForSection(_ type: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+        switch result {
+        case .success(let users):
+            state.usersSection = .init(type: type, users: users)
+        case .failure:
+            break
+        }
+    }
+    
+    private var searchQuery: String {
+        context.searchQuery
     }
 }

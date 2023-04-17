@@ -120,7 +120,10 @@ struct InviteUsersScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        return InviteUsersViewModel(userSession: userSession)
+        let usersProvider = UsersProviderMock()
+        usersProvider.fetchSuggestionsReturnValue = .success([.mockAlice])
+        usersProvider.searchProfilesWithReturnValue = .success([.mockAlice])
+        return InviteUsersViewModel(userSession: userSession, usersProvider: usersProvider)
     }()
     
     static var previews: some View {

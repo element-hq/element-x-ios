@@ -388,7 +388,10 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .inviteUsers:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
+            let usersProviderMock = UsersProviderMock()
+            usersProviderMock.fetchSuggestionsReturnValue = .success([])
+            usersProviderMock.searchProfilesWithReturnValue = .success([])
+            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), usersProvider: usersProviderMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }
