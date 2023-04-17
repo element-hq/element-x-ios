@@ -91,6 +91,18 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         }
     }
     
+    private func startDeclineFlow(invite: InvitesRoomDetails) {
+        let roomPlaceholder = invite.isDirect ? (invite.inviter?.displayName ?? invite.roomDetails.name) : invite.roomDetails.name
+        let title = invite.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
+        let message = invite.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
+        
+        state.bindings.alertInfo = .init(id: true,
+                                         title: title,
+                                         message: message,
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { self.decline(invite: invite) }))
+    }
+    
     private func accept(invite: InvitesRoomDetails) {
         Task {
             let roomID = invite.roomDetails.id
@@ -104,22 +116,14 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
                 displayError(.failedAcceptingInvite)
                 return
             }
-            let result = await roomProxy.acceptInvitation()
             
-            displayErrorIfNeeded(result)
+            switch await roomProxy.acceptInvitation() {
+            case .success:
+                actionsSubject.send(.openRoom(withIdentifier: roomID))
+            case .failure(let error):
+                displayError(error)
+            }
         }
-    }
-    
-    private func startDeclineFlow(invite: InvitesRoomDetails) {
-        let roomPlaceholder = invite.isDirect ? (invite.inviter?.displayName ?? invite.roomDetails.name) : invite.roomDetails.name
-        let title = invite.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
-        let message = invite.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
-        
-        state.bindings.alertInfo = .init(id: true,
-                                         title: title,
-                                         message: message,
-                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { self.decline(invite: invite) }))
     }
     
     private func decline(invite: InvitesRoomDetails) {
@@ -135,17 +139,13 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
                 displayError(.failedRejectingInvite)
                 return
             }
+            
             let result = await roomProxy.rejectInvitation()
             
-            displayErrorIfNeeded(result)
+            if case .failure(let error) = result {
+                displayError(error)
+            }
         }
-    }
-    
-    private func displayErrorIfNeeded(_ result: Result<Void, RoomProxyError>) {
-        guard case .failure(let error) = result else {
-            return
-        }
-        displayError(error)
     }
     
     private func displayError(_ error: RoomProxyError) {

@@ -39,7 +39,7 @@ class UserSessionFlowCoordinatorStateMachine {
         case startChatScreen(selectedRoomId: String?)
         
         /// Showing invites list screen
-        case invitesScreen(selectedRoomId: String?)
+        case invitesScreen(selectedRoomId: String?, shownRoomId: String?)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -122,10 +122,14 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .roomList(selectedRoomId: selectedRoomId)
             
             case (.showInvitesScreen, .roomList(let selectedRoomId)):
-                return .invitesScreen(selectedRoomId: selectedRoomId)
-            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
+                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: nil)
+            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId, _)):
                 return .roomList(selectedRoomId: selectedRoomId)
-                
+            case (.selectRoom(let roomId), .invitesScreen(let selectedRoomId, nil)):
+                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: roomId)
+            case (.deselectRoom, .invitesScreen(let selectedRoomId, .some)):
+                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: nil)
+
             default:
                 return nil
             }

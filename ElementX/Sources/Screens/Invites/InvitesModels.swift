@@ -14,7 +14,9 @@
 // limitations under the License.
 //
 
-enum InvitesViewModelAction { }
+enum InvitesViewModelAction {
+    case openRoom(withIdentifier: String)
+}
 
 struct InvitesViewState: BindableState {
     var invites: [InvitesRoomDetails]?
