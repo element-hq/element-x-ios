@@ -16,6 +16,8 @@
 
 import Combine
 
+/// A wrapper of CurrentValueSubject.
+/// The purpose of this type is to remove the possibility to send new values on the underlying subject.
 struct CurrentValuePublisher<Output, Failure: Error>: Publisher {
     private let subject: CurrentValueSubject<Output, Failure>
     
