@@ -63,7 +63,7 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertEqual(clientProxy.setPusherArgument?.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
         XCTAssertEqual(clientProxy.setPusherArgument?.deviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(clientProxy.setPusherArgument?.profileTag)
-        XCTAssertEqual(clientProxy.setPusherArgument?.lang, Bundle.preferredLanguages.first)
+        XCTAssertEqual(clientProxy.setPusherArgument?.lang, Bundle.app.preferredLocalizations.first)
         guard case let .http(data) = clientProxy.setPusherArgument?.kind else {
             XCTFail("Http kind expected")
             return

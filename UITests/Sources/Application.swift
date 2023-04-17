@@ -24,9 +24,6 @@ struct Application {
             "UI_TESTS_SCREEN": identifier.rawValue
         ]
         
-        // Use the same fallback language as the real app so translation comparison works
-        Bundle.elementFallbackLanguage = "en"
-        
         app.launch()
         return app
     }

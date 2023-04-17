@@ -160,9 +160,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "version", type: .text(value: InfoPlistReader.main.bundleShortVersionString)),
             MultipartFormData(key: "build", type: .text(value: InfoPlistReader.main.bundleVersion)),
             MultipartFormData(key: "os", type: .text(value: os)),
-            MultipartFormData(key: "resolved_language", type: .text(value: Bundle.preferredLanguages[0])),
-            MultipartFormData(key: "user_language", type: .text(value: Bundle.elementLanguage ?? "null")),
-            MultipartFormData(key: "fallback_language", type: .text(value: Bundle.elementFallbackLanguage ?? "null")),
+            MultipartFormData(key: "resolved_languages", type: .text(value: Bundle.app.preferredLocalizations.joined(separator: ", "))),
+            MultipartFormData(key: "user_languages", type: .text(value: Locale.preferredLanguages.joined(separator: ", "))),
+            MultipartFormData(key: "fallback_language", type: .text(value: Bundle.app.developmentLocalization ?? "null")),
             MultipartFormData(key: "local_time", type: .text(value: localTime)),
             MultipartFormData(key: "utc_time", type: .text(value: utcTime)),
             MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier))
