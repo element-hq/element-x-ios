@@ -23,8 +23,7 @@ struct AnalyticsSettingsScreen: View {
         Form {
             analyticsSection
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .compoundForm()
         .navigationTitle(L10n.commonAnalytics)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -41,7 +40,7 @@ struct AnalyticsSettingsScreen: View {
         } footer: {
             Text(context.viewState.strings.sectionFooter)
                 .compoundFormSectionFooter()
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
         }
         .compoundFormSection()
     }
