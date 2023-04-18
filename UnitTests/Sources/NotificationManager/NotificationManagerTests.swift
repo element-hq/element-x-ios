@@ -27,9 +27,14 @@ final class NotificationManagerTests: XCTestCase {
     private var shouldDisplayInAppNotificationReturnValue = false
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
-    private let settings = ServiceLocator.shared.settings
+    private var settings: AppSettings!
 
     override func setUp() {
+        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
+        AppSettings.reset()
+        settings = AppSettings()
+        ServiceLocator.shared.register(appSettings: settings)
+
         notificationManager = NotificationManager(notificationCenter: notificationCenter)
         notificationManager.start()
         notificationManager.setClientProxy(clientProxy)
@@ -114,7 +119,7 @@ final class NotificationManagerTests: XCTestCase {
     
     func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
         notificationManager.requestAuthorization()
-        await Task.yield()
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
     }
     
