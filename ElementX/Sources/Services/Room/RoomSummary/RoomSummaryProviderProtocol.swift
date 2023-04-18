@@ -53,13 +53,13 @@ enum RoomSummary: CustomStringConvertible {
 
 protocol RoomSummaryProviderProtocol {
     /// Publishes the currently available room summaries
-    var roomListPublisher: CurrentValueSubject<[RoomSummary], Never> { get }
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
     
     /// Publishes the current state the summary provider is finding itself in
-    var statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never> { get }
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
     
     /// Publishes the total number of rooms
-    var countPublisher: CurrentValueSubject<UInt, Never> { get }
+    var countPublisher: CurrentValuePublisher<UInt, Never> { get }
         
     func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt)
 }
