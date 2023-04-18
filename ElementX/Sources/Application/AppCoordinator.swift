@@ -42,7 +42,6 @@ class AppCoordinator: AppCoordinatorProtocol {
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var authenticationCoordinator: AuthenticationCoordinator?
     
-    private let bugReportService: BugReportServiceProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
     private var userSessionCancellables = Set<AnyCancellable>()
@@ -56,11 +55,11 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
         Self.setupLogging()
-        
-        stateMachine = AppCoordinatorStateMachine()
-        
-        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.settings.bugReportSentryURL)
 
+        ServiceLocator.shared.analytics.startIfEnabled()
+
+        stateMachine = AppCoordinatorStateMachine()
+                
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
         backgroundTaskService = UIKitBackgroundTaskService {
@@ -84,7 +83,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             wipeUserData(includingSettings: true)
         }
         ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
-        
+                
         setupStateMachine()
 
         observeApplicationState()
@@ -114,6 +113,9 @@ class AppCoordinator: AppCoordinatorProtocol {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
+        ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
+                                                                          sentryURL: ServiceLocator.shared.settings.bugReportSentryURL))
+        ServiceLocator.shared.register(analytics: Analytics(client: PostHogAnalyticsClient()))
     }
     
     private static func setupLogging() {
@@ -248,7 +250,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
-                                                                    bugReportService: bugReportService,
+                                                                    bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory())
         
         userSessionFlowCoordinator.callback = { [weak self] action in
@@ -291,6 +293,9 @@ class AppCoordinator: AppCoordinatorProtocol {
             //  regardless of the result, clear user data
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
+            
+            // reset analytics
+            ServiceLocator.shared.analytics.reset()
             
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
         }

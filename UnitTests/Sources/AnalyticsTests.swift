@@ -20,17 +20,26 @@ import XCTest
 
 class AnalyticsTests: XCTestCase {
     private var applicationSettings: AppSettings!
+    private var analyticsClient: AnalyticsClientMock!
+    private var bugReportService: BugReportServiceMock!
     
     override func setUp() {
         AppSettings.configureWithSuiteName("io.element.elementx.unitests")
         AppSettings.reset()
         applicationSettings = AppSettings()
+        ServiceLocator.shared.register(appSettings: applicationSettings)
+        bugReportService = BugReportServiceMock()
+        bugReportService.isRunning = false
+        ServiceLocator.shared.register(bugReportService: bugReportService)
+        analyticsClient = AnalyticsClientMock()
+        analyticsClient.isRunning = false
+        ServiceLocator.shared.register(analytics: Analytics(client: analyticsClient))
     }
     
     func testAnalyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
-        let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt
+        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then the prompt should be shown.
         XCTAssertTrue(showPrompt, "A prompt should be shown for a new user.")
@@ -41,7 +50,7 @@ class AnalyticsTests: XCTestCase {
         applicationSettings.enableAnalytics = false
         
         // When the user is prompted for analytics
-        let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt
+        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then no prompt should be shown.
         XCTAssertFalse(showPrompt, "A prompt should not be shown any more.")
@@ -52,10 +61,63 @@ class AnalyticsTests: XCTestCase {
         applicationSettings.enableAnalytics = true
         
         // When the user is prompted for analytics
-        let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt
+        let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
         
         // Then no prompt should be shown.
         XCTAssertFalse(showPrompt, "A prompt should not be shown any more.")
+    }
+    
+    func testAnalyticsPromptNotDisplayed() {
+        // Given a fresh install of the app both Analytics and BugReportService should be disabled
+        XCTAssertFalse(ServiceLocator.shared.settings.enableAnalytics)
+        XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
+        XCTAssertFalse(analyticsClient.startCalled)
+        XCTAssertFalse(bugReportService.startCalled)
+    }
+
+    func testAnalyticsOptOut() {
+        // Given a fresh install of the app (without PostHog analytics having been set).
+        // When analytics is opt-out
+        ServiceLocator.shared.analytics.optOut()
+        // Then analytics should be disabled
+        XCTAssertFalse(applicationSettings.enableAnalytics)
+        XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
+        XCTAssertFalse(analyticsClient.isRunning)
+        XCTAssertFalse(bugReportService.isRunning)
+        // Analytics client and the bug report service should have been stopped
+        XCTAssertTrue(analyticsClient.stopCalled)
+        XCTAssertTrue(bugReportService.stopCalled)
+    }
+
+    func testAnalyticsOptIn() {
+        // Given a fresh install of the app (without PostHog analytics having been set).
+        // When analytics is opt-in
+        ServiceLocator.shared.analytics.optIn()
+        // The analytics should be enabled
+        XCTAssertTrue(applicationSettings.enableAnalytics)
+        // Analytics client and the bug report service should have been started
+        XCTAssertTrue(analyticsClient.startCalled)
+        XCTAssertTrue(bugReportService.startCalled)
+    }
+
+    func testAnalyticsStartIfNotEnabled() {
+        // Given an existing install of the app where the user previously declined the tracking
+        applicationSettings.enableAnalytics = false
+        // Analytics should not start
+        ServiceLocator.shared.analytics.startIfEnabled()
+        XCTAssertFalse(ServiceLocator.shared.settings.enableAnalytics)
+        XCTAssertFalse(analyticsClient.startCalled)
+        XCTAssertFalse(bugReportService.startCalled)
+    }
+    
+    func testAnalyticsStartIfEnabled() {
+        // Given an existing install of the app where the user previously accpeted the tracking
+        applicationSettings.enableAnalytics = true
+        // Analytics should start
+        ServiceLocator.shared.analytics.startIfEnabled()
+        XCTAssertTrue(ServiceLocator.shared.settings.enableAnalytics)
+        XCTAssertTrue(analyticsClient.startCalled)
+        XCTAssertTrue(bugReportService.startCalled)
     }
     
     func testAddingUserProperties() {
@@ -116,25 +178,6 @@ class AnalyticsTests: XCTestCase {
         
         // When sending an event (tests run under Debug configuration so this is sent to the development instance)
         client.screen(AnalyticsEvent.MobileScreen(durationMs: nil, screenName: .Home))
-        
-        // Then the properties should be cleared
-        XCTAssertNil(client.pendingUserProperties, "The user properties should be cleared.")
-    }
-    
-    func testSendingUserPropertiesWithIdentify() {
-        // Given a client with user properties set
-        let client = PostHogAnalyticsClient()
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging,
-                                                                  numFavouriteRooms: nil,
-                                                                  numSpaces: nil,
-                                                                  allChatsActiveFilter: nil))
-        client.start()
-        
-        XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
-        XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
-        
-        // When calling identify (tests run under Debug configuration so this is sent to the development instance)
-        client.identify(id: UUID().uuidString)
         
         // Then the properties should be cleared
         XCTAssertNil(client.pendingUserProperties, "The user properties should be cleared.")

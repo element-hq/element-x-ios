@@ -46,8 +46,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 self.callback?(.dismiss)
-            case .toggleAnalytics:
-                self.toggleAnalytics()
+            case .analytics:
+                self.presentAnalyticsScreen()
             case .reportBug:
                 self.presentBugReportScreen()
             case .sessionVerification:
@@ -68,14 +68,11 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func toggleAnalytics() {
-        if ServiceLocator.shared.settings.enableAnalytics {
-            Analytics.shared.optOut()
-        } else {
-            Analytics.shared.optIn(with: parameters.userSession)
-        }
+    private func presentAnalyticsScreen() {
+        let coordinator = AnalyticsSettingsScreenCoordinator()
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
-
+    
     private func presentBugReportScreen() {
         let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
                                                     userID: parameters.userSession.userID,

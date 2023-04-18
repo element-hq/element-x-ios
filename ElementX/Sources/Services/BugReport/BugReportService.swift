@@ -39,13 +39,27 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         self.session = session
         super.init()
         
-        //  enable SentrySDK
+        //  set build version for logger
+        MXLogger.buildVersion = InfoPlistReader.main.bundleShortVersionString
+    }
+
+    // MARK: - BugReportServiceProtocol
+
+    var isRunning: Bool {
+        SentrySDK.isEnabled
+    }
+    
+    var crashedLastRun: Bool {
+        SentrySDK.crashedLastRun
+    }
+    
+    func start() {
+        guard !isRunning else { return }
         SentrySDK.start { options in
             #if DEBUG
             options.enabled = false
             #endif
-
-            options.dsn = sentryURL.absoluteString
+            options.dsn = self.sentryURL.absoluteString
 
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
@@ -61,19 +75,22 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                 self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
-
-        //  also enable logging crashes, to send them with bug reports
         MXLogger.logCrashes(true)
-        //  set build version for logger
-        MXLogger.buildVersion = InfoPlistReader.main.bundleShortVersionString
+        MXLog.info("Started.")
     }
-
-    // MARK: - BugReportServiceProtocol
-
-    var crashedLastRun: Bool {
-        SentrySDK.crashedLastRun
+           
+    func stop() {
+        guard isRunning else { return }
+        SentrySDK.close()
+        MXLogger.logCrashes(false)
+        MXLog.info("Stopped.")
     }
-
+    
+    func reset() {
+        lastCrashEventId = nil
+        MXLog.info("Reset.")
+    }
+    
     func crash() {
         SentrySDK.crash()
     }

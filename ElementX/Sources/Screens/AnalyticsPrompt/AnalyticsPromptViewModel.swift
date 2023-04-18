@@ -20,14 +20,12 @@ import SwiftUI
 typealias AnalyticsPromptViewModelType = StateStoreViewModel<AnalyticsPromptViewState, AnalyticsPromptViewAction>
 
 class AnalyticsPromptViewModel: AnalyticsPromptViewModelType, AnalyticsPromptViewModelProtocol {
-    private let termsURL: URL
-
     var callback: (@MainActor (AnalyticsPromptViewModelAction) -> Void)?
     
     /// Initialize a view model with the specified prompt type and app display name.
-    init(termsURL: URL) {
-        self.termsURL = termsURL
-        super.init(initialViewState: AnalyticsPromptViewState())
+    init() {
+        let promptStrings = AnalyticsPromptStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+        super.init(initialViewState: AnalyticsPromptViewState(strings: promptStrings))
     }
 
     // MARK: - Public

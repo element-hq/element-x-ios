@@ -53,6 +53,7 @@
 "action_view_source" = "View Source";
 "action_yes" = "Yes";
 "common_about" = "About";
+"common_analytics" = "Analytics";
 "common_audio" = "Audio";
 "common_bubbles" = "Bubbles";
 "common_creating_room" = "Creating room…";
@@ -161,6 +162,17 @@
 "room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "room_timeline_read_marker_title" = "New";
+"screen_analytics_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
+"screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
+"screen_analytics_prompt_read_terms_content_link" = "here";
+"screen_analytics_prompt_settings" = "You can turn this off anytime in settings";
+"screen_analytics_prompt_third_party_sharing" = "We <b>don't</b> share information with third parties";
+"screen_analytics_prompt_title" = "Help improve %1$@";
+"screen_analytics_read_terms" = "You can read all our terms %1$@.";
+"screen_analytics_read_terms_content_link" = "here";
+"screen_analytics_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Attach screenshot";
 "screen_bug_report_contact_me" = "You may contact me if you have any follow up questions";
 "screen_bug_report_edit_screenshot" = "Edit screenshot";
@@ -198,6 +210,10 @@
 "screen_dm_details_unblock_alert_action" = "Unblock";
 "screen_dm_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
 "screen_dm_details_unblock_user" = "Unblock user";
+"screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
+"screen_invites_decline_chat_title" = "Decline invite";
+"screen_invites_decline_direct_chat_message" = "Are you sure you want to decline to chat with %1$@?";
+"screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ invited you";
 "screen_login_error_deactivated_account" = "This account has been deactivated.";

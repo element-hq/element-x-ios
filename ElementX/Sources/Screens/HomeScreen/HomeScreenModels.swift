@@ -62,11 +62,8 @@ struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
-    
     var showSessionVerificationBanner = false
-    
     var rooms: [HomeScreenRoom] = []
-    
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
     /// The URL that will be shared when inviting friends to use the app.

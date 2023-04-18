@@ -38,16 +38,6 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
         postHog?.enable()
     }
     
-    func identify(id: String) {
-        if let userProperties = pendingUserProperties {
-            // As user properties overwrite old ones, compactMap the dictionary to avoid resetting any missing properties
-            postHog?.identify(id, properties: userProperties.properties.compactMapValues { $0 })
-            pendingUserProperties = nil
-        } else {
-            postHog?.identify(id)
-        }
-    }
-    
     func reset() {
         postHog?.reset()
         pendingUserProperties = nil
@@ -65,10 +55,12 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     }
     
     func capture(_ event: AnalyticsEventProtocol) {
+        guard isRunning else { return }
         postHog?.capture(event.eventName, properties: attachUserProperties(to: event.properties))
     }
     
     func screen(_ event: AnalyticsScreenProtocol) {
+        guard isRunning else { return }
         postHog?.screen(event.screenName.rawValue, properties: attachUserProperties(to: event.properties))
     }
     

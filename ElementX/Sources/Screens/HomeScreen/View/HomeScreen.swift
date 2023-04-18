@@ -119,6 +119,7 @@ struct HomeScreen: View {
             }
         }
         .background(Color.element.background.ignoresSafeArea())
+        .track(screen: .home)
     }
 
     @ViewBuilder

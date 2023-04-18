@@ -57,9 +57,9 @@ struct AnalyticsPrompt: View {
     private var mainContent: some View {
         VStack {
             Image(uiImage: Asset.Images.analyticsLogo.image)
-                .padding(.bottom, 25)
+                .padding(.bottom, 24)
             
-            Text(UntranslatedL10n.analyticsOptInTitle(InfoPlistReader.main.bundleDisplayName))
+            Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
@@ -73,7 +73,7 @@ struct AnalyticsPrompt: View {
             
             Divider()
                 .background(Color.element.quinaryContent)
-                .padding(.vertical, 28)
+                .padding(.vertical, 20)
             
             checkmarkList
         }
@@ -81,10 +81,10 @@ struct AnalyticsPrompt: View {
     
     /// The list of re-assurances about analytics.
     private var checkmarkList: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point1)
-            AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point1)
-            AnalyticsPromptCheckmarkItem(string: UntranslatedL10n.analyticsOptInListItem3)
+            AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point2)
+            AnalyticsPromptCheckmarkItem(string: context.viewState.strings.point3)
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.element.body)
@@ -113,7 +113,7 @@ struct AnalyticsPrompt: View {
 // MARK: - Previews
 
 struct AnalyticsPrompt_Previews: PreviewProvider {
-    static let viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+    static let viewModel = AnalyticsPromptViewModel()
     static var previews: some View {
         AnalyticsPrompt(context: viewModel.context)
     }

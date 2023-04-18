@@ -23,6 +23,7 @@ enum UITestsScreenIdentifier: String {
     case authenticationFlow
     case softLogout
     case analyticsPrompt
+    case analyticsSettingsScreen
     case simpleRegular
     case simpleUpgrade
     case home

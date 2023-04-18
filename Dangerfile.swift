@@ -52,7 +52,8 @@ let allowList = ["stefanceriu",
                  "aringenbach",
                  "flescio",
                  "Velin92",
-                 "alfogrillo"]
+                 "alfogrillo",
+                 "nimau"]
 
 let requiresSignOff = !allowList.contains(where: {
     $0.caseInsensitiveCompare(danger.github.pullRequest.user.login) == .orderedSame

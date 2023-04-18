@@ -77,8 +77,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         switch viewAction {
         case .close:
             callback?(.close)
-        case .toggleAnalytics:
-            callback?(.toggleAnalytics)
+        case .analytics:
+            callback?(.analytics)
         case .reportBug:
             callback?(.reportBug)
         case .logout:
