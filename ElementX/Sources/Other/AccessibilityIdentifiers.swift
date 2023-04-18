@@ -118,5 +118,7 @@ struct A11yIdentifiers {
     
     struct InvitesScreen {
         let noInvites = "invites-no_invites"
+        let accept = "invites-accept"
+        let decline = "invites-decline"
     }
 }
