@@ -24,20 +24,21 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     
     private var cancellables = Set<AnyCancellable>()
 
-    var sidebarWillChangeCancellable: AnyCancellable?
+    var sidebarStackModuleCancellable: AnyCancellable?
 
     @Published fileprivate var sidebarModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sidebar", oldValue)
                 oldValue.tearDown()
+                sidebarStackModuleCancellable = nil
             }
             
             if let sidebarModule {
                 logPresentationChange("Set sidebar", sidebarModule)
                 sidebarModule.coordinator?.start()
                 if let observableCoordinator = sidebarModule.coordinator as? NavigationStackCoordinator {
-                    sidebarWillChangeCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                    sidebarStackModuleCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
                         self?.objectWillChange.send()
                     }
                 }
@@ -50,20 +51,21 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         sidebarModule?.coordinator
     }
 
-    var detailWillChangeCancellable: AnyCancellable?
+    var detailCoordinatorCancellable: AnyCancellable?
     
     @Published fileprivate var detailModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove detail", oldValue)
                 oldValue.tearDown()
+                detailCoordinatorCancellable = nil
             }
             
             if let detailModule {
                 logPresentationChange("Set detail", detailModule)
                 detailModule.coordinator?.start()
                 if let observableCoordinator = detailModule.coordinator as? NavigationStackCoordinator {
-                    detailWillChangeCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                    detailCoordinatorCancellable = Publishers.CombineLatest(observableCoordinator.$rootModule, observableCoordinator.$stackModules).sink { [weak self] _ in
                         self?.objectWillChange.send()
                     }
                 }
@@ -216,6 +218,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     /// Set the coordinator to be used on the split's right pannel
     /// - Parameters:
     ///   - coordinator: the detail coordinator
+    ///   - animated: whether the transition should be animated
     ///   - dismissalCallback: called when this particular detail coordinator has removed/replaced
     func setDetailCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
