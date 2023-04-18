@@ -23,20 +23,26 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     fileprivate let placeholderModule: NavigationModule
     
     private var cancellables = Set<AnyCancellable>()
-    
+
+    var sidebarStackModuleCancellable: AnyCancellable?
+
     @Published fileprivate var sidebarModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sidebar", oldValue)
                 oldValue.tearDown()
+                sidebarStackModuleCancellable = nil
             }
             
             if let sidebarModule {
                 logPresentationChange("Set sidebar", sidebarModule)
                 sidebarModule.coordinator?.start()
+                if let observableCoordinator = sidebarModule.coordinator as? NavigationStackCoordinator {
+                    sidebarStackModuleCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                        self?.objectWillChange.send()
+                    }
+                }
             }
-            
-            updateCompactLayoutComponents()
         }
     }
     
@@ -44,20 +50,26 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     var sidebarCoordinator: (any CoordinatorProtocol)? {
         sidebarModule?.coordinator
     }
+
+    var detailCoordinatorCancellable: AnyCancellable?
     
     @Published fileprivate var detailModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove detail", oldValue)
                 oldValue.tearDown()
+                detailCoordinatorCancellable = nil
             }
             
             if let detailModule {
                 logPresentationChange("Set detail", detailModule)
                 detailModule.coordinator?.start()
+                if let observableCoordinator = detailModule.coordinator as? NavigationStackCoordinator {
+                    detailCoordinatorCancellable = Publishers.CombineLatest(observableCoordinator.$rootModule, observableCoordinator.$stackModules).sink { [weak self] _ in
+                        self?.objectWillChange.send()
+                    }
+                }
             }
-            
-            updateCompactLayoutComponents()
         }
     }
     
@@ -77,8 +89,6 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 logPresentationChange("Set sheet", sheetModule)
                 sheetModule.coordinator?.start()
             }
-            
-            updateCompactLayoutComponents()
         }
     }
     
@@ -98,8 +108,6 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
                 fullScreenCoverModule.coordinator?.start()
             }
-            
-            updateCompactLayoutComponents()
         }
     }
     
@@ -108,16 +116,72 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         fullScreenCoverModule?.coordinator
     }
     
-    @Published fileprivate var compactLayoutRootModule: NavigationModule?
+    fileprivate var compactLayoutRootModule: NavigationModule? {
+        if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
+            if let sidebarRootModule = sidebarNavigationStackCoordinator.rootModule {
+                return sidebarRootModule
+            }
+        } else if let sidebarModule {
+            return sidebarModule
+        }
+        return nil
+    }
     
     var compactLayoutRootCoordinator: (any CoordinatorProtocol)? {
         compactLayoutRootModule?.coordinator
     }
-    
-    /// This is set as internal so that we can manipulate the compact layout stack from the unit tests.
-    /// Shouldn't be used otherwise.
-    @Published internal var compactLayoutStackModules: [NavigationModule] = []
-    
+
+    var compactLayoutStackModules: [NavigationModule] {
+        get {
+            compactLayoutStackModulesBinding.wrappedValue
+        }
+        set {
+            compactLayoutStackModulesBinding.wrappedValue = newValue
+        }
+    }
+
+    fileprivate lazy var compactLayoutStackModulesBinding: Binding<[NavigationModule]> = Binding(get: { [weak self] in
+        self?.getCompactStackModules() ?? []
+    }, set: { [weak self] newValue in
+        self?.setCompactStackModules(newValue)
+    })
+
+    private func getCompactStackModules() -> [NavigationModule] {
+        // Start building the new compact layout navigation stack
+        var stackModules: [NavigationModule] = []
+        // If the sidebar is a stackCoordinator then use it's root as the compact layout root
+        // and push its children to the compact layout stack
+        if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
+            stackModules.append(contentsOf: sidebarNavigationStackCoordinator.stackModules)
+        }
+
+        // If the detail is a stackCoordinator then push its root and children to the compact layout stack
+        if let detailNavigationStackCoordinator = detailModule?.coordinator as? NavigationStackCoordinator {
+            if let detailRootCoordinator = detailNavigationStackCoordinator.rootModule {
+                stackModules.append(detailRootCoordinator)
+            }
+
+            stackModules.append(contentsOf: detailNavigationStackCoordinator.stackModules)
+        } else if let detailModule { // Otherwise just push it entirely
+            stackModules.append(detailModule)
+        }
+        return stackModules
+    }
+
+    private func setCompactStackModules(_ modules: [NavigationModule]) {
+        guard compactLayoutStackModules != modules else { return }
+
+        let diffs = modules.difference(from: compactLayoutStackModules)
+        diffs.forEach { change in
+            switch change {
+            case .insert:
+                break
+            case .remove(_, let module, _):
+                self.processCompactLayoutStackModuleRemoval(module)
+            }
+        }
+    }
+
     var compactLayoutStackCoordinators: [any CoordinatorProtocol] {
         compactLayoutStackModules.compactMap(\.coordinator)
     }
@@ -131,8 +195,9 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     /// Set the coordinator to be used on the split's left pannel
     /// - Parameters:
     ///   - coordinator: the sidebar coordinator
+    ///   - animated: whether the transition should be animated
     ///   - dismissalCallback: called when this particular sidebar coordinator has removed/replaced
-    func setSidebarCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setSidebarCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             sidebarModule = nil
             return
@@ -141,15 +206,21 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         if sidebarModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        sidebarModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            sidebarModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     /// Set the coordinator to be used on the split's right pannel
     /// - Parameters:
     ///   - coordinator: the detail coordinator
+    ///   - animated: whether the transition should be animated
     ///   - dismissalCallback: called when this particular detail coordinator has removed/replaced
-    func setDetailCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setDetailCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             detailModule = nil
             return
@@ -158,15 +229,21 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         if detailModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        detailModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            detailModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     /// Present a sheet on top of the split view
     /// - Parameters:
     ///   - coordinator: the coordinator to display
+    ///   - animated: whether the transition should be animated
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
-    func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             sheetModule = nil
             return
@@ -175,15 +252,21 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     /// Present a fullscreen cover on top of the split view
     /// - Parameters:
     ///   - coordinator: the coordinator to display
+    ///   - animated: whether the transition should be animated
     ///   - dismissalCallback: called when the fullscreen cover has been dismissed, programatically or otherwise
-    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             fullScreenCoverModule = nil
             return
@@ -192,8 +275,13 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         if fullScreenCoverModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
         
     // MARK: - CoordinatorProtocol
@@ -246,67 +334,6 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         }
     }
     
-    /// We need to update the compact layout whenever anything changes within the split coordinator or
-    /// the navigation coordinators embedded into it
-    private func updateCompactLayoutComponents() {
-        // First remove all observers
-        cancellables.removeAll()
-        
-        // Start building the new compact layout navigation stack
-        var stackModules: [NavigationModule] = []
-        // If the sidebar is a stackCoordinator then use it's root as the compact layout root
-        // and push its children to the compact layout stack
-        if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
-            // Observe changes on embedded stackCoordinators and reflect them in the compact layout components
-            observe(navigationStackCoordinator: sidebarNavigationStackCoordinator)
-            
-            if let sidebarRootModule = sidebarNavigationStackCoordinator.rootModule {
-                compactLayoutRootModule = sidebarRootModule
-            }
-            
-            stackModules.append(contentsOf: sidebarNavigationStackCoordinator.stackModules)
-        } else if let sidebarModule { // Otherwise just use it as a root directly
-            compactLayoutRootModule = sidebarModule
-        }
-        
-        // If the detail is a stackCoordinator then push its root and children to the compact layout stack
-        if let detailNavigationStackCoordinator = detailModule?.coordinator as? NavigationStackCoordinator {
-            // Observe changes on embedded stackCoordinators and reflect them in the compact layout components
-            observe(navigationStackCoordinator: detailNavigationStackCoordinator)
-            
-            if let detailRootCoordinator = detailNavigationStackCoordinator.rootModule {
-                stackModules.append(detailRootCoordinator)
-            }
-            
-            stackModules.append(contentsOf: detailNavigationStackCoordinator.stackModules)
-        } else if let detailModule { // Otherwise just push it entirely
-            stackModules.append(detailModule)
-        }
-        compactLayoutStackModules = stackModules
-        
-        // Observe and process compact layout changes
-        observeCompactLayoutStackChanges()
-    }
-        
-    /// Changes to the navigation stack while in a compact layout should be
-    /// reflected back onto the embedded components e.g. stackCoordinator pops
-    private func observeCompactLayoutStackChanges() {
-        $compactLayoutStackModules.sink { [weak self] stackModules in
-            guard let self, self.compactLayoutStackModules != stackModules else { return }
-            
-            let diffs = stackModules.difference(from: self.compactLayoutStackModules)
-            diffs.forEach { change in
-                switch change {
-                case .insert:
-                    break
-                case .remove(_, let module, _):
-                    self.processCompactLayoutStackModuleRemoval(module)
-                }
-            }
-        }
-        .store(in: &cancellables)
-    }
-    
     /// Manually process changes to the compact layout navigation stack and update embedded components
     /// We need to either: pop from the detail, nil the detail or pop from the sidebar
     private func processCompactLayoutStackModuleRemoval(_ module: NavigationModule) {
@@ -327,28 +354,6 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 detailModule = nil
             }
         }
-    }
-    
-    /// Any change to a NavigationStackCoordinator's internal state should be observed and reflected in the
-    /// compact layout components
-    private func observe(navigationStackCoordinator: NavigationStackCoordinator) {
-        navigationStackCoordinator.$rootModule.sink { [weak self] rootModule in
-            guard navigationStackCoordinator.rootModule != rootModule else { return }
-            DispatchQueue.main.async { self?.updateCompactLayoutComponents() }
-        }
-        .store(in: &cancellables)
-        
-        navigationStackCoordinator.$stackModules.sink { [weak self] stackModules in
-            guard navigationStackCoordinator.stackModules != stackModules else { return }
-            DispatchQueue.main.async { self?.updateCompactLayoutComponents() }
-        }
-        .store(in: &cancellables)
-        
-        navigationStackCoordinator.$sheetModule.sink { [weak self] sheetModule in
-            guard navigationStackCoordinator.sheetModule != sheetModule else { return }
-            DispatchQueue.main.async { self?.updateCompactLayoutComponents() }
-        }
-        .store(in: &cancellables)
     }
 }
 
@@ -379,7 +384,7 @@ private struct NavigationSplitCoordinatorView: View {
     
     /// The NavigationStack that will be used in compact layouts
     var navigationStack: some View {
-        NavigationStack(path: $navigationSplitCoordinator.compactLayoutStackModules) {
+        NavigationStack(path: navigationSplitCoordinator.compactLayoutStackModulesBinding) {
             navigationSplitCoordinator.compactLayoutRootModule?.coordinator?.toPresentable()
                 .navigationDestination(for: NavigationModule.self) { module in
                     module.coordinator?.toPresentable()
@@ -516,8 +521,9 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     /// Set the coordinator to be used on the stack's root
     /// - Parameters:
     ///   - coordinator: the root coordinator
+    ///   - animated: whether to animate the transition or not. Default is true
     ///   - dismissalCallback: called when this root coordinator has removed/replaced
-    func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             rootModule = nil
             return
@@ -529,15 +535,26 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         
         popToRoot(animated: false)
 
-        rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     /// Pushes a new coordinator on the navigation stack
     /// - Parameters:
     ///   - coordinator: the coordinator to be displayed
+    ///   - animated: whether to animate the transition or not. Default is true
     ///   - dismissalCallback: called when the coordinator has been popped, programatically or otherwise
-    func push(_ coordinator: any CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
-        stackModules.append(NavigationModule(coordinator, dismissalCallback: dismissalCallback))
+    func push(_ coordinator: any CoordinatorProtocol, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            stackModules.append(NavigationModule(coordinator, dismissalCallback: dismissalCallback))
+        }
     }
     
     /// Pop all the coordinators from the stack, returning to the root coordinator
@@ -546,33 +563,34 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         guard !stackModules.isEmpty else {
             return
         }
-        
-        if !animated {
-            // Disabling animations doesn't work through normal Transactions
-            // https://stackoverflow.com/questions/72832243
-            UIView.setAnimationsEnabled(false)
-        }
-        
-        stackModules.removeAll()
-        
-        if !animated {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                UIView.setAnimationsEnabled(true)
-            }
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            stackModules.removeAll()
         }
     }
     
     /// Removes the last coordinator from the navigation stack
-    func pop() {
-        stackModules.removeLast()
+    /// - Parameter animated: whether to animate the transition or not. Default is true
+    func pop(animated: Bool = true) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            stackModules.popLast()
+        }
     }
     
     /// Present a sheet on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
     /// - Parameters:
     ///   - coordinator: the coordinator to display
+    ///   - animated: whether to animate the transition or not. Default is true
+
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
-    func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         if let navigationSplitCoordinator {
             navigationSplitCoordinator.setSheetCoordinator(coordinator, dismissalCallback: dismissalCallback)
             return
@@ -586,16 +604,22 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
-    
+
     /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
     /// - Parameters:
     ///   - coordinator: the coordinator to display
+    ///   - animated: whether to animate the transition or not. Default is true
     ///   - dismissalCallback: called when the fullscreen cover has been dismissed, programatically or otherwise
-    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         if let navigationSplitCoordinator {
             navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator, dismissalCallback: dismissalCallback)
             return
@@ -609,8 +633,13 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         if fullScreenCoverModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-        
-        fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     // MARK: - CoordinatorProtocol
