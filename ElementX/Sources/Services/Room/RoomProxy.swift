@@ -351,8 +351,7 @@ class RoomProxy: RoomProxyProtocol {
     func rejectInvitation() async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                try self.room.rejectInvitation()
-                return .success(())
+                return try .success(self.room.rejectInvitation())
             } catch {
                 return .failure(.failedRejectingInvite)
             }
@@ -362,8 +361,7 @@ class RoomProxy: RoomProxyProtocol {
     func acceptInvitation() async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                try self.room.acceptInvitation()
-                return .success(())
+                return try .success(self.room.acceptInvitation())
             } catch {
                 return .failure(.failedAcceptingInvite)
             }
