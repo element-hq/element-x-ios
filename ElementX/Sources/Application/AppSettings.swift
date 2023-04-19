@@ -134,6 +134,12 @@ final class AppSettings: ObservableObject {
     /// `true` when the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.enableAnalytics, defaultValue: false, storageType: .userDefaults(store))
     var enableAnalytics
+    
+    /// Reset user consents for analytics
+    static func forgetAnalyticsConsents() {
+        MXLog.warning("Resetting user consents for analytics.")
+        store.removeObject(forKey: UserDefaultsKeys.enableAnalytics.rawValue)
+    }
         
     // MARK: - Room Screen
     

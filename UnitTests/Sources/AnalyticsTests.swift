@@ -182,4 +182,16 @@ class AnalyticsTests: XCTestCase {
         // Then the properties should be cleared
         XCTAssertNil(client.pendingUserProperties, "The user properties should be cleared.")
     }
+    
+    func testForgetAnalyticsConsents() {
+        // Given an existing install of the app where the user previously accpeted the tracking
+        applicationSettings.enableAnalytics = true
+        XCTAssertFalse(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
+
+        // When forgetting analytics consents
+        AppSettings.forgetAnalyticsConsents()
+        
+        // Then the analytics prompt should be presented again
+        XCTAssertTrue(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
+    }
 }
