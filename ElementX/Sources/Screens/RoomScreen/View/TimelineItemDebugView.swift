@@ -19,15 +19,13 @@ import SwiftUI
 struct TimelineItemDebugView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @State private var isModelExpanded = true
-    
     let info: TimelineItemDebugInfo
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    TimelineItemInfoDisclosureGroup(title: "Model", text: info.model, isExpanded: $isModelExpanded)
+                    TimelineItemInfoDisclosureGroup(title: "Model", text: info.model, isInitiallyExpanded: true)
                     
                     if let originalJSONInfo = info.originalJSON {
                         TimelineItemInfoDisclosureGroup(title: "Original JSON", text: originalJSONInfo)
@@ -60,22 +58,21 @@ struct TimelineItemDebugView: View {
     // MARK: - Private
     
     private struct TimelineItemInfoDisclosureGroup: View {
+        @State private var isExpanded: Bool
+        
         let title: String
         let text: String
-        var isExpanded: Binding<Bool>?
+        
+        init(title: String, text: String, isInitiallyExpanded: Bool = false) {
+            self.title = title
+            self.text = text
+            isExpanded = isInitiallyExpanded
+        }
         
         var body: some View {
             VStack(spacing: 0.0) {
-                Group {
-                    if let isExpanded {
-                        DisclosureGroup(title, isExpanded: isExpanded) {
-                            disclosureGroupContent
-                        }
-                    } else {
-                        DisclosureGroup(title) {
-                            disclosureGroupContent
-                        }
-                    }
+                DisclosureGroup(title, isExpanded: $isExpanded) {
+                    disclosureGroupContent
                 }
                 .font(.element.subheadline)
                 .padding()
