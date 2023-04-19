@@ -32,24 +32,56 @@ class InvitesViewModelTests: XCTestCase {
         userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 
-    func testEmptyState() throws {
+    func testEmptyState() async throws {
         setupViewModel()
+        _ = await context.nextViewState()
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertTrue(invites.isEmpty)
     }
     
-    func testListState() throws {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-        clientProxy.invitesSummaryProvider = summaryProvider
-        clientProxy.visibleRoomsSummaryProvider = summaryProvider
-        setupViewModel()
+    func testListState() async throws {
+        setupViewModel(roomSummaries: .mockInvites)
+        _ = await context.nextViewState()
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertEqual(invites.count, 2)
     }
     
+    func testAcceptInvite() async throws {
+        let invites: [RoomSummary] = .mockInvites
+        guard case .filled(let details) = invites.first else {
+            XCTFail("No invite found")
+            return
+        }
+        setupViewModel(roomSummaries: invites)
+        context.send(viewAction: .accept(.init(roomDetails: details)))
+        let action: InvitesViewModelAction? = await viewModel.actions.values.first()
+        guard case .openRoom(let roomID) = action else {
+            XCTFail("Wrong view model action")
+            return
+        }
+        XCTAssertEqual(details.id, roomID)
+    }
+    
+    func testDeclineInvite() async throws {
+        let invites: [RoomSummary] = .mockInvites
+        guard case .filled(let details) = invites.first else {
+            XCTFail("No invite found")
+            return
+        }
+        setupViewModel(roomSummaries: invites)
+        context.send(viewAction: .decline(.init(roomDetails: details)))
+        XCTAssertNotNil(context.alertInfo)
+    }
+    
     // MARK: - Private
     
-    private func setupViewModel() {
+    private func setupViewModel(roomSummaries: [RoomSummary]? = nil) {
+        if let roomSummaries {
+            let summaryProvider = MockRoomSummaryProvider(state: .loaded(roomSummaries))
+            clientProxy.invitesSummaryProvider = summaryProvider
+            clientProxy.visibleRoomsSummaryProvider = summaryProvider
+        }
+        
         viewModel = InvitesViewModel(userSession: userSession)
     }
 }

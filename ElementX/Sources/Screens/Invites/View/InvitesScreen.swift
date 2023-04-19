@@ -35,6 +35,7 @@ struct InvitesScreen: View {
             }
         }
         .navigationTitle(L10n.actionInvitesList)
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     // MARK: - Private

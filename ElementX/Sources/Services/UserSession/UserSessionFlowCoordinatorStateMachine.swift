@@ -23,7 +23,7 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The initial state, used before the coordinator starts
         case initial
         
-        /// Showing the home screen
+        /// Showing the home screen. The `selectedRoomId` represents the timeline shown on the detail panel (if any)
         case roomList(selectedRoomId: String?)
                 
         /// Showing the session verification flows
@@ -125,7 +125,11 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .invitesScreen(selectedRoomId: selectedRoomId)
             case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
-                
+            case (.selectRoom(let roomId), .invitesScreen):
+                return .invitesScreen(selectedRoomId: roomId)
+            case (.deselectRoom, .invitesScreen):
+                return .invitesScreen(selectedRoomId: nil)
+
             default:
                 return nil
             }

@@ -121,6 +121,11 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentInvitesList(animated: animated)
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
+            case (.invitesScreen, .selectRoom(let roomId), .invitesScreen(let selectedRoomId)) where roomId == selectedRoomId:
+                self.presentRoomWithIdentifier(roomId)
+            case (.invitesScreen, .deselectRoom, .invitesScreen):
+                break
+            
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -200,12 +205,18 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             detailNavigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self, roomIdentifier] in
                 guard let self else { return }
                 
-                // Move the state machine to no room selected if the room currently being dimissed
+                // Move the state machine to no room selected if the room currently being dismissed
                 // is the same as the one selected in the state machine.
                 // This generally happens when popping the room screen while in a compact layout
-                if case let .roomList(selectedRoomId) = self.stateMachine.state, selectedRoomId == roomIdentifier {
+                switch self.stateMachine.state {
+                case
+                    let .roomList(selectedRoomId) where selectedRoomId == roomIdentifier,
+                    let .invitesScreen(selectedRoomId) where selectedRoomId == roomIdentifier:
+                    
                     self.stateMachine.processEvent(.deselectRoom)
                     self.detailNavigationStackCoordinator.setRootCoordinator(nil)
+                default:
+                    break
                 }
             }
             
@@ -330,10 +341,15 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let coordinator = InvitesCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { _ in }
+            .sink { [weak self] action in
+                switch action {
+                case .openRoom(let roomId):
+                    self?.stateMachine.processEvent(.selectRoom(roomId: roomId))
+                }
+            }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setDetailCoordinator(coordinator, animated: animated) { [weak self] in
+        sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.closedInvitesScreen)
         }
     }

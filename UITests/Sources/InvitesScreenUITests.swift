@@ -28,4 +28,13 @@ class InvitesScreenUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
         app.assertScreenshot(.invitesNoInvites)
     }
+    
+    func testDeclineInvite() {
+        let app = Application.launch(.invites)
+        let declineButton = app.buttons[A11yIdentifiers.invitesScreen.decline].firstMatch
+        XCTAssert(declineButton.exists)
+        declineButton.tap()
+        XCTAssertEqual(app.alerts.count, 1)
+        app.assertScreenshot(.invites, step: 1)
+    }
 }

@@ -21,7 +21,9 @@ struct InvitesCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-enum InvitesCoordinatorAction { }
+enum InvitesCoordinatorAction {
+    case openRoom(withIdentifier: String)
+}
 
 final class InvitesCoordinator: CoordinatorProtocol {
     private let parameters: InvitesCoordinatorParameters
@@ -39,10 +41,15 @@ final class InvitesCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] _ in
-            guard let self else { return }
-        }
-        .store(in: &cancellables)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .openRoom(let roomID):
+                    self.actionsSubject.send(.openRoom(withIdentifier: roomID))
+                }
+            }
+            .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {

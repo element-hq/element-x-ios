@@ -65,6 +65,7 @@ class MockClientProxy: ClientProxyProtocol {
             return RoomProxyMock(with: .init(displayName: "Empty room"))
         case .filled(let details), .invalidated(let details):
             let room = RoomProxyMock(with: .init(displayName: details.name))
+            room.acceptInvitationReturnValue = .success(())
             room.inviterReturnValue = roomInviter
             return room
         }

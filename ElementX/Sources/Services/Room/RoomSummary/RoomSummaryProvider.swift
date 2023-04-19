@@ -129,7 +129,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let details = RoomSummaryDetails(id: room.roomId(),
                                          name: room.name() ?? room.roomId(),
-                                         isDirect: room.isDm() ?? false,
+                                         isDirect: fullRoom?.isDirect() ?? room.isDm() ?? false,
                                          avatarURL: avatarURL,
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
