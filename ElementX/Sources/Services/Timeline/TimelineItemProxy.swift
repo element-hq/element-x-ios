@@ -115,7 +115,7 @@ struct EventTimelineItemProxy {
     
     var debugInfo: TimelineItemDebugInfo {
         let debugInfo = item.debugInfo()
-        return TimelineItemDebugInfo(model: debugInfo.model, originalJson: debugInfo.originalJson, latestEditJson: debugInfo.latestEditJson)
+        return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }
 }
 
@@ -133,25 +133,25 @@ extension TimelineItemContentKind {
 struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
     let id = UUID()
     let model: String
-    let originalJson: String?
-    let latestEditJson: String?
+    let originalJSON: String?
+    let latestEditJSON: String?
     
-    init(model: String, originalJson: String?, latestEditJson: String?) {
+    init(model: String, originalJSON: String?, latestEditJSON: String?) {
         self.model = model
         
-        self.originalJson = Self.prettyJsonFormattedString(from: originalJson)
-        self.latestEditJson = Self.prettyJsonFormattedString(from: latestEditJson)
+        self.originalJSON = Self.prettyJsonFormattedString(from: originalJSON)
+        self.latestEditJSON = Self.prettyJsonFormattedString(from: latestEditJSON)
     }
     
     var description: String {
         var description = model
         
-        if let originalJson {
-            description += "\n\n\(originalJson)"
+        if let originalJSON {
+            description += "\n\n\(originalJSON)"
         }
         
-        if let latestEditJson {
-            description += "\n\n\(latestEditJson)"
+        if let latestEditJSON {
+            description += "\n\n\(latestEditJSON)"
         }
         
         return description
@@ -167,6 +167,6 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
             return nil
         }
         
-        return String(data: jsonData, encoding: .ascii)
+        return String(data: jsonData, encoding: .utf8)
     }
 }

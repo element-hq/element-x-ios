@@ -193,7 +193,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
         }
         
-        return .init(model: "Unknown item", originalJson: nil, latestEditJson: nil)
+        return .init(model: "Unknown item", originalJSON: nil, latestEditJSON: nil)
     }
     
     func retryDecryption(for sessionID: String) async {

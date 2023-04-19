@@ -66,7 +66,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func redact(_ itemID: String) async { }
     
     func debugInfo(for itemID: String) -> TimelineItemDebugInfo {
-        .init(model: "Mock debug description", originalJson: nil, latestEditJson: nil)
+        .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
     }
     
     func retryDecryption(for sessionID: String) async { }

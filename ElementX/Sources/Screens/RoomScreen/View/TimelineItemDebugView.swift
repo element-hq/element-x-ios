@@ -26,16 +26,21 @@ struct TimelineItemDebugView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                Divider()
-                
                 VStack {
-                    disclosureGroup(title: "Model", text: info.model)
-                    disclosureGroup(title: "Original JSON", text: info.originalJson)
-                    disclosureGroup(title: "Latest edit JSON", text: info.latestEditJson)
+                    TimelineItemInfoDisclosureGroup(title: "Model", text: info.model, isExpanded: $isModelExpanded)
+                    
+                    if let originalJSONInfo = info.originalJSON {
+                        TimelineItemInfoDisclosureGroup(title: "Original JSON", text: originalJSONInfo)
+                    }
+                    
+                    if let latestEditJSONInfo = info.latestEditJSON {
+                        TimelineItemInfoDisclosureGroup(title: "Latest edit JSON", text: latestEditJSONInfo)
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("Timeline item")
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L10n.actionCancel) {
@@ -54,41 +59,44 @@ struct TimelineItemDebugView: View {
     
     // MARK: - Private
     
-    @ViewBuilder
-    private func disclosureGroup(title: String, text: String?, isExpanded: Binding<Bool>? = nil) -> some View {
-        if let text {
+    private struct TimelineItemInfoDisclosureGroup: View {
+        let title: String
+        let text: String
+        var isExpanded: Binding<Bool>?
+        
+        var body: some View {
             VStack(spacing: 0.0) {
                 Group {
                     if let isExpanded {
                         DisclosureGroup(title, isExpanded: isExpanded) {
-                            groupContent(for: text)
+                            disclosureGroupContent
                         }
                     } else {
                         DisclosureGroup(title) {
-                            groupContent(for: text)
+                            disclosureGroupContent
                         }
                     }
                 }
-                .listRowInsets(.none)
                 .font(.element.subheadline)
                 .padding()
                 
                 Divider()
             }
         }
-    }
-    
-    private func groupContent(for text: String) -> some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            
-            Divider()
-            
-            Text(text)
-                .font(.element.caption1.monospaced())
-                .foregroundColor(.element.primaryContent)
+        
+        @ViewBuilder
+        var disclosureGroupContent: some View {
+            VStack(alignment: .leading) {
+                Spacer()
+                
+                Divider()
+                
+                Text(text)
+                    .font(.element.caption1.monospaced())
+                    .foregroundColor(.element.primaryContent)
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 }
 
@@ -110,7 +118,7 @@ struct TimelineItemDebugView_Previews: PreviewProvider {
     
     static var previews: some View {
         TimelineItemDebugView(info: .init(model: smallContent,
-                                          originalJson: smallContent,
-                                          latestEditJson: smallContent))
+                                          originalJSON: "{\"Hi\": \"Alice\"}",
+                                          latestEditJSON: "{\"Hi\": \"Bob\"}"))
     }
 }
