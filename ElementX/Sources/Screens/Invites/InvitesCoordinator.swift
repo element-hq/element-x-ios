@@ -46,7 +46,7 @@ final class InvitesCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .openRoom(let roomID):
-                    actionsSubject.send(.openRoom(withIdentifier: roomID))
+                    self.actionsSubject.send(.openRoom(withIdentifier: roomID))
                 }
             }
             .store(in: &cancellables)
