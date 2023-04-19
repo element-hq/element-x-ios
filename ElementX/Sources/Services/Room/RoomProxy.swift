@@ -141,7 +141,7 @@ class RoomProxy: RoomProxyProtocol {
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: nil)
+                                        timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
         if let result = try? slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: settings) {
             timelineObservationToken = result.taskHandle
             Task {
