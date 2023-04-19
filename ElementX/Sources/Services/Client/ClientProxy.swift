@@ -327,6 +327,10 @@ class ClientProxy: ClientProxyProtocol {
             allRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
             invitesViewProxy?.setSlidingSync(slidingSync: slidingSync)
             
+            // Build the room summary providers later so the sliding sync view proxies are up to date and the
+            // currentRoomList is populate with the data from the cold cache
+            buildRoomSummaryProviders()
+            
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
             
             self.slidingSync = slidingSync
@@ -351,9 +355,6 @@ class ClientProxy: ClientProxyProtocol {
                 .build()
             
             let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsSlidingSyncView, name: "Visible rooms")
-            
-            visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
-                                                              eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
             
             self.visibleRoomsSlidingSyncView = visibleRoomsSlidingSyncView
             self.visibleRoomsViewProxy = visibleRoomsViewProxy
@@ -394,13 +395,8 @@ class ClientProxy: ClientProxyProtocol {
                 .batchSize(batchSize: 100)
                 .build()
             
-            let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsSlidingSyncView, name: "All rooms")
-            
-            allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
-            
             self.allRoomsSlidingSyncView = allRoomsSlidingSyncView
-            self.allRoomsViewProxy = allRoomsViewProxy
+            allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsSlidingSyncView, name: "All rooms")
             
         } catch {
             MXLog.error("Failed building the all rooms sliding sync view with error: \(error)")
@@ -422,16 +418,31 @@ class ClientProxy: ClientProxyProtocol {
                 .batchSize(batchSize: 100)
                 .build()
             
-            let invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
-            
-            invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesViewProxy,
-                                                         eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
-            
             invitesSlidingSyncView = invitesView
-            self.invitesViewProxy = invitesViewProxy
+            invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
         } catch {
             MXLog.error("Failed building the invites sliding sync view with error: \(error)")
         }
+    }
+    
+    private func buildRoomSummaryProviders() {
+        guard visibleRoomsSummaryProvider == nil, allRoomsSummaryProvider == nil, invitesSummaryProvider == nil else {
+            fatalError("This shouldn't be called more than once")
+        }
+        
+        guard let visibleRoomsViewProxy, let allRoomsViewProxy, let invitesViewProxy else {
+            MXLog.error("Sliding sync view proxies unavailable")
+            return
+        }
+        
+        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
+                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+        
+        allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
+                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+        
+        invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesViewProxy,
+                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
     }
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
