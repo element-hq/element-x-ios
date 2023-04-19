@@ -42,7 +42,7 @@ enum TimelineItemDeliveryStatus: Hashable {
 }
 
 /// A light wrapper around event timeline items returned from Rust.
-struct EventTimelineItemProxy: CustomDebugStringConvertible {
+struct EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     
     init(item: MatrixRustSDK.EventTimelineItem) {
@@ -113,22 +113,9 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
     
-    // MARK: - CustomDebugStringConvertible
-    
-    var debugDescription: String {
+    var debugInfo: TimelineItemDebugInfo {
         let debugInfo = item.debugInfo()
-        
-        var debugDescription = debugInfo.model
-        
-        if let originalJson = debugInfo.originalJson {
-            debugDescription += "\n\n\(originalJson)"
-        }
-        
-        if let latestEditJson = debugInfo.latestEditJson {
-            debugDescription += "\n\n\(latestEditJson)"
-        }
-        
-        return debugDescription
+        return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }
 }
 
@@ -140,5 +127,46 @@ extension TimelineItemContentKind {
         default:
             return false
         }
+    }
+}
+
+struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
+    let id = UUID()
+    let model: String
+    let originalJSON: String?
+    let latestEditJSON: String?
+    
+    init(model: String, originalJSON: String?, latestEditJSON: String?) {
+        self.model = model
+        
+        self.originalJSON = Self.prettyJsonFormattedString(from: originalJSON)
+        self.latestEditJSON = Self.prettyJsonFormattedString(from: latestEditJSON)
+    }
+    
+    var description: String {
+        var description = model
+        
+        if let originalJSON {
+            description += "\n\n\(originalJSON)"
+        }
+        
+        if let latestEditJSON {
+            description += "\n\n\(latestEditJSON)"
+        }
+        
+        return description
+    }
+    
+    // MARK: - Private
+    
+    private static func prettyJsonFormattedString(from string: String?) -> String? {
+        guard let string,
+              let data = string.data(using: .utf8),
+              let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers),
+              let jsonData = try? JSONSerialization.data(withJSONObject: jsonDictionary, options: [.prettyPrinted]) else {
+            return nil
+        }
+        
+        return String(data: jsonData, encoding: .utf8)
     }
 }
