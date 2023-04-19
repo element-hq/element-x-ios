@@ -319,7 +319,7 @@ class ClientProxy: ClientProxyProtocol {
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsSlidingSyncView)
                 .withCommonExtensions()
-                .coldCache(name: "ElementX")
+                .storageKey(name: "ElementX")
                 .build()
             
             // Don't forget to update the view proxies after building the slidingSync
