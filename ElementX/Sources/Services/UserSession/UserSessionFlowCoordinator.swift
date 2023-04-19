@@ -121,7 +121,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentInvitesList(animated: animated)
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
-            case (.invitesScreen, .selectRoom(let roomId), .invitesScreen(_, .some)):
+            case (.invitesScreen, .selectRoom(let roomId), .invitesScreen):
                 self.presentRoomWithIdentifier(roomId)
             case (.invitesScreen, .deselectRoom, .invitesScreen):
                 break
@@ -211,7 +211,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 switch self.stateMachine.state {
                 case
                     let .roomList(selectedRoomId) where selectedRoomId == roomIdentifier,
-                    let .invitesScreen(_, selectedRoomId) where selectedRoomId == roomIdentifier:
+                    let .invitesScreen(selectedRoomId) where selectedRoomId == roomIdentifier:
                     
                     self.stateMachine.processEvent(.deselectRoom)
                     self.detailNavigationStackCoordinator.setRootCoordinator(nil)

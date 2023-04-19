@@ -23,7 +23,7 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The initial state, used before the coordinator starts
         case initial
         
-        /// Showing the home screen
+        /// Showing the home screen. The `selectedRoomId` represents the timeline shown on the detail panel (if any)
         case roomList(selectedRoomId: String?)
                 
         /// Showing the session verification flows
@@ -39,7 +39,7 @@ class UserSessionFlowCoordinatorStateMachine {
         case startChatScreen(selectedRoomId: String?)
         
         /// Showing invites list screen
-        case invitesScreen(selectedRoomId: String?, shownRoomId: String?)
+        case invitesScreen(selectedRoomId: String?)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -122,13 +122,13 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .roomList(selectedRoomId: selectedRoomId)
             
             case (.showInvitesScreen, .roomList(let selectedRoomId)):
-                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: nil)
-            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId, _)):
+                return .invitesScreen(selectedRoomId: selectedRoomId)
+            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
-            case (.selectRoom(let roomId), .invitesScreen(let selectedRoomId, nil)):
-                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: roomId)
-            case (.deselectRoom, .invitesScreen(let selectedRoomId, .some)):
-                return .invitesScreen(selectedRoomId: selectedRoomId, shownRoomId: nil)
+            case (.selectRoom(let roomId), .invitesScreen):
+                return .invitesScreen(selectedRoomId: roomId)
+            case (.deselectRoom, .invitesScreen):
+                return .invitesScreen(selectedRoomId: nil)
 
             default:
                 return nil
