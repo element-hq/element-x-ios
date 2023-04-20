@@ -52,12 +52,12 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         return [localProfile] + filteredSearchResult
     }
     
-    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfile?, ClientProxyError> {
+    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfile, ClientProxyError> {
         guard searchQuery.isMatrixIdentifier else {
-            return .success(nil)
+            return .failure(.failedGettingUserProfile)
         }
         
-        return await clientProxy.profile(for: searchQuery).map { $0 }
+        return await clientProxy.profile(for: searchQuery)
     }
 }
 
