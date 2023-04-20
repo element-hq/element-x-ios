@@ -22,9 +22,21 @@ enum CreateRoomViewModelAction {
 
 struct CreateRoomViewState: BindableState {
     var selectedUsers: [UserProfile]
+    var bindings = CreateRoomViewStateBindings()
+    
+    var canCreateRoom: Bool {
+        !bindings.roomName.isEmpty
+    }
+}
+
+struct CreateRoomViewStateBindings {
+    var roomName = ""
+    var roomTopic = ""
 }
 
 enum CreateRoomViewAction {
     case createRoom
+    case selectPrivateRoom
+    case selectPublicRoom
     case deselectUser(UserProfile)
 }
