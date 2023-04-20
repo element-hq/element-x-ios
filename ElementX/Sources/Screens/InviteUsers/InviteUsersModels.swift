@@ -45,7 +45,7 @@ struct InviteUsersViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<ClientProxyError>?
+    var alertInfo: AlertInfo<UserDiscoveryErrorType>?
 }
 
 enum InviteUsersViewAction {

@@ -85,7 +85,7 @@ class UserDiscoveryServiceTest: XCTestCase {
         XCTAssertEqual(results.isEmpty, count == 0)
     }
     
-    private func search(query: String) async -> Result<[UserProfile], ClientProxyError> {
+    private func search(query: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
         await service.searchProfiles(with: query)
     }
     

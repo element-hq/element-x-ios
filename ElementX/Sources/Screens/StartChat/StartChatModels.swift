@@ -16,6 +16,12 @@
 
 import Foundation
 
+enum StartChatErrorType: Error {
+    case failedSearchingUsers
+    case failedRetrievingDirectRoom
+    case failedCreatingRoom
+}
+
 enum StartChatViewModelAction {
     case close
     case createRoom
@@ -39,7 +45,7 @@ struct StartChatScreenViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<ClientProxyError>?
+    var alertInfo: AlertInfo<StartChatErrorType>?
 }
 
 enum StartChatViewAction {

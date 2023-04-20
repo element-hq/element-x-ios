@@ -72,15 +72,17 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func displayError(_ type: ClientProxyError) {
         switch type {
         case .failedRetrievingDirectRoom:
-            state.bindings.alertInfo = AlertInfo(id: type,
+            state.bindings.alertInfo = AlertInfo(id: .failedRetrievingDirectRoom,
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
         case .failedCreatingRoom:
-            state.bindings.alertInfo = AlertInfo(id: type,
+            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
+        case .failedSearchingUsers:
+            state.bindings.alertInfo = AlertInfo(id: .failedSearchingUsers)
         default:
-            state.bindings.alertInfo = AlertInfo(id: type)
+            break
         }
     }
     
@@ -126,7 +128,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func handleResult(for sectionType: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+    private func handleResult(for sectionType: SearchUserSectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)

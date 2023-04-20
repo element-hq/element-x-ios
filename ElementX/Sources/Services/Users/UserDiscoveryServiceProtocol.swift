@@ -16,8 +16,13 @@
 
 import Foundation
 
+enum UserDiscoveryErrorType: Error {
+    case failedSearchingUsers
+    case failedFetchingSuggestedUsers
+}
+
 // sourcery: AutoMockable
 protocol UserDiscoveryServiceProtocol {
-    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], ClientProxyError>
-    func fetchSuggestions() async -> Result<[UserProfile], ClientProxyError>
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType>
+    func fetchSuggestions() async -> Result<[UserProfile], UserDiscoveryErrorType>
 }

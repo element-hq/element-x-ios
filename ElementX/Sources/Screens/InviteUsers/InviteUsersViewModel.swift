@@ -109,7 +109,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         }
     }
     
-    private func handleResult(for sectionType: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+    private func handleResult(for sectionType: SearchUserSectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)
