@@ -16,8 +16,8 @@
 
 import Foundation
 
-struct SearchUsersSection {
-    let type: SearchUserSectionType
+struct UserDiscoverySection {
+    let type: UserDiscoverySectionType
     let users: [UserProfile]
     
     var title: String? {
@@ -30,7 +30,7 @@ struct SearchUsersSection {
     }
 }
 
-enum SearchUserSectionType: Equatable {
+enum UserDiscoverySectionType: Equatable {
     case searchResult
     case suggestions
 }

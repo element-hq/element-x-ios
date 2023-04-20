@@ -16,6 +16,10 @@
 
 import Foundation
 
+enum InviteUsersErrorType: Error {
+    case unknown
+}
+
 enum InviteUsersViewModelAction {
     case close
 }
@@ -23,7 +27,7 @@ enum InviteUsersViewModelAction {
 struct InviteUsersViewState: BindableState {
     var bindings = InviteUsersViewStateBindings()
     
-    var usersSection: SearchUsersSection = .init(type: .suggestions, users: [])
+    var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     var selectedUsers: [UserProfile] = []
     
     var isSearching: Bool {
@@ -45,7 +49,7 @@ struct InviteUsersViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<UserDiscoveryErrorType>?
+    var alertInfo: AlertInfo<InviteUsersErrorType>?
 }
 
 enum InviteUsersViewAction {

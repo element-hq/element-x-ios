@@ -17,9 +17,8 @@
 import Foundation
 
 enum StartChatErrorType: Error {
-    case failedSearchingUsers
-    case failedRetrievingDirectRoom
     case failedCreatingRoom
+    case unknown
 }
 
 enum StartChatViewModelAction {
@@ -30,7 +29,7 @@ enum StartChatViewModelAction {
 
 struct StartChatViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
-    var usersSection: SearchUsersSection = .init(type: .suggestions, users: [])
+    var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
