@@ -20,23 +20,60 @@ struct CreateRoomScreen: View {
     @ObservedObject var context: CreateRoomViewModel.Context
     
     var body: some View {
-        ScrollView {
-            mainContent
-        }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(L10n.actionCreateARoom)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                createButton
+        mainContent
+            .scrollContentBackground(.hidden)
+            .background(Color.element.formBackground.ignoresSafeArea())
+            .navigationTitle(L10n.screenCreateRoomTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    createButton
+                }
             }
-        }
     }
     
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
-        selectedUsersSection
+        VStack(alignment: .center, spacing: 24) {
+            Form {
+                roomSection
+                topicSection
+            }
+            selectedUsersSection
+            Spacer()
+            Form {
+                securitySection
+            }
+        }
+    }
+    
+    private var roomSection: some View {
+        Section {
+            TextField(L10n.screenCreateRoomRoomNameLabel,
+                      text: $context.roomName,
+                      prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder).compoundFormTextFieldPlaceholder(),
+                      axis: .horizontal)
+                .textFieldStyle(.compoundForm)
+        } header: {
+            Text(L10n.screenCreateRoomRoomNameLabel)
+                .compoundFormSectionFooter()
+        }
+        .compoundFormSection()
+    }
+    
+    private var topicSection: some View {
+        Section {
+            TextField(L10n.screenCreateRoomTopicLabel,
+                      text: $context.roomTopic,
+                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder).compoundFormTextFieldPlaceholder(),
+                      axis: .vertical)
+                .lineLimit(3, reservesSpace: false)
+                .textFieldStyle(.compoundForm)
+        } header: {
+            Text(L10n.screenCreateRoomTopicLabel)
+                .compoundFormSectionFooter()
+        }
+        .formSectionStyle()
     }
     
     @ScaledMetric private var cellWidth: CGFloat = 64
@@ -54,10 +91,35 @@ struct CreateRoomScreen: View {
         }
     }
     
+    private var securitySection: some View {
+        Section {
+            Button(action: selectPrivate) {
+                Label(L10n.screenCreateRoomPrivateOptionTitle, systemImage: "lock.shield")
+            }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+            Button(action: selectPrivate) {
+                Label(L10n.screenCreateRoomPublicOptionTitle, systemImage: "exclamationmark.shield")
+            }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+        } header: {
+            Text("SECURITY")
+        }
+        .formSectionStyle()
+    }
+    
     private var createButton: some View {
         Button { context.send(viewAction: .createRoom) } label: {
             Text(L10n.actionCreate)
         }
+        .disabled(!context.viewState.canCreateRoom)
+    }
+    
+    private func selectPrivate() {
+        context.send(viewAction: .selectPrivateRoom)
+    }
+    
+    private func selectPublic() {
+        context.send(viewAction: .selectPublicRoom)
     }
     
     private func deselect(_ user: UserProfile) {
@@ -71,6 +133,8 @@ struct CreateRoom_Previews: PreviewProvider {
     static let viewModel = CreateRoomViewModel(selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
     
     static var previews: some View {
-        CreateRoomScreen(context: viewModel.context)
+        NavigationView {
+            CreateRoomScreen(context: viewModel.context)
+        }
     }
 }
