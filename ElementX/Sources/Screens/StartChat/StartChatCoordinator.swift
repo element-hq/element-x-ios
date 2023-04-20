@@ -21,7 +21,7 @@ struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let navigationStackCoordinator: NavigationStackCoordinator?
-    let usersProvider: UsersProviderProtocol
+    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum StartChatCoordinatorAction {
@@ -42,7 +42,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, usersProvider: parameters.usersProvider)
+        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {
@@ -70,7 +70,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersCoordinatorParameters(userSession: parameters.userSession, usersProvider: parameters.usersProvider)
+        let inviteParameters = InviteUsersCoordinatorParameters(userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] result in
             switch result {

@@ -22,7 +22,7 @@ import XCTest
 class StartChatScreenViewModelTests: XCTestCase {
     var viewModel: StartChatViewModelProtocol!
     var clientProxy: MockClientProxy!
-    var usersProvider: UsersProviderMock!
+    var userDiscoveryService: UserDiscoveryServiceMock!
     
     var context: StartChatViewModel.Context {
         viewModel.context
@@ -30,11 +30,11 @@ class StartChatScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
-        usersProvider = UsersProviderMock()
-        usersProvider.fetchSuggestionsReturnValue = .success([])
-        usersProvider.searchProfilesWithReturnValue = .success([])
+        userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
+        userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
+        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
         
         setupAppSettings()
         ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
@@ -43,16 +43,16 @@ class StartChatScreenViewModelTests: XCTestCase {
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
-        XCTAssertTrue(usersProvider.fetchSuggestionsCalled)
+        XCTAssertTrue(userDiscoveryService.fetchSuggestionsCalled)
         
         await search(query: "AA")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
-        XCTAssertFalse(usersProvider.searchProfilesWithCalled)
+        XCTAssertFalse(userDiscoveryService.searchProfilesWithCalled)
         
         await search(query: "AAA")
         assertSearchResults(toBe: 0)
         
-        XCTAssertTrue(usersProvider.searchProfilesWithCalled)
+        XCTAssertTrue(userDiscoveryService.searchProfilesWithCalled)
     }
     
     // MARK: - Private

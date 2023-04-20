@@ -19,13 +19,13 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class UsersProviderTest: XCTestCase {
-    var provider: UsersProvider!
+class UserDiscoveryServiceTest: XCTestCase {
+    var service: UserDiscoveryService!
     var clientProxy: MockClientProxy!
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
-        provider = UsersProvider(clientProxy: clientProxy)
+        service = UserDiscoveryService(clientProxy: clientProxy)
     }
     
     func testQueryShowingResults() async throws {
@@ -86,7 +86,7 @@ class UsersProviderTest: XCTestCase {
     }
     
     private func search(query: String) async -> Result<[UserProfile], ClientProxyError> {
-        await provider.searchProfiles(with: query)
+        await service.searchProfiles(with: query)
     }
     
     private var searchResults: [UserProfile] {

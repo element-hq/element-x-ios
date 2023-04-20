@@ -16,7 +16,7 @@
 
 import Foundation
 
-final class UsersProvider: UsersProviderProtocol {
+final class UserDiscoveryService: UserDiscoveryServiceProtocol {
     private let clientProxy: ClientProxyProtocol
     
     init(clientProxy: ClientProxyProtocol) {

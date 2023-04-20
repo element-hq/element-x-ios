@@ -317,22 +317,22 @@ class MockScreen: Identifiable {
         case .startChat:
             ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let usersProviderMock = UsersProviderMock()
-            usersProviderMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
-            usersProviderMock.searchProfilesWithReturnValue = .success([])
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
-            let parameters: StartChatCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, usersProvider: usersProviderMock)
+            let parameters: StartChatCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock)
             let coordinator = StartChatCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChatWithSearchResults:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            let usersProviderMock = UsersProviderMock()
-            usersProviderMock.fetchSuggestionsReturnValue = .success([])
-            usersProviderMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, usersProvider: usersProviderMock))
+            let coordinator = StartChatCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:
@@ -384,10 +384,10 @@ class MockScreen: Identifiable {
         case .inviteUsers:
             ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let usersProviderMock = UsersProviderMock()
-            usersProviderMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
-            usersProviderMock.searchProfilesWithReturnValue = .success([])
-            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), usersProvider: usersProviderMock))
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
+            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }

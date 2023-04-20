@@ -22,7 +22,7 @@ typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, Start
 class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private let userSession: UserSessionProtocol
     private let actionsSubject: PassthroughSubject<StartChatViewModelAction, Never> = .init()
-    private let usersProvider: UsersProviderProtocol
+    private let userDiscoveryService: UserDiscoveryServiceProtocol
     
     var actions: AnyPublisher<StartChatViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -30,10 +30,10 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     
-    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?, usersProvider: UsersProviderProtocol) {
+    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
-        self.usersProvider = usersProvider
+        self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
@@ -104,7 +104,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
         suggestionTask = nil
         searchTask = Task {
-            let result = await usersProvider.searchProfiles(with: searchQuery)
+            let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
         }
@@ -120,7 +120,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
         searchTask = nil
         suggestionTask = Task {
-            let result = await usersProvider.fetchSuggestions()
+            let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
             handleResult(for: .suggestions, result: result)
         }

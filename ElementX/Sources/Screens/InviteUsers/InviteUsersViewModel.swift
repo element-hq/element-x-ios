@@ -21,16 +21,16 @@ typealias InviteUsersViewModelType = StateStoreViewModel<InviteUsersViewState, I
 
 class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let usersProvider: UsersProviderProtocol
+    private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, usersProvider: UsersProviderProtocol) {
+    init(userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
-        self.usersProvider = usersProvider
+        self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: InviteUsersViewState(), imageProvider: userSession.mediaProvider)
         
         setupSubscriptions()
@@ -87,7 +87,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         }
         suggestionTask = nil
         searchTask = Task {
-            let result = await usersProvider.searchProfiles(with: searchQuery)
+            let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
         }
@@ -103,7 +103,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         }
         searchTask = nil
         suggestionTask = Task {
-            let result = await usersProvider.fetchSuggestions()
+            let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
             handleResult(for: .suggestions, result: result)
         }

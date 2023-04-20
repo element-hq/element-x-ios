@@ -874,7 +874,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
-class UsersProviderMock: UsersProviderProtocol {
+class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
 
     //MARK: - searchProfiles
 
