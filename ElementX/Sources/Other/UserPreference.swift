@@ -145,12 +145,39 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     }
     
     private func encode(value: Value?, for key: String) {
-        let encodedValue = try? JSONEncoder().encode(value)
-        userDefaults.setValue(encodedValue, forKey: key)
+        // Detects correctly double optionals like this: String?? = .some(nil)
+        if value.isNil {
+            userDefaults.removeObject(forKey: key)
+        } else {
+            let encodedValue = try? JSONEncoder().encode(value)
+            userDefaults.setValue(encodedValue, forKey: key)
+        }
     }
     
     private func encodePlistRepresentable(value: Value?, for key: String) {
-        userDefaults.set(value, forKey: key)
+        // Detects correctly double optionals like this: String?? = .some(nil)
+        if value.isNil {
+            userDefaults.removeObject(forKey: key)
+        } else {
+            userDefaults.set(value, forKey: key)
+        }
+    }
+}
+
+private protocol Nullable {
+    var isNil: Bool { get }
+}
+
+extension Optional: Nullable {
+    var isNil: Bool {
+        switch self {
+        case .none:
+            return true
+        case .some(let nullable as Nullable):
+            return nullable.isNil
+        case .some:
+            return false
+        }
     }
 }
 
