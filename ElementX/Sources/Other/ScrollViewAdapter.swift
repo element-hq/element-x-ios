@@ -24,30 +24,39 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             scrollView?.delegate = self
         }
     }
-        
-    var isScrolling = CurrentValueSubject<Bool, Never>(false)
-        
-    private func update(_ scrollView: UIScrollView) {
-        isScrolling.send(scrollView.isDragging || scrollView.isDecelerating)
+    
+    let didScroll = PassthroughSubject<Void, Never>()
+    let isScrolling = CurrentValueSubject<Bool, Never>(false)
+    
+    // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        didScroll.send(())
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        update(scrollView)
+        updateDidScroll(scrollView)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        update(scrollView)
+        updateDidScroll(scrollView)
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        update(scrollView)
+        updateDidScroll(scrollView)
     }
         
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        update(scrollView)
+        updateDidScroll(scrollView)
     }
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        update(scrollView)
+        updateDidScroll(scrollView)
+    }
+    
+    // MARK: - Private
+    
+    private func updateDidScroll(_ scrollView: UIScrollView) {
+        isScrolling.send(scrollView.isDragging || scrollView.isDecelerating)
     }
 }
