@@ -17,6 +17,10 @@
 import Combine
 import Foundation
 
+/// Property wrapper that allows to store data into a keyed storage.
+/// It also exposes a Combine publisher for listening to value changes.
+/// The publisher isn't supposed to skip consecutive duplicates if any,
+/// there is no concept of Equatable at this level.
 @propertyWrapper
 final class UserPreference<T: Codable> {
     private let key: String
@@ -47,7 +51,8 @@ final class UserPreference<T: Codable> {
     }
 }
 
-// UserPreference sugar syntax
+// MARK: - UserPreference convenience initializers
+
 extension UserPreference {
     enum StorageType {
         case userDefaults(UserDefaults = .standard)
@@ -80,21 +85,6 @@ extension UserPreference {
     }
 }
 
-// MARK: - PlistRepresentable
-
-protocol PlistRepresentable { }
-
-extension Bool: PlistRepresentable { }
-extension String: PlistRepresentable { }
-extension Int: PlistRepresentable { }
-extension Float: PlistRepresentable { }
-extension Double: PlistRepresentable { }
-extension Data: PlistRepresentable { }
-
-extension Array: PlistRepresentable where Element: PlistRepresentable { }
-extension Dictionary: PlistRepresentable where Key == String, Value: PlistRepresentable { }
-extension Optional: PlistRepresentable where Wrapped: PlistRepresentable { }
-
 // MARK: - Storage
 
 protocol KeyedStorage<Value> {
@@ -103,6 +93,10 @@ protocol KeyedStorage<Value> {
     subscript(key: String) -> Value? { get set }
 }
 
+/// An implementation of KeyedStorage on the UserDefaults.
+///
+/// When used with a `Value` that conforms to `PlistRepresentable` the Codable encode/decode
+/// phase is skipped, and values are stored natively in the plist.
 final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     private let userDefaults: UserDefaults
     private var cache: [String: Value] = .init()
@@ -161,3 +155,20 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
 }
 
 extension Dictionary: KeyedStorage where Key == String, Value: Codable { }
+
+// MARK: - PlistRepresentable
+
+/// A protocol to mark types as being plist compliant.
+/// UserDefaultsStorage uses this protocol to avoid to encode/decode with Codable plist compliant values.
+protocol PlistRepresentable { }
+
+extension Bool: PlistRepresentable { }
+extension String: PlistRepresentable { }
+extension Int: PlistRepresentable { }
+extension Float: PlistRepresentable { }
+extension Double: PlistRepresentable { }
+extension Data: PlistRepresentable { }
+
+extension Array: PlistRepresentable where Element: PlistRepresentable { }
+extension Dictionary: PlistRepresentable where Key == String, Value: PlistRepresentable { }
+extension Optional: PlistRepresentable where Wrapped: PlistRepresentable { }
