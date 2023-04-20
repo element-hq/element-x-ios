@@ -21,20 +21,19 @@ typealias InviteUsersViewModelType = StateStoreViewModel<InviteUsersViewState, I
 
 class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let usersProvider: UsersProviderProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private let usersProvider: UsersProviderProtocol
-    
     init(userSession: UserSessionProtocol, usersProvider: UsersProviderProtocol) {
-        self.usersProvider = usersProvider
         self.userSession = userSession
+        self.usersProvider = usersProvider
         super.init(initialViewState: InviteUsersViewState(), imageProvider: userSession.mediaProvider)
         
-        setupBindings()
+        setupSubscriptions()
     }
     
     // MARK: - Public
@@ -68,43 +67,52 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
 
     // MARK: - Private
     
-    private func setupBindings() {
+    private func setupSubscriptions() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .searchQuery()
+            .debounceAndRemoveDuplicates()
             .sink { [weak self] _ in
-                self?.fetchData()
+                self?.fetchUsers()
             }
             .store(in: &cancellables)
     }
     
-    private func fetchData() {
+    @CancellableTask
+    private var searchTask: Task<Void, Never>?
+    
+    private func fetchUsers() {
         guard searchQuery.count >= 3 else {
             fetchSuggestions()
             return
         }
-        
-        Task {
+        suggestionTask = nil
+        searchTask = Task {
             let result = await usersProvider.searchProfiles(with: searchQuery)
-            parseResultForSection(.searchResult, result: result)
+            guard !Task.isCancelled else { return }
+            handleResult(for: .searchResult, result: result)
         }
     }
+    
+    @CancellableTask
+    private var suggestionTask: Task<Void, Never>?
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
-        Task {
+        searchTask = nil
+        suggestionTask = Task {
             let result = await usersProvider.fetchSuggestions()
-            parseResultForSection(.suggestions, result: result)
+            guard !Task.isCancelled else { return }
+            handleResult(for: .suggestions, result: result)
         }
     }
     
-    private func parseResultForSection(_ type: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+    private func handleResult(for sectionType: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
         switch result {
         case .success(let users):
-            state.usersSection = .init(type: type, users: users)
+            state.usersSection = .init(type: sectionType, users: users)
         case .failure:
             break
         }

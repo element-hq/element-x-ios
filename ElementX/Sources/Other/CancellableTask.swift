@@ -16,21 +16,20 @@
 
 import Foundation
 
-struct SearchUsersSection {
-    let type: SearchUserSectionType
-    let users: [UserProfile]
-    
-    var title: String? {
-        switch type {
-        case .searchResult:
-            return nil
-        case .suggestions:
-            return users.isEmpty ? nil : L10n.commonSuggestions
+@propertyWrapper
+struct CancellableTask<S: Sendable, F: Error> {
+    var wrappedValue: Task<S, F>? {
+        get {
+            storedValue
+        } set {
+            storedValue?.cancel()
+            storedValue = newValue
         }
     }
-}
-
-enum SearchUserSectionType: Equatable {
-    case searchResult
-    case suggestions
+    
+    private var storedValue: Task<S, F>?
+    
+    init(_ value: Task<S, F>? = nil) {
+        storedValue = value
+    }
 }

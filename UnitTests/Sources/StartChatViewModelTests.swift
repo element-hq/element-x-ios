@@ -35,13 +35,15 @@ class StartChatScreenViewModelTests: XCTestCase {
         usersProvider.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
+        
+        setupAppSettings()
+        ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
     }
     
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
-        // TODO: ask how to test feature flags
-//        XCTAssertTrue(usersProvider.fetchSuggestionsCalled)
+        XCTAssertTrue(usersProvider.fetchSuggestionsCalled)
         
         await search(query: "AA")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)

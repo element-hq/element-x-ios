@@ -26,9 +26,13 @@ extension Publisher where Self.Failure == Never {
 }
 
 extension Publisher where Output == String, Failure == Never {
-    func searchQuery() -> AnyPublisher<String, Never> {
+    /**
+     Debounce text queries,
+        it removes duplicates,
+        make sure clearing the text updates immediately.
+     */
+    func debounceAndRemoveDuplicates() -> AnyPublisher<String, Never> {
         map { query in
-            // debounce search queries but make sure clearing the search updates immediately
             let milliseconds = query.isEmpty ? 0 : 500
             return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
         }

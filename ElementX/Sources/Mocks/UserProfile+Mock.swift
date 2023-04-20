@@ -26,6 +26,10 @@ extension UserProfile {
         .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
     }
 
+    static var mockBobby: UserProfile {
+        .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
+    }
+
     static var mockCharlie: UserProfile {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
     }

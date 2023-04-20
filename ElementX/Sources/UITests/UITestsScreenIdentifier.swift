@@ -51,7 +51,6 @@ enum UITestsScreenIdentifier: String {
     case reportContent
     case startChat
     case startChatWithSearchResults
-    case startChatSearchingNonexistentID
     case invites
     case invitesNoInvites
     case inviteUsers

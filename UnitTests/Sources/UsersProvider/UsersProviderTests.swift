@@ -19,7 +19,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class SearchProviderTest: XCTestCase {
+class UsersProviderTest: XCTestCase {
     var provider: UsersProvider!
     var clientProxy: MockClientProxy!
     
@@ -70,9 +70,11 @@ class SearchProviderTest: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .failure(.failedGettingUserProfile)
         
-        let results = await search(query: "@a:b.com")
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
         
-        XCTAssertThrowsError(try results.get())
+        let firstUserID = results.first?.userID
+        XCTAssertEqual(firstUserID, "@a:b.com")
+        XCTAssertTrue(clientProxy.getProfileCalled)
     }
     
     // MARK: - Private

@@ -16,7 +16,7 @@
 
 import Foundation
 
-class UsersProvider: UsersProviderProtocol {
+final class UsersProvider: UsersProviderProtocol {
     private let clientProxy: ClientProxyProtocol
     
     init(clientProxy: ClientProxyProtocol) {
@@ -29,19 +29,18 @@ class UsersProvider: UsersProviderProtocol {
     
     func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], ClientProxyError> {
         do {
-            let queriedProfile = try await getProfileIfPossible(with: searchQuery)
-            let searchedUsers = await clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
-            let searchResults = try searchedUsers.get()
-            let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
-            let allResults = merge(localProfile: localProfile, searchResults: searchResults.results)
-            
-            return .success(allResults)
+            async let queriedProfile = try? profileIfPossible(with: searchQuery).get()
+            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
+            let users = try await merge(searchQuery: searchQuery, queriedProfile: queriedProfile, searchResults: searchedUsers.get())
+            return .success(users)
         } catch {
             return .failure(.failedSearchingUsers)
         }
     }
     
-    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]) -> [UserProfile] {
+    private func merge(searchQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults) -> [UserProfile] {
+        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
+        let searchResults = searchResults.results
         guard let localProfile else {
             return searchResults
         }
@@ -53,12 +52,12 @@ class UsersProvider: UsersProviderProtocol {
         return [localProfile] + filteredSearchResult
     }
     
-    private func getProfileIfPossible(with searchQuery: String) async throws -> UserProfile? {
+    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfile?, ClientProxyError> {
         guard searchQuery.isMatrixIdentifier else {
-            return nil
+            return .success(nil)
         }
         
-        return try await clientProxy.getProfile(for: searchQuery).get()
+        return await clientProxy.profile(for: searchQuery).map { $0 }
     }
 }
 

@@ -44,10 +44,10 @@ struct InviteUsersScreen: View {
     /// The content shown in the form when a search query has been entered.
     @ViewBuilder
     private var searchContent: some View {
-        if context.viewState.hasEmptySearchResults {
-            noResultsContent
-        } else {
-            Form {
+        Form {
+            if context.viewState.hasEmptySearchResults {
+                noResultsContent
+            } else {
                 usersSection
             }
         }
