@@ -47,6 +47,7 @@ final class UserPreference<T: Codable> {
     }
 }
 
+// UserPreference sugar syntax
 extension UserPreference {
     enum StorageType {
         case userDefaults(UserDefaults = .standard)
@@ -66,6 +67,23 @@ extension UserPreference {
         self.init(key: key, defaultValue: defaultValue, keyedStorage: storage)
     }
 }
+
+// MARK: - PlistRepresentable
+
+protocol PlistRepresentable { }
+
+extension Bool: PlistRepresentable { }
+extension String: PlistRepresentable { }
+extension Int: PlistRepresentable { }
+extension Float: PlistRepresentable { }
+extension Double: PlistRepresentable { }
+extension Data: PlistRepresentable { }
+
+extension Array: PlistRepresentable where Element: PlistRepresentable { }
+extension Dictionary: PlistRepresentable where Key == String, Value: PlistRepresentable { }
+extension Optional: PlistRepresentable where Wrapped: PlistRepresentable { }
+
+// MARK: - Storage
 
 protocol KeyedStorage<Value> {
     associatedtype Value: Codable
@@ -87,24 +105,46 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
                 return cache[key]
             }
             
-            let decodedValue = userDefaults
-                .data(forKey: key)
-                .flatMap {
-                    try? JSONDecoder().decode(Value.self, from: $0)
-                }
+            let value: Value?
+            if Value.self is PlistRepresentable.Type {
+                value = decodePlistRepresentableValue(for: key)
+            } else {
+                value = decodeValue(for: key)
+            }
             
-            cache[key] = decodedValue
-            return decodedValue
+            cache[key] = value
+            return value
         }
         set {
-            do {
-                let encodedValue = try JSONEncoder().encode(newValue)
-                userDefaults.setValue(encodedValue, forKey: key)
-                cache[key] = newValue
-            } catch {
-                cache[key] = nil
+            if Value.self is PlistRepresentable.Type {
+                encodePlistRepresentable(value: newValue, for: key)
+            } else {
+                encode(value: newValue, for: key)
             }
+            
+            cache[key] = nil
         }
+    }
+    
+    private func decodeValue(for key: String) -> Value? {
+        userDefaults
+            .data(forKey: key)
+            .flatMap {
+                try? JSONDecoder().decode(Value.self, from: $0)
+            }
+    }
+    
+    private func decodePlistRepresentableValue(for key: String) -> Value? {
+        userDefaults.object(forKey: key) as? Value
+    }
+    
+    private func encode(value: Value?, for key: String) {
+        let encodedValue = try? JSONEncoder().encode(value)
+        userDefaults.setValue(encodedValue, forKey: key)
+    }
+    
+    private func encodePlistRepresentable(value: Value?, for key: String) {
+        userDefaults.set(value, forKey: key)
     }
 }
 
