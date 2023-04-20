@@ -66,7 +66,7 @@ final class AppSettings: ObservableObject {
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
-    @UserSetting(key: UserDefaultsKeys.lastVersionLaunched.rawValue, defaultValue: nil, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.lastVersionLaunched.rawValue, defaultValue: nil, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
     
     /// The default homeserver address used. This is intentionally a string without a scheme
@@ -126,24 +126,24 @@ final class AppSettings: ObservableObject {
     }
     
     /// `true` when the user has opted in to send analytics.
-    @UserSetting(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, storageType: .userDefaults(store))
     var enableAnalytics
         
     // MARK: - Room Screen
     
-    @UserSettingRawRepresentable(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
     var timelineStyle
     
-    @UserSetting(key: UserDefaultsKeys.shouldCollapseRoomStateEvents.rawValue, defaultValue: true, persistIn: nil)
+    @UserPreference(key: UserDefaultsKeys.shouldCollapseRoomStateEvents.rawValue, defaultValue: true, storageType: .volatile)
     var shouldCollapseRoomStateEvents
     
     // MARK: - Notifications
 
-    @UserSetting(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, storageType: .userDefaults(store))
     var enableInAppNotifications
 
     /// Tag describing which set of device specific rules a pusher executes.
-    @UserSetting(key: UserDefaultsKeys.pusherProfileTag.rawValue, defaultValue: nil, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.pusherProfileTag.rawValue, defaultValue: nil, storageType: .userDefaults(store))
     var pusherProfileTag: String?
         
     // MARK: - Other
@@ -154,19 +154,19 @@ final class AppSettings: ObservableObject {
     
     // MARK: Start Chat
     
-    @UserSetting(key: UserDefaultsKeys.startChatFlowEnabled.rawValue, defaultValue: false, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.startChatFlowEnabled.rawValue, defaultValue: false, storageType: .userDefaults(store))
     var startChatFlowEnabled
     
-    @UserSetting(key: UserDefaultsKeys.startChatUserSuggestionsEnabled.rawValue, defaultValue: false, persistIn: nil)
+    @UserPreference(key: UserDefaultsKeys.startChatUserSuggestionsEnabled.rawValue, defaultValue: false, storageType: .volatile)
     var startChatUserSuggestionsEnabled
     
     // MARK: Media Uploading
     
-    @UserSetting(key: UserDefaultsKeys.mediaUploadingFlowEnabled.rawValue, defaultValue: false, persistIn: nil)
+    @UserPreference(key: UserDefaultsKeys.mediaUploadingFlowEnabled.rawValue, defaultValue: false, storageType: .volatile)
     var mediaUploadingFlowEnabled
     
     // MARK: Invites
     
-    @UserSetting(key: UserDefaultsKeys.invitesFlowEnabled.rawValue, defaultValue: false, persistIn: store)
+    @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled.rawValue, defaultValue: false, storageType: .userDefaults(store))
     var invitesFlowEnabled
 }
