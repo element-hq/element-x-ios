@@ -23,17 +23,8 @@ struct HomeScreen: View {
     
     @ObservedObject var context: HomeScreenViewModel.Context
     
-    @State private var isViewVisible = false
-    
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingLogoutConfirmation = false
-    @State private var visibleItemIdentifiers = Set<String>() {
-        didSet {
-            if isViewVisible {
-                updateVisibleRange()
-            }
-        }
-    }
     
     var body: some View {
         ScrollView {
@@ -69,16 +60,6 @@ struct HomeScreen: View {
                                 HomeScreenRoomCell(room: room, context: context)
                             }
                         }
-                        .onAppear {
-                            // Ignore while filtering rooms
-                            guard context.searchQuery.isEmpty else { return }
-                            visibleItemIdentifiers.insert(room.id)
-                        }
-                        .onDisappear {
-                            // Ignore while filtering rooms
-                            guard context.searchQuery.isEmpty else { return }
-                            visibleItemIdentifiers.remove(room.id)
-                        }
                     }
                 }
                 .searchable(text: $context.searchQuery)
@@ -86,18 +67,27 @@ struct HomeScreen: View {
                 .disableAutocorrection(true)
             }
         }
-        .onAppear {
-            isViewVisible = true
-        }
-        .onDisappear {
-            isViewVisible = false
-        }
         .introspectScrollView { scrollView in
             guard scrollView != scrollViewAdapter.scrollView else { return }
             scrollViewAdapter.scrollView = scrollView
         }
-        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
-            if !isScrolling {
+        .onReceive(scrollViewAdapter.didScroll) { _ in
+            updateVisibleRange()
+        }
+        .onReceive(scrollViewAdapter.isScrolling) { _ in
+            updateVisibleRange()
+        }
+        .onChange(of: context.searchQuery) { searchQuery in
+            if searchQuery.isEmpty {
+                // Allow the view to update after changing the query
+                DispatchQueue.main.async {
+                    updateVisibleRange()
+                }
+            }
+        }
+        .onChange(of: context.viewState.visibleRooms) { _ in
+            // Give the view a chance to update
+            DispatchQueue.main.async {
                 updateVisibleRange()
             }
         }
@@ -225,21 +215,22 @@ struct HomeScreen: View {
     }
     
     private func updateVisibleRange() {
-        let result = visibleItemIdentifiers.compactMap { itemIdentifier in
-            context.viewState.rooms.firstIndex { $0.id == itemIdentifier }
-        }.sorted()
-        
-        guard !result.isEmpty else {
+        guard let scrollView = scrollViewAdapter.scrollView,
+              context.viewState.rooms.count > 0 else {
             return
         }
         
-        guard let firstIndex = result.first, let lastIndex = result.last else {
-            return
-        }
+        let adjustedContentSize = max(scrollView.contentSize.height - scrollView.contentInset.top - scrollView.contentInset.bottom, scrollView.bounds.height)
+        let cellHeight = adjustedContentSize / Double(context.viewState.rooms.count)
         
+        let firstIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.contentInset.top) / cellHeight)
+        let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
+        
+        // Add some extra padding just to be on the safe side
         let lowerBound = max(0, firstIndex - Constants.slidingWindowBoundsPadding)
         let upperBound = min(Int(context.viewState.rooms.count), lastIndex + Constants.slidingWindowBoundsPadding)
-        
+
+        // This will be deduped and throttled on the view model layer
         context.send(viewAction: .updateVisibleItemRange(range: lowerBound..<upperBound, isScrolling: scrollViewAdapter.isScrolling.value))
     }
 }
