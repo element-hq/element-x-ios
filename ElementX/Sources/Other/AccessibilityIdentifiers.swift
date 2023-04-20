@@ -17,6 +17,7 @@
 import Foundation
 
 struct A11yIdentifiers {
+    static let analyticsPromptScreen = AnalyticsPromptScreen()
     static let bugReportScreen = BugReportScreen()
     static let changeServerScreen = ChangeServer()
     static let homeScreen = HomeScreen()
@@ -30,6 +31,12 @@ struct A11yIdentifiers {
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
     static let invitesScreen = InvitesScreen()
+    
+    struct AnalyticsPromptScreen {
+        let title = "analytics_prompt-title"
+        let enable = "analytics_prompt-enable"
+        let notNow = "analytics_prompt-not_now"
+    }
 
     struct BugReportScreen {
         let report = "bug_report-report"
@@ -53,6 +60,12 @@ struct A11yIdentifiers {
         func roomName(_ name: String) -> String {
             "home_screen-room_name:\(name)"
         }
+    }
+    
+    struct InvitesScreen {
+        let noInvites = "invites-no_invites"
+        let accept = "invites-accept"
+        let decline = "invites-decline"
     }
 
     struct LoginScreen {
@@ -84,6 +97,11 @@ struct A11yIdentifiers {
         let people = "room_details-people"
     }
     
+    struct RoomMemberDetailsScreen {
+        let ignore = "room_member_details-ignore"
+        let unignore = "room_member_details-unignore"
+    }
+    
     struct SessionVerificationScreen {
         let requestVerification = "session_verification-request_verification"
         let startSasVerification = "session_verification-start_sas_verification"
@@ -109,16 +127,5 @@ struct A11yIdentifiers {
         let closeStartChat = "start_chat-close"
         let inviteFriends = "start_chat-invite_friends"
         let searchNoResults = "start_chat-search_no_results"
-    }
-
-    struct RoomMemberDetailsScreen {
-        let ignore = "room_member_details-ignore"
-        let unignore = "room_member_details-unignore"
-    }
-    
-    struct InvitesScreen {
-        let noInvites = "invites-no_invites"
-        let accept = "invites-accept"
-        let decline = "invites-decline"
     }
 }

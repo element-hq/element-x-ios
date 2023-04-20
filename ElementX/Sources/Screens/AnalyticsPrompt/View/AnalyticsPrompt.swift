@@ -64,6 +64,7 @@ struct AnalyticsPrompt: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .padding(.bottom, 2)
+                .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(context.viewState.strings.optInContent)
                 .font(.element.body)
@@ -100,12 +101,14 @@ struct AnalyticsPrompt: View {
                     .font(.element.bodyBold)
             }
             .buttonStyle(.elementAction(.xLarge))
+            .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(L10n.actionNotNow)
                     .font(.element.bodyBold)
                     .padding(12)
             }
+            .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)
         }
     }
 }

@@ -32,4 +32,13 @@ extension XCUIElement {
             typeText(String(character))
         }
     }
+    
+    func forceTap() {
+        if isHittable {
+            tap()
+        } else {
+            let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.0, dy: 0.0))
+            coordinate.tap()
+        }
+    }
 }
