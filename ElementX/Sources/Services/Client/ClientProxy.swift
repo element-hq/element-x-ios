@@ -262,7 +262,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getProfile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
+    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 return try .success(.init(sdkUserProfile: self.client.getProfile(userId: userID)))

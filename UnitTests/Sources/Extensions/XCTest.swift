@@ -14,24 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
+import XCTest
 
-struct SearchUsersSection {
-    let type: SearchUserSectionType
-    let users: [UserProfile]
-}
+@testable import ElementX
 
-enum SearchUserSectionType: Equatable {
-    case searchResult
-    case suggestions
-    case empty
-    
-    var title: String? {
-        switch self {
-        case .searchResult, .empty:
-            return nil
-        case .suggestions:
-            return L10n.commonSuggestions
-        }
+extension XCTestCase {
+    func setupAppSettings() {
+        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
+        AppSettings.reset()
+        ServiceLocator.shared.register(appSettings: AppSettings())
     }
 }

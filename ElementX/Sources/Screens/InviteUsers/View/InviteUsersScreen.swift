@@ -44,10 +44,10 @@ struct InviteUsersScreen: View {
     /// The content shown in the form when a search query has been entered.
     @ViewBuilder
     private var searchContent: some View {
-        if context.viewState.hasEmptySearchResults {
-            noResultsContent
-        } else {
-            Form {
+        Form {
+            if context.viewState.hasEmptySearchResults {
+                noResultsContent
+            } else {
                 usersSection
             }
         }
@@ -72,7 +72,7 @@ struct InviteUsersScreen: View {
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
             }
         } header: {
-            if let title = context.viewState.usersSection.type.title {
+            if let title = context.viewState.usersSection.title {
                 Text(title)
             }
         }
@@ -120,7 +120,10 @@ struct InviteUsersScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        return InviteUsersViewModel(userSession: userSession)
+        let userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
+        userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
+        return InviteUsersViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
     }()
     
     static var previews: some View {

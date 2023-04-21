@@ -22,6 +22,7 @@ import XCTest
 class InviteUsersScreenViewModelTests: XCTestCase {
     var viewModel: InviteUsersViewModelProtocol!
     var clientProxy: MockClientProxy!
+    var userDiscoveryService: UserDiscoveryServiceMock!
     
     var context: InviteUsersViewModel.Context {
         viewModel.context
@@ -29,8 +30,11 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
+        userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
+        userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersViewModel(userSession: userSession)
+        let viewModel = InviteUsersViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }

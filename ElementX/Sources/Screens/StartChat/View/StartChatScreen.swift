@@ -92,7 +92,7 @@ struct StartChatScreen: View {
                     .buttonStyle(FormButtonStyle())
                 }
             } header: {
-                if let title = context.viewState.usersSection.type.title {
+                if let title = context.viewState.usersSection.title {
                     Text(title)
                 }
             }
@@ -131,12 +131,19 @@ struct StartChatScreen: View {
 // MARK: - Previews
 
 struct StartChat_Previews: PreviewProvider {
-    static var previews: some View {
+    static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
+        let userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
+        userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
+        let viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        return viewModel
+    }()
+    
+    static var previews: some View {
         NavigationView {
-            StartChatScreen(context: regularViewModel.context)
+            StartChatScreen(context: viewModel.context)
                 .tint(.element.accent)
         }
     }

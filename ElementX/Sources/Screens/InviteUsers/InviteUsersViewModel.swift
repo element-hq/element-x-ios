@@ -21,17 +21,19 @@ typealias InviteUsersViewModelType = StateStoreViewModel<InviteUsersViewState, I
 
 class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
+        self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: InviteUsersViewState(), imageProvider: userSession.mediaProvider)
         
-        fetchSuggestions()
+        setupSubscriptions()
     }
     
     // MARK: - Public
@@ -65,11 +67,53 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
 
     // MARK: - Private
     
-    private func fetchSuggestions() {
-        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
-            state.usersSection = .init(type: .empty, users: [])
+    private func setupSubscriptions() {
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .debounceAndRemoveDuplicates()
+            .sink { [weak self] _ in
+                self?.fetchUsers()
+            }
+            .store(in: &cancellables)
+    }
+    
+    @CancellableTask
+    private var fetchUsersTask: Task<Void, Never>?
+    
+    private func fetchUsers() {
+        guard searchQuery.count >= 3 else {
+            fetchSuggestions()
             return
         }
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        fetchUsersTask = Task {
+            let result = await userDiscoveryService.searchProfiles(with: searchQuery)
+            guard !Task.isCancelled else { return }
+            handleResult(for: .searchResult, result: result)
+        }
+    }
+    
+    private func fetchSuggestions() {
+        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+            state.usersSection = .init(type: .suggestions, users: [])
+            return
+        }
+        fetchUsersTask = Task {
+            let result = await userDiscoveryService.fetchSuggestions()
+            guard !Task.isCancelled else { return }
+            handleResult(for: .suggestions, result: result)
+        }
+    }
+    
+    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
+        switch result {
+        case .success(let users):
+            state.usersSection = .init(type: sectionType, users: users)
+        case .failure:
+            break
+        }
+    }
+    
+    private var searchQuery: String {
+        context.searchQuery
     }
 }

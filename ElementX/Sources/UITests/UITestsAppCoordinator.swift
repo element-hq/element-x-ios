@@ -315,23 +315,24 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChat:
+            ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), navigationStackCoordinator: navigationStackCoordinator))
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
+            let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
+            let parameters: StartChatCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock)
+            let coordinator = StartChatCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChatWithSearchResults:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            clientProxy.searchUsersResult = .success(.init(results: [.mockAlice], limited: true))
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()), navigationStackCoordinator: navigationStackCoordinator))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .startChatSearchingNonexistentID:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            clientProxy.searchUsersResult = .success(.init(results: [.mockAlice], limited: true))
-            clientProxy.getProfileResult = .failure(.failedGettingUserProfile)
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()), navigationStackCoordinator: navigationStackCoordinator))
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
+            let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+            let coordinator = StartChatCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:
@@ -381,8 +382,12 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .inviteUsers:
+            ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
+            let userDiscoveryMock = UserDiscoveryServiceMock()
+            userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
+            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
+            let coordinator = InviteUsersCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }
