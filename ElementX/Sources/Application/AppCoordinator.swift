@@ -295,7 +295,8 @@ class AppCoordinator: AppCoordinatorProtocol {
             tearDownUserSession()
             
             // reset analytics
-            ServiceLocator.shared.analytics.reset()
+            ServiceLocator.shared.analytics.optOut()
+            ServiceLocator.shared.analytics.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
         }

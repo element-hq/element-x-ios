@@ -44,18 +44,22 @@ class Analytics {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        !ServiceLocator.shared.settings.hasSeenAnalyticsPrompt && ServiceLocator.shared.settings.analyticsConfiguration.isEnabled
+        ServiceLocator.shared.settings.analyticsConsentState == .unknown && ServiceLocator.shared.settings.analyticsConfiguration.isEnabled
+    }
+    
+    var isEnabled: Bool {
+        ServiceLocator.shared.settings.analyticsConsentState == .optedIn
     }
     
     /// Opts in to analytics tracking with the supplied user session.
     func optIn() {
-        ServiceLocator.shared.settings.enableAnalytics = true
+        ServiceLocator.shared.settings.analyticsConsentState = .optedIn
         startIfEnabled()
     }
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
     func optOut() {
-        ServiceLocator.shared.settings.enableAnalytics = false
+        ServiceLocator.shared.settings.analyticsConsentState = .optedOut
         
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
@@ -66,7 +70,7 @@ class Analytics {
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
     func startIfEnabled() {
-        guard ServiceLocator.shared.settings.enableAnalytics, !isRunning else { return }
+        guard isEnabled, !isRunning else { return }
         
         client.start()
         ServiceLocator.shared.bugReportService.start()
@@ -85,6 +89,12 @@ class Analytics {
         client.reset()
         ServiceLocator.shared.bugReportService.reset()
         MXLog.info("Reset.")
+    }
+    
+    /// Reset the consent state for analytics
+    func resetConsentState() {
+        MXLog.warning("Resetting consent state for analytics.")
+        ServiceLocator.shared.settings.analyticsConsentState = .unknown
     }
     
     /// Flushes the event queue in the analytics client, uploading all pending events.
