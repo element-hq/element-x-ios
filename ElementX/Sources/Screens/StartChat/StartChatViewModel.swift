@@ -93,31 +93,26 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     @CancellableTask
-    private var searchTask: Task<Void, Never>?
+    private var fetchUsersTask: Task<Void, Never>?
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {
             fetchSuggestions()
             return
         }
-        suggestionTask = nil
-        searchTask = Task {
+        fetchUsersTask = Task {
             let result = await userDiscoveryService.searchProfiles(with: searchQuery)
             guard !Task.isCancelled else { return }
             handleResult(for: .searchResult, result: result)
         }
     }
     
-    @CancellableTask
-    private var suggestionTask: Task<Void, Never>?
-    
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
-        searchTask = nil
-        suggestionTask = Task {
+        fetchUsersTask = Task {
             let result = await userDiscoveryService.fetchSuggestions()
             guard !Task.isCancelled else { return }
             handleResult(for: .suggestions, result: result)
