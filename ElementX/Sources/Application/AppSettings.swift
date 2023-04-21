@@ -23,7 +23,7 @@ final class AppSettings: ObservableObject {
         case lastVersionLaunched
         case seenInvites
         case timelineStyle
-        case enableAnalytics
+        case analyticsConsentState
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
@@ -109,7 +109,7 @@ final class AppSettings: ObservableObject {
     let bugReportUISIId = "element-auto-uisi"
     
     // MARK: - Analytics
-        
+    
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
@@ -125,22 +125,11 @@ final class AppSettings: ObservableObject {
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #endif
-    
-    /// Whether the user has already been shown the PostHog analytics prompt.
-    var hasSeenAnalyticsPrompt: Bool {
-        Self.store.object(forKey: UserDefaultsKeys.enableAnalytics.rawValue) != nil
-    }
-    
-    /// `true` when the user has opted in to send analytics.
-    @UserPreference(key: UserDefaultsKeys.enableAnalytics, defaultValue: false, storageType: .userDefaults(store))
-    var enableAnalytics
-    
-    /// Reset user consents for analytics
-    static func forgetAnalyticsConsents() {
-        MXLog.warning("Resetting user consents for analytics.")
-        store.removeObject(forKey: UserDefaultsKeys.enableAnalytics.rawValue)
-    }
         
+    /// Whether the user has opted in to send analytics.
+    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
+    var analyticsConsentState
+    
     // MARK: - Room Screen
     
     @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: TimelineStyle.bubbles, storageType: .userDefaults(store))
@@ -151,7 +140,7 @@ final class AppSettings: ObservableObject {
     
     // MARK: - Notifications
 
-    @UserPreference(key: UserDefaultsKeys.timelineStyle, defaultValue: true, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableInAppNotifications
 
     /// Tag describing which set of device specific rules a pusher executes.

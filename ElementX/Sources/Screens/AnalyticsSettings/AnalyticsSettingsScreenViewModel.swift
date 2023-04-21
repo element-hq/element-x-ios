@@ -22,12 +22,13 @@ typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModel<AnalyticsSe
 class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, AnalyticsSettingsScreenViewModelProtocol {
     init() {
         let strings = AnalyticsSettingsScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
-        let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: ServiceLocator.shared.settings.enableAnalytics)
+        let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: ServiceLocator.shared.analytics.isEnabled)
         let state = AnalyticsSettingsScreenViewState(strings: strings, bindings: bindings)
         
         super.init(initialViewState: state)
         
-        ServiceLocator.shared.settings.$enableAnalytics
+        ServiceLocator.shared.settings.$analyticsConsentState
+            .map { $0 == .optIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)
     }
@@ -35,7 +36,7 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
     override func process(viewAction: AnalyticsSettingsScreenViewAction) {
         switch viewAction {
         case .toggleAnalytics:
-            if ServiceLocator.shared.settings.enableAnalytics {
+            if ServiceLocator.shared.analytics.isEnabled {
                 ServiceLocator.shared.analytics.optOut()
             } else {
                 ServiceLocator.shared.analytics.optIn()
