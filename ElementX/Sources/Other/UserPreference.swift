@@ -186,6 +186,7 @@ extension String: PlistRepresentable { }
 extension Int: PlistRepresentable { }
 extension Float: PlistRepresentable { }
 extension Double: PlistRepresentable { }
+extension Date: PlistRepresentable { }
 extension Data: PlistRepresentable { }
 
 extension Array: PlistRepresentable where Element: PlistRepresentable { }
