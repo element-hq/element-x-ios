@@ -16,21 +16,20 @@
 
 import Foundation
 
-extension UserProfile {
-    // Mocks
-    static var mockAlice: UserProfile {
-        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
+@propertyWrapper
+struct CancellableTask<S: Sendable, F: Error> {
+    private var storedValue: Task<S, F>?
+    
+    init(_ value: Task<S, F>? = nil) {
+        storedValue = value
     }
-
-    static var mockBob: UserProfile {
-        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
-    }
-
-    static var mockBobby: UserProfile {
-        .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
-    }
-
-    static var mockCharlie: UserProfile {
-        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
+    
+    var wrappedValue: Task<S, F>? {
+        get {
+            storedValue
+        } set {
+            storedValue?.cancel()
+            storedValue = newValue
+        }
     }
 }

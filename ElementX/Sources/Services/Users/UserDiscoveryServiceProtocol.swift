@@ -16,21 +16,13 @@
 
 import Foundation
 
-extension UserProfile {
-    // Mocks
-    static var mockAlice: UserProfile {
-        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
-    }
+enum UserDiscoveryErrorType: Error {
+    case failedSearchingUsers
+    case failedFetchingSuggestedUsers
+}
 
-    static var mockBob: UserProfile {
-        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
-    }
-
-    static var mockBobby: UserProfile {
-        .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
-    }
-
-    static var mockCharlie: UserProfile {
-        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
-    }
+// sourcery: AutoMockable
+protocol UserDiscoveryServiceProtocol {
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType>
+    func fetchSuggestions() async -> Result<[UserProfile], UserDiscoveryErrorType>
 }

@@ -874,4 +874,45 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
+class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
+
+    //MARK: - searchProfiles
+
+    var searchProfilesWithCallsCount = 0
+    var searchProfilesWithCalled: Bool {
+        return searchProfilesWithCallsCount > 0
+    }
+    var searchProfilesWithReceivedSearchQuery: String?
+    var searchProfilesWithReceivedInvocations: [String] = []
+    var searchProfilesWithReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
+    var searchProfilesWithClosure: ((String) async -> Result<[UserProfile], UserDiscoveryErrorType>)?
+
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
+        searchProfilesWithCallsCount += 1
+        searchProfilesWithReceivedSearchQuery = searchQuery
+        searchProfilesWithReceivedInvocations.append(searchQuery)
+        if let searchProfilesWithClosure = searchProfilesWithClosure {
+            return await searchProfilesWithClosure(searchQuery)
+        } else {
+            return searchProfilesWithReturnValue
+        }
+    }
+    //MARK: - fetchSuggestions
+
+    var fetchSuggestionsCallsCount = 0
+    var fetchSuggestionsCalled: Bool {
+        return fetchSuggestionsCallsCount > 0
+    }
+    var fetchSuggestionsReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
+    var fetchSuggestionsClosure: (() async -> Result<[UserProfile], UserDiscoveryErrorType>)?
+
+    func fetchSuggestions() async -> Result<[UserProfile], UserDiscoveryErrorType> {
+        fetchSuggestionsCallsCount += 1
+        if let fetchSuggestionsClosure = fetchSuggestionsClosure {
+            return await fetchSuggestionsClosure()
+        } else {
+            return fetchSuggestionsReturnValue
+        }
+    }
+}
 // swiftlint:enable all

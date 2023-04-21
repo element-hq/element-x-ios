@@ -22,6 +22,7 @@ import XCTest
 class StartChatScreenViewModelTests: XCTestCase {
     var viewModel: StartChatViewModelProtocol!
     var clientProxy: MockClientProxy!
+    var userDiscoveryService: UserDiscoveryServiceMock!
     
     var context: StartChatViewModel.Context {
         viewModel.context
@@ -29,66 +30,29 @@ class StartChatScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
+        userDiscoveryService = UserDiscoveryServiceMock()
+        userDiscoveryService.fetchSuggestionsReturnValue = .success([])
+        userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
+        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        
+        setupAppSettings()
+        ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
     }
     
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
-        XCTAssertEqual(context.viewState.usersSection.type, .empty)
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        XCTAssertTrue(userDiscoveryService.fetchSuggestionsCalled)
         
         await search(query: "AA")
-        XCTAssertEqual(context.viewState.usersSection.type, .empty)
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        XCTAssertFalse(userDiscoveryService.searchProfilesWithCalled)
         
         await search(query: "AAA")
         assertSearchResults(toBe: 0)
-    }
-    
-    func testQueryShowingResults() async throws {
-        clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
-        await search(query: "AAA")
-        assertSearchResults(toBe: 1)
-    }
-    
-    func testGetProfileIsNotCalled() async {
-        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
-        clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
-        
-        await search(query: "AAA")
-        assertSearchResults(toBe: 3)
-        XCTAssertFalse(clientProxy.getProfileCalled)
-    }
-    
-    func testLocalResultShows() async {
-        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
-        clientProxy.getProfileResult = .success(.init(userID: "@some:matrix.org"))
-        
-        await search(query: "@a:b.com")
-        
-        assertSearchResults(toBe: 4)
-        XCTAssertTrue(clientProxy.getProfileCalled)
-    }
-    
-    func testLocalResultWithDuplicates() async {
-        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
-        clientProxy.getProfileResult = .success(.init(userID: "@bob:matrix.org"))
-        
-        await search(query: "@a:b.com")
-        
-        assertSearchResults(toBe: 3)
-        let firstUserID = viewModel.context.viewState.usersSection.users.first?.userID
-        XCTAssertEqual(firstUserID, "@bob:matrix.org")
-        XCTAssertTrue(clientProxy.getProfileCalled)
-    }
-    
-    func testSearchResultsShowWhenGetProfileFails() async {
-        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
-        clientProxy.getProfileResult = .failure(.failedGettingUserProfile)
-        
-        await search(query: "@a:b.com")
-        
-        assertSearchResults(toBe: 4)
+        XCTAssertTrue(userDiscoveryService.searchProfilesWithCalled)
     }
     
     // MARK: - Private
@@ -104,13 +68,5 @@ class StartChatScreenViewModelTests: XCTestCase {
     private func search(query: String) async -> StartChatViewState? {
         viewModel.context.searchQuery = query
         return await context.$viewState.nextValue
-    }
-    
-    private var searchResults: [UserProfile] {
-        [
-            .mockAlice,
-            .mockBob,
-            .mockCharlie
-        ]
     }
 }

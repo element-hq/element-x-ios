@@ -98,5 +98,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
     
-    func getProfile(for userID: String) async -> Result<UserProfile, ClientProxyError>
+    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError>
 }

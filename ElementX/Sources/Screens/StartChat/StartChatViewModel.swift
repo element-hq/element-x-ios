@@ -22,6 +22,7 @@ typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, Start
 class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private let userSession: UserSessionProtocol
     private let actionsSubject: PassthroughSubject<StartChatViewModelAction, Never> = .init()
+    private let userDiscoveryService: UserDiscoveryServiceProtocol
     
     var actions: AnyPublisher<StartChatViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -29,13 +30,13 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     
-    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
+    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
+        self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
-        fetchSuggestions()
     }
     
     // MARK: - Public
@@ -70,87 +71,61 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func displayError(_ type: ClientProxyError) {
         switch type {
-        case .failedRetrievingDirectRoom:
-            state.bindings.alertInfo = AlertInfo(id: type,
+        case .failedCreatingRoom, .failedRetrievingDirectRoom:
+            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
-        case .failedCreatingRoom:
-            state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: L10n.commonError,
-                                                 message: L10n.screenStartChatErrorStartingChat)
+        case .failedSearchingUsers:
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
         default:
-            state.bindings.alertInfo = AlertInfo(id: type)
+            break
         }
     }
     
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .map { query in
-                // debounce search queries but make sure clearing the search updates immediately
-                let milliseconds = query.isEmpty ? 0 : 500
-                return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
-            }
-            .switchToLatest()
-            .removeDuplicates()
+            .debounceAndRemoveDuplicates()
             .sink { [weak self] _ in
-                self?.fetchData()
+                self?.fetchUsers()
             }
             .store(in: &cancellables)
     }
     
-    private func fetchData() {
+    @CancellableTask
+    private var fetchUsersTask: Task<Void, Never>?
+    
+    private func fetchUsers() {
         guard searchQuery.count >= 3 else {
             fetchSuggestions()
             return
         }
-        
-        Task {
-            await searchProfiles()
+        fetchUsersTask = Task {
+            let result = await userDiscoveryService.searchProfiles(with: searchQuery)
+            guard !Task.isCancelled else { return }
+            handleResult(for: .searchResult, result: result)
         }
-    }
-    
-    private func searchProfiles() async {
-        // copies the current query to check later if fetched data must be shown or not
-        let committedQuery = searchQuery
-        
-        async let queriedProfile = getProfileIfPossible()
-        async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
-        
-        await updateState(committedQuery: committedQuery,
-                          queriedProfile: queriedProfile,
-                          searchResults: try? searchedUsers.get())
-    }
-    
-    private func updateState(committedQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults?) {
-        guard committedQuery == searchQuery else {
-            return
-        }
-        
-        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
-        let allResults = merge(localProfile: localProfile, searchResults: searchResults?.results)
-        
-        state.usersSection = .init(type: .searchResult, users: allResults)
-    }
-    
-    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
-        guard let localProfile else {
-            return searchResults ?? []
-        }
-        
-        let filteredSearchResult = searchResults?.filter {
-            $0.userID != localProfile.userID
-        } ?? []
-
-        return [localProfile] + filteredSearchResult
     }
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
-            state.usersSection = .init(type: .empty, users: [])
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        fetchUsersTask = Task {
+            let result = await userDiscoveryService.fetchSuggestions()
+            guard !Task.isCancelled else { return }
+            handleResult(for: .suggestions, result: result)
+        }
+    }
+    
+    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
+        switch result {
+        case .success(let users):
+            state.usersSection = .init(type: sectionType, users: users)
+        case .failure:
+            break
+        }
     }
     
     private func createDirectRoom(with user: UserProfile) async {
@@ -163,14 +138,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .failure(let failure):
             displayError(failure)
         }
-    }
-    
-    private func getProfileIfPossible() async -> UserProfile? {
-        guard searchQuery.isMatrixIdentifier else {
-            return nil
-        }
-        
-        return try? await clientProxy.getProfile(for: searchQuery).get()
     }
     
     private var clientProxy: ClientProxyProtocol {
@@ -194,20 +161,5 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-}
-
-private extension String {
-    var isMatrixIdentifier: Bool {
-        MatrixEntityRegex.isMatrixUserIdentifier(self)
-    }
-}
-
-private extension UserProfile {
-    init?(searchQuery: String) {
-        guard searchQuery.isMatrixIdentifier else {
-            return nil
-        }
-        self.init(userID: searchQuery)
     }
 }

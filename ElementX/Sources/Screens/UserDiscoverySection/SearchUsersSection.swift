@@ -16,21 +16,21 @@
 
 import Foundation
 
-extension UserProfile {
-    // Mocks
-    static var mockAlice: UserProfile {
-        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
+struct UserDiscoverySection {
+    let type: UserDiscoverySectionType
+    let users: [UserProfile]
+    
+    var title: String? {
+        switch type {
+        case .searchResult:
+            return nil
+        case .suggestions:
+            return users.isEmpty ? nil : L10n.commonSuggestions
+        }
     }
+}
 
-    static var mockBob: UserProfile {
-        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
-    }
-
-    static var mockBobby: UserProfile {
-        .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
-    }
-
-    static var mockCharlie: UserProfile {
-        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
-    }
+enum UserDiscoverySectionType: Equatable {
+    case searchResult
+    case suggestions
 }

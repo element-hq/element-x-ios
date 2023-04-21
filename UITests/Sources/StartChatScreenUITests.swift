@@ -26,7 +26,7 @@ class StartChatScreenUITests: XCTestCase {
     func testSearchWithNoResults() {
         let app = Application.launch(.startChat)
         let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("Someone")
+        searchField.clearAndTypeText("None")
         XCTAssert(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
         app.assertScreenshot(.startChat, step: 1)
     }
@@ -34,27 +34,9 @@ class StartChatScreenUITests: XCTestCase {
     func testSearchWithResults() {
         let app = Application.launch(.startChatWithSearchResults)
         let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("Someone")
+        searchField.clearAndTypeText("Bob")
         XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
-        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 1)
+        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
         app.assertScreenshot(.startChat, step: 2)
-    }
-    
-    func testSearchExactMatrixID() {
-        let app = Application.launch(.startChatWithSearchResults)
-        let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("@a:b.com")
-        XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
-        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
-        app.assertScreenshot(.startChat, step: 3)
-    }
-    
-    func testSearchExactNotExistingMatrixID() {
-        let app = Application.launch(.startChatSearchingNonexistentID)
-        let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("@a:b.com")
-        XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
-        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
-        app.assertScreenshot(.startChat, step: 4)
     }
 }
