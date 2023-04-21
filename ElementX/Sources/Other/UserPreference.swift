@@ -99,7 +99,6 @@ protocol KeyedStorage<Value> {
 /// phase is skipped, and values are stored natively in the plist.
 final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     private let userDefaults: UserDefaults
-    private var cache: [String: Value] = .init()
     
     init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
@@ -107,10 +106,6 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     
     subscript(key: String) -> Value? {
         get {
-            guard cache[key] == nil else {
-                return cache[key]
-            }
-            
             let value: Value?
             if Value.self is PlistRepresentable.Type {
                 value = decodePlistRepresentableValue(for: key)
@@ -118,7 +113,6 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
                 value = decodeValue(for: key)
             }
             
-            cache[key] = value
             return value
         }
         set {
@@ -127,8 +121,6 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
             } else {
                 encode(value: newValue, for: key)
             }
-            
-            cache[key] = nil
         }
     }
     
