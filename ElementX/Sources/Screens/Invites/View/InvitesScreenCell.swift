@@ -100,7 +100,7 @@ struct InvitesScreenCell: View {
             .frame(height: 1 / UIScreen.main.scale)
     }
     
-    #warning("Return just `roomDetails.avatarURL` when this logic is implemented in the rust sdk")
+    // Return just `roomDetails.avatarURL` when this logic is implemented in the rust sdk
     private var mainAvatarURL: URL? {
         invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
     }

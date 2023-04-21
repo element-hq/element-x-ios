@@ -142,3 +142,5 @@ private extension String {
         return self[start..<end]
     }
 }
+
+// swiftlint:enable all

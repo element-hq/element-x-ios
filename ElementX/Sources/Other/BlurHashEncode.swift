@@ -141,3 +141,5 @@ extension BinaryInteger {
 private func pow(_ base: Int, _ exponent: Int) -> Int {
     (0..<exponent).reduce(1) { value, _ in value * base }
 }
+
+// swiftlint:enable all
