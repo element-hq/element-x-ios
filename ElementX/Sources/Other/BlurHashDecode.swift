@@ -1,6 +1,6 @@
-import UIKit
-
 // swiftlint:disable all
+
+import UIKit
 
 public extension UIImage {
     convenience init?(blurHash: String, size: CGSize, punch: Float = 1) {

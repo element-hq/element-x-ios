@@ -219,7 +219,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         var rooms = [HomeScreenRoom]()
         var createdRoomIdentifiers = [String: Bool]()
         
-        #warning("This works around duplicated room list items coming out of the SDK, remove once fixed")
+        // This works around duplicated room list items which happens because the 2 different ss lists used
+        // update at different times. That will be fixed once we move this logic to the Rust side
         func appendRoom(_ room: HomeScreenRoom, allRoomsProvider: Bool) {
             guard createdRoomIdentifiers[room.id] == nil else {
                 MXLog.error("Built duplicated room for identifier: \(room.id). AllRoomsSummaryProvider: \(allRoomsProvider). Ignoring")

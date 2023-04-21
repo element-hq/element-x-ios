@@ -16,6 +16,10 @@
 
 import Foundation
 
+enum FileManagerError: Error {
+    case invalidFileSize
+}
+
 extension FileManager {
     func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
@@ -32,7 +36,7 @@ extension FileManager {
         try createDirectory(at: url, withIntermediateDirectories: withIntermediateDirectories)
     }
     
-    func copyFileToTemporaryDirectory(url: URL) throws -> URL {
+    func copyFileToTemporaryDirectory(file url: URL) throws -> URL {
         let newURL = URL.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
         
         try? removeItem(at: newURL)
@@ -47,5 +51,18 @@ extension FileManager {
         try data.write(to: newURL)
         
         return newURL
+    }
+    
+    /// Retrieve a file's disk size
+    /// - Parameter url: the file URL
+    /// - Returns: the size in bytes
+    func sizeForItem(at url: URL) throws -> Double {
+        let attributes = try attributesOfItem(atPath: url.path())
+        
+        guard let size = attributes[FileAttributeKey.size] as? Double else {
+            throw FileManagerError.invalidFileSize
+        }
+        
+        return size
     }
 }

@@ -576,23 +576,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendImage
 
-    var sendImageUrlCallsCount = 0
-    var sendImageUrlCalled: Bool {
-        return sendImageUrlCallsCount > 0
+    var sendImageUrlThumbnailURLImageInfoCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoCallsCount > 0
     }
-    var sendImageUrlReceivedUrl: URL?
-    var sendImageUrlReceivedInvocations: [URL] = []
-    var sendImageUrlReturnValue: Result<Void, RoomProxyError>!
-    var sendImageUrlClosure: ((URL) async -> Result<Void, RoomProxyError>)?
+    var sendImageUrlThumbnailURLImageInfoReceivedArguments: (url: URL, thumbnailURL: URL, imageInfo: ImageInfo)?
+    var sendImageUrlThumbnailURLImageInfoReceivedInvocations: [(url: URL, thumbnailURL: URL, imageInfo: ImageInfo)] = []
+    var sendImageUrlThumbnailURLImageInfoReturnValue: Result<Void, RoomProxyError>!
+    var sendImageUrlThumbnailURLImageInfoClosure: ((URL, URL, ImageInfo) async -> Result<Void, RoomProxyError>)?
 
-    func sendImage(url: URL) async -> Result<Void, RoomProxyError> {
-        sendImageUrlCallsCount += 1
-        sendImageUrlReceivedUrl = url
-        sendImageUrlReceivedInvocations.append(url)
-        if let sendImageUrlClosure = sendImageUrlClosure {
-            return await sendImageUrlClosure(url)
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError> {
+        sendImageUrlThumbnailURLImageInfoCallsCount += 1
+        sendImageUrlThumbnailURLImageInfoReceivedArguments = (url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
+        sendImageUrlThumbnailURLImageInfoReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo))
+        if let sendImageUrlThumbnailURLImageInfoClosure = sendImageUrlThumbnailURLImageInfoClosure {
+            return await sendImageUrlThumbnailURLImageInfoClosure(url, thumbnailURL, imageInfo)
         } else {
-            return sendImageUrlReturnValue
+            return sendImageUrlThumbnailURLImageInfoReturnValue
         }
     }
     //MARK: - editMessage

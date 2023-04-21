@@ -76,7 +76,7 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationServiceProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationItemProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
-    - path: ../../ElementX/Sources/Services/Media
+    - path: ../../ElementX/Sources/Services/Media/Provider
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
     - path: ../../ElementX/Sources/Other/Logging

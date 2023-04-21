@@ -579,7 +579,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         transaction.disablesAnimations = !animated
 
         withTransaction(transaction) {
-            stackModules.popLast()
+            _ = stackModules.popLast()
         }
     }
     
