@@ -17,7 +17,7 @@
 import Foundation
 import SwiftUI
 
-enum TimelineStyle: String, CaseIterable {
+enum TimelineStyle: String, CaseIterable, Codable {
     case plain
     case bubbles
 

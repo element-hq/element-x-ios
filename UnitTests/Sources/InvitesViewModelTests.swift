@@ -34,14 +34,14 @@ class InvitesViewModelTests: XCTestCase {
 
     func testEmptyState() async throws {
         setupViewModel()
-        _ = await context.nextViewState()
+        _ = await context.$viewState.values.first(where: { $0.invites != nil })
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertTrue(invites.isEmpty)
     }
     
     func testListState() async throws {
         setupViewModel(roomSummaries: .mockInvites)
-        _ = await context.nextViewState()
+        _ = await context.$viewState.values.first(where: { $0.invites != nil })
         let invites = try XCTUnwrap(context.viewState.invites)
         XCTAssertEqual(invites.count, 2)
     }
