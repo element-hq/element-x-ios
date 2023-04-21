@@ -71,13 +71,13 @@ struct MediaUploadingPreprocessor {
     /// - Parameter url: the file URL
     /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        // Start by moving the file to a unique temporary location in order to avoid conflicts if processing it multiple times
+        // Start by copying the file to a unique temporary location in order to avoid conflicts if processing it multiple times
         // All the other operations will be made relative to it
         let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
         do {
             try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
-            try FileManager.default.moveItem(at: url, to: newURL)
+            try FileManager.default.copyItem(at: url, to: newURL)
         } catch {
             return .failure(.failedProcessingMedia(error))
         }
@@ -273,16 +273,7 @@ struct MediaUploadingPreprocessor {
             return .failure(.failedGeneratingImageThumbnail(error))
         }
     }
-    
-    private func resizeImage(_ image: UIImage, targetSize: CGSize) async -> Result<UIImage, MediaUploadingPreprocessorError> {
-        guard let data = image.pngData(),
-              let imageSource = CGImageSourceCreateWithData(data as NSData, nil) else {
-            return .failure(.failedResizingImage)
-        }
         
-        return await resizeImage(withSource: imageSource, targetSize: targetSize)
-    }
-    
     private func resizeImage(at url: URL, targetSize: CGSize) async -> Result<UIImage, MediaUploadingPreprocessorError> {
         let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil)
         guard let imageSource else {
@@ -331,22 +322,20 @@ struct MediaUploadingPreprocessor {
             let location = CMTime(seconds: Constants.videoThumbnailTime, preferredTimescale: 1)
             let cgImage = try await assetImageGenerator.image(at: location).image
             
-            switch await resizeImage(UIImage(cgImage: cgImage), targetSize: Constants.maximumThumbnailSize) {
-            case .success(let thumbnail):
-                guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
-                    return .failure(.failedGeneratingVideoThumbnail(nil))
-                }
-                
-                let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
-                
-                let fileName = "\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-                let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
-                try data.write(to: thumbnailURL)
-                
-                return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
-            case .failure(let error):
-                return .failure(.failedGeneratingVideoThumbnail(error))
+            let thumbnail = UIImage(cgImage: cgImage)
+            
+            guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
+                return .failure(.failedGeneratingVideoThumbnail(nil))
             }
+            
+            let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
+            
+            let fileName = "\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
+            let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
+            try data.write(to: thumbnailURL)
+            
+            return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
+            
         } catch {
             return .failure(.failedGeneratingVideoThumbnail(error))
         }
