@@ -134,10 +134,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        invitesSummaryProvider.countPublisher
-            .map { $0 > 0 }
+        invitesSummaryProvider.roomListPublisher
+            .combineLatest(ServiceLocator.shared.settings.$seenInvites)
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.hasPendingInvitations, on: self)
+            .sink { [weak self] summaries, readInvites in
+                self?.state.hasPendingInvitations = !summaries.isEmpty
+                self?.state.hasUnreadPendingInvitations = summaries.contains(where: {
+                    guard let roomId = $0.id else {
+                        return false
+                    }
+                    return !readInvites.contains(roomId)
+                })
+            }
             .store(in: &cancellables)
         
         updateRooms()

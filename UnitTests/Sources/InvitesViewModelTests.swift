@@ -53,7 +53,7 @@ class InvitesViewModelTests: XCTestCase {
             return
         }
         setupViewModel(roomSummaries: invites)
-        context.send(viewAction: .accept(.init(roomDetails: details)))
+        context.send(viewAction: .accept(.init(roomDetails: details, isUnread: false)))
         let action: InvitesViewModelAction? = await viewModel.actions.values.first()
         guard case .openRoom(let roomID) = action else {
             XCTFail("Wrong view model action")
@@ -69,7 +69,7 @@ class InvitesViewModelTests: XCTestCase {
             return
         }
         setupViewModel(roomSummaries: invites)
-        context.send(viewAction: .decline(.init(roomDetails: details)))
+        context.send(viewAction: .decline(.init(roomDetails: details, isUnread: false)))
         XCTAssertNotNil(context.alertInfo)
     }
     

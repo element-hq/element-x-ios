@@ -70,6 +70,7 @@ struct HomeScreenViewState: BindableState {
     let invitePermalink: URL?
     
     var hasPendingInvitations = false
+    var hasUnreadPendingInvitations = false
     
     var startChatFlowEnabled: Bool {
         ServiceLocator.shared.settings.startChatFlowEnabled
