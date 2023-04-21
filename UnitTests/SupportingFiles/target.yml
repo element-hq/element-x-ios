@@ -14,8 +14,6 @@ schemes:
     run:
       config: Debug
       disableMainThreadChecker: false
-      environmentVariables:
-        IS_RUNNING_UNIT_TESTS: "1"
     test:
       config: Debug
       disableMainThreadChecker: false

@@ -10,6 +10,12 @@
   ],
   "defaultOptions" : {
     "defaultTestExecutionTimeAllowance" : 60,
+    "environmentVariableEntries" : [
+      {
+        "key" : "IS_RUNNING_UNIT_TESTS",
+        "value" : "1"
+      }
+    ],
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
