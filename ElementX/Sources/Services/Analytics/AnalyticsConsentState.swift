@@ -17,7 +17,7 @@
 import Foundation
 
 enum AnalyticsConsentState: String, Codable {
-    case optOut
-    case optIn
+    case optedOut
+    case optedIn
     case unknown
 }

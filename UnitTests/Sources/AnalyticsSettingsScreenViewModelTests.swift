@@ -42,13 +42,13 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     }
 
     func testOptIn() {
-        applicationSettings.analyticsConsentState = .optOut
+        applicationSettings.analyticsConsentState = .optedOut
         context.send(viewAction: .toggleAnalytics)
         XCTAssertTrue(context.enableAnalytics)
     }
     
     func testOptOut() {
-        applicationSettings.analyticsConsentState = .optIn
+        applicationSettings.analyticsConsentState = .optedIn
         context.send(viewAction: .toggleAnalytics)
         XCTAssertFalse(context.enableAnalytics)
     }

@@ -28,7 +28,7 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
         super.init(initialViewState: state)
         
         ServiceLocator.shared.settings.$analyticsConsentState
-            .map { $0 == .optIn }
+            .map { $0 == .optedIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)
     }

@@ -47,7 +47,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsPromptUserDeclinedPostHog() {
         // Given an existing install of the app where the user previously declined PostHog
-        applicationSettings.analyticsConsentState = .optOut
+        applicationSettings.analyticsConsentState = .optedOut
         
         // When the user is prompted for analytics
         let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
@@ -58,7 +58,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsPromptUserAcceptedPostHog() {
         // Given an existing install of the app where the user previously accepted PostHog
-        applicationSettings.analyticsConsentState = .optIn
+        applicationSettings.analyticsConsentState = .optedIn
         
         // When the user is prompted for analytics
         let showPrompt = ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt
@@ -81,7 +81,7 @@ class AnalyticsTests: XCTestCase {
         // When analytics is opt-out
         ServiceLocator.shared.analytics.optOut()
         // Then analytics should be disabled
-        XCTAssertEqual(applicationSettings.analyticsConsentState, .optOut)
+        XCTAssertEqual(applicationSettings.analyticsConsentState, .optedOut)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
         XCTAssertFalse(analyticsClient.isRunning)
@@ -96,7 +96,7 @@ class AnalyticsTests: XCTestCase {
         // When analytics is opt-in
         ServiceLocator.shared.analytics.optIn()
         // The analytics should be enabled
-        XCTAssertEqual(applicationSettings.analyticsConsentState, .optIn)
+        XCTAssertEqual(applicationSettings.analyticsConsentState, .optedIn)
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         // Analytics client and the bug report service should have been started
         XCTAssertTrue(analyticsClient.startCalled)
@@ -105,7 +105,7 @@ class AnalyticsTests: XCTestCase {
 
     func testAnalyticsStartIfNotEnabled() {
         // Given an existing install of the app where the user previously declined the tracking
-        applicationSettings.analyticsConsentState = .optOut
+        applicationSettings.analyticsConsentState = .optedOut
         // Analytics should not start
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
@@ -115,7 +115,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsStartIfEnabled() {
         // Given an existing install of the app where the user previously accpeted the tracking
-        applicationSettings.analyticsConsentState = .optIn
+        applicationSettings.analyticsConsentState = .optedIn
         // Analytics should start
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
@@ -188,7 +188,7 @@ class AnalyticsTests: XCTestCase {
     
     func testResetConsentState() {
         // Given an existing install of the app where the user previously accpeted the tracking
-        applicationSettings.analyticsConsentState = .optIn
+        applicationSettings.analyticsConsentState = .optedIn
         XCTAssertFalse(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
 
         // When forgetting analytics consents

@@ -48,18 +48,18 @@ class Analytics {
     }
     
     var isEnabled: Bool {
-        ServiceLocator.shared.settings.analyticsConsentState == .optIn
+        ServiceLocator.shared.settings.analyticsConsentState == .optedIn
     }
     
     /// Opts in to analytics tracking with the supplied user session.
     func optIn() {
-        ServiceLocator.shared.settings.analyticsConsentState = .optIn
+        ServiceLocator.shared.settings.analyticsConsentState = .optedIn
         startIfEnabled()
     }
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
     func optOut() {
-        ServiceLocator.shared.settings.analyticsConsentState = .optOut
+        ServiceLocator.shared.settings.analyticsConsentState = .optedOut
         
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
