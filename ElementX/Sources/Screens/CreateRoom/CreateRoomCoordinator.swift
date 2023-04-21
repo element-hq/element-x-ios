@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct CreateRoomCoordinatorParameters {
+    let userSession: UserSessionProtocol
     let selectedUsers: [UserProfile]
 }
 
@@ -37,14 +38,15 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateRoomCoordinatorParameters) {
         self.parameters = parameters
-        
-        viewModel = CreateRoomViewModel(selectedUsers: parameters.selectedUsers)
+        // TODO: Check if any stored data are present and restore them
+        viewModel = CreateRoomViewModel(userSession: parameters.userSession, selectedUsers: parameters.selectedUsers)
     }
     
     func start() {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            // TODO: Store data for previous screen
             case .createRoom:
                 self.actionsSubject.send(.createRoom)
             }

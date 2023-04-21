@@ -32,6 +32,7 @@ struct CreateRoomViewState: BindableState {
 struct CreateRoomViewStateBindings {
     var roomName = ""
     var roomTopic = ""
+    var isRoomPrivate = true
 }
 
 enum CreateRoomViewAction {

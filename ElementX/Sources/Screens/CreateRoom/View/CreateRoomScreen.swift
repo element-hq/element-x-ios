@@ -35,8 +35,9 @@ struct CreateRoomScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
         VStack(alignment: .center, spacing: 24) {
+            // TODO: check spacing
+            roomSection
             Form {
-                roomSection
                 topicSection
             }
             selectedUsersSection
@@ -48,30 +49,34 @@ struct CreateRoomScreen: View {
     }
     
     private var roomSection: some View {
-        Section {
-            TextField(L10n.screenCreateRoomRoomNameLabel,
-                      text: $context.roomName,
-                      prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder).compoundFormTextFieldPlaceholder(),
-                      axis: .horizontal)
-                .textFieldStyle(.compoundForm)
-        } header: {
-            Text(L10n.screenCreateRoomRoomNameLabel)
-                .compoundFormSectionFooter()
+        // TODO: Style better
+        HStack(alignment: .top, spacing: 0) {
+            Image(systemName: "camera")
+                .frame(width: 70, height: 70)
+                .clipShape(Circle())
+            Form {
+                Section {
+                    TextField(L10n.screenCreateRoomRoomNameLabel,
+                              text: $context.roomName,
+                              prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
+                              axis: .horizontal)
+                } header: {
+                    Text(L10n.screenCreateRoomRoomNameLabel)
+                }
+                .formSectionStyle()
+            }
         }
-        .compoundFormSection()
     }
     
     private var topicSection: some View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
-                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder).compoundFormTextFieldPlaceholder(),
+                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
                 .lineLimit(3, reservesSpace: false)
-                .textFieldStyle(.compoundForm)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
-                .compoundFormSectionFooter()
         }
         .formSectionStyle()
     }
@@ -81,7 +86,7 @@ struct CreateRoomScreen: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 28) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersSelectedItem(user: user, imageProvider: context.imageProvider) {
+                    InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                         deselect(user)
                     }
                     .frame(width: cellWidth)
@@ -93,15 +98,17 @@ struct CreateRoomScreen: View {
     
     private var securitySection: some View {
         Section {
+            // TODO: style this items with descrition text and proper selection image
             Button(action: selectPrivate) {
                 Label(L10n.screenCreateRoomPrivateOptionTitle, systemImage: "lock.shield")
             }
-            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-            Button(action: selectPrivate) {
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.isRoomPrivate)))
+            Button(action: selectPublic) {
                 Label(L10n.screenCreateRoomPublicOptionTitle, systemImage: "exclamationmark.shield")
             }
-            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: !context.isRoomPrivate)))
         } header: {
+            // TODO: localize
             Text("SECURITY")
         }
         .formSectionStyle()
@@ -130,7 +137,11 @@ struct CreateRoomScreen: View {
 // MARK: - Previews
 
 struct CreateRoom_Previews: PreviewProvider {
-    static let viewModel = CreateRoomViewModel(selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
+    static let viewModel = {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
+                                          mediaProvider: MockMediaProvider())
+        return CreateRoomViewModel(userSession: userSession, selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
+    }()
     
     static var previews: some View {
         NavigationView {

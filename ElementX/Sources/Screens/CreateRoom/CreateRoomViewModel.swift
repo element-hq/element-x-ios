@@ -26,8 +26,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(selectedUsers: [UserProfile]) {
-        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers))
+    init(userSession: UserSessionProtocol, selectedUsers: [UserProfile]) {
+        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers), imageProvider: userSession.mediaProvider)
     }
     
     // MARK: - Public
@@ -39,9 +39,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .deselectUser(let user):
             state.selectedUsers.removeAll(where: { $0.userID == user.userID })
         case .selectPrivateRoom:
-            break
+            state.bindings.isRoomPrivate = true
         case .selectPublicRoom:
-            break
+            state.bindings.isRoomPrivate = false
         }
     }
 }
