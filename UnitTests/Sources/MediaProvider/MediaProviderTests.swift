@@ -166,8 +166,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     private func loadTestImage() throws -> UIImage {
-        let bundle = Bundle(for: classForCoder)
-        guard let path = bundle.path(forResource: "test_image", ofType: "png"),
+        guard let path = Bundle(for: Self.self).path(forResource: "test_image", ofType: "png"),
               let image = UIImage(contentsOfFile: path) else {
             throw MediaProviderTestsError.screenshotNotFound
         }
