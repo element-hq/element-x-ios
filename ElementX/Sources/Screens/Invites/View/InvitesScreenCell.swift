@@ -24,6 +24,7 @@ struct InvitesScreenCell: View {
     let declineAction: () -> Void
     
     private let verticalInsets = 16.0
+    @ScaledMetric private var badgeSize = 12.0
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
@@ -42,27 +43,26 @@ struct InvitesScreenCell: View {
                 }
         }
         .padding(.top, verticalInsets)
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
     }
     
     // MARK: - Private
     
     private var mainContent: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.element.headline)
-                .foregroundColor(.element.primaryContent)
-            
-            if let subtitle {
-                Text(subtitle)
-                    .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textPlaceholder)
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                textualContent
+                
+                if invite.isUnread {
+                    badge
+                }
             }
             
             inviterView
             
             buttons
-                .padding(.top, 10)
+                .padding(.trailing, 26)
+                .padding(.top, 8)
         }
     }
     
@@ -80,6 +80,22 @@ struct InvitesScreenCell: View {
             }
             .padding(.top, 4)
         }
+    }
+    
+    @ViewBuilder
+    private var textualContent: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.element.headline)
+                .foregroundColor(.element.primaryContent)
+            
+            if let subtitle {
+                Text(subtitle)
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textPlaceholder)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var buttons: some View {
@@ -127,6 +143,12 @@ struct InvitesScreenCell: View {
         }
         return attributedString
     }
+    
+    private var badge: some View {
+        Circle()
+            .frame(width: badgeSize, height: badgeSize)
+            .foregroundColor(.element.brand)
+    }
 }
 
 struct InvitesScreenCell_Previews: PreviewProvider {
@@ -139,6 +161,10 @@ struct InvitesScreenCell_Previews: PreviewProvider {
         
         InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
             .previewDisplayName("Aliased room")
+        
+        InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+            .dynamicTypeSize(.accessibility1)
+            .previewDisplayName("Aliased room (AX1)")
     }
 }
 
@@ -157,7 +183,7 @@ private extension InvitesRoomDetails {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        return .init(roomDetails: dmRoom, inviter: inviter)
+        return .init(roomDetails: dmRoom, inviter: inviter, isUnread: false)
     }
     
     static func room(alias: String?) -> InvitesRoomDetails {
@@ -174,6 +200,6 @@ private extension InvitesRoomDetails {
         inviter.userID = "@jack:somewhere.com"
         inviter.avatarURL = nil
         
-        return .init(roomDetails: dmRoom, inviter: inviter)
+        return .init(roomDetails: dmRoom, inviter: inviter, isUnread: true)
     }
 }

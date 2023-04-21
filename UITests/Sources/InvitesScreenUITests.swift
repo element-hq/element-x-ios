@@ -18,9 +18,14 @@ import ElementX
 import XCTest
 
 class InvitesScreenUITests: XCTestCase {
-    func testMixedInvites() {
+    func testInvitesWithNoBadges() {
         let app = Application.launch(.invites)
         app.assertScreenshot(.invites)
+    }
+    
+    func testInvitesWithBadges() {
+        let app = Application.launch(.invitesWithBadges)
+        app.assertScreenshot(.invitesWithBadges)
     }
     
     func testNoInvites() {

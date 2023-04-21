@@ -30,6 +30,7 @@ struct InvitesViewStateBindings {
 struct InvitesRoomDetails {
     let roomDetails: RoomSummaryDetails
     var inviter: RoomMemberProxyProtocol?
+    var isUnread: Bool
     
     var isDirect: Bool {
         roomDetails.isDirect

@@ -117,6 +117,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
+                
             case (.roomList, .showInvitesScreen, .invitesScreen):
                 self.presentInvitesList(animated: animated)
             case (.invitesScreen, .closedInvitesScreen, .roomList):

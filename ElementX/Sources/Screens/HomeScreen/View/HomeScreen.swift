@@ -33,7 +33,7 @@ struct HomeScreen: View {
             }
 
             if context.viewState.hasPendingInvitations, ServiceLocator.shared.settings.invitesFlowEnabled {
-                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
+                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
                     context.send(viewAction: .selectInvites)
                 }
                 .padding(.trailing, 16)

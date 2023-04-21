@@ -22,6 +22,7 @@ typealias InvitesViewModelType = StateStoreViewModel<InvitesViewState, InvitesVi
 class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     private var actionsSubject: PassthroughSubject<InvitesViewModelAction, Never> = .init()
     private let userSession: UserSessionProtocol
+    private let previouslySeenInvites: Set<String>
     
     var actions: AnyPublisher<InvitesViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -29,6 +30,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
 
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
+        previouslySeenInvites = ServiceLocator.shared.settings.seenInvites
         super.init(initialViewState: InvitesViewState(), imageProvider: userSession.mediaProvider)
         setupSubscriptions()
     }
@@ -65,7 +67,8 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
                 
-                let invites = roomSummaries.invites
+                let invites = self.buildInvites(from: roomSummaries)
+                ServiceLocator.shared.settings.seenInvites = Set(invites.map(\.roomDetails.id))
                 self.state.invites = invites
                 
                 for invite in invites {
@@ -73,6 +76,15 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func buildInvites(from summaries: [RoomSummary]) -> [InvitesRoomDetails] {
+        summaries.compactMap { summary in
+            guard case .filled(let details) = summary else {
+                return nil
+            }
+            return InvitesRoomDetails(roomDetails: details, isUnread: !previouslySeenInvites.contains(details.id))
+        }
     }
     
     private func fetchInviter(for roomID: String) {
@@ -152,16 +164,5 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         state.bindings.alertInfo = .init(id: true,
                                          title: L10n.commonError,
                                          message: L10n.errorUnknown)
-    }
-}
-
-private extension Array where Element == RoomSummary {
-    var invites: [InvitesRoomDetails] {
-        compactMap { summary in
-            guard case .filled(let details) = summary else {
-                return nil
-            }
-            return .init(roomDetails: details)
-        }
     }
 }
