@@ -19,13 +19,11 @@ import SwiftUI
 @main
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
-    private let applicationCoordinator: AppCoordinatorProtocol!
+    private let applicationCoordinator: AppCoordinatorProtocol
 
     init() {
         if Tests.isRunningUITests {
             applicationCoordinator = UITestsAppCoordinator()
-        } else if Tests.isRunningUnitTests {
-            applicationCoordinator = nil
         } else {
             applicationCoordinator = AppCoordinator()
         }
