@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
+    let navigationStackCoordinator: NavigationStackCoordinator?
     let userSession: UserSessionProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
@@ -47,7 +48,10 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
+                
                 self.actionsSubject.send(.close)
+            case .proceed(let users):
+                self.openCreateRoomScreenWith(users)
             }
         }
         .store(in: &cancellables)
@@ -55,5 +59,11 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
         
     func toPresentable() -> AnyView {
         AnyView(InviteUsersScreen(context: viewModel.context))
+    }
+    
+    private func openCreateRoomScreenWith(_ users: [UserProfile]) {
+        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession, selectedUsers: users)
+        let createRoomCoordinator = CreateRoomCoordinator(parameters: paramenters)
+        parameters.navigationStackCoordinator?.push(createRoomCoordinator)
     }
 }

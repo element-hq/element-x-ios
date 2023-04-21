@@ -43,7 +43,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .close:
             actionsSubject.send(.close)
         case .proceed:
-            break
+            actionsSubject.send(.proceed(users: state.selectedUsers))
         case .tapUser(let user):
             if state.isUserSelected(user) {
                 deselect(user)

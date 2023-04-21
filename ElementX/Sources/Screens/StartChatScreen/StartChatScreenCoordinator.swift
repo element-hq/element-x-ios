@@ -70,7 +70,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator, userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] result in
             switch result {

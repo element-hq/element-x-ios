@@ -22,6 +22,7 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case close
+    case proceed(users: [UserProfile])
 }
 
 struct InviteUsersScreenViewState: BindableState {
