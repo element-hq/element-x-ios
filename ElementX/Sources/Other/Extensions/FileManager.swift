@@ -56,7 +56,7 @@ extension FileManager {
     /// Retrieve a file's disk size
     /// - Parameter url: the file URL
     /// - Returns: the size in bytes
-    func sizeForItemAt(_ url: URL) throws -> Double {
+    func sizeForItem(at url: URL) throws -> Double {
         let attributes = try attributesOfItem(atPath: url.path())
         
         guard let size = attributes[FileAttributeKey.size] as? Double else {
