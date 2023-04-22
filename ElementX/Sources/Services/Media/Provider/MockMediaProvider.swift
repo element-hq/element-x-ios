@@ -38,6 +38,15 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .success(image)
     }
     
+    func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError> {
+        guard let image = UIImage(systemName: "photo"),
+              let data = image.pngData() else {
+            fatalError()
+        }
+        
+        return .success(data)
+    }
+    
     func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError> {
         .failure(.failedRetrievingFile)
     }

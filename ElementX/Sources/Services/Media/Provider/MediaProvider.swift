@@ -79,6 +79,16 @@ struct MediaProvider: MediaProviderProtocol {
         }
     }
     
+    func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError> {
+        do {
+            let imageData = try await mediaLoader.loadMediaContentForSource(source)
+            return .success(imageData)
+        } catch {
+            MXLog.error("Failed retrieving image with error: \(error)")
+            return .failure(.failedRetrievingImage)
+        }
+    }
+    
     // MARK: Files
     
     func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError> {

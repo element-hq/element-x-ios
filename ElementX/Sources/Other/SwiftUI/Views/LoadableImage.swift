@@ -14,18 +14,19 @@
 // limitations under the License.
 //
 
+import Kingfisher
 import SwiftUI
 
-struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
-    private let mediaSource: MediaSourceProxy?
+struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
+    private let mediaSource: MediaSourceProxy
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
     
-    private var transformer: (Image) -> TransformerView
+    private var transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
-    @State private var cachedImage: UIImage?
+    @StateObject private var loadableContent: LoadableContent
     
     /// A SwiftUI view that automatically fetches images
     /// It will try fetching the image from in-memory cache and if that's not available
@@ -35,11 +36,11 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     ///   - blurhash: an optional blurhash
     ///   - transformer: entry point for configuring the resulting image view
     ///   - placeholder: a view to show while the image or blurhash are not available
-    init(mediaSource: MediaSourceProxy?,
+    init(mediaSource: MediaSourceProxy,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
-         transformer: @escaping (Image) -> TransformerView = { $0 },
+         transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.blurhash = blurhash
@@ -48,17 +49,17 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
         
         self.transformer = transformer
         self.placeholder = placeholder
+        
+        _loadableContent = StateObject(wrappedValue: LoadableContent(imageProvider: imageProvider, mediaSource: mediaSource, size: size))
     }
     
-    init(url: URL?,
+    init(url: URL,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
-         transformer: @escaping (Image) -> TransformerView = { $0 },
+         transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
-        let mediaSource = url.map { MediaSourceProxy(url: $0, mimeType: nil) }
-        
-        self.init(mediaSource: mediaSource,
+        self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
                   blurhash: blurhash,
                   size: size,
                   imageProvider: imageProvider,
@@ -69,34 +70,98 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     var body: some View {
         let _ = Task {
             // Future improvement: Does guarding against a nil image prevent the image being updated when the URL changes?
-            guard image == nil, let mediaSource else { return }
-            
-            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
-                cachedImage = image
+            guard loadableContent.content == nil else {
+                return
             }
+            
+            await loadableContent.load()
         }
         
         ZStack {
-            if let image {
+            switch loadableContent.content {
+            case .image(let image):
                 transformer(
-                    Image(uiImage: image)
-                        .resizable()
+                    AnyView(Image(uiImage: image).resizable())
                 )
-            } else if let blurhash,
-                      // Build a small blurhash image so that it's fast
-                      let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                transformer(
-                    Image(uiImage: image)
-                        .resizable()
-                )
-            } else {
-                placeholder()
+            case .gifData:
+                transformer(AnyView(KFAnimatedImage(source: .provider(self))))
+            case .none:
+                if let blurhash,
+                   // Build a small blurhash image so that it's fast
+                   let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
+                    transformer(AnyView(Image(uiImage: image).resizable()))
+                } else {
+                    placeholder()
+                }
             }
         }
-        .animation(.elementDefault, value: image)
+        .animation(.elementDefault, value: loadableContent.content)
     }
     
-    private var image: UIImage? {
-        cachedImage ?? imageProvider?.imageFromSource(mediaSource, size: size)
+    // MARK: - ImageDataProvider
+    
+    var cacheKey: String {
+        mediaSource.url.absoluteString
+    }
+    
+    func data(handler: @escaping (Result<Data, Error>) -> Void) {
+        guard case let .gifData(data) = loadableContent.content else {
+            fatalError("Shouldn't reach this point without any gif data")
+        }
+        
+        handler(.success(data))
+    }
+}
+
+private class LoadableContent: ObservableObject {
+    enum CachedContent: Equatable {
+        case image(UIImage)
+        case gifData(Data)
+    }
+    
+    private let imageProvider: ImageProviderProtocol?
+    private let mediaSource: MediaSourceProxy
+    private let size: CGSize?
+    
+    @Published var cachedContent: CachedContent?
+    var content: CachedContent? {
+        if cachedContent != nil {
+            return cachedContent
+        }
+        
+        if let image = imageProvider?.imageFromSource(mediaSource) {
+            let isGIF = mediaSource.mimeType == "image/gif"
+            
+            if isGIF {
+                if let data = image.kf.data(format: .GIF) {
+                    return .gifData(data)
+                }
+            } else {
+                return .image(image)
+            }
+        }
+        
+        return cachedContent
+    }
+    
+    init(imageProvider: ImageProviderProtocol?, mediaSource: MediaSourceProxy, size: CGSize?) {
+        self.imageProvider = imageProvider
+        self.mediaSource = mediaSource
+        self.size = size
+    }
+    
+    @MainActor
+    func load() async {
+        let isGIF = mediaSource.mimeType == "image/gif"
+        
+        if isGIF {
+            if case let .success(data) = await imageProvider?.loadImageDataFromSource(mediaSource) {
+                cachedContent = .gifData(data)
+            }
+        } else {
+            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
+                cachedContent = .image(image)
+            }
+        }
     }
 }

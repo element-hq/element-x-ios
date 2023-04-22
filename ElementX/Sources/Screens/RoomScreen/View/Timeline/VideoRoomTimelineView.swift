@@ -23,7 +23,16 @@ struct VideoRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(mediaSource: timelineItem.thumbnailSource,
+            thumbnail
+                .frame(maxHeight: min(300, timelineItem.height ?? .infinity))
+                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+        }
+    }
+    
+    @ViewBuilder
+    var thumbnail: some View {
+        if let thumbnailSource = timelineItem.thumbnailSource {
+            LoadableImage(mediaSource: thumbnailSource,
                           blurhash: timelineItem.blurhash,
                           imageProvider: context.imageProvider) { imageView in
                 imageView
@@ -31,8 +40,8 @@ struct VideoRoomTimelineView: View {
             } placeholder: {
                 placeholder
             }
-            .frame(maxHeight: 300)
-            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+        } else {
+            playIcon
         }
     }
     
