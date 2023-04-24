@@ -18,7 +18,7 @@ import Combine
 import Foundation
 
 @MainActor
-protocol ReportContentViewModelProtocol {
-    var actions: AnyPublisher<ReportContentViewModelAction, Never> { get }
-    var context: ReportContentViewModelType.Context { get }
+protocol ReportContentScreenViewModelProtocol {
+    var actions: AnyPublisher<ReportContentScreenViewModelAction, Never> { get }
+    var context: ReportContentScreenViewModelType.Context { get }
 }

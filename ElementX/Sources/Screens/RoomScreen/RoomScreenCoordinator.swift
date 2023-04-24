@@ -175,15 +175,15 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         navigationStackCoordinator.push(coordinator)
     }
-
+    
     private func displayReportContent(for itemID: String, from senderID: String) {
         let navigationCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
-        let parameters = ReportContentCoordinatorParameters(itemID: itemID,
-                                                            senderID: senderID,
-                                                            roomProxy: parameters.roomProxy,
-                                                            userIndicatorController: userIndicatorController)
-        let coordinator = ReportContentCoordinator(parameters: parameters)
+        let parameters = ReportContentScreenCoordinatorParameters(itemID: itemID,
+                                                                  senderID: senderID,
+                                                                  roomProxy: parameters.roomProxy,
+                                                                  userIndicatorController: userIndicatorController)
+        let coordinator = ReportContentScreenCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] completion in
             self?.navigationStackCoordinator.setSheetCoordinator(nil)
             switch completion {

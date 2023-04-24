@@ -16,23 +16,23 @@
 
 import Foundation
 
-enum ReportContentViewModelAction {
+enum ReportContentScreenViewModelAction {
     case cancel
     case submitStarted
     case submitFinished
     case submitFailed(error: Error)
 }
 
-struct ReportContentViewState: BindableState {
-    var bindings: ReportContentViewStateBindings
+struct ReportContentScreenViewState: BindableState {
+    var bindings: ReportContentScreenViewStateBindings
 }
 
-struct ReportContentViewStateBindings {
+struct ReportContentScreenViewStateBindings {
     var reasonText: String
     var ignoreUser: Bool
 }
 
-enum ReportContentViewAction {
+enum ReportContentScreenViewAction {
     case cancel
     case submit
 }

@@ -17,15 +17,15 @@
 import Combine
 import SwiftUI
 
-typealias ReportContentViewModelType = StateStoreViewModel<ReportContentViewState, ReportContentViewAction>
+typealias ReportContentScreenViewModelType = StateStoreViewModel<ReportContentScreenViewState, ReportContentScreenViewAction>
 
-class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModelProtocol {
+class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportContentScreenViewModelProtocol {
     private let itemID: String
     private let senderID: String
     private let roomProxy: RoomProxyProtocol
-    private let actionsSubject: PassthroughSubject<ReportContentViewModelAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<ReportContentScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<ReportContentViewModelAction, Never> {
+    var actions: AnyPublisher<ReportContentScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
@@ -34,12 +34,12 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
         self.senderID = senderID
         self.roomProxy = roomProxy
         
-        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "", ignoreUser: false)))
+        super.init(initialViewState: ReportContentScreenViewState(bindings: ReportContentScreenViewStateBindings(reasonText: "", ignoreUser: false)))
     }
 
     // MARK: - Public
     
-    override func process(viewAction: ReportContentViewAction) {
+    override func process(viewAction: ReportContentScreenViewAction) {
         switch viewAction {
         case .cancel:
             actionsSubject.send(.cancel)

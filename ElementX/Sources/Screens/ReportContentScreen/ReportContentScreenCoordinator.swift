@@ -17,29 +17,29 @@
 import Combine
 import SwiftUI
 
-struct ReportContentCoordinatorParameters {
+struct ReportContentScreenCoordinatorParameters {
     let itemID: String
     let senderID: String
     let roomProxy: RoomProxyProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
-enum ReportContentCoordinatorAction {
+enum ReportContentScreenCoordinatorAction {
     case cancel
     case finish
 }
 
-final class ReportContentCoordinator: CoordinatorProtocol {
-    private let parameters: ReportContentCoordinatorParameters
-    private var viewModel: ReportContentViewModelProtocol
+final class ReportContentScreenCoordinator: CoordinatorProtocol {
+    private let parameters: ReportContentScreenCoordinatorParameters
+    private var viewModel: ReportContentScreenViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var callback: ((ReportContentCoordinatorAction) -> Void)?
+    var callback: ((ReportContentScreenCoordinatorAction) -> Void)?
     
-    init(parameters: ReportContentCoordinatorParameters) {
+    init(parameters: ReportContentScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = ReportContentViewModel(itemID: parameters.itemID, senderID: parameters.senderID, roomProxy: parameters.roomProxy)
+        viewModel = ReportContentScreenViewModel(itemID: parameters.itemID, senderID: parameters.senderID, roomProxy: parameters.roomProxy)
     }
 
     // MARK: - Public

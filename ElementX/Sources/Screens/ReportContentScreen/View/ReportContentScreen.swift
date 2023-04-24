@@ -19,7 +19,7 @@ import SwiftUI
 struct ReportContentScreen: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
-    @ObservedObject var context: ReportContentViewModel.Context
+    @ObservedObject var context: ReportContentScreenViewModel.Context
     
     private var horizontalPadding: CGFloat {
         horizontalSizeClass == .regular ? 50 : 16
@@ -83,10 +83,10 @@ struct ReportContentScreen: View {
 
 // MARK: - Previews
 
-struct ReportContent_Previews: PreviewProvider {
-    static let viewModel = ReportContentViewModel(itemID: "",
-                                                  senderID: "",
-                                                  roomProxy: RoomProxyMock(with: .init(displayName: nil)))
+struct ReportContentScreen_Previews: PreviewProvider {
+    static let viewModel = ReportContentScreenViewModel(itemID: "",
+                                                        senderID: "",
+                                                        roomProxy: RoomProxyMock(with: .init(displayName: nil)))
     
     static var previews: some View {
         NavigationStack {
