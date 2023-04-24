@@ -216,12 +216,16 @@ struct HomeScreen: View {
     
     private func updateVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
-              context.viewState.rooms.count > 0 else {
+              context.viewState.visibleRooms.count > 0 else {
+            return
+        }
+        
+        guard scrollView.contentSize.height > scrollView.bounds.height else {
             return
         }
         
         let adjustedContentSize = max(scrollView.contentSize.height - scrollView.contentInset.top - scrollView.contentInset.bottom, scrollView.bounds.height)
-        let cellHeight = adjustedContentSize / Double(context.viewState.rooms.count)
+        let cellHeight = adjustedContentSize / Double(context.viewState.visibleRooms.count)
         
         let firstIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.contentInset.top) / cellHeight)
         let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
