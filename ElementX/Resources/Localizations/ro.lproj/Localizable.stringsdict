@@ -30,10 +30,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@: %2$d mesaj</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@: %2$d mesaje</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -46,10 +54,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d notificare</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d notificări</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -62,10 +78,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d invitație</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d invitații</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -78,10 +102,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d mesaj nou</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d mesaje noi</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -94,10 +126,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d mesaj notificat necitit</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d mesaje notificate necitite</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -110,10 +150,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string></string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d cameră</string>
+			<key>two</key>
+			<string></string>
+			<key>few</key>
+			<string></string>
+			<key>many</key>
+			<string></string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d camere</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
