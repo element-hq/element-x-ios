@@ -26,7 +26,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
     private var transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
-    @StateObject private var loadableContent: LoadableContent
+    @StateObject private var contentLoader: ContentLoader
     
     /// A SwiftUI view that automatically fetches images
     /// It will try fetching the image from in-memory cache and if that's not available
@@ -50,7 +50,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
         self.transformer = transformer
         self.placeholder = placeholder
         
-        _loadableContent = StateObject(wrappedValue: LoadableContent(imageProvider: imageProvider, mediaSource: mediaSource, size: size))
+        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))
     }
     
     init(url: URL,
@@ -70,15 +70,15 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
     var body: some View {
         let _ = Task {
             // Future improvement: Does guarding against a nil image prevent the image being updated when the URL changes?
-            guard loadableContent.content == nil else {
+            guard contentLoader.content == nil else {
                 return
             }
             
-            await loadableContent.load()
+            await contentLoader.load()
         }
         
         ZStack {
-            switch loadableContent.content {
+            switch contentLoader.content {
             case .image(let image):
                 transformer(
                     AnyView(Image(uiImage: image).resizable())
@@ -95,7 +95,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
                 }
             }
         }
-        .animation(.elementDefault, value: loadableContent.content)
+        .animation(.elementDefault, value: contentLoader.content)
     }
     
     // MARK: - ImageDataProvider
@@ -105,7 +105,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
     }
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        guard case let .gifData(data) = loadableContent.content else {
+        guard case let .gifData(data) = contentLoader.content else {
             fatalError("Shouldn't reach this point without any gif data")
         }
         
@@ -113,8 +113,8 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
     }
 }
 
-private class LoadableContent: ObservableObject {
-    enum CachedContent: Equatable {
+private class ContentLoader: ObservableObject {
+    enum Content: Equatable {
         case image(UIImage)
         case gifData(Data)
     }
@@ -123,8 +123,9 @@ private class LoadableContent: ObservableObject {
     private let mediaSource: MediaSourceProxy
     private let size: CGSize?
     
-    @Published var cachedContent: CachedContent?
-    var content: CachedContent? {
+    @Published private var cachedContent: Content?
+    
+    var content: Content? {
         if cachedContent != nil {
             return cachedContent
         }
@@ -144,16 +145,14 @@ private class LoadableContent: ObservableObject {
         return cachedContent
     }
     
-    init(imageProvider: ImageProviderProtocol?, mediaSource: MediaSourceProxy, size: CGSize?) {
-        self.imageProvider = imageProvider
+    init(mediaSource: MediaSourceProxy, size: CGSize?, imageProvider: ImageProviderProtocol?) {
         self.mediaSource = mediaSource
         self.size = size
+        self.imageProvider = imageProvider
     }
     
     @MainActor
     func load() async {
-        let isGIF = mediaSource.mimeType == "image/gif"
-        
         if isGIF {
             if case let .success(data) = await imageProvider?.loadImageDataFromSource(mediaSource) {
                 cachedContent = .gifData(data)
@@ -163,5 +162,9 @@ private class LoadableContent: ObservableObject {
                 cachedContent = .image(image)
             }
         }
+    }
+    
+    private var isGIF: Bool {
+        mediaSource.mimeType == "image/gif"
     }
 }
