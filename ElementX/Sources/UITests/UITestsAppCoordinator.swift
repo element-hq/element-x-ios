@@ -100,9 +100,9 @@ class MockScreen: Identifiable {
                                                            credentials: credentials,
                                                            keyBackupNeeded: false))
         case .simpleRegular:
-            return TemplateCoordinator(parameters: .init(promptType: .regular))
+            return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
-            return TemplateCoordinator(parameters: .init(promptType: .upgrade))
+            return TemplateScreenCoordinator(parameters: .init(promptType: .upgrade))
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),

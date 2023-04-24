@@ -23,7 +23,7 @@ struct TemplateScreen: View {
         colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
     }
     
-    @ObservedObject var context: TemplateViewModel.Context
+    @ObservedObject var context: TemplateScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -92,9 +92,9 @@ struct TemplateScreen: View {
 
 // MARK: - Previews
 
-struct Template_Previews: PreviewProvider {
-    static let regularViewModel = TemplateViewModel(promptType: .regular)
-    static let upgradeViewModel = TemplateViewModel(promptType: .upgrade)
+struct TemplateScreen_Previews: PreviewProvider {
+    static let regularViewModel = TemplateScreenViewModel(promptType: .regular)
+    static let upgradeViewModel = TemplateScreenViewModel(promptType: .upgrade)
     static var previews: some View {
         TemplateScreen(context: regularViewModel.context)
             .previewDisplayName("Regular")

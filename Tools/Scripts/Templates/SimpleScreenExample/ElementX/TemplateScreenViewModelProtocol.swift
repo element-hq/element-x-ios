@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol TemplateViewModelProtocol {
-    var actions: AnyPublisher<TemplateViewModelAction, Never> { get }
-    var context: TemplateViewModelType.Context { get }
+protocol TemplateScreenViewModelProtocol {
+    var actions: AnyPublisher<TemplateScreenViewModelAction, Never> { get }
+    var context: TemplateScreenViewModelType.Context { get }
 }

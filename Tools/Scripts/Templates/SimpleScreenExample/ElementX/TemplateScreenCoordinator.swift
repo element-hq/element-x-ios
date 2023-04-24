@@ -17,31 +17,31 @@
 import Combine
 import SwiftUI
 
-struct TemplateCoordinatorParameters {
-    let promptType: TemplatePromptType
+struct TemplateScreenCoordinatorParameters {
+    let promptType: TemplateScreenPromptType
 }
 
-enum TemplateCoordinatorAction {
+enum TemplateScreenCoordinatorAction {
     case accept
     case cancel
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
-final class TemplateCoordinator: CoordinatorProtocol {
-    private let parameters: TemplateCoordinatorParameters
-    private var viewModel: TemplateViewModelProtocol
-    private let actionsSubject: PassthroughSubject<TemplateCoordinatorAction, Never> = .init()
+final class TemplateScreenCoordinator: CoordinatorProtocol {
+    private let parameters: TemplateScreenCoordinatorParameters
+    private var viewModel: TemplateScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<TemplateScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<TemplateCoordinatorAction, Never> {
+    var actions: AnyPublisher<TemplateScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: TemplateCoordinatorParameters) {
+    init(parameters: TemplateScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = TemplateViewModel(promptType: parameters.promptType)
+        viewModel = TemplateScreenViewModel(promptType: parameters.promptType)
     }
     
     func start() {

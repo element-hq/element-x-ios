@@ -16,12 +16,12 @@
 
 import Foundation
 
-enum TemplatePromptType {
+enum TemplateScreenPromptType {
     case regular
     case upgrade
 }
 
-extension TemplatePromptType: Identifiable, CaseIterable {
+extension TemplateScreenPromptType: Identifiable, CaseIterable {
     var id: Self { self }
     
     var title: String {
@@ -43,19 +43,19 @@ extension TemplatePromptType: Identifiable, CaseIterable {
     }
 }
 
-enum TemplateViewModelAction {
+enum TemplateScreenViewModelAction {
     case accept
     case cancel
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
-struct TemplateViewState: BindableState {
-    var promptType: TemplatePromptType
+struct TemplateScreenViewState: BindableState {
+    var promptType: TemplateScreenPromptType
     var count: Int
 }
 
-enum TemplateViewAction {
+enum TemplateScreenViewAction {
     case incrementCount
     case decrementCount
     case accept

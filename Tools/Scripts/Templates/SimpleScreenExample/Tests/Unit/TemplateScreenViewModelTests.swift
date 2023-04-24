@@ -24,14 +24,14 @@ class TemplateScreenViewModelTests: XCTestCase {
         static let counterInitialValue = 0
     }
     
-    var viewModel: TemplateViewModelProtocol!
+    var viewModel: TemplateScreenViewModelProtocol!
     
-    var context: TemplateViewModelType.Context {
+    var context: TemplateScreenViewModelType.Context {
         viewModel.context
     }
     
     override func setUpWithError() throws {
-        viewModel = TemplateViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
+        viewModel = TemplateScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
     }
 
     func testInitialState() {
