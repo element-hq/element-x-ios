@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol BugReportViewModelProtocol {
+protocol BugReportScreenViewModelProtocol {
     var actions: AnyPublisher<BugReportScreenViewModelAction, Never> { get }
-    var context: BugReportViewModelType.Context { get }
+    var context: BugReportScreenViewModelType.Context { get }
 }

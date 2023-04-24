@@ -125,7 +125,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
 
     private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
-        let params = FilePreviewCoordinatorScreenParameters(mediaFile: file, title: title)
+        let params = FilePreviewScreenCoordinatorParameters(mediaFile: file, title: title)
         let coordinator = FilePreviewScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()

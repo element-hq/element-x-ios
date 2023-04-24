@@ -34,19 +34,19 @@ struct BugReportScreenCoordinatorParameters {
 
 final class BugReportScreenCoordinator: CoordinatorProtocol {
     private let parameters: BugReportScreenCoordinatorParameters
-    private var viewModel: BugReportViewModelProtocol
+    private var viewModel: BugReportScreenViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
-
+    
     var completion: ((BugReportScreenCoordinatorResult) -> Void)?
     
     init(parameters: BugReportScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
-                                       userID: parameters.userID,
-                                       deviceID: parameters.deviceID,
-                                       screenshot: parameters.screenshot,
-                                       isModallyPresented: parameters.isModallyPresented)
+        viewModel = BugReportScreenViewModel(bugReportService: parameters.bugReportService,
+                                             userID: parameters.userID,
+                                             deviceID: parameters.deviceID,
+                                             screenshot: parameters.screenshot,
+                                             isModallyPresented: parameters.isModallyPresented)
     }
     
     // MARK: - Public

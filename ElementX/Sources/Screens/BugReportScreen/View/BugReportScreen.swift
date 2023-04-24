@@ -21,7 +21,7 @@ import SwiftUI
 struct BugReportScreen: View {
     @State private var selectedScreenshot: PhotosPickerItem?
     
-    @ObservedObject var context: BugReportViewModel.Context
+    @ObservedObject var context: BugReportScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -131,28 +131,28 @@ struct BugReportScreen: View {
 // MARK: - Previews
 
 struct BugReport_Previews: PreviewProvider {
-    static let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                              userID: "@mock.client.com",
-                                              deviceID: nil,
-                                              screenshot: nil,
-                                              isModallyPresented: false)
+    static let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                    userID: "@mock.client.com",
+                                                    deviceID: nil,
+                                                    screenshot: nil,
+                                                    isModallyPresented: false)
     
     static var previews: some View {
         NavigationStack {
-            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                                        userID: "@mock.client.com",
-                                                        deviceID: nil,
-                                                        screenshot: nil,
-                                                        isModallyPresented: false).context)
+            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                              userID: "@mock.client.com",
+                                                              deviceID: nil,
+                                                              screenshot: nil,
+                                                              isModallyPresented: false).context)
                 .previewDisplayName("Without Screenshot")
         }
         
         NavigationStack {
-            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                                        userID: "@mock.client.com",
-                                                        deviceID: nil,
-                                                        screenshot: Asset.Images.appLogo.image,
-                                                        isModallyPresented: false).context)
+            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                              userID: "@mock.client.com",
+                                                              deviceID: nil,
+                                                              screenshot: Asset.Images.appLogo.image,
+                                                              isModallyPresented: false).context)
                 .previewDisplayName("With Screenshot")
         }
     }
