@@ -38,7 +38,7 @@ struct AnalyticsPromptCheckmarkItem: View {
 // MARK: - Previews
 
 struct AnalyticsPromptCheckmarkItem_Previews: PreviewProvider {
-    static let strings = AnalyticsPromptStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+    static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     
     static var previews: some View {
         VStack(alignment: .leading) {

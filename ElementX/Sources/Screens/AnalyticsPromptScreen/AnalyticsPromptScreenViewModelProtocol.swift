@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol AnalyticsPromptViewModelProtocol {
-    var callback: (@MainActor (AnalyticsPromptViewModelAction) -> Void)? { get set }
+protocol AnalyticsPromptScreenViewModelProtocol {
+    var callback: (@MainActor (AnalyticsPromptScreenViewModelAction) -> Void)? { get set }
     var context: AnalyticsPromptViewModelType.Context { get }
 }

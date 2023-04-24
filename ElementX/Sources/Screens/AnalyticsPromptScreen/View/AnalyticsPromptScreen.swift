@@ -17,10 +17,10 @@
 import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.
-struct AnalyticsPrompt: View {
+struct AnalyticsPromptScreen: View {
     private let horizontalPadding: CGFloat = 16
     
-    @ObservedObject var context: AnalyticsPromptViewModel.Context
+    @ObservedObject var context: AnalyticsPromptScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -115,9 +115,9 @@ struct AnalyticsPrompt: View {
 
 // MARK: - Previews
 
-struct AnalyticsPrompt_Previews: PreviewProvider {
-    static let viewModel = AnalyticsPromptViewModel()
+struct AnalyticsPromptScreen_Previews: PreviewProvider {
+    static let viewModel = AnalyticsPromptScreenViewModel()
     static var previews: some View {
-        AnalyticsPrompt(context: viewModel.context)
+        AnalyticsPromptScreen(context: viewModel.context)
     }
 }

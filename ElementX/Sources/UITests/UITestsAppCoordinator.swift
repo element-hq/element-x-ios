@@ -78,7 +78,7 @@ class MockScreen: Identifiable {
                                                                 userIndicatorController: MockUserIndicatorController(),
                                                                 isModallyPresented: false))
         case .analyticsPrompt:
-            return AnalyticsPromptCoordinator()
+            return AnalyticsPromptScreenCoordinator()
         case .analyticsSettingsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = AnalyticsSettingsScreenCoordinator()

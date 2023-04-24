@@ -16,13 +16,13 @@
 
 import SwiftUI
 
-final class AnalyticsPromptCoordinator: CoordinatorProtocol {
-    private var viewModel: AnalyticsPromptViewModel
+final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: AnalyticsPromptScreenViewModel
 
     var callback: (@MainActor () -> Void)?
     
     init() {
-        viewModel = AnalyticsPromptViewModel()
+        viewModel = AnalyticsPromptScreenViewModel()
     }
     
     // MARK: - Public
@@ -45,6 +45,6 @@ final class AnalyticsPromptCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(AnalyticsPrompt(context: viewModel.context))
+        AnyView(AnalyticsPromptScreen(context: viewModel.context))
     }
 }

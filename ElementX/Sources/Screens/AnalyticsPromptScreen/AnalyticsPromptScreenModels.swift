@@ -23,7 +23,7 @@ enum AnalyticsPromptViewAction {
     case disable
 }
 
-enum AnalyticsPromptViewModelAction {
+enum AnalyticsPromptScreenViewModelAction {
     /// Enable analytics.
     case enable
     /// Disable analytics.
@@ -32,11 +32,11 @@ enum AnalyticsPromptViewModelAction {
 
 struct AnalyticsPromptViewState: BindableState {
     /// Attributed strings created from localized HTML.
-    let strings: AnalyticsPromptStrings
+    let strings: AnalyticsPromptScreenStrings
 }
 
 /// A collection of strings for the UI that need to be parsed from HTML
-struct AnalyticsPromptStrings {
+struct AnalyticsPromptScreenStrings {
     let optInContent: AttributedString
     let point1 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptDataUsage) ?? AttributedString(L10n.screenAnalyticsPromptDataUsage)
     let point2 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptThirdPartySharing) ?? AttributedString(L10n.screenAnalyticsPromptThirdPartySharing)
