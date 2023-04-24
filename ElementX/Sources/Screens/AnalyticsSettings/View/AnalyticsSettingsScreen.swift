@@ -31,7 +31,7 @@ struct AnalyticsSettingsScreen: View {
     var analyticsSection: some View {
         Section {
             Toggle(isOn: $context.enableAnalytics) {
-                Label(L10n.screenAnalyticsShareData, systemImage: "chart.bar")
+                Label(L10n.screenAnalyticsSettingsShareData, systemImage: "chart.bar")
             }
             .toggleStyle(.compoundForm)
             .onChange(of: context.enableAnalytics) { _ in
