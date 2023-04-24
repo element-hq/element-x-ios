@@ -36,7 +36,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testIgnoreSuccess() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         roomMemberProxyMock.ignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
@@ -56,7 +56,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testIgnoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         roomMemberProxyMock.ignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .failure(.ignoreUserFailed)
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
@@ -76,7 +76,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testUnignoreSuccess() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         roomMemberProxyMock.unignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
@@ -96,7 +96,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
     func testUnignoreFailure() async throws {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         roomMemberProxyMock.unignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .failure(.unignoreUserFailed)
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())

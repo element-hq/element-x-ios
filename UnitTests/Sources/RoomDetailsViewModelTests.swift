@@ -91,7 +91,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testIgnoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         recipient.ignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
@@ -152,7 +152,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testUnignoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         recipient.unignoreUserClosure = {
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(for: .milliseconds(100))
             return .failure(.unignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
