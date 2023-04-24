@@ -120,7 +120,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             completion()
             return
         }
-        let coordinator = AnalyticsPromptCoordinator()
+        let coordinator = AnalyticsPromptScreenCoordinator()
         coordinator.callback = {
             completion()
         }

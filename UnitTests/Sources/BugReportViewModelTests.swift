@@ -23,13 +23,13 @@ class BugReportViewModelTests: XCTestCase {
     enum TestError: Error {
         case testError
     }
-
+    
     func testInitialState() {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                           userID: "@mock.client.com",
-                                           deviceID: nil,
-                                           screenshot: nil,
-                                           isModallyPresented: false)
+        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                 userID: "@mock.client.com",
+                                                 deviceID: nil,
+                                                 screenshot: nil,
+                                                 isModallyPresented: false)
         let context = viewModel.context
         
         XCTAssertEqual(context.reportText, "")
@@ -38,11 +38,11 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testClearScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                           userID: "@mock.client.com",
-                                           deviceID: nil,
-                                           screenshot: UIImage.actions,
-                                           isModallyPresented: false)
+        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                 userID: "@mock.client.com",
+                                                 deviceID: nil,
+                                                 screenshot: UIImage.actions,
+                                                 isModallyPresented: false)
         let context = viewModel.context
         
         context.send(viewAction: .removeScreenshot)
@@ -50,23 +50,23 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testAttachScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
-                                           userID: "@mock.client.com",
-                                           deviceID: nil,
-                                           screenshot: nil, isModallyPresented: false)
+        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+                                                 userID: "@mock.client.com",
+                                                 deviceID: nil,
+                                                 screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         XCTAssertNil(context.viewState.screenshot)
         context.send(viewAction: .attachScreenshot(UIImage.actions))
         XCTAssert(context.viewState.screenshot == UIImage.actions)
     }
-
+    
     func testSendReportWithSuccess() async throws {
         let mockService = BugReportServiceMock()
         mockService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://test.test")
-        let viewModel = BugReportViewModel(bugReportService: mockService,
-                                           userID: "@mock.client.com",
-                                           deviceID: nil,
-                                           screenshot: nil, isModallyPresented: false)
+        let viewModel = BugReportScreenViewModel(bugReportService: mockService,
+                                                 userID: "@mock.client.com",
+                                                 deviceID: nil,
+                                                 screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         context.send(viewAction: .submit)
         
@@ -89,10 +89,10 @@ class BugReportViewModelTests: XCTestCase {
         mockService.submitBugReportProgressListenerClosure = { _, _ in
             throw TestError.testError
         }
-        let viewModel = BugReportViewModel(bugReportService: mockService,
-                                           userID: "@mock.client.com",
-                                           deviceID: nil,
-                                           screenshot: nil, isModallyPresented: false)
+        let viewModel = BugReportScreenViewModel(bugReportService: mockService,
+                                                 userID: "@mock.client.com",
+                                                 deviceID: nil,
+                                                 screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         context.send(viewAction: .submit)
         

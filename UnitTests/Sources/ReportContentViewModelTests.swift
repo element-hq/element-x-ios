@@ -28,9 +28,9 @@ class ReportContentScreenViewModelTests: XCTestCase {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
-        let viewModel = ReportContentViewModel(itemID: itemID,
-                                               senderID: senderID,
-                                               roomProxy: roomProxy)
+        let viewModel = ReportContentScreenViewModel(itemID: itemID,
+                                                     senderID: senderID,
+                                                     roomProxy: roomProxy)
         
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
@@ -52,9 +52,9 @@ class ReportContentScreenViewModelTests: XCTestCase {
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
         roomProxy.ignoreUserReturnValue = .success(())
-        let viewModel = ReportContentViewModel(itemID: itemID,
-                                               senderID: senderID,
-                                               roomProxy: roomProxy)
+        let viewModel = ReportContentScreenViewModel(itemID: itemID,
+                                                     senderID: senderID,
+                                                     roomProxy: roomProxy)
         
         // When reporting the content and also ignoring the user.
         viewModel.state.bindings.reasonText = reportReason

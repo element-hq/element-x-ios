@@ -83,8 +83,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerSource) {
-        let mediaPickerCoordinator = MediaPickerCoordinator(source: source) { [weak self] action in
+    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(source: source) { [weak self] action in
             switch action {
             case .cancel:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
@@ -125,8 +125,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
 
     private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
-        let params = FilePreviewCoordinatorParameters(mediaFile: file, title: title)
-        let coordinator = FilePreviewCoordinator(parameters: params)
+        let params = FilePreviewScreenCoordinatorParameters(mediaFile: file, title: title)
+        let coordinator = FilePreviewScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()
         }
@@ -160,10 +160,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayRoomDetails() {
-        let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                      roomProxy: parameters.roomProxy,
-                                                      mediaProvider: parameters.mediaProvider)
-        let coordinator = RoomDetailsCoordinator(parameters: params)
+        let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                            roomProxy: parameters.roomProxy,
+                                                            mediaProvider: parameters.mediaProvider)
+        let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
             case .cancel:
@@ -175,15 +175,15 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         navigationStackCoordinator.push(coordinator)
     }
-
+    
     private func displayReportContent(for itemID: String, from senderID: String) {
         let navigationCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
-        let parameters = ReportContentCoordinatorParameters(itemID: itemID,
-                                                            senderID: senderID,
-                                                            roomProxy: parameters.roomProxy,
-                                                            userIndicatorController: userIndicatorController)
-        let coordinator = ReportContentCoordinator(parameters: parameters)
+        let parameters = ReportContentScreenCoordinatorParameters(itemID: itemID,
+                                                                  senderID: senderID,
+                                                                  roomProxy: parameters.roomProxy,
+                                                                  userIndicatorController: userIndicatorController)
+        let coordinator = ReportContentScreenCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] completion in
             self?.navigationStackCoordinator.setSheetCoordinator(nil)
             switch completion {

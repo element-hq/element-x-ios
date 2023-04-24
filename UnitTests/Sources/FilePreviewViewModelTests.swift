@@ -20,11 +20,11 @@ import XCTest
 
 @MainActor
 class FilePreviewScreenViewModelTests: XCTestCase {
-    var viewModel: FilePreviewViewModelProtocol!
-    var context: FilePreviewViewModelType.Context!
+    var viewModel: FilePreviewScreenViewModelProtocol!
+    var context: FilePreviewScreenViewModelType.Context!
 
     override func setUpWithError() throws {
-        viewModel = FilePreviewViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
+        viewModel = FilePreviewScreenViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
         context = viewModel.context
     }
 
