@@ -16,23 +16,23 @@
 
 import SwiftUI
 
-enum MediaPickerSource {
+enum MediaPickerScreenSource {
     case camera
     case photoLibrary
     case documents
 }
 
-enum MediaPickerCoordinatorAction {
+enum MediaPickerScreenCoordinatorAction {
     case selectMediaAtURL(URL)
     case cancel
     case error(Error?)
 }
 
-class MediaPickerCoordinator: CoordinatorProtocol {
-    private let source: MediaPickerSource
-    private let callback: ((MediaPickerCoordinatorAction) -> Void)?
+class MediaPickerScreenCoordinator: CoordinatorProtocol {
+    private let source: MediaPickerScreenSource
+    private let callback: ((MediaPickerScreenCoordinatorAction) -> Void)?
     
-    init(source: MediaPickerSource, callback: @escaping (MediaPickerCoordinatorAction) -> Void) {
+    init(source: MediaPickerScreenSource, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.source = source
         self.callback = callback
     }

@@ -83,8 +83,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerSource) {
-        let mediaPickerCoordinator = MediaPickerCoordinator(source: source) { [weak self] action in
+    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(source: source) { [weak self] action in
             switch action {
             case .cancel:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
