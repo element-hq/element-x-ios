@@ -16,20 +16,20 @@
 
 import SwiftUI
 
-struct SessionVerificationCoordinatorParameters {
+struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
 }
 
-final class SessionVerificationCoordinator: CoordinatorProtocol {
-    private let parameters: SessionVerificationCoordinatorParameters
-    private var viewModel: SessionVerificationViewModelProtocol
+final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
+    private let parameters: SessionVerificationScreenCoordinatorParameters
+    private var viewModel: SessionVerificationScreenViewModelProtocol
     
     var callback: (() -> Void)?
     
-    init(parameters: SessionVerificationCoordinatorParameters) {
+    init(parameters: SessionVerificationScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
     }
     
     // MARK: - Public

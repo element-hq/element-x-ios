@@ -255,8 +255,8 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .sessionVerification:
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(2))
-            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
-            return SessionVerificationCoordinator(parameters: parameters)
+            let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
+            return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen:
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
             

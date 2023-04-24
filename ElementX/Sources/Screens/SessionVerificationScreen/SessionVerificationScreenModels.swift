@@ -16,12 +16,12 @@
 
 import Foundation
 
-enum SessionVerificationViewModelAction {
+enum SessionVerificationScreenViewModelAction {
     case finished
 }
 
-struct SessionVerificationViewState: BindableState {
-    var verificationState: SessionVerificationStateMachine.State = .initial
+struct SessionVerificationScreenViewState: BindableState {
+    var verificationState: SessionVerificationScreenStateMachine.State = .initial
     
     var title: String? {
         switch verificationState {
@@ -78,7 +78,7 @@ struct SessionVerificationViewState: BindableState {
     }
 }
 
-enum SessionVerificationViewAction {
+enum SessionVerificationScreenViewAction {
     case requestVerification
     case startSasVerification
     case restart

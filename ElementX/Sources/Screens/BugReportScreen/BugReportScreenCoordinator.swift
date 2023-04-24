@@ -17,12 +17,12 @@
 import Combine
 import SwiftUI
 
-enum BugReportCoordinatorResult {
+enum BugReportScreenCoordinatorResult {
     case cancel
     case finish
 }
 
-struct BugReportCoordinatorParameters {
+struct BugReportScreenCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
     let userID: String
     let deviceID: String?
@@ -32,14 +32,14 @@ struct BugReportCoordinatorParameters {
     let isModallyPresented: Bool
 }
 
-final class BugReportCoordinator: CoordinatorProtocol {
-    private let parameters: BugReportCoordinatorParameters
+final class BugReportScreenCoordinator: CoordinatorProtocol {
+    private let parameters: BugReportScreenCoordinatorParameters
     private var viewModel: BugReportViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
 
-    var completion: ((BugReportCoordinatorResult) -> Void)?
+    var completion: ((BugReportScreenCoordinatorResult) -> Void)?
     
-    init(parameters: BugReportCoordinatorParameters) {
+    init(parameters: BugReportScreenCoordinatorParameters) {
         self.parameters = parameters
         
         viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,

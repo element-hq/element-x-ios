@@ -21,13 +21,13 @@ import XCTest
 
 @MainActor
 class SessionVerificationViewModelTests: XCTestCase {
-    var viewModel: SessionVerificationViewModelProtocol!
+    var viewModel: SessionVerificationScreenViewModelProtocol!
     var context: SessionVerificationViewModelType.Context!
     var sessionVerificationController: SessionVerificationControllerProxyMock!
     
     override func setUpWithError() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
-        viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: sessionVerificationController)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController)
         context = viewModel.context
     }
 

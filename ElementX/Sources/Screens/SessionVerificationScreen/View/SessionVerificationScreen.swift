@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct SessionVerificationScreen: View {
-    @ObservedObject var context: SessionVerificationViewModel.Context
+    @ObservedObject var context: SessionVerificationScreenViewModel.Context
     
     var body: some View {
         NavigationStack {
@@ -245,9 +245,9 @@ struct SessionVerification_Previews: PreviewProvider {
             .previewDisplayName("Verified")
     }
     
-    static func sessionVerificationScreen(state: SessionVerificationStateMachine.State) -> some View {
-        let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
-                                                     initialState: SessionVerificationViewState(verificationState: state))
+    static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
+        let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
+                                                           initialState: SessionVerificationScreenViewState(verificationState: state))
         
         return SessionVerificationScreen(context: viewModel.context)
     }

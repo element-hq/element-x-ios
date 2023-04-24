@@ -269,9 +269,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
-        let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
         
-        let coordinator = SessionVerificationCoordinator(parameters: parameters)
+        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] in
             self?.navigationSplitCoordinator.setSheetCoordinator(nil)

@@ -16,20 +16,20 @@
 
 import SwiftUI
 
-typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerificationViewState, SessionVerificationViewAction>
+typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerificationScreenViewState, SessionVerificationScreenViewAction>
 
-class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVerificationViewModelProtocol {
+class SessionVerificationScreenViewModel: SessionVerificationViewModelType, SessionVerificationScreenViewModelProtocol {
     private let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
     
-    private var stateMachine: SessionVerificationStateMachine
+    private var stateMachine: SessionVerificationScreenStateMachine
 
-    var callback: ((SessionVerificationViewModelAction) -> Void)?
+    var callback: ((SessionVerificationScreenViewModelAction) -> Void)?
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
-         initialState: SessionVerificationViewState = SessionVerificationViewState()) {
+         initialState: SessionVerificationScreenViewState = SessionVerificationScreenViewState()) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         
-        stateMachine = SessionVerificationStateMachine()
+        stateMachine = SessionVerificationScreenStateMachine()
         
         super.init(initialViewState: initialState)
         
@@ -63,7 +63,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             .store(in: &cancellables)
     }
     
-    override func process(viewAction: SessionVerificationViewAction) {
+    override func process(viewAction: SessionVerificationScreenViewAction) {
         switch viewAction {
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)

@@ -17,7 +17,7 @@
 import Foundation
 import SwiftState
 
-class SessionVerificationStateMachine {
+class SessionVerificationScreenStateMachine {
     /// States the SessionVerificationViewModel can find itself in
     enum State: StateType {
         /// The initial state, before verification started

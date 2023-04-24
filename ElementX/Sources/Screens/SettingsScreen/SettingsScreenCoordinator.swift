@@ -100,8 +100,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
-        let verificationParameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
-        let coordinator = SessionVerificationCoordinator(parameters: verificationParameters)
+        let verificationParameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let coordinator = SessionVerificationScreenCoordinator(parameters: verificationParameters)
         
         coordinator.callback = { [weak self] in
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)

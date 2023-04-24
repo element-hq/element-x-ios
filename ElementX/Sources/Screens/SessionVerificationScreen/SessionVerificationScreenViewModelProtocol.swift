@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol SessionVerificationViewModelProtocol {
-    var callback: ((SessionVerificationViewModelAction) -> Void)? { get set }
+protocol SessionVerificationScreenViewModelProtocol {
+    var callback: ((SessionVerificationScreenViewModelAction) -> Void)? { get set }
     var context: SessionVerificationViewModelType.Context { get }
 }

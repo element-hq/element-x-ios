@@ -20,11 +20,11 @@ import XCTest
 
 @MainActor
 class SessionVerificationStateMachineTests: XCTestCase {
-    private var stateMachine: SessionVerificationStateMachine!
+    private var stateMachine: SessionVerificationScreenStateMachine!
     
     @MainActor
     override func setUpWithError() throws {
-        stateMachine = SessionVerificationStateMachine()
+        stateMachine = SessionVerificationScreenStateMachine()
     }
     
     func testAcceptChallenge() {
