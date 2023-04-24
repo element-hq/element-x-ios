@@ -159,7 +159,6 @@
 "room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "room_timeline_read_marker_title" = "New";
-"screen_analytics_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
@@ -167,9 +166,7 @@
 "screen_analytics_prompt_settings" = "You can turn this off anytime in settings";
 "screen_analytics_prompt_third_party_sharing" = "We <b>don't</b> share information with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
-"screen_analytics_read_terms" = "You can read all our terms %1$@.";
-"screen_analytics_read_terms_content_link" = "here";
-"screen_analytics_share_data" = "Share analytics data";
+"screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Attach screenshot";
 "screen_bug_report_contact_me" = "You may contact me if you have any follow up questions";
 "screen_bug_report_edit_screenshot" = "Edit screenshot";
@@ -312,6 +309,9 @@
 "dialog_title_error" = "Error";
 "dialog_title_success" = "Success";
 "notification_room_action_quick_reply" = "Quick reply";
+"screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
+"screen_analytics_settings_read_terms_content_link" = "here";
 "screen_change_server_submit" = "Continue";
 "screen_change_server_title" = "Select your server";
 "screen_dm_details_block_alert_action" = "Block";

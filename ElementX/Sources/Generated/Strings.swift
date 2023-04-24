@@ -392,10 +392,6 @@ public enum L10n {
   public static func roomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "room_timeline_state_changes", p1)
   }
-  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
-  public static func screenAnalyticsHelpUsImprove(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_analytics_help_us_improve", String(describing: p1))
-  }
   /// We <b>don't</b> record or profile any account data
   public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
   /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
@@ -416,14 +412,18 @@ public enum L10n {
   public static func screenAnalyticsPromptTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_prompt_title", String(describing: p1))
   }
+  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
+  public static func screenAnalyticsSettingsHelpUsImprove(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_settings_help_us_improve", String(describing: p1))
+  }
   /// You can read all our terms %1$@.
-  public static func screenAnalyticsReadTerms(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_analytics_read_terms", String(describing: p1))
+  public static func screenAnalyticsSettingsReadTerms(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_analytics_settings_read_terms", String(describing: p1))
   }
   /// here
-  public static var screenAnalyticsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_read_terms_content_link") }
+  public static var screenAnalyticsSettingsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_settings_read_terms_content_link") }
   /// Share analytics data
-  public static var screenAnalyticsShareData: String { return L10n.tr("Localizable", "screen_analytics_share_data") }
+  public static var screenAnalyticsSettingsShareData: String { return L10n.tr("Localizable", "screen_analytics_settings_share_data") }
   /// Attach screenshot
   public static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions

@@ -34,12 +34,12 @@ struct AnalyticsSettingsScreenStrings {
     let sectionFooter: AttributedString
     
     init(termsURL: URL) {
-        let content = AttributedString(L10n.screenAnalyticsHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
+        let content = AttributedString(L10n.screenAnalyticsSettingsHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
         // Create the 'read terms' with a placeholder.
         let linkPlaceholder = "{link}"
-        var readTerms = AttributedString(L10n.screenAnalyticsReadTerms(linkPlaceholder))
+        var readTerms = AttributedString(L10n.screenAnalyticsSettingsReadTerms(linkPlaceholder))
         readTerms.replace(linkPlaceholder,
-                          with: L10n.screenAnalyticsReadTermsContentLink,
+                          with: L10n.screenAnalyticsSettingsReadTermsContentLink,
                           asLinkTo: termsURL)
         sectionFooter = content + "\n\n" + readTerms
     }
