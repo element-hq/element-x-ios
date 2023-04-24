@@ -20,11 +20,11 @@ import XCTest
 
 @MainActor
 class InviteUsersScreenViewModelTests: XCTestCase {
-    var viewModel: InviteUsersViewModelProtocol!
+    var viewModel: InviteUsersScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
-    var context: InviteUsersViewModel.Context {
+    var context: InviteUsersScreenViewModel.Context {
         viewModel.context
     }
     
@@ -34,7 +34,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
+        let viewModel = InviteUsersScreenViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }
