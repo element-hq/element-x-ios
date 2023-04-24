@@ -1,11 +1,15 @@
 #!/bin/bash
 
-if [ ! $# -eq 2 ]; then
-    echo "Usage: ./createScreen.sh Folder MyScreenName"
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+
+if [ ! $# -eq 1 ]; then
+    echo -e "Usage: ${GREEN}./createScreen.sh Name${NOCOLOR}"
+    echo -e "For example ${GREEN}./createScreen.sh Home${NOCOLOR} will create ${GREEN}HomeScreen${NOCOLOR}"
     exit 1
 fi
 
-SCREENS_DIR="../../ElementX/Sources/Screens"/$1
+SCREENS_DIR="../../ElementX/Sources/Screens"/$1Screen
 UI_TESTS_DIR="../../UITests/Sources"
 UNIT_TESTS_DIR="../../UnitTests/Sources"
 
@@ -28,7 +32,7 @@ cp -R "Templates/SimpleScreenExample/Tests/UI/" $UI_TESTS_DIR/
 
 cp -R "Templates/SimpleScreenExample/Tests/Unit/" $UNIT_TESTS_DIR/
 
-SCREEN_NAME=$2
+SCREEN_NAME=$1
 SCREEN_VAR_NAME=`echo $SCREEN_NAME | awk '{ print tolower(substr($0, 1, 1)) substr($0, 2) }'`
 
 function rename_files {

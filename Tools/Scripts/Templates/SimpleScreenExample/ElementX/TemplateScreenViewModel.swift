@@ -17,22 +17,22 @@
 import Combine
 import SwiftUI
 
-typealias TemplateViewModelType = StateStoreViewModel<TemplateViewState, TemplateViewAction>
+typealias TemplateScreenViewModelType = StateStoreViewModel<TemplateScreenViewState, TemplateScreenViewAction>
 
-class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<TemplateViewModelAction, Never> = .init()
+class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<TemplateScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<TemplateViewModelAction, Never> {
+    var actions: AnyPublisher<TemplateScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(promptType: TemplatePromptType, initialCount: Int = 0) {
-        super.init(initialViewState: TemplateViewState(promptType: promptType, count: 0))
+    init(promptType: TemplateScreenPromptType, initialCount: Int = 0) {
+        super.init(initialViewState: TemplateScreenViewState(promptType: promptType, count: 0))
     }
     
     // MARK: - Public
     
-    override func process(viewAction: TemplateViewAction) {
+    override func process(viewAction: TemplateScreenViewAction) {
         switch viewAction {
         case .accept:
             actionsSubject.send(.accept)
