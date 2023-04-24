@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol InvitesViewModelProtocol {
-    var actions: AnyPublisher<InvitesViewModelAction, Never> { get }
-    var context: InvitesViewModelType.Context { get }
+protocol InvitesScreenViewModelProtocol {
+    var actions: AnyPublisher<InvitesScreenViewModelAction, Never> { get }
+    var context: InvitesScreenViewModelType.Context { get }
 }

@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct InvitesScreen: View {
-    @ObservedObject var context: InvitesViewModel.Context
+    @ObservedObject var context: InvitesScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -56,32 +56,32 @@ struct InvitesScreen: View {
 struct InvitesScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            InvitesScreen(context: InvitesViewModel.noInvites.context)
+            InvitesScreen(context: InvitesScreenViewModel.noInvites.context)
         }
         .previewDisplayName("No Invites")
         
         NavigationView {
-            InvitesScreen(context: InvitesViewModel.someInvite.context)
+            InvitesScreen(context: InvitesScreenViewModel.someInvite.context)
         }
         .previewDisplayName("Some Invite")
     }
 }
 
-private extension InvitesViewModel {
-    static let noInvites: InvitesViewModel = {
+private extension InvitesScreenViewModel {
+    static let noInvites: InvitesScreenViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesViewModel(userSession: userSession)
+        let regularViewModel = InvitesScreenViewModel(userSession: userSession)
         return regularViewModel
     }()
     
-    static let someInvite: InvitesViewModel = {
+    static let someInvite: InvitesScreenViewModel = {
         let clientProxy = MockClientProxy(userID: "@userid:example.com")
         clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesViewModel(userSession: userSession)
+        let regularViewModel = InvitesScreenViewModel(userSession: userSession)
         return regularViewModel
     }()
 }

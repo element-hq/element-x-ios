@@ -17,27 +17,27 @@
 import Combine
 import SwiftUI
 
-struct InvitesCoordinatorParameters {
+struct InvitesScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-enum InvitesCoordinatorAction {
+enum InvitesScreenCoordinatorAction {
     case openRoom(withIdentifier: String)
 }
 
-final class InvitesCoordinator: CoordinatorProtocol {
-    private let parameters: InvitesCoordinatorParameters
-    private var viewModel: InvitesViewModelProtocol
-    private let actionsSubject: PassthroughSubject<InvitesCoordinatorAction, Never> = .init()
+final class InvitesScreenCoordinator: CoordinatorProtocol {
+    private let parameters: InvitesScreenCoordinatorParameters
+    private var viewModel: InvitesScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<InvitesScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<InvitesCoordinatorAction, Never> {
+    var actions: AnyPublisher<InvitesScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: InvitesCoordinatorParameters) {
+    init(parameters: InvitesScreenCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = InvitesViewModel(userSession: parameters.userSession)
+        viewModel = InvitesScreenViewModel(userSession: parameters.userSession)
     }
     
     func start() {

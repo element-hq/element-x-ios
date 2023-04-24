@@ -17,27 +17,27 @@
 import Combine
 import SwiftUI
 
-typealias InvitesViewModelType = StateStoreViewModel<InvitesViewState, InvitesViewAction>
+typealias InvitesScreenViewModelType = StateStoreViewModel<InvitesScreenViewState, InvitesScreenViewAction>
 
-class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<InvitesViewModelAction, Never> = .init()
+class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<InvitesScreenViewModelAction, Never> = .init()
     private let userSession: UserSessionProtocol
     private let previouslySeenInvites: Set<String>
     
-    var actions: AnyPublisher<InvitesViewModelAction, Never> {
+    var actions: AnyPublisher<InvitesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
         previouslySeenInvites = ServiceLocator.shared.settings.seenInvites
-        super.init(initialViewState: InvitesViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: InvitesScreenViewState(), imageProvider: userSession.mediaProvider)
         setupSubscriptions()
     }
     
     // MARK: - Public
     
-    override func process(viewAction: InvitesViewAction) {
+    override func process(viewAction: InvitesScreenViewAction) {
         switch viewAction {
         case .accept(let invite):
             accept(invite: invite)
@@ -78,12 +78,12 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
             .store(in: &cancellables)
     }
     
-    private func buildInvites(from summaries: [RoomSummary]) -> [InvitesRoomDetails] {
+    private func buildInvites(from summaries: [RoomSummary]) -> [InvitesScreenRoomDetails] {
         summaries.compactMap { summary in
             guard case .filled(let details) = summary else {
                 return nil
             }
-            return InvitesRoomDetails(roomDetails: details, isUnread: !previouslySeenInvites.contains(details.id))
+            return InvitesScreenRoomDetails(roomDetails: details, isUnread: !previouslySeenInvites.contains(details.id))
         }
     }
     
@@ -103,7 +103,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         }
     }
     
-    private func startDeclineFlow(invite: InvitesRoomDetails) {
+    private func startDeclineFlow(invite: InvitesScreenRoomDetails) {
         let roomPlaceholder = invite.isDirect ? (invite.inviter?.displayName ?? invite.roomDetails.name) : invite.roomDetails.name
         let title = invite.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
         let message = invite.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
@@ -115,7 +115,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
                                          secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { self.decline(invite: invite) }))
     }
     
-    private func accept(invite: InvitesRoomDetails) {
+    private func accept(invite: InvitesScreenRoomDetails) {
         Task {
             let roomID = invite.roomDetails.id
             defer {
@@ -138,7 +138,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         }
     }
     
-    private func decline(invite: InvitesRoomDetails) {
+    private func decline(invite: InvitesScreenRoomDetails) {
         Task {
             let roomID = invite.roomDetails.id
             defer {

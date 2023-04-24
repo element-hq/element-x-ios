@@ -14,20 +14,20 @@
 // limitations under the License.
 //
 
-enum InvitesViewModelAction {
+enum InvitesScreenViewModelAction {
     case openRoom(withIdentifier: String)
 }
 
-struct InvitesViewState: BindableState {
-    var invites: [InvitesRoomDetails]?
-    var bindings: InvitesViewStateBindings = .init()
+struct InvitesScreenViewState: BindableState {
+    var invites: [InvitesScreenRoomDetails]?
+    var bindings: InvitesScreenViewStateBindings = .init()
 }
 
-struct InvitesViewStateBindings {
+struct InvitesScreenViewStateBindings {
     var alertInfo: AlertInfo<Bool>?
 }
 
-struct InvitesRoomDetails {
+struct InvitesScreenRoomDetails {
     let roomDetails: RoomSummaryDetails
     var inviter: RoomMemberProxyProtocol?
     var isUnread: Bool
@@ -37,7 +37,7 @@ struct InvitesRoomDetails {
     }
 }
 
-enum InvitesViewAction {
-    case accept(InvitesRoomDetails)
-    case decline(InvitesRoomDetails)
+enum InvitesScreenViewAction {
+    case accept(InvitesScreenRoomDetails)
+    case decline(InvitesScreenRoomDetails)
 }

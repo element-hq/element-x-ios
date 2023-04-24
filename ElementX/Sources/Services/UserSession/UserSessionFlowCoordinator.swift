@@ -338,8 +338,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Invites list
     
     private func presentInvitesList(animated: Bool) {
-        let parameters = InvitesCoordinatorParameters(userSession: userSession)
-        let coordinator = InvitesCoordinator(parameters: parameters)
+        let parameters = InvitesScreenCoordinatorParameters(userSession: userSession)
+        let coordinator = InvitesScreenCoordinator(parameters: parameters)
         
         coordinator.actions
             .sink { [weak self] action in

@@ -19,11 +19,11 @@ import XCTest
 
 @MainActor
 class InvitesViewModelTests: XCTestCase {
-    var viewModel: InvitesViewModelProtocol!
+    var viewModel: InvitesScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!
     
-    var context: InvitesViewModelType.Context {
+    var context: InvitesScreenViewModelType.Context {
         viewModel.context
     }
     
@@ -54,7 +54,7 @@ class InvitesViewModelTests: XCTestCase {
         }
         setupViewModel(roomSummaries: invites)
         context.send(viewAction: .accept(.init(roomDetails: details, isUnread: false)))
-        let action: InvitesViewModelAction? = await viewModel.actions.values.first()
+        let action: InvitesScreenViewModelAction? = await viewModel.actions.values.first()
         guard case .openRoom(let roomID) = action else {
             XCTFail("Wrong view model action")
             return
@@ -82,6 +82,6 @@ class InvitesViewModelTests: XCTestCase {
             clientProxy.visibleRoomsSummaryProvider = summaryProvider
         }
         
-        viewModel = InvitesViewModel(userSession: userSession)
+        viewModel = InvitesScreenViewModel(userSession: userSession)
     }
 }
