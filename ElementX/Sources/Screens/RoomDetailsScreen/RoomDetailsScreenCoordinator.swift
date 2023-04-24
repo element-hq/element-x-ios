@@ -57,16 +57,16 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             }
         }
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
     
     private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
-        let params = RoomMembersListCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                          mediaProvider: parameters.mediaProvider,
-                                                          members: members)
-        let coordinator = RoomMembersListCoordinator(parameters: params)
+        let params = RoomMembersListScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                                mediaProvider: parameters.mediaProvider,
+                                                                members: members)
+        let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
         navigationStackCoordinator.push(coordinator)
     }

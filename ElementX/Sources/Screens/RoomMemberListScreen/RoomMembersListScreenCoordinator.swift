@@ -16,26 +16,26 @@
 
 import SwiftUI
 
-struct RoomMembersListCoordinatorParameters {
+struct RoomMembersListScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let mediaProvider: MediaProviderProtocol
     let members: [RoomMemberProxyProtocol]
 }
 
-enum RoomMembersListCoordinatorAction { }
+enum RoomMembersListScreenCoordinatorAction { }
 
-final class RoomMembersListCoordinator: CoordinatorProtocol {
-    private let parameters: RoomMembersListCoordinatorParameters
-    private var viewModel: RoomMembersListViewModelProtocol
+final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
+    private let parameters: RoomMembersListScreenCoordinatorParameters
+    private var viewModel: RoomMembersListScreenViewModelProtocol
     private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
     
-    var callback: ((RoomMembersListCoordinatorAction) -> Void)?
+    var callback: ((RoomMembersListScreenCoordinatorAction) -> Void)?
     
-    init(parameters: RoomMembersListCoordinatorParameters) {
+    init(parameters: RoomMembersListScreenCoordinatorParameters) {
         self.parameters = parameters
-
-        viewModel = RoomMembersListViewModel(mediaProvider: parameters.mediaProvider,
-                                             members: parameters.members)
+        
+        viewModel = RoomMembersListScreenViewModel(mediaProvider: parameters.mediaProvider,
+                                                   members: parameters.members)
     }
     
     func start() {

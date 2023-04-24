@@ -16,13 +16,13 @@
 
 import SwiftUI
 
-typealias RoomMembersListViewModelType = StateStoreViewModel<RoomMembersListViewState, RoomMembersListViewAction>
+typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
 
-class RoomMembersListViewModel: RoomMembersListViewModelType, RoomMembersListViewModelProtocol {
+class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let members: [RoomMemberProxyProtocol]
     
-    var callback: ((RoomMembersListViewModelAction) -> Void)?
+    var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
     init(mediaProvider: MediaProviderProtocol,
          members: [RoomMemberProxyProtocol]) {
@@ -35,7 +35,7 @@ class RoomMembersListViewModel: RoomMembersListViewModelType, RoomMembersListVie
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMembersListViewAction) {
+    override func process(viewAction: RoomMembersListScreenViewAction) {
         switch viewAction {
         case .selectMember(let id):
             guard let member = members.first(where: { $0.userID == id }) else {
