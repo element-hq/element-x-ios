@@ -25,7 +25,7 @@ struct EmojiPickerScreen: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
                 ForEach(context.viewState.categories) { category in
-                    Section(header: EmojiPickerHeaderView(title: category.name)
+                    Section(header: EmojiPickerScreenHeaderView(title: category.name)
                         .padding(.horizontal, 13)
                         .padding(.top, 10)) {
                             ForEach(category.emojis) { emoji in

@@ -19,7 +19,7 @@ import SwiftUI
 import UIKit
 
 struct FilePreviewScreen: View {
-    @ObservedObject var context: FilePreviewViewModel.Context
+    @ObservedObject var context: FilePreviewScreenViewModel.Context
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -40,7 +40,7 @@ struct FilePreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let context: FilePreviewViewModel.Context
+    let context: FilePreviewScreenViewModel.Context
     let fileURL: URL
     let title: String?
 
@@ -92,8 +92,8 @@ private class PreviewItem: NSObject, QLPreviewItem {
 
 // MARK: - Previews
 
-struct FilePreview_Previews: PreviewProvider {
-    static let viewModel = FilePreviewViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
+struct FilePreviewScreen_Previews: PreviewProvider {
+    static let viewModel = FilePreviewScreenViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
     
     static var previews: some View {
         FilePreviewScreen(context: viewModel.context)

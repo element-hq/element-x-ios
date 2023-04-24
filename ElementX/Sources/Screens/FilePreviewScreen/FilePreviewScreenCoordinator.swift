@@ -16,25 +16,25 @@
 
 import SwiftUI
 
-struct FilePreviewCoordinatorParameters {
+struct FilePreviewCoordinatorScreenParameters {
     let mediaFile: MediaFileHandleProxy
     let title: String?
 }
 
-enum FilePreviewCoordinatorAction {
+enum FilePreviewScreenCoordinatorAction {
     case cancel
 }
 
-final class FilePreviewCoordinator: CoordinatorProtocol {
-    private let parameters: FilePreviewCoordinatorParameters
-    private var viewModel: FilePreviewViewModelProtocol
+final class FilePreviewScreenCoordinator: CoordinatorProtocol {
+    private let parameters: FilePreviewCoordinatorScreenParameters
+    private var viewModel: FilePreviewScreenViewModelProtocol
 
-    var callback: ((FilePreviewCoordinatorAction) -> Void)?
+    var callback: ((FilePreviewScreenCoordinatorAction) -> Void)?
     
-    init(parameters: FilePreviewCoordinatorParameters) {
+    init(parameters: FilePreviewCoordinatorScreenParameters) {
         self.parameters = parameters
         
-        viewModel = FilePreviewViewModel(mediaFile: parameters.mediaFile, title: parameters.title)
+        viewModel = FilePreviewScreenViewModel(mediaFile: parameters.mediaFile, title: parameters.title)
     }
     
     // MARK: - Public

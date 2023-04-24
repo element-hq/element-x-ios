@@ -14,25 +14,10 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Foundation
 
-struct EmojiPickerHeaderView: View {
-    let title: String
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.element.subheadline.bold())
-                .foregroundColor(.element.primaryContent)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-}
-
-struct EmojiPickerHeaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            EmojiPickerHeaderView(title: "")
-        }
-    }
+@MainActor
+protocol FilePreviewScreenViewModelProtocol {
+    var callback: ((FilePreviewScreenViewModelAction) -> Void)? { get set }
+    var context: FilePreviewScreenViewModelType.Context { get }
 }

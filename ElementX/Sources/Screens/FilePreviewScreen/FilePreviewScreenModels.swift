@@ -16,15 +16,15 @@
 
 import Foundation
 
-enum FilePreviewViewModelAction {
+enum FilePreviewScreenViewModelAction {
     case cancel
 }
 
-struct FilePreviewViewState: BindableState {
+struct FilePreviewScreenViewState: BindableState {
     let mediaFile: MediaFileHandleProxy
     let title: String?
 }
 
-enum FilePreviewViewAction {
+enum FilePreviewScreenViewAction {
     case cancel
 }

@@ -16,16 +16,16 @@
 
 import SwiftUI
 
-typealias FilePreviewViewModelType = StateStoreViewModel<FilePreviewViewState, FilePreviewViewAction>
+typealias FilePreviewScreenViewModelType = StateStoreViewModel<FilePreviewScreenViewState, FilePreviewScreenViewAction>
 
-class FilePreviewViewModel: FilePreviewViewModelType, FilePreviewViewModelProtocol {
-    var callback: ((FilePreviewViewModelAction) -> Void)?
+class FilePreviewScreenViewModel: FilePreviewScreenViewModelType, FilePreviewScreenViewModelProtocol {
+    var callback: ((FilePreviewScreenViewModelAction) -> Void)?
 
     init(mediaFile: MediaFileHandleProxy, title: String? = nil) {
-        super.init(initialViewState: FilePreviewViewState(mediaFile: mediaFile, title: title))
+        super.init(initialViewState: FilePreviewScreenViewState(mediaFile: mediaFile, title: title))
     }
     
-    override func process(viewAction: FilePreviewViewAction) {
+    override func process(viewAction: FilePreviewScreenViewAction) {
         switch viewAction {
         case .cancel:
             callback?(.cancel)
