@@ -83,9 +83,9 @@ struct AnalyticsPromptScreen: View {
     /// The list of re-assurances about analytics.
     private var checkmarkList: some View {
         VStack(alignment: .leading, spacing: 8) {
-            AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point1)
-            AnalyticsPromptCheckmarkItem(attributedString: context.viewState.strings.point2)
-            AnalyticsPromptCheckmarkItem(string: context.viewState.strings.point3)
+            AnalyticsPromptScreenCheckmarkItem(attributedString: context.viewState.strings.point1)
+            AnalyticsPromptScreenCheckmarkItem(attributedString: context.viewState.strings.point2)
+            AnalyticsPromptScreenCheckmarkItem(string: context.viewState.strings.point3)
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.element.body)

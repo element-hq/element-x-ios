@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum AnalyticsPromptViewAction {
+enum AnalyticsPromptScreenViewAction {
     /// Enable analytics.
     case enable
     /// Disable analytics.
@@ -30,7 +30,7 @@ enum AnalyticsPromptScreenViewModelAction {
     case disable
 }
 
-struct AnalyticsPromptViewState: BindableState {
+struct AnalyticsPromptScreenViewState: BindableState {
     /// Attributed strings created from localized HTML.
     let strings: AnalyticsPromptScreenStrings
 }

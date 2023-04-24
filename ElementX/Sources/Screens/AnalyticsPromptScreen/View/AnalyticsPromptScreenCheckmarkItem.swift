@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct AnalyticsPromptCheckmarkItem: View {
+struct AnalyticsPromptScreenCheckmarkItem: View {
     private let attributedString: AttributedString
     
     init(attributedString: AttributedString) {
@@ -37,15 +37,15 @@ struct AnalyticsPromptCheckmarkItem: View {
 
 // MARK: - Previews
 
-struct AnalyticsPromptCheckmarkItem_Previews: PreviewProvider {
+struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     
     static var previews: some View {
         VStack(alignment: .leading) {
-            AnalyticsPromptCheckmarkItem(attributedString: strings.point1)
-            AnalyticsPromptCheckmarkItem(attributedString: strings.point2)
-            AnalyticsPromptCheckmarkItem(attributedString: AttributedString("This is a short string."))
-            AnalyticsPromptCheckmarkItem(attributedString: AttributedString("This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct."))
+            AnalyticsPromptScreenCheckmarkItem(attributedString: strings.point1)
+            AnalyticsPromptScreenCheckmarkItem(attributedString: strings.point2)
+            AnalyticsPromptScreenCheckmarkItem(attributedString: AttributedString("This is a short string."))
+            AnalyticsPromptScreenCheckmarkItem(attributedString: AttributedString("This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct."))
         }
         .padding()
     }

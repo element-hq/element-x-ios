@@ -17,20 +17,20 @@
 import Combine
 import SwiftUI
 
-typealias AnalyticsPromptViewModelType = StateStoreViewModel<AnalyticsPromptViewState, AnalyticsPromptViewAction>
+typealias AnalyticsPromptScreenViewModelType = StateStoreViewModel<AnalyticsPromptScreenViewState, AnalyticsPromptScreenViewAction>
 
-class AnalyticsPromptScreenViewModel: AnalyticsPromptViewModelType, AnalyticsPromptScreenViewModelProtocol {
+class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, AnalyticsPromptScreenViewModelProtocol {
     var callback: (@MainActor (AnalyticsPromptScreenViewModelAction) -> Void)?
     
     /// Initialize a view model with the specified prompt type and app display name.
     init() {
         let promptStrings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
-        super.init(initialViewState: AnalyticsPromptViewState(strings: promptStrings))
+        super.init(initialViewState: AnalyticsPromptScreenViewState(strings: promptStrings))
     }
 
     // MARK: - Public
     
-    override func process(viewAction: AnalyticsPromptViewAction) {
+    override func process(viewAction: AnalyticsPromptScreenViewAction) {
         switch viewAction {
         case .enable:
             callback?(.enable)
