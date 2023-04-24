@@ -309,7 +309,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-        
+    
     // MARK: Bug reporting
     
     private func presentFeedbackScreen(animated: Bool, for image: UIImage? = nil) {
@@ -317,13 +317,13 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
         
-        let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
-                                                        userID: userSession.userID,
-                                                        deviceID: userSession.deviceID,
-                                                        userIndicatorController: userIndicatorController,
-                                                        screenshot: image,
-                                                        isModallyPresented: true)
-        let coordinator = BugReportCoordinator(parameters: parameters)
+        let parameters = BugReportScreenCoordinatorParameters(bugReportService: bugReportService,
+                                                              userID: userSession.userID,
+                                                              deviceID: userSession.deviceID,
+                                                              userIndicatorController: userIndicatorController,
+                                                              screenshot: image,
+                                                              isModallyPresented: true)
+        let coordinator = BugReportScreenCoordinator(parameters: parameters)
         coordinator.completion = { [weak self] _ in
             self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }

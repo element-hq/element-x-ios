@@ -17,15 +17,15 @@
 import Combine
 import SwiftUI
 
-typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState, BugReportViewAction>
+typealias BugReportViewModelType = StateStoreViewModel<BugReportScreenViewState, BugReportScreenViewAction>
 
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let userID: String
     private let deviceID: String?
-    private let actionsSubject: PassthroughSubject<BugReportViewModelAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
 
-    var actions: AnyPublisher<BugReportViewModelAction, Never> {
+    var actions: AnyPublisher<BugReportScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -38,15 +38,15 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         self.userID = userID
         self.deviceID = deviceID
         
-        let bindings = BugReportViewStateBindings(reportText: "", sendingLogsEnabled: true)
-        super.init(initialViewState: BugReportViewState(screenshot: screenshot,
-                                                        bindings: bindings,
-                                                        isModallyPresented: isModallyPresented))
+        let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: true)
+        super.init(initialViewState: BugReportScreenViewState(screenshot: screenshot,
+                                                              bindings: bindings,
+                                                              isModallyPresented: isModallyPresented))
     }
-
+    
     // MARK: - Public
-
-    override func process(viewAction: BugReportViewAction) {
+    
+    override func process(viewAction: BugReportScreenViewAction) {
         switch viewAction {
         case .cancel:
             actionsSubject.send(.cancel)

@@ -17,25 +17,25 @@
 import Foundation
 import UIKit
 
-enum BugReportViewModelAction {
+enum BugReportScreenViewModelAction {
     case cancel
     case submitStarted(progressTracker: ProgressTracker)
     case submitFinished
     case submitFailed(error: Error)
 }
 
-struct BugReportViewState: BindableState {
+struct BugReportScreenViewState: BindableState {
     var screenshot: UIImage?
-    var bindings: BugReportViewStateBindings
+    var bindings: BugReportScreenViewStateBindings
     let isModallyPresented: Bool
 }
 
-struct BugReportViewStateBindings {
+struct BugReportScreenViewStateBindings {
     var reportText: String
     var sendingLogsEnabled: Bool
 }
 
-enum BugReportViewAction {
+enum BugReportScreenViewAction {
     case cancel
     case submit
     case removeScreenshot

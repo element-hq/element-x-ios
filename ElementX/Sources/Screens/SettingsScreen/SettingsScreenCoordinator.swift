@@ -74,13 +74,13 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentBugReportScreen() {
-        let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                    userID: parameters.userSession.userID,
-                                                    deviceID: parameters.userSession.deviceID,
-                                                    userIndicatorController: parameters.userIndicatorController,
-                                                    screenshot: nil,
-                                                    isModallyPresented: false)
-        let coordinator = BugReportCoordinator(parameters: params)
+        let params = BugReportScreenCoordinatorParameters(bugReportService: parameters.bugReportService,
+                                                          userID: parameters.userSession.userID,
+                                                          deviceID: parameters.userSession.deviceID,
+                                                          userIndicatorController: parameters.userIndicatorController,
+                                                          screenshot: nil,
+                                                          isModallyPresented: false)
+        let coordinator = BugReportScreenCoordinator(parameters: params)
         coordinator.completion = { [weak self] result in
             switch result {
             case .finish:
