@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol RoomDetailsViewModelProtocol {
-    var callback: ((RoomDetailsViewModelAction) -> Void)? { get set }
-    var context: RoomDetailsViewModelType.Context { get }
+protocol RoomDetailsScreenViewModelProtocol {
+    var callback: ((RoomDetailsScreenViewModelAction) -> Void)? { get set }
+    var context: RoomDetailsScreenViewModelType.Context { get }
 }

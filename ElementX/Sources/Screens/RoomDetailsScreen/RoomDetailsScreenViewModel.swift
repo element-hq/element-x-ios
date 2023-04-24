@@ -17,9 +17,9 @@
 import Combine
 import SwiftUI
 
-typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
+typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
 
-class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
+class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = [] {
         didSet {
@@ -42,7 +42,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         }
     }
     
-    var callback: ((RoomDetailsViewModelAction) -> Void)?
+    var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
 
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
@@ -70,7 +70,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     // MARK: - Public
     
-    override func process(viewAction: RoomDetailsViewAction) {
+    override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))

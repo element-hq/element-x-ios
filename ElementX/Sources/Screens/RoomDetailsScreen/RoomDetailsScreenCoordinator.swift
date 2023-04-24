@@ -16,29 +16,29 @@
 
 import SwiftUI
 
-struct RoomDetailsCoordinatorParameters {
+struct RoomDetailsScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
 
-enum RoomDetailsCoordinatorAction {
+enum RoomDetailsScreenCoordinatorAction {
     case cancel
     case leftRoom
 }
 
-final class RoomDetailsCoordinator: CoordinatorProtocol {
-    private let parameters: RoomDetailsCoordinatorParameters
-    private var viewModel: RoomDetailsViewModelProtocol
+final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
+    private let parameters: RoomDetailsScreenCoordinatorParameters
+    private var viewModel: RoomDetailsScreenViewModelProtocol
     private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
     
-    var callback: ((RoomDetailsCoordinatorAction) -> Void)?
+    var callback: ((RoomDetailsScreenCoordinatorAction) -> Void)?
     
-    init(parameters: RoomDetailsCoordinatorParameters) {
+    init(parameters: RoomDetailsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsViewModel(roomProxy: parameters.roomProxy,
-                                         mediaProvider: parameters.mediaProvider)
+        viewModel = RoomDetailsScreenViewModel(roomProxy: parameters.roomProxy,
+                                               mediaProvider: parameters.mediaProvider)
     }
     
     // MARK: - Public

@@ -21,7 +21,7 @@ import UIKit
 
 // MARK: View model
 
-enum RoomDetailsViewModelAction {
+enum RoomDetailsScreenViewModelAction {
     case requestMemberDetailsPresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
@@ -29,7 +29,7 @@ enum RoomDetailsViewModelAction {
 
 // MARK: View
 
-struct RoomDetailsViewState: BindableState {
+struct RoomDetailsScreenViewState: BindableState {
     let roomId: String
     let canonicalAlias: String?
     let isEncrypted: Bool
@@ -45,7 +45,7 @@ struct RoomDetailsViewState: BindableState {
         members.isEmpty
     }
 
-    var bindings: RoomDetailsViewStateBindings
+    var bindings: RoomDetailsScreenViewStateBindings
 
     var dmRecipient: RoomMemberDetails?
 
@@ -54,7 +54,7 @@ struct RoomDetailsViewState: BindableState {
     }
 }
 
-struct RoomDetailsViewStateBindings {
+struct RoomDetailsScreenViewStateBindings {
     struct IgnoreUserAlertItem: AlertItem, Equatable {
         enum Action {
             case ignore
@@ -85,7 +85,7 @@ struct RoomDetailsViewStateBindings {
             }
         }
 
-        var viewAction: RoomDetailsViewAction {
+        var viewAction: RoomDetailsScreenViewAction {
             switch action {
             case .ignore: return .ignoreConfirmed
             case .unignore: return .unignoreConfirmed
@@ -94,7 +94,7 @@ struct RoomDetailsViewStateBindings {
     }
 
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<RoomDetailsErrorType>?
+    var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     var ignoreUserRoomAlertItem: IgnoreUserAlertItem?
 }
@@ -120,7 +120,7 @@ struct LeaveRoomAlertItem: AlertItem {
     }
 }
 
-enum RoomDetailsViewAction {
+enum RoomDetailsScreenViewAction {
     case processTapPeople
     case processTapLeave
     case processTapIgnore
@@ -130,7 +130,7 @@ enum RoomDetailsViewAction {
     case unignoreConfirmed
 }
 
-enum RoomDetailsErrorType: Hashable {
+enum RoomDetailsScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
     /// Leaving room has failed..

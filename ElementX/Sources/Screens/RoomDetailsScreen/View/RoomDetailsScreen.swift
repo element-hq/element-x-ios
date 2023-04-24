@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    @ObservedObject var context: RoomDetailsViewModel.Context
+    @ObservedObject var context: RoomDetailsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -199,7 +199,7 @@ struct RoomDetailsScreen: View {
     }
 
     @ViewBuilder
-    private func blockUserAlertActions(_ item: RoomDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertActions(_ item: RoomDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle,
                role: item.action == .ignore ? .destructive : nil) {
@@ -207,14 +207,14 @@ struct RoomDetailsScreen: View {
         }
     }
 
-    private func blockUserAlertMessage(_ item: RoomDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertMessage(_ item: RoomDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
 }
 
 // MARK: - Previews
 
-struct RoomDetails_Previews: PreviewProvider {
+struct RoomDetailsScreen_Previews: PreviewProvider {
     static let genericRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,
@@ -228,25 +228,25 @@ struct RoomDetails_Previews: PreviewProvider {
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
         
-        return RoomDetailsViewModel(roomProxy: roomProxy,
-                                    mediaProvider: MockMediaProvider())
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+                                          mediaProvider: MockMediaProvider())
     }()
-
+    
     static let dmRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockMe,
             .mockDan
         ]
-
+        
         let roomProxy = RoomProxyMock(with: .init(displayName: "DM Room",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
-
-        return RoomDetailsViewModel(roomProxy: roomProxy,
-                                    mediaProvider: MockMediaProvider())
+        
+        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+                                          mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {

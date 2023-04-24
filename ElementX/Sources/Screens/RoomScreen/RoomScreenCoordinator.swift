@@ -160,10 +160,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayRoomDetails() {
-        let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                      roomProxy: parameters.roomProxy,
-                                                      mediaProvider: parameters.mediaProvider)
-        let coordinator = RoomDetailsCoordinator(parameters: params)
+        let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                            roomProxy: parameters.roomProxy,
+                                                            mediaProvider: parameters.mediaProvider)
+        let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
             case .cancel:

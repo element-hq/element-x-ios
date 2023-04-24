@@ -41,7 +41,7 @@ struct RoomMembersListViewStateBindings {
     var searchQuery = ""
 
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<RoomDetailsErrorType>?
+    var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
 }
 
 enum RoomMembersListViewAction {
