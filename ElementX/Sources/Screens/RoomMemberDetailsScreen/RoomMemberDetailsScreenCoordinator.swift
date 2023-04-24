@@ -16,23 +16,23 @@
 
 import SwiftUI
 
-struct RoomMemberDetailsCoordinatorParameters {
+struct RoomMemberDetailsScreenCoordinatorParameters {
     let roomMemberProxy: RoomMemberProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
 
-enum RoomMemberDetailsCoordinatorAction { }
+enum RoomMemberDetailsScreenCoordinatorAction { }
 
-final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
-    private let parameters: RoomMemberDetailsCoordinatorParameters
-    private var viewModel: RoomMemberDetailsViewModelProtocol
+final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
+    private let parameters: RoomMemberDetailsScreenCoordinatorParameters
+    private var viewModel: RoomMemberDetailsScreenViewModelProtocol
 
-    var callback: ((RoomMemberDetailsCoordinatorAction) -> Void)?
+    var callback: ((RoomMemberDetailsScreenCoordinatorAction) -> Void)?
 
-    init(parameters: RoomMemberDetailsCoordinatorParameters) {
+    init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
         self.parameters = parameters
 
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: parameters.roomMemberProxy, mediaProvider: parameters.mediaProvider)
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: parameters.roomMemberProxy, mediaProvider: parameters.mediaProvider)
     }
 
     func start() { }

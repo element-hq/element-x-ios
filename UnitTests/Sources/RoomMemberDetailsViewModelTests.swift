@@ -20,13 +20,13 @@ import XCTest
 
 @MainActor
 class RoomMemberDetailsViewModelTests: XCTestCase {
-    var viewModel: RoomMemberDetailsViewModelProtocol!
+    var viewModel: RoomMemberDetailsScreenViewModelProtocol!
     var roomMemberProxyMock: RoomMemberProxyMock!
-    var context: RoomMemberDetailsViewModelType.Context { viewModel.context }
+    var context: RoomMemberDetailsScreenViewModelType.Context { viewModel.context }
 
     func testInitialState() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -39,7 +39,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(10))
             return .success(())
         }
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
@@ -59,7 +59,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(10))
             return .failure(.ignoreUserFailed)
         }
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
@@ -79,7 +79,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(10))
             return .success(())
         }
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -99,7 +99,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(10))
             return .failure(.unignoreUserFailed)
         }
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -116,7 +116,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialStateAccountOwner() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -125,7 +125,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialStateIgnoredUser() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)

@@ -16,16 +16,16 @@
 
 import Foundation
 
-enum RoomMemberDetailsViewModelAction { }
+enum RoomMemberDetailsScreenViewModelAction { }
 
-struct RoomMemberDetailsViewState: BindableState {
+struct RoomMemberDetailsScreenViewState: BindableState {
     var details: RoomMemberDetails
     var isProcessingIgnoreRequest = false
 
-    var bindings: RoomMemberDetailsViewStateBindings
+    var bindings: RoomMemberDetailsScreenViewStateBindings
 }
 
-struct RoomMemberDetailsViewStateBindings {
+struct RoomMemberDetailsScreenViewStateBindings {
     struct IgnoreUserAlertItem: AlertItem, Equatable {
         enum Action {
             case ignore
@@ -56,7 +56,7 @@ struct RoomMemberDetailsViewStateBindings {
             }
         }
 
-        var viewAction: RoomMemberDetailsViewAction {
+        var viewAction: RoomMemberDetailsScreenViewAction {
             switch action {
             case .ignore: return .ignoreConfirmed
             case .unignore: return .unignoreConfirmed
@@ -68,7 +68,7 @@ struct RoomMemberDetailsViewStateBindings {
     var errorAlert: ErrorAlertItem?
 }
 
-enum RoomMemberDetailsViewAction {
+enum RoomMemberDetailsScreenViewAction {
     case showUnignoreAlert
     case showIgnoreAlert
     case ignoreConfirmed

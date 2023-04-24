@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomMemberDetailsScreen: View {
-    @ObservedObject var context: RoomMemberDetailsViewModel.Context
+    @ObservedObject var context: RoomMemberDetailsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -69,7 +69,7 @@ struct RoomMemberDetailsScreen: View {
         .formSectionStyle()
     }
 
-    private var blockUserButtonAction: RoomMemberDetailsViewAction {
+    private var blockUserButtonAction: RoomMemberDetailsScreenViewAction {
         context.viewState.details.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
     }
 
@@ -82,7 +82,7 @@ struct RoomMemberDetailsScreen: View {
     }
 
     @ViewBuilder
-    private func blockUserAlertActions(_ item: RoomMemberDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertActions(_ item: RoomMemberDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle,
                role: item.action == .ignore ? .destructive : nil) {
@@ -90,27 +90,27 @@ struct RoomMemberDetailsScreen: View {
         }
     }
 
-    private func blockUserAlertMessage(_ item: RoomMemberDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertMessage(_ item: RoomMemberDetailsScreenViewStateBindings.IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
 }
 
 // MARK: - Previews
 
-struct RoomMemberDetails_Previews: PreviewProvider {
+struct RoomMemberDetailsScreen_Previews: PreviewProvider {
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
-        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
-        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
-        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {

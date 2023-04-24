@@ -16,23 +16,23 @@
 
 import SwiftUI
 
-typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetailsViewState, RoomMemberDetailsViewAction>
+typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberDetailsScreenViewState, RoomMemberDetailsScreenViewAction>
 
-class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
+class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
     let roomMemberProxy: RoomMemberProxyProtocol
-
-    var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
-
+    
+    var callback: ((RoomMemberDetailsScreenViewModelAction) -> Void)?
+    
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomMemberProxy = roomMemberProxy
-        let initialViewState = RoomMemberDetailsViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
-                                                          bindings: .init())
+        let initialViewState = RoomMemberDetailsScreenViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
+                                                                bindings: .init())
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMemberDetailsViewAction) {
+    override func process(viewAction: RoomMemberDetailsScreenViewAction) {
         switch viewAction {
         case .showUnignoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .unignore)

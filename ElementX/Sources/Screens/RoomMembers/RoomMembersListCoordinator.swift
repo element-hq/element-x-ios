@@ -56,8 +56,8 @@ final class RoomMembersListCoordinator: CoordinatorProtocol {
     // MARK: - Private
 
     private func selectMember(_ member: RoomMemberProxyProtocol) {
-        let parameters = RoomMemberDetailsCoordinatorParameters(roomMemberProxy: member, mediaProvider: parameters.mediaProvider)
-        let coordinator = RoomMemberDetailsCoordinator(parameters: parameters)
+        let parameters = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: parameters.mediaProvider)
+        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: parameters)
 
         navigationStackCoordinator.push(coordinator)
     }
