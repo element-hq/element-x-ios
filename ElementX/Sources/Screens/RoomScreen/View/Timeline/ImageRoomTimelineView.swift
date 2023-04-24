@@ -25,12 +25,10 @@ struct ImageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(mediaSource: timelineItem.source,
                           blurhash: timelineItem.blurhash,
-                          imageProvider: context.imageProvider) { image in
-                image.overlay { overlay }
-            } placeholder: {
+                          imageProvider: context.imageProvider) {
                 placeholder
             }
-            .frame(maxHeight: 300)
+            .frame(maxHeight: min(300, timelineItem.height ?? .infinity))
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
     }
@@ -43,20 +41,6 @@ struct ImageRoomTimelineView: View {
             
             ProgressView(L10n.commonLoading)
                 .frame(maxWidth: .infinity)
-        }
-    }
-    
-    @ViewBuilder
-    var overlay: some View {
-        if timelineItem.contentType == .gif {
-            Text(L10n.commonGif)
-                .font(.element.bodyBold)
-                .foregroundStyle(.primary)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 7)
-                .background(.thinMaterial)
-                .cornerRadius(8)
-                .environment(\.colorScheme, .dark)
         }
     }
 }
@@ -77,7 +61,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: nil))
+                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png")))
 
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       body: "Some other image",
@@ -85,7 +69,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: nil))
+                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png")))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       body: "Blurhashed image",
@@ -93,7 +77,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: nil,
+                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                                                                       contentType: .gif))

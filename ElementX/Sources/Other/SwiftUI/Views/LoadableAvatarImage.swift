@@ -36,15 +36,24 @@ struct LoadableAvatarImage: View {
     }
     
     var body: some View {
-        LoadableImage(url: url,
-                      size: avatarSize.scaledSize,
-                      imageProvider: imageProvider) { image in
-            image
-                .scaledToFill()
-        } placeholder: {
+        avatar
+            .frame(width: frameSize, height: frameSize)
+            .clipShape(Circle())
+    }
+    
+    @ViewBuilder
+    var avatar: some View {
+        if let url {
+            LoadableImage(url: url,
+                          size: avatarSize.scaledSize,
+                          imageProvider: imageProvider) { image in
+                image
+                    .scaledToFill()
+            } placeholder: {
+                PlaceholderAvatarImage(name: name, contentID: contentID)
+            }
+        } else {
             PlaceholderAvatarImage(name: name, contentID: contentID)
         }
-        .frame(width: frameSize, height: frameSize)
-        .clipShape(Circle())
     }
 }

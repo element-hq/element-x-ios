@@ -224,7 +224,8 @@ class LoggingTests: XCTestCase {
                                                  timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", body: "ImageString",
                                                  timestamp: "", isOutgoing: false, isEditable: false,
-                                                 sender: .init(id: "sender"), source: nil)
+                                                 sender: .init(id: "sender"),
+                                                 source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"))
         let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", body: "VideoString",
                                                  timestamp: "", isOutgoing: false, isEditable: false,
                                                  sender: .init(id: "sender"), duration: 0, source: nil, thumbnailSource: nil)
