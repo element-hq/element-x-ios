@@ -95,7 +95,7 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func uploadMedia(mimeType: String, data content: [UInt8]) throws -> String { fatalError() }
     
-    func getMediaFile(source: MatrixRustSDK.MediaSource, mimeType: String) throws -> MatrixRustSDK.MediaFileHandle { fatalError() }
+    func getMediaFile(mediaSource: MatrixRustSDK.MediaSource, mimeType: String) throws -> MatrixRustSDK.MediaFileHandle { fatalError() }
     
     func getProfile(userId: String) throws -> MatrixRustSDK.UserProfile { fatalError() }
     
@@ -142,4 +142,6 @@ private class MockMediaLoadingClient: ClientProtocol {
                    lang: String) throws {
         fatalError()
     }
+    
+    func searchUsers(searchTerm: String, limit: UInt64) throws -> MatrixRustSDK.SearchUsersResults { fatalError() }
 }

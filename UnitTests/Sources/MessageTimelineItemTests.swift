@@ -156,7 +156,7 @@ private struct MockEventTimelineItem: EventTimelineItemProtocol {
     
     func raw() -> String? { nil }
     
-    func reactions() -> [MatrixRustSDK.Reaction]? { nil }
+    func reactions() -> [MatrixRustSDK.Reaction] { [] }
     
     func sender() -> String { "@user:server.com" }
     

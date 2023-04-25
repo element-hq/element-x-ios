@@ -106,7 +106,7 @@ struct EventTimelineItemProxy {
     }
 
     var reactions: [Reaction] {
-        item.reactions() ?? []
+        item.reactions()
     }
     
     var timestamp: Date {
