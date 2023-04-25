@@ -220,18 +220,18 @@ class AppCoordinator: AppCoordinatorProtocol {
                 displayName = name
             }
             
-            let credentials = SoftLogoutCredentials(userId: userSession.userID,
-                                                    homeserverName: userSession.homeserver,
-                                                    userDisplayName: displayName,
-                                                    deviceId: userSession.deviceID)
+            let credentials = SoftLogoutScreenCredentials(userId: userSession.userID,
+                                                          homeserverName: userSession.homeserver,
+                                                          userDisplayName: displayName,
+                                                          deviceId: userSession.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
             _ = await authenticationService.configure(for: userSession.homeserver)
             
-            let parameters = SoftLogoutCoordinatorParameters(authenticationService: authenticationService,
-                                                             credentials: credentials,
-                                                             keyBackupNeeded: false)
-            let coordinator = SoftLogoutCoordinator(parameters: parameters)
+            let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                   credentials: credentials,
+                                                                   keyBackupNeeded: false)
+            let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             coordinator.callback = { result in
                 switch result {
                 case .signedIn(let session):

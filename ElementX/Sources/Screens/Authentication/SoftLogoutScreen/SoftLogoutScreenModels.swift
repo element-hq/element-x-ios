@@ -16,14 +16,14 @@
 
 import SwiftUI
 
-struct SoftLogoutCredentials {
+struct SoftLogoutScreenCredentials {
     let userId: String
     let homeserverName: String
     let userDisplayName: String
     let deviceId: String?
 }
 
-enum SoftLogoutViewModelAction: CustomStringConvertible {
+enum SoftLogoutScreenViewModelAction: CustomStringConvertible {
     /// Login with password
     case login(String)
     /// Forgot password
@@ -48,9 +48,9 @@ enum SoftLogoutViewModelAction: CustomStringConvertible {
     }
 }
 
-struct SoftLogoutViewState: BindableState {
+struct SoftLogoutScreenViewState: BindableState {
     /// Soft logout credentials
-    var credentials: SoftLogoutCredentials
+    var credentials: SoftLogoutScreenCredentials
 
     /// Data about the selected homeserver.
     var homeserver: LoginHomeserver
@@ -59,7 +59,7 @@ struct SoftLogoutViewState: BindableState {
     var keyBackupNeeded: Bool
 
     /// View state that can be bound to from SwiftUI.
-    var bindings: SoftLogoutBindings
+    var bindings: SoftLogoutScreenBindings
 
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
@@ -75,14 +75,14 @@ struct SoftLogoutViewState: BindableState {
     }
 }
 
-struct SoftLogoutBindings {
+struct SoftLogoutScreenBindings {
     /// The password input by the user.
     var password: String
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<SoftLogoutErrorType>?
+    var alertInfo: AlertInfo<SoftLogoutScreenErrorType>?
 }
 
-enum SoftLogoutViewAction {
+enum SoftLogoutScreenViewAction {
     /// Login.
     case login
     /// Forgot password
@@ -93,7 +93,7 @@ enum SoftLogoutViewAction {
     case continueWithOIDC
 }
 
-enum SoftLogoutErrorType: Hashable {
+enum SoftLogoutScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
     /// An unknown error occurred.

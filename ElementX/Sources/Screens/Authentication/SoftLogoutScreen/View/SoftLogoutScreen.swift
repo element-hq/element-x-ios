@@ -22,7 +22,7 @@ struct SoftLogoutScreen: View {
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
 
-    @ObservedObject var context: SoftLogoutViewModel.Context
+    @ObservedObject var context: SoftLogoutScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -171,14 +171,14 @@ struct SoftLogoutScreen: View {
 
 // MARK: - Previews
 
-struct SoftLogout_Previews: PreviewProvider {
+struct SoftLogoutScreen_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(MockSoftLogoutScreenState.allCases) { state in
             screen(for: state.viewModel)
         }
     }
 
-    static func screen(for viewModel: SoftLogoutViewModel) -> some View {
+    static func screen(for viewModel: SoftLogoutScreenViewModel) -> some View {
         NavigationStack {
             SoftLogoutScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)

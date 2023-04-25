@@ -16,10 +16,10 @@
 
 import Foundation
 
-protocol SoftLogoutViewModelProtocol {
-    var callback: (@MainActor (SoftLogoutViewModelAction) -> Void)? { get set }
-    var context: SoftLogoutViewModelType.Context { get }
+protocol SoftLogoutScreenViewModelProtocol {
+    var callback: (@MainActor (SoftLogoutScreenViewModelAction) -> Void)? { get set }
+    var context: SoftLogoutScreenViewModelType.Context { get }
     
     /// Display an error to the user.
-    @MainActor func displayError(_ type: SoftLogoutErrorType)
+    @MainActor func displayError(_ type: SoftLogoutScreenErrorType)
 }
