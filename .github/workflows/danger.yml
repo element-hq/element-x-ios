@@ -3,7 +3,7 @@ name: Danger CI
 on:
   pull_request:
     paths-ignore:
-    - '.github/**'
+      - '.github/**'
 
 jobs:
   build:
