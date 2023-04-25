@@ -3,6 +3,8 @@ name: PR Build
 on:
   pull_request:
     types: [ labeled, synchronize, opened, reopened ]
+    paths-ignore:
+    - '.github/**'
 
 jobs:
   build:
