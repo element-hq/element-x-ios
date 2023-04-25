@@ -18,6 +18,7 @@ import UIKit
 
 public extension UIFont {
     /// The fonts used by Element as defined in https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1362%3A0
+    @available(*, deprecated, message: "Not yet available in compound.")
     @objc static let element = ElementUIFonts(values: ElementBaseFonts())
 }
 

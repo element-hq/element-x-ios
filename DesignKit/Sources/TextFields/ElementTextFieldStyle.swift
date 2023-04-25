@@ -119,13 +119,13 @@ public struct ElementTextFieldStyle: TextFieldStyle {
         
         return VStack(alignment: .leading, spacing: 8) {
             labelText
-                .font(.element.footnote)
+                .font(.compound.bodySM)
                 .foregroundColor(labelColor)
                 .padding(.horizontal, 16)
             
             configuration
                 .focused($isFocused)
-                .font(.element.callout)
+                .font(.compound.bodyLG)
                 .foregroundColor(textColor)
                 .accentColor(accentColor)
                 .padding(.leading, 16.0)
@@ -148,7 +148,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
  
             footerText
                 .tint(.element.links)
-                .font(.element.caption1)
+                .font(.compound.bodyXS)
                 .foregroundColor(footerColor)
                 .padding(.horizontal, 16)
         }

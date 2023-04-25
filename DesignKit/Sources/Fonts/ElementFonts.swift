@@ -18,6 +18,7 @@ import SwiftUI
 
 public extension Font {
     /// The fonts used by Element as defined in https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1362%3A0
+    @available(*, deprecated, renamed: "compound")
     static let element = ElementFonts(values: ElementBaseFonts())
 }
 
