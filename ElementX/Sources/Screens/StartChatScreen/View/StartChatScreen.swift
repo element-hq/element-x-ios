@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct StartChatScreen: View {
-    @ObservedObject var context: StartChatViewModel.Context
+    @ObservedObject var context: StartChatScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -137,7 +137,7 @@ struct StartChat_Previews: PreviewProvider {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        let viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        let viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
         return viewModel
     }()
     

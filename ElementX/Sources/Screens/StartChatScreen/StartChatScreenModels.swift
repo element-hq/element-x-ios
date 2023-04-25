@@ -16,18 +16,18 @@
 
 import Foundation
 
-enum StartChatErrorType: Error {
+enum StartChatScreenErrorType: Error {
     case failedCreatingRoom
     case unknown
 }
 
-enum StartChatViewModelAction {
+enum StartChatScreenViewModelAction {
     case close
     case createRoom
     case openRoom(withIdentifier: String)
 }
 
-struct StartChatViewState: BindableState {
+struct StartChatScreenViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
 
@@ -44,10 +44,10 @@ struct StartChatScreenViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<StartChatErrorType>?
+    var alertInfo: AlertInfo<StartChatScreenErrorType>?
 }
 
-enum StartChatViewAction {
+enum StartChatScreenViewAction {
     case close
     case createRoom
     case inviteFriends

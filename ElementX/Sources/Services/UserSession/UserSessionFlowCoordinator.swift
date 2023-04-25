@@ -289,8 +289,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController, navigationStackCoordinator: startChatNavigationStackCoordinator, userDiscoveryService: userDiscoveryService)
-        let coordinator = StartChatCoordinator(parameters: parameters)
+        let parameters = StartChatScreenCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController, navigationStackCoordinator: startChatNavigationStackCoordinator, userDiscoveryService: userDiscoveryService)
+        let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {

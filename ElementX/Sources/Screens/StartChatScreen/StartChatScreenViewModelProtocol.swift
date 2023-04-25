@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol StartChatViewModelProtocol {
-    var actions: AnyPublisher<StartChatViewModelAction, Never> { get }
-    var context: StartChatViewModelType.Context { get }
+protocol StartChatScreenViewModelProtocol {
+    var actions: AnyPublisher<StartChatScreenViewModelAction, Never> { get }
+    var context: StartChatScreenViewModelType.Context { get }
 }

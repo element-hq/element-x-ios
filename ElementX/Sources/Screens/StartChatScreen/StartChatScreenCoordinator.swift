@@ -17,32 +17,32 @@
 import Combine
 import SwiftUI
 
-struct StartChatCoordinatorParameters {
+struct StartChatScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let navigationStackCoordinator: NavigationStackCoordinator?
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
-enum StartChatCoordinatorAction {
+enum StartChatScreenCoordinatorAction {
     case close
     case openRoom(withIdentifier: String)
 }
 
-final class StartChatCoordinator: CoordinatorProtocol {
-    private let parameters: StartChatCoordinatorParameters
-    private var viewModel: StartChatViewModelProtocol
-    private let actionsSubject: PassthroughSubject<StartChatCoordinatorAction, Never> = .init()
+final class StartChatScreenCoordinator: CoordinatorProtocol {
+    private let parameters: StartChatScreenCoordinatorParameters
+    private var viewModel: StartChatScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<StartChatScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<StartChatCoordinatorAction, Never> {
+    var actions: AnyPublisher<StartChatScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: StartChatCoordinatorParameters) {
+    init(parameters: StartChatScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, userDiscoveryService: parameters.userDiscoveryService)
+        viewModel = StartChatScreenViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {

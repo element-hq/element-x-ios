@@ -17,14 +17,14 @@
 import Combine
 import SwiftUI
 
-typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, StartChatViewAction>
+typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenViewState, StartChatScreenViewAction>
 
-class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
+class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let actionsSubject: PassthroughSubject<StartChatViewModelAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     
-    var actions: AnyPublisher<StartChatViewModelAction, Never> {
+    var actions: AnyPublisher<StartChatScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -34,14 +34,14 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: StartChatScreenViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
     }
     
     // MARK: - Public
     
-    override func process(viewAction: StartChatViewAction) {
+    override func process(viewAction: StartChatScreenViewAction) {
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
