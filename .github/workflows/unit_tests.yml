@@ -7,6 +7,8 @@ on:
     branches: [ develop ]
   
   pull_request:
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   tests:
