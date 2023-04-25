@@ -68,15 +68,15 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                           userIndicatorController: MockUserIndicatorController(),
-                                                                           isModallyPresented: true))
+            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                                 userIndicatorController: MockUserIndicatorController(),
+                                                                                 isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelectionNonModal:
-            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                userIndicatorController: MockUserIndicatorController(),
-                                                                isModallyPresented: false))
+            return ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                      userIndicatorController: MockUserIndicatorController(),
+                                                                      isModallyPresented: false))
         case .analyticsPrompt:
             return AnalyticsPromptScreenCoordinator()
         case .analyticsSettingsScreen:

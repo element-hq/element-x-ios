@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct ServerSelectionScreen: View {
-    @ObservedObject var context: ServerSelectionViewModel.Context
+    @ObservedObject var context: ServerSelectionScreenViewModel.Context
     
     var body: some View {
         ScrollView {

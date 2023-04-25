@@ -199,11 +199,11 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              isModallyPresented: false)
+        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    isModallyPresented: false)
         
-        let coordinator = ServerSelectionCoordinator(parameters: parameters)
+        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
             guard let self, let coordinator else { return }
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
@@ -213,8 +213,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
-    private func serverSelectionCoordinator(_ coordinator: ServerSelectionCoordinator,
-                                            didCompleteWith action: ServerSelectionCoordinatorAction) {
+    private func serverSelectionCoordinator(_ coordinator: ServerSelectionScreenCoordinator,
+                                            didCompleteWith action: ServerSelectionScreenCoordinatorAction) {
         if action == .updated {
             updateViewModel()
         }

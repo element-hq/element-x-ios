@@ -72,10 +72,10 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func showServerSelectionScreen() {
-        let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              isModallyPresented: false)
-        let coordinator = ServerSelectionCoordinator(parameters: parameters)
+        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    isModallyPresented: false)
+        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
             guard let self else { return }

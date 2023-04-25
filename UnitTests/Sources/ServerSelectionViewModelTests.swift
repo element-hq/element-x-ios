@@ -24,11 +24,11 @@ class ServerSelectionViewModelTests: XCTestCase {
         static let counterInitialValue = 0
     }
     
-    var viewModel: ServerSelectionViewModelProtocol!
-    var context: ServerSelectionViewModelType.Context!
+    var viewModel: ServerSelectionScreenViewModelProtocol!
+    var context: ServerSelectionScreenViewModelType.Context!
     
     @MainActor override func setUp() {
-        viewModel = ServerSelectionViewModel(homeserverAddress: "", isModallyPresented: true)
+        viewModel = ServerSelectionScreenViewModel(homeserverAddress: "", isModallyPresented: true)
         context = viewModel.context
     }
 

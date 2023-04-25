@@ -23,22 +23,22 @@ enum MockServerSelectionScreenState: CaseIterable {
     case nonModal
     
     /// Generate the view struct for the screen state.
-    @MainActor var viewModel: ServerSelectionViewModel {
+    @MainActor var viewModel: ServerSelectionScreenViewModel {
         switch self {
         case .matrix:
-            return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                            isModallyPresented: true)
+            return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
+                                                  isModallyPresented: true)
         case .emptyAddress:
-            return ServerSelectionViewModel(homeserverAddress: "",
-                                            isModallyPresented: true)
+            return ServerSelectionScreenViewModel(homeserverAddress: "",
+                                                  isModallyPresented: true)
         case .invalidAddress:
-            let viewModel = ServerSelectionViewModel(homeserverAddress: "thisisbad",
-                                                     isModallyPresented: true)
+            let viewModel = ServerSelectionScreenViewModel(homeserverAddress: "thisisbad",
+                                                           isModallyPresented: true)
             viewModel.displayError(.footerMessage(L10n.errorUnknown))
             return viewModel
         case .nonModal:
-            return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                            isModallyPresented: false)
+            return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
+                                                  isModallyPresented: false)
         }
     }
 }

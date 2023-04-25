@@ -16,19 +16,19 @@
 
 import SwiftUI
 
-typealias ServerSelectionViewModelType = StateStoreViewModel<ServerSelectionViewState, ServerSelectionViewAction>
+typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelectionScreenViewState, ServerSelectionScreenViewAction>
 
-class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionViewModelProtocol {
-    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)?
+class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, ServerSelectionScreenViewModelProtocol {
+    var callback: (@MainActor (ServerSelectionScreenViewModelAction) -> Void)?
 
     init(homeserverAddress: String, isModallyPresented: Bool) {
-        let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress)
+        let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         
-        super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
-                                                              isModallyPresented: isModallyPresented))
+        super.init(initialViewState: ServerSelectionScreenViewState(bindings: bindings,
+                                                                    isModallyPresented: isModallyPresented))
     }
-
-    override func process(viewAction: ServerSelectionViewAction) {
+    
+    override func process(viewAction: ServerSelectionScreenViewAction) {
         switch viewAction {
         case .confirm:
             callback?(.confirm(homeserverAddress: state.bindings.homeserverAddress))
@@ -39,7 +39,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
         }
     }
     
-    func displayError(_ type: ServerSelectionErrorType) {
+    func displayError(_ type: ServerSelectionScreenErrorType) {
         switch type {
         case .footerMessage(let message):
             withElementAnimation {

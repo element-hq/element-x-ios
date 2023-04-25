@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct ServerSelectionCoordinatorParameters {
+struct ServerSelectionScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -24,23 +24,23 @@ struct ServerSelectionCoordinatorParameters {
     let isModallyPresented: Bool
 }
 
-enum ServerSelectionCoordinatorAction {
+enum ServerSelectionScreenCoordinatorAction {
     case updated
     case dismiss
 }
 
-final class ServerSelectionCoordinator: CoordinatorProtocol {
-    private let parameters: ServerSelectionCoordinatorParameters
+final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
+    private let parameters: ServerSelectionScreenCoordinatorParameters
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private var viewModel: ServerSelectionViewModelProtocol
+    private var viewModel: ServerSelectionScreenViewModelProtocol
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
-    var callback: (@MainActor (ServerSelectionCoordinatorAction) -> Void)?
+    var callback: (@MainActor (ServerSelectionScreenCoordinatorAction) -> Void)?
     
-    init(parameters: ServerSelectionCoordinatorParameters) {
+    init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
-                                             isModallyPresented: parameters.isModallyPresented)
+        viewModel = ServerSelectionScreenViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
+                                                   isModallyPresented: parameters.isModallyPresented)
         userIndicatorController = parameters.userIndicatorController
     }
     

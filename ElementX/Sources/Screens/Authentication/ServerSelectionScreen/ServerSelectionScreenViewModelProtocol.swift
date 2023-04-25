@@ -17,10 +17,10 @@
 import Foundation
 
 @MainActor
-protocol ServerSelectionViewModelProtocol {
-    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)? { get set }
-    var context: ServerSelectionViewModelType.Context { get }
+protocol ServerSelectionScreenViewModelProtocol {
+    var callback: (@MainActor (ServerSelectionScreenViewModelAction) -> Void)? { get set }
+    var context: ServerSelectionScreenViewModelType.Context { get }
     
     /// Displays an error to the user.
-    func displayError(_ type: ServerSelectionErrorType)
+    func displayError(_ type: ServerSelectionScreenErrorType)
 }
