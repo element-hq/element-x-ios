@@ -319,6 +319,7 @@ class ClientProxy: ClientProxyProtocol {
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsSlidingSyncView)
                 .withCommonExtensions()
+                .bumpEventTypes(bumpEventTypes: ["m.room.message", "m.room.encrypted"])
                 .storageKey(name: "ElementX")
                 .build()
             
