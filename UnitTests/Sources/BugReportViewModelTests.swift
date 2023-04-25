@@ -62,7 +62,10 @@ class BugReportViewModelTests: XCTestCase {
     
     func testSendReportWithSuccess() async throws {
         let mockService = BugReportServiceMock()
-        mockService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://test.test")
+        mockService.submitBugReportProgressListenerClosure = { _, _ in
+            await Task.yield()
+            return SubmitBugReportResponse(reportUrl: "https://test.test")
+        }
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
                                                  userID: "@mock.client.com",
                                                  deviceID: nil,

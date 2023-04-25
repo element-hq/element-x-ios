@@ -36,7 +36,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
         
-        setupAppSettings()
+        AppSettings.reset()
         ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
     }
     
