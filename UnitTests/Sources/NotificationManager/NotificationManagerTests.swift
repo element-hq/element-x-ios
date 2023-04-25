@@ -27,13 +27,11 @@ final class NotificationManagerTests: XCTestCase {
     private var shouldDisplayInAppNotificationReturnValue = false
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
-    private var settings: AppSettings!
+    
+    private var appSettings: AppSettings { ServiceLocator.shared.settings }
 
     override func setUp() {
-        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
         AppSettings.reset()
-        settings = AppSettings()
-        ServiceLocator.shared.register(appSettings: settings)
 
         notificationManager = NotificationManager(notificationCenter: notificationCenter)
         notificationManager.start()
@@ -64,7 +62,7 @@ final class NotificationManagerTests: XCTestCase {
         let pushkeyData = Data("1234".utf8)
         _ = await notificationManager.register(with: pushkeyData)
         XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.pushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.appId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.appId, appSettings.pusherAppId)
         XCTAssertEqual(clientProxy.setPusherArgument?.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
         XCTAssertEqual(clientProxy.setPusherArgument?.deviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(clientProxy.setPusherArgument?.profileTag)
@@ -73,7 +71,7 @@ final class NotificationManagerTests: XCTestCase {
             XCTFail("Http kind expected")
             return
         }
-        XCTAssertEqual(data.url, settings?.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(data.url, appSettings.pushGatewayBaseURL.absoluteString)
         XCTAssertEqual(data.format, .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",
@@ -83,15 +81,15 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {
-        settings?.pusherProfileTag = nil
+        appSettings.pusherProfileTag = nil
         _ = await notificationManager.register(with: Data())
-        XCTAssertNotNil(settings?.pusherProfileTag)
+        XCTAssertNotNil(appSettings.pusherProfileTag)
     }
     
     func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async throws {
-        settings?.pusherProfileTag = "12345"
+        appSettings.pusherProfileTag = "12345"
         _ = await notificationManager.register(with: Data())
-        XCTAssertEqual(settings?.pusherProfileTag, "12345")
+        XCTAssertEqual(appSettings.pusherProfileTag, "12345")
     }
     
     func test_whenShowLocalNotification_notificationRequestGetsAdded() async throws {

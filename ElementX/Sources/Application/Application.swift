@@ -19,13 +19,13 @@ import SwiftUI
 @main
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
-    private let appCoordinator: AppCoordinatorProtocol!
+    private let appCoordinator: AppCoordinatorProtocol
 
     init() {
         if Tests.isRunningUITests {
             appCoordinator = UITestsAppCoordinator()
         } else if Tests.isRunningUnitTests {
-            appCoordinator = nil
+            appCoordinator = UnitTestsAppCoordinator()
         } else {
             appCoordinator = AppCoordinator()
         }
@@ -33,15 +33,11 @@ struct Application: App {
 
     var body: some Scene {
         WindowGroup {
-            if Tests.isRunningUnitTests {
-                EmptyView()
-            } else {
-                appCoordinator.toPresentable()
-                    .task {
-                        appCoordinator.start()
-                    }
-                    .statusBarHidden(shouldHideStatusBar)
-            }
+            appCoordinator.toPresentable()
+                .task {
+                    appCoordinator.start()
+                }
+                .statusBarHidden(shouldHideStatusBar)
         }
     }
     
