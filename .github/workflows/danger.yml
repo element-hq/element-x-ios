@@ -1,6 +1,9 @@
 name: Danger CI
 
-on: [pull_request]
+on:
+  pull_request:
+    paths-ignore:
+    - '.github/**'
 
 jobs:
   build:
