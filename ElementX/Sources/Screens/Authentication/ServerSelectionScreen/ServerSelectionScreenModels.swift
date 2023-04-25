@@ -16,14 +16,14 @@
 
 import Foundation
 
-enum ServerSelectionViewModelAction {
+enum ServerSelectionScreenViewModelAction {
     /// The user would like to use the homeserver at the given address.
     case confirm(homeserverAddress: String)
     /// Dismiss the view without using the entered address.
     case dismiss
 }
 
-struct ServerSelectionViewState: BindableState {
+struct ServerSelectionScreenViewState: BindableState {
     /// The message to be shown in the text field footer when no error has occurred.
     private let regularFooterMessage = {
         let linkPlaceholder = "{link}"
@@ -35,7 +35,7 @@ struct ServerSelectionViewState: BindableState {
     }()
     
     /// View state that can be bound to from SwiftUI.
-    var bindings: ServerSelectionBindings
+    var bindings: ServerSelectionScreenBindings
     /// An error message to be shown in the text field footer.
     var footerErrorMessage: String?
     /// Whether the screen is presented modally or within a navigation stack.
@@ -62,14 +62,14 @@ struct ServerSelectionViewState: BindableState {
     }
 }
 
-struct ServerSelectionBindings {
+struct ServerSelectionScreenBindings {
     /// The homeserver address input by the user.
     var homeserverAddress: String
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<ServerSelectionErrorType>?
+    var alertInfo: AlertInfo<ServerSelectionScreenErrorType>?
 }
 
-enum ServerSelectionViewAction {
+enum ServerSelectionScreenViewAction {
     /// The user would like to use the homeserver at the input address.
     case confirm
     /// Dismiss the view without using the entered address.
@@ -78,7 +78,7 @@ enum ServerSelectionViewAction {
     case clearFooterError
 }
 
-enum ServerSelectionErrorType: Hashable {
+enum ServerSelectionScreenErrorType: Hashable {
     /// An error message to be shown in the text field footer.
     case footerMessage(String)
     /// An alert that allows the user to learn about sliding sync.

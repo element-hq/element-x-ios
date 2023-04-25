@@ -22,7 +22,7 @@ struct LoginScreen: View {
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
     
-    @ObservedObject var context: LoginViewModel.Context
+    @ObservedObject var context: LoginScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -146,26 +146,26 @@ struct LoginScreen: View {
 
 // MARK: - Previews
 
-struct Login_Previews: PreviewProvider {
-    static let credentialsViewModel: LoginViewModel = {
-        let viewModel = LoginViewModel(homeserver: .mockMatrixDotOrg)
+struct LoginScreen_Previews: PreviewProvider {
+    static let credentialsViewModel: LoginScreenViewModel = {
+        let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg)
         viewModel.context.username = "alice"
         viewModel.context.password = "password"
         return viewModel
     }()
     
     static var previews: some View {
-        screen(for: LoginViewModel(homeserver: .mockMatrixDotOrg))
+        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg))
             .previewDisplayName("matrix.org")
         screen(for: credentialsViewModel)
             .previewDisplayName("Credentials Entered")
-        screen(for: LoginViewModel(homeserver: .mockOIDC))
+        screen(for: LoginScreenViewModel(homeserver: .mockOIDC))
             .previewDisplayName("OIDC")
-        screen(for: LoginViewModel(homeserver: .mockUnsupported))
+        screen(for: LoginScreenViewModel(homeserver: .mockUnsupported))
             .previewDisplayName("Unsupported")
     }
     
-    static func screen(for viewModel: LoginViewModel) -> some View {
+    static func screen(for viewModel: LoginScreenViewModel) -> some View {
         NavigationStack {
             LoginScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)

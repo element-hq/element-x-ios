@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum LoginViewModelAction: CustomStringConvertible {
+enum LoginScreenViewModelAction: CustomStringConvertible {
     /// The user would like to select another server.
     case selectServer
     /// Parse the username and update the homeserver if included.
@@ -45,13 +45,13 @@ enum LoginViewModelAction: CustomStringConvertible {
     }
 }
 
-struct LoginViewState: BindableState {
+struct LoginScreenViewState: BindableState {
     /// Data about the selected homeserver.
     var homeserver: LoginHomeserver
     /// Whether a new homeserver is currently being loaded.
     var isLoading = false
     /// View state that can be bound to from SwiftUI.
-    var bindings: LoginBindings
+    var bindings: LoginScreenBindings
     
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
@@ -67,16 +67,16 @@ struct LoginViewState: BindableState {
     }
 }
 
-struct LoginBindings {
+struct LoginScreenBindings {
     /// The username input by the user.
     var username = ""
     /// The password input by the user.
     var password = ""
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<LoginErrorType>?
+    var alertInfo: AlertInfo<LoginScreenErrorType>?
 }
 
-enum LoginViewAction {
+enum LoginScreenViewAction {
     /// The user would like to select another server.
     case selectServer
     /// Parse the username to detect if a homeserver is included.
@@ -89,7 +89,7 @@ enum LoginViewAction {
     case continueWithOIDC
 }
 
-enum LoginErrorType: Hashable {
+enum LoginScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
     /// Looking up the homeserver from the username failed.

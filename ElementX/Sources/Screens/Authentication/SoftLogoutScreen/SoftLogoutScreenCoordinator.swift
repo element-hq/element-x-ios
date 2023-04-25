@@ -17,13 +17,13 @@
 import AppAuth
 import SwiftUI
 
-struct SoftLogoutCoordinatorParameters {
+struct SoftLogoutScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProxyProtocol
-    let credentials: SoftLogoutCredentials
+    let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
 }
 
-enum SoftLogoutCoordinatorResult: CustomStringConvertible {
+enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
     /// Login was successful.
     case signedIn(UserSessionProtocol)
     /// Clear all user data
@@ -40,26 +40,26 @@ enum SoftLogoutCoordinatorResult: CustomStringConvertible {
     }
 }
 
-final class SoftLogoutCoordinator: CoordinatorProtocol {
-    private let parameters: SoftLogoutCoordinatorParameters
-    private var viewModel: SoftLogoutViewModelProtocol
+final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
+    private let parameters: SoftLogoutScreenCoordinatorParameters
+    private var viewModel: SoftLogoutScreenViewModelProtocol
     private let hostingController: UIViewController
     /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
     private let oidcUserAgent: OIDExternalUserAgentIOS?
     
     /// The wizard used to handle the registration flow.
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-
-    var callback: (@MainActor (SoftLogoutCoordinatorResult) -> Void)?
     
-    @MainActor init(parameters: SoftLogoutCoordinatorParameters) {
+    var callback: (@MainActor (SoftLogoutScreenCoordinatorResult) -> Void)?
+    
+    @MainActor init(parameters: SoftLogoutScreenCoordinatorParameters) {
         self.parameters = parameters
-
+        
         let homeserver = parameters.authenticationService.homeserver
         
-        viewModel = SoftLogoutViewModel(credentials: parameters.credentials,
-                                        homeserver: homeserver,
-                                        keyBackupNeeded: parameters.keyBackupNeeded)
+        viewModel = SoftLogoutScreenViewModel(credentials: parameters.credentials,
+                                              homeserver: homeserver,
+                                              keyBackupNeeded: parameters.keyBackupNeeded)
         
         hostingController = UIHostingController(rootView: SoftLogoutScreen(context: viewModel.context))
         oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)

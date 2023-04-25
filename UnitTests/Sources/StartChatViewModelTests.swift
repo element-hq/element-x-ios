@@ -20,11 +20,11 @@ import XCTest
 
 @MainActor
 class StartChatScreenViewModelTests: XCTestCase {
-    var viewModel: StartChatViewModelProtocol!
+    var viewModel: StartChatScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
-    var context: StartChatViewModel.Context {
+    var context: StartChatScreenViewModel.Context {
         viewModel.context
     }
     
@@ -34,7 +34,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
         
         setupAppSettings()
         ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
@@ -65,7 +65,7 @@ class StartChatScreenViewModelTests: XCTestCase {
     }
     
     @discardableResult
-    private func search(query: String) async -> StartChatViewState? {
+    private func search(query: String) async -> StartChatScreenViewState? {
         viewModel.context.searchQuery = query
         return await context.$viewState.nextValue
     }

@@ -16,24 +16,24 @@
 
 import SwiftUI
 
-typealias SoftLogoutViewModelType = StateStoreViewModel<SoftLogoutViewState, SoftLogoutViewAction>
+typealias SoftLogoutScreenViewModelType = StateStoreViewModel<SoftLogoutScreenViewState, SoftLogoutScreenViewAction>
 
-class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol {
-    var callback: (@MainActor (SoftLogoutViewModelAction) -> Void)?
+class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreenViewModelProtocol {
+    var callback: (@MainActor (SoftLogoutScreenViewModelAction) -> Void)?
 
-    init(credentials: SoftLogoutCredentials,
+    init(credentials: SoftLogoutScreenCredentials,
          homeserver: LoginHomeserver,
          keyBackupNeeded: Bool,
          password: String = "") {
-        let bindings = SoftLogoutBindings(password: password)
-        let viewState = SoftLogoutViewState(credentials: credentials,
-                                            homeserver: homeserver,
-                                            keyBackupNeeded: keyBackupNeeded,
-                                            bindings: bindings)
+        let bindings = SoftLogoutScreenBindings(password: password)
+        let viewState = SoftLogoutScreenViewState(credentials: credentials,
+                                                  homeserver: homeserver,
+                                                  keyBackupNeeded: keyBackupNeeded,
+                                                  bindings: bindings)
         super.init(initialViewState: viewState)
     }
     
-    override func process(viewAction: SoftLogoutViewAction) {
+    override func process(viewAction: SoftLogoutScreenViewAction) {
         switch viewAction {
         case .login:
             callback?(.login(state.bindings.password))
@@ -46,7 +46,7 @@ class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol 
         }
     }
 
-    @MainActor func displayError(_ type: SoftLogoutErrorType) {
+    @MainActor func displayError(_ type: SoftLogoutScreenErrorType) {
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,

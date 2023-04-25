@@ -17,21 +17,21 @@
 import AppAuth
 import SwiftUI
 
-struct LoginCoordinatorParameters {
+struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     /// The navigation router used to present the server selection screen.
     let navigationStackCoordinator: NavigationStackCoordinator
 }
 
-enum LoginCoordinatorAction {
+enum LoginScreenCoordinatorAction {
     /// Login was successful.
     case signedIn(UserSessionProtocol)
 }
 
-final class LoginCoordinator: CoordinatorProtocol {
-    private let parameters: LoginCoordinatorParameters
-    private var viewModel: LoginViewModelProtocol
+final class LoginScreenCoordinator: CoordinatorProtocol {
+    private let parameters: LoginScreenCoordinatorParameters
+    private var viewModel: LoginScreenViewModelProtocol
     private let hostingController: UIViewController
     /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
     private let oidcUserAgent: OIDExternalUserAgentIOS?
@@ -45,14 +45,14 @@ final class LoginCoordinator: CoordinatorProtocol {
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
 
-    var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
+    var callback: (@MainActor (LoginScreenCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: LoginCoordinatorParameters) {
+    init(parameters: LoginScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = LoginViewModel(homeserver: parameters.authenticationService.homeserver)
+        viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver)
         
         hostingController = UIHostingController(rootView: LoginScreen(context: viewModel.context))
         oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
@@ -199,11 +199,11 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              isModallyPresented: false)
+        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    isModallyPresented: false)
         
-        let coordinator = ServerSelectionCoordinator(parameters: parameters)
+        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
             guard let self, let coordinator else { return }
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
@@ -213,8 +213,8 @@ final class LoginCoordinator: CoordinatorProtocol {
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
-    private func serverSelectionCoordinator(_ coordinator: ServerSelectionCoordinator,
-                                            didCompleteWith action: ServerSelectionCoordinatorAction) {
+    private func serverSelectionCoordinator(_ coordinator: ServerSelectionScreenCoordinator,
+                                            didCompleteWith action: ServerSelectionScreenCoordinatorAction) {
         if action == .updated {
             updateViewModel()
         }

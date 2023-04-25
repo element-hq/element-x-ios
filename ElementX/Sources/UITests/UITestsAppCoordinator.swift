@@ -62,21 +62,21 @@ class MockScreen: Identifiable {
         switch id {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                 navigationStackCoordinator: navigationStackCoordinator))
+            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                       navigationStackCoordinator: navigationStackCoordinator))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                           userIndicatorController: MockUserIndicatorController(),
-                                                                           isModallyPresented: true))
+            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                                 userIndicatorController: MockUserIndicatorController(),
+                                                                                 isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelectionNonModal:
-            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                userIndicatorController: MockUserIndicatorController(),
-                                                                isModallyPresented: false))
+            return ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                      userIndicatorController: MockUserIndicatorController(),
+                                                                      isModallyPresented: false))
         case .analyticsPrompt:
             return AnalyticsPromptScreenCoordinator()
         case .analyticsSettingsScreen:
@@ -92,13 +92,13 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .softLogout:
-            let credentials = SoftLogoutCredentials(userId: "@mock:matrix.org",
-                                                    homeserverName: "matrix.org",
-                                                    userDisplayName: "mock",
-                                                    deviceId: "ABCDEFGH")
-            return SoftLogoutCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                           credentials: credentials,
-                                                           keyBackupNeeded: false))
+            let credentials = SoftLogoutScreenCredentials(userId: "@mock:matrix.org",
+                                                          homeserverName: "matrix.org",
+                                                          userDisplayName: "mock",
+                                                          deviceId: "ABCDEFGH")
+            return SoftLogoutScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                 credentials: credentials,
+                                                                 keyBackupNeeded: false))
         case .simpleRegular:
             return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
@@ -321,8 +321,8 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
-            let parameters: StartChatCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock)
-            let coordinator = StartChatCoordinator(parameters: parameters)
+            let parameters: StartChatScreenCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock)
+            let coordinator = StartChatScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChatWithSearchResults:
@@ -332,7 +332,7 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock))
+            let coordinator = StartChatScreenCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:

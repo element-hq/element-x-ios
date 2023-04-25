@@ -14,13 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
-protocol ServerSelectionViewModelProtocol {
-    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)? { get set }
-    var context: ServerSelectionViewModelType.Context { get }
-    
-    /// Displays an error to the user.
-    func displayError(_ type: ServerSelectionErrorType)
+protocol StartChatScreenViewModelProtocol {
+    var actions: AnyPublisher<StartChatScreenViewModelAction, Never> { get }
+    var context: StartChatScreenViewModelType.Context { get }
 }
