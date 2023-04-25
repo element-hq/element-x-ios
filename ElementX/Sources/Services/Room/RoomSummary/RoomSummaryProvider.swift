@@ -80,7 +80,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncListRoomsListDiff]) {
-        MXLog.info("Received \(diffs.count) diffs")
+        let span = MXLog.createSpan("process_room_list_diffs")
+        span.enter()
+        defer {
+            span.exit()
+        }
+        
+        MXLog.verbose("Received \(diffs.count) diffs")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
@@ -101,7 +107,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         detectDuplicatesInRoomList(rooms)
         
-        MXLog.info("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
+        MXLog.verbose("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {

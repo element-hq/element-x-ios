@@ -60,6 +60,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
             case .success(let items):
                 itemProxies = items.map(TimelineItemProxy.init)
+                MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
             case .failure:
                 let roomID = await roomProxy.id
                 MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
@@ -70,7 +71,13 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
-        MXLog.verbose("Received timeline diff")
+        let span = MXLog.createSpan("process_timeline_list_diffs")
+        span.enter()
+        defer {
+            span.exit()
+        }
+        
+        MXLog.info("Received timeline diff")
         
         itemProxies = diffs
             .reduce(itemProxies) { currentItems, diff in
@@ -84,12 +91,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                     return currentItems
                 }
                 
-                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
-                
                 return updatedItems
             }
         
-        MXLog.verbose("Finished applying diff")
+        MXLog.info("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -100,60 +105,64 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .pushFront:
             guard let item = diff.pushFront() else { fatalError() }
             
-            MXLog.verbose("Push Front")
+            MXLog.info("Push Front: \(item.debugIdentifier)")
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
         case .pushBack:
             guard let item = diff.pushBack() else { fatalError() }
             
-            MXLog.verbose("Push Back")
+            MXLog.info("Push Back \(item.debugIdentifier)")
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
         case .insert:
             guard let update = diff.insert() else { fatalError() }
             
-            MXLog.verbose("Insert at \(update.index), current total count: \(itemProxies.count)")
+            MXLog.info("Insert \(update.item.debugIdentifier) at \(update.index)")
             let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .append:
             guard let items = diff.append() else { fatalError() }
             
-            MXLog.verbose("Append new items with count: \(items.count), to current total count: \(itemProxies.count)")
+            MXLog.info("Append \(items.map(\.debugIdentifier))")
             for (index, item) in items.enumerated() {
                 changes.append(.insert(offset: Int(itemProxies.count) + index, element: TimelineItemProxy(item: item), associatedWith: nil))
             }
         case .set:
             guard let update = diff.set() else { fatalError() }
             
-            MXLog.verbose("Update \(update.index), current total count: \(itemProxies.count)")
+            MXLog.info("Set \(update.item.debugIdentifier) at index \(update.index)")
             let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .popFront:
-            MXLog.verbose("Pop Front, current total count: \(itemProxies.count)")
             guard let itemProxy = itemProxies.first else { fatalError() }
+            
+            MXLog.info("Pop Front \(itemProxy.debugIdentifier)")
             
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
         case .popBack:
-            MXLog.verbose("Pop Back, current total count: \(itemProxies.count)")
             guard let itemProxy = itemProxies.last else { fatalError() }
+            
+            MXLog.info("Pop Back \(itemProxy.debugIdentifier)")
             
             changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
         case .remove:
             guard let index = diff.remove() else { fatalError() }
             
-            MXLog.verbose("Remove item at: \(index), current total count: \(itemProxies.count)")
             let itemProxy = itemProxies[Int(index)]
+            
+            MXLog.info("Remove \(itemProxy.debugIdentifier) at: \(index)")
+            
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .clear:
-            MXLog.verbose("Clear all items, current total count: \(itemProxies.count)")
+            MXLog.info("Clear all items")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
         case .reset:
             guard let items = diff.reset() else { fatalError() }
             
-            MXLog.verbose("Replace all items with new count: \(items.count), current total count: \(itemProxies.count)")
+            MXLog.info("Replace all items with \(items.map(\.debugIdentifier))")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
@@ -164,5 +173,45 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
         
         return CollectionDifference(changes)
+    }
+}
+
+private extension TimelineItem {
+    var debugIdentifier: String {
+        if let virtualTimelineItem = asVirtual() {
+            return virtualTimelineItem.debugIdentifier
+        } else if let eventTimelineItem = asEvent() {
+            return eventTimelineItem.uniqueIdentifier()
+        }
+        
+        return "UnknownTimelineItem"
+    }
+}
+
+private extension TimelineItemProxy {
+    var debugIdentifier: String {
+        switch self {
+        case .event(let eventTimelineItem):
+            return eventTimelineItem.item.uniqueIdentifier()
+        case .virtual(let virtualTimelineItem):
+            return virtualTimelineItem.debugIdentifier
+        case .unknown:
+            return "UnknownTimelineItem"
+        }
+    }
+}
+
+private extension VirtualTimelineItem {
+    var debugIdentifier: String {
+        switch self {
+        case .dayDivider(let timestamp):
+            return "DayDiviver(\(timestamp))"
+        case .loadingIndicator:
+            return "LoadingIndicator"
+        case .readMarker:
+            return "ReadMarker"
+        case .timelineStart:
+            return "TimelineStart"
+        }
     }
 }

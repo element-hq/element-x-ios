@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "8ce08eb804c449f4e7472e66edd7e80b4e8e9ded",
-        "version" : "1.0.54-alpha"
+        "revision" : "1febfb02005fca9cf99264be72c6383c103085c5",
+        "version" : "1.0.56-alpha"
       }
     },
     {
@@ -212,15 +212,6 @@
       "state" : {
         "revision" : "c18951c747ab62af7c15e17a81bd37d4fd5a9979",
         "version" : "0.2.3"
-      }
-    },
-    {
-      "identity" : "swiftybeaver",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver",
-      "state" : {
-        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
-        "version" : "2.0.0"
       }
     },
     {

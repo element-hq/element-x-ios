@@ -51,10 +51,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     @Consumable private var storedAppRoute: AppRoute?
 
     init() {
+        MXLog.configure()
+        
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
-        Self.setupLogging()
 
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -116,26 +117,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
                                                                           sentryURL: ServiceLocator.shared.settings.bugReportSentryURL))
         ServiceLocator.shared.register(analytics: Analytics(client: PostHogAnalyticsClient()))
-    }
-    
-    private static func setupLogging() {
-        let loggerConfiguration = MXLogConfiguration()
-        loggerConfiguration.maxLogFilesCount = 10
-        
-        #if DEBUG
-        setupTracing(configuration: .debug)
-        loggerConfiguration.logLevel = .debug
-        #else
-        setupTracing(configuration: .release)
-        loggerConfiguration.logLevel = .info
-        #endif
-        
-        // Avoid redirecting NSLogs to files if we are attached to a debugger.
-        if isatty(STDERR_FILENO) == 0 {
-            loggerConfiguration.redirectLogsToFiles = true
-        }
-      
-        MXLog.configure(loggerConfiguration)
     }
     
     /// Perform any required migrations for the app to function correctly.

@@ -22,9 +22,28 @@ import MatrixRustSDK
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
 struct TracingConfiguration {
     static var release = TracingConfiguration(overrides: [.common: .info])
-    static var debug = TracingConfiguration(overrides: [.common: .info])
+    
+    static var debug = TracingConfiguration(overrides: [.matrix_sdk_crypto: .info,
+                                                        .matrix_sdk_http_client: .info,
+                                                        .matrix_sdk_sliding_sync: .info,
+                                                        .matrix_sdk_base_sliding_sync: .info])
+    
+    /// Configure tracing with certain overrides in place
+    /// - Parameter overrides: the desired overrides
+    /// - Returns: a custom tracing configuration
     static func custom(overrides: [Target: LogLevel]) -> TracingConfiguration {
         TracingConfiguration(overrides: overrides)
+    }
+    
+    /// Sets the same log level for all Targets
+    /// - Parameter logLevel: the desired log level
+    /// - Returns: a custom tracing configuration
+    static func custom(logLevel: LogLevel) -> TracingConfiguration {
+        let overrides = targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
+            partialResult[target] = logLevel
+        }
+
+        return TracingConfiguration(overrides: overrides)
     }
     
     enum LogLevel: String { case error, warn, info, debug, trace }
@@ -41,8 +60,8 @@ struct TracingConfiguration {
         case matrix_sdk_room_timeline = "matrix_sdk::room::timeline"
     }
     
-    let targets: OrderedDictionary<Target, LogLevel> = [
-        .common: .warn,
+    static let targets: OrderedDictionary<Target, LogLevel> = [
+        .common: .info,
         .hyper: .warn,
         .sled: .warn,
         .matrix_sdk_sled: .warn,
@@ -56,7 +75,7 @@ struct TracingConfiguration {
     var overrides = [Target: LogLevel]()
     
     var filter: String {
-        var newTargets = targets
+        var newTargets = Self.targets
         for (target, logLevel) in overrides {
             newTargets.updateValue(logLevel, forKey: target)
         }

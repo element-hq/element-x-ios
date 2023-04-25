@@ -93,7 +93,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             let client = try authenticationService.restoreWithAccessToken(token: token, deviceId: deviceID)
             return await userSession(for: client)
         } catch {
-            MXLog.error(error)
+            MXLog.error("Failed restoring with access token: \(error)")
             return .failure(.failedLoggingIn)
         }
     }

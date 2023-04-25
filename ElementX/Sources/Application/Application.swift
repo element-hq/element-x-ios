@@ -19,13 +19,15 @@ import SwiftUI
 @main
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
-    private let applicationCoordinator: AppCoordinatorProtocol
+    private let appCoordinator: AppCoordinatorProtocol!
 
     init() {
         if Tests.isRunningUITests {
-            applicationCoordinator = UITestsAppCoordinator()
+            appCoordinator = UITestsAppCoordinator()
+        } else if Tests.isRunningUnitTests {
+            appCoordinator = nil
         } else {
-            applicationCoordinator = AppCoordinator()
+            appCoordinator = AppCoordinator()
         }
     }
 
@@ -34,9 +36,9 @@ struct Application: App {
             if Tests.isRunningUnitTests {
                 EmptyView()
             } else {
-                applicationCoordinator.toPresentable()
+                appCoordinator.toPresentable()
                     .task {
-                        applicationCoordinator.start()
+                        appCoordinator.start()
                     }
                     .statusBarHidden(shouldHideStatusBar)
             }

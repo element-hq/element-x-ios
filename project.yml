@@ -42,7 +42,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.54-alpha
+    exactVersion: 1.0.56-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
@@ -82,9 +82,6 @@ packages:
     minorVersion: 0.2.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 2.0.0
-  SwiftyBeaver:
-    url: https://github.com/SwiftyBeaver/SwiftyBeaver
     minorVersion: 2.0.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
