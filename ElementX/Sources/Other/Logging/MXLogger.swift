@@ -37,8 +37,8 @@ class MXLogger {
     ///
     /// - Parameters:
     ///   - redirectToFiles: `true` to enable the redirection.
-    ///   - numberOfFiles: number of files to keep (default is 10).
-    ///   - sizeLimit: size limit of log files in bytes. 0 means no limitation, the default value for other methods
+    ///   - maxLogFileCount: number of files to keep (default is 10).
+    ///   - logFileSizeLimit: size limit of log files in bytes. 0 means no limitation, the default value for other methods
     static func configure(redirectToFiles: Bool,
                           maxLogFileCount: UInt,
                           logFileSizeLimit: UInt) {

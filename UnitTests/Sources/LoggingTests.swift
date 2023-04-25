@@ -70,8 +70,6 @@ class LoggingTests: XCTestCase {
         // Given a fresh launch with no logs.
         XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
-        MXLog.configure()
-        
         // When launching the app 10 times, with a maxLogCount of 5.
         let launchCount = 10
         let logFileCount = 5
@@ -90,8 +88,6 @@ class LoggingTests: XCTestCase {
     func testLogFileSizeLimit() throws {
         // Given a fresh launch with no logs.
         XCTAssertTrue(MXLogger.logFiles.isEmpty)
-        
-        MXLog.configure()
         
         // When launching the app 10 times, with a max total log size of 25KB and logging ~5KB data each time.
         let launchCount = 10

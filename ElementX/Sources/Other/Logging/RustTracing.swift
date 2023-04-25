@@ -28,10 +28,16 @@ struct TracingConfiguration {
                                                         .matrix_sdk_sliding_sync: .info,
                                                         .matrix_sdk_base_sliding_sync: .info])
     
+    /// Configure tracing with certain overrides in place
+    /// - Parameter overrides: the desired overrides
+    /// - Returns: a custom tracing configuration
     static func custom(overrides: [Target: LogLevel]) -> TracingConfiguration {
         TracingConfiguration(overrides: overrides)
     }
     
+    /// Sets the same log level for all Targets
+    /// - Parameter logLevel: the desired log level
+    /// - Returns: a custom tracing configuration
     static func custom(logLevel: LogLevel) -> TracingConfiguration {
         let overrides = targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             partialResult[target] = logLevel

@@ -28,7 +28,7 @@ enum MXLog {
         // Avoid redirecting NSLogs to files if we are attached to a debugger.
         static let redirectToFiles = isatty(STDERR_FILENO) == 0
         
-        /// the maximum number of log files to use before rolling. `50` by default.
+        /// the maximum number of log files to use before rolling. `10` by default.
         static let maxLogFileCount: UInt = 10
         
         /// the maximum total space to use for log files in bytes. `100MB` by default.
