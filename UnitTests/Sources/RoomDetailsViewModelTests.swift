@@ -100,10 +100,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .ignoreConfirmed)
-        await context.nextViewState()
-
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        await context.nextViewState()
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
     }
@@ -120,10 +121,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .ignoreConfirmed)
-        await context.nextViewState()
-
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        await context.nextViewState()
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
@@ -141,10 +143,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .unignoreConfirmed)
-        await context.nextViewState()
-
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        await context.nextViewState()
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
     }
@@ -161,10 +164,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .unignoreConfirmed)
-        await context.nextViewState()
+        
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
 
-        await context.nextViewState()
+        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
