@@ -17,9 +17,9 @@
 import Foundation
 
 @MainActor
-protocol LoginViewModelProtocol {
-    var callback: (@MainActor (LoginViewModelAction) -> Void)? { get set }
-    var context: LoginViewModelType.Context { get }
+protocol LoginScreenViewModelProtocol {
+    var callback: (@MainActor (LoginScreenViewModelAction) -> Void)? { get set }
+    var context: LoginScreenViewModelType.Context { get }
     
     /// Update the view to reflect that a new homeserver is being loaded.
     /// - Parameter isLoading: Whether or not the homeserver is being loaded.
@@ -31,5 +31,5 @@ protocol LoginViewModelProtocol {
     
     /// Display an error to the user.
     /// - Parameter type: The type of error to be displayed.
-    func displayError(_ type: LoginErrorType)
+    func displayError(_ type: LoginScreenErrorType)
 }

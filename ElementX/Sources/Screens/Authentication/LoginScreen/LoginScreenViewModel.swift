@@ -16,19 +16,19 @@
 
 import SwiftUI
 
-typealias LoginViewModelType = StateStoreViewModel<LoginViewState, LoginViewAction>
+typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
 
-class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
-    var callback: (@MainActor (LoginViewModelAction) -> Void)?
+class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
+    var callback: (@MainActor (LoginScreenViewModelAction) -> Void)?
 
     init(homeserver: LoginHomeserver) {
-        let bindings = LoginBindings()
-        let viewState = LoginViewState(homeserver: homeserver, bindings: bindings)
+        let bindings = LoginScreenBindings()
+        let viewState = LoginScreenViewState(homeserver: homeserver, bindings: bindings)
         
         super.init(initialViewState: viewState)
     }
 
-    override func process(viewAction: LoginViewAction) {
+    override func process(viewAction: LoginScreenViewAction) {
         switch viewAction {
         case .selectServer:
             callback?(.selectServer)
@@ -52,7 +52,7 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         state.homeserver = homeserver
     }
     
-    func displayError(_ type: LoginErrorType) {
+    func displayError(_ type: LoginScreenErrorType) {
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,

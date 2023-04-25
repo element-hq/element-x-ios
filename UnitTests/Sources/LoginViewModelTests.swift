@@ -21,11 +21,11 @@ import XCTest
 @MainActor
 class LoginViewModelTests: XCTestCase {
     let defaultHomeserver = LoginHomeserver.mockMatrixDotOrg
-    var viewModel: LoginViewModelProtocol!
-    var context: LoginViewModelType.Context!
+    var viewModel: LoginScreenViewModelProtocol!
+    var context: LoginScreenViewModelType.Context!
     
     @MainActor override func setUp() async throws {
-        viewModel = LoginViewModel(homeserver: defaultHomeserver)
+        viewModel = LoginScreenViewModel(homeserver: defaultHomeserver)
         context = viewModel.context
     }
     
@@ -135,7 +135,7 @@ class LoginViewModelTests: XCTestCase {
     func testLogsForPassword() {
         // Given the coordinator and view model results that contain passwords.
         let password = "supersecretpassword"
-        let viewModelAction: LoginViewModelAction = .login(username: "Alice", password: password)
+        let viewModelAction: LoginScreenViewModelAction = .login(username: "Alice", password: password)
         
         // When creating a string representation of those results (e.g. for logging).
         let viewModelActionString = "\(viewModelAction)"
