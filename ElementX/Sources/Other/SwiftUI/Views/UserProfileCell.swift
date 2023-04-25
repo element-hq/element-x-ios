@@ -32,12 +32,12 @@ struct UserProfileCell: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(user.displayName ?? user.userID)
-                    .font(.element.title3)
+                    .font(.compound.headingSM)
                     .foregroundColor(.element.primaryContent)
                 
                 if user.displayName != nil {
                     Text(user.userID)
-                        .font(.element.subheadline)
+                        .font(.compound.bodyMD)
                         .foregroundColor(.element.tertiaryContent)
                 }
                 

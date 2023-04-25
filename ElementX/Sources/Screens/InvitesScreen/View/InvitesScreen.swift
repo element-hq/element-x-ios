@@ -42,7 +42,7 @@ struct InvitesScreen: View {
     
     private var noInvitesContent: some View {
         Text(L10n.screenInvitesEmptyList)
-            .font(.element.body)
+            .font(.compound.bodyLG)
             .foregroundColor(.element.tertiaryContent)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)

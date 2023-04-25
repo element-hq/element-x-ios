@@ -26,13 +26,13 @@ enum FormRowAccessory: View {
         switch self {
         case .navigationLink:
             Image(systemName: "chevron.forward")
-                .font(.element.subheadlineBold)
+                .font(.compound.bodyMD.bold())
                 .foregroundColor(.element.quaternaryContent)
         case .progressView:
             ProgressView()
         case .selection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
         }
     }
@@ -95,7 +95,7 @@ struct FormActionButtonStyle: ButtonStyle {
             
             Text(title)
                 .foregroundColor(.element.secondaryContent)
-                .font(.element.subheadline)
+                .font(.compound.bodyMD)
         }
     }
 }

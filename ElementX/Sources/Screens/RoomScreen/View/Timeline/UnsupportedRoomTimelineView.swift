@@ -28,7 +28,7 @@ struct UnsupportedRoomTimelineView: View {
                     
                     Text(timelineItem.error)
                         .fixedSize(horizontal: false, vertical: true)
-                        .font(.element.footnote)
+                        .font(.compound.bodySM)
                 }
             } icon: {
                 Image(systemName: "exclamationmark.triangle")

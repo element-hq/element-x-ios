@@ -74,7 +74,7 @@ struct RoomScreen: View {
     private var scrollToBottomButton: some View {
         Button { context.viewState.scrollToBottomPublisher.send(()) } label: {
             Image(systemName: "chevron.down")
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .fontWeight(.semibold)
                 .foregroundColor(.element.secondaryContent)
                 .padding(13)
@@ -132,7 +132,7 @@ struct RoomScreen: View {
             }
         } label: {
             Image(systemName: "plus.circle")
-                .font(.element.title1)
+                .font(.compound.headingLG)
                 .foregroundColor(.element.brand)
         }
     }

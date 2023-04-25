@@ -60,14 +60,14 @@ struct AnalyticsPromptScreen: View {
                 .padding(.bottom, 24)
             
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
-                .font(.element.title2Bold)
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .padding(.bottom, 2)
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(context.viewState.strings.optInContent)
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.secondaryContent)
                 .tint(.element.links)
@@ -88,7 +88,7 @@ struct AnalyticsPromptScreen: View {
             AnalyticsPromptScreenCheckmarkItem(string: context.viewState.strings.point3)
         }
         .fixedSize(horizontal: false, vertical: true)
-        .font(.element.body)
+        .font(.compound.bodyLG)
         .foregroundColor(.element.secondaryContent)
         .frame(maxWidth: .infinity)
     }
@@ -98,14 +98,14 @@ struct AnalyticsPromptScreen: View {
         VStack {
             Button { context.send(viewAction: .enable) } label: {
                 Text(L10n.actionEnable)
-                    .font(.element.bodyBold)
+                    .font(.compound.bodyLGSemibold)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(L10n.actionNotNow)
-                    .font(.element.bodyBold)
+                    .font(.compound.bodyLGSemibold)
                     .padding(12)
             }
             .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)

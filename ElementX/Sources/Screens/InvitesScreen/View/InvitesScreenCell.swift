@@ -86,7 +86,7 @@ struct InvitesScreenCell: View {
     private var textualContent: some View {
         VStack(alignment: .leading) {
             Text(title)
-                .font(.element.headline)
+                .font(.compound.bodyLGSemibold)
                 .foregroundColor(.element.primaryContent)
             
             if let subtitle {

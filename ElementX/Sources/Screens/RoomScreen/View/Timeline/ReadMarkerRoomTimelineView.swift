@@ -24,7 +24,7 @@ struct ReadMarkerRoomTimelineView: View {
         VStack(alignment: .trailing, spacing: 2) {
             Text(L10n.roomTimelineReadMarkerTitle)
                 .textCase(.uppercase)
-                .font(.element.caption2Bold)
+                .font(.compound.bodyXSSemibold)
                 .foregroundColor(.element.quaternaryContent)
             Rectangle()
                 .frame(height: 0.5)

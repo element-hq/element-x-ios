@@ -31,14 +31,14 @@ struct LoginServerInfoSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.screenLoginServerHeader)
-                .font(.element.footnote)
+                .font(.compound.bodySM)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
             
             Button(action: editAction) {
                 HStack {
                     Text(address)
-                        .font(.element.subheadlineBold)
+                        .font(.compound.bodyMDSemibold)
                         .foregroundColor(.element.primaryContent)
                         .padding(.horizontal, 16)
                         .padding(.vertical)
@@ -46,6 +46,7 @@ struct LoginServerInfoSection: View {
                     Spacer()
                     
                     Image(systemName: "chevron.right")
+                        .font(.compound.bodyMD.bold())
                         .foregroundColor(.element.tertiaryContent)
                         .padding(.trailing, 16)
                 }

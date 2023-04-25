@@ -40,11 +40,11 @@ struct OnboardingPageView: View {
                 Spacer()
                 
                 Text(content.title)
-                    .font(.element.title1Bold)
+                    .font(.compound.headingLGBold)
                     .foregroundColor(.element.primaryContent)
                     .multilineTextAlignment(.center)
                 Text(content.message)
-                    .font(.element.body)
+                    .font(.compound.bodyLG)
                     .foregroundColor(.element.secondaryContent)
                     .multilineTextAlignment(.center)
             }

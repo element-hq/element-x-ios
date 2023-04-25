@@ -62,7 +62,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                         .accessibilityHidden(true)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                        .font(.element.footnoteBold)
+                        .font(.compound.bodySMSemibold)
                         .foregroundColor(.element.primaryContent)
                         .lineLimit(1)
                         .padding(.vertical, senderNameVerticalPadding)
@@ -112,7 +112,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
                 if timelineItem.properties.isEdited {
                     Text(L10n.commonEditedSuffix)
-                        .font(.element.caption2)
+                        .font(.compound.bodyXS)
                         .foregroundColor(.element.tertiaryContent)
                 }
             }

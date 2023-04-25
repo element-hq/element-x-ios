@@ -152,7 +152,7 @@ struct FormattedBodyText: View {
 
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
-        container.font = .element.subheadline
+        container.font = .compound.bodyMD
         return container
     }
 }

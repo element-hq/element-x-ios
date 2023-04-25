@@ -48,7 +48,7 @@ struct MessageComposer: View {
                 } label: {
                     submitButtonImage
                         .symbolVariant(.fill)
-                        .font(.element.body)
+                        .font(.compound.bodyLG)
                         .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
                         .background {
                             Circle()
@@ -127,7 +127,7 @@ private struct MessageComposerReplyHeader: View {
             Spacer()
             Button(action: action) {
                 Image(systemName: "xmark")
-                    .font(.element.caption2.weight(.medium))
+                    .font(.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
                     .padding(12.0)
             }
@@ -145,7 +145,7 @@ private struct MessageComposerEditHeader: View {
             Spacer()
             Button(action: action) {
                 Image(systemName: "xmark")
-                    .font(.element.caption2.weight(.medium))
+                    .font(.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
                     .padding(12.0)
             }
@@ -159,7 +159,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.element.caption1)
+        .font(.compound.bodyXS)
         .foregroundColor(.element.secondaryContent)
         .lineLimit(1)
     }

@@ -56,7 +56,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 Spacer()
                 Text(timelineItem.timestamp)
                     .foregroundColor(Color.element.tertiaryContent)
-                    .font(.element.caption2)
+                    .font(.compound.bodyXS)
             }
             .padding(.top, 16)
         }
@@ -67,7 +67,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         VStack {
             if timelineItem.properties.isEdited {
                 Text(L10n.commonEditedSuffix)
-                    .font(.element.footnote)
+                    .font(.compound.bodySM)
                     .foregroundColor(.element.tertiaryContent)
             }
             

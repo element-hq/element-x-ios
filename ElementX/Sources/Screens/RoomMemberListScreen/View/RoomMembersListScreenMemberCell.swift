@@ -35,7 +35,7 @@ struct RoomMembersListScreenMemberCell: View {
                     .accessibilityHidden(true)
 
                 Text(member.name ?? "")
-                    .font(.element.calloutBold)
+                    .font(.compound.bodyMDSemibold)
                     .foregroundColor(.element.primaryContent)
                     .lineLimit(1)
 

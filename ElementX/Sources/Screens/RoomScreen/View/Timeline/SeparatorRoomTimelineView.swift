@@ -21,7 +21,7 @@ struct SeparatorRoomTimelineView: View {
     
     var body: some View {
         Text(timelineItem.text)
-            .font(.element.footnote)
+            .font(.compound.bodySM)
             .foregroundColor(.element.secondaryContent)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 36.0)

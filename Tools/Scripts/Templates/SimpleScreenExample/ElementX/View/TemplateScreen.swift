@@ -45,7 +45,7 @@ struct TemplateScreen: View {
     var mainContent: some View {
         VStack(spacing: 36) {
             Text(context.viewState.promptType.title)
-                .font(.element.title2Bold)
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("title")
@@ -57,7 +57,7 @@ struct TemplateScreen: View {
             
             HStack {
                 Text("Counter: \(context.viewState.count)")
-                    .font(.element.body)
+                    .font(.compound.bodyLG)
                     .multilineTextAlignment(.center)
                     .foregroundColor(counterColor)
                 

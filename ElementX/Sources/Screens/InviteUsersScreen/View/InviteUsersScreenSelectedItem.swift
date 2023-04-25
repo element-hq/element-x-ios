@@ -29,7 +29,7 @@ struct InviteUsersScreenSelectedItem: View {
                                 avatarSize: .user(on: .inviteUsers),
                                 imageProvider: imageProvider)
             Text(user.displayName ?? user.userID)
-                .font(.element.title3)
+                .font(.compound.headingSM)
                 .foregroundColor(.element.primaryContent)
                 .lineLimit(1)
         }

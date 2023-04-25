@@ -54,7 +54,7 @@ struct LoginScreen: View {
     /// The header containing a Welcome Back title.
     var header: some View {
         Text(L10n.screenLoginTitle)
-            .font(.element.title1Bold)
+            .font(.compound.headingLGBold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
     }
@@ -70,7 +70,7 @@ struct LoginScreen: View {
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(L10n.screenLoginFormHeader)
-                .font(.element.footnote)
+                .font(.compound.bodySM)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)

@@ -102,7 +102,7 @@ struct RoomDetailsScreen: View {
             Section {
                 Text(topic)
                     .foregroundColor(.element.secondaryContent)
-                    .font(.element.footnote)
+                    .font(.compound.bodySM)
             } header: {
                 Text(L10n.commonTopic)
                     .formSectionHeader()
@@ -122,7 +122,7 @@ struct RoomDetailsScreen: View {
                     } else {
                         Text(String(context.viewState.members.count))
                             .foregroundColor(.element.tertiaryContent)
-                            .font(.element.body)
+                            .font(.compound.bodyLG)
                     }
                 } label: {
                     Label(L10n.commonPeople, systemImage: "person")
@@ -145,7 +145,7 @@ struct RoomDetailsScreen: View {
                         Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                         Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
                             .foregroundColor(.element.secondaryContent)
-                            .font(.element.footnote)
+                            .font(.compound.bodySM)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")

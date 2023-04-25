@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import DesignTokens
 import SwiftUI
 
@@ -55,7 +56,7 @@ public struct ElementActionButtonStyle: ButtonStyle {
             .padding(.vertical, verticalPadding)
             .frame(maxWidth: maxWidth)
             .foregroundColor(fontColor)
-            .font(.element.bodyBold)
+            .font(.compound.bodyLGSemibold)
             .background(Capsule()
                 .fill(color)
                 .opacity(backgroundOpacity(when: configuration.isPressed)))

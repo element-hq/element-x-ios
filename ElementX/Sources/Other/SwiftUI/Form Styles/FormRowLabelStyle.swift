@@ -55,7 +55,7 @@ struct FormRowLabelStyle: LabelStyle {
                 .background(iconBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             configuration.title
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .foregroundColor(titleColor)
         }
     }

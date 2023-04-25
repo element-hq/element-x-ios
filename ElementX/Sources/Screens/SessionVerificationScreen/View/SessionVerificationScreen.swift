@@ -79,6 +79,7 @@ struct SessionVerificationScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .padding(.bottom, 8)
+                .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
             Text(context.viewState.message)
                 .font(.subheadline)
@@ -156,7 +157,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .font(.element.bodyBold)
+                .font(.compound.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             
@@ -176,7 +177,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .font(.element.bodyBold)
+                .font(.compound.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
                 .disabled(true)
             }
@@ -203,9 +204,9 @@ struct SessionVerificationScreen: View {
         var body: some View {
             VStack(spacing: 16.0) {
                 Text(emoji.symbol)
-                    .font(.element.largeTitleBold)
+                    .font(.compound.headingXLBold)
                 Text(emoji.description)
-                    .font(.element.subheadline)
+                    .font(.compound.bodyMD)
                     .foregroundColor(.element.secondaryContent)
             }
             .padding(8.0)
@@ -218,7 +219,7 @@ struct SessionVerificationScreen: View {
         var body: some View {
             Image(systemName: systemName)
                 .resizable()
-                .font(.element.body.weight(.light))
+                .font(.compound.bodyLG.weight(.light))
                 .scaledToFit()
                 .foregroundColor(.element.accent)
                 .frame(width: 100, height: 100)

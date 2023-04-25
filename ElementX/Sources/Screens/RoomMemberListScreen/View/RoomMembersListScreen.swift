@@ -32,7 +32,7 @@ struct RoomMembersListScreen: View {
                 } header: {
                     Text(L10n.commonMemberCount(context.viewState.members.count))
                         .foregroundColor(.element.secondaryContent)
-                        .font(.element.body)
+                        .font(.compound.bodyLG)
                         .padding(.vertical, 12)
                 }
                 .padding(.horizontal)
