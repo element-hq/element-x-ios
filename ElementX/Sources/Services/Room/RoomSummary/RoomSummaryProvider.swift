@@ -86,7 +86,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             span.exit()
         }
         
-        MXLog.info("Received \(diffs.count) diffs")
+        MXLog.verbose("Received \(diffs.count) diffs")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
@@ -107,7 +107,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         detectDuplicatesInRoomList(rooms)
         
-        MXLog.info("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
+        MXLog.verbose("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
