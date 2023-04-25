@@ -314,11 +314,14 @@ class ClientProxy: ClientProxyProtocol {
                 return
             }
             
+            let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
+            
             // Add the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsSlidingSyncView)
                 .withCommonExtensions()
+                .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
                 .storageKey(name: "ElementX")
                 .build()
             
