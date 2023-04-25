@@ -49,6 +49,10 @@ struct SessionVerificationScreenViewState: BindableState {
             return L10n.commonVerificationCancelled
         }
     }
+    
+    var titleAccessibilityIdentifier: String {
+        verificationState == .verified ? A11yIdentifiers.sessionVerificationScreen.verificationComplete : ""
+    }
         
     var message: String {
         switch verificationState {

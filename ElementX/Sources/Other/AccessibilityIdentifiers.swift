@@ -108,6 +108,7 @@ struct A11yIdentifiers {
         let acceptChallenge = "session_verification-accept_challenge"
         let declineChallenge = "session_verification-decline_challenge"
         let emojiWrapper = "session_verification-emojis"
+        let verificationComplete = "session_verification-verification_complete"
         let close = "session_verification-close"
     }
         

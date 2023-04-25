@@ -49,6 +49,7 @@ class SessionVerificationUITests: XCTestCase {
         app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].tap()
         app.assertScreenshot(.sessionVerification, step: Step.acceptingEmojis)
         
+        XCTAssert(app.staticTexts[A11yIdentifiers.sessionVerificationScreen.verificationComplete].waitForExistence(timeout: 5.0))
         app.assertScreenshot(.sessionVerification, step: Step.verificationComplete)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
