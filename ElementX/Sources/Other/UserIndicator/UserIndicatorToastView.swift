@@ -25,7 +25,7 @@ struct UserIndicatorToastView: View {
                 Image(systemName: iconName)
             }
             Text(indicator.title)
-                .font(.element.footnote)
+                .font(.compound.bodySM)
                 .foregroundColor(.element.primaryContent)
         }
         .id(indicator.id)

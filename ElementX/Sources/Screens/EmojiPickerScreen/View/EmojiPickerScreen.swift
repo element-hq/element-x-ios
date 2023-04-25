@@ -33,7 +33,7 @@ struct EmojiPickerScreen: View {
                                     context.send(viewAction: .emojiTapped(emoji: emoji))
                                 } label: {
                                     Text(emoji.value)
-                                        .font(.element.title1)
+                                        .font(.compound.headingLG)
                                 }
                             }
                         }

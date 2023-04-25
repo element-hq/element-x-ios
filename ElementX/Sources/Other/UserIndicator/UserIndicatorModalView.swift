@@ -35,7 +35,7 @@ struct UserIndicatorModalView: View {
                         Image(systemName: iconName)
                     }
                     Text(indicator.title)
-                        .font(.element.body)
+                        .font(.compound.bodyLG)
                         .foregroundColor(.element.primaryContent)
                 }
             }

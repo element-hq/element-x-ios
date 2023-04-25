@@ -60,7 +60,7 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
                     .animation(.elementDefault, value: configuration.isExpanded)
             }
             .frame(maxWidth: .infinity)
-            .font(.element.footnote)
+            .font(.compound.bodySM)
             .foregroundColor(.element.secondaryContent)
             .padding(.horizontal, 36.0)
             .padding(.top, 20.0)

@@ -55,20 +55,20 @@ struct SoftLogoutScreen: View {
     var header: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(UntranslatedL10n.softLogoutSigninTitle)
-                .font(.element.title2Bold)
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.title)
 
             Text(UntranslatedL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.message)
 
             if context.viewState.showRecoverEncryptionKeysMessage {
                 Text(UntranslatedL10n.softLogoutSigninE2eWarningNotice)
-                    .font(.element.body)
+                    .font(.compound.bodyLG)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.element.primaryContent)
             }
@@ -88,7 +88,7 @@ struct SoftLogoutScreen: View {
 
             Button { context.send(viewAction: .forgotPassword) } label: {
                 Text(UntranslatedL10n.softLogoutForgotPassword)
-                    .font(.element.body)
+                    .font(.compound.bodyLG)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.bottom, 8)
@@ -124,13 +124,13 @@ struct SoftLogoutScreen: View {
     var clearDataForm: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(UntranslatedL10n.softLogoutClearDataTitle)
-                .font(.element.title2Bold)
+                .font(.compound.headingMDBold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataTitle)
 
             Text(UntranslatedL10n.softLogoutClearDataNotice)
-                .font(.element.body)
+                .font(.compound.bodyLG)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataMessage)

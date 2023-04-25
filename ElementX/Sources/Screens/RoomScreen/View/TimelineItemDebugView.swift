@@ -74,7 +74,7 @@ struct TimelineItemDebugView: View {
                 DisclosureGroup(title, isExpanded: $isExpanded) {
                     disclosureGroupContent
                 }
-                .font(.element.subheadline)
+                .font(.compound.bodyMD)
                 .padding()
                 
                 Divider()
@@ -89,7 +89,7 @@ struct TimelineItemDebugView: View {
                 Divider()
                 
                 Text(text)
-                    .font(.element.caption1.monospaced())
+                    .font(.compound.bodyXS.monospaced())
                     .foregroundColor(.element.primaryContent)
             }
             .frame(maxWidth: .infinity)

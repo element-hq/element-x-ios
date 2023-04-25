@@ -43,9 +43,9 @@ struct TimelineReactionButton: View {
     var label: some View {
         HStack(spacing: 4) {
             Text(reaction.key)
-                .font(.element.subheadline)
+                .font(.compound.bodyMD)
             Text(String(reaction.count))
-                .font(.element.subheadline)
+                .font(.compound.bodyMD)
                 .foregroundColor(.element.secondaryContent)
         }
         .padding(.vertical, 6)

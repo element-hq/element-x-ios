@@ -21,7 +21,7 @@ struct TimelineStartRoomTimelineView: View {
     
     var body: some View {
         Text(title)
-            .font(.element.footnote)
+            .font(.compound.bodySM)
             .foregroundColor(.element.secondaryContent)
             .padding(.vertical, 24)
             .frame(maxWidth: .infinity)

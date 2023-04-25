@@ -85,14 +85,14 @@ struct HomeScreenRoomCell: View {
     var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.element.headline)
+                .font(.compound.bodyLGSemibold)
                 .foregroundColor(.element.primaryContent)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(.element.footnote)
+                    .font(.compound.bodySM)
                     .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
             }
         }
@@ -156,7 +156,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 
 private extension View {
     func lastMessageFormatting() -> some View {
-        font(.element.subheadline)
+        font(.compound.bodyMD)
             .foregroundColor(.element.tertiaryContent)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
