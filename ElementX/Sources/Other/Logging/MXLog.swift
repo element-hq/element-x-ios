@@ -199,6 +199,6 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        logEvent(file: file, line: UInt32(line), column: UInt32(column), level: level, target: target, message: "\(message)")
+        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), column: UInt32(column), level: level, target: target, message: "\(message)")
     }
 }
