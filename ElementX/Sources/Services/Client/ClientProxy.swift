@@ -35,16 +35,8 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
-    // swiftlint: disable all
     func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
-        if let type = try? notification.event.eventType() {
-            switch type {
-            case .messageLike(content: let content):
-                print(content)
-            case .state:
-                print("state")
-            }
-        }
+        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification))
     }
 
     // MARK: - SlidingSyncDelegate
@@ -464,7 +456,10 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                 RequiredState(key: "m.room.encryption", value: "")]
+                                                 RequiredState(key: "m.room.encryption", value: ""),
+                                                 RequiredState(key: "m.room.member", value: "$ME"),
+                                                 RequiredState(key: "m.room.power_levels", value: ""),
+                                                 RequiredState(key: "m.room.name", value: "")]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.encryption", value: ""),
@@ -536,6 +531,10 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
+    }
+
+    fileprivate func didReceiveNotification(notification: NotificationItemProxyProtocol) {
+        callbacks.send(.receivedNotification(notification))
     }
 }
 

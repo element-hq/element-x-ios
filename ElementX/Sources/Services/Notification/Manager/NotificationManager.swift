@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import UIKit
 import UserNotifications
@@ -21,6 +22,7 @@ import UserNotifications
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private var clientProxy: ClientProxyProtocol?
+    var clientCancellable: AnyCancellable?
 
     init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.notificationCenter = notificationCenter
@@ -66,6 +68,17 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
         self.clientProxy = clientProxy
+        clientCancellable = clientProxy?.callbacks.sink { [weak self] value in
+            guard let self else { return }
+            switch value {
+            case let .receivedNotification(notification):
+                Task {
+                    await self.showLocalNotification(notification)
+                }
+            default:
+                return
+            }
+        }
     }
 
     func registrationFailed(with error: Error) { }
@@ -84,6 +97,19 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             MXLog.info("[NotificationManager] show local notification succeeded")
         } catch {
             MXLog.error("[NotificationManager] show local notification failed: \(error)")
+        }
+    }
+
+    private func showLocalNotification(_ notification: NotificationItemProxyProtocol) async {
+        guard let userID = clientProxy?.userID else { return }
+        do {
+            guard let content = try await notification.process(receiverId: userID, roomId: notification.roomID, mediaProvider: nil) else {
+                return
+            }
+            let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString, content: content, trigger: nil)
+            try await notificationCenter.add(request)
+        } catch {
+            MXLog.error("[NotificationManager] show local notification item failed: \(error)")
         }
     }
     

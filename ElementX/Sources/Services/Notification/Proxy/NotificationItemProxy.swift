@@ -266,18 +266,19 @@ extension NotificationItemProxyProtocol {
                                mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = UNMutableNotificationContent()
         notification.receiverID = receiverId
-        let appName = InfoPlistReader(bundle: .app).bundleDisplayName
-        notification.title = appName
-        notification.subtitle = L10n.notification
+        notification.title = roomDisplayName
+        notification.subtitle = senderDisplayName ?? ""
         // We can store the room identifier into the thread identifier since it's used for notifications
         // that belong to the same group
         notification.threadIdentifier = roomId
         notification.categoryIdentifier = NotificationConstants.Category.reply
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        let senderPrefix = senderDisplayName != nil ? "\(senderDisplayName ?? "") in " : ""
+        let senderName = "\(senderPrefix)\(roomDisplayName)"
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderId: senderId,
-                                                            senderName: appName,
+                                                            senderName: senderName,
                                                             mediaSource: mediaSource,
                                                             roomId: roomId)
 

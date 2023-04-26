@@ -42,50 +42,51 @@ extension UNMutableNotificationContent {
                        senderName: String,
                        mediaSource: MediaSourceProxy?,
                        roomId: String) async throws -> UNMutableNotificationContent {
-        guard let mediaProvider, let mediaSource else {
-            return self
+        var image: INImage?
+        if let mediaSource {
+            switch await mediaProvider?.loadFileFromSource(mediaSource) {
+            case .success(let mediaFile):
+                image = try INImage(imageData: Data(contentsOf: mediaFile.url))
+            case .failure(let error):
+                MXLog.error("Couldn't add sender icon: \(error)")
+            case .none:
+                break
+            }
         }
+        // Initialize only the sender for a one-to-one message intent.
+        let handle = INPersonHandle(value: senderId, type: .unknown)
+        let sender = INPerson(personHandle: handle,
+                              nameComponents: nil,
+                              displayName: senderName,
+                              image: image,
+                              contactIdentifier: nil,
+                              customIdentifier: nil)
 
-        switch await mediaProvider.loadFileFromSource(mediaSource) {
-        case .success(let mediaFile):
-            // Initialize only the sender for a one-to-one message intent.
-            let handle = INPersonHandle(value: senderId, type: .unknown)
-            let sender = try INPerson(personHandle: handle,
-                                      nameComponents: nil,
-                                      displayName: senderName,
-                                      image: INImage(imageData: Data(contentsOf: mediaFile.url)),
-                                      contactIdentifier: nil,
-                                      customIdentifier: nil)
+        // Because this communication is incoming, you can infer that the current user is
+        // a recipient. Don't include the current user when initializing the intent.
+        let intent = INSendMessageIntent(recipients: nil,
+                                         outgoingMessageType: .outgoingMessageText,
+                                         content: nil,
+                                         speakableGroupName: nil,
+                                         conversationIdentifier: roomId,
+                                         serviceName: nil,
+                                         sender: sender,
+                                         attachments: nil)
 
-            // Because this communication is incoming, you can infer that the current user is
-            // a recipient. Don't include the current user when initializing the intent.
-            let intent = INSendMessageIntent(recipients: nil,
-                                             outgoingMessageType: .outgoingMessageText,
-                                             content: nil,
-                                             speakableGroupName: nil,
-                                             conversationIdentifier: roomId,
-                                             serviceName: nil,
-                                             sender: sender,
-                                             attachments: nil)
+        // Use the intent to initialize the interaction.
+        let interaction = INInteraction(intent: intent, response: nil)
 
-            // Use the intent to initialize the interaction.
-            let interaction = INInteraction(intent: intent, response: nil)
+        // Interaction direction is incoming because the user is
+        // receiving this message.
+        interaction.direction = .incoming
 
-            // Interaction direction is incoming because the user is
-            // receiving this message.
-            interaction.direction = .incoming
+        // Donate the interaction before updating notification content.
+        try await interaction.donate()
+        // Update notification content before displaying the
+        // communication notification.
+        let updatedContent = try updating(from: intent)
 
-            // Donate the interaction before updating notification content.
-            try await interaction.donate()
-            // Update notification content before displaying the
-            // communication notification.
-            let updatedContent = try updating(from: intent)
-            
-            // swiftlint:disable:next force_cast
-            return updatedContent.mutableCopy() as! UNMutableNotificationContent
-        case .failure(let error):
-            MXLog.error("Couldn't add sender icon: \(error)")
-            return self
-        }
+        // swiftlint:disable:next force_cast
+        return updatedContent.mutableCopy() as! UNMutableNotificationContent
     }
 }
