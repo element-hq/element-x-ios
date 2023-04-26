@@ -227,20 +227,19 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError> {
-        .failure(.failedSendingMedia)
-//        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-//        defer {
-//            sendMessageBackgroundTask?.stop()
-//        }
-//
-//        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-//            do {
-//                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo)
-//                return .success(())
-//            } catch {
-//                return .failure(.failedEditingMessage)
-//            }
-//        }
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo)
+                return .success(())
+            } catch {
+                return .failure(.failedEditingMessage)
+            }
+        }
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
