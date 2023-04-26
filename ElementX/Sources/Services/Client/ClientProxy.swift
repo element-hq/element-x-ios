@@ -35,6 +35,18 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
+    // swiftlint: disable all
+    func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
+        if let type = try? notification.event.eventType() {
+            switch type {
+            case .messageLike(content: let content):
+                print(content)
+            case .state:
+                print("state")
+            }
+        }
+    }
+
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
@@ -95,6 +107,9 @@ class ClientProxy: ClientProxyProtocol {
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
         
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+        await Task.dispatch(on: clientQueue) {
+            client.registerNotificationHandler()
+        }
         
         configureSlidingSync()
 
