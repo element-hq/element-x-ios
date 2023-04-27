@@ -55,6 +55,8 @@ final class MediaLoaderTests: XCTestCase {
 }
 
 private class MockMediaLoadingClient: ClientProtocol {
+    func setNotificationDelegate(notificationDelegate: MatrixRustSDK.NotificationDelegate?) { }
+
     private(set) var numberOfInvocations = 0
     
     func getMediaContent(mediaSource: MatrixRustSDK.MediaSource) throws -> [UInt8] {
