@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct HomeScreen: View {
@@ -63,7 +64,7 @@ struct HomeScreen: View {
                     }
                 }
                 .searchable(text: $context.searchQuery)
-                .searchableStyle(.list)
+                .compoundSearchField()
                 .disableAutocorrection(true)
             }
         }

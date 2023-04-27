@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct InviteUsersScreen: View {
@@ -36,6 +37,7 @@ struct InviteUsersScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
+        .compoundSearchField()
         .alert(item: $context.alertInfo) { $0.alert }
     }
     
