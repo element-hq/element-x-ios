@@ -22,6 +22,7 @@ import Combine
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
     private let clientProxy = MockClientProxy(userID: "@test:user.net")
+    private lazy var mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     private let notificationCenter = UserNotificationCenterSpy()
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
@@ -35,7 +36,7 @@ final class NotificationManagerTests: XCTestCase {
 
         notificationManager = NotificationManager(notificationCenter: notificationCenter)
         notificationManager.start()
-        notificationManager.setClientProxy(clientProxy)
+        notificationManager.setUserSession(mockUserSession)
     }
     
     func test_whenRegistered_pusherIsCalled() async {

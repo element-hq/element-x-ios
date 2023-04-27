@@ -102,9 +102,10 @@ class ClientProxy: ClientProxyProtocol {
 
         let delegate = WeakClientProxyWrapper(clientProxy: self)
         client.setDelegate(delegate: delegate)
-        await Task.dispatch(on: clientQueue) {
-            client.setNotificationDelegate(notificationDelegate: delegate)
-        }
+        // Uncomment to test local notifications
+//        await Task.dispatch(on: clientQueue) {
+//            client.setNotificationDelegate(notificationDelegate: delegate)
+//        }
         
         configureSlidingSync()
 
@@ -458,14 +459,17 @@ class ClientProxy: ClientProxyProtocol {
                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
     }
     
-    private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                 RequiredState(key: "m.room.encryption", value: ""),
-                                                 // These are required for notifications
-                                                 // The idea is to create another SS
-                                                 // to listen to them separately
-                                                 RequiredState(key: "m.room.member", value: "$ME"),
-                                                 RequiredState(key: "m.room.power_levels", value: ""),
-                                                 RequiredState(key: "m.room.name", value: "")]
+    private lazy var slidingSyncRequiredState = [
+        RequiredState(key: "m.room.avatar", value: ""),
+        RequiredState(key: "m.room.encryption", value: "")
+        // These are required for notifications
+        // The idea is to create another SS
+        // to listen to them separately
+        // only here for testing purposes when enabling local notifications
+//        RequiredState(key: "m.room.member", value: "$ME"),
+//        RequiredState(key: "m.room.power_levels", value: ""),
+//        RequiredState(key: "m.room.name", value: "")
+    ]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.encryption", value: ""),
