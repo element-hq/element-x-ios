@@ -16,16 +16,16 @@
 
 import SwiftUI
 
-typealias MediaPickerPreviewScreenViewModelType = StateStoreViewModel<MediaPickerPreviewScreenViewState, MediaPickerPreviewScreenViewAction>
+typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModel<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
-class MediaPickerPreviewScreenViewModel: MediaPickerPreviewScreenViewModelType, MediaPickerPreviewScreenViewModelProtocol {
-    var callback: ((MediaPickerPreviewScreenViewModelAction) -> Void)?
+class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
+    var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)?
 
     init(url: URL, title: String?) {
-        super.init(initialViewState: MediaPickerPreviewScreenViewState(url: url, title: title))
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title))
     }
     
-    override func process(viewAction: MediaPickerPreviewScreenViewAction) {
+    override func process(viewAction: MediaUploadPreviewScreenViewAction) {
         switch viewAction {
         case .send:
             callback?(.send)

@@ -16,27 +16,27 @@
 
 import SwiftUI
 
-struct MediaPickerPreviewScreenCoordinatorParameters {
+struct MediaUploadPreviewScreenCoordinatorParameters {
     let url: URL
     let title: String?
 }
 
-enum MediaPickerPreviewScreenCoordinatorAction {
+enum MediaUploadPreviewScreenCoordinatorAction {
     case send
     case cancel
 }
 
-final class MediaPickerPreviewScreenCoordinator: CoordinatorProtocol {
-    private let parameters: MediaPickerPreviewScreenCoordinatorParameters
+final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
+    private let parameters: MediaUploadPreviewScreenCoordinatorParameters
     
-    private var viewModel: MediaPickerPreviewScreenViewModelProtocol
-    private let callback: (MediaPickerPreviewScreenCoordinatorAction) -> Void
+    private var viewModel: MediaUploadPreviewScreenViewModelProtocol
+    private let callback: (MediaUploadPreviewScreenCoordinatorAction) -> Void
     
-    init(parameters: MediaPickerPreviewScreenCoordinatorParameters, callback: @escaping (MediaPickerPreviewScreenCoordinatorAction) -> Void) {
+    init(parameters: MediaUploadPreviewScreenCoordinatorParameters, callback: @escaping (MediaUploadPreviewScreenCoordinatorAction) -> Void) {
         self.parameters = parameters
         self.callback = callback
         
-        viewModel = MediaPickerPreviewScreenViewModel(url: parameters.url, title: parameters.title)
+        viewModel = MediaUploadPreviewScreenViewModel(url: parameters.url, title: parameters.title)
     }
     
     func start() {
@@ -51,6 +51,6 @@ final class MediaPickerPreviewScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(MediaPickerPreviewScreen(context: viewModel.context))
+        AnyView(MediaUploadPreviewScreen(context: viewModel.context))
     }
 }

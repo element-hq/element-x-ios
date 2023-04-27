@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol MediaPickerPreviewScreenViewModelProtocol {
-    var callback: ((MediaPickerPreviewScreenViewModelAction) -> Void)? { get set }
-    var context: MediaPickerPreviewScreenViewModelType.Context { get }
+protocol MediaUploadPreviewScreenViewModelProtocol {
+    var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)? { get set }
+    var context: MediaUploadPreviewScreenViewModelType.Context { get }
 }

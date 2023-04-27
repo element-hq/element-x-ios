@@ -91,7 +91,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             case .error:
                 break
             case .selectMediaAtURL(let url):
-                let mediaPickerPreviewScreenCoordinator = MediaPickerPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
+                let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
                     switch action {
                     case .send:
                         Task {
@@ -121,7 +121,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     }
                 }
                 
-                self?.navigationStackCoordinator.setSheetCoordinator(mediaPickerPreviewScreenCoordinator)
+                self?.navigationStackCoordinator.setSheetCoordinator(mediaUploadPreviewScreenCoordinator)
             }
         }
         

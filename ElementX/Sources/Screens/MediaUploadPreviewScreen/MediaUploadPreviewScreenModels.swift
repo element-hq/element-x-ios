@@ -14,9 +14,19 @@
 // limitations under the License.
 //
 
-import XCTest
+import Foundation
 
-@testable import ElementX
+enum MediaUploadPreviewScreenViewModelAction {
+    case send
+    case cancel
+}
 
-@MainActor
-class MediaPickerPreviewScreenViewModelTests: XCTestCase { }
+struct MediaUploadPreviewScreenViewState: BindableState {
+    let url: URL
+    let title: String?
+}
+
+enum MediaUploadPreviewScreenViewAction {
+    case send
+    case cancel
+}
