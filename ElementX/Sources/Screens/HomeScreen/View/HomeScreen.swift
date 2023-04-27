@@ -59,6 +59,9 @@ struct HomeScreen: View {
                                     .redacted(reason: .placeholder)
                             } else {
                                 HomeScreenRoomCell(room: room, context: context)
+                                    .contextMenu {
+                                        roomContextualMenu
+                                    }
                             }
                         }
                     }
@@ -155,6 +158,16 @@ struct HomeScreen: View {
             Text(L10n.screenSignoutConfirmationDialogContent)
         }
         .accessibilityLabel(L10n.a11yUserMenu)
+    }
+    
+    @ViewBuilder
+    private var roomContextualMenu: some View {
+        Button(action: settings) {
+            Label(L10n.commonSettings, systemImage: "gearshape")
+        }
+        Button(role: .destructive, action: settings) {
+            Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
+        }
     }
     
     private var newRoomButton: some View {
