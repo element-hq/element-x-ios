@@ -40,7 +40,7 @@ enum MediaInfo {
     case image(imageURL: URL, thumbnailURL: URL, imageInfo: ImageInfo)
     case video(videoURL: URL, thumbnailURL: URL, videoInfo: VideoInfo)
     case audio(audioURL: URL, audioInfo: AudioInfo)
-    case file(FileInfo)
+    case file(fileURL: URL, fileInfo: FileInfo)
 }
 
 private struct ImageProcessingInfo {
@@ -205,7 +205,7 @@ struct MediaUploadingPreprocessor {
         let fileSize = try? UInt64(FileManager.default.sizeForItem(at: url))
         
         let fileInfo = FileInfo(mimetype: mimeType, size: fileSize, thumbnailInfo: nil, thumbnailSource: nil)
-        return .success(.file(fileInfo))
+        return .success(.file(fileURL: url, fileInfo: fileInfo))
     }
     
     // MARK: Images

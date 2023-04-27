@@ -103,8 +103,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                 switch mediaInfo {
                                 case let .image(imageURL, thumbnailURL, imageInfo):
                                     let _ = await self?.parameters.roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
-                                default:
-                                    break
+                                case let .video(videoURL, thumbnailURL, videoInfo):
+                                    let _ = await self?.parameters.roomProxy.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo)
+                                case let .audio(audioURL, audioInfo):
+                                    let _ = await self?.parameters.roomProxy.sendAudio(url: audioURL, audioInfo: audioInfo)
+                                case let .file(fileURL, fileInfo):
+                                    let _ = await self?.parameters.roomProxy.sendFile(url: fileURL, fileInfo: fileInfo)
                                 }
                             case .failure(let error):
                                 MXLog.error("Failed processing media to upload with error: \(error)")

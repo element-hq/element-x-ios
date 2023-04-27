@@ -595,6 +595,69 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendImageUrlThumbnailURLImageInfoReturnValue
         }
     }
+    //MARK: - sendVideo
+
+    var sendVideoUrlThumbnailURLVideoInfoCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoCallsCount > 0
+    }
+    var sendVideoUrlThumbnailURLVideoInfoReceivedArguments: (url: URL, thumbnailURL: URL, videoInfo: VideoInfo)?
+    var sendVideoUrlThumbnailURLVideoInfoReceivedInvocations: [(url: URL, thumbnailURL: URL, videoInfo: VideoInfo)] = []
+    var sendVideoUrlThumbnailURLVideoInfoReturnValue: Result<Void, RoomProxyError>!
+    var sendVideoUrlThumbnailURLVideoInfoClosure: ((URL, URL, VideoInfo) async -> Result<Void, RoomProxyError>)?
+
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo) async -> Result<Void, RoomProxyError> {
+        sendVideoUrlThumbnailURLVideoInfoCallsCount += 1
+        sendVideoUrlThumbnailURLVideoInfoReceivedArguments = (url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo)
+        sendVideoUrlThumbnailURLVideoInfoReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo))
+        if let sendVideoUrlThumbnailURLVideoInfoClosure = sendVideoUrlThumbnailURLVideoInfoClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoClosure(url, thumbnailURL, videoInfo)
+        } else {
+            return sendVideoUrlThumbnailURLVideoInfoReturnValue
+        }
+    }
+    //MARK: - sendAudio
+
+    var sendAudioUrlAudioInfoCallsCount = 0
+    var sendAudioUrlAudioInfoCalled: Bool {
+        return sendAudioUrlAudioInfoCallsCount > 0
+    }
+    var sendAudioUrlAudioInfoReceivedArguments: (url: URL, audioInfo: AudioInfo)?
+    var sendAudioUrlAudioInfoReceivedInvocations: [(url: URL, audioInfo: AudioInfo)] = []
+    var sendAudioUrlAudioInfoReturnValue: Result<Void, RoomProxyError>!
+    var sendAudioUrlAudioInfoClosure: ((URL, AudioInfo) async -> Result<Void, RoomProxyError>)?
+
+    func sendAudio(url: URL, audioInfo: AudioInfo) async -> Result<Void, RoomProxyError> {
+        sendAudioUrlAudioInfoCallsCount += 1
+        sendAudioUrlAudioInfoReceivedArguments = (url: url, audioInfo: audioInfo)
+        sendAudioUrlAudioInfoReceivedInvocations.append((url: url, audioInfo: audioInfo))
+        if let sendAudioUrlAudioInfoClosure = sendAudioUrlAudioInfoClosure {
+            return await sendAudioUrlAudioInfoClosure(url, audioInfo)
+        } else {
+            return sendAudioUrlAudioInfoReturnValue
+        }
+    }
+    //MARK: - sendFile
+
+    var sendFileUrlFileInfoCallsCount = 0
+    var sendFileUrlFileInfoCalled: Bool {
+        return sendFileUrlFileInfoCallsCount > 0
+    }
+    var sendFileUrlFileInfoReceivedArguments: (url: URL, fileInfo: FileInfo)?
+    var sendFileUrlFileInfoReceivedInvocations: [(url: URL, fileInfo: FileInfo)] = []
+    var sendFileUrlFileInfoReturnValue: Result<Void, RoomProxyError>!
+    var sendFileUrlFileInfoClosure: ((URL, FileInfo) async -> Result<Void, RoomProxyError>)?
+
+    func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError> {
+        sendFileUrlFileInfoCallsCount += 1
+        sendFileUrlFileInfoReceivedArguments = (url: url, fileInfo: fileInfo)
+        sendFileUrlFileInfoReceivedInvocations.append((url: url, fileInfo: fileInfo))
+        if let sendFileUrlFileInfoClosure = sendFileUrlFileInfoClosure {
+            return await sendFileUrlFileInfoClosure(url, fileInfo)
+        } else {
+            return sendFileUrlFileInfoReturnValue
+        }
+    }
     //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0
