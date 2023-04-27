@@ -77,6 +77,9 @@ class UserSessionFlowCoordinatorStateMachine {
         case showInvitesScreen
         /// The invites screen has been dismissed
         case closedInvitesScreen
+        
+        /// Request presentation of the settings of a specific room
+        case selectRoomSettings(roomId: String)
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -129,6 +132,9 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .invitesScreen(selectedRoomId: roomId)
             case (.deselectRoom, .invitesScreen):
                 return .invitesScreen(selectedRoomId: nil)
+                
+            case (.selectRoomSettings(let roomId), .roomList):
+                return .roomList(selectedRoomId: roomId)
 
             default:
                 return nil

@@ -159,7 +159,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))
         case .showRoomSettings(roomIdentifier: let roomIdentifier):
-            break
+            callback?(.presentRoomSettings(roomIdentifier: roomIdentifier))
         case .leaveRoom(roomIdentifier: let roomIdentifier):
             break
         case .userMenu(let action):
