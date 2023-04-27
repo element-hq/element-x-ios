@@ -460,6 +460,9 @@ class ClientProxy: ClientProxyProtocol {
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                  RequiredState(key: "m.room.encryption", value: ""),
+                                                 // These are required for notifications
+                                                 // The idea is to create another SS
+                                                 // to listen to them separately
                                                  RequiredState(key: "m.room.member", value: "$ME"),
                                                  RequiredState(key: "m.room.power_levels", value: ""),
                                                  RequiredState(key: "m.room.name", value: "")]

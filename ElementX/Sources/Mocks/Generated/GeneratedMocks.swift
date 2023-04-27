@@ -264,21 +264,21 @@ class NotificationManagerMock: NotificationManagerProtocol {
         showLocalNotificationWithSubtitleReceivedInvocations.append((title: title, subtitle: subtitle))
         await showLocalNotificationWithSubtitleClosure?(title, subtitle)
     }
-    //MARK: - setClientProxy
+    //MARK: - setUserSession
 
-    var setClientProxyCallsCount = 0
-    var setClientProxyCalled: Bool {
-        return setClientProxyCallsCount > 0
+    var setUserSessionCallsCount = 0
+    var setUserSessionCalled: Bool {
+        return setUserSessionCallsCount > 0
     }
-    var setClientProxyReceivedClientProxy: ClientProxyProtocol?
-    var setClientProxyReceivedInvocations: [ClientProxyProtocol?] = []
-    var setClientProxyClosure: ((ClientProxyProtocol?) -> Void)?
+    var setUserSessionReceivedUserSession: UserSessionProtocol?
+    var setUserSessionReceivedInvocations: [UserSessionProtocol?] = []
+    var setUserSessionClosure: ((UserSessionProtocol?) -> Void)?
 
-    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
-        setClientProxyCallsCount += 1
-        setClientProxyReceivedClientProxy = clientProxy
-        setClientProxyReceivedInvocations.append(clientProxy)
-        setClientProxyClosure?(clientProxy)
+    func setUserSession(_ userSession: UserSessionProtocol?) {
+        setUserSessionCallsCount += 1
+        setUserSessionReceivedUserSession = userSession
+        setUserSessionReceivedInvocations.append(userSession)
+        setUserSessionClosure?(userSession)
     }
     //MARK: - requestAuthorization
 

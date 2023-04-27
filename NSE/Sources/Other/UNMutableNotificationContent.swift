@@ -39,7 +39,9 @@ extension UNMutableNotificationContent {
     
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderId: String,
+                       receiverId: String,
                        senderName: String,
+                       groupName: String?,
                        mediaSource: MediaSourceProxy?,
                        roomId: String) async throws -> UNMutableNotificationContent {
         var image: INImage?
@@ -53,25 +55,34 @@ extension UNMutableNotificationContent {
                 break
             }
         }
-        // Initialize only the sender for a one-to-one message intent.
-        let handle = INPersonHandle(value: senderId, type: .unknown)
-        let sender = INPerson(personHandle: handle,
+
+        let senderHandle = INPersonHandle(value: senderId, type: .unknown)
+        let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
                               displayName: senderName,
                               image: image,
                               contactIdentifier: nil,
                               customIdentifier: nil)
 
-        // Because this communication is incoming, you can infer that the current user is
-        // a recipient. Don't include the current user when initializing the intent.
-        let intent = INSendMessageIntent(recipients: nil,
+        // These are required to show the group name as subtitle
+        var speakableGroupName: INSpeakableString?
+        var recipients: [INPerson]?
+        if let groupName {
+            let meHandle = INPersonHandle(value: receiverId, type: .unknown)
+            let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
+            speakableGroupName = INSpeakableString(spokenPhrase: groupName)
+            recipients = [sender, me]
+        }
+
+        let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,
                                          content: nil,
-                                         speakableGroupName: nil,
+                                         speakableGroupName: speakableGroupName,
                                          conversationIdentifier: roomId,
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
+        intent.setImage(image, forParameterNamed: \.conversationIdentifier)
 
         // Use the intent to initialize the interaction.
         let interaction = INInteraction(intent: intent, response: nil)

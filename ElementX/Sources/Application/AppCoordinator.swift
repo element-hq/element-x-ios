@@ -288,7 +288,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         userSessionFlowCoordinator = nil
 
-        notificationManager.setClientProxy(nil)
+        notificationManager.setUserSession(nil)
     }
     
     private func presentSplashScreen(isSoftLogout: Bool = false) {
@@ -302,7 +302,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        notificationManager.setClientProxy(userSession.clientProxy)
+        notificationManager.setUserSession(userSession)
         notificationManager.requestAuthorization()
 
         if let appDelegate = AppDelegate.shared {

@@ -21,7 +21,7 @@ import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
-    private var clientProxy: ClientProxyProtocol?
+    private var userSession: UserSessionProtocol?
     var clientCancellable: AnyCancellable?
 
     init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
@@ -60,15 +60,15 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     func register(with deviceToken: Data) async -> Bool {
-        guard let clientProxy else {
+        guard let userSession else {
             return false
         }
-        return await setPusher(with: deviceToken, clientProxy: clientProxy)
+        return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
     }
 
-    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
-        self.clientProxy = clientProxy
-        clientCancellable = clientProxy?.callbacks.sink { [weak self] value in
+    func setUserSession(_ userSession: UserSessionProtocol?) {
+        self.userSession = userSession
+        clientCancellable = userSession?.clientProxy.callbacks.sink { [weak self] value in
             guard let self else { return }
             switch value {
             case let .receivedNotification(notification):
@@ -101,9 +101,9 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     private func showLocalNotification(_ notification: NotificationItemProxyProtocol) async {
-        guard let userID = clientProxy?.userID else { return }
+        guard let userSession else { return }
         do {
-            guard let content = try await notification.process(receiverId: userID, roomId: notification.roomID, mediaProvider: nil) else {
+            guard let content = try await notification.process(receiverId: userSession.userID, roomId: notification.roomID, mediaProvider: userSession.mediaProvider) else {
                 return
             }
             let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString, content: content, trigger: nil)

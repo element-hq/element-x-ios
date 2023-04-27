@@ -26,19 +26,17 @@ protocol NotificationItemProxyProtocol {
 
     var senderDisplayName: String? { get }
 
-    var senderAvatarURL: String? { get }
+    var senderAvatarMediaSource: MediaSourceProxy? { get }
 
     var roomDisplayName: String { get }
 
-    var roomAvatarURL: String? { get }
+    var roomAvatarMediaSource: MediaSourceProxy? { get }
 
     var isNoisy: Bool { get }
 
     var isDirect: Bool { get }
 
     var isEncrypted: Bool { get }
-
-    var mediaSource: MediaSourceProxy? { get }
 }
 
 struct NotificationItemProxy: NotificationItemProxyProtocol {
@@ -56,16 +54,8 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.senderDisplayName
     }
 
-    var senderAvatarURL: String? {
-        notificationItem.senderAvatarUrl
-    }
-
     var roomDisplayName: String {
         notificationItem.roomDisplayName
-    }
-
-    var roomAvatarURL: String? {
-        notificationItem.roomAvatarUrl
     }
 
     var isNoisy: Bool {
@@ -80,7 +70,21 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.isEncrypted
     }
 
-    var mediaSource: MediaSourceProxy?
+    var senderAvatarMediaSource: MediaSourceProxy? {
+        if let senderAvatarURLString = notificationItem.senderAvatarUrl,
+           let senderAvatarURL = URL(string: senderAvatarURLString) {
+            return MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
+        }
+        return nil
+    }
+
+    var roomAvatarMediaSource: MediaSourceProxy? {
+        if let roomAvatarURLString = notificationItem.roomAvatarUrl,
+           let roomAvatarURL = URL(string: roomAvatarURLString) {
+            return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
+        }
+        return nil
+    }
 }
 
 // The mock and the protocol are just temporary until we can handle
@@ -109,35 +113,32 @@ struct MockNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isEncrypted: Bool { false }
 
-    var mediaSource: MediaSourceProxy? { nil }
+    var senderAvatarMediaSource: MediaSourceProxy? { nil }
+
+    var roomAvatarMediaSource: MediaSourceProxy? { nil }
 }
 
 extension NotificationItemProxyProtocol {
     var requiresMediaProvider: Bool {
-        false
-//        if avatarUrl != nil {
-//            return true
-//        }
-//        switch timelineItemProxy {
-//        case .event(let eventItem):
-//            guard eventItem.isMessage else {
-//                // To be handled in the future
-//                return false
-//            }
-//            guard let message = eventItem.content.asMessage() else {
-//                fatalError("Only handled messages")
-//            }
-//            switch message.msgtype() {
-//            case .image, .video:
-//                return true
-//            default:
-//                return false
-//            }
-//        case .virtual:
-//            return false
-//        case .other:
-//            return false
-//        }
+        if senderAvatarMediaSource != nil || roomAvatarMediaSource != nil {
+            return true
+        }
+        switch event.type {
+        case .state, .none:
+            return false
+        case let .messageLike(content):
+            switch content {
+            case let .roomMessage(messageType):
+                switch messageType {
+                case .image, .video:
+                    return true
+                default:
+                    return false
+                }
+            default:
+                return false
+            }
+        }
     }
 
     /// Process the receiver item proxy
@@ -149,27 +150,6 @@ extension NotificationItemProxyProtocol {
     func process(receiverId: String,
                  roomId: String,
                  mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
-//        switch timelineItemProxy {
-//        case .event(let eventItem):
-//            guard eventItem.isMessage else {
-//                // To be handled in the future
-//                return nil
-//            }
-//            guard let message = eventItem.content.asMessage() else {
-//                fatalError("Item must be a message")
-//            }
-//
-//            return try await process(message: message,
-//                                     senderId: eventItem.sender,
-//                                     roomId: roomId,
-//                                     mediaProvider: mediaProvider)
-//        case .virtual:
-//            return nil
-//        case .other:
-//            return nil
-//        }
-        // For now we can't solve the sender ID nor get the type of message that we are displaying
-        // so we are just going to process all of them as a text notification saying "Notification"
         if self is MockNotificationItemProxy {
             return processMock(receiverId: receiverId, roomId: roomId)
         } else {
@@ -195,8 +175,7 @@ extension NotificationItemProxyProtocol {
                     case .text(content: let content):
                         return try await processText(content: content, receiverId: receiverId, senderId: event.senderID, roomId: roomId, mediaProvider: mediaProvider)
                     }
-                // swiftlint:disable:next line_length
-                case .callAnswer, .callInvite, .callHangup, .callCandidates, .keyVerificationReady, .keyVerificationStart, .keyVerificationCancel, .keyVerificationAccept, .keyVerificationKey, .keyVerificationMac, .keyVerificationDone, .reactionContent, .roomEncrypted, .roomRedaction, .sticker:
+                default:
                     return nil
                 }
             }
@@ -263,7 +242,7 @@ extension NotificationItemProxyProtocol {
     // To be removed once we don't need the mock anymore
     private func processMock(receiverId: String,
                              roomId: String) -> UNMutableNotificationContent {
-        var notification = UNMutableNotificationContent()
+        let notification = UNMutableNotificationContent()
         notification.receiverID = receiverId
         notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
         notification.body = L10n.notification
@@ -279,32 +258,34 @@ extension NotificationItemProxyProtocol {
                                mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = UNMutableNotificationContent()
         notification.receiverID = receiverId
-        notification.title = roomDisplayName
-        notification.subtitle = senderDisplayName ?? ""
+        // These are fallbacks since the senderIcon also sets the title and the subtitle
+        notification.title = senderDisplayName ?? roomDisplayName
+        if notification.title != roomDisplayName {
+            notification.subtitle = roomDisplayName
+        }
         // We can store the room identifier into the thread identifier since it's used for notifications
         // that belong to the same group
         notification.threadIdentifier = roomId
         notification.categoryIdentifier = NotificationConstants.Category.reply
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
 
-        var senderName = ""
-        if isDirect {
-            senderName = senderDisplayName ?? ""
+        let senderName = senderDisplayName ?? roomDisplayName
+        var groupName: String?
+        var mediaSource: MediaSourceProxy?
+        if !isDirect {
+            groupName = senderName != roomDisplayName ? roomDisplayName : nil
+            mediaSource = roomAvatarMediaSource
         } else {
-            let senderPrefix = senderDisplayName != nil ? "\(senderDisplayName ?? "") in " : ""
-            senderName = "\(senderPrefix)\(roomDisplayName)"
-        }
-        // Fallback
-        if senderName.isEmpty {
-            senderName = roomDisplayName
+            mediaSource = senderAvatarMediaSource
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderId: senderId,
+                                                            receiverId: receiverId,
                                                             senderName: senderName,
+                                                            groupName: groupName,
                                                             mediaSource: mediaSource,
                                                             roomId: roomId)
-
         return notification
     }
 
