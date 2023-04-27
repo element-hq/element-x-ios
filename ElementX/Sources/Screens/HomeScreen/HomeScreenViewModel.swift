@@ -153,10 +153,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))
+        case .showRoomSettings(roomIdentifier: let roomIdentifier):
+            break
+        case .leaveRoom(roomIdentifier: let roomIdentifier):
+            break
         case .userMenu(let action):
             switch action {
             case .feedback:
