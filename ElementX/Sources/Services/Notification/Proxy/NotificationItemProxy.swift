@@ -171,8 +171,7 @@ extension NotificationItemProxyProtocol {
         // For now we can't solve the sender ID nor get the type of message that we are displaying
         // so we are just going to process all of them as a text notification saying "Notification"
         if self is MockNotificationItemProxy {
-            let content = TextMessageContent(body: L10n.notification, formatted: nil)
-            return try await processText(content: content, receiverId: receiverId, senderId: "undefined", roomId: roomId, mediaProvider: mediaProvider)
+            return processMock(receiverId: receiverId, roomId: roomId)
         } else {
             switch event.type {
             case .none, .state:
@@ -196,6 +195,7 @@ extension NotificationItemProxyProtocol {
                     case .text(content: let content):
                         return try await processText(content: content, receiverId: receiverId, senderId: event.senderID, roomId: roomId, mediaProvider: mediaProvider)
                     }
+                // swiftlint:disable:next line_length
                 case .callAnswer, .callInvite, .callHangup, .callCandidates, .keyVerificationReady, .keyVerificationStart, .keyVerificationCancel, .keyVerificationAccept, .keyVerificationKey, .keyVerificationMac, .keyVerificationDone, .reactionContent, .roomEncrypted, .roomRedaction, .sticker:
                     return nil
                 }
@@ -260,6 +260,19 @@ extension NotificationItemProxyProtocol {
         }
     }
 
+    // To be removed once we don't need the mock anymore
+    private func processMock(receiverId: String,
+                             roomId: String) -> UNMutableNotificationContent {
+        var notification = UNMutableNotificationContent()
+        notification.receiverID = receiverId
+        notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
+        notification.body = L10n.notification
+        notification.threadIdentifier = roomId
+        notification.categoryIdentifier = NotificationConstants.Category.reply
+        notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        return notification
+    }
+
     private func processCommon(receiverId: String,
                                senderId: String,
                                roomId: String,
@@ -273,8 +286,18 @@ extension NotificationItemProxyProtocol {
         notification.threadIdentifier = roomId
         notification.categoryIdentifier = NotificationConstants.Category.reply
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
-        let senderPrefix = senderDisplayName != nil ? "\(senderDisplayName ?? "") in " : ""
-        let senderName = "\(senderPrefix)\(roomDisplayName)"
+
+        var senderName = ""
+        if isDirect {
+            senderName = senderDisplayName ?? ""
+        } else {
+            let senderPrefix = senderDisplayName != nil ? "\(senderDisplayName ?? "") in " : ""
+            senderName = "\(senderPrefix)\(roomDisplayName)"
+        }
+        // Fallback
+        if senderName.isEmpty {
+            senderName = roomDisplayName
+        }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderId: senderId,

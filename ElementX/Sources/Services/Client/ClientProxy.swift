@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
+private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -35,15 +35,17 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
-    func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
-        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification))
-    }
-
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
         MXLog.info("Received sliding sync update")
         clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
+    }
+
+    // MARK: - NotificationDelegate
+
+    func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
+        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification))
     }
 }
 
@@ -97,10 +99,11 @@ class ClientProxy: ClientProxyProtocol {
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
-        
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+
+        let delegate = WeakClientProxyWrapper(clientProxy: self)
+        client.setDelegate(delegate: delegate)
         await Task.dispatch(on: clientQueue) {
-            client.registerNotificationHandler()
+            client.setNotificationDelegate(notificationDelegate: delegate)
         }
         
         configureSlidingSync()
