@@ -17,6 +17,7 @@
 import Foundation
 
 struct SeparatorRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
+    #warning("This should really be a stable identifier, ideally coming from the SDK, but unfortunately we receive duplicates for it at the moment, crashing our timeline data source")
     let id: String = UUID().uuidString
     let text: String
 }
