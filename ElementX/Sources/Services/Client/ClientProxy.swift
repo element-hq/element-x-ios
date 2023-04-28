@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
+private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -40,6 +40,12 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     func didReceiveSyncUpdate(summary: UpdateSummary) {
         MXLog.info("Received sliding sync update")
         clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
+    }
+
+    // MARK: - NotificationDelegate
+
+    func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
+        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification))
     }
 }
 
@@ -93,8 +99,13 @@ class ClientProxy: ClientProxyProtocol {
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
-        
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+
+        let delegate = WeakClientProxyWrapper(clientProxy: self)
+        client.setDelegate(delegate: delegate)
+        // Uncomment to test local notifications
+//        await Task.dispatch(on: clientQueue) {
+//            client.setNotificationDelegate(notificationDelegate: delegate)
+//        }
         
         configureSlidingSync()
 
@@ -448,8 +459,17 @@ class ClientProxy: ClientProxyProtocol {
                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
     }
     
-    private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                 RequiredState(key: "m.room.encryption", value: "")]
+    private lazy var slidingSyncRequiredState = [
+        RequiredState(key: "m.room.avatar", value: ""),
+        RequiredState(key: "m.room.encryption", value: "")
+        // These are required for notifications
+        // The idea is to create another SS
+        // to listen to them separately
+        // only here for testing purposes when enabling local notifications
+//        RequiredState(key: "m.room.member", value: "$ME"),
+//        RequiredState(key: "m.room.power_levels", value: ""),
+//        RequiredState(key: "m.room.name", value: "")
+    ]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.encryption", value: ""),
@@ -521,6 +541,10 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
+    }
+
+    fileprivate func didReceiveNotification(notification: NotificationItemProxyProtocol) {
+        callbacks.send(.receivedNotification(notification))
     }
 }
 

@@ -25,7 +25,7 @@ class NotificationServiceProxy: NotificationServiceProxyProtocol {
 //        service = NotificationService(basePath: basePath, userId: userId)
     }
 
-    func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy? {
-        NotificationItemProxy()
+    func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxyProtocol? {
+        MockNotificationItemProxy(eventID: eventId, roomID: roomId)
     }
 }

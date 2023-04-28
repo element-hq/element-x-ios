@@ -21,6 +21,7 @@ import MatrixRustSDK
 enum ClientProxyCallback {
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
+    case receivedNotification(NotificationItemProxyProtocol)
 }
 
 enum ClientProxyError: Error {

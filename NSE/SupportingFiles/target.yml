@@ -67,6 +67,7 @@ targets:
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Generated
     - path: ../../ElementX/Sources/Services/Timeline/TimelineItemProxy.swift
+    - path: ../../ElementX/Sources/Services/Timeline/TimelineEventProxy.swift
     - path: ../../ElementX/Sources/Services/Timeline/TimelineItemSender.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
