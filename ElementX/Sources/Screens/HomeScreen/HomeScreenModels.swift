@@ -39,7 +39,7 @@ enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
     case showRoomSettings(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
-    case confirmLeaveRoom
+    case confirmLeaveRoom(roomIdentifier: String)
     case userMenu(action: HomeScreenViewUserMenuAction)
     case startChat
     case verifySession

@@ -162,8 +162,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentRoomSettings(roomIdentifier: roomIdentifier))
         case .leaveRoom(roomIdentifier: let roomIdentifier):
             startLeaveRoomProcess(roomId: roomIdentifier)
-        case .confirmLeaveRoom:
-            break
+        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
+            leaveRoom(roomId: roomIdentifier)
         case .userMenu(let action):
             switch action {
             case .feedback:
@@ -328,9 +328,28 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             
             if joinedMembers.count > 1 {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: room.isPublic ? .public : .private)
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: room.isPublic ? .public : .private)
             } else {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: .empty)
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: .empty)
+            }
+        }
+    }
+    
+    private func leaveRoom(roomId: String) {
+        Task {
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+            }
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            let room = await userSession.clientProxy.roomForIdentifier(roomId)
+            let result = await room?.leaveRoom()
+            
+            switch result {
+            case .none, .some(.failure):
+                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+            case .some(.success):
+                break
             }
         }
     }

@@ -106,6 +106,7 @@ struct LeaveRoomAlertItem: AlertItem {
         case `private`
     }
 
+    let roomId: String
     let state: RoomState
     let title = L10n.actionLeaveRoom
     let confirmationTitle = L10n.actionLeave
