@@ -130,7 +130,7 @@ extension NotificationItemProxyProtocol {
             switch content {
             case let .roomMessage(messageType):
                 switch messageType {
-                case .image, .video:
+                case .image, .video, .audio:
                     return true
                 default:
                     return false
@@ -264,8 +264,9 @@ extension NotificationItemProxyProtocol {
                                                    mediaProvider: mediaProvider)
         notification.body = "📷 " + content.body
 
-        notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
+        notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                             mediaSource: .init(source: content.source,
+                                                                                mimeType: content.info?.mimetype))
 
         return notification
     }
@@ -281,8 +282,9 @@ extension NotificationItemProxyProtocol {
                                                    mediaProvider: mediaProvider)
         notification.body = "📹 " + content.body
 
-        notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
+        notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                             mediaSource: .init(source: content.source,
+                                                                                mimeType: content.info?.mimetype))
 
         return notification
     }
@@ -334,11 +336,15 @@ extension NotificationItemProxyProtocol {
                               senderId: String,
                               roomId: String,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(receiverId: receiverId,
+        var notification = try await processCommon(receiverId: receiverId,
                                                    senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "🔊 " + content.body
+
+        notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                             mediaSource: .init(source: content.source,
+                                                                                mimeType: content.info?.mimetype))
 
         return notification
     }

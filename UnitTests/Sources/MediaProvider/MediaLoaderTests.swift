@@ -55,8 +55,6 @@ final class MediaLoaderTests: XCTestCase {
 }
 
 private class MockMediaLoadingClient: ClientProtocol {
-    func setNotificationDelegate(notificationDelegate: MatrixRustSDK.NotificationDelegate?) { }
-
     private(set) var numberOfInvocations = 0
     
     func getMediaContent(mediaSource: MatrixRustSDK.MediaSource) throws -> [UInt8] {
@@ -146,4 +144,6 @@ private class MockMediaLoadingClient: ClientProtocol {
     }
     
     func searchUsers(searchTerm: String, limit: UInt64) throws -> MatrixRustSDK.SearchUsersResults { fatalError() }
+
+    func setNotificationDelegate(notificationDelegate: MatrixRustSDK.NotificationDelegate?) { }
 }

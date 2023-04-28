@@ -35,18 +35,25 @@ extension UNMutableNotificationContent {
     }
     
     func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
-                            mediaSource: MediaSourceProxy) async throws -> UNMutableNotificationContent {
+                            mediaSource: MediaSourceProxy) async -> UNMutableNotificationContent {
         guard let mediaProvider else {
             return self
         }
         switch await mediaProvider.loadFileFromSource(mediaSource) {
         case .success(let file):
-            let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
-                                                          url: file.url, // Needs testing: Does the file get copied before the media handle is be dropped?
-                                                          options: nil)
-            attachments.append(attachment)
+            do {
+                let identifier = ProcessInfo.processInfo.globallyUniqueString
+                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: file.url, with: "\(identifier).\(file.url.pathExtension)")
+                let attachment = try UNNotificationAttachment(identifier: identifier,
+                                                              url: newURL,
+                                                              options: nil)
+                attachments.append(attachment)
+            } catch {
+                MXLog.error("Couldn't add media attachment:: \(error)")
+                return self
+            }
         case .failure(let error):
-            MXLog.error("Couldn't add media attachment: \(error)")
+            MXLog.error("Couldn't load the file for media attachment: \(error)")
         }
 
         return self
