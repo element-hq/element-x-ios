@@ -105,7 +105,7 @@ extension UNMutableNotificationContent {
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
-        intent.setImage(image, forParameterNamed: \.conversationIdentifier)
+        intent.setImage(image, forParameterNamed: \.speakableGroupName)
 
         // Use the intent to initialize the interaction.
         let interaction = INInteraction(intent: intent, response: nil)
