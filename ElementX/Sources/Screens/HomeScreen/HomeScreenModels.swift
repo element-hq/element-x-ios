@@ -39,6 +39,7 @@ enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
     case showRoomSettings(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
+    case confirmLeaveRoom
     case userMenu(action: HomeScreenViewUserMenuAction)
     case startChat
     case verifySession
@@ -104,6 +105,7 @@ struct HomeScreenViewStateBindings {
     var searchQuery = ""
     
     var alertInfo: AlertInfo<UUID>?
+    var leaveRoomAlertItem: LeaveRoomAlertItem?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
