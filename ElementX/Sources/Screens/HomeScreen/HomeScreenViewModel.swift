@@ -319,19 +319,26 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             let room = await userSession.clientProxy.roomForIdentifier(roomId)
-            await room?.updateMembers()
-            let joinedMembers = await room?.membersPublisher.values.first()?.filter { $0.membership == .join }
             
-            guard let room, let joinedMembers else {
+            guard let room else {
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
                 return
             }
             
-            if joinedMembers.count > 1 {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: room.isPublic ? .public : .private)
-            } else {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: .empty)
+            guard !room.isPublic else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: .public)
+                return
             }
+            
+            await room.updateMembers()
+            let joinedMembers = await room.membersPublisher.values.first()?.filter { $0.membership == .join }
+            
+            guard let joinedMembers else {
+                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+                return
+            }
+            
+            state.bindings.leaveRoomAlertItem = joinedMembers.count > 1 ? LeaveRoomAlertItem(roomId: roomId, state: .private) : LeaveRoomAlertItem(roomId: roomId, state: .empty)
         }
     }
     
