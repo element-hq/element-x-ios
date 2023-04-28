@@ -27,6 +27,7 @@ struct HomeScreenCoordinatorParameters {
 enum HomeScreenCoordinatorAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomSettings(roomIdentifier: String)
+    case roomLeft(roomIdentifier: String)
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentSessionVerificationScreen
@@ -57,6 +58,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
             case .presentRoomSettings(roomIdentifier: let roomIdentifier):
                 self.callback?(.presentRoomSettings(roomIdentifier: roomIdentifier))
+            case .roomLeft(roomIdentifier: let roomIdentifier):
+                self.callback?(.roomLeft(roomIdentifier: roomIdentifier))
             case .presentFeedbackScreen:
                 self.callback?(.presentFeedbackScreen)
             case .presentSettingsScreen:

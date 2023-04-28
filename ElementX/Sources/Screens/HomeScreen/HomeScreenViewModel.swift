@@ -349,7 +349,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .none, .some(.failure):
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
             case .some(.success):
-                break
+                callback?(.roomLeft(roomIdentifier: roomId))
             }
         }
     }

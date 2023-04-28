@@ -21,6 +21,7 @@ import UIKit
 enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomSettings(roomIdentifier: String)
+    case roomLeft(roomIdentifier: String)
     case presentSessionVerificationScreen
     case presentSettingsScreen
     case presentFeedbackScreen

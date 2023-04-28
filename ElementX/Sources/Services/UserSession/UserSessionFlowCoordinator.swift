@@ -159,6 +159,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.stateMachine.processEvent(.selectRoom(roomId: roomIdentifier))
             case .presentRoomSettings(let roomIdentifier):
                 self.stateMachine.processEvent(.selectRoomSettings(roomId: roomIdentifier))
+            case .roomLeft(let roomIdentifier):
+                self.deselectRoomIfNeeded(roomIdentifier: roomIdentifier)
             case .presentSettingsScreen:
                 self.stateMachine.processEvent(.showSettingsScreen)
             case .presentFeedbackScreen:
@@ -232,6 +234,18 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
             }
         }
+    }
+    
+    private func deselectRoomIfNeeded(roomIdentifier: String) {
+        guard
+            case .roomList(selectedRoomId: let selectedRoomId) = stateMachine.state,
+            selectedRoomId == roomIdentifier
+        else {
+            return
+        }
+
+        stateMachine.processEvent(.deselectRoom)
+        navigationSplitCoordinator.setDetailCoordinator(nil)
     }
 
     private func dismissRoom() {
