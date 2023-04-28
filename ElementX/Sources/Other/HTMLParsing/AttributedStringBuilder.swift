@@ -136,15 +136,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [])
         matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: []))
         // As of right now we do not handle event id links in any way so there is no need to add them as links
-//        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: []))
+        // matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: []))
         matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []))
         matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []))
-        
         guard matches.count > 0 else {
             return
         }
         
-        matches.forEach { match in
+        // Sort the links by length so the longest one always takes priority
+        matches.sorted { $0.range.length > $1.range.length }.forEach { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return
             }
@@ -161,8 +161,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
-            let link = string[matchRange].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            attributedString.addAttribute(.link, value: link as Any, range: match.range)
+            attributedString.addAttribute(.link, value: string[matchRange] as Any, range: match.range)
         }
     }
     

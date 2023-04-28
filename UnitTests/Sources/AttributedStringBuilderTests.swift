@@ -159,25 +159,37 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNil(attributedString.uiKit.attachment, "iFrame attachments should be removed as they're not included in the allowedHTMLTags array.")
     }
     
+    func testLinkWithFragment() {
+        let string = "https://example.com/#/"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+    }
+    
+    func testPermalink() {
+        let string = "https://matrix.to/#/!hello:matrix.org/$world?via=matrix.org"
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: string, expectedRuns: 1)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: string, expectedRuns: 1)
+    }
+    
     func testUserIdLink() {
         let userId = "@user:matrix.org"
         let string = "The user is \(userId)."
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: userId)
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: userId)
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: userId, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: userId, expectedRuns: 3)
     }
     
     func testRoomAliasLink() {
         let roomAlias = "#matrix:matrix.org"
         let string = "The room alias is \(roomAlias)."
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: roomAlias)
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: roomAlias)
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: roomAlias, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: roomAlias, expectedRuns: 3)
     }
     
     func testRoomIdLink() {
         let roomId = "!roomidentifier:matrix.org"
         let string = "The room is \(roomId)."
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: roomId)
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: roomId)
+        checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: roomId, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: roomId, expectedRuns: 3)
     }
 
     // As of right now we do not handle event id links in any way so there is no need to add them as links
@@ -390,16 +402,16 @@ class AttributedStringBuilderTests: XCTestCase {
     
     // MARK: - Private
     
-    private func checkMatrixEntityLinkIn(attributedString: AttributedString?, expected: String) {
+    private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
         guard let attributedString else {
             XCTFail("Could not build the attributed string")
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 3)
+        XCTAssertEqual(attributedString.runs.count, expectedRuns)
         
         for run in attributedString.runs where run.link != nil {
-            XCTAssertEqual(run.link?.path, expected)
+            XCTAssertEqual(run.link?.absoluteString, expectedLink)
             return
         }
         
