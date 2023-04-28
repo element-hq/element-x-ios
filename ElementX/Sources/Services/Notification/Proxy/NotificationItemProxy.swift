@@ -141,7 +141,7 @@ extension NotificationItemProxyProtocol {
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint: disable cyclomatic_complexity
     /// Process the receiver item proxy
     /// - Parameters:
     ///   - receiverId: identifier of the user that has received the notification
@@ -182,7 +182,7 @@ extension NotificationItemProxyProtocol {
             }
         }
     }
-
+    
     // swiftlint: enable cyclomatic_complexity
 
     // MARK: - Private
