@@ -44,7 +44,7 @@ struct UserProfileCell: View {
                 if !user.isVerified {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(Image(systemName: "exclamationmark.circle.fill"))
-                            .foregroundColor(.compound.textActionCritical)
+                            .foregroundColor(.compound.textCriticalPrimary)
                         
                         Text(L10n.screenStartChatUnknownProfile)
                             .foregroundColor(.secondary)

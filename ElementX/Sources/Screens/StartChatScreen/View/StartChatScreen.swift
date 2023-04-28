@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct StartChatScreen: View {
@@ -37,6 +38,7 @@ struct StartChatScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
+        .compoundSearchField()
         .alert(item: $context.alertInfo) { $0.alert }
     }
 

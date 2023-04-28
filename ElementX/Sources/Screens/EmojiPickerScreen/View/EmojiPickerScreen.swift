@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct EmojiPickerScreen: View {
@@ -45,7 +46,7 @@ struct EmojiPickerScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .searchable(text: $searchString)
-        .searchableStyle(.list)
+        .compoundSearchField()
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))
         }

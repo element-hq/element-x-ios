@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomMembersListScreen: View {
@@ -39,7 +40,7 @@ struct RoomMembersListScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-        .searchableStyle(.list)
+        .compoundSearchField()
         .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo) { $0.alert }
