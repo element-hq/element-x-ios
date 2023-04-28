@@ -52,6 +52,7 @@ extension UNMutableNotificationContent {
         return self
     }
 
+    // swiftlint:disable:next function_parameter_count
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderId: String,
                        receiverId: String,

@@ -141,6 +141,7 @@ extension NotificationItemProxyProtocol {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     /// Process the receiver item proxy
     /// - Parameters:
     ///   - receiverId: identifier of the user that has received the notification
@@ -182,62 +183,9 @@ extension NotificationItemProxyProtocol {
         }
     }
 
+    // swiftlint: enable cyclomatic_complexity
+
     // MARK: - Private
-
-    // MARK: Common
-
-    private func process(message: Message,
-                         receiverId: String,
-                         senderId: String,
-                         roomId: String,
-                         mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
-        switch message.msgtype() {
-        case .text(content: let content):
-            return try await processText(content: content,
-                                         receiverId: receiverId,
-                                         senderId: senderId,
-                                         roomId: roomId,
-                                         mediaProvider: mediaProvider)
-        case .image(content: let content):
-            return try await processImage(content: content,
-                                          receiverId: receiverId,
-                                          senderId: senderId,
-                                          roomId: roomId,
-                                          mediaProvider: mediaProvider)
-        case .audio(content: let content):
-            return try await processAudio(content: content,
-                                          receiverId: receiverId,
-                                          senderId: senderId,
-                                          roomId: roomId,
-                                          mediaProvider: mediaProvider)
-        case .video(content: let content):
-            return try await processVideo(content: content,
-                                          receiverId: receiverId,
-                                          senderId: senderId,
-                                          roomId: roomId,
-                                          mediaProvider: mediaProvider)
-        case .file(content: let content):
-            return try await processFile(content: content,
-                                         receiverId: receiverId,
-                                         senderId: senderId,
-                                         roomId: roomId,
-                                         mediaProvider: mediaProvider)
-        case .notice(content: let content):
-            return try await processNotice(content: content,
-                                           receiverId: receiverId,
-                                           senderId: senderId,
-                                           roomId: roomId,
-                                           mediaProvider: mediaProvider)
-        case .emote(content: let content):
-            return try await processEmote(content: content,
-                                          receiverId: receiverId,
-                                          senderId: senderId,
-                                          roomId: roomId,
-                                          mediaProvider: mediaProvider)
-        case .none:
-            return nil
-        }
-    }
 
     // To be removed once we don't need the mock anymore
     private func processMock(receiverId: String,
