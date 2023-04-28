@@ -158,8 +158,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))
-        case .showRoomSettings(roomIdentifier: let roomIdentifier):
-            callback?(.presentRoomSettings(roomIdentifier: roomIdentifier))
+        case .showRoomDetails(roomIdentifier: let roomIdentifier):
+            callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(roomIdentifier: let roomIdentifier):
             startLeaveRoomProcess(roomId: roomIdentifier)
         case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):

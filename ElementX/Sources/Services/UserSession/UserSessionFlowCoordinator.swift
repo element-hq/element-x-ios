@@ -127,9 +127,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.invitesScreen, .deselectRoom, .invitesScreen):
                 break
                 
-            case (.roomList(let currentRoomId), .selectRoomSettings(let roomId), .roomList) where currentRoomId == roomId:
+            case (.roomList(let currentRoomId), .selectRoomDetails(let roomId), .roomList) where currentRoomId == roomId:
                 break
-            case (.roomList, .selectRoomSettings(let roomId), .roomList(let selectedRoomId)) where roomId == selectedRoomId:
+            case (.roomList, .selectRoomDetails(let roomId), .roomList(let selectedRoomId)) where roomId == selectedRoomId:
                 self.presentRoomDetails(roomIdentifier: roomId)
             
             default:
@@ -157,8 +157,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             switch action {
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.selectRoom(roomId: roomIdentifier))
-            case .presentRoomSettings(let roomIdentifier):
-                self.stateMachine.processEvent(.selectRoomSettings(roomId: roomIdentifier))
+            case .presentRoomDetails(let roomIdentifier):
+                self.stateMachine.processEvent(.selectRoomDetails(roomId: roomIdentifier))
             case .roomLeft(let roomIdentifier):
                 self.deselectRoomIfNeeded(roomIdentifier: roomIdentifier)
             case .presentSettingsScreen:

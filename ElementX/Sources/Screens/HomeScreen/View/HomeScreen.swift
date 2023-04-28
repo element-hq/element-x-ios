@@ -61,7 +61,7 @@ struct HomeScreen: View {
                                 HomeScreenRoomCell(room: room, context: context)
                                     .contextMenu {
                                         Button {
-                                            context.send(viewAction: .showRoomSettings(roomIdentifier: room.id))
+                                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                                         } label: {
                                             Label(L10n.commonSettings, systemImage: "gearshape")
                                         }
