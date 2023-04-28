@@ -89,7 +89,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    static let loadingIndicatorIdentifier = "LoginCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "LoginCoordinatorLoading"
     
     private func startLoading(isInteractionBlocking: Bool) {
         if isInteractionBlocking {

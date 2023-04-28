@@ -21,14 +21,13 @@ struct MediaUploadPreviewScreen: View {
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
-            PreviewView(context: context,
-                        fileURL: context.viewState.url,
-                        title: context.viewState.title)
-                .id(UUID())
-                .ignoresSafeArea(edges: .bottom)
-                .toolbar { toolbar }
-        }
+        PreviewView(context: context,
+                    fileURL: context.viewState.url,
+                    title: context.viewState.title)
+            .id(UUID())
+            .ignoresSafeArea(edges: .bottom)
+            .toolbar { toolbar }
+            .interactiveDismissDisabled()
     }
     
     @ToolbarContentBuilder
@@ -103,7 +102,11 @@ private class PreviewItem: NSObject, QLPreviewItem {
 // MARK: - Previews
 
 struct MediaUploadPreviewScreen_Previews: PreviewProvider {
-    static let viewModel = MediaUploadPreviewScreenViewModel(url: URL.picturesDirectory, title: nil)
+    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: MockUserIndicatorController(),
+                                                             roomProxy: RoomProxyMock(),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
+                                                             title: nil,
+                                                             url: URL.picturesDirectory)
     static var previews: some View {
         MediaUploadPreviewScreen(context: viewModel.context)
     }

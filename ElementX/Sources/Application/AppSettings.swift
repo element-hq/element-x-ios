@@ -163,7 +163,7 @@ final class AppSettings: ObservableObject {
     
     // MARK: Media Uploading
     
-    @UserPreference(key: UserDefaultsKeys.mediaUploadingFlowEnabled, defaultValue: false, storageType: .volatile)
+    @UserPreference(key: UserDefaultsKeys.mediaUploadingFlowEnabled, defaultValue: true, storageType: .volatile)
     var mediaUploadingFlowEnabled
     
     // MARK: Invites

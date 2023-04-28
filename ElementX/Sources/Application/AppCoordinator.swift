@@ -339,7 +339,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     // MARK: Toasts and loading indicators
     
-    static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
     
     private func showLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

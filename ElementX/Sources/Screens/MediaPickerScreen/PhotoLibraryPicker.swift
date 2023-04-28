@@ -20,7 +20,12 @@ import SwiftUI
 enum PhotoLibraryPickerAction {
     case selectFile(URL)
     case cancel
-    case error(Error?)
+    case error(PhotoLibraryPickerError)
+}
+
+enum PhotoLibraryPickerError: Error {
+    case failedLoadingFileRepresentation(Error?)
+    case failedCopyingFile
 }
 
 struct PhotoLibraryPicker: UIViewControllerRepresentable {
@@ -63,7 +68,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             
             provider.loadFileRepresentation(forTypeIdentifier: "public.item") { [weak self] url, error in
                 guard let url else {
-                    self?.photoLibraryPicker.callback(.error(error))
+                    Task { @MainActor in
+                        self?.photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(error)))
+                    }
                     return
                 }
                 
@@ -76,7 +83,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
                         self?.photoLibraryPicker.callback(.selectFile(newURL))
                     }
                 } catch {
-                    self?.photoLibraryPicker.callback(.error(error))
+                    Task { @MainActor in
+                        self?.photoLibraryPicker.callback(.error(.failedCopyingFile))
+                    }
                 }
             }
         }

@@ -17,35 +17,36 @@
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    let url: URL
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let roomProxy: RoomProxyProtocol
+    let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
+    let url: URL
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
-    case send
-    case cancel
+    case dismiss
 }
 
 final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
-    private let parameters: MediaUploadPreviewScreenCoordinatorParameters
-    
     private var viewModel: MediaUploadPreviewScreenViewModelProtocol
     private let callback: (MediaUploadPreviewScreenCoordinatorAction) -> Void
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters, callback: @escaping (MediaUploadPreviewScreenCoordinatorAction) -> Void) {
-        self.parameters = parameters
         self.callback = callback
         
-        viewModel = MediaUploadPreviewScreenViewModel(url: parameters.url, title: parameters.title)
+        viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: parameters.userIndicatorController,
+                                                      roomProxy: parameters.roomProxy,
+                                                      mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+                                                      title: parameters.title,
+                                                      url: parameters.url)
     }
     
     func start() {
         viewModel.callback = { [weak self] action in
             switch action {
-            case .send:
-                self?.callback(.send)
-            case .cancel:
-                self?.callback(.cancel)
+            case .dismiss:
+                self?.callback(.dismiss)
             }
         }
     }

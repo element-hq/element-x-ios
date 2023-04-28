@@ -17,8 +17,7 @@
 import Foundation
 
 enum MediaUploadPreviewScreenViewModelAction {
-    case send
-    case cancel
+    case dismiss
 }
 
 struct MediaUploadPreviewScreenViewState: BindableState {
