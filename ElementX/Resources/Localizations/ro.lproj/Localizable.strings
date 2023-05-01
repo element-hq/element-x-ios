@@ -159,7 +159,6 @@
 "room_timeline_beginning_of_room" = "Acesta este începutul conversației %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
 "room_timeline_read_marker_title" = "Nou";
-"screen_analytics_help_us_improve" = "Ajutați-ne să identificăm problemele și să îmbunătățim %1$@ prin partajarea datelor de utilizare anonime.";
 "screen_analytics_prompt_data_usage" = "<b>Nu</b> înregistrăm sau profilăm datele contului";
 "screen_analytics_prompt_help_us_improve" = "Ajutați-ne să identificăm problemele și să îmbunătățim %1$@ prin partajarea datelor de utilizare anonime.";
 "screen_analytics_prompt_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
@@ -167,9 +166,7 @@
 "screen_analytics_prompt_settings" = "Puteți dezactiva această opțiune oricând din setări";
 "screen_analytics_prompt_third_party_sharing" = "<b>Nu</b> împărtășim informații cu terți";
 "screen_analytics_prompt_title" = "Ajutați la îmbunătățirea %1$@";
-"screen_analytics_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
-"screen_analytics_read_terms_content_link" = "aici";
-"screen_analytics_share_data" = "Partajați datele analitice";
+"screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Atașați o captură de ecran";
 "screen_bug_report_contact_me" = "Puteți să mă contactați dacă aveți întrebări suplimentare";
 "screen_bug_report_edit_screenshot" = "Editați captura de ecran";
@@ -211,6 +208,9 @@
 "screen_login_form_header" = "Introduceți detaliile";
 "screen_login_server_header" = "Locul unde trăiesc conversațiile tale";
 "screen_login_title" = "Bine ați revenit!";
+"screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
+"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
+"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_onboarding_welcome_subtitle" = "Bun venit la versiunea beta a %1$@. Supraalimentat, pentru viteză și simplitate.";
 "screen_onboarding_welcome_title" = "Fii în Elementul tău";
 "screen_report_content_block_user_hint" = "Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator";
@@ -312,6 +312,9 @@
 "dialog_title_error" = "Eroare";
 "dialog_title_success" = "Succes";
 "notification_room_action_quick_reply" = "Raspuns rapid";
+"screen_analytics_settings_help_us_improve" = "Ajutați-ne să identificăm problemele și să îmbunătățim %1$@ prin partajarea datelor de utilizare anonime.";
+"screen_analytics_settings_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
+"screen_analytics_settings_read_terms_content_link" = "aici";
 "screen_change_server_submit" = "Continuați";
 "screen_change_server_title" = "Selectați serverul";
 "screen_dm_details_block_alert_action" = "Blocați";

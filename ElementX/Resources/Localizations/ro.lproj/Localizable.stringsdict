@@ -14,8 +14,6 @@
 			<string>d</string>
 			<key>one</key>
 			<string>%1$d membru</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d membri</string>
 		</dict>
@@ -30,16 +28,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%1$@: %2$d mesaj</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$@: %2$d mesaje</string>
 		</dict>
@@ -54,16 +44,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%d notificare</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%d notificări</string>
 		</dict>
@@ -78,16 +60,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%d invitație</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%d invitații</string>
 		</dict>
@@ -102,16 +76,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%d mesaj nou</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%d mesaje noi</string>
 		</dict>
@@ -126,16 +92,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%d mesaj notificat necitit</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%d mesaje notificate necitite</string>
 		</dict>
@@ -150,16 +108,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string></string>
 			<key>one</key>
 			<string>%d cameră</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%d camere</string>
 		</dict>
@@ -176,8 +126,6 @@
 			<string>d</string>
 			<key>one</key>
 			<string>%1$d schimbare a camerii</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d schimbări ale camerei</string>
 		</dict>
@@ -194,8 +142,6 @@
 			<string>d</string>
 			<key>one</key>
 			<string>o persoană</string>
-			<key>few</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d persoane</string>
 		</dict>
