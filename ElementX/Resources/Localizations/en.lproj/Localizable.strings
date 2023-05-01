@@ -208,6 +208,9 @@
 "screen_login_form_header" = "Enter your details";
 "screen_login_server_header" = "Where your conversations live";
 "screen_login_title" = "Welcome back!";
+"screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
+"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
+"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_onboarding_welcome_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Be in your Element";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";

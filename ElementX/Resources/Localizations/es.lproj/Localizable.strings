@@ -159,7 +159,6 @@
 "room_timeline_beginning_of_room" = "Este es el principio de %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Este es el principio de esta conversación.";
 "room_timeline_read_marker_title" = "Nuevos";
-"screen_analytics_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
@@ -167,9 +166,7 @@
 "screen_analytics_prompt_settings" = "You can turn this off anytime in settings";
 "screen_analytics_prompt_third_party_sharing" = "We <b>don't</b> share information with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
-"screen_analytics_read_terms" = "You can read all our terms %1$@.";
-"screen_analytics_read_terms_content_link" = "here";
-"screen_analytics_share_data" = "Share analytics data";
+"screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Adjuntar captura de pantalla";
 "screen_bug_report_contact_me" = "Podéis poneros en contacto conmigo para resolver dudas relacionadas";
 "screen_bug_report_edit_screenshot" = "Editar captura de pantalla";
@@ -211,6 +208,9 @@
 "screen_login_form_header" = "Introduce tus datos";
 "screen_login_server_header" = "Donde viven tus conversaciones";
 "screen_login_title" = "¡Hola de nuevo!";
+"screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
+"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
+"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_onboarding_welcome_subtitle" = "Bienvenido a la beta de %1$@. Vitaminado, para mayor rapidez y sencillez.";
 "screen_onboarding_welcome_title" = "Siéntente en tu Elemento";
 "screen_report_content_block_user_hint" = "Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario";
@@ -312,6 +312,9 @@
 "dialog_title_error" = "Error";
 "dialog_title_success" = "Terminado";
 "notification_room_action_quick_reply" = "Respuesta rápida";
+"screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
+"screen_analytics_settings_read_terms_content_link" = "here";
 "screen_change_server_submit" = "Continuar";
 "screen_change_server_title" = "Selecciona tu servidor";
 "screen_dm_details_block_alert_action" = "Bloquear";

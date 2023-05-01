@@ -540,6 +540,12 @@ public enum L10n {
   public static var screenLoginTitle: String { return L10n.tr("Localizable", "screen_login_title") }
   /// Username
   public static var screenLoginUsernameHint: String { return L10n.tr("Localizable", "screen_login_username_hint") }
+  /// Failed selecting media, please try again.
+  public static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
+  /// Failed processing media to upload, please try again.
+  public static var screenMediaUploadPreviewErrorFailedProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_processing") }
+  /// Failed uploading media, please try again.
+  public static var screenMediaUploadPreviewErrorFailedSending: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_sending") }
   /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
   public static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))

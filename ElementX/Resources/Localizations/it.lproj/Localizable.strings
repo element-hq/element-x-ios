@@ -159,7 +159,6 @@
 "room_timeline_beginning_of_room" = "Questo è l'inizio di %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Questo è l'inizio della conversazione.";
 "room_timeline_read_marker_title" = "Nuovo";
-"screen_analytics_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
@@ -167,9 +166,7 @@
 "screen_analytics_prompt_settings" = "You can turn this off anytime in settings";
 "screen_analytics_prompt_third_party_sharing" = "We <b>don't</b> share information with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
-"screen_analytics_read_terms" = "You can read all our terms %1$@.";
-"screen_analytics_read_terms_content_link" = "here";
-"screen_analytics_share_data" = "Share analytics data";
+"screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Allega istantanea schermo";
 "screen_bug_report_contact_me" = "Potete contattarmi per qualsiasi altra domanda";
 "screen_bug_report_edit_screenshot" = "Modifica istantanea schermo";
@@ -211,6 +208,9 @@
 "screen_login_form_header" = "Inserisci i tuoi dati";
 "screen_login_server_header" = "Dove vivono le tue conversazioni";
 "screen_login_title" = "Bentornato!";
+"screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
+"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
+"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_onboarding_welcome_subtitle" = "Benvenuto nella beta di %1$@. Potenziato in velocità e semplicità.";
 "screen_onboarding_welcome_title" = "Sii nel tuo elemento";
 "screen_report_content_block_user_hint" = "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente";
@@ -312,6 +312,9 @@
 "dialog_title_error" = "Errore";
 "dialog_title_success" = "Operazione riuscita";
 "notification_room_action_quick_reply" = "Risposta rapida";
+"screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
+"screen_analytics_settings_read_terms_content_link" = "here";
 "screen_change_server_submit" = "Continua";
 "screen_change_server_title" = "Seleziona il tuo server";
 "screen_dm_details_block_alert_action" = "Blocca";
