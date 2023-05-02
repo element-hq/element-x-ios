@@ -41,7 +41,7 @@ class MockMediaLoader: MediaLoaderProtocol {
         }
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
         if let mediaFileURL {
             return .unmanaged(url: mediaFileURL)
         } else {

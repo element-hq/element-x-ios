@@ -595,7 +595,7 @@ extension ClientProxy: MediaLoaderProtocol {
         try await mediaLoader.loadMediaThumbnailForSource(source, width: width, height: height)
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
-        try await mediaLoader.loadMediaFileForSource(source)
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
+        try await mediaLoader.loadMediaFileForSource(source, body: body)
     }
 }
