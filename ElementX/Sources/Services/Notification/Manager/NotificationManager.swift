@@ -101,7 +101,8 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     private func showLocalNotification(_ notification: NotificationItemProxyProtocol) async {
-        guard let userSession else { return }
+        guard let userSession,
+              notification.event.timestamp > ServiceLocator.shared.settings.lastAppLaunchDate else { return }
         do {
             guard let content = try await notification.process(receiverId: userSession.userID, roomId: notification.roomID, mediaProvider: userSession.mediaProvider) else {
                 return

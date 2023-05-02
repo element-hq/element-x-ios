@@ -150,6 +150,8 @@ final class AppSettings: ObservableObject {
     // MARK: - Other
     
     let permalinkBaseURL = URL(staticString: "https://matrix.to")
+
+    let lastAppLaunchDate = Date()
     
     // MARK: - Feature Flags
     

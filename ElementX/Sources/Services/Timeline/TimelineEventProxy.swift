@@ -23,6 +23,8 @@ protocol TimelineEventProxyProtocol {
     var eventID: String { get }
 
     var senderID: String { get }
+
+    var timestamp: Date { get }
 }
 
 final class TimelineEventProxy: TimelineEventProxyProtocol {
@@ -43,10 +45,15 @@ final class TimelineEventProxy: TimelineEventProxyProtocol {
     var type: TimelineEventType? {
         try? timelineEvent.eventType()
     }
+
+    var timestamp: Date {
+        Date(timeIntervalSince1970: TimeInterval(timelineEvent.timestamp() / 1000))
+    }
 }
 
 struct MockTimelineEventProxy: TimelineEventProxyProtocol {
     let eventID: String
     let senderID = ""
     let type: TimelineEventType? = nil
+    let timestamp = Date()
 }
