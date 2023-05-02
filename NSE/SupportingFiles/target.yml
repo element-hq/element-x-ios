@@ -90,3 +90,5 @@ targets:
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
+    - path: ../../ElementX/Sources/Other/UserPreference.swift
+    - path: ../../ElementX/Sources/Other/SharedUserDefaultsKeys.swift

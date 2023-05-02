@@ -138,6 +138,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         guard let identifier = modifiedContent.notificationIdentifier,
               !settings.servedNotificationIdentifiers.contains(identifier) else {
             MXLog.info("\(tag) notify: notification already served")
+            discard()
             return
         }
 
