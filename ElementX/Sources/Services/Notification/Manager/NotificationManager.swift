@@ -104,10 +104,12 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         guard let userSession,
               notification.event.timestamp > ServiceLocator.shared.settings.lastAppLaunchDate else { return }
         do {
-            guard let content = try await notification.process(receiverId: userSession.userID, roomId: notification.roomID, mediaProvider: userSession.mediaProvider) else {
+            guard let content = try await notification.process(mediaProvider: userSession.mediaProvider),
+                  let identifier = notification.identifier else {
                 return
             }
-            let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString, content: content, trigger: nil)
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+            ServiceLocator.shared.settings.servedNotificationIdentifiers.insert(identifier)
             try await notificationCenter.add(request)
         } catch {
             MXLog.error("[NotificationManager] show local notification item failed: \(error)")

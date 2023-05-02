@@ -18,14 +18,16 @@ import Foundation
 import MatrixRustSDK
 
 class NotificationServiceProxy: NotificationServiceProxyProtocol {
+    private let userID: String
 //    private let service: NotificationServiceProtocol
 
     init(basePath: String,
-         userId: String) {
+         userID: String) {
+        self.userID = userID
 //        service = NotificationService(basePath: basePath, userId: userId)
     }
 
     func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxyProtocol? {
-        MockNotificationItemProxy(eventID: eventId, roomID: roomId)
+        MockNotificationItemProxy(eventID: eventId, roomID: roomId, receiverID: userID)
     }
 }

@@ -69,6 +69,8 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
 
+        ServiceLocator.shared.settings.servedNotificationIdentifiers = []
+
         notificationManager = NotificationManager()
         notificationManager.delegate = self
         notificationManager.start()
@@ -84,7 +86,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             wipeUserData(includingSettings: true)
         }
         ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
-                
+
         setupStateMachine()
 
         observeApplicationState()

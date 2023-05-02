@@ -45,7 +45,8 @@ private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, Slid
     // MARK: - NotificationDelegate
 
     func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
-        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification))
+        guard let userID = clientProxy?.userID else { return }
+        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification, receiverID: userID))
     }
 }
 
@@ -103,9 +104,9 @@ class ClientProxy: ClientProxyProtocol {
         let delegate = WeakClientProxyWrapper(clientProxy: self)
         client.setDelegate(delegate: delegate)
         // Uncomment to test local notifications
-//        await Task.dispatch(on: clientQueue) {
-//            client.setNotificationDelegate(notificationDelegate: delegate)
-//        }
+        await Task.dispatch(on: clientQueue) {
+            client.setNotificationDelegate(notificationDelegate: delegate)
+        }
         
         configureSlidingSync()
 
@@ -461,14 +462,14 @@ class ClientProxy: ClientProxyProtocol {
     
     private lazy var slidingSyncRequiredState = [
         RequiredState(key: "m.room.avatar", value: ""),
-        RequiredState(key: "m.room.encryption", value: "")
+        RequiredState(key: "m.room.encryption", value: ""),
         // These are required for notifications
         // The idea is to create another SS
         // to listen to them separately
         // only here for testing purposes when enabling local notifications
-//        RequiredState(key: "m.room.member", value: "$ME"),
-//        RequiredState(key: "m.room.power_levels", value: ""),
-//        RequiredState(key: "m.room.name", value: "")
+        RequiredState(key: "m.room.member", value: "$ME"),
+        RequiredState(key: "m.room.power_levels", value: ""),
+        RequiredState(key: "m.room.name", value: "")
     ]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
