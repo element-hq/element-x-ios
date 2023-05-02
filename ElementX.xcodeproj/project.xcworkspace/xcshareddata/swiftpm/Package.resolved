@@ -20,7 +20,7 @@
     {
       "identity" : "compound-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-ios.git",
+      "location" : "https://github.com/vector-im/compound-ios",
       "state" : {
         "revision" : "b4f34edce9003ba1fde31500312f317b728f4ee3"
       }
@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "3a1355ab4c6933e9f55d8a7addcefb13c6a5c26d",
-        "version" : "1.0.58-alpha"
+        "revision" : "15c314fcb20e3b009b573a50edc4736a73e63c96",
+        "version" : "1.0.59-alpha"
       }
     },
     {

@@ -21,5 +21,11 @@ protocol MediaLoaderProtocol {
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy
+}
+
+extension MediaLoaderProtocol {
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+        try await loadMediaFileForSource(source, body: nil)
+    }
 }

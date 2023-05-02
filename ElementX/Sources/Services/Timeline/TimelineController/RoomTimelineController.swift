@@ -106,29 +106,29 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         var source: MediaSourceProxy?
-        var title: String
+        var body: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.source
-            title = item.body
+            body = item.body
         case let item as VideoRoomTimelineItem:
             source = item.source
-            title = item.body
+            body = item.body
         case let item as FileRoomTimelineItem:
             source = item.source
-            title = item.body
+            body = item.body
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
             source = item.source
-            title = item.body
+            body = item.body
         default:
             return .none
         }
         
         guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source) {
+        switch await mediaProvider.loadFileFromSource(source, body: body) {
         case .success(let file):
-            return .displayMediaFile(file: file, title: title)
+            return .displayMediaFile(file: file, title: body)
         case .failure:
             return .none
         }

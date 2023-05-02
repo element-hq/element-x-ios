@@ -91,7 +91,7 @@ class MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
         throw ClientProxyError.failedLoadingMedia
     }
     
