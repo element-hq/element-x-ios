@@ -75,6 +75,11 @@ extension UserPreference {
     convenience init<R: RawRepresentable>(key: R, defaultValue: T, storageType: StorageType) where R.RawValue == String {
         self.init(key: key.rawValue, defaultValue: defaultValue, storageType: storageType)
     }
+
+    convenience init<R: RawRepresentable>(key: R, initialValue: T, storageType: StorageType) where R.RawValue == String {
+        self.init(key: key, defaultValue: initialValue, storageType: storageType)
+        wrappedValue = initialValue
+    }
     
     convenience init(key: String, storageType: StorageType) where T: ExpressibleByNilLiteral {
         self.init(key: key, defaultValue: nil, storageType: storageType)
