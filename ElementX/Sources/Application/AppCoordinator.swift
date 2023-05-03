@@ -84,7 +84,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             wipeUserData(includingSettings: true)
         }
         ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
-                
+
         setupStateMachine()
 
         observeApplicationState()

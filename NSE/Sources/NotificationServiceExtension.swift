@@ -19,6 +19,7 @@ import MatrixRustSDK
 import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
+    private let settings = NSESettings()
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     var handler: ((UNNotificationContent) -> Void)?
@@ -29,8 +30,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
               let roomId = request.roomId,
               let eventId = request.eventId,
-              let notificationID = request.pusherNotificationClientIdentifier,
-              let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == notificationID }) else {
+              let clientID = request.pusherNotificationClientIdentifier,
+              let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
             // We cannot process this notification, it might be due to one of these:
             // - Device rebooted and locked
             // - Not a Matrix notification
@@ -69,7 +70,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         let service = NotificationServiceProxy(basePath: URL.sessionsBaseDirectory.path,
-                                               userId: credentials.userID)
+                                               userID: credentials.userID)
 
         guard let itemProxy = try await service.notificationItem(roomId: roomId,
                                                                  eventId: eventId) else {
@@ -81,9 +82,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         // First process without a media proxy.
         // After this some properties of the notification should be set, like title, subtitle, sound etc.
-        guard let firstContent = try await itemProxy.process(receiverId: credentials.userID,
-                                                             roomId: roomId,
-                                                             mediaProvider: nil) else {
+        guard let firstContent = try await itemProxy.process(mediaProvider: nil) else {
             MXLog.error("\(tag) not even first content")
 
             // Notification should be discarded
@@ -103,9 +102,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) process with media")
 
         // There is some media to load, process it again
-        if let latestContent = try await itemProxy.process(receiverId: credentials.userID,
-                                                           roomId: roomId,
-                                                           mediaProvider: createMediaProvider(with: credentials)) {
+        if let latestContent = try await itemProxy.process(mediaProvider: createMediaProvider(with: credentials)) {
             // Processing finished, hopefully with some media
             modifiedContent = latestContent
             return notify()
@@ -137,6 +134,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             MXLog.info("\(tag) notify: no modified content")
             return
         }
+
+        guard let identifier = modifiedContent.notificationID,
+              !settings.servedNotificationIdentifiers.contains(identifier) else {
+            MXLog.info("\(tag) notify: notification already served")
+            discard()
+            return
+        }
+
+        settings.servedNotificationIdentifiers.insert(identifier)
         handler?(modifiedContent)
         handler = nil
         self.modifiedContent = nil

@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 /// Store Element specific app settings.
-final class AppSettings: ObservableObject {
+final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
@@ -69,6 +69,8 @@ final class AppSettings: ObservableObject {
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
+
+    let lastLaunchDate = Date()
     
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
@@ -146,11 +148,15 @@ final class AppSettings: ObservableObject {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
+
+    /// A set of all the notification identifiers that have been served so far, it's reset every time the app is launched
+    @UserPreference(key: SharedUserDefaultsKeys.servedNotificationIdentifiers, initialValue: [], storageType: .userDefaults(store))
+    var servedNotificationIdentifiers: Set<String>
         
     // MARK: - Other
     
     let permalinkBaseURL = URL(staticString: "https://matrix.to")
-    
+
     // MARK: - Feature Flags
     
     // MARK: Start Chat

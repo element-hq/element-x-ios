@@ -22,6 +22,18 @@ extension UNNotificationContent {
     @objc var receiverID: String? {
         userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
     }
+
+    @objc var notificationID: String? {
+        userInfo[NotificationConstants.UserInfoKey.notificationIdentifier] as? String
+    }
+
+    @objc var roomID: String? {
+        userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
+    }
+
+    @objc var eventID: String? {
+        userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
+    }
 }
 
 extension UNMutableNotificationContent {
@@ -33,7 +45,34 @@ extension UNMutableNotificationContent {
             userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] = newValue
         }
     }
-    
+
+    override var roomID: String? {
+        get {
+            userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.roomIdentifier] = newValue
+        }
+    }
+
+    override var eventID: String? {
+        get {
+            userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.eventIdentifier] = newValue
+        }
+    }
+
+    override var notificationID: String? {
+        get {
+            userInfo[NotificationConstants.UserInfoKey.notificationIdentifier] as? String
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.notificationIdentifier] = newValue
+        }
+    }
+
     func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
                             mediaSource: MediaSourceProxy) async -> UNMutableNotificationContent {
         guard let mediaProvider else {
