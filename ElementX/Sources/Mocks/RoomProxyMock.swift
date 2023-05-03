@@ -32,6 +32,7 @@ struct RoomProxyMockConfiguration {
     var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxyProtocol]?
+    var inviter: RoomMemberProxyMock?
 }
 
 extension RoomProxyMock {
@@ -57,7 +58,12 @@ extension RoomProxyMock {
         } else {
             membersPublisher = Just([]).eraseToAnyPublisher()
         }
+        
+        if let inviter = configuration.inviter {
+            inviterClosure = { inviter }
+        }
 
         updateMembersClosure = { }
+        acceptInvitationClosure = { .success(()) }
     }
 }

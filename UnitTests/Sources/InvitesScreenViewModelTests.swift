@@ -18,7 +18,7 @@
 import XCTest
 
 @MainActor
-class InvitesViewModelTests: XCTestCase {
+class InvitesScreenViewModelTests: XCTestCase {
     var viewModel: InvitesScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!

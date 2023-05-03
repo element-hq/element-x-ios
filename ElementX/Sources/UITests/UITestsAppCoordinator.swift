@@ -368,9 +368,9 @@ class MockScreen: Identifiable {
             ServiceLocator.shared.settings.seenInvites = Set([RoomSummary].mockInvites.dropFirst(1).compactMap(\.id))
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            clientProxy.roomInviter = RoomMemberProxyMock.mockCharlie
+            clientProxy.roomForIdentifierMocks["someAwesomeRoomId1"] = .init(with: .init(displayName: "First room", inviter: .mockCharlie))
+            clientProxy.roomForIdentifierMocks["someAwesomeRoomId2"] = .init(with: .init(displayName: "Second room", inviter: .mockCharlie))
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-            clientProxy.visibleRoomsSummaryProvider = summaryProvider
             clientProxy.invitesSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
@@ -380,9 +380,9 @@ class MockScreen: Identifiable {
             ServiceLocator.shared.settings.seenInvites = Set([RoomSummary].mockInvites.compactMap(\.id))
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            clientProxy.roomInviter = RoomMemberProxyMock.mockCharlie
+            clientProxy.roomForIdentifierMocks["someAwesomeRoomId1"] = .init(with: .init(displayName: "First room", inviter: .mockCharlie))
+            clientProxy.roomForIdentifierMocks["someAwesomeRoomId2"] = .init(with: .init(displayName: "Second room", inviter: .mockCharlie))
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-            clientProxy.visibleRoomsSummaryProvider = summaryProvider
             clientProxy.invitesSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
