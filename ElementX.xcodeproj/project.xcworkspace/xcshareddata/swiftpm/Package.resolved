@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS",
       "state" : {
-        "revision" : "3d36a58a2b736f7bc499453e996a704929b25080",
-        "version" : "1.6.0"
+        "revision" : "71cde449f13d453227e687458144bde372d30fc7",
+        "version" : "1.6.2"
       }
     },
     {
@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "c81430db734d23d851d19d4de34bf2590397d5f1",
-        "version" : "1.0.57-alpha"
+        "revision" : "3a1355ab4c6933e9f55d8a7addcefb13c6a5c26d",
+        "version" : "1.0.58-alpha"
       }
     },
     {
@@ -120,8 +120,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "5962d97f30dbe85f8591ee5ba64f671c6bf1770a",
-        "version" : "2.0.1"
+        "revision" : "845cce377a4e039a9bac1aaa09f55450dcb638b9",
+        "version" : "2.0.2"
       }
     },
     {
@@ -129,8 +129,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "3fc79ea6ebcfd726e48bea1d98f89bc3a32d5cf2",
-        "version" : "8.3.2"
+        "revision" : "e6dcfba32f2861438b82c7ad34e058b23c83daf6",
+        "version" : "8.6.0"
       }
     },
     {
@@ -181,7 +181,7 @@
     {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
         "revision" : "cef5b3f6f11781dd4591bdd1dd0a3d22bd609334",
         "version" : "1.11.0"
@@ -228,8 +228,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "ab8c9f45843694dd16be4297e6d44c0634fd9913",
-        "version" : "0.8.4"
+        "revision" : "4af50b38daf0037cfbab15514a241224c3f62f98",
+        "version" : "0.8.5"
       }
     }
   ],

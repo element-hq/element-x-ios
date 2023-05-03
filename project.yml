@@ -42,7 +42,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.57-alpha
+    exactVersion: 1.0.58-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
@@ -91,7 +91,7 @@ packages:
     minorVersion: 1.3.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 8.3.0
+    minorVersion: 8.6.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.11.0
