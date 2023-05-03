@@ -275,15 +275,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
             
             detailNavigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self, roomIdentifier] in
-                guard let self else { return }
-
-                switch self.stateMachine.state {
-                case let .roomList(selectedRoomId) where selectedRoomId == roomIdentifier:
-                    self.stateMachine.processEvent(.deselectRoom)
-                    self.detailNavigationStackCoordinator.setRootCoordinator(nil)
-                default:
-                    break
-                }
+                self?.deselectRoomIfNeeded(roomIdentifier: roomIdentifier)
             }
             
             if navigationSplitCoordinator.detailCoordinator == nil {
