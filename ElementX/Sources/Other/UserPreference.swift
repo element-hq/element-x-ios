@@ -76,6 +76,12 @@ extension UserPreference {
         self.init(key: key.rawValue, defaultValue: defaultValue, storageType: storageType)
     }
 
+    /// Convenience initializer that also immediatelly stores the provided initialValue.
+    ///
+    /// - Parameters:
+    ///   - key: the raw representable key used to store the value, needs conform also to String
+    ///   - initialValue: the initial value that will be stored, the initialValue is also used as defaultValue
+    ///   - storageType: the storage type where the wrappedValue will be stored.
     convenience init<R: RawRepresentable>(key: R, initialValue: T, storageType: StorageType) where R.RawValue == String {
         self.init(key: key, defaultValue: initialValue, storageType: storageType)
         wrappedValue = initialValue

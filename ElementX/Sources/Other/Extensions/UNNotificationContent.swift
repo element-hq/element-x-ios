@@ -23,7 +23,7 @@ extension UNNotificationContent {
         userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
     }
 
-    @objc var notificationIdentifier: String? {
+    @objc var notificationID: String? {
         userInfo[NotificationConstants.UserInfoKey.notificationIdentifier] as? String
     }
 
@@ -64,7 +64,7 @@ extension UNMutableNotificationContent {
         }
     }
 
-    override var notificationIdentifier: String? {
+    override var notificationID: String? {
         get {
             userInfo[NotificationConstants.UserInfoKey.notificationIdentifier] as? String
         }

@@ -69,6 +69,8 @@ final class AppSettings {
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
+
+    let lastLaunchDate = Date()
     
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
@@ -155,8 +157,6 @@ final class AppSettings {
     
     let permalinkBaseURL = URL(staticString: "https://matrix.to")
 
-    let lastAppLaunchDate = Date()
-    
     // MARK: - Feature Flags
     
     // MARK: Start Chat

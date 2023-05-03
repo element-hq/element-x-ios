@@ -43,7 +43,7 @@ protocol NotificationItemProxyProtocol {
 }
 
 extension NotificationItemProxyProtocol {
-    var identifier: String? {
+    var id: String? {
         let identifiers = receiverID + roomID + event.eventID
         guard let data = identifiers.data(using: .utf8) else {
             return nil
@@ -210,7 +210,7 @@ extension NotificationItemProxyProtocol {
         notification.receiverID = receiverID
         notification.roomID = roomID
         notification.eventID = event.eventID
-        notification.notificationIdentifier = identifier
+        notification.notificationID = id
         notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
         notification.body = L10n.notification
         notification.threadIdentifier = roomID
@@ -224,7 +224,7 @@ extension NotificationItemProxyProtocol {
         notification.receiverID = receiverID
         notification.roomID = roomID
         notification.eventID = event.eventID
-        notification.notificationIdentifier = identifier
+        notification.notificationID = id
         notification.title = senderDisplayName ?? roomDisplayName
         if notification.title != roomDisplayName {
             notification.subtitle = roomDisplayName
