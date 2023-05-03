@@ -21,6 +21,7 @@ enum FormRowAccessory: View {
     case navigationLink
     case progressView
     case selection(isSelected: Bool)
+    case singleSelection(isSelected: Bool)
     
     var body: some View {
         switch self {
@@ -34,6 +35,10 @@ enum FormRowAccessory: View {
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
                 .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
+        case .singleSelection(let isSelected):
+            Image(systemName: "checkmark")
+                .font(.compound.bodyLG)
+                .foregroundColor(isSelected ? .element.primaryContent : .clear)
         }
     }
 }
@@ -43,13 +48,15 @@ enum FormRowAccessory: View {
 /// The primitive style is needed to set the list row insets to `0`. The inner style is then needed
 /// to change the background colour depending on whether the button is currently pressed or not.
 struct FormButtonStyle: PrimitiveButtonStyle {
+    var iconAlignment: VerticalAlignment = .firstTextBaseline
+    
     /// An accessory to be added on the trailing side of the row.
     var accessory: FormRowAccessory?
     
     func makeBody(configuration: Configuration) -> some View {
         Button(action: configuration.trigger) {
             configuration.label
-                .labelStyle(FormRowLabelStyle(role: configuration.role))
+                .labelStyle(FormRowLabelStyle(alignment: iconAlignment, role: configuration.role))
                 .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
         .buttonStyle(Style(accessory: accessory))
@@ -133,6 +140,14 @@ struct FormButtonStyles_Previews: PreviewProvider {
                     Text("Selection")
                 }
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
+                Button { } label: {
+                    VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
+                        Label("Hello world", systemImage: "globe")
+                        Text("subtitle\nsubtitle")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: true)))
             }
             .formSectionStyle()
 

@@ -34,38 +34,41 @@ struct CreateRoomScreen: View {
     
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
-        VStack(alignment: .center, spacing: 24) {
-            // TODO: check spacing
+        Form {
             roomSection
-            Form {
-                topicSection
-            }
+            topicSection
             selectedUsersSection
+            // TODO: Spacer not working properly
             Spacer()
-            Form {
-                securitySection
-            }
+                .listRowBackground(Color.clear)
+            securitySection
         }
     }
     
+    @ScaledMetric private var roomIconSide: CGFloat = 64
     private var roomSection: some View {
-        // TODO: Style better
-        HStack(alignment: .top, spacing: 0) {
-            Image(systemName: "camera")
-                .frame(width: 70, height: 70)
-                .clipShape(Circle())
-            Form {
-                Section {
+        Section {
+            HStack(alignment: .center, spacing: 16) {
+                Image(systemName: "camera")
+                    .foregroundColor(.element.secondaryContent)
+                    .frame(width: roomIconSide, height: roomIconSide)
+                    .background(Color.element.quinaryContent)
+                    .clipShape(Circle())
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+                        .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
                               prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                               axis: .horizontal)
-                } header: {
-                    Text(L10n.screenCreateRoomRoomNameLabel)
+                        .padding(FormRow.insets)
+                        .background(Color.element.formRowBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
-                .formSectionStyle()
             }
+            .listRowBackground(Color.clear)
         }
+        .formSectionStyle()
     }
     
     private var topicSection: some View {
@@ -83,33 +86,46 @@ struct CreateRoomScreen: View {
     
     @ScaledMetric private var cellWidth: CGFloat = 64
     private var selectedUsersSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 28) {
-                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
-                        deselect(user)
+        Section {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 28) {
+                    ForEach(context.viewState.selectedUsers, id: \.userID) { user in
+                        InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
+                            deselect(user)
+                        }
+                        .frame(width: cellWidth)
                     }
-                    .frame(width: cellWidth)
                 }
             }
-            .padding(.horizontal, 18)
+            .listRowBackground(Color.clear)
         }
     }
     
     private var securitySection: some View {
         Section {
-            // TODO: style this items with descrition text and proper selection image
             Button(action: selectPrivate) {
-                Label(L10n.screenCreateRoomPrivateOptionTitle, systemImage: "lock.shield")
+                VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
+                    Label(L10n.screenCreateRoomPrivateOptionTitle, systemImage: "lock.shield")
+                    Text(L10n.screenCreateRoomPrivateOptionDescription)
+                        .font(.compound.bodyMD)
+                        // TODO: padding not working properly
+                        .padding(.horizontal, 20)
+                        .foregroundColor(.element.secondaryContent)
+                }
             }
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.isRoomPrivate)))
+            .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: context.isRoomPrivate)))
             Button(action: selectPublic) {
-                Label(L10n.screenCreateRoomPublicOptionTitle, systemImage: "exclamationmark.shield")
+                VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
+                    Label(L10n.screenCreateRoomPublicOptionTitle, systemImage: "exclamationmark.shield")
+                    Text(L10n.screenCreateRoomPublicOptionDescription)
+                        .font(.compound.bodyMD)
+                        .padding(.horizontal)
+                        .foregroundColor(.element.secondaryContent)
+                }
             }
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: !context.isRoomPrivate)))
+            .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: !context.isRoomPrivate)))
         } header: {
-            // TODO: localize
-            Text("SECURITY")
+            Text(L10n.commonSecurity.uppercased())
         }
         .formSectionStyle()
     }
@@ -140,7 +156,9 @@ struct CreateRoom_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        return CreateRoomViewModel(userSession: userSession, selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
+        let parameters = CreateRoomVolatileParameters()
+        parameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
+        return CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
     }()
     
     static var previews: some View {
