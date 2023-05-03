@@ -26,6 +26,7 @@ enum RoomScreenViewModelAction {
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
+    case displayMediaUploadPreviewScreen(url: URL)
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -62,6 +63,8 @@ enum RoomScreenViewAction {
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
+    
+    case handlePasteOrDrop(provider: NSItemProvider)
 }
 
 struct RoomScreenViewState: BindableState {

@@ -138,7 +138,6 @@
 "notification_unread_notified_messages_in_room" = "%1$@ in %2$@";
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ in %2$@ and %3$@";
 "preference_rageshake" = "Rageshake to report bug";
-"rageshake_detection_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "rageshake_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
 "report_content_hint" = "Reason for reporting this content";
@@ -177,7 +176,6 @@
 "screen_bug_report_include_logs" = "Send logs to help";
 "screen_bug_report_include_screenshot" = "Send screenshot";
 "screen_bug_report_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
-"screen_bug_report_rash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_no_sliding_sync_message" = "This server currently doesn’t support sliding sync.";
 "screen_change_server_form_header" = "Homeserver URL";
@@ -193,7 +191,6 @@
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_room_name_placeholder" = "e.g. Product Sprint";
-"screen_create_room_title" = "Create a room";
 "screen_create_room_topic_label" = "Topic (optional)";
 "screen_create_room_topic_placeholder" = "What is this room about?";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
@@ -216,7 +213,6 @@
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
-"screen_room_details_invite_people_title" = "Invite people";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
@@ -241,10 +237,8 @@
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to sign out?";
-"screen_signout_confirmation_dialog_submit" = "Sign out";
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
-"screen_signout_preference_item" = "Sign out";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
 "screen_start_chat_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
@@ -312,11 +306,14 @@
 "dialog_title_error" = "Error";
 "dialog_title_success" = "Success";
 "notification_room_action_quick_reply" = "Quick reply";
+"rageshake_detection_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "here";
+"screen_bug_report_rash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "screen_change_server_submit" = "Continue";
 "screen_change_server_title" = "Select your server";
+"screen_create_room_title" = "Create a room";
 "screen_dm_details_block_alert_action" = "Block";
 "screen_dm_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
 "screen_dm_details_block_user" = "Block user";
@@ -328,9 +325,13 @@
 "screen_login_submit" = "Continue";
 "screen_login_username_hint" = "Username";
 "screen_report_content_block_user" = "Block user";
+"screen_room_details_invite_people_title" = "Invite people";
 "screen_room_details_leave_room_title" = "Leave room";
 "screen_room_details_people_title" = "People";
 "screen_room_details_security_title" = "Security";
 "screen_room_details_topic_title" = "Topic";
+"screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_session_verification_cancelled_title" = "Verification cancelled";
 "screen_session_verification_positive_button_ready" = "Start";
+"screen_signout_confirmation_dialog_submit" = "Sign out";
+"screen_signout_preference_item" = "Sign out";

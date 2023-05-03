@@ -19,6 +19,7 @@ import SwiftUI
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var showReactionsMenuForItemId = ""
+    @State private var dragOver = false
     
     var body: some View {
         timeline
@@ -48,6 +49,15 @@ struct RoomScreen: View {
                 guard !Task.isCancelled else { return }
                 context.send(viewAction: .markRoomAsRead)
             }
+            .onDrop(of: ["public.item"], isTargeted: $dragOver) { providers -> Bool in
+                guard let provider = providers.first,
+                      provider.isSupportedForPasteOrDrop else {
+                    return false
+                }
+                
+                context.send(viewAction: .handlePasteOrDrop(provider: provider))
+                return true
+            }
     }
     
     private var timeline: some View {
@@ -64,6 +74,8 @@ struct RoomScreen: View {
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         type: context.viewState.composerMode) {
             sendMessage()
+        } pasteAction: { provider in
+            context.send(viewAction: .handlePasteOrDrop(provider: provider))
         } replyCancellationAction: {
             context.send(viewAction: .cancelReply)
         } editCancellationAction: {

@@ -23,6 +23,7 @@ struct MessageComposer: View {
     let type: RoomScreenComposerMode
     
     let sendAction: () -> Void
+    var pasteAction: ((NSItemProvider) -> Void)?
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
     
@@ -39,7 +40,8 @@ struct MessageComposer: View {
                                          focused: $focused,
                                          isMultiline: $isMultiline,
                                          maxHeight: 300,
-                                         onEnterKeyHandler: sendAction)
+                                         enterKeyHandler: sendAction,
+                                         pasteHandler: pasteAction)
                     .tint(.element.brand)
                     .padding(.vertical, 10)
                 

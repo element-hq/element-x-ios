@@ -68,6 +68,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayMediaPickerWithSource(.photoLibrary)
             case .displayDocumentPicker:
                 self.displayMediaPickerWithSource(.documents)
+            case .displayMediaUploadPreviewScreen(let url):
+                self.displayMediaUploadPreviewScreenForFile(at: url)
             }
         }
     }

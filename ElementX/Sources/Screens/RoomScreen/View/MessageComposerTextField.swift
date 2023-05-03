@@ -16,7 +16,8 @@
 
 import SwiftUI
 
-typealias OnEnterKeyHandler = () -> Void
+typealias EnterKeyHandler = () -> Void
+typealias PasteHandler = ((NSItemProvider) -> Void)?
 
 struct MessageComposerTextField: View {
     let placeholder: String
@@ -25,7 +26,8 @@ struct MessageComposerTextField: View {
     @Binding var isMultiline: Bool
     
     let maxHeight: CGFloat
-    let onEnterKeyHandler: OnEnterKeyHandler
+    let enterKeyHandler: EnterKeyHandler
+    var pasteHandler: PasteHandler = nil
     
     private var showingPlaceholder: Bool {
         text.isEmpty
@@ -40,7 +42,8 @@ struct MessageComposerTextField: View {
                           focused: $focused,
                           isMultiline: $isMultiline,
                           maxHeight: maxHeight,
-                          onEnterKeyHandler: onEnterKeyHandler)
+                          enterKeyHandler: enterKeyHandler,
+                          pasteHandler: pasteHandler)
             .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
     }
@@ -64,15 +67,16 @@ private struct UITextViewWrapper: UIViewRepresentable {
     
     let maxHeight: CGFloat
 
-    let onEnterKeyHandler: OnEnterKeyHandler
+    let enterKeyHandler: EnterKeyHandler
+    let pasteHandler: PasteHandler
     
     private let font = UIFont.preferredFont(forTextStyle: .body)
     
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
-        let textView = TextViewWithKeyDetection()
+        let textView = ElementTextView()
         textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
-        textView.keyDelegate = context.coordinator
+        textView.elementDelegate = context.coordinator
         textView.textColor = .element.primaryContent
         textView.isEditable = true
         textView.font = font
@@ -126,25 +130,29 @@ private struct UITextViewWrapper: UIViewRepresentable {
         Coordinator(text: $text,
                     focused: $focused,
                     maxHeight: maxHeight,
-                    onEnterKeyHandler: onEnterKeyHandler)
+                    enterKeyHandler: enterKeyHandler,
+                    pasteHandler: pasteHandler)
     }
     
-    final class Coordinator: NSObject, UITextViewDelegate, TextViewWithKeyDetectionDelegate {
+    final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
         private var text: Binding<String>
         private var focused: Binding<Bool>
         
         private let maxHeight: CGFloat
         
-        private let onEnterKeyHandler: OnEnterKeyHandler
+        private let enterKeyHandler: EnterKeyHandler
+        private let pasteHandler: PasteHandler
         
         init(text: Binding<String>,
              focused: Binding<Bool>,
              maxHeight: CGFloat,
-             onEnterKeyHandler: @escaping OnEnterKeyHandler) {
+             enterKeyHandler: @escaping EnterKeyHandler,
+             pasteHandler: PasteHandler) {
             self.text = text
             self.focused = focused
             self.maxHeight = maxHeight
-            self.onEnterKeyHandler = onEnterKeyHandler
+            self.enterKeyHandler = enterKeyHandler
+            self.pasteHandler = pasteHandler
         }
         
         func textViewDidChange(_ textView: UITextView) {
@@ -159,23 +167,28 @@ private struct UITextViewWrapper: UIViewRepresentable {
             focused.wrappedValue = false
         }
         
-        func enterKeyWasPressed(textView: UITextView) {
-            onEnterKeyHandler()
+        func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
+            enterKeyHandler()
         }
         
-        func shiftEnterKeyPressed(textView: UITextView) {
+        func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView) {
             textView.insertText("\n")
+        }
+        
+        func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider) {
+            pasteHandler?(provider)
         }
     }
 }
 
-private protocol TextViewWithKeyDetectionDelegate: AnyObject {
-    func enterKeyWasPressed(textView: UITextView)
-    func shiftEnterKeyPressed(textView: UITextView)
+private protocol ElementTextViewDelegate: AnyObject {
+    func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView)
+    func textViewDidReceiveEnterKeyPress(_ textView: UITextView)
+    func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider)
 }
 
-private class TextViewWithKeyDetection: UITextView {
-    weak var keyDelegate: TextViewWithKeyDetectionDelegate?
+private class ElementTextView: UITextView {
+    weak var elementDelegate: ElementTextViewDelegate?
     
     var isMultiline: Binding<Bool>?
     
@@ -185,11 +198,11 @@ private class TextViewWithKeyDetection: UITextView {
     }
     
     @objc func shiftEnterKeyPressed(sender: UIKeyCommand) {
-        keyDelegate?.shiftEnterKeyPressed(textView: self)
+        elementDelegate?.textViewDidReceiveShiftEnterKeyPress(self)
     }
     
     @objc func enterKeyPressed(sender: UIKeyCommand) {
-        keyDelegate?.enterKeyWasPressed(textView: self)
+        elementDelegate?.textViewDidReceiveEnterKeyPress(self)
     }
     
     override func layoutSubviews() {
@@ -207,6 +220,31 @@ private class TextViewWithKeyDetection: UITextView {
                 isMultiline.wrappedValue = false
             }
         }
+    }
+    
+    // Pasting support
+    
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if super.canPerformAction(action, withSender: sender) {
+            return true
+        }
+        
+        guard action == #selector(paste(_:)) else {
+            return false
+        }
+        
+        return UIPasteboard.general.itemProviders.first?.isSupportedForPasteOrDrop ?? false
+    }
+    
+    override func paste(_ sender: Any?) {
+        super.paste(sender)
+        
+        guard let provider = UIPasteboard.general.itemProviders.first,
+              provider.isSupportedForPasteOrDrop else {
+            return
+        }
+        
+        elementDelegate?.textView(self, didReceivePasteWith: provider)
     }
 }
 
@@ -236,7 +274,7 @@ struct MessageComposerTextField_Previews: PreviewProvider {
                                      focused: $focused,
                                      isMultiline: $isMultiline,
                                      maxHeight: 300,
-                                     onEnterKeyHandler: { })
+                                     enterKeyHandler: { })
         }
     }
 }
