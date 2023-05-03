@@ -409,14 +409,16 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator, userSession: userSession, userDiscoveryService: userDiscoveryMock))
+            let coordinator = InviteUsersScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator, userSession: userSession, userDiscoveryService: userDiscoveryMock, createRoomParameters: nil))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
+            let createRoomParameters = CreateRoomVolatileParameters()
+            createRoomParameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: createRoomParameters)
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

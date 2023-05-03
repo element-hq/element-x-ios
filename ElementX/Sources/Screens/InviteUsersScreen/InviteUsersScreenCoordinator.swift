@@ -21,6 +21,7 @@ struct InviteUsersScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator?
     let userSession: UserSessionProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
+    let createRoomParameters: CreateRoomVolatileParameters?
 }
 
 enum InviteUsersScreenCoordinatorAction {
@@ -62,8 +63,19 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     }
     
     private func openCreateRoomScreenWith(_ users: [UserProfile]) {
-        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession, selectedUsers: users)
-        let createRoomCoordinator = CreateRoomCoordinator(parameters: paramenters)
-        parameters.navigationStackCoordinator?.push(createRoomCoordinator)
+        guard let createRoomParameters = parameters.createRoomParameters else { return }
+        createRoomParameters.selectedUsers = users
+        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession, createRoomParameters: createRoomParameters)
+        let coordinator = CreateRoomCoordinator(parameters: paramenters)
+        coordinator.actions.sink { [weak self] result in
+            switch result {
+            case .deselectUser(let user):
+                self?.viewModel.context.send(viewAction: .deselectUser(user))
+            default:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
 }
