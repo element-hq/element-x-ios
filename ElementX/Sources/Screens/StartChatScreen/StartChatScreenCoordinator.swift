@@ -35,6 +35,9 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private let actionsSubject: PassthroughSubject<StartChatScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
+    // this is needed to persist some data in this flow and then destroy them when the flow is eneded
+    private var createRoomParameters = CreateRoomVolatileParameters()
+    
     var actions: AnyPublisher<StartChatScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -70,7 +73,11 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator, userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
+        createRoomParameters = .init()
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                      userSession: parameters.userSession,
+                                                                      userDiscoveryService: parameters.userDiscoveryService,
+                                                                      createRoomParameters: createRoomParameters)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] result in
             switch result {
@@ -81,4 +88,11 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         .store(in: &cancellables)
         parameters.navigationStackCoordinator?.push(coordinator)
     }
+}
+
+class CreateRoomVolatileParameters {
+    var name = ""
+    var topic = ""
+    var selectedUsers: [UserProfile] = []
+    var isRoomPrivate = true
 }

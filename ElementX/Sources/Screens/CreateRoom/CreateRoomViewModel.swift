@@ -21,13 +21,17 @@ typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, Cre
 
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
-    
+    private let createRoomParameters: CreateRoomVolatileParameters
     var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userSession: UserSessionProtocol, selectedUsers: [UserProfile]) {
-        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers), imageProvider: userSession.mediaProvider)
+    init(userSession: UserSessionProtocol, createRoomParameters: CreateRoomVolatileParameters) {
+        let bindings = CreateRoomViewStateBindings(roomName: createRoomParameters.name, roomTopic: createRoomParameters.topic, isRoomPrivate: createRoomParameters.isRoomPrivate)
+        self.createRoomParameters = createRoomParameters
+        super.init(initialViewState: CreateRoomViewState(selectedUsers: createRoomParameters.selectedUsers, bindings: bindings), imageProvider: userSession.mediaProvider)
+        
+        setupBindings()
     }
     
     // MARK: - Public
@@ -38,10 +42,24 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             actionsSubject.send(.createRoom)
         case .deselectUser(let user):
             state.selectedUsers.removeAll(where: { $0.userID == user.userID })
+            actionsSubject.send(.deselectUser(user))
         case .selectPrivateRoom:
             state.bindings.isRoomPrivate = true
         case .selectPublicRoom:
             state.bindings.isRoomPrivate = false
         }
+    }
+    
+    // MARK: - Private
+
+    private func setupBindings() {
+        context.$viewState
+            .map(\.bindings)
+            .sink { [weak self] bindings in
+                self?.createRoomParameters.name = bindings.roomName
+                self?.createRoomParameters.topic = bindings.roomTopic
+                self?.createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
+            }
+            .store(in: &cancellables)
     }
 }

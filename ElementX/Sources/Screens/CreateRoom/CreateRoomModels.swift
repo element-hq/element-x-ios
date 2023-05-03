@@ -18,11 +18,12 @@ import Foundation
 
 enum CreateRoomViewModelAction {
     case createRoom
+    case deselectUser(UserProfile)
 }
 
 struct CreateRoomViewState: BindableState {
     var selectedUsers: [UserProfile]
-    var bindings = CreateRoomViewStateBindings()
+    var bindings: CreateRoomViewStateBindings
     
     var canCreateRoom: Bool {
         !bindings.roomName.isEmpty
@@ -30,9 +31,9 @@ struct CreateRoomViewState: BindableState {
 }
 
 struct CreateRoomViewStateBindings {
-    var roomName = ""
-    var roomTopic = ""
-    var isRoomPrivate = true
+    var roomName: String
+    var roomTopic: String
+    var isRoomPrivate: Bool
 }
 
 enum CreateRoomViewAction {

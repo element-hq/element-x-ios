@@ -19,11 +19,12 @@ import SwiftUI
 
 struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let selectedUsers: [UserProfile]
+    let createRoomParameters: CreateRoomVolatileParameters
 }
 
 enum CreateRoomCoordinatorAction {
     case createRoom
+    case deselectUser(UserProfile)
 }
 
 final class CreateRoomCoordinator: CoordinatorProtocol {
@@ -38,15 +39,15 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateRoomCoordinatorParameters) {
         self.parameters = parameters
-        // TODO: Check if any stored data are present and restore them
-        viewModel = CreateRoomViewModel(userSession: parameters.userSession, selectedUsers: parameters.selectedUsers)
+        viewModel = CreateRoomViewModel(userSession: parameters.userSession, createRoomParameters: parameters.createRoomParameters)
     }
     
     func start() {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            // TODO: Store data for previous screen
+            case .deselectUser(let user):
+                self.actionsSubject.send(.deselectUser(user))
             case .createRoom:
                 self.actionsSubject.send(.createRoom)
             }
