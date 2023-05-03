@@ -72,6 +72,8 @@ class ClientProxy: ClientProxyProtocol {
     var invitesViewProxy: SlidingSyncViewProxy?
     var invitesSummaryProvider: RoomSummaryProviderProtocol?
 
+    var notificationsSlidingSyncView: SlidingSyncList?
+
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
     var avatarURLPublisher: AnyPublisher<URL?, Never> {
@@ -320,6 +322,7 @@ class ClientProxy: ClientProxyProtocol {
             buildAndConfigureVisibleRoomsSlidingSyncView()
             buildAndConfigureAllRoomsSlidingSyncView()
             buildAndConfigureInvitesSlidingSyncView()
+            buildAndConfigureNotificationSyncView()
             
             guard let visibleRoomsSlidingSyncView else {
                 MXLog.error("Visible rooms sliding sync view unavailable")
@@ -439,7 +442,28 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed building the invites sliding sync view with error: \(error)")
         }
     }
-    
+
+    private func buildAndConfigureNotificationSyncView() {
+        guard notificationsSlidingSyncView == nil else {
+            fatalError("This shouldn't be called more than once")
+        }
+
+        do {
+            let notificationsSlidingSyncView = try SlidingSyncListBuilder()
+                .noTimelineLimit()
+                .requiredState(requiredState: slidingSyncNotificationsRequiredState)
+                .filters(filters: slidingSyncNotificationsFilters)
+                .name(name: "Notifications")
+                .syncMode(mode: .growing)
+                .batchSize(batchSize: 100)
+                .build()
+
+            self.notificationsSlidingSyncView = notificationsSlidingSyncView
+        } catch {
+            MXLog.error("Failed building the notification sliding sync view with error: \(error)")
+        }
+    }
+
     private func buildRoomSummaryProviders() {
         guard visibleRoomsSummaryProvider == nil, allRoomsSummaryProvider == nil, invitesSummaryProvider == nil else {
             fatalError("This shouldn't be called more than once")
@@ -460,17 +484,12 @@ class ClientProxy: ClientProxyProtocol {
                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
     }
     
-    private lazy var slidingSyncRequiredState = [
-        RequiredState(key: "m.room.avatar", value: ""),
-        RequiredState(key: "m.room.encryption", value: ""),
-        // These are required for notifications
-        // The idea is to create another SS
-        // to listen to them separately
-        // only here for testing purposes when enabling local notifications
-        RequiredState(key: "m.room.member", value: "$ME"),
-        RequiredState(key: "m.room.power_levels", value: ""),
-        RequiredState(key: "m.room.name", value: "")
-    ]
+    private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
+                                                 RequiredState(key: "m.room.encryption", value: "")]
+
+    private lazy var slidingSyncNotificationsRequiredState = [RequiredState(key: "m.room.member", value: "$ME"),
+                                                              RequiredState(key: "m.room.power_levels", value: ""),
+                                                              RequiredState(key: "m.room.name", value: "")]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.encryption", value: ""),
@@ -487,6 +506,17 @@ class ClientProxy: ClientProxyProtocol {
                                                                         roomNameLike: nil,
                                                                         tags: [],
                                                                         notTags: [])
+
+    private lazy var slidingSyncNotificationsFilters = SlidingSyncRequestListFilters(isDm: nil,
+                                                                                     spaces: [],
+                                                                                     isEncrypted: nil,
+                                                                                     isInvite: nil,
+                                                                                     isTombstoned: false,
+                                                                                     roomTypes: [],
+                                                                                     notRoomTypes: ["m.space"],
+                                                                                     roomNameLike: nil,
+                                                                                     tags: [],
+                                                                                     notTags: [])
     
     private lazy var slidingSyncInviteFilters = SlidingSyncRequestListFilters(isDm: nil,
                                                                               spaces: [],
@@ -519,6 +549,13 @@ class ClientProxy: ClientProxyProtocol {
             _ = slidingSync?.addList(list: invitesSlidingSyncView)
         } else {
             MXLog.error("Invites sliding sync view unavailable")
+        }
+
+        if let notificationsSlidingSyncView {
+            MXLog.info("Registering notifications view")
+            _ = slidingSync?.addList(list: notificationsSlidingSyncView)
+        } else {
+            MXLog.error("Notifications sliding sync view unavailable")
         }
         
         restartSync()
