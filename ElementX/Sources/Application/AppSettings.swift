@@ -29,7 +29,6 @@ final class AppSettings: ObservableObject {
         case shouldCollapseRoomStateEvents
         case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
-        case mediaUploadingFlowEnabled
         case invitesFlowEnabled
     }
     
@@ -160,12 +159,7 @@ final class AppSettings: ObservableObject {
     
     @UserPreference(key: UserDefaultsKeys.startChatUserSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var startChatUserSuggestionsEnabled
-    
-    // MARK: Media Uploading
-    
-    @UserPreference(key: UserDefaultsKeys.mediaUploadingFlowEnabled, defaultValue: true, storageType: .volatile)
-    var mediaUploadingFlowEnabled
-    
+        
     // MARK: Invites
     
     @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled, defaultValue: false, storageType: .userDefaults(store))

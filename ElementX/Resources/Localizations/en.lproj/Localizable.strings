@@ -211,6 +211,11 @@
 "screen_onboarding_welcome_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Be in your Element";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
+"screen_room_attachment_source_camera" = "Camera";
+"screen_room_attachment_source_camera_photo" = "Take photo";
+"screen_room_attachment_source_camera_video" = "Record a video";
+"screen_room_attachment_source_files" = "Attachment";
+"screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_share_room_title" = "Share room";

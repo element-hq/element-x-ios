@@ -26,10 +26,7 @@ struct RoomScreen: View {
             .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(spacing: 4.0) {
-                    if context.viewState.mediaUploadingFlowEnabled {
-                        sendAttachmentButton
-                    }
-                    
+                    RoomAttachmentPicker(context: context)
                     messageComposer
                 }
                 .padding()
@@ -122,30 +119,6 @@ struct RoomScreen: View {
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
-        }
-    }
-    
-    private var sendAttachmentButton: some View {
-        Menu {
-            Button {
-                context.send(viewAction: .displayDocumentPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadDocumentPicker, systemImage: "doc")
-            }
-            Button {
-                context.send(viewAction: .displayMediaPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadPhotoAndVideoPicker, systemImage: "photo")
-            }
-            Button {
-                context.send(viewAction: .displayCameraPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadCameraPicker, systemImage: "camera")
-            }
-        } label: {
-            Image(systemName: "plus.circle")
-                .font(.compound.headingLG)
-                .foregroundColor(.element.brand)
         }
     }
     

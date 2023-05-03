@@ -43,14 +43,7 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.startChatUserSuggestionsEnabled) { _ in
                     context.send(viewAction: .changedStartChatUserSuggestionsEnabled)
                 }
-                
-                Toggle(isOn: $context.mediaUploadFlowEnabled) {
-                    Text("Show Media Uploading flow")
-                }
-                .onChange(of: context.mediaUploadFlowEnabled) { _ in
-                    context.send(viewAction: .changedMediaUploadFlowEnabled)
-                }
-                
+                                
                 Toggle(isOn: $context.invitesFlowEnabled) {
                     Text("Show Invites flow")
                 }

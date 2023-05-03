@@ -39,7 +39,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatarURL: roomAvatarUrl,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
-                                                         mediaUploadingFlowEnabled: ServiceLocator.shared.settings.mediaUploadingFlowEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -74,11 +73,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
-        
-        ServiceLocator.shared.settings.$mediaUploadingFlowEnabled
-            .weakAssign(to: \.state.mediaUploadingFlowEnabled, on: self)
-            .store(in: &cancellables)
-        
+                
         buildTimelineViews()
     }
     

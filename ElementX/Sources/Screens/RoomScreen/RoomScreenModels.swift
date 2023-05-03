@@ -76,7 +76,6 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
-    var mediaUploadingFlowEnabled: Bool
     
     var bindings: RoomScreenViewStateBindings
     
