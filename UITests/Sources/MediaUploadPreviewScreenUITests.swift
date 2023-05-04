@@ -14,10 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
-@MainActor
-protocol MediaPickerPreviewScreenViewModelProtocol {
-    var callback: ((MediaPickerPreviewScreenViewModelAction) -> Void)? { get set }
-    var context: MediaPickerPreviewScreenViewModelType.Context { get }
-}
+class MediaUploadPreviewScreenUITests: XCTestCase { }

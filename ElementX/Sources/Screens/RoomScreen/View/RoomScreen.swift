@@ -19,16 +19,14 @@ import SwiftUI
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var showReactionsMenuForItemId = ""
+    @State private var dragOver = false
     
     var body: some View {
         timeline
             .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(spacing: 4.0) {
-                    if context.viewState.mediaUploadingFlowEnabled {
-                        sendAttachmentButton
-                    }
-                    
+                    RoomAttachmentPicker(context: context)
                     messageComposer
                 }
                 .padding()
@@ -48,6 +46,15 @@ struct RoomScreen: View {
                 guard !Task.isCancelled else { return }
                 context.send(viewAction: .markRoomAsRead)
             }
+            .onDrop(of: ["public.item"], isTargeted: $dragOver) { providers -> Bool in
+                guard let provider = providers.first,
+                      provider.isSupportedForPasteOrDrop else {
+                    return false
+                }
+                
+                context.send(viewAction: .handlePasteOrDrop(provider: provider))
+                return true
+            }
     }
     
     private var timeline: some View {
@@ -64,6 +71,8 @@ struct RoomScreen: View {
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         type: context.viewState.composerMode) {
             sendMessage()
+        } pasteAction: { provider in
+            context.send(viewAction: .handlePasteOrDrop(provider: provider))
         } replyCancellationAction: {
             context.send(viewAction: .cancelReply)
         } editCancellationAction: {
@@ -110,30 +119,6 @@ struct RoomScreen: View {
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
-        }
-    }
-    
-    private var sendAttachmentButton: some View {
-        Menu {
-            Button {
-                context.send(viewAction: .displayDocumentPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadDocumentPicker, systemImage: "doc")
-            }
-            Button {
-                context.send(viewAction: .displayMediaPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadPhotoAndVideoPicker, systemImage: "photo")
-            }
-            Button {
-                context.send(viewAction: .displayCameraPicker)
-            } label: {
-                Label(UntranslatedL10n.mediaUploadCameraPicker, systemImage: "camera")
-            }
-        } label: {
-            Image(systemName: "plus.circle")
-                .font(.compound.headingLG)
-                .foregroundColor(.element.brand)
         }
     }
     

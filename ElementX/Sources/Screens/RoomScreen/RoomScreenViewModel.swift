@@ -39,7 +39,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatarURL: roomAvatarUrl,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
-                                                         mediaUploadingFlowEnabled: ServiceLocator.shared.settings.mediaUploadingFlowEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -74,11 +73,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
-        
-        ServiceLocator.shared.settings.$mediaUploadingFlowEnabled
-            .weakAssign(to: \.state.mediaUploadingFlowEnabled, on: self)
-            .store(in: &cancellables)
-        
+                
         buildTimelineViews()
     }
     
@@ -122,6 +117,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             callback?(.displayMediaPicker)
         case .displayDocumentPicker:
             callback?(.displayDocumentPicker)
+        case .handlePasteOrDrop(let provider):
+            handlePasteOrDrop(provider)
         }
     }
     
@@ -332,6 +329,60 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         if action.switchToDefaultComposer {
             state.composerMode = .default
+        }
+    }
+    
+    // Pasting and dropping
+    
+    private func handlePasteOrDrop(_ provider: NSItemProvider) {
+        guard let type = provider.registeredContentTypes.first,
+              let preferredExtension = type.preferredFilenameExtension else {
+            MXLog.error("Invalid NSItemProvider: \(provider)")
+            displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
+            return
+        }
+        
+        let providerSuggestedName = provider.suggestedName
+        let providerDescription = provider.description
+        
+        _ = provider.loadDataRepresentation(for: type) { data, error in
+            Task { @MainActor in
+                let loadingIndicatorIdentifier = UUID().uuidString
+                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                defer {
+                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                }
+
+                if let error {
+                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
+                    MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
+                    return
+                }
+
+                guard let data else {
+                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
+                    MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
+                    return
+                }
+
+                do {
+                    let url = try await Task.detached {
+                        if let filename = providerSuggestedName {
+                            let hasExtension = !(filename as NSString).pathExtension.isEmpty
+                            let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
+                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
+                        } else {
+                            let filename = "\(UUID().uuidString).\(preferredExtension)"
+                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
+                        }
+                    }.value
+
+                    self.callback?(.displayMediaUploadPreviewScreen(url: url))
+                } catch {
+                    self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
+                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
+                }
+            }
         }
     }
 }

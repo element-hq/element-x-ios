@@ -29,7 +29,6 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
-        case mediaUploadingFlowEnabled
         case invitesFlowEnabled
     }
     
@@ -166,12 +165,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.startChatUserSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var startChatUserSuggestionsEnabled
-    
-    // MARK: Media Uploading
-    
-    @UserPreference(key: UserDefaultsKeys.mediaUploadingFlowEnabled, defaultValue: false, storageType: .volatile)
-    var mediaUploadingFlowEnabled
-    
+        
     // MARK: Invites
     
     @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled, defaultValue: false, storageType: .userDefaults(store))

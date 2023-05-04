@@ -16,17 +16,8 @@
 
 import Foundation
 
-enum MediaPickerPreviewScreenViewModelAction {
-    case send
-    case cancel
-}
-
-struct MediaPickerPreviewScreenViewState: BindableState {
-    let url: URL
-    let title: String?
-}
-
-enum MediaPickerPreviewScreenViewAction {
-    case send
-    case cancel
+@MainActor
+protocol MediaUploadPreviewScreenViewModelProtocol {
+    var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)? { get set }
+    var context: MediaUploadPreviewScreenViewModelType.Context { get }
 }

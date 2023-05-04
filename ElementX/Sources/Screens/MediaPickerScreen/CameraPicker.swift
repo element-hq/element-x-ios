@@ -70,7 +70,7 @@ struct CameraPicker: UIViewControllerRepresentable {
                     return
                 }
                 
-                let fileName = "\(Date.now.formatted(date: .abbreviated, time: .shortened)).jpg"
+                let fileName = "\(Date.now.formatted(.iso8601.dateSeparator(.omitted).timeSeparator(.omitted))).jpg"
                 
                 do {
                     let url = try FileManager.default.writeDataToTemporaryDirectory(data: jpegData, fileName: fileName)

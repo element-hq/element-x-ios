@@ -7,7 +7,7 @@ on:
 
 jobs:
   open-translations-pr:
-    runs-on: macos-12
+    runs-on: macos-13
     # Skip in forks
     if: github.repository == 'vector-im/element-x-ios'
     steps:

@@ -17,18 +17,17 @@
 import QuickLook
 import SwiftUI
 
-struct MediaPickerPreviewScreen: View {
-    @ObservedObject var context: MediaPickerPreviewScreenViewModel.Context
+struct MediaUploadPreviewScreen: View {
+    @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
     var body: some View {
-        NavigationStack {
-            PreviewView(context: context,
-                        fileURL: context.viewState.url,
-                        title: context.viewState.title)
-                .id(UUID())
-                .ignoresSafeArea(edges: .bottom)
-                .toolbar { toolbar }
-        }
+        PreviewView(context: context,
+                    fileURL: context.viewState.url,
+                    title: context.viewState.title)
+            .id(UUID())
+            .ignoresSafeArea(edges: .bottom)
+            .toolbar { toolbar }
+            .interactiveDismissDisabled()
     }
     
     @ToolbarContentBuilder
@@ -47,7 +46,7 @@ struct MediaPickerPreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let context: MediaPickerPreviewScreenViewModel.Context
+    let context: MediaUploadPreviewScreenViewModel.Context
     let fileURL: URL
     let title: String?
 
@@ -102,9 +101,13 @@ private class PreviewItem: NSObject, QLPreviewItem {
 
 // MARK: - Previews
 
-struct MediaPickerPreviewScreen_Previews: PreviewProvider {
-    static let viewModel = MediaPickerPreviewScreenViewModel(url: URL.picturesDirectory, title: nil)
+struct MediaUploadPreviewScreen_Previews: PreviewProvider {
+    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: MockUserIndicatorController(),
+                                                             roomProxy: RoomProxyMock(),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
+                                                             title: nil,
+                                                             url: URL.picturesDirectory)
     static var previews: some View {
-        MediaPickerPreviewScreen(context: viewModel.context)
+        MediaUploadPreviewScreen(context: viewModel.context)
     }
 }

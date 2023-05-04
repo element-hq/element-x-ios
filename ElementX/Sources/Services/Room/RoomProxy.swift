@@ -227,20 +227,67 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError> {
-        .failure(.failedSendingMedia)
-//        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
-//        defer {
-//            sendMessageBackgroundTask?.stop()
-//        }
-//
-//        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-//            do {
-//                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo)
-//                return .success(())
-//            } catch {
-//                return .failure(.failedEditingMessage)
-//            }
-//        }
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMedia)
+            }
+        }
+    }
+    
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMedia)
+            }
+        }
+    }
+    
+    func sendAudio(url: URL, audioInfo: AudioInfo) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMedia)
+            }
+        }
+    }
+    
+    func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.sendFile(url: url.path(), fileInfo: fileInfo)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMedia)
+            }
+        }
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {

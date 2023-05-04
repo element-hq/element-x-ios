@@ -68,6 +68,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayMediaPickerWithSource(.photoLibrary)
             case .displayDocumentPicker:
                 self.displayMediaPickerWithSource(.documents)
+            case .displayMediaUploadPreviewScreen(let url):
+                self.displayMediaUploadPreviewScreenForFile(at: url)
             }
         }
     }
@@ -84,44 +86,43 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(source: source) { [weak self] action in
+        let stackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
+        
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
             switch action {
             case .cancel:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            case .error:
-                break
             case .selectMediaAtURL(let url):
-                let mediaPickerPreviewScreenCoordinator = MediaPickerPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
-                    switch action {
-                    case .send:
-                        Task {
-                            let preprocessor = MediaUploadingPreprocessor()
-                            switch await preprocessor.processMedia(at: url) {
-                            case .success(let mediaInfo):
-                                MXLog.info(mediaInfo)
-                                
-                                switch mediaInfo {
-                                case let .image(imageURL, thumbnailURL, imageInfo):
-                                    let _ = await self?.parameters.roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
-                                default:
-                                    break
-                                }
-                            case .failure(let error):
-                                MXLog.error("Failed processing media to upload with error: \(error)")
-                            }
-                            
-                            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-                        }
-                    case .cancel:
-                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
-                    }
-                }
-                
-                self?.navigationStackCoordinator.setSheetCoordinator(mediaPickerPreviewScreenCoordinator)
+                self?.displayMediaUploadPreviewScreenForFile(at: url)
             }
         }
         
-        navigationStackCoordinator.setSheetCoordinator(mediaPickerCoordinator)
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+    }
+    
+    private func displayMediaUploadPreviewScreenForFile(at url: URL) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
+        
+        let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
+                                                                       roomProxy: parameters.roomProxy,
+                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
+                                                                       title: url.lastPathComponent,
+                                                                       url: url)
+        
+        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters) { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        
+        stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
 
     private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {

@@ -556,6 +556,16 @@ public enum L10n {
   public static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
   /// Check if you want to hide all current and future messages from this user
   public static var screenReportContentBlockUserHint: String { return L10n.tr("Localizable", "screen_report_content_block_user_hint") }
+  /// Camera
+  public static var screenRoomAttachmentSourceCamera: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera") }
+  /// Take photo
+  public static var screenRoomAttachmentSourceCameraPhoto: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_photo") }
+  /// Record a video
+  public static var screenRoomAttachmentSourceCameraVideo: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_video") }
+  /// Attachment
+  public static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
+  /// Photo & Video Library
+  public static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
@@ -572,6 +582,8 @@ public enum L10n {
   public static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
+  /// Failed processing media to upload, please try again.
+  public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Block
   public static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
   /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.

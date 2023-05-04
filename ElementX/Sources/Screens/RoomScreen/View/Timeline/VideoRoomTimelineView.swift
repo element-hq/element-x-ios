@@ -24,7 +24,7 @@ struct VideoRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             thumbnail
-                .frame(maxHeight: min(300, timelineItem.height ?? .infinity))
+                .frame(maxHeight: min(300, max(100, timelineItem.height ?? .infinity)))
                 .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
     }

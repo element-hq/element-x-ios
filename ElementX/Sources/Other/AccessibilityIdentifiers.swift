@@ -89,6 +89,7 @@ struct A11yIdentifiers {
     struct RoomScreen {
         let name = "room-name"
         let avatar = "room-avatar"
+        let attachmentPicker = "room-attachment_picker"
     }
     
     struct RoomDetailsScreen {

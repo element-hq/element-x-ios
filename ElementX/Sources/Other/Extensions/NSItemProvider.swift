@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,13 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import Foundation
 
-class MediaPickerPreviewScreenUITests: XCTestCase { }
+extension NSItemProvider {
+    var isSupportedForPasteOrDrop: Bool {
+        !registeredContentTypes
+            .compactMap(\.preferredMIMEType)
+            .filter { $0.hasPrefix("image/") || $0.hasPrefix("video/") || $0.hasPrefix("application/") }
+            .isEmpty
+    }
+}

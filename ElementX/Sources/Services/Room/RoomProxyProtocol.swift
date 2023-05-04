@@ -76,6 +76,12 @@ protocol RoomProxyProtocol {
     func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
     
     func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError>
+    
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo) async -> Result<Void, RoomProxyError>
+    
+    func sendAudio(url: URL, audioInfo: AudioInfo) async -> Result<Void, RoomProxyError>
+    
+    func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError>
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     

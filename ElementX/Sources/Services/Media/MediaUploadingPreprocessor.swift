@@ -40,7 +40,7 @@ enum MediaInfo {
     case image(imageURL: URL, thumbnailURL: URL, imageInfo: ImageInfo)
     case video(videoURL: URL, thumbnailURL: URL, videoInfo: VideoInfo)
     case audio(audioURL: URL, audioInfo: AudioInfo)
-    case file(FileInfo)
+    case file(fileURL: URL, fileInfo: FileInfo)
 }
 
 private struct ImageProcessingInfo {
@@ -205,7 +205,7 @@ struct MediaUploadingPreprocessor {
         let fileSize = try? UInt64(FileManager.default.sizeForItem(at: url))
         
         let fileInfo = FileInfo(mimetype: mimeType, size: fileSize, thumbnailInfo: nil, thumbnailSource: nil)
-        return .success(.file(fileInfo))
+        return .success(.file(fileURL: url, fileInfo: fileInfo))
     }
     
     // MARK: Images
@@ -217,32 +217,30 @@ struct MediaUploadingPreprocessor {
     /// - Returns: the URL for the modified image and its size as an `ImageProcessingResult`
     private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) async -> Result<ImageProcessingInfo, MediaUploadingPreprocessorError> {
         guard let originalData = NSData(contentsOf: url),
-              let originalCGImage = UIImage(data: originalData as Data)?.cgImage,
+              let originalImage = UIImage(data: originalData as Data),
               let imageSource = CGImageSourceCreateWithData(originalData, nil) else {
             return .failure(.failedStrippingLocationData)
         }
         
-        guard let originalMetadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) else {
-            MXLog.info("No metadata found. Returning original image")
-            return .success(.init(url: url, height: Double(originalCGImage.height), width: Double(originalCGImage.width), mimeType: mimeType, blurhash: nil))
+        guard let originalMetadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
+              (originalMetadata as NSDictionary).value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil else {
+            MXLog.info("No GPS metadata found. Returning original image")
+            return .success(.init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil))
         }
         
-        guard let adjustedMetadata = (originalMetadata as NSDictionary).mutableCopy() as? NSMutableDictionary else {
-            return .failure(.failedStrippingLocationData)
-        }
-        
-        adjustedMetadata.setValue(nil, forKeyPath: "\(kCGImagePropertyGPSDictionary)")
+        let count = CGImageSourceGetCount(imageSource)
+        let metadataKeysToRemove = [kCGImagePropertyGPSDictionary: kCFNull]
         
         let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, 1, nil) else {
+        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, count, nil) else {
             return .failure(.failedStrippingLocationData)
         }
-        CGImageDestinationAddImage(destination, originalCGImage, adjustedMetadata)
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
         CGImageDestinationFinalize(destination)
         
         do {
             try data.write(to: url)
-            return .success(.init(url: url, height: Double(originalCGImage.height), width: Double(originalCGImage.width), mimeType: mimeType, blurhash: nil))
+            return .success(.init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil))
         } catch {
             return .failure(.failedStrippingLocationData)
         }

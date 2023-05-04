@@ -25,14 +25,15 @@ enum MediaPickerScreenSource {
 enum MediaPickerScreenCoordinatorAction {
     case selectMediaAtURL(URL)
     case cancel
-    case error(Error?)
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let source: MediaPickerScreenSource
     private let callback: ((MediaPickerScreenCoordinatorAction) -> Void)?
     
-    init(source: MediaPickerScreenSource, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol, source: MediaPickerScreenSource, callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+        self.userIndicatorController = userIndicatorController
         self.source = source
         self.callback = callback
     }
@@ -52,7 +53,8 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
                 case .cancel:
                     self?.callback?(.cancel)
                 case .error(let error):
-                    self?.callback?(.error(error))
+                    MXLog.error("Failed selecting media from the photo library with error: \(error)")
+                    self?.showError()
                 case .selectFile(let url):
                     self?.callback?(.selectMediaAtURL(url))
                 }
@@ -65,7 +67,8 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
                 case .cancel:
                     self.callback?(.cancel)
                 case .error(let error):
-                    self.callback?(.error(error))
+                    MXLog.error("Failed selecting media from the document picker with error: \(error)")
+                    self.showError()
                 case .selectFile(let url):
                     self.callback?(.selectMediaAtURL(url))
                 }
@@ -79,11 +82,16 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
             case .cancel:
                 self?.callback?(.cancel)
             case .error(let error):
-                self?.callback?(.error(error))
+                MXLog.error("Failed selecting media from the camera picker with error: \(error)")
+                self?.showError()
             case .selectFile(let url):
                 self?.callback?(.selectMediaAtURL(url))
             }
         }
         .background(.black, ignoresSafeAreaEdges: .bottom)
+    }
+    
+    private func showError() {
+        userIndicatorController?.submitIndicator(UserIndicator(title: L10n.screenMediaPickerErrorFailedSelection))
     }
 }

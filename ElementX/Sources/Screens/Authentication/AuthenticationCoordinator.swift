@@ -127,7 +127,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
+    private static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
     
     private func startLoading() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
