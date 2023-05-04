@@ -228,17 +228,14 @@ struct MediaUploadingPreprocessor {
             return .success(.init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil))
         }
         
-        guard let adjustedMetadata = (originalMetadata as NSDictionary).mutableCopy() as? NSMutableDictionary else {
-            return .failure(.failedStrippingLocationData)
-        }
-        
-        adjustedMetadata.setValue(nil, forKeyPath: "\(kCGImagePropertyGPSDictionary)")
+        let count = CGImageSourceGetCount(imageSource)
+        let metadataKeysToRemove = [kCGImagePropertyGPSDictionary: kCFNull]
         
         let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, 1, nil) else {
+        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, count, nil) else {
             return .failure(.failedStrippingLocationData)
         }
-        CGImageDestinationAddImageFromSource(destination, imageSource, 0, adjustedMetadata)
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
         CGImageDestinationFinalize(destination)
         
         do {
