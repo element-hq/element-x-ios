@@ -51,9 +51,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
 
         Task {
-            try await run(with: credentials,
-                          roomId: roomId,
-                          eventId: eventId)
+            await run(with: credentials,
+                      roomId: roomId,
+                      eventId: eventId)
         }
     }
     
@@ -66,65 +66,59 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     private func run(with credentials: KeychainCredentials,
                      roomId: String,
-                     eventId: String) async throws {
+                     eventId: String) async {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
-        let service = NotificationServiceProxy(basePath: URL.sessionsBaseDirectory.path,
-                                               userID: credentials.userID)
+        do {
+            let client = try getClient(from: credentials)
+            
+            let itemProxy = try await client.getNotificationItemProxy(roomID: roomId,
+                                                                      eventID: eventId)
 
-        guard let itemProxy = try await service.notificationItem(roomId: roomId,
-                                                                 eventId: eventId) else {
-            MXLog.error("\(tag) got no notification item")
+            // First process without a media proxy.
+            // After this some properties of the notification should be set, like title, subtitle, sound etc.
+            guard let firstContent = try? await itemProxy.process(mediaProvider: nil) else {
+                MXLog.error("\(tag) not even first content")
 
-            // Notification should be discarded
-            return discard()
-        }
+                // Notification should be discarded
+                return discard()
+            }
 
-        // First process without a media proxy.
-        // After this some properties of the notification should be set, like title, subtitle, sound etc.
-        guard let firstContent = try await itemProxy.process(mediaProvider: nil) else {
-            MXLog.error("\(tag) not even first content")
+            // After the first processing, update the modified content
+            modifiedContent = firstContent
 
-            // Notification should be discarded
-            return discard()
-        }
+            guard itemProxy.requiresMediaProvider else {
+                MXLog.info("\(tag) no media needed")
 
-        // After the first processing, update the modified content
-        modifiedContent = firstContent
+                // We've processed the item and no media operations needed, so no need to go further
+                return notify()
+            }
 
-        guard itemProxy.requiresMediaProvider else {
-            MXLog.info("\(tag) no media needed")
+            MXLog.info("\(tag) process with media")
 
-            // We've processed the item and no media operations needed, so no need to go further
+            // There is some media to load, process it again
+            if let latestContent = try? await itemProxy.process(mediaProvider: MediaProvider(mediaLoader: MediaLoader(client: client),
+                                                                                             imageCache: .onlyOnDisk,
+                                                                                             backgroundTaskService: nil)) {
+                // Processing finished, hopefully with some media
+                modifiedContent = latestContent
+            }
+            // We still notify, but without the media attachment if it fails to load
             return notify()
-        }
-
-        MXLog.info("\(tag) process with media")
-
-        // There is some media to load, process it again
-        if let latestContent = try await itemProxy.process(mediaProvider: createMediaProvider(with: credentials)) {
-            // Processing finished, hopefully with some media
-            modifiedContent = latestContent
-            return notify()
-        } else {
-            // This is not very likely, as it should discard the notification sooner
+        } catch {
+            MXLog.error("NSE run error: \(error)")
             return discard()
         }
     }
 
-    private func createMediaProvider(with credentials: KeychainCredentials) throws -> MediaProviderProtocol {
+    private func getClient(from credentials: KeychainCredentials) throws -> Client {
         let builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         let client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
-        
-        MXLog.info("\(tag) creating media provider")
-        
-        return MediaProvider(mediaLoader: MediaLoader(client: client),
-                             imageCache: .onlyOnDisk,
-                             backgroundTaskService: nil)
+        return client
     }
     
     private func notify() {
@@ -163,5 +157,20 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     deinit {
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
+    }
+}
+
+private extension Client {
+    func getNotificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol {
+        let userID = try userId()
+        return await Task.dispatch(on: .global()) {
+            do {
+                let notification = try self.getNotificationItem(roomId: roomID, eventId: eventID)
+                return NotificationItemProxy(notificationItem: notification, receiverID: userID)
+            } catch {
+                MXLog.error("NSE: Could not get notification's content, using a mocked notification instead")
+                return MockNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+            }
+        }
     }
 }
