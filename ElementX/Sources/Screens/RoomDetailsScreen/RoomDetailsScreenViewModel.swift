@@ -75,7 +75,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
         case .processTapLeave:
-            guard members.count > 1 else {
+            let joinedMembers = members.filter { $0.membership == .join }
+            guard joinedMembers.count > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomProxy.id, state: .empty)
                 return
             }
