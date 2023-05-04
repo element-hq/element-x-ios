@@ -22,8 +22,8 @@ struct MessageComposer: View {
     let sendingDisabled: Bool
     let type: RoomScreenComposerMode
     
-    let sendAction: () -> Void
-    var pasteAction: ((NSItemProvider) -> Void)?
+    let sendAction: EnterKeyHandler
+    let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
     
@@ -175,6 +175,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: true,
                             type: .default,
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
             
@@ -183,6 +184,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: false,
                             type: .default,
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
             
@@ -191,6 +193,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: false,
                             type: .default,
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
             
@@ -199,6 +202,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: false,
                             type: .default,
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
             
@@ -208,6 +212,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             type: .reply(id: UUID().uuidString,
                                          displayName: "John Doe"),
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
 
@@ -216,6 +221,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: false,
                             type: .edit(originalItemId: UUID().uuidString),
                             sendAction: { },
+                            pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
         }

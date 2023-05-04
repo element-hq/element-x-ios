@@ -17,7 +17,7 @@
 import SwiftUI
 
 typealias EnterKeyHandler = () -> Void
-typealias PasteHandler = ((NSItemProvider) -> Void)?
+typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposerTextField: View {
     let placeholder: String
@@ -27,7 +27,7 @@ struct MessageComposerTextField: View {
     
     let maxHeight: CGFloat
     let enterKeyHandler: EnterKeyHandler
-    var pasteHandler: PasteHandler = nil
+    let pasteHandler: PasteHandler
     
     private var showingPlaceholder: Bool {
         text.isEmpty
@@ -147,7 +147,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
              focused: Binding<Bool>,
              maxHeight: CGFloat,
              enterKeyHandler: @escaping EnterKeyHandler,
-             pasteHandler: PasteHandler) {
+             pasteHandler: @escaping PasteHandler) {
             self.text = text
             self.focused = focused
             self.maxHeight = maxHeight
@@ -176,7 +176,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider) {
-            pasteHandler?(provider)
+            pasteHandler(provider)
         }
     }
 }
@@ -274,7 +274,8 @@ struct MessageComposerTextField_Previews: PreviewProvider {
                                      focused: $focused,
                                      isMultiline: $isMultiline,
                                      maxHeight: 300,
-                                     enterKeyHandler: { })
+                                     enterKeyHandler: { },
+                                     pasteHandler: { _ in })
         }
     }
 }
