@@ -21,13 +21,17 @@ import XCTest
 @MainActor
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
-    var context: HomeScreenViewModelType.Context!
+    var clientProxy: MockClientProxy!
+    
+    var context: HomeScreenViewModelType.Context! {
+        viewModel.context
+    }
     
     override func setUpWithError() throws {
-        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
+        clientProxy = MockClientProxy(userID: "@mock:client.com")
+        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider()),
                                         attributedStringBuilder: AttributedStringBuilder())
-        context = viewModel.context
     }
     
     func testSelectRoom() async throws {
@@ -64,5 +68,60 @@ class HomeScreenViewModelTests: XCTestCase {
         context.send(viewAction: .userMenu(action: .settings))
         await Task.yield()
         XCTAssert(correctResult)
+    }
+    
+    func testLeaveRoomAlert() async throws {
+        let mockRoomId = "1"
+        clientProxy.roomForIdentifierMocks[mockRoomId] = .init(with: .init(id: mockRoomId, displayName: "Some room"))
+        context.send(viewAction: .leaveRoom(roomIdentifier: mockRoomId))
+        await context.nextViewState()
+        XCTAssertEqual(context.leaveRoomAlertItem?.roomId, mockRoomId)
+    }
+    
+    func testLeaveRoomError() async throws {
+        let mockRoomId = "1"
+        let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
+        room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
+        clientProxy.roomForIdentifierMocks[mockRoomId] = room
+        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
+        let newState = await context.nextViewState()
+        XCTAssertNotNil(context.alertInfo)
+    }
+    
+    func testLeaveRoomSuccess() async throws {
+        let mockRoomId = "1"
+        var correctResult = false
+        viewModel.callback = { result in
+            switch result {
+            case .roomLeft(let roomIdentifier):
+                correctResult = roomIdentifier == mockRoomId
+            default:
+                break
+            }
+        }
+        let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
+        room.leaveRoomClosure = { .success(()) }
+        clientProxy.roomForIdentifierMocks[mockRoomId] = room
+        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
+        await Task.yield()
+        XCTAssertNil(context.alertInfo)
+        XCTAssertTrue(correctResult)
+    }
+    
+    func testShowRoomDetails() async throws {
+        let mockRoomId = "1"
+        var correctResult = false
+        viewModel.callback = { result in
+            switch result {
+            case .presentRoomDetails(let roomIdentifier):
+                correctResult = roomIdentifier == mockRoomId
+            default:
+                break
+            }
+        }
+        context.send(viewAction: .showRoomDetails(roomIdentifier: mockRoomId))
+        await Task.yield()
+        XCTAssertNil(context.alertInfo)
+        XCTAssertTrue(correctResult)
     }
 }

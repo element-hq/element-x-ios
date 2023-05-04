@@ -123,9 +123,14 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
             case (.invitesScreen, .selectRoom(let roomId), .invitesScreen(let selectedRoomId)) where roomId == selectedRoomId:
-                self.presentRoomWithIdentifier(roomId)
+                self.presentRoomWithIdentifier(roomId, animated: animated)
             case (.invitesScreen, .deselectRoom, .invitesScreen):
                 break
+                
+            case (.roomList(let currentRoomId), .selectRoomDetails(let roomId), .roomList) where currentRoomId == roomId:
+                break
+            case (.roomList, .selectRoomDetails(let roomId), .roomList(let selectedRoomId)) where roomId == selectedRoomId:
+                self.presentRoomDetails(roomIdentifier: roomId, animated: animated)
             
             default:
                 fatalError("Unknown transition: \(context)")
@@ -152,6 +157,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             switch action {
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.selectRoom(roomId: roomIdentifier))
+            case .presentRoomDetails(let roomIdentifier):
+                self.stateMachine.processEvent(.selectRoomDetails(roomId: roomIdentifier))
+            case .roomLeft(let roomIdentifier):
+                self.deselectRoomIfNeeded(roomIdentifier: roomIdentifier)
             case .presentSettingsScreen:
                 self.stateMachine.processEvent(.showSettingsScreen)
             case .presentFeedbackScreen:
@@ -226,10 +235,53 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
         }
     }
+    
+    private func deselectRoomIfNeeded(roomIdentifier: String) {
+        guard
+            case .roomList(selectedRoomId: let selectedRoomId) = stateMachine.state,
+            selectedRoomId == roomIdentifier
+        else {
+            return
+        }
+
+        stateMachine.processEvent(.deselectRoom)
+        navigationSplitCoordinator.setDetailCoordinator(nil)
+    }
 
     private func dismissRoom() {
         detailNavigationStackCoordinator.popToRoot(animated: true)
         navigationSplitCoordinator.setDetailCoordinator(nil)
+    }
+    
+    private func presentRoomDetails(roomIdentifier: String, animated: Bool = true) {
+        Task {
+            guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                MXLog.error("Invalid room identifier: \(roomIdentifier)")
+                return
+            }
+            
+            let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                                roomProxy: roomProxy,
+                                                                mediaProvider: userSession.mediaProvider)
+            
+            let coordinator = RoomDetailsScreenCoordinator(parameters: params)
+            
+            coordinator.callback = { [weak self] action in
+                switch action {
+                case .cancel, .leftRoom:
+                    self?.stateMachine.processEvent(.deselectRoom)
+                    self?.detailNavigationStackCoordinator.setRootCoordinator(nil)
+                }
+            }
+            
+            detailNavigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self, roomIdentifier] in
+                self?.deselectRoomIfNeeded(roomIdentifier: roomIdentifier)
+            }
+            
+            if navigationSplitCoordinator.detailCoordinator == nil {
+                navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
+            }
+        }
     }
         
     // MARK: Settings

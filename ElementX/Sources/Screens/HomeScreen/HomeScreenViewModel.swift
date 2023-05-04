@@ -153,10 +153,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))
+        case .showRoomDetails(roomIdentifier: let roomIdentifier):
+            callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
+        case .leaveRoom(roomIdentifier: let roomIdentifier):
+            startLeaveRoomProcess(roomId: roomIdentifier)
+        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
+            leaveRoom(roomId: roomIdentifier)
         case .userMenu(let action):
             switch action {
             case .feedback:
@@ -300,5 +307,57 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         visibleRoomsSummaryProvider.updateVisibleRange(range, timelineLimit: timelineLimit)
+    }
+    
+    private static let leaveRoomLoadingID = "LeaveRoomLoading"
+    
+    private func startLeaveRoomProcess(roomId: String) {
+        Task {
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+            }
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            let room = await userSession.clientProxy.roomForIdentifier(roomId)
+            
+            guard let room else {
+                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+                return
+            }
+            
+            guard !room.isPublic else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: .public)
+                return
+            }
+            
+            await room.updateMembers()
+            let joinedMembers = await room.membersPublisher.values.first()?.filter { $0.membership == .join }
+            
+            guard let joinedMembers else {
+                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+                return
+            }
+            
+            state.bindings.leaveRoomAlertItem = joinedMembers.count > 1 ? LeaveRoomAlertItem(roomId: roomId, state: .private) : LeaveRoomAlertItem(roomId: roomId, state: .empty)
+        }
+    }
+    
+    private func leaveRoom(roomId: String) {
+        Task {
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+            }
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            let room = await userSession.clientProxy.roomForIdentifier(roomId)
+            let result = await room?.leaveRoom()
+            
+            switch result {
+            case .none, .some(.failure):
+                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+            case .some(.success):
+                callback?(.roomLeft(roomIdentifier: roomId))
+            }
+        }
     }
 }

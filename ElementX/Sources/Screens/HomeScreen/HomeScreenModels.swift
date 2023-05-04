@@ -20,6 +20,8 @@ import UIKit
 
 enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
+    case presentRoomDetails(roomIdentifier: String)
+    case roomLeft(roomIdentifier: String)
     case presentSessionVerificationScreen
     case presentSettingsScreen
     case presentFeedbackScreen
@@ -36,6 +38,9 @@ enum HomeScreenViewUserMenuAction {
 
 enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
+    case showRoomDetails(roomIdentifier: String)
+    case leaveRoom(roomIdentifier: String)
+    case confirmLeaveRoom(roomIdentifier: String)
     case userMenu(action: HomeScreenViewUserMenuAction)
     case startChat
     case verifySession
@@ -101,6 +106,7 @@ struct HomeScreenViewStateBindings {
     var searchQuery = ""
     
     var alertInfo: AlertInfo<UUID>?
+    var leaveRoomAlertItem: LeaveRoomAlertItem?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

@@ -59,6 +59,19 @@ struct HomeScreen: View {
                                     .redacted(reason: .placeholder)
                             } else {
                                 HomeScreenRoomCell(room: room, context: context)
+                                    .contextMenu {
+                                        Button {
+                                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
+                                        } label: {
+                                            Label(L10n.commonSettings, systemImage: "gearshape")
+                                        }
+                                                
+                                        Button(role: .destructive) {
+                                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+                                        } label: {
+                                            Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
+                                        }
+                                    }
                             }
                         }
                     }
@@ -97,6 +110,9 @@ struct HomeScreen: View {
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.leaveRoomAlertItem,
+               actions: leaveRoomAlertActions,
+               message: leaveRoomAlertMessage)
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -237,6 +253,18 @@ struct HomeScreen: View {
 
         // This will be deduped and throttled on the view model layer
         context.send(viewAction: .updateVisibleItemRange(range: lowerBound..<upperBound, isScrolling: scrollViewAdapter.isScrolling.value))
+    }
+    
+    @ViewBuilder
+    private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
+        Button(item.cancelTitle, role: .cancel) { }
+        Button(item.confirmationTitle, role: .destructive) {
+            context.send(viewAction: .confirmLeaveRoom(roomIdentifier: item.roomId))
+        }
+    }
+    
+    private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
+        Text(item.subtitle)
     }
 }
 
