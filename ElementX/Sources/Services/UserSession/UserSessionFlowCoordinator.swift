@@ -123,14 +123,14 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
             case (.invitesScreen, .selectRoom(let roomId), .invitesScreen(let selectedRoomId)) where roomId == selectedRoomId:
-                self.presentRoomWithIdentifier(roomId)
+                self.presentRoomWithIdentifier(roomId, animated: animated)
             case (.invitesScreen, .deselectRoom, .invitesScreen):
                 break
                 
             case (.roomList(let currentRoomId), .selectRoomDetails(let roomId), .roomList) where currentRoomId == roomId:
                 break
             case (.roomList, .selectRoomDetails(let roomId), .roomList(let selectedRoomId)) where roomId == selectedRoomId:
-                self.presentRoomDetails(roomIdentifier: roomId)
+                self.presentRoomDetails(roomIdentifier: roomId, animated: animated)
             
             default:
                 fatalError("Unknown transition: \(context)")
