@@ -30,36 +30,28 @@ struct RoomAttachmentPicker: View {
                 .font(.compound.headingLG)
                 .foregroundColor(.element.accent)
         }
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPicker)
         .popover(isPresented: $showAttachmentPopover) {
             VStack(alignment: .leading, spacing: 0.0) {
                 Button {
                     showAttachmentPopover = false
                     context.send(viewAction: .displayMediaPicker)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourceGallery, systemImage: "photo.fill")
-                        .labelStyle(EqualIconWidthLabelStyle())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, systemImageName: "photo.fill")
                 }
                 
                 Button {
                     showAttachmentPopover = false
                     context.send(viewAction: .displayDocumentPicker)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourceFiles, systemImage: "paperclip")
-                        .labelStyle(EqualIconWidthLabelStyle())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, systemImageName: "paperclip")
                 }
                 
                 Button {
                     showAttachmentPopover = false
                     context.send(viewAction: .displayCameraPicker)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourceCamera, systemImage: "camera.fill")
-                        .labelStyle(EqualIconWidthLabelStyle())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
             }
             .background {
@@ -75,6 +67,19 @@ struct RoomAttachmentPicker: View {
             .presentationDetents([.height(sheetContentHeight)])
             .presentationDragIndicator(.visible)
             .tint(.element.accent)
+        }
+    }
+    
+    private struct PickerLabel: View {
+        let title: String
+        let systemImageName: String
+        
+        var body: some View {
+            Label(title, systemImage: systemImageName)
+                .labelStyle(EqualIconWidthLabelStyle())
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
         }
     }
 }
