@@ -26,6 +26,7 @@ struct SettingsScreenCoordinatorParameters {
 enum SettingsScreenCoordinatorAction {
     case dismiss
     case logout
+    case clearCache
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -114,6 +115,14 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     
     private func presentDeveloperOptions() {
         let coordinator = DeveloperOptionsScreenCoordinator()
+        
+        coordinator.callback = { [weak self] action in
+            switch action {
+            case .clearCache:
+                self?.callback?(.clearCache)
+            }
+        }
+        
         parameters.navigationStackCoordinator?.push(coordinator)
     }
 

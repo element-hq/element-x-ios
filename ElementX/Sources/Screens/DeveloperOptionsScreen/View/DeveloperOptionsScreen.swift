@@ -66,9 +66,17 @@ struct DeveloperOptionsScreen: View {
                     Text("🥳")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(FormButtonStyle())
             }
-            .formSectionStyle()
+            
+            Section {
+                Button {
+                    context.send(viewAction: .clearCache)
+                } label: {
+                    Text("Clear cache")
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.red)
+                }
+            }
         }
         .overlay(effectsView)
         .scrollContentBackground(.hidden)

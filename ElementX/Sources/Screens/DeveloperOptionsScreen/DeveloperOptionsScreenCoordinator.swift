@@ -16,11 +16,23 @@
 
 import SwiftUI
 
+enum DeveloperOptionsScreenCoordinatorAction {
+    case clearCache
+}
+
 final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
-    private let viewModel: DeveloperOptionsScreenViewModelProtocol
+    private var viewModel: DeveloperOptionsScreenViewModelProtocol
+    
+    var callback: ((DeveloperOptionsScreenCoordinatorAction) -> Void)?
     
     init() {
         viewModel = DeveloperOptionsScreenViewModel()
+        viewModel.callback = { [weak self] action in
+            switch action {
+            case .clearCache:
+                self?.callback?(.clearCache)
+            }
+        }
     }
             
     func toPresentable() -> AnyView {

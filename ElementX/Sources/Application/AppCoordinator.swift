@@ -159,6 +159,8 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self.logout(isSoft: isSoft)
             case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
+            case (.signedIn, .clearCache, .initial):
+                clearCache()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -238,6 +240,8 @@ class AppCoordinator: AppCoordinatorProtocol {
             switch action {
             case .signOut:
                 self?.stateMachine.processEvent(.signOut(isSoft: false))
+            case .clearCache:
+                self?.stateMachine.processEvent(.clearCache)
             }
         }
         
@@ -427,6 +431,25 @@ class AppCoordinator: AppCoordinatorProtocol {
         } else {
             storedAppRoute = appRoute
         }
+    }
+    
+    private func clearCache() {
+        showLoadingIndicator()
+        
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
+        
+        userSession.clientProxy.stopSync()
+        userSessionFlowCoordinator?.stop()
+        
+        userSessionStore.clearCacheFor(userSession: userSession)
+        
+        tearDownUserSession()
+        
+        stateMachine.processEvent(.startWithExistingSession)
     }
 }
 

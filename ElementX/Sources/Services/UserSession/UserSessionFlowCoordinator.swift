@@ -19,6 +19,7 @@ import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
     case signOut
+    case clearCache
 }
 
 class UserSessionFlowCoordinator: CoordinatorProtocol {
@@ -304,6 +305,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case .logout:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 self.callback?(.signOut)
+            case .clearCache:
+                self.callback?(.clearCache)
             }
         }
         

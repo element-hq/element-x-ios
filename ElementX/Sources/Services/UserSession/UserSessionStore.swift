@@ -90,6 +90,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         deleteSessionDirectory(for: userID)
     }
     
+    func clearCacheFor(userSession: UserSessionProtocol) {
+        let userID = userSession.clientProxy.userID
+        deleteCachesFolder(for: userID)
+    }
+    
     // MARK: - Private
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
@@ -143,6 +148,18 @@ class UserSessionStore: UserSessionStoreProtocol {
         // Rust sanitises the user ID replacing invalid characters with an _
         let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
         let url = baseDirectory.appendingPathComponent(sanitisedUserID)
+        
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            MXLog.failure("Failed deleting the session data: \(error)")
+        }
+    }
+    
+    private func deleteCachesFolder(for userID: String) {
+        // Rust sanitises the user ID replacing invalid characters with an _
+        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
+        let url = baseDirectory.appendingPathComponent(sanitisedUserID).appendingPathComponent("matrix-sdk-state")
         
         do {
             try FileManager.default.removeItem(at: url)

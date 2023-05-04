@@ -16,7 +16,9 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction { }
+enum DeveloperOptionsScreenViewModelAction {
+    case clearCache
+}
 
 struct DeveloperOptionsScreenViewState: BindableState {
     var bindings: DeveloperOptionsScreenViewStateBindings
@@ -36,4 +38,5 @@ enum DeveloperOptionsScreenViewAction {
     case changedStartChatUserSuggestionsEnabled
     case changedMediaUploadFlowEnabled
     case changedInvitesFlowEnabled
+    case clearCache
 }

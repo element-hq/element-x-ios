@@ -48,6 +48,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             ServiceLocator.shared.settings.mediaUploadingFlowEnabled = state.bindings.mediaUploadFlowEnabled
         case .changedInvitesFlowEnabled:
             ServiceLocator.shared.settings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
+        case .clearCache:
+            callback?(.clearCache)
         }
     }
 }
