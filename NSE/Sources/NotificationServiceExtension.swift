@@ -75,17 +75,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             let itemProxy = try await client.getNotificationItemProxy(roomID: roomId,
                                                                       eventID: eventId)
 
-            // First process without a media proxy.
-            // After this some properties of the notification should be set, like title, subtitle, sound etc.
-            guard let firstContent = try await itemProxy.process(mediaProvider: nil) else {
-                MXLog.error("\(tag) not even first content")
-
-                // Notification should be discarded
-                return discard()
-            }
-
             // After the first processing, update the modified content
-            modifiedContent = firstContent
+            modifiedContent = try await itemProxy.process(mediaProvider: nil)
 
             guard itemProxy.requiresMediaProvider else {
                 MXLog.info("\(tag) no media needed")
@@ -168,8 +159,8 @@ private extension Client {
                 let notification = try self.getNotificationItem(roomId: roomID, eventId: eventID)
                 return NotificationItemProxy(notificationItem: notification, receiverID: userID)
             } catch {
-                MXLog.error("NSE: Could not get notification's content, using a mocked notification instead")
-                return MockNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+                MXLog.error("NSE: Could not get notification's content, using a generic notification instead")
+                return GenericNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
             }
         }
     }
