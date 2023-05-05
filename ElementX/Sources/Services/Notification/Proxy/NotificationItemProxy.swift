@@ -102,7 +102,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 }
 
-struct GenericNotificationItemProxy: NotificationItemProxyProtocol {
+struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     let eventID: String
 
     var event: TimelineEventProxyProtocol {
@@ -165,12 +165,12 @@ extension NotificationItemProxyProtocol {
     ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
     func process(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        if self is GenericNotificationItemProxy {
-            return processGeneric()
+        if self is EmptyNotificationItemProxy {
+            return processEmpty()
         } else {
             switch event.type {
             case .none, .state:
-                return processGeneric()
+                return processEmpty()
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
@@ -191,7 +191,7 @@ extension NotificationItemProxyProtocol {
                         return try await processText(content: content, mediaProvider: mediaProvider)
                     }
                 default:
-                    return processGeneric()
+                    return processEmpty()
                 }
             }
         }
@@ -201,7 +201,7 @@ extension NotificationItemProxyProtocol {
 
     // MARK: - Private
 
-    private func processGeneric() -> UNMutableNotificationContent {
+    private func processEmpty() -> UNMutableNotificationContent {
         let notification = UNMutableNotificationContent()
         notification.receiverID = receiverID
         notification.roomID = roomID

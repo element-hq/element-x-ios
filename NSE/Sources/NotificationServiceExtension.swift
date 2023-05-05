@@ -72,7 +72,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         do {
             let userSession = try NSEUserSession(credentials: credentials)
             
-            let itemProxy = try await userSession.getNotificationItemProxy(roomID: roomId, eventID: eventId)
+            let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)

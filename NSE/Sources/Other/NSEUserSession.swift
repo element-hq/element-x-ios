@@ -32,7 +32,7 @@ final class NSEUserSession {
         try client.restoreSession(session: credentials.restorationToken.session)
     }
 
-    func getNotificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol {
+    func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol {
         let userID = try client.userId()
         return await Task.dispatch(on: .global()) {
             do {
@@ -40,7 +40,7 @@ final class NSEUserSession {
                 return NotificationItemProxy(notificationItem: notification, receiverID: userID)
             } catch {
                 MXLog.error("NSE: Could not get notification's content, using a generic notification instead")
-                return GenericNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+                return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
             }
         }
     }
