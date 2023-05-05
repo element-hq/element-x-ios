@@ -77,7 +77,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
             // First process without a media proxy.
             // After this some properties of the notification should be set, like title, subtitle, sound etc.
-            guard let firstContent = try? await itemProxy.process(mediaProvider: nil) else {
+            guard let firstContent = try await itemProxy.process(mediaProvider: nil) else {
                 MXLog.error("\(tag) not even first content")
 
                 // Notification should be discarded

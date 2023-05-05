@@ -172,8 +172,10 @@ extension NotificationItemProxyProtocol {
             return processMock()
         } else {
             switch event.type {
-            case .none, .state:
+            case .none:
                 return nil
+            case .state:
+                return processMock()
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
@@ -194,7 +196,7 @@ extension NotificationItemProxyProtocol {
                         return try await processText(content: content, mediaProvider: mediaProvider)
                     }
                 default:
-                    return nil
+                    return processMock()
                 }
             }
         }
