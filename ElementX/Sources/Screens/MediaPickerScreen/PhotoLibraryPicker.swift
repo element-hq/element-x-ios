@@ -61,12 +61,13 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         // MARK: PHPickerViewControllerDelegate
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            guard let provider = results.first?.itemProvider else {
+            guard let provider = results.first?.itemProvider,
+                  let contentType = provider.registeredContentTypes.filter({ $0.conforms(to: .image) || $0.conforms(to: .movie) || $0.conforms(to: .video) }).first else {
                 photoLibraryPicker.callback(.cancel)
                 return
             }
             
-            provider.loadFileRepresentation(forTypeIdentifier: "public.item") { [weak self] url, error in
+            provider.loadFileRepresentation(forTypeIdentifier: contentType.identifier) { [weak self] url, error in
                 guard let url else {
                     Task { @MainActor in
                         self?.photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(error)))
