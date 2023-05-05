@@ -22,8 +22,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private let settings = NSESettings()
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-    var handler: ((UNNotificationContent) -> Void)?
-    var modifiedContent: UNMutableNotificationContent?
+    private var handler: ((UNNotificationContent) -> Void)?
+    private var modifiedContent: UNMutableNotificationContent?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -117,14 +117,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         guard let modifiedContent else {
             MXLog.info("\(tag) notify: no modified content")
-            return
+            return discard()
         }
 
         guard let identifier = modifiedContent.notificationID,
               !settings.servedNotificationIdentifiers.contains(identifier) else {
             MXLog.info("\(tag) notify: notification already served")
-            discard()
-            return
+            return discard()
         }
 
         settings.servedNotificationIdentifiers.insert(identifier)
