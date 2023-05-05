@@ -69,12 +69,11 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
-                Button {
+                Button(role: .destructive) {
                     context.send(viewAction: .clearCache)
                 } label: {
                     Text("Clear cache")
                         .frame(maxWidth: .infinity)
-                        .foregroundColor(.red)
                 }
             }
         }

@@ -21,6 +21,7 @@ import MatrixRustSDK
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
+    private let cachesFolderName = "matrix-sdk-state"
     
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { !keychainController.restorationTokens().isEmpty }
@@ -145,9 +146,15 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func deleteSessionDirectory(for userID: String) {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        let url = baseDirectory.appendingPathComponent(sanitisedUserID)
+        do {
+            try FileManager.default.removeItem(at: basePath(for: userID))
+        } catch {
+            MXLog.failure("Failed deleting the session data: \(error)")
+        }
+    }
+    
+    private func deleteCachesFolder(for userID: String) {
+        let url = basePath(for: userID).appendingPathComponent(cachesFolderName)
         
         do {
             try FileManager.default.removeItem(at: url)
@@ -156,15 +163,10 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    private func deleteCachesFolder(for userID: String) {
+    #warning("We should move this and the caches folder path to the rust side")
+    private func basePath(for userID: String) -> URL {
         // Rust sanitises the user ID replacing invalid characters with an _
         let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        let url = baseDirectory.appendingPathComponent(sanitisedUserID).appendingPathComponent("matrix-sdk-state")
-        
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            MXLog.failure("Failed deleting the session data: \(error)")
-        }
+        return baseDirectory.appendingPathComponent(sanitisedUserID)
     }
 }
