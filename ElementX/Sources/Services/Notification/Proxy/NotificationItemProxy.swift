@@ -172,9 +172,7 @@ extension NotificationItemProxyProtocol {
             return processMock()
         } else {
             switch event.type {
-            case .none:
-                return nil
-            case .state:
+            case .none, .state:
                 return processMock()
             case let .messageLike(content):
                 switch content {
