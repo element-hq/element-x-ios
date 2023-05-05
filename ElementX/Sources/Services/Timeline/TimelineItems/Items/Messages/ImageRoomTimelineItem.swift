@@ -27,6 +27,8 @@ struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiabl
     
     let content: ImageRoomTimelineItemContent
     
+    var replyDetails: TimelineItemReplyDetails?
+    
     var properties = RoomTimelineItemProperties()
     
     var body: String {

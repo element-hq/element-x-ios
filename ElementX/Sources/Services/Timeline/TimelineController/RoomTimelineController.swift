@@ -256,7 +256,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func buildTimelineItemFor(_ item: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch item {
         case .event(let eventTimelineItem):
-            return timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
+            let item = timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
+            
+            // Fetch replied-to event details if unavailable at the point of loading it in the timeline
+            if let messageTimelineItem = item as? EventBasedMessageTimelineItemProtocol {
+                if case .unavailable(let eventID) = messageTimelineItem.replyDetails {
+                    roomProxy.fetchEventDetails(for: eventID)
+                }
+            }
+            
+            return item
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):

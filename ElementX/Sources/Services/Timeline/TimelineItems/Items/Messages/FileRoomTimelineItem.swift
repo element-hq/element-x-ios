@@ -27,6 +27,8 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable
     
     let content: FileRoomTimelineItemContent
     
+    var replyDetails: TimelineItemReplyDetails?
+    
     var properties = RoomTimelineItemProperties()
     
     var body: String {

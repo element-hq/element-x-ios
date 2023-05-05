@@ -838,6 +838,22 @@ class RoomProxyMock: RoomProxyProtocol {
             return acceptInvitationReturnValue
         }
     }
+    //MARK: - fetchEventDetails
+
+    var fetchEventDetailsForCallsCount = 0
+    var fetchEventDetailsForCalled: Bool {
+        return fetchEventDetailsForCallsCount > 0
+    }
+    var fetchEventDetailsForReceivedEventID: String?
+    var fetchEventDetailsForReceivedInvocations: [String] = []
+    var fetchEventDetailsForClosure: ((String) -> Void)?
+
+    func fetchEventDetails(for eventID: String) {
+        fetchEventDetailsForCallsCount += 1
+        fetchEventDetailsForReceivedEventID = eventID
+        fetchEventDetailsForReceivedInvocations.append(eventID)
+        fetchEventDetailsForClosure?(eventID)
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {

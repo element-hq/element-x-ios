@@ -18,4 +18,5 @@ import Foundation
 
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
     var body: String { get }
+    var replyDetails: TimelineItemReplyDetails? { get }
 }

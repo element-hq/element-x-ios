@@ -26,6 +26,8 @@ struct EmoteRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiabl
     
     let content: EmoteRoomTimelineItemContent
     
+    var replyDetails: TimelineItemReplyDetails?
+    
     var properties = RoomTimelineItemProperties()
     
     var body: String {

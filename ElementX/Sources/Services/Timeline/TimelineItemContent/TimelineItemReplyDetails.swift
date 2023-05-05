@@ -16,20 +16,19 @@
 
 import Foundation
 
-struct AudioRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    let sender: TimelineItemSender
-    
-    let content: AudioRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
+enum TimelineItemReplyContent: Hashable {
+    case audio(AudioRoomTimelineItemContent)
+    case emote(EmoteRoomTimelineItemContent)
+    case file(FileRoomTimelineItemContent)
+    case image(ImageRoomTimelineItemContent)
+    case notice(NoticeRoomTimelineItemContent)
+    case text(TextRoomTimelineItemContent)
+    case video(VideoRoomTimelineItemContent)
+}
 
-    var properties = RoomTimelineItemProperties()
-    
-    var body: String {
-        content.body
-    }
+enum TimelineItemReplyDetails: Hashable {
+    case unavailable(eventID: String)
+    case pending(eventID: String)
+    case ready(sender: TimelineItemSender, content: TimelineItemReplyContent)
+    case error(eventID: String, message: String)
 }
