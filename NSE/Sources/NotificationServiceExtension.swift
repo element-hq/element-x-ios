@@ -70,10 +70,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let client = try getClient(from: credentials)
+            let userSession = try NSEUserSession(credentials: credentials)
             
-            let itemProxy = try await client.getNotificationItemProxy(roomID: roomId,
-                                                                      eventID: eventId)
+            let itemProxy = try await userSession.getNotificationItemProxy(roomID: roomId, eventID: eventId)
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)
@@ -88,9 +87,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             MXLog.info("\(tag) process with media")
 
             // There is some media to load, process it again
-            if let latestContent = try? await itemProxy.process(mediaProvider: MediaProvider(mediaLoader: MediaLoader(client: client),
-                                                                                             imageCache: .onlyOnDisk,
-                                                                                             backgroundTaskService: nil)) {
+            if let latestContent = try? await itemProxy.process(mediaProvider: userSession.mediaProvider) {
                 // Processing finished, hopefully with some media
                 modifiedContent = latestContent
             }
@@ -100,16 +97,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             MXLog.error("NSE run error: \(error)")
             return discard()
         }
-    }
-
-    private func getClient(from credentials: KeychainCredentials) throws -> Client {
-        let builder = ClientBuilder()
-            .basePath(path: URL.sessionsBaseDirectory.path)
-            .username(username: credentials.userID)
-
-        let client = try builder.build()
-        try client.restoreSession(session: credentials.restorationToken.session)
-        return client
     }
     
     private func notify() {
@@ -147,20 +134,5 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     deinit {
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
-    }
-}
-
-private extension Client {
-    func getNotificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol {
-        let userID = try userId()
-        return await Task.dispatch(on: .global()) {
-            do {
-                let notification = try self.getNotificationItem(roomId: roomID, eventId: eventID)
-                return NotificationItemProxy(notificationItem: notification, receiverID: userID)
-            } catch {
-                MXLog.error("NSE: Could not get notification's content, using a generic notification instead")
-                return GenericNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
-            }
-        }
     }
 }
