@@ -362,39 +362,34 @@ class ClientProxy: ClientProxyProtocol {
             fatalError("This shouldn't be called more than once")
         }
         
-        do {
-            let visibleRoomsSlidingSyncView = try SlidingSyncListBuilder()
-                .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
-                .requiredState(requiredState: slidingSyncRequiredState)
-                .filters(filters: slidingSyncFilters)
-                .name(name: "CurrentlyVisibleRooms")
-                .syncMode(mode: .selective)
-                .addRange(from: 0, to: 20)
-                .build()
-            
-            let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsSlidingSyncView, name: "Visible rooms")
-            
-            self.visibleRoomsSlidingSyncView = visibleRoomsSlidingSyncView
-            self.visibleRoomsViewProxy = visibleRoomsViewProxy
-            
-            // Changes to the visibleRoomsSlidingSyncView range need to restart the connection to be applied
-            visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
-                self?.restartSync()
+        let visibleRoomsSlidingSyncView = SlidingSyncListBuilder(name: "CurrentlyVisibleRooms")
+            .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
+            .requiredState(requiredState: slidingSyncRequiredState)
+            .filters(filters: slidingSyncFilters)
+            .syncMode(mode: .selective)
+            .addRange(from: 0, to: 20)
+            .build()
+
+        let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsSlidingSyncView, name: "Visible rooms")
+
+        self.visibleRoomsSlidingSyncView = visibleRoomsSlidingSyncView
+        self.visibleRoomsViewProxy = visibleRoomsViewProxy
+
+        // Changes to the visibleRoomsSlidingSyncView range need to restart the connection to be applied
+        visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
+            self?.restartSync()
+        }
+        .store(in: &cancellables)
+
+        // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
+        visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.statePublisher.sink { [weak self] state in
+            guard state == .fullyLoaded else {
+                return
             }
-            .store(in: &cancellables)
-            
-            // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
-            visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.statePublisher.sink { [weak self] state in
-                guard state == .fullyLoaded else {
-                    return
-                }
-                
-                MXLog.info("Visible rooms view received first update, configuring views post initial sync")
-                self?.configureViewsPostInitialSync()
-                self?.visibleRoomsViewProxyStateObservationToken = nil
-            }
-        } catch {
-            MXLog.error("Failed building the visible rooms sliding sync view with error: \(error)")
+
+            MXLog.info("Visible rooms view received first update, configuring views post initial sync")
+            self?.configureViewsPostInitialSync()
+            self?.visibleRoomsViewProxyStateObservationToken = nil
         }
     }
     
@@ -403,22 +398,16 @@ class ClientProxy: ClientProxyProtocol {
             fatalError("This shouldn't be called more than once")
         }
         
-        do {
-            let allRoomsSlidingSyncView = try SlidingSyncListBuilder()
-                .noTimelineLimit()
-                .requiredState(requiredState: slidingSyncRequiredState)
-                .filters(filters: slidingSyncFilters)
-                .name(name: "AllRooms")
-                .syncMode(mode: .growing)
-                .batchSize(batchSize: 100)
-                .build()
-            
-            self.allRoomsSlidingSyncView = allRoomsSlidingSyncView
-            allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsSlidingSyncView, name: "All rooms")
-            
-        } catch {
-            MXLog.error("Failed building the all rooms sliding sync view with error: \(error)")
-        }
+        let allRoomsSlidingSyncView = SlidingSyncListBuilder(name: "AllRooms")
+            .noTimelineLimit()
+            .requiredState(requiredState: slidingSyncRequiredState)
+            .filters(filters: slidingSyncFilters)
+            .syncMode(mode: .growing)
+            .batchSize(batchSize: 100)
+            .build()
+
+        self.allRoomsSlidingSyncView = allRoomsSlidingSyncView
+        allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsSlidingSyncView, name: "All rooms")
     }
     
     private func buildAndConfigureInvitesSlidingSyncView() {
@@ -426,21 +415,16 @@ class ClientProxy: ClientProxyProtocol {
             fatalError("This shouldn't be called more than once")
         }
         
-        do {
-            let invitesView = try SlidingSyncListBuilder()
-                .noTimelineLimit()
-                .requiredState(requiredState: slidingSyncInvitesRequiredState)
-                .filters(filters: slidingSyncInviteFilters)
-                .name(name: "Invites")
-                .syncMode(mode: .growing)
-                .batchSize(batchSize: 100)
-                .build()
-            
-            invitesSlidingSyncView = invitesView
-            invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
-        } catch {
-            MXLog.error("Failed building the invites sliding sync view with error: \(error)")
-        }
+        let invitesView = SlidingSyncListBuilder(name: "Invites")
+            .noTimelineLimit()
+            .requiredState(requiredState: slidingSyncInvitesRequiredState)
+            .filters(filters: slidingSyncInviteFilters)
+            .syncMode(mode: .growing)
+            .batchSize(batchSize: 100)
+            .build()
+
+        invitesSlidingSyncView = invitesView
+        invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
     }
 
     private func buildAndConfigureNotificationSyncView() {
@@ -448,20 +432,15 @@ class ClientProxy: ClientProxyProtocol {
             fatalError("This shouldn't be called more than once")
         }
 
-        do {
-            let notificationsSlidingSyncView = try SlidingSyncListBuilder()
-                .noTimelineLimit()
-                .requiredState(requiredState: slidingSyncNotificationsRequiredState)
-                .filters(filters: slidingSyncNotificationsFilters)
-                .name(name: "Notifications")
-                .syncMode(mode: .growing)
-                .batchSize(batchSize: 100)
-                .build()
+        let notificationsSlidingSyncView = SlidingSyncListBuilder(name: "Notifications")
+            .noTimelineLimit()
+            .requiredState(requiredState: slidingSyncNotificationsRequiredState)
+            .filters(filters: slidingSyncNotificationsFilters)
+            .syncMode(mode: .growing)
+            .batchSize(batchSize: 100)
+            .build()
 
-            self.notificationsSlidingSyncView = notificationsSlidingSyncView
-        } catch {
-            MXLog.error("Failed building the notification sliding sync view with error: \(error)")
-        }
+        self.notificationsSlidingSyncView = notificationsSlidingSyncView
     }
 
     private func buildRoomSummaryProviders() {
