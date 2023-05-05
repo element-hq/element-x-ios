@@ -17,18 +17,19 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let body: String
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
-
-    let source: MediaSourceProxy?
-    let thumbnailSource: MediaSourceProxy?
-    var contentType: UTType?
+    
+    let content: FileRoomTimelineItemContent
     
     var properties = RoomTimelineItemProperties()
+    
+    var body: String {
+        content.body
+    }
 }

@@ -18,7 +18,6 @@ import Foundation
 import UIKit
 
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringConvertible {
-    var body: String { get }
     var timestamp: String { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }

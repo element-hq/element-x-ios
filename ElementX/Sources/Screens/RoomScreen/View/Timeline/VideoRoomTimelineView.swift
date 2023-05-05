@@ -24,16 +24,16 @@ struct VideoRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             thumbnail
-                .frame(maxHeight: min(300, max(100, timelineItem.height ?? .infinity)))
-                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+                .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
+                .aspectRatio(timelineItem.content.aspectRatio, contentMode: .fit)
         }
     }
     
     @ViewBuilder
     var thumbnail: some View {
-        if let thumbnailSource = timelineItem.thumbnailSource {
+        if let thumbnailSource = timelineItem.content.thumbnailSource {
             LoadableImage(mediaSource: thumbnailSource,
-                          blurhash: timelineItem.blurhash,
+                          blurhash: timelineItem.content.blurhash,
                           imageProvider: context.imageProvider) { imageView in
                 imageView
                     .overlay { playIcon }
@@ -76,36 +76,25 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Some video",
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      duration: 21,
-                                                                      source: nil,
-                                                                      thumbnailSource: nil))
+                                                                      content: .init(body: "Some video", duration: 21, source: nil, thumbnailSource: nil)))
 
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Some other video",
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      duration: 22,
-                                                                      source: nil,
-                                                                      thumbnailSource: nil))
+                                                                      content: .init(body: "Some other video", duration: 22, source: nil, thumbnailSource: nil)))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Blurhashed video",
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      duration: 23,
-                                                                      source: nil,
-                                                                      thumbnailSource: nil,
-                                                                      aspectRatio: 0.7,
-                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
+                                                                      content: .init(body: "Blurhashed video", duration: 23, source: nil, thumbnailSource: nil, aspectRatio: 0.7, blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")))
         }
     }
 }

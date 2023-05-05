@@ -257,10 +257,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         var actions: [TimelineItemContextMenuAction] = [
-            .react, .copy, .reply
-            // Disabled for FOSDEM
-            // .quote, .copyPermalink
+            .react, .reply, .copyPermalink
         ]
+        
+        if timelineItem is EventBasedMessageTimelineItemProtocol {
+            actions.append(contentsOf: [.copy, .quote])
+        }
 
         if item.isEditable {
             actions.append(.edit)
@@ -282,28 +284,40 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions, debugActions: debugActions)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
-              let item = timelineItem as? EventBasedTimelineItemProtocol else {
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
         
         switch action {
         case .react:
-            callback?(.displayEmojiPicker(itemID: item.id))
+            callback?(.displayEmojiPicker(itemID: eventTimelineItem.id))
         case .copy:
-            UIPasteboard.general.string = item.body
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
+                return
+            }
+            
+            UIPasteboard.general.string = messageTimelineItem.body
         case .edit:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
+                return
+            }
+            
             state.bindings.composerFocused = true
-            state.bindings.composerText = item.body
-            state.composerMode = .edit(originalItemId: item.id)
+            state.bindings.composerText = messageTimelineItem.body
+            state.composerMode = .edit(originalItemId: messageTimelineItem.id)
         case .quote:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
+                return
+            }
+            
             state.bindings.composerFocused = true
-            state.bindings.composerText = "> \(item.body)"
+            state.bindings.composerText = "> \(messageTimelineItem.body)\n\n"
         case .copyPermalink:
             do {
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomID)
+                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID)
                 UIPasteboard.general.url = permalink
             } catch {
                 displayError(.alert(L10n.errorFailedCreatingThePermalink))
@@ -314,9 +328,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .reply:
             state.bindings.composerFocused = true
-            state.composerMode = .reply(id: item.id, displayName: item.sender.displayName ?? item.sender.id)
+            state.composerMode = .reply(id: eventTimelineItem.id, displayName: eventTimelineItem.sender.displayName ?? eventTimelineItem.sender.id)
         case .viewSource:
-            let debugInfo = timelineController.debugInfo(for: item.id)
+            let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
             MXLog.info(debugInfo)
             state.bindings.debugInfo = debugInfo
         case .retryDecryption(let sessionID):
@@ -324,7 +338,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            callback?(.displayReportContent(itemID: itemID, senderID: item.sender.id))
+            callback?(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         }
         
         if action.switchToDefaultComposer {

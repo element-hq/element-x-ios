@@ -25,7 +25,7 @@ struct AudioRoomTimelineView: View {
             HStack {
                 Image(systemName: "waveform")
                     .foregroundColor(.element.primaryContent)
-                FormattedBodyText(text: timelineItem.body)
+                FormattedBodyText(text: timelineItem.content.body)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
@@ -35,20 +35,18 @@ struct AudioRoomTimelineView: View {
 
 struct AudioRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
-
+    
     static var previews: some View {
         body.environmentObject(viewModel.context)
         body.timelineStyle(.plain).environmentObject(viewModel.context)
     }
-
+    
     static var body: some View {
         AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: UUID().uuidString,
-                                                                  body: "audio.ogg",
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
                                                                   isEditable: false,
                                                                   sender: .init(id: "Bob"),
-                                                                  duration: 300,
-                                                                  source: nil))
+                                                                  content: .init(body: "audio.ogg", duration: 300, source: nil, contentType: nil)))
     }
 }

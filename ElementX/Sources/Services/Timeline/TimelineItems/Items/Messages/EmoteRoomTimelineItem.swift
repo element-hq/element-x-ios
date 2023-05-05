@@ -16,15 +16,19 @@
 
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct EmoteRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let body: String
-    var formattedBody: AttributedString?
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
     
+    let content: EmoteRoomTimelineItemContent
+    
     var properties = RoomTimelineItemProperties()
+    
+    var body: String {
+        content.body
+    }
 }

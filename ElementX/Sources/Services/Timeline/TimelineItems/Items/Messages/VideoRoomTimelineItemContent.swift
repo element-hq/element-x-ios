@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,17 @@
 // limitations under the License.
 //
 
-import UIKit
+import Foundation
+import UniformTypeIdentifiers
 
-struct NoticeRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    
-    let sender: TimelineItemSender
-    
-    let content: NoticeRoomTimelineItemContent
-    
-    var properties = RoomTimelineItemProperties()
-    
-    var body: String {
-        content.body
-    }
+struct VideoRoomTimelineItemContent: Hashable {
+    let body: String
+    let duration: UInt64
+    let source: MediaSourceProxy?
+    let thumbnailSource: MediaSourceProxy?
+    var width: CGFloat?
+    var height: CGFloat?
+    var aspectRatio: CGFloat?
+    var blurhash: String?
+    var contentType: UTType?
 }

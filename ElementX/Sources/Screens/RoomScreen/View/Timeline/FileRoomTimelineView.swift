@@ -25,7 +25,7 @@ struct FileRoomTimelineView: View {
             HStack {
                 Image(systemName: "doc.text.fill")
                     .foregroundColor(.element.primaryContent)
-                FormattedBodyText(text: timelineItem.body)
+                FormattedBodyText(text: timelineItem.content.body)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
@@ -44,31 +44,25 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    body: "document.pdf",
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    source: nil,
-                                                                    thumbnailSource: nil))
+                                                                    content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
 
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    body: "document.docx",
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    source: nil,
-                                                                    thumbnailSource: nil))
+                                                                    content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
             
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    body: "document.txt",
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    source: nil,
-                                                                    thumbnailSource: nil))
+                                                                    content: .init(body: "document.txt", source: nil, thumbnailSource: nil, contentType: nil)))
         }
     }
 }

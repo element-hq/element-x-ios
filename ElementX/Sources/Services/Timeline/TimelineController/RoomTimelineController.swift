@@ -109,18 +109,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var body: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as VideoRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as FileRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         default:
             return .none
         }
@@ -218,7 +218,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let isLastItem = index == collapsibleChunks.indices.last
             
             let items = collapsibleChunk.compactMap { itemProxy in
-                let timelineItem = buildTimelineItemFor(itemProxy: itemProxy)
+                let timelineItem = buildTimelineItemFor(itemProxy)
                 
                 if timelineItem is PaginationIndicatorRoomTimelineItem {
                     isBackPaginating = true
@@ -253,10 +253,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItemFor(itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
-        switch itemProxy {
-        case .event(let eventItemProxy):
-            return timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy)
+    private func buildTimelineItemFor(_ item: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+        switch item {
+        case .event(let eventTimelineItem):
+            return timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):
