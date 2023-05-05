@@ -39,7 +39,7 @@ final class NSEUserSession {
                 let notification = try self.client.getNotificationItem(roomId: roomID, eventId: eventID)
                 return NotificationItemProxy(notificationItem: notification, receiverID: userID)
             } catch {
-                MXLog.error("NSE: Could not get notification's content, using a generic notification instead")
+                MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
                 return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
             }
         }
