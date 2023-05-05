@@ -52,6 +52,9 @@ class AppCoordinatorStateMachine {
         case signOut(isSoft: Bool)
         /// Signing out completed
         case completedSigningOut(isSoft: Bool)
+        
+        /// Request cache clearing
+        case clearCache
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -71,6 +74,8 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
+        
+        stateMachine.addRoutes(event: .clearCache, transitions: [.signedIn => .initial])
 
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in

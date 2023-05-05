@@ -45,6 +45,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = state.bindings.startChatUserSuggestionsEnabled
         case .changedInvitesFlowEnabled:
             ServiceLocator.shared.settings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
+        case .clearCache:
+            callback?(.clearCache)
         }
     }
 }
