@@ -106,7 +106,7 @@ class ClientProxy: ClientProxyProtocol {
         let delegate = WeakClientProxyWrapper(clientProxy: self)
         client.setDelegate(delegate: delegate)
 
-        // Comment to remove local notifications
+        // Set up sync listener for generating local notifications.
         await Task.dispatch(on: clientQueue) {
             client.setNotificationDelegate(notificationDelegate: delegate)
         }
