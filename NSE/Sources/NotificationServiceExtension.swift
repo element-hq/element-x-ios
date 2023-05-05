@@ -22,8 +22,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private let settings = NSESettings()
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-    var handler: ((UNNotificationContent) -> Void)?
-    var modifiedContent: UNMutableNotificationContent?
+    private var handler: ((UNNotificationContent) -> Void)?
+    private var modifiedContent: UNMutableNotificationContent?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -51,9 +51,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
 
         Task {
-            try await run(with: credentials,
-                          roomId: roomId,
-                          eventId: eventId)
+            await run(with: credentials,
+                      roomId: roomId,
+                      eventId: eventId)
         }
     }
     
@@ -66,65 +66,37 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     private func run(with credentials: KeychainCredentials,
                      roomId: String,
-                     eventId: String) async throws {
+                     eventId: String) async {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
-        let service = NotificationServiceProxy(basePath: URL.sessionsBaseDirectory.path,
-                                               userID: credentials.userID)
+        do {
+            let userSession = try NSEUserSession(credentials: credentials)
+            
+            let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
 
-        guard let itemProxy = try await service.notificationItem(roomId: roomId,
-                                                                 eventId: eventId) else {
-            MXLog.error("\(tag) got no notification item")
+            // After the first processing, update the modified content
+            modifiedContent = try await itemProxy.process(mediaProvider: nil)
 
-            // Notification should be discarded
-            return discard()
-        }
+            guard itemProxy.requiresMediaProvider else {
+                MXLog.info("\(tag) no media needed")
 
-        // First process without a media proxy.
-        // After this some properties of the notification should be set, like title, subtitle, sound etc.
-        guard let firstContent = try await itemProxy.process(mediaProvider: nil) else {
-            MXLog.error("\(tag) not even first content")
+                // We've processed the item and no media operations needed, so no need to go further
+                return notify()
+            }
 
-            // Notification should be discarded
-            return discard()
-        }
+            MXLog.info("\(tag) process with media")
 
-        // After the first processing, update the modified content
-        modifiedContent = firstContent
-
-        guard itemProxy.requiresMediaProvider else {
-            MXLog.info("\(tag) no media needed")
-
-            // We've processed the item and no media operations needed, so no need to go further
+            // There is some media to load, process it again
+            if let latestContent = try? await itemProxy.process(mediaProvider: userSession.mediaProvider) {
+                // Processing finished, hopefully with some media
+                modifiedContent = latestContent
+            }
+            // We still notify, but without the media attachment if it fails to load
             return notify()
-        }
-
-        MXLog.info("\(tag) process with media")
-
-        // There is some media to load, process it again
-        if let latestContent = try await itemProxy.process(mediaProvider: createMediaProvider(with: credentials)) {
-            // Processing finished, hopefully with some media
-            modifiedContent = latestContent
-            return notify()
-        } else {
-            // This is not very likely, as it should discard the notification sooner
+        } catch {
+            MXLog.error("NSE run error: \(error)")
             return discard()
         }
-    }
-
-    private func createMediaProvider(with credentials: KeychainCredentials) throws -> MediaProviderProtocol {
-        let builder = ClientBuilder()
-            .basePath(path: URL.sessionsBaseDirectory.path)
-            .username(username: credentials.userID)
-
-        let client = try builder.build()
-        try client.restoreSession(session: credentials.restorationToken.session)
-        
-        MXLog.info("\(tag) creating media provider")
-        
-        return MediaProvider(mediaLoader: MediaLoader(client: client),
-                             imageCache: .onlyOnDisk,
-                             backgroundTaskService: nil)
     }
     
     private func notify() {
@@ -132,14 +104,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         guard let modifiedContent else {
             MXLog.info("\(tag) notify: no modified content")
-            return
+            return discard()
         }
 
         guard let identifier = modifiedContent.notificationID,
               !settings.servedNotificationIdentifiers.contains(identifier) else {
             MXLog.info("\(tag) notify: notification already served")
-            discard()
-            return
+            return discard()
         }
 
         settings.servedNotificationIdentifiers.insert(identifier)

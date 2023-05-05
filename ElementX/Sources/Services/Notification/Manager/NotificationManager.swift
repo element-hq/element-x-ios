@@ -104,11 +104,13 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         guard let userSession,
               notification.event.timestamp > ServiceLocator.shared.settings.lastLaunchDate else { return }
         do {
-            guard let content = try await notification.process(mediaProvider: userSession.mediaProvider),
-                  let identifier = notification.id else {
+            guard let identifier = notification.id else {
                 return
             }
+
+            let content = try await notification.process(mediaProvider: userSession.mediaProvider)
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+            
             guard !ServiceLocator.shared.settings.servedNotificationIdentifiers.contains(identifier) else {
                 MXLog.info("NotificationManager] local notification discarded because it has already been served")
                 return

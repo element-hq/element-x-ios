@@ -102,10 +102,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 }
 
-// The mock and the protocol are just temporary until we can handle
-// and decrypt notifications both in background and in foreground
-// but they should not be necessary in the future
-struct MockNotificationItemProxy: NotificationItemProxyProtocol {
+struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     let eventID: String
 
     var event: TimelineEventProxyProtocol {
@@ -167,13 +164,13 @@ extension NotificationItemProxyProtocol {
     ///   - roomId: Room identifier
     ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
-    func process(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
-        if self is MockNotificationItemProxy {
-            return processMock()
+    func process(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        if self is EmptyNotificationItemProxy {
+            return processEmpty()
         } else {
             switch event.type {
             case .none, .state:
-                return nil
+                return processEmpty()
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
@@ -194,7 +191,7 @@ extension NotificationItemProxyProtocol {
                         return try await processText(content: content, mediaProvider: mediaProvider)
                     }
                 default:
-                    return nil
+                    return processEmpty()
                 }
             }
         }
@@ -204,8 +201,7 @@ extension NotificationItemProxyProtocol {
 
     // MARK: - Private
 
-    // To be removed once we don't need the mock anymore
-    private func processMock() -> UNMutableNotificationContent {
+    private func processEmpty() -> UNMutableNotificationContent {
         let notification = UNMutableNotificationContent()
         notification.receiverID = receiverID
         notification.roomID = roomID
