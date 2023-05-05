@@ -146,4 +146,8 @@ private class MockMediaLoadingClient: ClientProtocol {
     func searchUsers(searchTerm: String, limit: UInt64) throws -> MatrixRustSDK.SearchUsersResults { fatalError() }
 
     func setNotificationDelegate(notificationDelegate: MatrixRustSDK.NotificationDelegate?) { }
+
+    func getNotificationItem(roomId: String, eventId: String) throws -> MatrixRustSDK.NotificationItem {
+        fatalError()
+    }
 }
