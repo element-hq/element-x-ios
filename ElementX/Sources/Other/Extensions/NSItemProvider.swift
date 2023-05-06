@@ -15,12 +15,30 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 extension NSItemProvider {
     var isSupportedForPasteOrDrop: Bool {
-        !registeredContentTypes
-            .compactMap(\.preferredMIMEType)
-            .filter { $0.hasPrefix("image/") || $0.hasPrefix("video/") || $0.hasPrefix("application/") }
-            .isEmpty
+        preferredContentType != nil
+    }
+    
+    var preferredContentType: UTType? {
+        let supportedContentTypes = registeredContentTypes
+            .filter { isMimeTypeSupported($0.preferredMIMEType) }
+        
+        // Have .jpeg take priority over .heic
+        if supportedContentTypes.contains(.jpeg) {
+            return .jpeg
+        }
+        
+        return supportedContentTypes.first
+    }
+    
+    private func isMimeTypeSupported(_ mimeType: String?) -> Bool {
+        guard let mimeType else {
+            return false
+        }
+        
+        return mimeType.hasPrefix("image/") || mimeType.hasPrefix("video/") || mimeType.hasPrefix("application/")
     }
 }

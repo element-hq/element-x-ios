@@ -62,7 +62,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             guard let provider = results.first?.itemProvider,
-                  let contentType = provider.registeredContentTypes.filter({ $0.conforms(to: .image) || $0.conforms(to: .movie) || $0.conforms(to: .video) }).first else {
+                  let contentType = provider.preferredContentType else {
                 photoLibraryPicker.callback(.cancel)
                 return
             }
