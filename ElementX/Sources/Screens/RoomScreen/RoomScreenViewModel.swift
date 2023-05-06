@@ -335,8 +335,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // Pasting and dropping
     
     private func handlePasteOrDrop(_ provider: NSItemProvider) {
-        guard let type = provider.registeredContentTypes.first,
-              let preferredExtension = type.preferredFilenameExtension else {
+        guard let contentType = provider.preferredContentType,
+              let preferredExtension = contentType.preferredFilenameExtension else {
             MXLog.error("Invalid NSItemProvider: \(provider)")
             displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
             return
@@ -345,7 +345,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let providerSuggestedName = provider.suggestedName
         let providerDescription = provider.description
         
-        _ = provider.loadDataRepresentation(for: type) { data, error in
+        _ = provider.loadDataRepresentation(for: contentType) { data, error in
             Task { @MainActor in
                 let loadingIndicatorIdentifier = UUID().uuidString
                 ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
