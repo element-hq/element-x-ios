@@ -29,11 +29,6 @@ jobs:
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
-
-      - name: Setup simulators
-        run:
-          xcrun simctl create "iPhone 13 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro
-
       
       - name: Run tests
         run: bundle exec fastlane integration_tests

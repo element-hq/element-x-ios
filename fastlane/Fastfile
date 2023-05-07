@@ -110,7 +110,10 @@ lane :unit_tests do
 end
 
 lane :ui_tests do
-  sh("xcrun simctl create 'iPad (9th generation)' com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation")
+  create_simulator_if_necessary(
+    name: "iPad (9th generation)",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"
+  )
 
   run_tests(
     scheme: "UITests",
@@ -130,7 +133,10 @@ lane :ui_tests do
 end
 
 lane :integration_tests do
-  sh("xcrun simctl create 'iPhone 13 Pro' com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro")
+  create_simulator_if_necessary(
+    name: "iPhone 13 Pro",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro"
+  )
 
   run_tests(
     scheme: "IntegrationTests",
@@ -333,4 +339,21 @@ private_lane :update_app_icon do |options|
       sh("convert -background '#0008' -fill white -gravity center -size '#{caption_width}'x'#{caption_height}' caption:'#{caption_text}' '#{file_name}' +swap -gravity south -composite '#{file_name}'")
     end
   end
+end
+
+private_lane :create_simulator_if_necessary do |options|
+  simulator_name = options[:name]
+  UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
+
+  simulator_type = options[:type]
+  UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
+
+
+  # Use use a `(` here to avoid matching `iPhone 13 Pro` on `iPhone 13 Pro Max` for example
+  begin sh("xcrun simctl list devices | grep '#{simulator_name} ('")
+    UI.success "Simulator already exists"
+  rescue
+    sh("xcrun simctl create '#{simulator_name}' #{simulator_type}")
+  end
+
 end
