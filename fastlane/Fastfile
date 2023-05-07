@@ -109,7 +109,9 @@ lane :unit_tests do
   )
 end
 
-lane :ui_tests do 
+lane :ui_tests do
+  sh("xcrun simctl create 'iPad (9th generation)' com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation")
+
   run_tests(
     scheme: "UITests",
     devices: ["iPhone 14", "iPad (9th generation)"],
@@ -128,6 +130,8 @@ lane :ui_tests do
 end
 
 lane :integration_tests do
+  sh("xcrun simctl create 'iPhone 13 Pro' com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro")
+
   run_tests(
     scheme: "IntegrationTests",
     devices: ["iPhone 13 Pro"],
