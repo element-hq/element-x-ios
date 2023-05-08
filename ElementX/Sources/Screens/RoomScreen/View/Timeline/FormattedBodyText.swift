@@ -100,7 +100,7 @@ struct FormattedBodyText: View {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .blockquoteFormatting(isReply: component.isReply)
+                        .blockquoteFormatting()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.element.background)
                         .cornerRadius(8)
@@ -119,7 +119,7 @@ struct FormattedBodyText: View {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .blockquoteFormatting(isReply: component.isReply)
+                        .blockquoteFormatting()
                         .layoutPriority(LayoutPriority.hiddenBlockquote)
                         .hidden()
                 }
@@ -164,9 +164,8 @@ extension FormattedBodyText {
 }
 
 private extension View {
-    func blockquoteFormatting(isReply: Bool) -> some View {
-        lineLimit(isReply ? 3 : nil)
-            .foregroundColor(.element.tertiaryContent)
+    func blockquoteFormatting() -> some View {
+        foregroundColor(.element.tertiaryContent)
             .fixedSize(horizontal: false, vertical: true)
             .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
     }

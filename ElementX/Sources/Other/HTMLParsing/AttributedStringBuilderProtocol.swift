@@ -19,7 +19,6 @@ import Foundation
 struct AttributedStringBuilderComponent: Hashable {
     let attributedString: AttributedString
     let isBlockquote: Bool
-    let isReply: Bool
 }
 
 protocol AttributedStringBuilderProtocol {
