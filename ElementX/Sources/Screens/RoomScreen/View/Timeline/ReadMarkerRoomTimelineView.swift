@@ -41,7 +41,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
     static let item = ReadMarkerRoomTimelineItem()
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RoomTimelineViewProvider.separator(.init(text: "Today"), .single)
+            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
             RoomTimelineViewProvider.text(.init(id: "",
                                                 timestamp: "",
                                                 isOutgoing: true,
@@ -51,7 +51,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
             
             ReadMarkerRoomTimelineView(timelineItem: item)
             
-            RoomTimelineViewProvider.separator(.init(text: "Today"), .single)
+            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
             RoomTimelineViewProvider.text(.init(id: "",
                                                 timestamp: "",
                                                 isOutgoing: false,

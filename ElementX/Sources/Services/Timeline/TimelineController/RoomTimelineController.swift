@@ -231,8 +231,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
             let isLastItem = index == collapsibleChunks.indices.last
             
+            // Try building a stable identifier for items that don't have one
+            // We need to avoid duplicates otherwise the diffable datasource will crash
+            let reversedIndex = collapsibleChunks.count - index
+            
             let items = collapsibleChunk.compactMap { itemProxy in
-                let timelineItem = buildTimelineItem(for: itemProxy)
+                
+                let timelineItem = buildTimelineItem(for: itemProxy, chunkIndex: reversedIndex)
                 
                 if timelineItem is PaginationIndicatorRoomTimelineItem {
                     isBackPaginating = true
@@ -267,17 +272,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+    private func buildTimelineItem(for itemProxy: TimelineItemProxy, chunkIndex: Int) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
             return timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):
-                // These components will be replaced by a timestamp in upcoming releases
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
-                return SeparatorRoomTimelineItem(text: dateString)
+                
+                // Separators without stable identifiers cause UI glitches
+                let identifier = "\(chunkIndex)-\(dateString)"
+                return SeparatorRoomTimelineItem(id: identifier, text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem()
             case .loadingIndicator:
