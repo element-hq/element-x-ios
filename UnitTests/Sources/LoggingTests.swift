@@ -186,37 +186,55 @@ class LoggingTests: XCTestCase {
             XCTFail(Constants.genericFailure)
             return
         }
-
+        
         let content = try String(contentsOf: logFile)
         XCTAssertTrue(content.contains(roomSummary.id))
         XCTAssertFalse(content.contains(roomName))
         XCTAssertFalse(content.contains(lastMessage))
     }
     
+    // swiftlint:disable:next function_body_length
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: "mytextmessage", body: "TextString",
-                                               formattedBody: AttributedString(textAttributedString),
-                                               timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
+        let textMessage = TextRoomTimelineItem(id: "mytextmessage",
+                                               timestamp: "",
+                                               isOutgoing: false,
+                                               isEditable: false,
+                                               sender: .init(id: "sender"),
+                                               content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
         let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", body: "NoticeString",
-                                                   formattedBody: AttributedString(noticeAttributedString),
-                                                   timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
+        let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage",
+                                                   timestamp: "",
+                                                   isOutgoing: false,
+                                                   isEditable: false,
+                                                   sender: .init(id: "sender"),
+                                                   content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
         let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", body: "EmoteString",
-                                                 formattedBody: AttributedString(emoteAttributedString),
-                                                 timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
-        let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", body: "ImageString",
-                                                 timestamp: "", isOutgoing: false, isEditable: false,
+        let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage",
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
                                                  sender: .init(id: "sender"),
-                                                 source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"))
-        let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", body: "VideoString",
-                                                 timestamp: "", isOutgoing: false, isEditable: false,
-                                                 sender: .init(id: "sender"), duration: 0, source: nil, thumbnailSource: nil)
-        let fileMessage = FileRoomTimelineItem(id: "myfilemessage", body: "FileString",
-                                               timestamp: "", isOutgoing: false, isEditable: false,
-                                               sender: .init(id: "sender"), source: nil, thumbnailSource: nil)
+                                                 content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
+        let imageMessage = ImageRoomTimelineItem(id: "myimagemessage",
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 sender: .init(id: "sender"),
+                                                 content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
+        let videoMessage = VideoRoomTimelineItem(id: "myvideomessage",
+                                                 timestamp: "",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 sender: .init(id: "sender"),
+                                                 content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
+        let fileMessage = FileRoomTimelineItem(id: "myfilemessage",
+                                               timestamp: "",
+                                               isOutgoing: false,
+                                               isEditable: false,
+                                               sender: .init(id: "sender"),
+                                               content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
