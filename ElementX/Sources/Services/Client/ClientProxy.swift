@@ -326,8 +326,8 @@ class ClientProxy: ClientProxyProtocol {
             
             let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
             
-            // Add the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
-            // We will still register the allRoomsSlidingSyncView later, and than will have no cache
+            // Add the visibleRoomsSlidingSyncList here so that it can take advantage of the SS builder cold cache
+            // We will still register the allRoomsSlidingSyncList later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
@@ -372,7 +372,7 @@ class ClientProxy: ClientProxyProtocol {
         self.visibleRoomsListBuilder = visibleRoomsListBuilder
         self.visibleRoomsListProxy = visibleRoomsListProxy
 
-        // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
+        // The allRoomsSlidingSyncList will be registered as soon as the visibleRoomsSlidingSyncList receives its first update
         visibleRoomsListProxyStateObservationToken = visibleRoomsListProxy.statePublisher.sink { [weak self] state in
             guard state == .fullyLoaded else {
                 return
@@ -451,13 +451,13 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsListProxy,
+        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: visibleRoomsListProxy,
                                                           eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
         
-        allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsListProxy,
+        allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: allRoomsListProxy,
                                                       eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
         
-        invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesListProxy,
+        invitesSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: invitesListProxy,
                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
     }
     
