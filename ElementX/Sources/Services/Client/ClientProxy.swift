@@ -303,13 +303,7 @@ class ClientProxy: ClientProxyProtocol {
             self.avatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-    
-    private func restartSync() {
-        MXLog.info("Restarting sync")
-        stopSync()
-        startSync()
-    }
-    
+        
     private func configureSlidingSync() {
         guard slidingSync == nil else {
             fatalError("This shouldn't be called more than once")
@@ -348,7 +342,7 @@ class ClientProxy: ClientProxyProtocol {
             
             // Build the room summary providers later so the sliding sync view proxies are up to date and the
             // currentRoomList is populated with the data from the cold cache
-//            buildRoomSummaryProviders()
+            buildRoomSummaryProviders()
             
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
             
@@ -540,8 +534,6 @@ class ClientProxy: ClientProxyProtocol {
         } else {
             MXLog.error("Notifications sliding sync view unavailable")
         }
-
-        restartSync()
     }
     
     private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {

@@ -58,8 +58,8 @@ private class SlidingSyncListObserver: SlidingSyncListRoomListObserver, SlidingS
 
 class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
     private let name: String
-    private var slidingSync: SlidingSyncProtocol!
-    private var slidingSyncList: SlidingSyncListProtocol!
+    private var slidingSync: SlidingSyncProtocol?
+    private var slidingSyncList: SlidingSyncListProtocol?
     
     private var listUpdateObserverToken: TaskHandle?
     private var stateUpdateObserverToken: TaskHandle?
@@ -86,23 +86,31 @@ class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
     }
     
     func currentRoomsList() -> [RoomListEntry] {
-        slidingSyncList.currentRoomList()
+        guard let slidingSyncList else {
+            return []
+        }
+        
+        return slidingSyncList.currentRoomList()
     }
     
     func roomForIdentifier(_ identifier: String) throws -> SlidingSyncRoomProtocol? {
-        try slidingSync.getRoom(roomId: identifier)
+        guard let slidingSync else {
+            return nil
+        }
+        
+        return try slidingSync.getRoom(roomId: identifier)
     }
     
     func updateVisibleRange(_ range: Range<Int>?, timelineLimit: UInt?) {
         do {
             if let range {
                 MXLog.info("Setting '\(name)' list range to \(range)")
-                try slidingSyncList.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
+                try slidingSyncList?.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
             }
             
             if let timelineLimit {
                 MXLog.info("Setting '\(name)' list timeline limit to \(timelineLimit)")
-                slidingSyncList.setTimelineLimit(value: UInt32(timelineLimit))
+                slidingSyncList?.setTimelineLimit(value: UInt32(timelineLimit))
             }
         } catch {
             MXLog.error("Failed setting sliding sync list range with error: \(error)")
