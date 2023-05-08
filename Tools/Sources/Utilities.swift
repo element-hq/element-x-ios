@@ -19,7 +19,6 @@ enum Utilities {
     @discardableResult
     static func zsh(_ command: String, workingDirectoryURL: URL = projectDirectoryURL) throws -> String? {
         let process = Process()
-        process.environment = [:]
         process.executableURL = URL(fileURLWithPath: "/bin/zsh")
         process.arguments = ["-cu", command]
         process.currentDirectoryURL = workingDirectoryURL
