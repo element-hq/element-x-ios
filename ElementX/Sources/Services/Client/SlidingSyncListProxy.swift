@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingSyncListStateObserver, SlidingSyncListRoomsCountObserver {
+private class SlidingSyncListObserver: SlidingSyncListRoomListObserver, SlidingSyncListStateObserver, SlidingSyncListRoomsCountObserver {
     /// Publishes room list diffs as they come in through sliding sync
     let roomListDiffPublisher = PassthroughSubject<SlidingSyncListRoomsListDiff, Never>()
     
@@ -33,7 +33,7 @@ private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingS
     init(name: String) {
         self.name = name
     }
-        
+            
     // MARK: - SlidingSyncListRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncListRoomsListDiff) {
@@ -56,9 +56,10 @@ private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingS
     }
 }
 
-class SlidingSyncViewProxy {
+class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
+    private let name: String
     private var slidingSync: SlidingSyncProtocol!
-    private let slidingSyncView: SlidingSyncListProtocol
+    private var slidingSyncList: SlidingSyncListProtocol!
     
     private var listUpdateObserverToken: TaskHandle?
     private var stateUpdateObserverToken: TaskHandle?
@@ -69,7 +70,6 @@ class SlidingSyncViewProxy {
     let diffPublisher = PassthroughSubject<SlidingSyncListRoomsListDiff, Never>()
     let statePublisher = PassthroughSubject<SlidingSyncState, Never>()
     let countPublisher = PassthroughSubject<UInt, Never>()
-    let visibleRangeUpdatePublisher = PassthroughSubject<Void, Never>()
     
     deinit {
         listUpdateObserverToken?.cancel()
@@ -77,26 +77,8 @@ class SlidingSyncViewProxy {
         countUpdateObserverToken?.cancel()
     }
     
-    init(slidingSyncView: SlidingSyncListProtocol, name: String) {
-        self.slidingSyncView = slidingSyncView
-        
-        let slidingSyncViewObserver = SlidingSyncViewObserver(name: name)
-        
-        slidingSyncViewObserver.stateUpdatePublisher
-            .subscribe(statePublisher)
-            .store(in: &cancellables)
-        
-        slidingSyncViewObserver.countUpdatePublisher
-            .subscribe(countPublisher)
-            .store(in: &cancellables)
-        
-        slidingSyncViewObserver.roomListDiffPublisher
-            .subscribe(diffPublisher)
-            .store(in: &cancellables)
-        
-        listUpdateObserverToken = slidingSyncView.observeRoomList(observer: slidingSyncViewObserver)
-        stateUpdateObserverToken = slidingSyncView.observeState(observer: slidingSyncViewObserver)
-        countUpdateObserverToken = slidingSyncView.observeRoomsCount(observer: slidingSyncViewObserver)
+    init(name: String) {
+        self.name = name
     }
     
     func setSlidingSync(slidingSync: SlidingSyncProtocol) {
@@ -104,23 +86,52 @@ class SlidingSyncViewProxy {
     }
     
     func currentRoomsList() -> [RoomListEntry] {
-        slidingSyncView.currentRoomList()
+        slidingSyncList.currentRoomList()
     }
     
     func roomForIdentifier(_ identifier: String) throws -> SlidingSyncRoomProtocol? {
         try slidingSync.getRoom(roomId: identifier)
     }
     
-    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
-        MXLog.info("Setting sliding sync view range to \(range), timeline limit: \(timelineLimit)")
-        
+    func updateVisibleRange(_ range: Range<Int>?, timelineLimit: UInt?) {
         do {
-            try slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
-            slidingSyncView.setTimelineLimit(value: UInt32(timelineLimit))
+            if let range {
+                MXLog.info("Setting '\(name)' list range to \(range)")
+                try slidingSyncList.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
+            }
             
-            visibleRangeUpdatePublisher.send(())
+            if let timelineLimit {
+                MXLog.info("Setting '\(name)' list timeline limit to \(timelineLimit)")
+                slidingSyncList.setTimelineLimit(value: UInt32(timelineLimit))
+            }
         } catch {
             MXLog.error("Failed setting sliding sync list range with error: \(error)")
         }
+    }
+    
+    // MARK: - SlidingSyncListOnceBuilt
+    
+    func updateList(list: MatrixRustSDK.SlidingSyncList) -> MatrixRustSDK.SlidingSyncList {
+        slidingSyncList = list
+        
+        let slidingSyncListObserver = SlidingSyncListObserver(name: name)
+        
+        slidingSyncListObserver.stateUpdatePublisher
+            .subscribe(statePublisher)
+            .store(in: &cancellables)
+        
+        slidingSyncListObserver.countUpdatePublisher
+            .subscribe(countPublisher)
+            .store(in: &cancellables)
+        
+        slidingSyncListObserver.roomListDiffPublisher
+            .subscribe(diffPublisher)
+            .store(in: &cancellables)
+        
+        listUpdateObserverToken = list.observeRoomList(observer: slidingSyncListObserver)
+        stateUpdateObserverToken = list.observeState(observer: slidingSyncListObserver)
+        countUpdateObserverToken = list.observeRoomsCount(observer: slidingSyncListObserver)
+        
+        return list
     }
 }

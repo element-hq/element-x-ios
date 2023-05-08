@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
-    private let slidingSyncViewProxy: SlidingSyncViewProxy
+    private let slidingSyncViewProxy: SlidingSyncListProxy
     private let serialDispatchQueue: DispatchQueue
     private let eventStringBuilder: RoomEventStringBuilder
     
@@ -47,7 +47,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
+    init(slidingSyncViewProxy: SlidingSyncListProxy, eventStringBuilder: RoomEventStringBuilder) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
