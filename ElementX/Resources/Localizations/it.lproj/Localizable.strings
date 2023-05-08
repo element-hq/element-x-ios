@@ -138,7 +138,6 @@
 "notification_unread_notified_messages_in_room" = "%1$@ in %2$@";
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ in %2$@ and %3$@";
 "preference_rageshake" = "Scuoti per segnalare un problema";
-"rageshake_detection_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "rageshake_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "report_content_explanation" = "Questo messaggio verrà segnalato all'amministratore dell'homeserver. Questi non sarà in grado di leggere i messaggi criptati.";
 "report_content_hint" = "Motivo della segnalazione di questo contenuto";
@@ -177,7 +176,6 @@
 "screen_bug_report_include_logs" = "Invia i log per aiutarci";
 "screen_bug_report_include_screenshot" = "Invia istantanea schermo";
 "screen_bug_report_logs_description" = "Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Questi saranno privati. Per inviare solo il tuo messaggio, disattiva questa impostazione.";
-"screen_bug_report_rash_logs_alert_title" = "%1$@ si è chiuso inaspettatamente l'ultima volta che è stato usato. Vuoi condividere con noi un rapporto sull'arresto anomalo?";
 "screen_change_server_error_invalid_homeserver" = "Non siamo riusciti a raggiungere questo homserver. Verifica di aver inserito correttamente l'URL del server domestico. Se l'URL è corretto, contatta l'amministratore del tuo server domestico per ulteriore assistenza.";
 "screen_change_server_error_no_sliding_sync_message" = "Questo server attualmente non supporta la sincronizzazione scorrevole.";
 "screen_change_server_form_header" = "URL dell'homeserver";
@@ -193,7 +191,6 @@
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_room_name_placeholder" = "e.g. Product Sprint";
-"screen_create_room_title" = "Create a room";
 "screen_create_room_topic_label" = "Topic (optional)";
 "screen_create_room_topic_placeholder" = "What is this room about?";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
@@ -214,9 +211,13 @@
 "screen_onboarding_welcome_subtitle" = "Benvenuto nella beta di %1$@. Potenziato in velocità e semplicità.";
 "screen_onboarding_welcome_title" = "Sii nel tuo elemento";
 "screen_report_content_block_user_hint" = "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente";
+"screen_room_attachment_source_camera" = "Camera";
+"screen_room_attachment_source_camera_photo" = "Take photo";
+"screen_room_attachment_source_camera_video" = "Record a video";
+"screen_room_attachment_source_files" = "Attachment";
+"screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_encryption_enabled_subtitle" = "I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli.";
 "screen_room_details_encryption_enabled_title" = "Crittografia messaggi abilitata";
-"screen_room_details_invite_people_title" = "Invita persone";
 "screen_room_details_share_room_title" = "Condividi stanza";
 "screen_room_member_details_block_alert_action" = "Blocca";
 "screen_room_member_details_block_alert_description" = "Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento.";
@@ -224,6 +225,7 @@
 "screen_room_member_details_unblock_alert_action" = "Sblocca";
 "screen_room_member_details_unblock_alert_description" = "Dopo aver sbloccato l'utente, potrai vedere nuovamente tutti i suoi messaggi.";
 "screen_room_member_details_unblock_user" = "Sblocca utente";
+"screen_room_member_list_pending_header_title" = "Pending";
 "screen_roomlist_a11y_create_message" = "Crea una nuova conversazione o stanza";
 "screen_roomlist_main_space_title" = "Tutte le conversazioni";
 "screen_session_verification_cancelled_subtitle" = "C'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata.";
@@ -241,10 +243,8 @@
 "screen_session_verification_waiting_to_accept_subtitle" = "Accetta la richiesta di avviare il processo di verifica nell'altra sessione per continuare.";
 "screen_session_verification_waiting_to_accept_title" = "In attesa di accettare la richiesta";
 "screen_signout_confirmation_dialog_content" = "Sei sicuro di voler uscire?";
-"screen_signout_confirmation_dialog_submit" = "Esci";
 "screen_signout_confirmation_dialog_title" = "Esci";
 "screen_signout_in_progress_dialog_content" = "Uscita in corso…";
-"screen_signout_preference_item" = "Esci";
 "screen_start_chat_error_starting_chat" = "Si è verificato un errore durante il tentativo di avviare una chat";
 "screen_start_chat_unknown_profile" = "Non possiamo convalidare l'ID Matrix di questo utente. L'invito potrebbe non essere ricevuto.";
 "session_verification_banner_message" = "Sembra che tu stia utilizzando un nuovo dispositivo. Verifica di essere tu per accedere ai tuoi messaggi crittografati.";
@@ -312,11 +312,14 @@
 "dialog_title_error" = "Errore";
 "dialog_title_success" = "Operazione riuscita";
 "notification_room_action_quick_reply" = "Risposta rapida";
+"rageshake_detection_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "here";
+"screen_bug_report_rash_logs_alert_title" = "%1$@ si è chiuso inaspettatamente l'ultima volta che è stato usato. Vuoi condividere con noi un rapporto sull'arresto anomalo?";
 "screen_change_server_submit" = "Continua";
 "screen_change_server_title" = "Seleziona il tuo server";
+"screen_create_room_title" = "Crea una stanza";
 "screen_dm_details_block_alert_action" = "Blocca";
 "screen_dm_details_block_alert_description" = "Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento.";
 "screen_dm_details_block_user" = "Blocca utente";
@@ -328,9 +331,13 @@
 "screen_login_submit" = "Continua";
 "screen_login_username_hint" = "Nome utente";
 "screen_report_content_block_user" = "Blocca utente";
+"screen_room_details_invite_people_title" = "Invita persone";
 "screen_room_details_leave_room_title" = "Esci dalla stanza";
 "screen_room_details_people_title" = "Persone";
 "screen_room_details_security_title" = "Sicurezza";
 "screen_room_details_topic_title" = "Oggetto";
+"screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_session_verification_cancelled_title" = "Verifica annullata";
 "screen_session_verification_positive_button_ready" = "Inizia";
+"screen_signout_confirmation_dialog_submit" = "Esci";
+"screen_signout_preference_item" = "Esci";

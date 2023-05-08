@@ -14,6 +14,8 @@
 			<string>d</string>
 			<key>one</key>
 			<string>%1$d membru</string>
+			<key>few</key>
+			<string>%1$d membri</string>
 			<key>other</key>
 			<string>%1$d membri</string>
 		</dict>
@@ -126,6 +128,8 @@
 			<string>d</string>
 			<key>one</key>
 			<string>%1$d schimbare a camerii</string>
+			<key>few</key>
+			<string>%1$d schimbări ale camerei</string>
 			<key>other</key>
 			<string>%1$d schimbări ale camerei</string>
 		</dict>
