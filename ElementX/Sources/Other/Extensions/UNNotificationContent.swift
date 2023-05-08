@@ -18,6 +18,27 @@ import Foundation
 import Intents
 import UserNotifications
 
+enum NotificationIconType {
+    case sender(mediaSource: MediaSourceProxy?)
+    case group(mediaSource: MediaSourceProxy?, groupName: String)
+
+    var mediaSource: MediaSourceProxy? {
+        switch self {
+        case .group(let mediaSource, _), .sender(let mediaSource):
+            return mediaSource
+        }
+    }
+
+    var isSenderIcon: Bool {
+        switch self {
+        case .sender:
+            return true
+        case .group:
+            return false
+        }
+    }
+}
+
 extension UNNotificationContent {
     @objc var receiverID: String? {
         userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
@@ -103,11 +124,10 @@ extension UNMutableNotificationContent {
                        senderId: String,
                        receiverId: String,
                        senderName: String,
-                       groupName: String?,
-                       mediaSource: MediaSourceProxy?,
-                       roomId: String) async throws -> UNMutableNotificationContent {
+                       roomId: String,
+                       iconType: NotificationIconType) async throws -> UNMutableNotificationContent {
         var image: INImage?
-        if let mediaSource {
+        if let mediaSource = iconType.mediaSource {
             switch await mediaProvider?.loadFileFromSource(mediaSource) {
             case .success(let mediaFile):
                 image = try INImage(imageData: Data(contentsOf: mediaFile.url))
@@ -122,14 +142,14 @@ extension UNMutableNotificationContent {
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
                               displayName: senderName,
-                              image: image,
+                              image: iconType.isSenderIcon ? image : nil,
                               contactIdentifier: nil,
                               customIdentifier: nil)
 
         // These are required to show the group name as subtitle
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
-        if let groupName {
+        if case let .group(_, groupName) = iconType {
             let meHandle = INPersonHandle(value: receiverId, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupName)
@@ -144,7 +164,9 @@ extension UNMutableNotificationContent {
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
-        intent.setImage(image, forParameterNamed: \.speakableGroupName)
+        if speakableGroupName != nil, let image {
+            intent.setImage(image, forParameterNamed: \.speakableGroupName)
+        }
 
         // Use the intent to initialize the interaction.
         let interaction = INInteraction(intent: intent, response: nil)
