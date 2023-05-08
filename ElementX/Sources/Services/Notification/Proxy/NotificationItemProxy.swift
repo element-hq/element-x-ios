@@ -232,22 +232,17 @@ extension NotificationItemProxyProtocol {
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
 
         let senderName = senderDisplayName ?? roomDisplayName
-        var groupName: String?
-        var mediaSource: MediaSourceProxy?
+        let iconType: NotificationIconType
         if !isDirect {
-            groupName = senderName != roomDisplayName ? roomDisplayName : nil
-            mediaSource = roomAvatarMediaSource
+            iconType = .group(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
         } else {
-            mediaSource = senderAvatarMediaSource
+            iconType = .sender(mediaSource: senderAvatarMediaSource)
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderId: event.senderID,
-                                                            receiverId: receiverID,
+                                                            senderID: event.senderID,
                                                             senderName: senderName,
-                                                            groupName: groupName,
-                                                            mediaSource: mediaSource,
-                                                            roomId: roomID)
+                                                            iconType: iconType)
         return notification
     }
 
