@@ -96,7 +96,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemID: String) async { }
+    func processItemAppearance(_ itemID: String) async {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
+            return
+        }
+        
+        // Fetch replied-to event details if unavailable at the point of displaying it in the timeline
+        if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+            if case .unavailable(let eventID) = messageTimelineItem.replyDetails {
+                roomProxy.fetchEventDetails(for: eventID)
+            }
+        }
+    }
     
     func processItemDisappearance(_ itemID: String) { }
 
@@ -256,16 +267,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func buildTimelineItemFor(_ item: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch item {
         case .event(let eventTimelineItem):
-            let item = timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
-            
-            // Fetch replied-to event details if unavailable at the point of loading it in the timeline
-            if let messageTimelineItem = item as? EventBasedMessageTimelineItemProtocol {
-                if case .unavailable(let eventID) = messageTimelineItem.replyDetails {
-                    roomProxy.fetchEventDetails(for: eventID)
-                }
-            }
-            
-            return item
+            return timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):
