@@ -119,12 +119,9 @@ extension UNMutableNotificationContent {
         return self
     }
 
-    // swiftlint:disable:next function_parameter_count
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
-                       senderId: String,
-                       receiverId: String,
+                       senderID: String,
                        senderName: String,
-                       roomId: String,
                        iconType: NotificationIconType) async throws -> UNMutableNotificationContent {
         var image: INImage?
         if let mediaSource = iconType.mediaSource {
@@ -138,7 +135,7 @@ extension UNMutableNotificationContent {
             }
         }
 
-        let senderHandle = INPersonHandle(value: senderId, type: .unknown)
+        let senderHandle = INPersonHandle(value: senderID, type: .unknown)
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
                               displayName: senderName,
@@ -150,7 +147,7 @@ extension UNMutableNotificationContent {
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
         if case let .group(_, groupName) = iconType {
-            let meHandle = INPersonHandle(value: receiverId, type: .unknown)
+            let meHandle = INPersonHandle(value: receiverID, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupName)
             recipients = [sender, me]
@@ -160,7 +157,7 @@ extension UNMutableNotificationContent {
                                          outgoingMessageType: .outgoingMessageText,
                                          content: nil,
                                          speakableGroupName: speakableGroupName,
-                                         conversationIdentifier: roomId,
+                                         conversationIdentifier: roomID,
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)

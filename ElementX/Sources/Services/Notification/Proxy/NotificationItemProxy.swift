@@ -240,10 +240,8 @@ extension NotificationItemProxyProtocol {
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderId: event.senderID,
-                                                            receiverId: receiverID,
+                                                            senderID: event.senderID,
                                                             senderName: senderName,
-                                                            roomId: roomID,
                                                             iconType: iconType)
         return notification
     }
