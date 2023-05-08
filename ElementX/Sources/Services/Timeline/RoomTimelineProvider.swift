@@ -53,7 +53,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             
             roomTimelineListener
                 .itemsUpdatePublisher
-                .collect(.byTime(serialDispatchQueue, 0.025))
+                .collect(.byTime(serialDispatchQueue, 0.1))
                 .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
             
