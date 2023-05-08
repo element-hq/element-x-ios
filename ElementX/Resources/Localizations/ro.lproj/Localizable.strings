@@ -138,7 +138,6 @@
 "notification_unread_notified_messages_in_room" = "%1$@ în %2$@";
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ în %2$@ și %3$@";
 "preference_rageshake" = "Rageshake pentru a raporta erori";
-"rageshake_detection_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
 "rageshake_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
 "report_content_explanation" = "Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat.";
 "report_content_hint" = "Motivul raportării acestui conținut";
@@ -177,7 +176,6 @@
 "screen_bug_report_include_logs" = "Trimiteți log-uri pentru a ajuta";
 "screen_bug_report_include_screenshot" = "Trimiteți captură de ecran";
 "screen_bug_report_logs_description" = "Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare.";
-"screen_bug_report_rash_logs_alert_title" = "%1$@ s-a blocat ultima dată când a fost folosit. Dorești să ne trimiti un raport?";
 "screen_change_server_error_invalid_homeserver" = "Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar.";
 "screen_change_server_error_no_sliding_sync_message" = "Momentan acest server nu oferă suport pentru sliding sync.";
 "screen_change_server_form_header" = "Adresa URL a homeserver-ului";
@@ -193,7 +191,6 @@
 "screen_create_room_public_option_title" = "Cameră publică (oricine)";
 "screen_create_room_room_name_label" = "Numele camerei";
 "screen_create_room_room_name_placeholder" = "e.g. Mici și Cozonaci";
-"screen_create_room_title" = "Creați o cameră";
 "screen_create_room_topic_label" = "Subiect (opțional)";
 "screen_create_room_topic_placeholder" = "Despre ce este această cameră?";
 "screen_invites_decline_chat_message" = "Sigur doriți să refuzați alăturarea la %1$@?";
@@ -214,9 +211,13 @@
 "screen_onboarding_welcome_subtitle" = "Bun venit la versiunea beta a %1$@. Supraalimentat, pentru viteză și simplitate.";
 "screen_onboarding_welcome_title" = "Fii în Elementul tău";
 "screen_report_content_block_user_hint" = "Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator";
+"screen_room_attachment_source_camera" = "Camera";
+"screen_room_attachment_source_camera_photo" = "Take photo";
+"screen_room_attachment_source_camera_video" = "Record a video";
+"screen_room_attachment_source_files" = "Attachment";
+"screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_encryption_enabled_subtitle" = "Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca.";
 "screen_room_details_encryption_enabled_title" = "Criptarea mesajelor este activată";
-"screen_room_details_invite_people_title" = "Invitați persoane";
 "screen_room_details_share_room_title" = "Partajați camera";
 "screen_room_member_details_block_alert_action" = "Blocați";
 "screen_room_member_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";
@@ -224,6 +225,7 @@
 "screen_room_member_details_unblock_alert_action" = "Deblocați";
 "screen_room_member_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_room_member_details_unblock_user" = "Deblocați utilizatorul";
+"screen_room_member_list_pending_header_title" = "Pending";
 "screen_roomlist_a11y_create_message" = "Creați o conversație sau o cameră nouă";
 "screen_roomlist_main_space_title" = "Toate conversatiile";
 "screen_session_verification_cancelled_subtitle" = "Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă.";
@@ -241,10 +243,8 @@
 "screen_session_verification_waiting_to_accept_subtitle" = "Acceptați solicitarea de a începe procesul de verificare în cealaltă sesiune pentru a continua.";
 "screen_session_verification_waiting_to_accept_title" = "Se așteptă acceptarea cererii";
 "screen_signout_confirmation_dialog_content" = "Sunteți sigur că vreți să vă deconectați?";
-"screen_signout_confirmation_dialog_submit" = "Deconectați-vă";
 "screen_signout_confirmation_dialog_title" = "Deconectați-vă";
 "screen_signout_in_progress_dialog_content" = "Deconectare în curs…";
-"screen_signout_preference_item" = "Deconectați-vă";
 "screen_start_chat_error_starting_chat" = "A apărut o eroare la încercarea începerii conversației";
 "screen_start_chat_unknown_profile" = "Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost primită.";
 "session_verification_banner_message" = "Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea pentru acces la mesajele dumneavoastră criptate.";
@@ -312,11 +312,14 @@
 "dialog_title_error" = "Eroare";
 "dialog_title_success" = "Succes";
 "notification_room_action_quick_reply" = "Raspuns rapid";
+"rageshake_detection_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
 "screen_analytics_settings_help_us_improve" = "Ajutați-ne să identificăm problemele și să îmbunătățim %1$@ prin partajarea datelor de utilizare anonime.";
 "screen_analytics_settings_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "aici";
+"screen_bug_report_rash_logs_alert_title" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
 "screen_change_server_submit" = "Continuați";
 "screen_change_server_title" = "Selectați serverul";
+"screen_create_room_title" = "Creați o cameră";
 "screen_dm_details_block_alert_action" = "Blocați";
 "screen_dm_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";
 "screen_dm_details_block_user" = "Blocați utilizatorul";
@@ -328,9 +331,13 @@
 "screen_login_submit" = "Continuați";
 "screen_login_username_hint" = "Utilizator";
 "screen_report_content_block_user" = "Blocați utilizatorul";
+"screen_room_details_invite_people_title" = "Invitați persoane";
 "screen_room_details_leave_room_title" = "Părăsiți camera";
 "screen_room_details_people_title" = "Persoane";
 "screen_room_details_security_title" = "Securitate";
 "screen_room_details_topic_title" = "Subiect";
+"screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_session_verification_cancelled_title" = "Verificare anulată";
 "screen_session_verification_positive_button_ready" = "Începeți";
+"screen_signout_confirmation_dialog_submit" = "Deconectați-vă";
+"screen_signout_preference_item" = "Deconectați-vă";

@@ -225,6 +225,7 @@
 "screen_room_member_details_unblock_alert_action" = "Unblock";
 "screen_room_member_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
+"screen_room_member_list_pending_header_title" = "Pending";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
