@@ -44,8 +44,8 @@ struct CollapsibleRoomTimelineView: View {
 
 struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = CollapsibleTimelineItem(items: [SeparatorRoomTimelineItem(text: "This is a separator"),
-                                                   SeparatorRoomTimelineItem(text: "This is another separator")])
+        let item = CollapsibleTimelineItem(items: [SeparatorRoomTimelineItem(id: "First separator", text: "This is a separator"),
+                                                   SeparatorRoomTimelineItem(id: "Second separator", text: "This is another separator")])
         CollapsibleRoomTimelineView(timelineItem: item)
     }
 }

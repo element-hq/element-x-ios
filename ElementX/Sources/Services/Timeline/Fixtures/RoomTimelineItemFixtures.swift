@@ -19,7 +19,7 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(text: "Yesterday"),
+        SeparatorRoomTimelineItem(id: "Yesterday", text: "Yesterday"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "10:10 AM",
                              isOutgoing: false,
@@ -46,7 +46,7 @@ enum RoomTimelineItemFixtures {
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
                              ])),
-        SeparatorRoomTimelineItem(text: "Today"),
+        SeparatorRoomTimelineItem(id: "Today", text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "5 PM",
                              isOutgoing: false,
