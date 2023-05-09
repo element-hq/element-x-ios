@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
-    private let slidingSyncViewProxy: SlidingSyncViewProxy
+    private let slidingSyncListProxy: SlidingSyncListProxy
     private let serialDispatchQueue: DispatchQueue
     private let eventStringBuilder: RoomEventStringBuilder
     
@@ -47,34 +47,34 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
-        self.slidingSyncViewProxy = slidingSyncViewProxy
+    init(slidingSyncListProxy: SlidingSyncListProxy, eventStringBuilder: RoomEventStringBuilder) {
+        self.slidingSyncListProxy = slidingSyncListProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         
-        rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
+        rooms = slidingSyncListProxy.currentRoomsList().map { roomListEntry in
             buildSummaryForRoomListEntry(roomListEntry)
         }
         
         roomListSubject.send(rooms) // didSet not called from initialisers
         
-        slidingSyncViewProxy.statePublisher
+        slidingSyncListProxy.statePublisher
             .map(RoomSummaryProviderState.init)
             .subscribe(stateSubject)
             .store(in: &cancellables)
         
-        slidingSyncViewProxy.countPublisher
+        slidingSyncListProxy.countPublisher
             .subscribe(countSubject)
             .store(in: &cancellables)
         
-        slidingSyncViewProxy.diffPublisher
+        slidingSyncListProxy.diffPublisher
             .collect(.byTime(serialDispatchQueue, 0.025))
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
     }
     
     func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
-        slidingSyncViewProxy.updateVisibleRange(range, timelineLimit: timelineLimit)
+        slidingSyncListProxy.updateVisibleRange(range, timelineLimit: timelineLimit)
     }
     
     // MARK: - Private
@@ -111,7 +111,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
-        guard let room = try? slidingSyncViewProxy.roomForIdentifier(identifier) else {
+        guard let room = try? slidingSyncListProxy.roomForIdentifier(identifier) else {
             MXLog.error("Failed finding room with id: \(identifier)")
             return .empty
         }
