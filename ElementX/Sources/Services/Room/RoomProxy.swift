@@ -441,6 +441,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    var invitedMembersCount: UInt64 {
+        room.invitedMembersCount()
+    }
+    
+    var joinedMembersCount: UInt64 {
+        room.joinedMembersCount()
+    }
+    
+    var activeMembersCount: UInt64 {
+        room.activeMembersCount()
+    }
+    
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
