@@ -414,6 +414,21 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembersPublisher = value }
     }
     var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
+    var invitedMembersCount: UInt64 {
+        get { return underlyingInvitedMembersCount }
+        set(value) { underlyingInvitedMembersCount = value }
+    }
+    var underlyingInvitedMembersCount: UInt64!
+    var joinedMembersCount: UInt64 {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: UInt64!
+    var activeMembersCount: UInt64 {
+        get { return underlyingActiveMembersCount }
+        set(value) { underlyingActiveMembersCount = value }
+    }
+    var underlyingActiveMembersCount: UInt64!
 
     //MARK: - loadAvatarURLForUserId
 

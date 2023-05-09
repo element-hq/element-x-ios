@@ -325,20 +325,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 return
             }
             
-            guard !room.isPublic else {
+            if room.isPublic {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomId, state: .public)
-                return
+            } else {
+                state.bindings.leaveRoomAlertItem = room.joinedMembersCount > 1 ? LeaveRoomAlertItem(roomId: roomId, state: .private) : LeaveRoomAlertItem(roomId: roomId, state: .empty)
             }
-            
-            await room.updateMembers()
-            let joinedMembers = await room.membersPublisher.values.first()?.filter { $0.membership == .join }
-            
-            guard let joinedMembers else {
-                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
-                return
-            }
-            
-            state.bindings.leaveRoomAlertItem = joinedMembers.count > 1 ? LeaveRoomAlertItem(roomId: roomId, state: .private) : LeaveRoomAlertItem(roomId: roomId, state: .empty)
         }
     }
     

@@ -104,6 +104,12 @@ protocol RoomProxyProtocol {
     func acceptInvitation() async -> Result<Void, RoomProxyError>
     
     func fetchDetails(for eventID: String)
+    
+    var invitedMembersCount: UInt64 { get }
+    
+    var joinedMembersCount: UInt64 { get }
+    
+    var activeMembersCount: UInt64 { get }
 }
 
 extension RoomProxyProtocol {
