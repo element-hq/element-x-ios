@@ -428,7 +428,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func fetchEventDetails(for eventID: String) {
+    func fetchDetails(for eventID: String) {
         Task {
             await Task.dispatch(on: .global()) {
                 do {
