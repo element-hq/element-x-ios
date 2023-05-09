@@ -84,7 +84,7 @@ class HomeScreenViewModelTests: XCTestCase {
         room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
-        let newState = await context.nextViewState()
+        await context.nextViewState()
         XCTAssertNotNil(context.alertInfo)
     }
     
