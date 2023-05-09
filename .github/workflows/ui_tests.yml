@@ -32,7 +32,7 @@ jobs:
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
-      
+
       - name: Run tests
         run: bundle exec fastlane ui_tests
       
