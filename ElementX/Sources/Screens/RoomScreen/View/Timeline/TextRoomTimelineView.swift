@@ -22,10 +22,10 @@ struct TextRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let attributedString = timelineItem.formattedBody {
+            if let attributedString = timelineItem.content.formattedBody {
                 FormattedBodyText(attributedString: attributedString)
             } else {
-                FormattedBodyText(text: timelineItem.body)
+                FormattedBodyText(text: timelineItem.content.body)
             }
         }
     }
@@ -65,10 +65,10 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: text,
                              timestamp: timestamp,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
-                             sender: .init(id: senderId))
+                             sender: .init(id: senderId),
+                             content: .init(body: text))
     }
 }

@@ -23,14 +23,22 @@ struct ImageRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(mediaSource: timelineItem.source,
-                          blurhash: timelineItem.blurhash,
+            LoadableImage(mediaSource: source,
+                          blurhash: timelineItem.content.blurhash,
                           imageProvider: context.imageProvider) {
                 placeholder
             }
-            .frame(maxHeight: min(300, max(100, timelineItem.height ?? .infinity)))
-            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+            .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
+            .aspectRatio(timelineItem.content.aspectRatio, contentMode: .fit)
         }
+    }
+    
+    var source: MediaSourceProxy {
+        guard timelineItem.content.contentType != .gif, let thumbnailSource = timelineItem.content.thumbnailSource else {
+            return timelineItem.content.source
+        }
+        
+        return thumbnailSource
     }
     
     var placeholder: some View {
@@ -56,31 +64,30 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Some image",
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png")))
-
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Some other image",
-                                                                      timestamp: "Now",
-                                                                      isOutgoing: false,
-                                                                      isEditable: false,
-                                                                      sender: .init(id: "Bob"),
-                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png")))
+                                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      body: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
-                                                                      aspectRatio: 0.7,
-                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                                                                      contentType: .gif))
+                                                                      content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
+            
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
+                                                                      timestamp: "Now",
+                                                                      isOutgoing: false,
+                                                                      isEditable: false,
+                                                                      sender: .init(id: "Bob"),
+                                                                      content: .init(body: "Blurhashed image",
+                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
+                                                                                     thumbnailSource: nil,
+                                                                                     aspectRatio: 0.7,
+                                                                                     blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                                                                                     contentType: .gif)))
         }
     }
 }

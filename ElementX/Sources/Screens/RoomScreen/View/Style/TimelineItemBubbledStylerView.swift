@@ -102,13 +102,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var styledContent: some View {
         if shouldAvoidBubbling {
-            content()
+            contentWithReply
                 .bubbleStyle(inset: false,
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
-                content()
+                contentWithReply
 
                 if timelineItem.properties.isEdited {
                     Text(L10n.commonEditedSuffix)
@@ -120,6 +120,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                          color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
                          cornerRadius: cornerRadius,
                          corners: roundedCorners)
+        }
+    }
+    
+    @ViewBuilder
+    var contentWithReply: some View {
+        VStack(alignment: .leading, spacing: 4.0) {
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+               let replyDetails = messageTimelineItem.replyDetails {
+                TimelineReplyView(timelineItemReplyDetails: replyDetails)
+                    .background(Color.element.background)
+                    .cornerRadius(8)
+            }
+            
+            content()
         }
     }
     

@@ -30,7 +30,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
-                    content()
+                    contentWithReply
                     
                     Spacer()
                     
@@ -42,7 +42,24 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             }
         }
     }
-
+    
+    @ViewBuilder
+    var contentWithReply: some View {
+        VStack(alignment: .leading) {
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+               let replyDetails = messageTimelineItem.replyDetails {
+                HStack(spacing: 4.0) {
+                    Rectangle()
+                        .foregroundColor(.element.accent)
+                        .frame(width: 4.0)
+                    TimelineReplyView(timelineItemReplyDetails: replyDetails)
+                }
+            }
+            
+            content()
+        }
+    }
+    
     @ViewBuilder
     private var header: some View {
         if shouldShowSenderDetails {

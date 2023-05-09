@@ -17,22 +17,21 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let body: String
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
     
-    let source: MediaSourceProxy
+    let content: ImageRoomTimelineItemContent
     
-    var width: CGFloat?
-    var height: CGFloat?
-    var aspectRatio: CGFloat?
-    var blurhash: String?
-    var contentType: UTType?
+    var replyDetails: TimelineItemReplyDetails?
     
     var properties = RoomTimelineItemProperties()
+    
+    var body: String {
+        content.body
+    }
 }

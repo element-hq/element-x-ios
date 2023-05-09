@@ -102,6 +102,8 @@ protocol RoomProxyProtocol {
     func rejectInvitation() async -> Result<Void, RoomProxyError>
     
     func acceptInvitation() async -> Result<Void, RoomProxyError>
+    
+    func fetchDetails(for eventID: String)
 }
 
 extension RoomProxyProtocol {

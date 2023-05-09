@@ -341,7 +341,6 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
-        XCTAssertTrue(component.isReply, "The reply quote should be detected as a reply")
     }
     
     func testMultipleGroupedBlockquotes() {
@@ -388,9 +387,6 @@ class AttributedStringBuilderTests: XCTestCase {
         let coalescedComponents = attributedString.formattedComponents
         
         XCTAssertEqual(coalescedComponents.count, 6)
-        for component in coalescedComponents where component.isReply {
-            XCTFail("None of the blockquotes should be detected as replies.")
-        }
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {

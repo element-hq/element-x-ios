@@ -43,21 +43,21 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             RoomTimelineViewProvider.separator(.init(text: "Today"), .single)
             RoomTimelineViewProvider.text(.init(id: "",
-                                                body: "This is another message",
                                                 timestamp: "",
                                                 isOutgoing: true,
                                                 isEditable: false,
-                                                sender: .init(id: "1", displayName: "Bob")), .single)
+                                                sender: .init(id: "1", displayName: "Bob"),
+                                                content: .init(body: "This is another message")), .single)
             
             ReadMarkerRoomTimelineView(timelineItem: item)
             
             RoomTimelineViewProvider.separator(.init(text: "Today"), .single)
             RoomTimelineViewProvider.text(.init(id: "",
-                                                body: "This is a message",
                                                 timestamp: "",
                                                 isOutgoing: false,
                                                 isEditable: false,
-                                                sender: .init(id: "", displayName: "Alice")), .single)
+                                                sender: .init(id: "", displayName: "Alice"),
+                                                content: .init(body: "This is a message")), .single)
         }
         .padding(.horizontal, 8)
         .environmentObject(viewModel.context)

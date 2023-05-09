@@ -96,7 +96,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemID: String) async { }
+    func processItemAppearance(_ itemID: String) async {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
+            return
+        }
+        
+        // Fetch replied-to event details if unavailable at the point of displaying it in the timeline
+        if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+            switch messageTimelineItem.replyDetails {
+            case .notLoaded, .error:
+                roomProxy.fetchDetails(for: timelineItem.id)
+            default:
+                break
+            }
+        }
+    }
     
     func processItemDisappearance(_ itemID: String) { }
 
@@ -109,18 +123,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var body: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as VideoRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as FileRoomTimelineItem:
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.source
-            body = item.body
+            source = item.content.source
+            body = item.content.body
         default:
             return .none
         }
@@ -218,7 +232,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let isLastItem = index == collapsibleChunks.indices.last
             
             let items = collapsibleChunk.compactMap { itemProxy in
-                let timelineItem = buildTimelineItemFor(itemProxy: itemProxy)
+                let timelineItem = buildTimelineItem(for: itemProxy)
                 
                 if timelineItem is PaginationIndicatorRoomTimelineItem {
                     isBackPaginating = true
@@ -253,10 +267,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItemFor(itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+    private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch itemProxy {
-        case .event(let eventItemProxy):
-            return timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy)
+        case .event(let eventTimelineItem):
+            return timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):

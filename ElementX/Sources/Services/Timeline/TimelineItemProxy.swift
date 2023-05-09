@@ -65,15 +65,7 @@ struct EventTimelineItemProxy {
             return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
         }
     }
-    
-    var body: String? {
-        content.asMessage()?.body()
-    }
-    
-    var isMessage: Bool {
-        content.asMessage() != nil
-    }
-    
+        
     var isRoomState: Bool {
         content.kind().isRoomState
     }

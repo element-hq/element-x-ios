@@ -31,10 +31,10 @@ struct NoticeRoomTimelineView: View {
                 Image(systemName: "info.bubble").padding(.top, 2.0)
                     .foregroundColor(.element.secondaryContent)
                 
-                if let attributedString = timelineItem.formattedBody {
+                if let attributedString = timelineItem.content.formattedBody {
                     FormattedBodyText(attributedString: attributedString)
                 } else {
-                    FormattedBodyText(text: timelineItem.body)
+                    FormattedBodyText(text: timelineItem.content.body)
                 }
             }
             .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText
@@ -64,10 +64,10 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
         NoticeRoomTimelineItem(id: UUID().uuidString,
-                               body: text,
                                timestamp: timestamp,
                                isOutgoing: false,
                                isEditable: false,
-                               sender: .init(id: senderId))
+                               sender: .init(id: senderId),
+                               content: .init(body: text))
     }
 }

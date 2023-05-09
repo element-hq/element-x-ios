@@ -428,6 +428,19 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func fetchDetails(for eventID: String) {
+        Task {
+            await Task.dispatch(on: .global()) {
+                do {
+                    MXLog.info("Fetching event details for \(eventID)")
+                    try self.room.fetchEventDetails(eventId: eventID)
+                } catch {
+                    MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
+                }
+            }
+        }
+    }
+    
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener

@@ -21,61 +21,61 @@ enum RoomTimelineItemFixtures {
     static var `default`: [RoomTimelineItemProtocol] = [
         SeparatorRoomTimelineItem(text: "Yesterday"),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "That looks so good!",
                              timestamp: "10:10 AM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Jacob"),
+                             content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
+                             content: .init(body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
+                             content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
                              ])),
         SeparatorRoomTimelineItem(text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!",
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
-                             sender: .init(id: "", displayName: "Helena")),
+                             sender: .init(id: "", displayName: "Helena"),
+                             content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!")),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "And John's speech was amazing!",
-                             timestamp: "5 PM",
-                             isOutgoing: true,
-                             isEditable: true,
-                             sender: .init(id: "", displayName: "Bob")),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "New home office set up!",
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
                              sender: .init(id: "", displayName: "Bob"),
+                             content: .init(body: "And John's speech was amazing!")),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             timestamp: "5 PM",
+                             isOutgoing: true,
+                             isEditable: true,
+                             sender: .init(id: "", displayName: "Bob"),
+                             content: .init(body: "New home office set up!"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             body: "",
-                             formattedBody: AttributedStringBuilder().fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳"),
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
-                             sender: .init(id: "", displayName: "Helena"))
+                             sender: .init(id: "", displayName: "Helena"),
+                             content: .init(body: "",
+                                            formattedBody: AttributedStringBuilder().fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳")))
     ]
     
     /// A small chunk of events, containing 2 text items.
@@ -187,10 +187,10 @@ enum RoomTimelineItemFixtures {
 private extension TextRoomTimelineItem {
     init(text: String, senderDisplayName: String) {
         self.init(id: UUID().uuidString,
-                  body: text,
                   timestamp: "10:47 am",
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
-                  sender: .init(id: "", displayName: senderDisplayName))
+                  sender: .init(id: "", displayName: senderDisplayName),
+                  content: .init(body: text))
     }
 }

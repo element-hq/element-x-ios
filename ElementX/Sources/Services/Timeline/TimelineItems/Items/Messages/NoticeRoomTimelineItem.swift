@@ -16,15 +16,21 @@
 
 import UIKit
 
-struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct NoticeRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let body: String
-    var formattedBody: AttributedString?
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
     
+    let content: NoticeRoomTimelineItemContent
+    
+    var replyDetails: TimelineItemReplyDetails?
+    
     var properties = RoomTimelineItemProperties()
+    
+    var body: String {
+        content.body
+    }
 }
