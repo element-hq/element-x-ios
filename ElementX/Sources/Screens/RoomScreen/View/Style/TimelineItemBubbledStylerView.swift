@@ -125,16 +125,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     @ViewBuilder
     var contentWithReply: some View {
-        if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-           let replyDetails = messageTimelineItem.replyDetails {
-            VStack(alignment: .leading, spacing: 4.0) {
+        VStack(alignment: .leading, spacing: 4.0) {
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+               let replyDetails = messageTimelineItem.replyDetails {
                 TimelineReplyView(timelineItemReplyDetails: replyDetails)
                     .background(Color.element.background)
                     .cornerRadius(8)
-                
-                content()
             }
-        } else {
+            
             content()
         }
     }
