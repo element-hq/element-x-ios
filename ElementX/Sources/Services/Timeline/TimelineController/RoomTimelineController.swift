@@ -103,8 +103,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         // Fetch replied-to event details if unavailable at the point of displaying it in the timeline
         if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
-            if case .unavailable(let eventID) = messageTimelineItem.replyDetails {
+            switch messageTimelineItem.replyDetails {
+            case .unavailable(let eventID), .error(let eventID, _):
                 roomProxy.fetchEventDetails(for: eventID)
+            default:
+                break
             }
         }
     }

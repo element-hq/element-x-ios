@@ -432,9 +432,10 @@ class RoomProxy: RoomProxyProtocol {
         Task {
             await Task.dispatch(on: .global()) {
                 do {
+                    MXLog.info("Fetching event details for \(eventID)")
                     try self.room.fetchEventDetails(eventId: eventID)
                 } catch {
-                    MXLog.error("Failed fetching event details with error: \(error)")
+                    MXLog.error("Failed fetching event details for \(eventID) with error: \(error)")
                 }
             }
         }
