@@ -104,7 +104,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         // Fetch replied-to event details if unavailable at the point of displaying it in the timeline
         if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
             switch messageTimelineItem.replyDetails {
-            case .unavailable(let eventID), .error(let eventID, _):
+            case .notLoaded(let eventID), .error(let eventID, _):
                 roomProxy.fetchEventDetails(for: eventID)
             default:
                 break
@@ -232,7 +232,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let isLastItem = index == collapsibleChunks.indices.last
             
             let items = collapsibleChunk.compactMap { itemProxy in
-                let timelineItem = buildTimelineItemFor(itemProxy)
+                let timelineItem = buildTimelineItem(for: itemProxy)
                 
                 if timelineItem is PaginationIndicatorRoomTimelineItem {
                     isBackPaginating = true
@@ -267,10 +267,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItemFor(_ item: TimelineItemProxy) -> RoomTimelineItemProtocol? {
-        switch item {
+    private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+        switch itemProxy {
         case .event(let eventTimelineItem):
-            return timelineItemFactory.buildTimelineItemFor(eventTimelineItem: eventTimelineItem)
+            return timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):

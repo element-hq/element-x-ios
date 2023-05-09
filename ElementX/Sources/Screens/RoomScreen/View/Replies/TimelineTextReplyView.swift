@@ -22,7 +22,7 @@ struct TimelineReplyView: View {
     var body: some View {
         if let timelineItemReplyDetails {
             switch timelineItemReplyDetails {
-            case .ready(let sender, let content):
+            case .loaded(let sender, let content):
                 switch content {
                 case .audio(let content):
                     TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: nil))

@@ -27,8 +27,8 @@ enum TimelineItemReplyContent: Hashable {
 }
 
 enum TimelineItemReplyDetails: Hashable {
-    case unavailable(eventID: String)
-    case pending(eventID: String)
-    case ready(sender: TimelineItemSender, content: TimelineItemReplyContent)
+    case notLoaded(eventID: String)
+    case loading(eventID: String)
+    case loaded(sender: TimelineItemSender, content: TimelineItemReplyContent)
     case error(eventID: String, message: String)
 }
