@@ -138,6 +138,10 @@ public enum L10n {
   public static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
   /// Editing
   public static var commonEditing: String { return L10n.tr("Localizable", "common_editing") }
+  /// * %1$@ %2$@
+  public static func commonEmote(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "common_emote", String(describing: p1), String(describing: p2))
+  }
   /// Encryption enabled
   public static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
   /// Error

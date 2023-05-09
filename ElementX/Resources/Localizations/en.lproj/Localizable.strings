@@ -62,6 +62,7 @@
 "common_developer_options" = "Developer options";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
+"common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Encryption enabled";
 "common_error" = "Error";
 "common_file" = "File";

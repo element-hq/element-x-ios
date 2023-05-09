@@ -368,9 +368,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
         var formattedBody: AttributedString?
         if let htmlBody {
-            formattedBody = attributedStringBuilder.fromHTML("* \(name) \(htmlBody)")
+            formattedBody = attributedStringBuilder.fromHTML(L10n.commonEmote(name, htmlBody))
         } else {
-            formattedBody = attributedStringBuilder.fromPlain("* \(name) \(messageContent.body)")
+            formattedBody = attributedStringBuilder.fromPlain(L10n.commonEmote(name, messageContent.body))
         }
         
         return .init(body: messageContent.body, formattedBody: formattedBody)

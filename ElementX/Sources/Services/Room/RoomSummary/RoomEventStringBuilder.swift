@@ -45,7 +45,7 @@ struct RoomEventStringBuilder {
             // Message types that don't need a prefix.
             case .emote(content: let content):
                 let senderDisplayName = sender.displayName ?? sender.id
-                return AttributedString("* \(senderDisplayName) \(content.body)")
+                return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
             // Message types that should be prefixed with the sender's name.
             case .image:
                 message = L10n.commonImage
