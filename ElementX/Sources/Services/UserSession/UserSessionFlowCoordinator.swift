@@ -144,8 +144,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     }
     
     private func presentHomeScreen() {
-        userSession.clientProxy.startSync()
-
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          attributedStringBuilder: AttributedStringBuilder(),
                                                          bugReportService: bugReportService,

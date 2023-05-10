@@ -30,11 +30,12 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private var userSession: UserSessionProtocol! {
         didSet {
-            userSessionCancellables.removeAll()
+            userSessionObserver?.cancel()
             
             if userSession != nil {
                 configureNotificationManager()
                 observeUserSessionChanges()
+                startSync()
             }
         }
     }
@@ -44,8 +45,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
-    private var userSessionCancellables = Set<AnyCancellable>()
-    private var cancellables = Set<AnyCancellable>()
+    private var appDelegateObserver: AnyCancellable?
+    private var userSessionObserver: AnyCancellable?
+    private var networkMonitorObserver: AnyCancellable?
+    private var initialSyncObserver: AnyCancellable?
+    
     let notificationManager: NotificationManagerProtocol
 
     @Consumable private var storedAppRoute: AppRoute?
@@ -310,7 +314,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         notificationManager.requestAuthorization()
 
         if let appDelegate = AppDelegate.shared {
-            appDelegate.callbacks
+            appDelegateObserver = appDelegate.callbacks
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] callback in
                     switch callback {
@@ -320,14 +324,13 @@ class AppCoordinator: AppCoordinatorProtocol {
                         self?.notificationManager.registrationFailed(with: error)
                     }
                 }
-                .store(in: &cancellables)
         } else {
             MXLog.error("Couldn't register to AppDelegate callbacks")
         }
     }
     
     private func observeUserSessionChanges() {
-        userSession.callbacks
+        userSessionObserver = userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }
@@ -338,7 +341,6 @@ class AppCoordinator: AppCoordinatorProtocol {
                     break
                 }
             }
-            .store(in: &userSessionCancellables)
     }
     
     // MARK: Toasts and loading indicators
@@ -362,12 +364,26 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     // MARK: - Application State
 
-    private func pause() {
+    private func stopSync() {
         userSession?.clientProxy.stopSync()
     }
 
-    private func resume() {
+    private func startSync() {
         userSession?.clientProxy.startSync()
+        
+        let identifier = "StaleDataIndicator"
+        
+        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast, title: L10n.commonLoading, persistent: true))
+        
+        initialSyncObserver = userSession.clientProxy
+            .callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                if case .receivedSyncUpdate = callback {
+                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
+                    self?.initialSyncObserver?.cancel()
+                }
+            }
     }
 
     private func observeApplicationState() {
@@ -390,7 +406,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            self?.pause()
+            self?.stopSync()
             
             self?.backgroundTask = nil
             self?.isSuspended = true
@@ -406,13 +422,13 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         if isSuspended {
             isSuspended = false
-            resume()
+            startSync()
         }
     }
     
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
-        ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
+        networkMonitorObserver = ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
             MXLog.info("Reachability changed to \(reachable)")
             
             if reachable {
@@ -422,7 +438,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                                                                                     title: L10n.commonOffline,
                                                                                     persistent: true))
             }
-        }.store(in: &cancellables)
+        }
     }
 
     private func handleAppRoute(_ appRoute: AppRoute) {
