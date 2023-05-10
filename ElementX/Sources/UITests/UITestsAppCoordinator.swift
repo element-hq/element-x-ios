@@ -422,6 +422,15 @@ class MockScreen: Identifiable {
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .createRoomNoUsers:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let clientProxy = MockClientProxy(userID: "@mock:client.com")
+            let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+            let createRoomParameters = CreateRoomVolatileParameters()
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: createRoomParameters)
+            let coordinator = CreateRoomCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

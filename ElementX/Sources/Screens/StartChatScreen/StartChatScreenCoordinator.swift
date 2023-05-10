@@ -89,10 +89,3 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.push(coordinator)
     }
 }
-
-class CreateRoomVolatileParameters {
-    var name = ""
-    var topic = ""
-    var selectedUsers: [UserProfile] = []
-    var isRoomPrivate = true
-}

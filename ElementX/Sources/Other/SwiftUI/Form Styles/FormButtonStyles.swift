@@ -141,10 +141,15 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 }
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
                 Button { } label: {
-                    VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
-                        Label("Hello world", systemImage: "globe")
-                        Text("subtitle\nsubtitle")
-                            .foregroundColor(.secondary)
+                    Label {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Hello world")
+                            Text("subtitle\nsubtitle")
+                                .font(.compound.bodyMD)
+                                .foregroundColor(.element.secondaryContent)
+                        }
+                    } icon: {
+                        Image(systemName: "globe")
                     }
                 }
                 .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: true)))

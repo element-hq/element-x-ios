@@ -21,6 +21,7 @@ struct CreateRoomScreen: View {
     
     var body: some View {
         mainContent
+            .scrollDismissesKeyboard(.immediately)
             .scrollContentBackground(.hidden)
             .background(Color.element.formBackground.ignoresSafeArea())
             .navigationTitle(L10n.screenCreateRoomTitle)
@@ -37,7 +38,10 @@ struct CreateRoomScreen: View {
         Form {
             roomSection
             topicSection
-            selectedUsersSection
+            if !context.viewState.selectedUsers.isEmpty {
+                // TODO: check clipping outside form
+                selectedUsersSection
+            }
             // TODO: Spacer not working properly
             Spacer()
                 .listRowBackground(Color.clear)
@@ -56,16 +60,19 @@ struct CreateRoomScreen: View {
                     .clipShape(Circle())
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+                        .font(.compound.bodySM)
+                        .padding(.leading, 16)
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
                               prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                               axis: .horizontal)
-                        .padding(FormRow.insets)
+                        .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                         .background(Color.element.formRowBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
+            .listRowInsets(.init())
             .listRowBackground(Color.clear)
         }
         .formSectionStyle()
@@ -88,7 +95,7 @@ struct CreateRoomScreen: View {
     private var selectedUsersSection: some View {
         Section {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 28) {
+                LazyHStack(spacing: 28) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                         InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
@@ -97,6 +104,7 @@ struct CreateRoomScreen: View {
                     }
                 }
             }
+            .listRowInsets(.init())
             .listRowBackground(Color.clear)
         }
     }
@@ -104,23 +112,28 @@ struct CreateRoomScreen: View {
     private var securitySection: some View {
         Section {
             Button(action: selectPrivate) {
-                VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
-                    Label(L10n.screenCreateRoomPrivateOptionTitle, systemImage: "lock.shield")
-                    Text(L10n.screenCreateRoomPrivateOptionDescription)
-                        .font(.compound.bodyMD)
-                        // TODO: padding not working properly
-                        .padding(.horizontal, 20)
-                        .foregroundColor(.element.secondaryContent)
+                Label {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(L10n.screenCreateRoomPrivateOptionTitle)
+                        Text(L10n.screenCreateRoomPrivateOptionDescription)
+                            .font(.compound.bodyMD)
+                            .foregroundColor(.element.secondaryContent)
+                    }
+                } icon: {
+                    Image(systemName: "lock.shield")
                 }
             }
             .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: context.isRoomPrivate)))
             Button(action: selectPublic) {
-                VStack(alignment: .listRowSeparatorLeading, spacing: 0) {
-                    Label(L10n.screenCreateRoomPublicOptionTitle, systemImage: "exclamationmark.shield")
-                    Text(L10n.screenCreateRoomPublicOptionDescription)
-                        .font(.compound.bodyMD)
-                        .padding(.horizontal)
-                        .foregroundColor(.element.secondaryContent)
+                Label {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(L10n.screenCreateRoomPublicOptionTitle)
+                        Text(L10n.screenCreateRoomPublicOptionDescription)
+                            .font(.compound.bodyMD)
+                            .foregroundColor(.element.secondaryContent)
+                    }
+                } icon: {
+                    Image(systemName: "exclamationmark.shield")
                 }
             }
             .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: !context.isRoomPrivate)))
@@ -161,9 +174,21 @@ struct CreateRoom_Previews: PreviewProvider {
         return CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
     }()
     
+    static let emtpyViewModel = {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
+                                          mediaProvider: MockMediaProvider())
+        let parameters = CreateRoomVolatileParameters()
+        return CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
+    }()
+    
     static var previews: some View {
         NavigationView {
             CreateRoomScreen(context: viewModel.context)
         }
+        .previewDisplayName("Create Room")
+        NavigationView {
+            CreateRoomScreen(context: emtpyViewModel.context)
+        }
+        .previewDisplayName("Create Room without users")
     }
 }
