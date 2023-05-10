@@ -26,11 +26,18 @@ struct RoomMemberDetails: Identifiable, Equatable {
 
     @MainActor
     init(withProxy proxy: RoomMemberProxyProtocol) {
-        id = proxy.userID
-        name = proxy.displayName
-        avatarURL = proxy.avatarURL
-        permalink = proxy.permalink
-        isAccountOwner = proxy.isAccountOwner
-        isIgnored = proxy.isIgnored
+        #warning("Fix performance issue here")
+        id = UUID().uuidString
+        name = id
+        avatarURL = nil
+        permalink = nil
+        isAccountOwner = false
+        isIgnored = false
+        /* id = proxy.userID
+         name = proxy.displayName
+         avatarURL = proxy.avatarURL
+         permalink = proxy.permalink
+         isAccountOwner = proxy.isAccountOwner
+         isIgnored = proxy.isIgnored */
     }
 }

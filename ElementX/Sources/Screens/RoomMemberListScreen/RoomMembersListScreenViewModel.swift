@@ -28,13 +28,23 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.mediaProvider = mediaProvider
         self.members = members
         
-        let joinedMembers = members
-            .filter { $0.membership == .join }
-            .map(RoomMemberDetails.init)
+        let clock = ContinuousClock()
         
-        let invitedMembers = members
-            .filter { $0.membership == .invite }
-            .map(RoomMemberDetails.init)
+        var joinedMembers: [RoomMemberDetails] = []
+        var invitedMembers: [RoomMemberDetails] = []
+
+        let result = clock.measure {
+            #warning("Fix performance issue here")
+            joinedMembers = members
+                // .filter { $0.membership == .join }
+                .map(RoomMemberDetails.init)
+            
+            invitedMembers = members
+                // .filter { $0.membership == .invite }
+                .map(RoomMemberDetails.init)
+        }
+        
+        print("*** \(result)")
         
         super.init(initialViewState: .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers),
                    imageProvider: mediaProvider)
