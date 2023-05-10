@@ -86,7 +86,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     return
                 }
                 
-                let roomMembersDetails = members.map { RoomMemberDetails(withProxy: $0) }
+                var roomMembersDetails: [RoomMemberDetails] = []
+                var joinedMembersCount = 0
+                roomMembersDetails.reserveCapacity(members.count)
+                
+                for member in members {
+                    roomMembersDetails.append(RoomMemberDetails(withProxy: member))
+                    if member.membership == .join {
+                        joinedMembersCount += 1
+                    }
+                }
                 
                 Task { @MainActor in
                     if self.roomProxy.isDirect, self.roomProxy.isEncrypted, members.count == 2 {
@@ -94,6 +103,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     }
                     
                     self.state.members = roomMembersDetails
+                    self.state.joinedMembersCount = joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
                     self.members = members
                 }

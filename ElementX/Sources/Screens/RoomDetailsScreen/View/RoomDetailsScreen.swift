@@ -120,7 +120,7 @@ struct RoomDetailsScreen: View {
                     if context.viewState.isLoadingMembers {
                         ProgressView()
                     } else {
-                        Text(String(context.viewState.members.count))
+                        Text(String(context.viewState.joinedMembersCount))
                             .foregroundColor(.element.tertiaryContent)
                             .font(.compound.bodyLG)
                     }
