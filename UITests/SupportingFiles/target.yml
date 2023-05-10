@@ -29,7 +29,6 @@ targets:
     - target: ElementX
     - package: MatrixRustSDK
     - package: AnalyticsEvents
-    - package: AppAuth
     - package: DeviceKit
     - package: DTCoreText
     - package: KeychainAccess

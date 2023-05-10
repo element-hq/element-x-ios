@@ -132,7 +132,6 @@ targets:
     - package: Compound
     - package: Algorithms
     - package: AnalyticsEvents
-    - package: AppAuth
     - package: Collections
     - package: DeviceKit
     - package: DTCoreText

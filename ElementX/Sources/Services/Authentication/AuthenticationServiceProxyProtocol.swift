@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import AppAuth
 import Foundation
+import MatrixRustSDK
 
 enum AuthenticationServiceError: Error {
     /// An error occurred during OIDC authentication.
@@ -34,7 +34,37 @@ protocol AuthenticationServiceProxyProtocol {
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
-    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError>
+    /// Add docs.
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
+
+// MARK: - OIDC
+
+enum OIDCError: Error {
+    /// Failed to get the URL that should be presented for login.
+    case urlFailure
+    /// The user cancelled the login.
+    case userCancellation
+    /// OIDC isn't supported on the currently configured server.
+    case notSupported
+    /// An unknown error occurred.
+    case unknown
+}
+
+struct OIDCAuthenticationDataProxy: Equatable {
+//    let underlyingData: OidcAuthenticationData
+//
+//    var url: URL {
+//        URL(string: underlyingData.loginUrl())!
+//    }
+    let url = URL(staticString: "https://theroadtonowhere")
+}
+
+// extension OidcAuthenticationData: Equatable {
+//    public static func == (lhs: MatrixRustSDK.OidcAuthenticationData, rhs: MatrixRustSDK.OidcAuthenticationData) -> Bool {
+//        lhs.loginUrl() == rhs.loginUrl()
+//    }
+// }

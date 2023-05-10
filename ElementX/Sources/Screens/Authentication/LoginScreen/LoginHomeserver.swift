@@ -64,8 +64,7 @@ extension LoginHomeserver {
     
     /// A mock homeserver that supports only supports authentication via a single SSO provider.
     static var mockOIDC: LoginHomeserver {
-        let issuerURL = URL(staticString: "https://auth.company.com")
-        return LoginHomeserver(address: "company.com", loginMode: .oidc(issuerURL))
+        LoginHomeserver(address: "company.com", loginMode: .oidc)
     }
     
     /// A mock homeserver that only with no supported login flows.

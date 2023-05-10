@@ -21,6 +21,7 @@ enum UserSessionCallback {
     case sessionVerificationNeeded
     case didVerifySession
     case didReceiveAuthError(isSoftLogout: Bool)
+    case updateRestorationToken
 }
 
 protocol UserSessionProtocol {
