@@ -24,12 +24,19 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
-    init(mediaProvider: MediaProviderProtocol,
-         members: [RoomMemberProxyProtocol]) {
+    init(mediaProvider: MediaProviderProtocol, members: [RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
         self.members = members
-        super.init(initialViewState: .init(members: members.map { RoomMemberDetails(withProxy: $0) },
-                                           bindings: .init()),
+        
+        let joinedMembers = members
+            .filter { $0.membership == .join }
+            .map(RoomMemberDetails.init)
+        
+        let invitedMembers = members
+            .filter { $0.membership == .invite }
+            .map(RoomMemberDetails.init)
+        
+        super.init(initialViewState: .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers),
                    imageProvider: mediaProvider)
     }
     
