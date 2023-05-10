@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import Foundation
 
-class CreateRoomScreenUITests: XCTestCase {
-    func testLanding() {
-        let app = Application.launch(.createRoom)
-        app.assertScreenshot(.createRoom, step: 0)
-    }
-
-    func testLandingWithoutUsers() {
-        let app = Application.launch(.createRoomNoUsers)
-        app.assertScreenshot(.createRoom, step: 1)
-    }
+/// This parameters are only used in the create room flow for having a a volatile persisted object that will be disposed once the flow is ended
+class CreateRoomVolatileParameters {
+    var name = ""
+    var topic = ""
+    var selectedUsers: [UserProfile] = []
+    var isRoomPrivate = true
 }
