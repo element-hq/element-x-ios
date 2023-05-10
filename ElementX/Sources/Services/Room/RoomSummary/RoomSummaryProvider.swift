@@ -121,7 +121,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         // Dispatch onto another queue otherwise the rust method latestRoomMessage crashes.
         // This will be fixed when we get async uniffi support.
-        DispatchQueue.global(qos: .default).sync {
+        DispatchQueue.global(qos: .userInitiated).sync {
             if let latestRoomMessage = room.latestRoomMessage() {
                 let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
                 lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
