@@ -32,9 +32,9 @@ struct UserIndicatorToastView: View {
         .padding(.horizontal, 12.0)
         .padding(.vertical, 10.0)
         .frame(minWidth: 150.0)
-        .background(Color.element.system)
+        .background(Color.element.background)
         .clipShape(RoundedCornerShape(radius: 24.0, corners: .allCorners))
-        .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
+        .shadow(color: .black.opacity(0.25), radius: 10.0, y: 4.0)
         .transition(toastTransition)
     }
     
