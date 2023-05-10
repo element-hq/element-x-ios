@@ -130,16 +130,13 @@ private class ContentLoader: ObservableObject {
             return cachedContent
         }
         
-        if let image = imageProvider?.imageFromSource(mediaSource) {
-            let isGIF = mediaSource.mimeType == "image/gif"
-            
-            if isGIF {
-                if let data = image.kf.data(format: .GIF) {
-                    return .gifData(data)
-                }
-            } else {
-                return .image(image)
+        if isGIF {
+            if let image = imageProvider?.imageFromSource(mediaSource),
+               let data = image.kf.data(format: .GIF) {
+                return .gifData(data)
             }
+        } else if let image = imageProvider?.imageFromSource(mediaSource, size: size) {
+            return .image(image)
         }
         
         return cachedContent
