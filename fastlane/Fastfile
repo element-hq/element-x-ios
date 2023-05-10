@@ -222,9 +222,6 @@ lane :release_to_github do
 end
 
 lane :prepare_next_release do
-  api_token = ENV["GITHUB_TOKEN"]
-  UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
-
   target_file_path = "../project.yml"
   xcode_project_file_path = "../ElementX.xcodeproj"
 
@@ -238,17 +235,46 @@ lane :prepare_next_release do
 
   xcodegen(spec: "project.yml")
 
-  sh("git config --global user.name 'Element CI'")
-  sh("git config --global user.email 'ci@element.io'")
-
   sh("git add #{target_file_path} #{xcode_project_file_path}")
 
   sh("git commit -m 'Prepare next release'")
 
-  # Get repo url path, without `http` or `git@` prefixes
-  repo_url = sh("git ls-remote --get-url origin | sed 's#http://##g' | sed 's#https:\/\/##g' | sed 's#git@##g\'")
+  git_push()
+end
 
-  # Use the access token for write access
+lane :tag_nightly do |options|
+  build_number = options[:build_number]
+  UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?
+
+  xcodegen_project_file_path = "../project.yml"
+  data = YAML.load_file xcodegen_project_file_path
+  current_version = data["settings"]["MARKETING_VERSION"]
+
+  tag_name = "nightly-#{current_version}.#{build_number}"
+  sh("git tag #{tag_name}")
+
+  git_push(tag_name: tag_name)
+end
+
+private_lane :git_push do |options|
+  # Use the Github API token for repo write access
+  api_token = ENV["GITHUB_TOKEN"]
+  UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
+
+  sh("git config --global user.name 'Element CI'")
+  sh("git config --global user.email 'ci@element.io'")
+
+  # Get repo url path, without `http`, `https` or `git@` prefixes or `.git` suffix
+  repo_url = sh("git ls-remote --get-url origin | sed 's#http://##g' | sed 's#https:\/\/##g' | sed 's#git@##g' | sed 's#.git##g'")
+
+  # This sometimes has a trailing newline
+  repo_url = repo_url.strip
+
+  # Push the tag separately if available
+  if options[:tag_name]
+    sh("git push https://#{api_token}@#{repo_url} #{options[:tag_name]}")
+  end
+    
   sh("git push https://#{api_token}@#{repo_url}")
 end
 
