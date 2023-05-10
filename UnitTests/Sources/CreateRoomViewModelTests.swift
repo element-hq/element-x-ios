@@ -22,14 +22,18 @@ import XCTest
 class CreateRoomScreenViewModelTests: XCTestCase {
     var viewModel: CreateRoomViewModelProtocol!
     var clientProxy: MockClientProxy!
+    var userSession: MockUserSession!
     
     var context: CreateRoomViewModel.Context {
         viewModel.context
     }
     
     override func setUpWithError() throws {
-        clientProxy = .init(userID: "")
-        let viewModel = CreateRoomViewModel(selectedUsers: [.mockAlice, .mockBob, .mockCharlie])
+        clientProxy = MockClientProxy(userID: "@a:b.com")
+        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        let parameters = CreateRoomVolatileParameters()
+        parameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
+        let viewModel = CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
         self.viewModel = viewModel
     }
     
@@ -39,5 +43,22 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
         context.send(viewAction: .deselectUser(.mockAlice))
         XCTAssertNotEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+    }
+    
+    func testDefaulSecurity() {
+        XCTAssertTrue(context.viewState.bindings.isRoomPrivate)
+    }
+    
+    func testChangeSecurity() {
+        context.send(viewAction: .selectPublicRoom)
+        XCTAssertFalse(context.viewState.bindings.isRoomPrivate)
+        context.send(viewAction: .selectPrivateRoom)
+        XCTAssertTrue(context.viewState.bindings.isRoomPrivate)
+    }
+    
+    func testCreateRoomRequirements() {
+        XCTAssertFalse(context.viewState.canCreateRoom)
+        context.roomName = "A"
+        XCTAssertTrue(context.viewState.canCreateRoom)
     }
 }
