@@ -159,6 +159,10 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self.presentSplashScreen()
             case (.restoringSession, .createdUserSession, .signedIn):
                 self.setupUserSession()
+            case (.signingOut, .signOut, .signingOut):
+                // We can ignore signOut when already in the process of signing out,
+                // such as the SDK sending an authError due to token invalidation.
+                break
             case (_, .signOut(let isSoft), .signingOut):
                 self.logout(isSoft: isSoft)
             case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
@@ -336,7 +340,9 @@ class AppCoordinator: AppCoordinatorProtocol {
                 guard let self else { return }
                 switch callback {
                 case .didReceiveAuthError(let isSoftLogout):
-                    self.stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
+                    stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
+                case .updateRestorationToken:
+                    userSessionStore.refreshRestorationToken(for: userSession)
                 default:
                     break
                 }

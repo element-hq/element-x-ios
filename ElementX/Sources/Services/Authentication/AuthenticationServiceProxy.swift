@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import AppAuth
 import Foundation
 import MatrixRustSDK
 
@@ -26,8 +25,18 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
+        
+        // guard let settings = ServiceLocator.shared.settings else { fatalError("The settings must be set.") }
+        // let oidcConfiguration = OidcConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+        //                                           redirectUri: settings.oidcRedirectURL.absoluteString,
+        //                                           clientUri: settings.oidcClientURL.absoluteString,
+        //                                           tosUri: settings.oidcTermsURL.absoluteString,
+        //                                           policyUri: settings.oidcPolicyURL.absoluteString,
+        //                                           staticRegistrations: settings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
+        
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: nil,
+                                                      // oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
     }
     
@@ -42,8 +51,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             }
             
             if let details = authenticationService.homeserverDetails() {
-                if let issuer = details.authenticationIssuer(), let issuerURL = URL(string: issuer) {
-                    homeserver.loginMode = .oidc(issuerURL)
+                if details.authenticationIssuer() != nil {
+                    homeserver.loginMode = .oidc
                 } else if details.supportsPasswordLogin() {
                     homeserver.loginMode = .password
                 } else {
@@ -62,40 +71,32 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        guard case let .oidc(issuerURL) = homeserver.loginMode else {
-            return .failure(.oidcError(.notSupported))
-        }
-        
-        let token: String
-        let deviceID = generateDeviceID()
-        do {
-            let oidcService = OIDCService(issuerURL: issuerURL)
-            let configuration = try await oidcService.metadata()
-            let registationResponse = try await oidcService.registerClient(metadata: configuration)
-            let authResponse = try await oidcService.presentWebAuthentication(metadata: configuration,
-                                                                              clientID: registationResponse.clientID,
-                                                                              scope: "openid urn:matrix:org.matrix.msc2967.client:api:* urn:matrix:org.matrix.msc2967.client:device:\(deviceID)",
-                                                                              userAgent: userAgent)
-            let tokenResponse = try await oidcService.redeemCodeForTokens(authResponse: authResponse)
-            
-            guard let accessToken = tokenResponse.accessToken else { return .failure(.oidcError(.unknown)) }
-            token = accessToken
-        } catch let error as OIDCError {
-            MXLog.error("Login with OIDC failed: \(error)")
-            return .failure(.oidcError(error))
-        } catch {
-            MXLog.error("Login with OIDC failed: \(error)")
-            return .failure(.failedLoggingIn)
-        }
-        
-        do {
-            let client = try authenticationService.restoreWithAccessToken(token: token, deviceId: deviceID)
-            return await userSession(for: client)
-        } catch {
-            MXLog.error("Failed restoring with access token: \(error)")
-            return .failure(.failedLoggingIn)
-        }
+    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
+        .failure(.oidcError(.notSupported))
+//        do {
+//            let oidcData = try await Task.dispatch(on: .global()) {
+//                try self.authenticationService.urlForOidcLogin()
+//            }
+//            return .success(OIDCAuthenticationDataProxy(underlyingData: oidcData))
+//        } catch {
+//            MXLog.error("Failed to get URL for OIDC login: \(error)")
+//            return .failure(.oidcError(.urlFailure))
+//        }
+    }
+    
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        .failure(.oidcError(.notSupported))
+//        do {
+//            let client = try await Task.dispatch(on: .global()) {
+//                try self.authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
+//            }
+//            return await userSession(for: client)
+//        } catch AuthenticationError.OidcCancelled {
+//            return .failure(.oidcError(.userCancellation))
+//        } catch {
+//            MXLog.error("Login with OIDC failed: \(error)")
+//            return .failure(.failedLoggingIn)
+//        }
     }
     
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
@@ -132,14 +133,5 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .failure:
             return .failure(.failedLoggingIn)
         }
-    }
-    
-    private func generateDeviceID() -> String {
-        var deviceID = ""
-        for _ in 0..<10 {
-            guard let scalar = UnicodeScalar(Int.random(in: 65...90)) else { fatalError() }
-            deviceID.append(Character(scalar))
-        }
-        return deviceID
     }
 }

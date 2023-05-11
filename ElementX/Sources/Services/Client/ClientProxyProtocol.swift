@@ -22,6 +22,7 @@ enum ClientProxyCallback {
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
     case receivedNotification(NotificationItemProxyProtocol)
+    case updateRestorationToken
 }
 
 enum ClientProxyError: Error {

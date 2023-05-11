@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import AppAuth
+import Combine
 import SwiftUI
 
 struct LoginScreenCoordinatorParameters {
@@ -32,16 +32,10 @@ enum LoginScreenCoordinatorAction {
 final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
-    private let hostingController: UIViewController
-    /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
-    private let oidcUserAgent: OIDExternalUserAgentIOS?
     
-    private var currentTask: Task<Void, Error>? {
-        willSet {
-            currentTask?.cancel()
-        }
-    }
+    @CancellableTask private var currentTask: Task<Void, Error>?
     
+    private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
 
@@ -54,8 +48,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         
         viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver)
         
-        hostingController = UIHostingController(rootView: LoginScreen(context: viewModel.context))
-        oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
+        oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
     
     // MARK: - Public
@@ -74,7 +67,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             case .login(let username, let password):
                 self.login(username: username, password: password)
             case .continueWithOIDC:
-                self.loginWithOIDC()
+                self.continueWithOIDC()
             }
         }
     }
@@ -126,27 +119,34 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
+        case .oidcError(.notSupported):
+            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
+            viewModel.displayError(.alert(L10n.commonServerNotSupported))
+        case .oidcError(.userCancellation):
+            // No need to show an error, the user cancelled authentication.
+            break
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }
     }
     
-    private func loginWithOIDC() {
-        guard let oidcUserAgent else {
-            handleError(AuthenticationServiceError.oidcError(.notSupported))
-            return
-        }
-        
+    private func continueWithOIDC() {
         startLoading(isInteractionBlocking: true)
         
         Task {
-            switch await authenticationService.loginWithOIDC(userAgent: oidcUserAgent) {
-            case .success(let userSession):
-                callback?(.signedIn(userSession))
-                stopLoading()
+            switch await authenticationService.urlForOIDCLogin() {
             case .failure(let error):
                 stopLoading()
                 handleError(error)
+            case .success(let oidcData):
+                stopLoading()
+                
+                switch await oidcAuthenticationPresenter.authenticate(using: oidcData) {
+                case .success(let userSession):
+                    callback?(.signedIn(userSession))
+                case .failure(let error):
+                    handleError(error)
+                }
             }
         }
     }

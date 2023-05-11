@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-import AppAuth
+import Foundation
+import MatrixRustSDK
 
 class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     
     private(set) var homeserver: LoginHomeserver = .mockMatrixDotOrg
-    var oidcUserAgent: OIDExternalUserAgentIOS?
     
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         // Map the address to the mock homeservers
@@ -42,10 +42,14 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }
-
+    
+    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        .failure(.oidcError(.notSupported))
+    }
+    
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         // Login only succeeds if the username and password match the valid credentials property
         guard username == validCredentials.username, password == validCredentials.password else {

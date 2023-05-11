@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import AppAuth
 import SwiftUI
 
 struct SoftLogoutScreenCoordinatorParameters {
@@ -43,11 +42,8 @@ enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
 final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol
-    private let hostingController: UIViewController
-    /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
-    private let oidcUserAgent: OIDExternalUserAgentIOS?
     
-    /// The wizard used to handle the registration flow.
+    private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     
     var callback: (@MainActor (SoftLogoutScreenCoordinatorResult) -> Void)?
@@ -56,13 +52,11 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         let homeserver = parameters.authenticationService.homeserver
-        
         viewModel = SoftLogoutScreenViewModel(credentials: parameters.credentials,
                                               homeserver: homeserver,
                                               keyBackupNeeded: parameters.keyBackupNeeded)
         
-        hostingController = UIHostingController(rootView: SoftLogoutScreen(context: viewModel.context))
-        oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
+        oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
     
     // MARK: - Public
@@ -80,7 +74,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             case .clearAllData:
                 self.callback?(.clearAllData)
             case .continueWithOIDC:
-                self.loginWithOIDC()
+                self.continueWithOIDC()
             }
         }
     }
@@ -136,22 +130,23 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         }
     }
 
-    private func loginWithOIDC() {
-        guard let oidcUserAgent else {
-            handleError(AuthenticationServiceError.oidcError(.notSupported))
-            return
-        }
-
+    private func continueWithOIDC() {
         startLoading()
-
+        
         Task {
-            switch await authenticationService.loginWithOIDC(userAgent: oidcUserAgent) {
-            case .success(let userSession):
-                callback?(.signedIn(userSession))
-                stopLoading()
+            switch await authenticationService.urlForOIDCLogin() {
             case .failure(let error):
                 stopLoading()
                 handleError(error)
+            case .success(let oidcData):
+                stopLoading()
+                
+                switch await oidcAuthenticationPresenter.authenticate(using: oidcData) {
+                case .success(let userSession):
+                    callback?(.signedIn(userSession))
+                case .failure(let error):
+                    handleError(error)
+                }
             }
         }
     }
@@ -163,6 +158,12 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
+        case .oidcError(.notSupported):
+            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
+            viewModel.displayError(.alert(L10n.commonServerNotSupported))
+        case .oidcError(.userCancellation):
+            // No need to show an error, the user cancelled authentication.
+            break
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }

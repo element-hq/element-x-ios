@@ -56,9 +56,6 @@ packages:
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.5.0
-  AppAuth:
-    url: https://github.com/openid/AppAuth-iOS
-    minorVersion: 1.6.0
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.0.0

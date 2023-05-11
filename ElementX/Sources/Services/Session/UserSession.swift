@@ -89,9 +89,15 @@ class UserSession: UserSessionProtocol {
         authErrorCancellable = clientProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                if case .receivedAuthError(let isSoftLogout) = callback {
-                    self?.callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
-                    self?.tearDownAuthErrorWatchdog()
+                guard let self else { return }
+                switch callback {
+                case .receivedAuthError(let isSoftLogout):
+                    callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
+                    tearDownAuthErrorWatchdog()
+                case .updateRestorationToken:
+                    callbacks.send(.updateRestorationToken)
+                default:
+                    break
                 }
             }
     }

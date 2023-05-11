@@ -27,12 +27,15 @@ private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, Slid
     }
     
     // MARK: - ClientDelegate
-    
-    func didReceiveSyncUpdate() { }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
         MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
+    }
+    
+    func didRefreshTokens() {
+        MXLog.info("The session has updated tokens.")
+        clientProxy?.updateRestorationToken()
     }
 
     // MARK: - SlidingSyncDelegate
@@ -552,6 +555,10 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving room with identifier: \(identifier)")
             return (nil, nil)
         }
+    }
+    
+    fileprivate func updateRestorationToken() {
+        callbacks.send(.updateRestorationToken)
     }
     
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {

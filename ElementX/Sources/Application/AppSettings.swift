@@ -89,6 +89,17 @@ final class AppSettings {
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
     let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md")
     
+    /// The redirect URL used for OIDC.
+    let oidcRedirectURL = URL(staticString: "io.element:/callback")
+    /// The app's main URL shown when using OIDC.
+    let oidcClientURL = URL(staticString: "https://element.io")
+    /// The app's Terms of Service URL shown when using OIDC.
+    let oidcTermsURL = URL(staticString: "https://element.io/user-terms-of-service")
+    /// The app's Privacy Policy URL shown when using OIDC.
+    let oidcPolicyURL = URL(staticString: "https://element.io/privacy")
+    /// Any pre-defined static client registrations for OIDC issuers.
+    let oidcStaticRegistrations = [URL(staticString: "https://id.thirdroom.io/realms/thirdroom"): "elementx"]
+    
     // MARK: - Notifications
     
     var pusherAppId: String {
