@@ -191,7 +191,7 @@ extension NotificationItemProxyProtocol {
             case .none:
                 return processEmpty()
             case let .state(content):
-                return processStateEvent(content: content, mediaProvider: mediaProvider)
+                return try await processStateEvent(content: content, mediaProvider: mediaProvider)
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
