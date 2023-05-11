@@ -82,7 +82,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var isEncrypted: Bool {
-        notificationItem.isEncrypted
+        notificationItem.isEncrypted ?? false
     }
 
     var senderAvatarMediaSource: MediaSourceProxy? {
