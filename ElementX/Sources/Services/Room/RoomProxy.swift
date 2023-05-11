@@ -441,16 +441,16 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    var invitedMembersCount: UInt64 {
-        room.invitedMembersCount()
+    var invitedMembersCount: UInt {
+        UInt(room.invitedMembersCount())
     }
     
-    var joinedMembersCount: UInt64 {
-        room.joinedMembersCount()
+    var joinedMembersCount: UInt {
+        UInt(room.joinedMembersCount())
     }
     
-    var activeMembersCount: UInt64 {
-        room.activeMembersCount()
+    var activeMembersCount: UInt {
+        UInt(room.activeMembersCount())
     }
     
     // MARK: - Private

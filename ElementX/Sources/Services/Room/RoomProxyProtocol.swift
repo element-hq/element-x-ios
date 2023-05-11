@@ -105,11 +105,11 @@ protocol RoomProxyProtocol {
     
     func fetchDetails(for eventID: String)
     
-    var invitedMembersCount: UInt64 { get }
+    var invitedMembersCount: UInt { get }
     
-    var joinedMembersCount: UInt64 { get }
+    var joinedMembersCount: UInt { get }
     
-    var activeMembersCount: UInt64 { get }
+    var activeMembersCount: UInt { get }
 }
 
 extension RoomProxyProtocol {
