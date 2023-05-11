@@ -33,6 +33,10 @@ struct RoomProxyMockConfiguration {
     var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxyProtocol]?
     var inviter: RoomMemberProxyMock?
+    
+    var invitedMembersCount: UInt = 100
+    var joinedMembersCount: UInt = 50
+    var activeMembersCount: UInt = 25
 }
 
 extension RoomProxyMock {
@@ -52,6 +56,10 @@ extension RoomProxyMock {
         canonicalAlias = configuration.canonicalAlias
         alternativeAliases = configuration.alternativeAliases
         hasUnreadNotifications = configuration.hasUnreadNotifications
+        
+        invitedMembersCount = configuration.invitedMembersCount
+        joinedMembersCount = configuration.joinedMembersCount
+        activeMembersCount = configuration.activeMembersCount
 
         if let members = configuration.members {
             membersPublisher = Just(members).eraseToAnyPublisher()

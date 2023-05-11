@@ -44,9 +44,6 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         case .send:
             Task {
                 startLoading()
-                defer {
-                    stopLoading()
-                }
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
@@ -58,9 +55,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                         showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
                     }
                     
+                    stopLoading()
                 case .failure(let error):
                     MXLog.error("Failed processing media to upload with error: \(error)")
                     showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
+                    stopLoading()
                 }
             }
             
