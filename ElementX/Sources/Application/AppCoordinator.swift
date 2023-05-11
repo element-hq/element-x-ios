@@ -507,7 +507,6 @@ extension AppCoordinator: NotificationManagerDelegate {
     func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
         MXLog.info("[AppCoordinator] tappedNotification")
 
-        // We store the room identifier into the thread identifier
         guard let roomID = content.roomID,
               content.receiverID != nil else {
             return
