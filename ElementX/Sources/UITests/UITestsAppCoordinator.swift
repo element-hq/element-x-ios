@@ -307,6 +307,14 @@ class MockScreen: Identifiable {
                                                                                  members: members))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomMembersListScreenPendingInvites:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
+            let coordinator = RoomMembersListScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                                 mediaProvider: MockMediaProvider(),
+                                                                                 members: members))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .reportContent:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ReportContentScreenCoordinator(parameters: .init(itemID: "test",
