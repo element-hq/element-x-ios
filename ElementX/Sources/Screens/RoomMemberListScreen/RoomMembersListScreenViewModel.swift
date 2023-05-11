@@ -27,11 +27,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     init(mediaProvider: MediaProviderProtocol, members: [RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
         self.members = members
+        super.init(initialViewState: .init(), imageProvider: mediaProvider)
         
-        super.init(initialViewState: .init(joinedMembers: [], invitedMembers: []),
-                   imageProvider: mediaProvider)
-        
-        buildMemberSections(members: members)
+        buildMembersDetails(members: members)
     }
     
     // MARK: - Public
@@ -49,24 +47,32 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Private
     
-    func buildMemberSections(members: [RoomMemberProxyProtocol]) {
-        DispatchQueue.global().async {
+    func buildMembersDetails(members: [RoomMemberProxyProtocol]) {
+        Task {
             let indicatorId = UUID().uuidString
-            DispatchQueue.main.sync {
-                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
-            }
-            let joinedMembers = members
-                .filter { $0.membership == .join }
-                .map { RoomMemberDetails(withProxy: $0) }
-            
-            let invitedMembers = members
-                .filter { $0.membership == .invite }
-                .map { RoomMemberDetails(withProxy: $0) }
-            
-            DispatchQueue.main.sync {
-                self.state = .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers)
+            defer {
                 ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
             }
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            let (invitedMembers, joinedMembers) = await split(members: members)
+            self.state = .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers)
         }
+    }
+    
+    func split(members: [RoomMemberProxyProtocol]) async -> (invited: [RoomMemberDetails], joined: [RoomMemberDetails]) {
+        await Task.detached {
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            let invitedMembers = members
+                .filter { $0.membership == .invite }
+                .map(RoomMemberDetails.init(withProxy:))
+            
+            let joinedMembers = members
+                .filter { $0.membership == .join }
+                .map(RoomMemberDetails.init(withProxy:))
+            
+            return (invitedMembers, joinedMembers)
+        }
+        .value
     }
 }

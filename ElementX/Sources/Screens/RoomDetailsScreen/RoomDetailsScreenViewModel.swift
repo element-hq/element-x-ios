@@ -23,8 +23,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
     private var dmRecipient: RoomMemberProxyProtocol?
+    
     @CancellableTask
-    private var buildMembersTask: Task<Void, Never>?
+    private var buildMembersDetailsTask: Task<Void, Never>?
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
 
@@ -82,8 +83,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .sink { [weak self] members in
                 guard let self else { return }
                 
-                buildMembersTask = Task {
-                    let (membersDetails, joinedMembersCount) = await self.buildMembersInfo(members: members)
+                buildMembersDetailsTask = Task {
+                    let (membersDetails, joinedMembersCount) = await self.buildMembersDetails(members: members)
                     
                     guard !Task.isCancelled else { return }
                     
@@ -100,7 +101,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
     }
     
-    private func buildMembersInfo(members: [RoomMemberProxyProtocol]) async -> (memberDetails: [RoomMemberDetails], joinedMembersCount: Int) {
+    private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> (memberDetails: [RoomMemberDetails], joinedMembersCount: Int) {
         await Task.detached {
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var roomMembersDetails: [RoomMemberDetails] = []
@@ -116,7 +117,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             
             return (roomMembersDetails, joinedMembersCount)
-        }.value
+        }
+        .value
     }
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
