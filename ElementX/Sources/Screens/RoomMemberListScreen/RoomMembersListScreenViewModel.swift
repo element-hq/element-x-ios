@@ -28,26 +28,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.mediaProvider = mediaProvider
         self.members = members
         
-        let clock = ContinuousClock()
-        
-        var joinedMembers: [RoomMemberDetails] = []
-        var invitedMembers: [RoomMemberDetails] = []
-
-        let result = clock.measure {
-            #warning("Fix performance issue here")
-            joinedMembers = members
-                // .filter { $0.membership == .join }
-                .map(RoomMemberDetails.init)
-            
-            invitedMembers = members
-                // .filter { $0.membership == .invite }
-                .map(RoomMemberDetails.init)
-        }
-        
-        print("*** \(result)")
-        
-        super.init(initialViewState: .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers),
+        super.init(initialViewState: .init(joinedMembers: [], invitedMembers: []),
                    imageProvider: mediaProvider)
+        
+        buildMemberSections(members: members)
     }
     
     // MARK: - Public
@@ -60,6 +44,29 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 return
             }
             callback?(.selectMember(member))
+        }
+    }
+    
+    // MARK: - Private
+    
+    func buildMemberSections(members: [RoomMemberProxyProtocol]) {
+        DispatchQueue.global().async {
+            let indicatorId = UUID().uuidString
+            DispatchQueue.main.sync {
+                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
+            }
+            let joinedMembers = members
+                .filter { $0.membership == .join }
+                .map { RoomMemberDetails(withProxy: $0) }
+            
+            let invitedMembers = members
+                .filter { $0.membership == .invite }
+                .map { RoomMemberDetails(withProxy: $0) }
+            
+            DispatchQueue.main.sync {
+                self.state = .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers)
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
+            }
         }
     }
 }

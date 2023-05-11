@@ -25,7 +25,7 @@ struct RoomMembersListScreenViewState: BindableState {
     private var invitedMembers: [RoomMemberDetails]
     var bindings: RoomMembersListScreenViewStateBindings
     
-    init(joinedMembers: [RoomMemberDetails], invitedMembers: [RoomMemberDetails], bindings: RoomMembersListScreenViewStateBindings = .init()) {
+    init(joinedMembers: [RoomMemberDetails] = [], invitedMembers: [RoomMemberDetails] = [], bindings: RoomMembersListScreenViewStateBindings = .init()) {
         self.joinedMembers = joinedMembers
         self.invitedMembers = invitedMembers
         self.bindings = bindings
