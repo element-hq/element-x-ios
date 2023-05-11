@@ -22,7 +22,6 @@ enum RoomMemberProxyError: Error {
     case unignoreUserFailed
 }
 
-@MainActor
 // sourcery: AutoMockable
 protocol RoomMemberProxyProtocol {
     var userID: String { get }

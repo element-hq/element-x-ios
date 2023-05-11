@@ -23,6 +23,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
     private var dmRecipient: RoomMemberProxyProtocol?
+    @CancellableTask
+    private var buildMembersTask: Task<Void, Never>?
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
 
@@ -75,34 +77,21 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Private
 
-    private static let leaveRoomLoadingID = "LeaveRoomLoading"
-    
     private func setupSubscriptions() {
         roomProxy.membersPublisher
-            // for large rooms it is important to map room members outside the main thread
-            .receive(on: DispatchQueue.global())
             .sink { [weak self] members in
-                guard let self else {
-                    return
-                }
+                guard let self else { return }
                 
-                var roomMembersDetails: [RoomMemberDetails] = []
-                var joinedMembersCount = 0
-                roomMembersDetails.reserveCapacity(members.count)
-                
-                for member in members {
-                    roomMembersDetails.append(RoomMemberDetails(withProxy: member))
-                    if member.membership == .join {
-                        joinedMembersCount += 1
-                    }
-                }
-                
-                Task { @MainActor in
+                buildMembersTask = Task {
+                    let (membersDetails, joinedMembersCount) = await self.buildMembersInfo(members: members)
+                    
+                    guard !Task.isCancelled else { return }
+                    
                     if self.roomProxy.isDirect, self.roomProxy.isEncrypted, members.count == 2 {
                         self.dmRecipient = members.first(where: { !$0.isAccountOwner })
                     }
                     
-                    self.state.members = roomMembersDetails
+                    self.state.members = membersDetails
                     self.state.joinedMembersCount = joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
                     self.members = members
@@ -110,6 +99,27 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
     }
+    
+    private func buildMembersInfo(members: [RoomMemberProxyProtocol]) async -> (memberDetails: [RoomMemberDetails], joinedMembersCount: Int) {
+        await Task.detached {
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            var roomMembersDetails: [RoomMemberDetails] = []
+            var joinedMembersCount = 0
+            roomMembersDetails.reserveCapacity(members.count)
+            
+            for member in members {
+                roomMembersDetails.append(RoomMemberDetails(withProxy: member))
+                
+                if member.membership == .join {
+                    joinedMembersCount += 1
+                }
+            }
+            
+            return (roomMembersDetails, joinedMembersCount)
+        }.value
+    }
+    
+    private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
     private func leaveRoom() async {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
