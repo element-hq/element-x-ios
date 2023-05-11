@@ -263,7 +263,7 @@ extension NotificationItemProxyProtocol {
         let notification = baseMutableContent
         notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
         notification.body = L10n.notification
-        notification.categoryIdentifier = NotificationConstants.Category.reply
+        notification.categoryIdentifier = NotificationConstants.Category.message
         return notification
     }
 
@@ -273,7 +273,7 @@ extension NotificationItemProxyProtocol {
         if notification.title != roomDisplayName {
             notification.subtitle = roomDisplayName
         }
-        notification.categoryIdentifier = NotificationConstants.Category.reply
+        notification.categoryIdentifier = NotificationConstants.Category.message
 
         let senderName = senderDisplayName ?? roomDisplayName
         let iconType: NotificationIconType

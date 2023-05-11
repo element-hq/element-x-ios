@@ -34,11 +34,19 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     weak var delegate: NotificationManagerDelegate?
 
     func start() {
-        let replyCategory = UNNotificationCategory(identifier: NotificationConstants.Category.reply,
-                                                   actions: [],
-                                                   intentIdentifiers: [],
-                                                   options: [])
-        notificationCenter.setNotificationCategories([replyCategory])
+        // Not implemented yet
+        // let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
+        // title: L10n.actionQuickReply,
+        // options: [])
+        let messageCategory = UNNotificationCategory(identifier: NotificationConstants.Category.message,
+                                                     actions: [],
+                                                     intentIdentifiers: [],
+                                                     options: [])
+        let inviteCategory = UNNotificationCategory(identifier: NotificationConstants.Category.invite,
+                                                    actions: [],
+                                                    intentIdentifiers: [],
+                                                    options: [])
+        notificationCenter.setNotificationCategories([messageCategory, inviteCategory])
         notificationCenter.delegate = self
     }
 
