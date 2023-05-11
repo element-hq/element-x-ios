@@ -86,7 +86,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             span.exit()
         }
         
-        MXLog.verbose("Received \(diffs.count) diffs")
+        MXLog.info("Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
@@ -100,14 +100,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     return currentItems
                 }
                 
-                MXLog.verbose("Applied diff, new count: \(updatedItems.count)")
-                
                 return updatedItems
             }
         
         detectDuplicatesInRoomList(rooms)
         
-        MXLog.verbose("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
+        MXLog.info("Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
@@ -162,34 +160,36 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         switch diff {
         case .pushFront(let value):
-            MXLog.verbose("Push Front")
+            MXLog.info("Push Front \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
-            MXLog.verbose("Push Back")
+            MXLog.info("Push Back \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .append(values: let values):
-            MXLog.verbose("Append \(values.count) rooms, current total count: \(rooms.count)")
+            let debugIdentifiers = values.map(\.debugIdentifier)
+            MXLog.info("Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
                 let summary = buildSummaryForRoomListEntry(value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .set(let index, let value):
-            MXLog.verbose("Update \(index), current total count: \(rooms.count)")
+            MXLog.info("Update \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .insert(let index, let value):
-            MXLog.verbose("Insert at \(index), current total count: \(rooms.count)")
+            MXLog.info("Insert at \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .remove(let index):
-            MXLog.verbose("Remove from: \(index), current total count: \(rooms.count)")
             let summary = rooms[Int(index)]
+            MXLog.info("Remove \(summary.id ?? "") from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
-            MXLog.verbose("Replace all items with new count: \(values.count), current total count: \(rooms.count)")
+            let debugIdentifiers = values.map(\.debugIdentifier)
+            MXLog.info("Replace all items with \(debugIdentifiers)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
@@ -198,16 +198,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
             }
         case .clear:
-            MXLog.verbose("Clear all items, current total count: \(rooms.count)")
+            MXLog.info("Clear all items")
             for (index, value) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
         case .popFront:
-            MXLog.verbose("Pop Front, current total count: \(rooms.count)")
+            MXLog.info("Pop Front")
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .popBack:
-            MXLog.verbose("Pop Back, current total count: \(rooms.count)")
+            MXLog.info("Pop Back")
             guard let value = rooms.last else {
                 fatalError()
             }
@@ -254,12 +254,14 @@ extension RoomSummaryProviderState {
 }
 
 extension MatrixRustSDK.RoomListEntry {
-    var id: String? {
+    var debugIdentifier: String {
         switch self {
         case .empty:
-            return nil
-        case .invalidated(let roomId), .filled(let roomId):
-            return roomId
+            return "Empty"
+        case .invalidated(let roomId):
+            return "Invalidated(\(roomId))"
+        case .filled(let roomId):
+            return "Filled(\(roomId))"
         }
     }
     

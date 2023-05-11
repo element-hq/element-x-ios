@@ -23,10 +23,7 @@ import MatrixRustSDK
 struct TracingConfiguration {
     static var release = TracingConfiguration(overrides: [.common: .info])
     
-    static var debug = TracingConfiguration(overrides: [.matrix_sdk_crypto: .info,
-                                                        .matrix_sdk_http_client: .info,
-                                                        .matrix_sdk_sliding_sync: .info,
-                                                        .matrix_sdk_base_sliding_sync: .info])
+    static var debug = TracingConfiguration(overrides: [.common: .info])
     
     /// Configure tracing with certain overrides in place
     /// - Parameter overrides: the desired overrides
