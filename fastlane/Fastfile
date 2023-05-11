@@ -235,6 +235,8 @@ lane :prepare_next_release do
 
   xcodegen(spec: "project.yml")
 
+  setup_git()
+
   sh("git add #{target_file_path} #{xcode_project_file_path}")
 
   sh("git commit -m 'Prepare next release'")
@@ -250,19 +252,23 @@ lane :tag_nightly do |options|
   data = YAML.load_file xcodegen_project_file_path
   current_version = data["settings"]["MARKETING_VERSION"]
 
-  tag_name = "nightly-#{current_version}.#{build_number}"
+  setup_git()
+
+  tag_name = "nightly/#{current_version}.#{build_number}"
   sh("git tag #{tag_name}")
 
   git_push(tag_name: tag_name)
+end
+
+private_lane :setup_git
+  sh("git config --global user.name 'Element CI'")
+  sh("git config --global user.email 'ci@element.io'")
 end
 
 private_lane :git_push do |options|
   # Use the Github API token for repo write access
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
-
-  sh("git config --global user.name 'Element CI'")
-  sh("git config --global user.email 'ci@element.io'")
 
   # Get repo url path, without `http`, `https` or `git@` prefixes or `.git` suffix
   repo_url = sh("git ls-remote --get-url origin | sed 's#http://##g' | sed 's#https:\/\/##g' | sed 's#git@##g' | sed 's#.git##g'")
