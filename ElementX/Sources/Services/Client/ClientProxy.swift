@@ -190,7 +190,13 @@ class ClientProxy: ClientProxyProtocol {
             self.roomTupleForIdentifier(identifier)
         }
 
-        guard let slidingSyncRoom, let room else {
+        guard let slidingSyncRoom else {
+            MXLog.error("Invalid slidingSyncRoom for identifier \(identifier)")
+            return nil
+        }
+        
+        guard let room else {
+            MXLog.error("Invalid slidingSyncRoom fullRoom for identifier \(identifier)")
             return nil
         }
 
