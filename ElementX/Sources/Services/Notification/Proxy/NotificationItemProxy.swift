@@ -205,15 +205,13 @@ extension NotificationItemProxyProtocol {
 
     // MARK: - Private
 
-    private func processStateEvent(content: StateEventContent, mediaProvider: MediaProviderProtocol?) -> UNMutableNotificationContent {
+    private func processStateEvent(content: StateEventContent, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         switch content {
         case let .roomMemberContent(userId, membershipState):
             switch membershipState {
             case .invite:
                 if userId == receiverID {
-                    // This does not work yet we need support for multiprocess sync in the SDK so I am using processEmpty()
-                    //                    return try await processInvited(mediaProvider: mediaProvider)
-                    return processEmpty()
+                    return try await processInvited(mediaProvider: mediaProvider)
                 } else {
                     return processEmpty()
                 }
