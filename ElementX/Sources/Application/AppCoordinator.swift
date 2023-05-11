@@ -160,7 +160,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
             case (.signedIn, .clearCache, .initial):
-                clearCache()
+                self.clearCache()
             default:
                 fatalError("Unknown transition: \(context)")
             }
