@@ -260,7 +260,7 @@ lane :tag_nightly do |options|
   git_push(tag_name: tag_name)
 end
 
-private_lane :setup_git
+private_lane :setup_git do
   sh("git config --global user.name 'Element CI'")
   sh("git config --global user.email 'ci@element.io'")
 end
