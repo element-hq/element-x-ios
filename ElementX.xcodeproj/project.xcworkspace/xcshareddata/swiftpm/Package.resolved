@@ -11,7 +11,7 @@
     {
       "identity" : "compound-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-ios",
+      "location" : "https://github.com/vector-im/compound-ios.git",
       "state" : {
         "revision" : "b4f34edce9003ba1fde31500312f317b728f4ee3"
       }
