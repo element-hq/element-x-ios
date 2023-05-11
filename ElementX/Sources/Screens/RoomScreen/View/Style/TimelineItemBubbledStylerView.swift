@@ -125,15 +125,27 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     @ViewBuilder
     var contentWithReply: some View {
-        VStack(alignment: .leading, spacing: 4.0) {
+        TimelineBubbleLayout(spacing: 8) {
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
                let replyDetails = messageTimelineItem.replyDetails {
+                // The rendered reply bubble with a greedy width. The custom layout prevents
+                // the infinite width from increasing the overall width of the view.
                 TimelineReplyView(timelineItemReplyDetails: replyDetails)
+                    .timelineQuoteBubbleFormatting()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.element.background)
                     .cornerRadius(8)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                
+                // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
+                TimelineReplyView(timelineItemReplyDetails: replyDetails)
+                    .timelineQuoteBubbleFormatting()
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .hidden()
             }
             
             content()
+                .layoutPriority(TimelineBubbleLayout.Priority.regularText)
         }
     }
     
@@ -188,15 +200,45 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {
+        mockTimeline
+            .previewDisplayName("Mock Timeline")
+        replies
+            .previewDisplayName("Replies")
+    }
+    
+    static var mockTimeline: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
-                let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineViewProvider(timelineItem: item, groupStyle: .single)
-                    .padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
+            ForEach(viewModel.state.items) { item in
+                item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }
         .timelineStyle(.bubbles)
         .previewLayout(.sizeThatFits)
+        .environmentObject(viewModel.context)
+    }
+    
+    static var replies: some View {
+        VStack {
+            RoomTimelineViewProvider.text(TextRoomTimelineItem(id: "",
+                                                               timestamp: "10:42",
+                                                               isOutgoing: true,
+                                                               isEditable: false,
+                                                               sender: .init(id: "whoever"),
+                                                               content: .init(body: "A long message that should be on multiple lines."),
+                                                               replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                     content: .text(.init(body: "Short")))),
+                                          .single)
+            
+            RoomTimelineViewProvider.text(TextRoomTimelineItem(id: "",
+                                                               timestamp: "10:42",
+                                                               isOutgoing: true,
+                                                               isEditable: false,
+                                                               sender: .init(id: "whoever"),
+                                                               content: .init(body: "Short message"),
+                                                               replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                     content: .text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))),
+                                          .single)
+        }
         .environmentObject(viewModel.context)
     }
 }

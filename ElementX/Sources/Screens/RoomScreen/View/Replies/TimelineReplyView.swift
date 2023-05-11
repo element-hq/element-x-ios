@@ -25,19 +25,19 @@ struct TimelineReplyView: View {
             case .loaded(let sender, let content):
                 switch content {
                 case .audio(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: nil))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
                 case .emote(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: content.formattedBody))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .file(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: nil))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
                 case .image(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: nil))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
                 case .notice(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: content.formattedBody))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .text(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: content.formattedBody))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .video(let content):
-                    TimelineTextReplyView(attributedText: attributedString(for: sender, body: content.body, formattedBody: nil))
+                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
                 }
             default:
                 Text("Missing in-reply-to details")
@@ -48,26 +48,35 @@ struct TimelineReplyView: View {
         }
     }
     
-    private func attributedString(for sender: TimelineItemSender, body: String, formattedBody: AttributedString?) -> AttributedString {
-        var attributedHeading = AttributedString("\(sender.displayName ?? sender.id)\n")
-        attributedHeading.font = .compound.bodyMD.bold()
-        attributedHeading.foregroundColor = .element.primaryContent
-        
-        var formattedBody = formattedBody ?? AttributedString(body)
-        formattedBody.font = .compound.bodyMD
-        formattedBody.foregroundColor = .element.secondaryContent
-        
-        attributedHeading += formattedBody
-        
-        return attributedHeading
-    }
-    
     private struct TimelineTextReplyView: View {
-        let attributedText: AttributedString
+        let sender: TimelineItemSender
+        let plainBody: String
+        let formattedBody: AttributedString?
         
         var body: some View {
-            FormattedBodyText(attributedString: attributedText)
-                .lineLimit(3)
+            VStack(alignment: .leading) {
+                Text(sender.displayName ?? sender.id)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundColor(.compound.textPrimary)
+                
+                Text(formattedBody ?? AttributedString(plainBody))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textPlaceholder)
+                    .tint(.element.links)
+                    .lineLimit(2)
+            }
         }
+    }
+}
+
+struct TimelineReplyView_Previews: PreviewProvider {
+    static var previews: some View {
+        TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                            content: .text(.init(body: "This is a reply"))))
+            .background(Color.element.background)
+            .cornerRadius(8)
+            .padding(8)
+            .background(Color.element.bubblesYou)
+            .cornerRadius(12)
     }
 }
