@@ -186,6 +186,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         Task { @MainActor in
             guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
                 MXLog.error("Invalid room identifier: \(roomIdentifier)")
+                stateMachine.processEvent(.deselectRoom)
                 return
             }
             let userId = userSession.clientProxy.userID
