@@ -39,10 +39,8 @@ struct CreateRoomScreen: View {
             roomSection
             topicSection
             if !context.viewState.selectedUsers.isEmpty {
-                // TODO: check clipping outside form
                 selectedUsersSection
             }
-            // TODO: Spacer not working properly
             Spacer()
                 .listRowBackground(Color.clear)
             securitySection
@@ -67,6 +65,7 @@ struct CreateRoomScreen: View {
                               text: $context.roomName,
                               prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                               axis: .horizontal)
+                        .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                         .background(Color.element.formRowBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -84,6 +83,7 @@ struct CreateRoomScreen: View {
                       text: $context.roomTopic,
                       prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
+                .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
                 .lineLimit(3, reservesSpace: false)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)

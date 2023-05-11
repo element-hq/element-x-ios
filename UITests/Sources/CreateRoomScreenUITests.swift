@@ -27,4 +27,23 @@ class CreateRoomScreenUITests: XCTestCase {
         let app = Application.launch(.createRoomNoUsers)
         app.assertScreenshot(.createRoom, step: 1)
     }
+    
+    func testLongInputNameText() {
+        let app = Application.launch(.createRoom)
+        let roomName: String
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            roomName = "Room name very very very very very very very very very very very very very very very very long"
+        } else {
+            roomName = "Room name very very very very long"
+        }
+        app.textFields[A11yIdentifiers.createRoomScreen.roomName].clearAndTypeText(roomName)
+        app.assertScreenshot(.createRoom, step: 2)
+    }
+    
+    func testLongInputTopicText() {
+        let app = Application.launch(.createRoom)
+        let roomTopic = "Room topic\nvery\nvery\nvery long"
+        app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].clearAndTypeText(roomTopic)
+        app.assertScreenshot(.createRoom, step: 3)
+    }
 }
