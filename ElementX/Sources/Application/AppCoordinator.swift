@@ -168,7 +168,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
             case (.signedIn, .clearCache, .initial):
-                self.clearCache()
+                clearCache()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -508,14 +508,14 @@ extension AppCoordinator: NotificationManagerDelegate {
         MXLog.info("[AppCoordinator] tappedNotification")
 
         // We store the room identifier into the thread identifier
-        guard !content.threadIdentifier.isEmpty,
+        guard let roomID = content.roomID,
               content.receiverID != nil else {
             return
         }
 
         // Handle here the account switching when available
 
-        handleAppRoute(.room(roomID: content.threadIdentifier))
+        handleAppRoute(.room(roomID: roomID))
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

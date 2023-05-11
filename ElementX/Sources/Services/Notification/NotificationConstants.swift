@@ -29,6 +29,7 @@ enum NotificationConstants {
     enum Category {
         static let discard = "discard"
         static let reply = "reply"
+        static let invite = "invite"
     }
 
     enum Action {
