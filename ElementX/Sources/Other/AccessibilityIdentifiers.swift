@@ -30,6 +30,7 @@ struct A11yIdentifiers {
     static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
+    static let createRoomScreen = CreateRoomScreen()
     static let invitesScreen = InvitesScreen()
     
     struct AnalyticsPromptScreen {
@@ -129,5 +130,10 @@ struct A11yIdentifiers {
         let closeStartChat = "start_chat-close"
         let inviteFriends = "start_chat-invite_friends"
         let searchNoResults = "start_chat-search_no_results"
+    }
+    
+    struct CreateRoomScreen {
+        let roomName = "create-room-room-name"
+        let roomTopic = "create-room-room-topic"
     }
 }
