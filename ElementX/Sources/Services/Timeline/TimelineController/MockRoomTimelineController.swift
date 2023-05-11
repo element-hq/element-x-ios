@@ -81,7 +81,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         let client = try UITestsSignalling.Client(mode: .app)
         
         signalCancellable = client.signals.sink { [weak self] signal in
-            Task { try await self?.handleSignal(signal) }
+            Task {
+                do {
+                    try await self?.handleSignal(signal)
+                } catch {
+                    MXLog.error(error.localizedDescription)
+                }
+            }
         }
         
         self.client = client
