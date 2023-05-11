@@ -9,6 +9,8 @@ if [ "$CI_WORKFLOW" = "Release" ]; then
 
     bundle exec fastlane release_to_github
     bundle exec fastlane prepare_next_release
+elif [ "$CI_WORKFLOW" = "Nightly" ]; then
+    bundle exec fastlane tag_nightly build_number:"$CI_BUILD_NUMBER"
 fi
 
 # Upload dsyms no matter the workflow

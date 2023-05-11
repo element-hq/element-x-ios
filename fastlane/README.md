@@ -93,6 +93,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### tag_nightly
+
+```sh
+[bundle exec] fastlane tag_nightly
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
