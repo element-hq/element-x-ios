@@ -127,7 +127,7 @@ extension UNMutableNotificationContent {
         if let mediaSource = iconType.mediaSource {
             switch await mediaProvider?.loadFileFromSource(mediaSource) {
             case .success(let mediaFile):
-                image = try INImage(imageData: Data(contentsOf: mediaFile.url))
+                image = try await INImage(imageData: Data(from: mediaFile.url))
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
             case .none:
