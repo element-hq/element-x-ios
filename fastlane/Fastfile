@@ -117,7 +117,7 @@ lane :ui_tests do
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 14", "iPad (9th generation)"],
+    devices: ["iPhone 14", "iPad (10th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true
