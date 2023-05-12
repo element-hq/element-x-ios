@@ -19,29 +19,29 @@ import XCTest
 
 @MainActor
 class RoomScreenUITests: XCTestCase {
-    func testPlainNoAvatar() async throws {
+    func testPlainNoAvatar() {
         let app = Application.launch(.roomPlainNoAvatar)
 
         XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
         XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.avatar].exists)
 
-        try await app.assertScreenshot(.roomPlainNoAvatar)
+        app.assertScreenshot(.roomPlainNoAvatar)
     }
 
-    func testEncryptedWithAvatar() async throws {
+    func testEncryptedWithAvatar() {
         let app = Application.launch(.roomEncryptedWithAvatar)
 
         XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
         XCTAssert(app.images[A11yIdentifiers.roomScreen.avatar].waitForExistence(timeout: 1))
 
-        try await app.assertScreenshot(.roomEncryptedWithAvatar)
+        app.assertScreenshot(.roomEncryptedWithAvatar)
     }
     
-    func testSmallTimelineLayout() async throws {
+    func testSmallTimelineLayout() {
         let app = Application.launch(.roomSmallTimeline)
         
         // The messages should be bottom aligned.
-        try await app.assertScreenshot(.roomSmallTimeline)
+        app.assertScreenshot(.roomSmallTimeline)
     }
     
     func testSmallTimelineWithIncomingAndPagination() async throws {
@@ -57,7 +57,7 @@ class RoomScreenUITests: XCTestCase {
         try await performOperation(.paginate, using: client)
 
         // Then the 4 visible messages should stay aligned to the bottom.
-        try await app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
+        app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
     }
     
     func testSmallTimelineWithLargePagination() async throws {
@@ -72,7 +72,7 @@ class RoomScreenUITests: XCTestCase {
         try await performOperation(.paginate, using: client)
 
         // The bottom of the timeline should remain visible with more items added above.
-        try await app.assertScreenshot(.roomSmallTimelineLargePagination)
+        app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
     
     func testTimelineLayoutInMiddle() async throws {
@@ -83,28 +83,29 @@ class RoomScreenUITests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
 
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
         // Given a timeline that is neither at the top nor the bottom.
         app.tables.element.swipeDown()
-        try await Task.sleep(for: .seconds(5)) // Allow the table to settle
-        try await app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
+        app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
         
         // Then the UI should remain unchanged.
-        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
         
         // When an incoming message arrives
         try await performOperation(.incomingMessage, using: client)
         
         // Then the UI should still remain unchanged.
-        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
         
         // When the keyboard appears for the message composer.
         try await tapMessageComposer(in: app)
         
         // Then the timeline scroll offset should remain unchanged.
-        try await app.assertScreenshot(.roomLayoutMiddle, step: 1)
+        app.assertScreenshot(.roomLayoutMiddle, step: 1)
     }
     
     func testTimelineLayoutAtTop() async throws {
@@ -120,13 +121,13 @@ class RoomScreenUITests: XCTestCase {
             app.tables.element.swipeDown()
         }
         let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
+        app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
 
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped)
+        app.assertScreenshot(.roomLayoutTop, insets: cropped)
     }
     
     func testTimelineLayoutAtBottom() async throws {
@@ -138,21 +139,18 @@ class RoomScreenUITests: XCTestCase {
         defer { try? client.stop() }
 
         // Some time for the timeline to settle
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(1))
         // When an incoming message arrives.
         try await performOperation(.incomingMessage, using: client)
-        // Some time for the timeline to settle
-        try await Task.sleep(for: .seconds(2))
         
         // Then the timeline should scroll down to reveal the message.
-        try await app.assertScreenshot(.roomLayoutBottom, step: 0)
+        app.assertScreenshot(.roomLayoutBottom, step: 0)
         
         // When the keyboard appears for the message composer.
         try await tapMessageComposer(in: app)
-
-        try await Task.sleep(for: .seconds(2))
+        
         // Then the timeline should still show the last message.
-        try await app.assertScreenshot(.roomLayoutBottom, step: 1)
+        app.assertScreenshot(.roomLayoutBottom, step: 1)
     }
     
     // MARK: - Helper Methods
@@ -160,11 +158,11 @@ class RoomScreenUITests: XCTestCase {
     private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {
         try client.send(operation)
         await _ = client.signals.values.first { $0 == .success }
-        try await Task.sleep(for: .seconds(2)) // Allow the timeline to update
+        try await Task.sleep(for: .seconds(1)) // Allow the timeline to update
     }
     
     private func tapMessageComposer(in app: XCUIApplication) async throws {
         app.textViews.element.tap()
-        try await Task.sleep(for: .seconds(5)) // Allow the animations to complete
+        try await Task.sleep(for: .seconds(1)) // Allow the animations to complete
     }
 }
