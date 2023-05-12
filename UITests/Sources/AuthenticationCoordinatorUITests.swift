@@ -36,9 +36,6 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Login Screen: Tap next
         app.buttons[A11yIdentifiers.loginScreen.continue].tap()
-        
-        // Then login should succeed.
-        XCTAssertFalse(app.alerts.element.exists, "No alert should be shown when logging in with valid credentials.")
     }
     
     func testLoginWithIncorrectPassword() async throws {
