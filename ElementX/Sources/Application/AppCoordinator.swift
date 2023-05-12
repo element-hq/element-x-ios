@@ -446,7 +446,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
         // Allow for everything to deallocate properly
         Task {
-            try await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(2))
             userSessionStore.clearCache(for: userID)
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
