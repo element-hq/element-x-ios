@@ -42,7 +42,7 @@ struct ShimmerModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .mask { gradient }
-            .onAppear {
+            .task {
                 withAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
                     animationTrigger.toggle()
                 }
