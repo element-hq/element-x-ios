@@ -21,19 +21,32 @@ enum RoomMembersListScreenViewModelAction {
 }
 
 struct RoomMembersListScreenViewState: BindableState {
-    var members: [RoomMemberDetails]
-
+    private var joinedMembers: [RoomMemberDetails]
+    private var invitedMembers: [RoomMemberDetails]
     var bindings: RoomMembersListScreenViewStateBindings
+    
+    init(joinedMembers: [RoomMemberDetails] = [], invitedMembers: [RoomMemberDetails] = [], bindings: RoomMembersListScreenViewStateBindings = .init()) {
+        self.joinedMembers = joinedMembers
+        self.invitedMembers = invitedMembers
+        self.bindings = bindings
+    }
 
-    var visibleMembers: [RoomMemberDetails] {
-        if bindings.searchQuery.isEmpty {
-            return members
-        }
-
-        return members.lazy.filter { member in
-            member.id.localizedCaseInsensitiveContains(bindings.searchQuery) ||
-                member.name?.localizedCaseInsensitiveContains(bindings.searchQuery) ?? false
-        }
+    var visibleJoinedMembers: [RoomMemberDetails] {
+        joinedMembers.lazy
+            .filter { member in
+                member.matches(searchQuery: bindings.searchQuery)
+            }
+    }
+    
+    var visibleInvitedMembers: [RoomMemberDetails] {
+        invitedMembers.lazy
+            .filter { member in
+                member.matches(searchQuery: bindings.searchQuery)
+            }
+    }
+    
+    var joinedMembersCount: Int {
+        joinedMembers.count
     }
 }
 
@@ -46,4 +59,14 @@ struct RoomMembersListScreenViewStateBindings {
 
 enum RoomMembersListScreenViewAction {
     case selectMember(id: String)
+}
+
+private extension RoomMemberDetails {
+    func matches(searchQuery: String) -> Bool {
+        guard !searchQuery.isEmpty else {
+            return true
+        }
+        
+        return id.localizedCaseInsensitiveContains(searchQuery) || name?.localizedCaseInsensitiveContains(searchQuery) ?? false
+    }
 }

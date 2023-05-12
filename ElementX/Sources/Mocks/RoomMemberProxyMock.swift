@@ -55,6 +55,18 @@ extension RoomMemberProxyMock {
                                         isAccountOwner: false,
                                         isIgnored: false))
     }
+    
+    static var mockInvitedAlice: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
+                                        displayName: "Alice",
+                                        avatarURL: nil,
+                                        membership: .invite,
+                                        isNameAmbiguous: false,
+                                        powerLevel: 50,
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: false,
+                                        isIgnored: false))
+    }
 
     static var mockBob: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org",

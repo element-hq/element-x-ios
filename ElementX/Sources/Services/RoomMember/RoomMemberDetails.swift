@@ -24,7 +24,6 @@ struct RoomMemberDetails: Identifiable, Equatable {
     let isAccountOwner: Bool
     var isIgnored: Bool
 
-    @MainActor
     init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userID
         name = proxy.displayName

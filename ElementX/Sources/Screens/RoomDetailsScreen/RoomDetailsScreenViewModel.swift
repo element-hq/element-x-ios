@@ -21,26 +21,11 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreen
 
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private var members: [RoomMemberProxyProtocol] = [] {
-        didSet {
-            state.members = members.map { RoomMemberDetails(withProxy: $0) }
-            if roomProxy.isDirect, roomProxy.isEncrypted, members.count == 2 {
-                dmRecipient = members.first(where: { !$0.isAccountOwner })
-            } else {
-                dmRecipient = nil
-            }
-        }
-    }
-
-    private var dmRecipient: RoomMemberProxyProtocol? {
-        didSet {
-            if let dmRecipient {
-                state.dmRecipient = RoomMemberDetails(withProxy: dmRecipient)
-            } else {
-                state.dmRecipient = nil
-            }
-        }
-    }
+    private var members: [RoomMemberProxyProtocol] = []
+    private var dmRecipient: RoomMemberProxyProtocol?
+    
+    @CancellableTask
+    private var buildMembersDetailsTask: Task<Void, Never>?
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
 
@@ -57,11 +42,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            permalink: roomProxy.permalink,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
-
-        roomProxy.membersPublisher.sink { [weak self] members in
-            self?.members = members
-        }
-        .store(in: &cancellables)
+        
+        setupSubscriptions()
 
         Task {
             await roomProxy.updateMembers()
@@ -96,6 +78,49 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Private
 
+    private func setupSubscriptions() {
+        roomProxy.membersPublisher
+            .sink { [weak self] members in
+                guard let self else { return }
+                
+                buildMembersDetailsTask = Task {
+                    let (membersDetails, joinedMembersCount) = await self.buildMembersDetails(members: members)
+                    
+                    guard !Task.isCancelled else { return }
+                    
+                    if self.roomProxy.isDirect, self.roomProxy.isEncrypted, members.count == 2 {
+                        self.dmRecipient = members.first(where: { !$0.isAccountOwner })
+                    }
+                    
+                    self.state.members = membersDetails
+                    self.state.joinedMembersCount = joinedMembersCount
+                    self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
+                    self.members = members
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> (memberDetails: [RoomMemberDetails], joinedMembersCount: Int) {
+        await Task.detached {
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            var roomMembersDetails: [RoomMemberDetails] = []
+            var joinedMembersCount = 0
+            roomMembersDetails.reserveCapacity(members.count)
+            
+            for member in members {
+                roomMembersDetails.append(RoomMemberDetails(withProxy: member))
+                
+                if member.membership == .join {
+                    joinedMembersCount += 1
+                }
+            }
+            
+            return (roomMembersDetails, joinedMembersCount)
+        }
+        .value
+    }
+    
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
     private func leaveRoom() async {

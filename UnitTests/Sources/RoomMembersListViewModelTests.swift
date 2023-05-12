@@ -19,4 +19,62 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomMembersListScreenViewModelTests: XCTestCase { }
+class RoomMembersListScreenViewModelTests: XCTestCase {
+    var viewModel: RoomMembersListScreenViewModel!
+    
+    var context: RoomMembersListScreenViewModel.Context {
+        viewModel.context
+    }
+    
+    func testJoinedMembers() async {
+        setup(with: [.mockAlice, .mockBob])
+        await context.nextViewState()
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 2)
+    }
+    
+    func testSearch() async {
+        setup(with: [.mockAlice, .mockBob])
+        await context.nextViewState()
+        context.searchQuery = "alice"
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
+    }
+    
+    func testEmptySearch() async {
+        setup(with: [.mockAlice, .mockBob])
+        await context.nextViewState()
+        context.searchQuery = "WWW"
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+    }
+    
+    func testJoinedAndInvitedMembers() async {
+        setup(with: [.mockInvitedAlice, .mockBob])
+        await context.nextViewState()
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 1)
+        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
+    }
+    
+    func testInvitedMembers() async {
+        setup(with: [.mockInvitedAlice])
+        await context.nextViewState()
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
+        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+    }
+    
+    func testSearchInvitedMembers() async {
+        setup(with: [.mockInvitedAlice])
+        context.searchQuery = "alice"
+        await context.nextViewState()
+        XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
+        XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
+        XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
+    }
+    
+    private func setup(with members: [RoomMemberProxyMock]) {
+        viewModel = .init(mediaProvider: MockMediaProvider(), members: members)
+    }
+}

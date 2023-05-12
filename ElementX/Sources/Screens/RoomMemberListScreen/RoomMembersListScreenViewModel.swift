@@ -24,13 +24,12 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
-    init(mediaProvider: MediaProviderProtocol,
-         members: [RoomMemberProxyProtocol]) {
+    init(mediaProvider: MediaProviderProtocol, members: [RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
         self.members = members
-        super.init(initialViewState: .init(members: members.map { RoomMemberDetails(withProxy: $0) },
-                                           bindings: .init()),
-                   imageProvider: mediaProvider)
+        super.init(initialViewState: .init(), imageProvider: mediaProvider)
+        
+        buildMembersDetails(members: members)
     }
     
     // MARK: - Public
@@ -44,5 +43,36 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             }
             callback?(.selectMember(member))
         }
+    }
+    
+    // MARK: - Private
+    
+    func buildMembersDetails(members: [RoomMemberProxyProtocol]) {
+        Task {
+            let indicatorId = UUID().uuidString
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
+            }
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            let (invitedMembers, joinedMembers) = await split(members: members)
+            self.state = .init(joinedMembers: joinedMembers, invitedMembers: invitedMembers)
+        }
+    }
+    
+    func split(members: [RoomMemberProxyProtocol]) async -> (invited: [RoomMemberDetails], joined: [RoomMemberDetails]) {
+        await Task.detached {
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            let invitedMembers = members
+                .filter { $0.membership == .invite }
+                .map(RoomMemberDetails.init(withProxy:))
+            
+            let joinedMembers = members
+                .filter { $0.membership == .join }
+                .map(RoomMemberDetails.init(withProxy:))
+            
+            return (invitedMembers, joinedMembers)
+        }
+        .value
     }
 }

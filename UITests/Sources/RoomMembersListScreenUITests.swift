@@ -18,9 +18,33 @@ import ElementX
 import XCTest
 
 class RoomMembersListScreenUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testJoinedMembers() {
         let app = Application.launch(.roomMembersListScreen)
         
         app.assertScreenshot(.roomMembersListScreen)
+    }
+    
+    func testJoinedAndInvitedMembers() {
+        let app = Application.launch(.roomMembersListScreenPendingInvites)
+        
+        app.assertScreenshot(.roomMembersListScreenPendingInvites)
+    }
+    
+    func testSearchInvitedMember() {
+        let app = Application.launch(.roomMembersListScreenPendingInvites)
+        
+        let searchBar = app.searchFields.firstMatch
+        searchBar.clearAndTypeText("alice\n")
+        
+        app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
+    }
+    
+    func testSearchJoinedMember() {
+        let app = Application.launch(.roomMembersListScreenPendingInvites)
+        
+        let searchBar = app.searchFields.firstMatch
+        searchBar.clearAndTypeText("bob\n")
+        
+        app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
     }
 }

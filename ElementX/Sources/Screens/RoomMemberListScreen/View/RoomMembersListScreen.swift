@@ -25,18 +25,8 @@ struct RoomMembersListScreen: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
-                Section {
-                    ForEach(context.viewState.visibleMembers) { member in
-                        RoomMembersListScreenMemberCell(member: member, context: context)
-                            .id(member.id)
-                    }
-                } header: {
-                    Text(L10n.commonMemberCount(context.viewState.members.count))
-                        .foregroundColor(.element.secondaryContent)
-                        .font(.compound.bodyLG)
-                        .padding(.vertical, 12)
-                }
-                .padding(.horizontal)
+                membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
+                membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(context.viewState.joinedMembersCount))
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
@@ -44,6 +34,24 @@ struct RoomMembersListScreen: View {
         .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo) { $0.alert }
+    }
+    
+    // MARK: - Private
+    
+    private func membersSection(data: [RoomMemberDetails], sectionTitle: String) -> some View {
+        Section {
+            ForEach(data, id: \.id) { member in
+                RoomMembersListScreenMemberCell(member: member, context: context)
+            }
+        } header: {
+            if !data.isEmpty {
+                Text(sectionTitle)
+                    .foregroundColor(.element.secondaryContent)
+                    .font(.compound.bodyLG)
+                    .padding(.vertical, 12)
+            }
+        }
+        .padding(.horizontal)
     }
 }
 

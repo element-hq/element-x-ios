@@ -39,6 +39,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var avatarURL: URL?
     let permalink: URL?
     var members: [RoomMemberDetails] = []
+    var joinedMembersCount = 0
     var isProcessingIgnoreRequest = false
     
     var isLoadingMembers: Bool {
