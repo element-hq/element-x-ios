@@ -110,8 +110,6 @@ lane :unit_tests do
 end
 
 lane :ui_tests do
-  disable_keyboard_suggestions
-
   create_simulator_if_necessary(
     name: "iPad (9th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"
@@ -391,9 +389,4 @@ private_lane :create_simulator_if_necessary do |options|
     sh("xcrun simctl create '#{simulator_name}' #{simulator_type}")
   end
 
-end
-
-private_lane :disable_keyboard_suggestions do
-  sh("defaults write com.apple.iphonesimulator KeyboardAutocorrection -bool NO")
-  sh("defaults write com.apple.iphonesimulator KeyboardPrediction -bool NO")
 end
