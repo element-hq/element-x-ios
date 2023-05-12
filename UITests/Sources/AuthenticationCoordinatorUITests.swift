@@ -36,6 +36,8 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Login Screen: Tap next
         app.buttons[A11yIdentifiers.loginScreen.continue].tap()
+
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 1.0), "The analytics prompt screen should be seen after login")
     }
     
     func testLoginWithIncorrectPassword() async throws {
