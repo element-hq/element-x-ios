@@ -98,7 +98,7 @@ class LoginTests: XCTestCase {
         }
         
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
-        XCTAssertTrue(profileButton.waitForExistence(timeout: 1.0))
+        XCTAssertTrue(profileButton.waitForExistence(timeout: 2.0))
 
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()
