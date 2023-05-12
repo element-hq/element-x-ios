@@ -35,7 +35,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         
         let searchBar = app.searchFields.firstMatch
         searchBar.tap()
-        searchBar.typeText("alice")
+        searchBar.typeText("alice\n")
         
         app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
     }
@@ -45,7 +45,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         
         let searchBar = app.searchFields.firstMatch
         searchBar.tap()
-        searchBar.typeText("bob")
+        searchBar.typeText("bob\n")
         
         app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
     }
