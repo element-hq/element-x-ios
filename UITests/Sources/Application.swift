@@ -40,8 +40,8 @@ extension XCUIApplication {
             snapshotName += "-\(step)"
         }
 
-        // Sometimes the CI might be slow let's wait a second before taking the image
-        sleep(1)
+        // Sometimes the CI might be slow let's wait two second before taking the image
+        sleep(2)
         var snapshot = XCUIScreen.main.screenshot().image
         
         if let insets {
