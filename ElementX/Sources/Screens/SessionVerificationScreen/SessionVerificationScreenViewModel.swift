@@ -109,11 +109,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             case (_, _, .verified):
                 // Dismiss the success screen automatically.
                 Task {
-                    do {
-                        try await Task.sleep(for: .seconds(2))
-                    } catch {
-                        MXLog.error(error.localizedDescription)
-                    }
+                    try? await Task.sleep(for: .seconds(2))
                     self.callback?(.finished)
                 }
             default:

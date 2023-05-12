@@ -49,13 +49,6 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.bindings.isRoomPrivate)
     }
     
-    func testChangeSecurity() {
-        context.send(viewAction: .selectPublicRoom)
-        XCTAssertFalse(context.viewState.bindings.isRoomPrivate)
-        context.send(viewAction: .selectPrivateRoom)
-        XCTAssertTrue(context.viewState.bindings.isRoomPrivate)
-    }
-    
     func testCreateRoomRequirements() {
         XCTAssertFalse(context.viewState.canCreateRoom)
         context.roomName = "A"

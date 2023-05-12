@@ -133,7 +133,7 @@ struct A11yIdentifiers {
     }
     
     struct CreateRoomScreen {
-        let roomName = "create-room-room-name"
-        let roomTopic = "create-room-room-topic"
+        let roomName = "create_room-room_name"
+        let roomTopic = "create_room-room_topic"
     }
 }
