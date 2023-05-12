@@ -18,14 +18,15 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
-    let navigationStackCoordinator: NavigationStackCoordinator?
     let userSession: UserSessionProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
-    let createRoomParameters: CreateRoomVolatileParameters?
+    let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
 }
 
 enum InviteUsersScreenCoordinatorAction {
     case close
+    case proceed
+    case toggleUser(UserProfile)
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {
@@ -41,7 +42,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     init(parameters: InviteUsersScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = InviteUsersScreenViewModel(userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
+        viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers, userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {
@@ -49,33 +50,17 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                
                 self.actionsSubject.send(.close)
-            case .proceed(let users):
-                self.openCreateRoomScreenWith(users)
+            case .proceed:
+                self.actionsSubject.send(.proceed)
+            case .toggleUser(let user):
+                self.actionsSubject.send(.toggleUser(user))
             }
         }
         .store(in: &cancellables)
-    }
-        
-    func toPresentable() -> AnyView {
-        AnyView(InviteUsersScreen(context: viewModel.context))
     }
     
-    private func openCreateRoomScreenWith(_ users: [UserProfile]) {
-        guard let createRoomParameters = parameters.createRoomParameters else { return }
-        createRoomParameters.selectedUsers = users
-        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession, createRoomParameters: createRoomParameters)
-        let coordinator = CreateRoomCoordinator(parameters: paramenters)
-        coordinator.actions.sink { [weak self] result in
-            switch result {
-            case .deselectUser(let user):
-                self?.viewModel.context.send(viewAction: .deselectUser(user))
-            default:
-                break
-            }
-        }
-        .store(in: &cancellables)
-        parameters.navigationStackCoordinator?.push(coordinator)
+    func toPresentable() -> AnyView {
+        AnyView(InviteUsersScreen(context: viewModel.context))
     }
 }

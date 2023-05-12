@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
@@ -24,6 +25,9 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!
     
+    private let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+    private var cancellables: Set<AnyCancellable> = []
+    
     var context: CreateRoomViewModel.Context {
         viewModel.context
     }
@@ -31,10 +35,25 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         clientProxy = MockClientProxy(userID: "@a:b.com")
         userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        let parameters = CreateRoomVolatileParameters()
-        parameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
-        let viewModel = CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
+        let parameters = CreateRoomFlowParameters()
+        usersSubject.send([.mockAlice, .mockBob, .mockCharlie])
+        let viewModel = CreateRoomViewModel(userSession: userSession, createRoomParameters: .init(parameters), selectedUsers: usersSubject.asCurrentValuePublisher())
         self.viewModel = viewModel
+        
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .deselectUser(let user):
+                var selectedUsers = usersSubject.value
+                if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                    selectedUsers.remove(at: index)
+                }
+                usersSubject.send(selectedUsers)
+            default:
+                break
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func testDeselectUser() {

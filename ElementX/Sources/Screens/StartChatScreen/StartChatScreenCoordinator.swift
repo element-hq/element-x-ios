@@ -35,8 +35,15 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private let actionsSubject: PassthroughSubject<StartChatScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    // this is needed to persist some data in this flow and then destroy them when the flow is eneded
-    private var createRoomParameters = CreateRoomVolatileParameters()
+    private var createRoomParameters = CurrentValueSubject<CreateRoomFlowParameters, Never>(.init())
+    private var createRoomParametersPublisher: CurrentValuePublisher<CreateRoomFlowParameters, Never> {
+        createRoomParameters.asCurrentValuePublisher()
+    }
+    
+    private let selectedUsers = CurrentValueSubject<[UserProfile], Never>([])
+    private var selectedUsersPublisher: CurrentValuePublisher<[UserProfile], Never> {
+        selectedUsers.asCurrentValuePublisher()
+    }
     
     var actions: AnyPublisher<StartChatScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -73,19 +80,59 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        createRoomParameters = .init()
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
-                                                                      userSession: parameters.userSession,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession,
                                                                       userDiscoveryService: parameters.userDiscoveryService,
-                                                                      createRoomParameters: createRoomParameters)
+                                                                      selectedUsers: selectedUsersPublisher)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] result in
+            guard let self else { return }
+            
             switch result {
             case .close:
-                self?.parameters.navigationStackCoordinator?.pop()
+                parameters.navigationStackCoordinator?.pop()
+            case .proceed:
+                openCreateRoomScreen()
+            case .toggleUser(let user):
+                toggleUser(user)
             }
         }
         .store(in: &cancellables)
+        
+        parameters.navigationStackCoordinator?.push(coordinator) { [weak self] in
+            self?.createRoomParameters.send(.init())
+            self?.selectedUsers.send([])
+        }
+    }
+    
+    private func openCreateRoomScreen() {
+        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
+                                                          createRoomParameters: createRoomParametersPublisher,
+                                                          selectedUsers: selectedUsersPublisher)
+        let coordinator = CreateRoomCoordinator(parameters: paramenters)
+        coordinator.actions.sink { [weak self] result in
+            switch result {
+            case .deselectUser(let user):
+                self?.toggleUser(user)
+            case .updateDetails(let details):
+                self?.createRoomParameters.send(details)
+            case .createRoom:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
         parameters.navigationStackCoordinator?.push(coordinator)
+    }
+    
+    // MARK: - Private
+    
+    private func toggleUser(_ user: UserProfile) {
+        var selectedUsers = selectedUsers.value
+        if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+            selectedUsers.remove(at: index)
+        } else {
+            selectedUsers.append(user)
+        }
+        self.selectedUsers.send(selectedUsers)
     }
 }

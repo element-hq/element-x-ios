@@ -16,10 +16,9 @@
 
 import Foundation
 
-/// This parameters are only used in the create room flow for having a a volatile persisted object that will be disposed once the flow is ended
-class CreateRoomVolatileParameters {
+/// This parameters are only used in the create room flow for having persisted informations between screens
+struct CreateRoomFlowParameters {
     var name = ""
     var topic = ""
-    var selectedUsers: [UserProfile] = []
     var isRoomPrivate = true
 }

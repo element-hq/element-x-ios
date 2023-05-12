@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 import UIKit
 
@@ -53,6 +54,7 @@ class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     
     private var retainedState = [Any]()
+    private var cancellables: Set<AnyCancellable> = []
     
     init(id: UITestsScreenIdentifier) {
         self.id = id
@@ -409,16 +411,32 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator, userSession: userSession, userDiscoveryService: userDiscoveryMock, createRoomParameters: nil))
+            let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+            let coordinator = InviteUsersScreenCoordinator(parameters: .init(userSession: userSession, userDiscoveryService: userDiscoveryMock, selectedUsers: usersSubject.asCurrentValuePublisher()))
+            coordinator.actions.sink { action in
+                switch action {
+                case .toggleUser(let user):
+                    var selectedUsers = usersSubject.value
+                    if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                        selectedUsers.remove(at: index)
+                    } else {
+                        selectedUsers.append(user)
+                    }
+                    usersSubject.send(selectedUsers)
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-            let createRoomParameters = CreateRoomVolatileParameters()
-            createRoomParameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: createRoomParameters)
+            let createRoomParameters = CreateRoomFlowParameters()
+            let selectedUsers: [UserProfile] = [.mockAlice, .mockBob, .mockCharlie]
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: .init(createRoomParameters), selectedUsers: .init(selectedUsers))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -426,8 +444,8 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-            let createRoomParameters = CreateRoomVolatileParameters()
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: createRoomParameters)
+            let createRoomParameters = CreateRoomFlowParameters()
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, createRoomParameters: .init(createRoomParameters), selectedUsers: .init([]))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

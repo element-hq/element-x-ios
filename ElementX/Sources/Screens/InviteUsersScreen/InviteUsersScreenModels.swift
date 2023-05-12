@@ -22,13 +22,15 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case close
-    case proceed(users: [UserProfile])
+    case proceed
+    case toggleUser(UserProfile)
 }
 
 struct InviteUsersScreenViewState: BindableState {
     var bindings = InviteUsersScreenViewStateBindings()
     
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
+    
     var selectedUsers: [UserProfile] = []
     
     var isSearching: Bool {
@@ -56,6 +58,5 @@ struct InviteUsersScreenViewStateBindings {
 enum InviteUsersScreenViewAction {
     case close
     case proceed
-    case tapUser(UserProfile)
-    case deselectUser(UserProfile)
+    case toggleUser(UserProfile)
 }

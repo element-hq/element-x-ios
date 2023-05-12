@@ -19,6 +19,7 @@ import Foundation
 enum CreateRoomViewModelAction {
     case createRoom
     case deselectUser(UserProfile)
+    case updateDetails(CreateRoomFlowParameters)
 }
 
 struct CreateRoomViewState: BindableState {

@@ -21,15 +21,25 @@ typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, Cre
 
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
-    private let createRoomParameters: CreateRoomVolatileParameters
+    private var createRoomParameters: CreateRoomFlowParameters
     var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    init(userSession: UserSessionProtocol,
+         createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
+         selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
+        let parameters = createRoomParameters.value
+        self.createRoomParameters = parameters
+        let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
-    init(userSession: UserSessionProtocol, createRoomParameters: CreateRoomVolatileParameters) {
-        let bindings = CreateRoomViewStateBindings(roomName: createRoomParameters.name, roomTopic: createRoomParameters.topic, isRoomPrivate: createRoomParameters.isRoomPrivate)
-        self.createRoomParameters = createRoomParameters
-        super.init(initialViewState: CreateRoomViewState(selectedUsers: createRoomParameters.selectedUsers, bindings: bindings), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
+        
+        selectedUsers
+            .sink { [weak self] users in
+                self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
         
         setupBindings()
     }
@@ -41,7 +51,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .createRoom:
             actionsSubject.send(.createRoom)
         case .deselectUser(let user):
-            state.selectedUsers.removeAll(where: { $0.userID == user.userID })
             actionsSubject.send(.deselectUser(user))
         }
     }
@@ -51,10 +60,13 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private func setupBindings() {
         context.$viewState
             .map(\.bindings)
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] bindings in
-                self?.createRoomParameters.name = bindings.roomName
-                self?.createRoomParameters.topic = bindings.roomTopic
-                self?.createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
+                guard let self else { return }
+                createRoomParameters.name = bindings.roomName
+                createRoomParameters.topic = bindings.roomTopic
+                createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
+                actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
     }

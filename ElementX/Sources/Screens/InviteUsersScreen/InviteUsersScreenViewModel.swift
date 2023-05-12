@@ -28,10 +28,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
+    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>, userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: InviteUsersScreenViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value), imageProvider: userSession.mediaProvider)
+        
+        selectedUsers
+            .sink { [weak self] users in
+                self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
         
         setupSubscriptions()
     }
@@ -43,26 +49,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .close:
             actionsSubject.send(.close)
         case .proceed:
-            actionsSubject.send(.proceed(users: state.selectedUsers))
-        case .tapUser(let user):
-            if state.isUserSelected(user) {
-                deselect(user)
-            } else {
-                select(user)
-            }
-        case .deselectUser(let user):
-            deselect(user)
+            actionsSubject.send(.proceed)
+        case .toggleUser(let user):
+            actionsSubject.send(.toggleUser(user))
         }
-    }
-    
-    private func select(_ user: UserProfile) {
-        state.selectedUsers.append(user)
-        state.scrollToLastID = user.userID
-    }
-    
-    private func deselect(_ user: UserProfile) {
-        state.selectedUsers.removeAll(where: { $0.userID == user.userID })
-        state.scrollToLastID = nil
     }
 
     // MARK: - Private

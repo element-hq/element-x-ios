@@ -67,7 +67,7 @@ struct InviteUsersScreen: View {
     private var usersSection: some View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                Button { context.send(viewAction: .tapUser(user)) } label: {
+                Button { context.send(viewAction: .toggleUser(user)) } label: {
                     UserProfileCell(user: user,
                                     imageProvider: context.imageProvider)
                 }
@@ -112,7 +112,7 @@ struct InviteUsersScreen: View {
     }
     
     private func deselect(_ user: UserProfile) {
-        context.send(viewAction: .deselectUser(user))
+        context.send(viewAction: .toggleUser(user))
     }
 }
 
@@ -125,7 +125,7 @@ struct InviteUsersScreen_Previews: PreviewProvider {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        return InviteUsersScreenViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
+        return InviteUsersScreenViewModel(selectedUsers: .init([]), userSession: userSession, userDiscoveryService: userDiscoveryService)
     }()
     
     static var previews: some View {

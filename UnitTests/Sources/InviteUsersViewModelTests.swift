@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
@@ -23,6 +24,9 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     var viewModel: InviteUsersScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
+    
+    private let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+    private var cancellables: Set<AnyCancellable> = []
     
     var context: InviteUsersScreenViewModel.Context {
         viewModel.context
@@ -34,33 +38,51 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersScreenViewModel(userSession: userSession, userDiscoveryService: userDiscoveryService)
+        usersSubject.send([])
+        let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(), userSession: userSession, userDiscoveryService: userDiscoveryService)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
+        
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .toggleUser(let user):
+                var selectedUsers = usersSubject.value
+                if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                    selectedUsers.remove(at: index)
+                } else {
+                    selectedUsers.append(user)
+                }
+                usersSubject.send(selectedUsers)
+            default:
+                break
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func testSelectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .tapUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.count == 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
     }
     
     func testReselectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .tapUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-        context.send(viewAction: .tapUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
     
     func testDeselectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .tapUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-        context.send(viewAction: .deselectUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
 }
