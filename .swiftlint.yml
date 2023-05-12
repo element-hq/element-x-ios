@@ -3,6 +3,7 @@ disabled_rules:
   - unused_setter_value
   - redundant_discardable_let
   - identifier_name
+  - unhandled_throwing_task
 
 opt_in_rules:  
   - force_unwrapping
