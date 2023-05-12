@@ -160,16 +160,17 @@ struct CreateRoom_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let parameters = CreateRoomVolatileParameters()
-        parameters.selectedUsers = [.mockAlice, .mockBob, .mockCharlie]
-        return CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
+        let parameters = CreateRoomFlowParameters()
+        let selectedUsers: [UserProfile] = [.mockAlice, .mockBob, .mockCharlie]
+        
+        return CreateRoomViewModel(userSession: userSession, createRoomParameters: .init(parameters), selectedUsers: .init(selectedUsers))
     }()
     
     static let emtpyViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let parameters = CreateRoomVolatileParameters()
-        return CreateRoomViewModel(userSession: userSession, createRoomParameters: parameters)
+        let parameters = CreateRoomFlowParameters()
+        return CreateRoomViewModel(userSession: userSession, createRoomParameters: .init(parameters), selectedUsers: .init([]))
     }()
     
     static var previews: some View {
