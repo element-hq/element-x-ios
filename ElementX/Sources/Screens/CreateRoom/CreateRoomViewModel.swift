@@ -22,6 +22,7 @@ typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, Cre
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     private var createRoomParameters: CreateRoomFlowParameters
+
     var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
