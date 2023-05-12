@@ -37,19 +37,19 @@ class SessionVerificationUITests: XCTestCase {
         app.buttons[A11yIdentifiers.sessionVerificationScreen.requestVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForOtherDevice)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.useEmojiComparisonPrompt)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForEmojis)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.compareEmojis)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].tap()
         app.assertScreenshot(.sessionVerification, step: Step.acceptingEmojis)
         
-        XCTAssert(app.staticTexts[A11yIdentifiers.sessionVerificationScreen.verificationComplete].waitForExistence(timeout: 5.0))
+        XCTAssert(app.staticTexts[A11yIdentifiers.sessionVerificationScreen.verificationComplete].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.verificationComplete)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
@@ -62,13 +62,13 @@ class SessionVerificationUITests: XCTestCase {
         app.buttons[A11yIdentifiers.sessionVerificationScreen.requestVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForOtherDevice)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.useEmojiComparisonPrompt)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForEmojis)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.compareEmojis)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.declineChallenge].tap()
@@ -84,13 +84,13 @@ class SessionVerificationUITests: XCTestCase {
         app.buttons[A11yIdentifiers.sessionVerificationScreen.requestVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForOtherDevice)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.useEmojiComparisonPrompt)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.startSasVerification].tap()
         app.assertScreenshot(.sessionVerification, step: Step.waitingForEmojis)
         
-        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons[A11yIdentifiers.sessionVerificationScreen.acceptChallenge].waitForExistence(timeout: 10.0))
         app.assertScreenshot(.sessionVerification, step: Step.compareEmojis)
         
         app.buttons[A11yIdentifiers.sessionVerificationScreen.close].tap()
