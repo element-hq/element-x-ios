@@ -19,6 +19,7 @@ import XCTest
 class HomeScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch(.home)
-        app.assertScreenshot(.home)
+        // The skeleton is dynamic so the precision of the test can depend a lot on the waiting time, which could make the test flaky on CI
+        app.assertScreenshot(.home, delay: 0)
     }
 }

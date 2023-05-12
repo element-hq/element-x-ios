@@ -82,10 +82,11 @@ class RoomScreenUITests: XCTestCase {
         
         await client.waitForApp()
         defer { try? client.stop() }
-        
+
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
         // Given a timeline that is neither at the top nor the bottom.
         app.tables.element.swipeDown()
-        try await Task.sleep(for: .milliseconds(500)) // Allow the table to settle
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
         app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
@@ -136,7 +137,9 @@ class RoomScreenUITests: XCTestCase {
         
         await client.waitForApp()
         defer { try? client.stop() }
-        
+
+        // Some time for the timeline to settle
+        try await Task.sleep(for: .seconds(1))
         // When an incoming message arrives.
         try await performOperation(.incomingMessage, using: client)
         
@@ -155,11 +158,11 @@ class RoomScreenUITests: XCTestCase {
     private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {
         try client.send(operation)
         await _ = client.signals.values.first { $0 == .success }
-        try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update
+        try await Task.sleep(for: .seconds(1)) // Allow the timeline to update
     }
     
     private func tapMessageComposer(in app: XCUIApplication) async throws {
         app.textViews.element.tap()
-        try await Task.sleep(for: .milliseconds(500)) // Allow the animations to complete
+        try await Task.sleep(for: .seconds(1)) // Allow the animations to complete
     }
 }
