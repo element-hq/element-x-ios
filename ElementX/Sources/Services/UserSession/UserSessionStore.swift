@@ -21,7 +21,7 @@ import MatrixRustSDK
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let cachesFolderName = "matrix-sdk-state"
+    private let matrixSDKStateKey = "matrix-sdk-state"
     
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { !keychainController.restorationTokens().isEmpty }
@@ -91,9 +91,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         deleteSessionDirectory(for: userID)
     }
     
-    func clearCacheFor(userSession: UserSessionProtocol) {
-        let userID = userSession.clientProxy.userID
-        deleteCachesFolder(for: userID)
+    func clearCache(for userID: String) {
+        deleteCaches(for: userID)
     }
     
     // MARK: - Private
@@ -153,17 +152,17 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    private func deleteCachesFolder(for userID: String) {
-        let url = basePath(for: userID).appendingPathComponent(cachesFolderName)
-        
+    private func deleteCaches(for userID: String) {
         do {
-            try FileManager.default.removeItem(at: url)
+            for url in try FileManager.default.contentsOfDirectory(at: basePath(for: userID), includingPropertiesForKeys: nil) where url.path.contains(matrixSDKStateKey) {
+                try FileManager.default.removeItem(at: url)
+            }
         } catch {
             MXLog.failure("Failed deleting the session data: \(error)")
         }
     }
     
-    #warning("We should move this and the caches folder path to the rust side")
+    #warning("We should move this and the caches cleanup to the rust side")
     private func basePath(for userID: String) -> URL {
         // Rust sanitises the user ID replacing invalid characters with an _
         let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")

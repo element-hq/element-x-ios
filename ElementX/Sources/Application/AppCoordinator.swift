@@ -458,20 +458,21 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func clearCache() {
         showLoadingIndicator()
         
-        defer {
-            hideLoadingIndicator()
-        }
-        
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
         userSession.clientProxy.stopSync()
         userSessionFlowCoordinator?.stop()
         
-        userSessionStore.clearCacheFor(userSession: userSession)
-        
+        let userID = userSession.userID
         tearDownUserSession()
-        
-        stateMachine.processEvent(.startWithExistingSession)
+    
+        // Allow for everything to deallocate properly
+        Task {
+            try await Task.sleep(for: .seconds(2))
+            userSessionStore.clearCache(for: userID)
+            stateMachine.processEvent(.startWithExistingSession)
+            hideLoadingIndicator()
+        }
     }
 }
 
