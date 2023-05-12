@@ -105,10 +105,10 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     }
     
     private func openCreateRoomScreen() {
-        let paramenters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
-                                                          createRoomParameters: createRoomParametersPublisher,
-                                                          selectedUsers: selectedUsersPublisher)
-        let coordinator = CreateRoomCoordinator(parameters: paramenters)
+        let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
+                                                               createRoomParameters: createRoomParametersPublisher,
+                                                               selectedUsers: selectedUsersPublisher)
+        let coordinator = CreateRoomCoordinator(parameters: createParameters)
         coordinator.actions.sink { [weak self] result in
             switch result {
             case .deselectUser(let user):
