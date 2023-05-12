@@ -23,6 +23,7 @@ enum RoomMembersListScreenViewModelAction {
 struct RoomMembersListScreenViewState: BindableState {
     private var joinedMembers: [RoomMemberDetails]
     private var invitedMembers: [RoomMemberDetails]
+    var canInviteUsers = false
     var bindings: RoomMembersListScreenViewStateBindings
     
     init(joinedMembers: [RoomMemberDetails] = [], invitedMembers: [RoomMemberDetails] = [], bindings: RoomMembersListScreenViewStateBindings = .init()) {
@@ -59,6 +60,7 @@ struct RoomMembersListScreenViewStateBindings {
 
 enum RoomMembersListScreenViewAction {
     case selectMember(id: String)
+    case invite
 }
 
 private extension RoomMemberDetails {

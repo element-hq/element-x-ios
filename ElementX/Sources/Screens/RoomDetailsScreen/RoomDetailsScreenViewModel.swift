@@ -23,7 +23,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
     private var dmRecipient: RoomMemberProxyProtocol?
-    private var accountOwner: RoomMemberProxyProtocol?
     
     @CancellableTask
     private var buildMembersDetailsTask: Task<Void, Never>?
@@ -99,8 +98,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.joinedMembersCount = roomMembersDetails.joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
                     self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
-                    
-                    self.accountOwner = roomMembersDetails.accountOwner
                     self.members = members
                 }
             }
@@ -172,7 +169,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
 }
 
 private struct RoomMembersDetails {
-    var members: [RoomMemberDetails]
-    var joinedMembersCount: Int
-    var accountOwner: RoomMemberProxyProtocol?
+    let members: [RoomMemberDetails]
+    let joinedMembersCount: Int
+    let accountOwner: RoomMemberProxyProtocol?
 }

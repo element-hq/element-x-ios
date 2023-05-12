@@ -34,6 +34,11 @@ struct RoomMembersListScreen: View {
         .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo) { $0.alert }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                inviteButton
+            }
+        }
     }
     
     // MARK: - Private
@@ -52,6 +57,17 @@ struct RoomMembersListScreen: View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    @ViewBuilder
+    private var inviteButton: some View {
+        if context.viewState.canInviteUsers {
+            Button {
+                context.send(viewAction: .invite)
+            } label: {
+                Text(L10n.actionInvite)
+            }
+        }
     }
 }
 
