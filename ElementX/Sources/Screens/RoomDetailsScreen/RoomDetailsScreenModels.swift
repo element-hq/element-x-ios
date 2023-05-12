@@ -41,6 +41,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var members: [RoomMemberDetails] = []
     var joinedMembersCount = 0
     var isProcessingIgnoreRequest = false
+    var canInviteUsers = false
     
     var isLoadingMembers: Bool {
         members.isEmpty
@@ -124,6 +125,7 @@ struct LeaveRoomAlertItem: AlertItem {
 
 enum RoomDetailsScreenViewAction {
     case processTapPeople
+    case processTapInvite
     case processTapLeave
     case processTapIgnore
     case processTapUnignore

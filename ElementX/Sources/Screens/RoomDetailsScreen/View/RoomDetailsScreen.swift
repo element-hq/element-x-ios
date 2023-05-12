@@ -113,19 +113,29 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            Button {
-                context.send(viewAction: .processTapPeople)
-            } label: {
-                LabeledContent {
-                    if context.viewState.isLoadingMembers {
-                        ProgressView()
-                    } else {
-                        Text(String(context.viewState.joinedMembersCount))
-                            .foregroundColor(.element.tertiaryContent)
-                            .font(.compound.bodyLG)
-                    }
+            Group {
+                Button {
+                    context.send(viewAction: .processTapPeople)
                 } label: {
-                    Label(L10n.commonPeople, systemImage: "person")
+                    LabeledContent {
+                        if context.viewState.isLoadingMembers {
+                            ProgressView()
+                        } else {
+                            Text(String(context.viewState.joinedMembersCount))
+                                .foregroundColor(.element.tertiaryContent)
+                                .font(.compound.bodyLG)
+                        }
+                    } label: {
+                        Label(L10n.commonPeople, systemImage: "person")
+                    }
+                }
+                
+                if context.viewState.canInviteUsers {
+                    Button {
+                        context.send(viewAction: .processTapInvite)
+                    } label: {
+                        Label(L10n.screenRoomDetailsInvitePeopleTitle, systemImage: "person.badge.plus")
+                    }
                 }
             }
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))

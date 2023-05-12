@@ -331,6 +331,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingIsIgnored = value }
     }
     var underlyingIsIgnored: Bool!
+    var canInviteUsers: Bool {
+        get { return underlyingCanInviteUsers }
+        set(value) { underlyingCanInviteUsers = value }
+    }
+    var underlyingCanInviteUsers: Bool!
 
     //MARK: - ignoreUser
 
