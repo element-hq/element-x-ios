@@ -34,8 +34,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
-        searchBar.tap()
-        searchBar.typeText("alice\n")
+        searchBar.clearAndTypeText("alice\n")
         
         app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
     }
@@ -44,8 +43,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
-        searchBar.tap()
-        searchBar.typeText("bob\n")
+        searchBar.clearAndTypeText("bob\n")
         
         app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
     }
