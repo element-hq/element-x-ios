@@ -43,10 +43,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .deselectUser(let user):
             state.selectedUsers.removeAll(where: { $0.userID == user.userID })
             actionsSubject.send(.deselectUser(user))
-        case .selectPrivateRoom:
-            state.bindings.isRoomPrivate = true
-        case .selectPublicRoom:
-            state.bindings.isRoomPrivate = false
         }
     }
     

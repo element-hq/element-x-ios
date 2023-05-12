@@ -38,7 +38,5 @@ struct CreateRoomViewStateBindings {
 
 enum CreateRoomViewAction {
     case createRoom
-    case selectPrivateRoom
-    case selectPublicRoom
     case deselectUser(UserProfile)
 }

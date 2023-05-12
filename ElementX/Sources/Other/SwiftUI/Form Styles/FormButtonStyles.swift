@@ -21,7 +21,6 @@ enum FormRowAccessory: View {
     case navigationLink
     case progressView
     case selection(isSelected: Bool)
-    case singleSelection(isSelected: Bool)
     
     var body: some View {
         switch self {
@@ -35,10 +34,6 @@ enum FormRowAccessory: View {
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
                 .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
-        case .singleSelection(let isSelected):
-            Image(systemName: "checkmark")
-                .font(.compound.bodyLG)
-                .foregroundColor(isSelected ? .element.primaryContent : .clear)
         }
     }
 }
@@ -140,19 +135,6 @@ struct FormButtonStyles_Previews: PreviewProvider {
                     Text("Selection")
                 }
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
-                Button { } label: {
-                    Label {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Hello world")
-                            Text("subtitle\nsubtitle")
-                                .font(.compound.bodyMD)
-                                .foregroundColor(.element.secondaryContent)
-                        }
-                    } icon: {
-                        Image(systemName: "globe")
-                    }
-                }
-                .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: true)))
             }
             .formSectionStyle()
 

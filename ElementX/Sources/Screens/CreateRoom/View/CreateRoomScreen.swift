@@ -31,6 +31,7 @@ struct CreateRoomScreen: View {
                     createButton
                 }
             }
+            .background(ViewFrameReader(frame: $frame))
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -38,22 +39,19 @@ struct CreateRoomScreen: View {
         Form {
             roomSection
             topicSection
-            if !context.viewState.selectedUsers.isEmpty {
-                selectedUsersSection
-            }
             Spacer()
                 .listRowBackground(Color.clear)
             securitySection
         }
     }
     
-    @ScaledMetric private var roomIconSide: CGFloat = 64
+    @ScaledMetric private var roomIconSize: CGFloat = 64
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
                 Image(systemName: "camera")
                     .foregroundColor(.element.secondaryContent)
-                    .frame(width: roomIconSide, height: roomIconSide)
+                    .frame(width: roomIconSize, height: roomIconSize)
                     .background(Color.element.quinaryContent)
                     .clipShape(Circle())
                 VStack(alignment: .leading, spacing: 8) {
@@ -87,31 +85,34 @@ struct CreateRoomScreen: View {
                 .lineLimit(3, reservesSpace: false)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
+        } footer: {
+            if !context.viewState.selectedUsers.isEmpty {
+                selectedUsersSection
+            }
         }
         .formSectionStyle()
     }
     
-    @ScaledMetric private var cellWidth: CGFloat = 64
+    @State private var frame: CGRect = .zero
+    @ScaledMetric private var invitedUserCellWidth: CGFloat = 64
     private var selectedUsersSection: some View {
-        Section {
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 28) {
-                    ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                        InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
-                            deselect(user)
-                        }
-                        .frame(width: cellWidth)
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 28) {
+                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
+                    InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
+                        context.send(viewAction: .deselectUser(user))
                     }
+                    .frame(width: invitedUserCellWidth)
                 }
             }
-            .listRowInsets(.init())
-            .listRowBackground(Color.clear)
+            .padding(.init(top: 16, leading: 32, bottom: 16, trailing: 32))
         }
+        .frame(width: frame.width)
     }
     
     private var securitySection: some View {
         Section {
-            Button(action: selectPrivate) {
+            Picker(L10n.commonSecurity, selection: $context.isRoomPrivate) {
                 Label {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L10n.screenCreateRoomPrivateOptionTitle)
@@ -122,9 +123,8 @@ struct CreateRoomScreen: View {
                 } icon: {
                     Image(systemName: "lock.shield")
                 }
-            }
-            .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: context.isRoomPrivate)))
-            Button(action: selectPublic) {
+                .tag(true)
+                .labelStyle(FormRowLabelStyle(alignment: .top))
                 Label {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L10n.screenCreateRoomPublicOptionTitle)
@@ -135,8 +135,11 @@ struct CreateRoomScreen: View {
                 } icon: {
                     Image(systemName: "exclamationmark.shield")
                 }
+                .tag(false)
+                .labelStyle(FormRowLabelStyle(alignment: .top))
             }
-            .buttonStyle(FormButtonStyle(iconAlignment: .top, accessory: .singleSelection(isSelected: !context.isRoomPrivate)))
+            .labelsHidden()
+            .pickerStyle(.inline)
         } header: {
             Text(L10n.commonSecurity.uppercased())
         }
@@ -148,18 +151,6 @@ struct CreateRoomScreen: View {
             Text(L10n.actionCreate)
         }
         .disabled(!context.viewState.canCreateRoom)
-    }
-    
-    private func selectPrivate() {
-        context.send(viewAction: .selectPrivateRoom)
-    }
-    
-    private func selectPublic() {
-        context.send(viewAction: .selectPublicRoom)
-    }
-    
-    private func deselect(_ user: UserProfile) {
-        context.send(viewAction: .deselectUser(user))
     }
 }
 
