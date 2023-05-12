@@ -101,14 +101,18 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenStart_notificationCategoriesAreSet() throws {
-        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
-                                                        title: L10n.actionQuickReply,
-                                                        options: [])
-        let replyCategory = UNNotificationCategory(identifier: NotificationConstants.Category.reply,
-                                                   actions: [replyAction],
-                                                   intentIdentifiers: [],
-                                                   options: [])
-        XCTAssertEqual(notificationCenter.notificationCategoriesValue, [replyCategory])
+        //        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
+        //                                                        title: L10n.actionQuickReply,
+        //                                                        options: [])
+        let messageCategory = UNNotificationCategory(identifier: NotificationConstants.Category.message,
+                                                     actions: [],
+                                                     intentIdentifiers: [],
+                                                     options: [])
+        let inviteCategory = UNNotificationCategory(identifier: NotificationConstants.Category.invite,
+                                                    actions: [],
+                                                    intentIdentifiers: [],
+                                                    options: [])
+        XCTAssertEqual(notificationCenter.notificationCategoriesValue, [messageCategory, inviteCategory])
     }
     
     func test_whenStart_delegateIsSet() throws {

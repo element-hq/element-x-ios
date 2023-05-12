@@ -110,8 +110,10 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: delegate)
 
         // Set up sync listener for generating local notifications.
-        await Task.dispatch(on: clientQueue) {
-            client.setNotificationDelegate(notificationDelegate: delegate)
+        if ServiceLocator.shared.settings.enableLocalPushNotifications {
+            await Task.dispatch(on: clientQueue) {
+                client.setNotificationDelegate(notificationDelegate: delegate)
+            }
         }
         
         configureSlidingSync()
@@ -326,7 +328,9 @@ class ClientProxy: ClientProxyProtocol {
             buildAndConfigureVisibleRoomsSlidingSyncList()
             buildAndConfigureAllRoomsSlidingSyncList()
             buildAndConfigureInvitesSlidingSyncList()
-            buildAndConfigureNotificationsSlidingSyncList()
+            if ServiceLocator.shared.settings.enableLocalPushNotifications {
+                buildAndConfigureNotificationsSlidingSyncList()
+            }
             
             guard let visibleRoomsListBuilder else {
                 MXLog.error("Visible rooms sliding sync view unavailable")
@@ -537,11 +541,13 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Invites sliding sync view unavailable")
         }
 
-        if let notificationsListBuilder {
-            MXLog.info("Registering notifications view")
-            _ = slidingSync?.addList(listBuilder: notificationsListBuilder)
-        } else {
-            MXLog.error("Notifications sliding sync view unavailable")
+        if ServiceLocator.shared.settings.enableLocalPushNotifications {
+            if let notificationsListBuilder {
+                MXLog.info("Registering notifications view")
+                _ = slidingSync?.addList(listBuilder: notificationsListBuilder)
+            } else {
+                MXLog.error("Notifications sliding sync view unavailable")
+            }
         }
     }
     

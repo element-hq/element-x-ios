@@ -33,13 +33,15 @@ protocol NotificationItemProxyProtocol {
 
     var roomDisplayName: String { get }
 
+    var roomCanonicalAlias: String? { get }
+
     var roomAvatarMediaSource: MediaSourceProxy? { get }
 
     var isNoisy: Bool { get }
 
     var isDirect: Bool { get }
 
-    var isEncrypted: Bool { get }
+    var isEncrypted: Bool? { get }
 }
 
 extension NotificationItemProxyProtocol {
@@ -73,6 +75,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.roomDisplayName
     }
 
+    var roomCanonicalAlias: String? {
+        notificationItem.roomCanonicalAlias
+    }
+
     var isNoisy: Bool {
         notificationItem.isNoisy
     }
@@ -81,8 +87,8 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.isDirect
     }
 
-    var isEncrypted: Bool {
-        notificationItem.isEncrypted ?? false
+    var isEncrypted: Bool? {
+        notificationItem.isEncrypted
     }
 
     var senderAvatarMediaSource: MediaSourceProxy? {
@@ -119,13 +125,15 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var roomDisplayName: String { "" }
 
+    var roomCanonicalAlias: String? { nil }
+
     var roomAvatarURL: String? { nil }
 
     var isNoisy: Bool { false }
 
     var isDirect: Bool { false }
 
-    var isEncrypted: Bool { false }
+    var isEncrypted: Bool? { nil }
 
     var senderAvatarMediaSource: MediaSourceProxy? { nil }
 
@@ -135,6 +143,18 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 }
 
 extension NotificationItemProxyProtocol {
+    var baseMutableContent: UNMutableNotificationContent {
+        let notification = UNMutableNotificationContent()
+        notification.receiverID = receiverID
+        notification.roomID = roomID
+        notification.eventID = event.eventID
+        notification.notificationID = id
+        notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        // So that the UI groups notification that are received for the same room but also for the same user
+        notification.threadIdentifier = "\(receiverID)\(roomID)"
+        return notification
+    }
+
     var requiresMediaProvider: Bool {
         if senderAvatarMediaSource != nil || roomAvatarMediaSource != nil {
             return true
@@ -157,7 +177,6 @@ extension NotificationItemProxyProtocol {
         }
     }
 
-    // swiftlint: disable cyclomatic_complexity
     /// Process the receiver item proxy
     /// - Parameters:
     ///   - receiverId: identifier of the user that has received the notification
@@ -169,67 +188,90 @@ extension NotificationItemProxyProtocol {
             return processEmpty()
         } else {
             switch event.type {
-            case .none, .state:
+            case .none:
                 return processEmpty()
+            case let .state(content):
+                return try await processStateEvent(content: content, mediaProvider: mediaProvider)
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
-                    switch messageType {
-                    case .emote(content: let content):
-                        return try await processEmote(content: content, mediaProvider: mediaProvider)
-                    case .image(content: let content):
-                        return try await processImage(content: content, mediaProvider: mediaProvider)
-                    case .audio(content: let content):
-                        return try await processAudio(content: content, mediaProvider: mediaProvider)
-                    case .video(content: let content):
-                        return try await processVideo(content: content, mediaProvider: mediaProvider)
-                    case .file(content: let content):
-                        return try await processFile(content: content, mediaProvider: mediaProvider)
-                    case .notice(content: let content):
-                        return try await processNotice(content: content, mediaProvider: mediaProvider)
-                    case .text(content: let content):
-                        return try await processText(content: content, mediaProvider: mediaProvider)
-                    }
+                    return try await processRoomMessage(messageType: messageType, mediaProvider: mediaProvider)
                 default:
                     return processEmpty()
                 }
             }
         }
     }
-    
-    // swiftlint: enable cyclomatic_complexity
 
     // MARK: - Private
 
+    private func processStateEvent(content: StateEventContent, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        switch content {
+        case let .roomMemberContent(userId, membershipState):
+            switch membershipState {
+            case .invite:
+                if userId == receiverID {
+                    return try await processInvited(mediaProvider: mediaProvider)
+                } else {
+                    return processEmpty()
+                }
+            default:
+                return processEmpty()
+            }
+        default:
+            return processEmpty()
+        }
+    }
+
+    private func processInvited(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        var notification = baseMutableContent
+
+        notification.categoryIdentifier = NotificationConstants.Category.invite
+
+        // Sadly as of right now we can't get from the NSE context any information for invited rooms, so we will only display the user name and a simple message
+        let iconType = NotificationIconType.sender(mediaSource: senderAvatarMediaSource)
+        notification = try await notification.addSenderIcon(using: mediaProvider,
+                                                            senderID: event.senderID,
+                                                            senderName: senderDisplayName ?? event.senderID,
+                                                            iconType: iconType)
+        notification.body = L10n.screenInvitesInvitedYou("")
+        return notification
+    }
+
+    private func processRoomMessage(messageType: MessageType, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        switch messageType {
+        case .emote(content: let content):
+            return try await processEmote(content: content, mediaProvider: mediaProvider)
+        case .image(content: let content):
+            return try await processImage(content: content, mediaProvider: mediaProvider)
+        case .audio(content: let content):
+            return try await processAudio(content: content, mediaProvider: mediaProvider)
+        case .video(content: let content):
+            return try await processVideo(content: content, mediaProvider: mediaProvider)
+        case .file(content: let content):
+            return try await processFile(content: content, mediaProvider: mediaProvider)
+        case .notice(content: let content):
+            return try await processNotice(content: content, mediaProvider: mediaProvider)
+        case .text(content: let content):
+            return try await processText(content: content, mediaProvider: mediaProvider)
+        }
+    }
+
     private func processEmpty() -> UNMutableNotificationContent {
-        let notification = UNMutableNotificationContent()
-        notification.receiverID = receiverID
-        notification.roomID = roomID
-        notification.eventID = event.eventID
-        notification.notificationID = id
+        let notification = baseMutableContent
         notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
         notification.body = L10n.notification
-        notification.threadIdentifier = roomID
-        notification.categoryIdentifier = NotificationConstants.Category.reply
-        notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        notification.categoryIdentifier = NotificationConstants.Category.message
         return notification
     }
 
     private func processCommon(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = UNMutableNotificationContent()
-        notification.receiverID = receiverID
-        notification.roomID = roomID
-        notification.eventID = event.eventID
-        notification.notificationID = id
+        var notification = baseMutableContent
         notification.title = senderDisplayName ?? roomDisplayName
         if notification.title != roomDisplayName {
             notification.subtitle = roomDisplayName
         }
-        // We can store the room identifier into the thread identifier since it's used for notifications
-        // that belong to the same group
-        notification.threadIdentifier = roomID
-        notification.categoryIdentifier = NotificationConstants.Category.reply
-        notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        notification.categoryIdentifier = NotificationConstants.Category.message
 
         let senderName = senderDisplayName ?? roomDisplayName
         let iconType: NotificationIconType
