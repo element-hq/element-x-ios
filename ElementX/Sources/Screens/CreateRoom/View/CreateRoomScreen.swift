@@ -95,6 +95,7 @@ struct CreateRoomScreen: View {
     
     @State private var frame: CGRect = .zero
     @ScaledMetric private var invitedUserCellWidth: CGFloat = 64
+
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 28) {
