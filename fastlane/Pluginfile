@@ -2,7 +2,6 @@
 #
 # Ensure this file is checked in to source control!
 
-gem 'fastlane-plugin-diawi'
 gem 'fastlane-plugin-xcodegen'
 gem 'fastlane-plugin-sentry'
 gem 'fastlane-plugin-browserstack'
