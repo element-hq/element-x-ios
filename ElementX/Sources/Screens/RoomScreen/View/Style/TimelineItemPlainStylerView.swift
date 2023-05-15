@@ -50,7 +50,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                let replyDetails = messageTimelineItem.replyDetails {
                 HStack(spacing: 4.0) {
                     Rectangle()
-                        .foregroundColor(.element.accent)
+                        .foregroundColor(.global.melon)
                         .frame(width: 4.0)
                     TimelineReplyView(timelineItemReplyDetails: replyDetails)
                 }

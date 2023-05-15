@@ -76,6 +76,6 @@ extension View {
     func timelineQuoteBubbleFormatting() -> some View {
         foregroundColor(.compound.textPlaceholder)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
+            .padding(4.0)
     }
 }
