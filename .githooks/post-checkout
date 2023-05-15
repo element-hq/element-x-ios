@@ -4,5 +4,3 @@ git lfs post-checkout "$@"
 
 #!/bin/bash
 export PATH="$PATH:/opt/homebrew/bin"
-
-xcodegen

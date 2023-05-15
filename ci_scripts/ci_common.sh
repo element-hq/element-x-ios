@@ -45,6 +45,4 @@ setup_github_actions_environment() {
 
     bundle config path vendor/bundle
     bundle install --jobs 4 --retry 3
-
-    xcodegen
 }
