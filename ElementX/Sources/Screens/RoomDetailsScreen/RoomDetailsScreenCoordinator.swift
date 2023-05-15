@@ -55,8 +55,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .requestMemberDetailsPresentation(let members):
                 self.presentRoomMembersList(members)
-            case .requestInvitePeoplePresentation:
-                self.presentInviteUsersScreen()
+            case .requestInvitePeoplePresentation(let room):
+                self.presentInviteUsersScreen(room: room)
             case .cancel:
                 self.callback?(.cancel)
             case .leftRoom:
@@ -80,8 +80,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(mediaProvider: parameters.mediaProvider, userDiscoveryService: parameters.userDiscoveryService)
+    private func presentInviteUsersScreen(room: RoomProxyProtocol) {
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(mediaProvider: parameters.mediaProvider, userDiscoveryService: parameters.userDiscoveryService, roomContext: .room(room))
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         let navigationStackCoordinator = NavigationStackCoordinator()
         navigationStackCoordinator.setRootCoordinator(coordinator)

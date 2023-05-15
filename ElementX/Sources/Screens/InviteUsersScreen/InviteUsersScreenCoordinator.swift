@@ -21,6 +21,7 @@ struct InviteUsersScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
+    let roomContext: InviteUsersScreenRoomContext
 }
 
 enum InviteUsersScreenCoordinatorAction {

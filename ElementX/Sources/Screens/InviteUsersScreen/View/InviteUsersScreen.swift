@@ -107,8 +107,9 @@ struct InviteUsersScreen: View {
     
     private var nextButton: some View {
         Button { context.send(viewAction: .proceed) } label: {
-            Text(context.viewState.selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext)
+            Text(context.viewState.actionText)
         }
+        .disabled(context.viewState.isActionDisabled)
     }
     
     private func deselect(_ user: UserProfile) {

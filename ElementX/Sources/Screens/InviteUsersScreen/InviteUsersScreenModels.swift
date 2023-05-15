@@ -26,6 +26,11 @@ enum InviteUsersScreenViewModelAction {
     case toggleUser(UserProfile)
 }
 
+enum InviteUsersScreenRoomContext {
+    case draftRoom
+    case room(RoomProxyProtocol)
+}
+
 struct InviteUsersScreenViewState: BindableState {
     var bindings = InviteUsersScreenViewStateBindings()
     
@@ -45,6 +50,20 @@ struct InviteUsersScreenViewState: BindableState {
     
     func isUserSelected(_ user: UserProfile) -> Bool {
         selectedUsers.contains { $0.userID == user.userID }
+    }
+    
+    let isCreatingRoom: Bool
+    
+    var actionText: String {
+        if isCreatingRoom {
+            return selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext
+        } else {
+            return L10n.actionInvite
+        }
+    }
+    
+    var isActionDisabled: Bool {
+        isCreatingRoom ? false : selectedUsers.isEmpty
     }
 }
 

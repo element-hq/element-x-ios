@@ -22,6 +22,7 @@ typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreen
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
+    private let roomContext: InviteUsersScreenRoomContext
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
@@ -107,5 +108,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private var searchQuery: String {
         context.searchQuery
+    }
+}
+
+private extension InviteUsersScreenRoomContext {
+    var isCreatingRoom: Bool {
+        switch self {
+        case .draftRoom:
+            return true
+        case .room:
+            return false
+        }
     }
 }
