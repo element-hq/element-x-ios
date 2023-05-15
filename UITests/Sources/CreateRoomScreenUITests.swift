@@ -17,29 +17,30 @@
 import ElementX
 import XCTest
 
+@MainActor
 class CreateRoomScreenUITests: XCTestCase {
-    func testLanding() {
+    func testLanding() async throws {
         let app = Application.launch(.createRoom)
-        app.assertScreenshot(.createRoom, step: 0)
+        try await app.assertScreenshot(.createRoom, step: 0)
     }
 
-    func testLandingWithoutUsers() {
+    func testLandingWithoutUsers() async throws {
         let app = Application.launch(.createRoomNoUsers)
-        app.assertScreenshot(.createRoom, step: 1)
+        try await app.assertScreenshot(.createRoom, step: 1)
     }
     
-    func testLongInputNameText() {
+    func testLongInputNameText() async throws {
         let app = Application.launch(.createRoom)
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].tap()
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-        app.assertScreenshot(.createRoom, step: 2)
+        try await app.assertScreenshot(.createRoom, step: 2)
     }
     
-    func testLongInputTopicText() {
+    func testLongInputTopicText() async throws {
         let app = Application.launch(.createRoom)
         let roomTopic = "Room topic\nvery\nvery\nvery long"
         app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].tap()
         app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].typeText(roomTopic)
-        app.assertScreenshot(.createRoom, step: 3)
+        try await app.assertScreenshot(.createRoom, step: 3)
     }
 }
