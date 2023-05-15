@@ -84,6 +84,9 @@ final class AppSettings {
     /// that don't yet have an officially trusted proxy configured in their well-known.
     let slidingSyncProxyURL: URL? = nil
     
+    /// The task identifier used for background app refresh. Also used in main target's the Info.plist
+    let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+    
     // MARK: - Authentication
     
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.

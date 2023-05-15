@@ -41,6 +41,7 @@ protocol UserSessionStoreProtocol {
     func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError>
 
     /// Refresh the restore token of the client for a given session.
+    @discardableResult
     func refreshRestorationToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError>
     
     /// Logs out of the specified session.

@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
+import BackgroundTasks
 import Combine
 import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -49,6 +50,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     private var userSessionObserver: AnyCancellable?
     private var networkMonitorObserver: AnyCancellable?
     private var initialSyncObserver: AnyCancellable?
+    private var backgroundRefreshSyncObserver: AnyCancellable?
     
     let notificationManager: NotificationManagerProtocol
 
@@ -93,6 +95,8 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         observeApplicationState()
         observeNetworkState()
+        
+        registerBackgroundAppRefresh()
     }
     
     func start() {
@@ -111,7 +115,63 @@ class AppCoordinator: AppCoordinatorProtocol {
     func toPresentable() -> AnyView {
         ServiceLocator.shared.userIndicatorController.toPresentable()
     }
+    
+    // MARK: - AuthenticationCoordinatorDelegate
+    
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
+        self.userSession = userSession
+        stateMachine.processEvent(.createdUserSession)
+    }
+    
+    // MARK: - NotificationManagerDelegate
+    
+    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
+        if granted {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+    }
+    
+    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return true
+        }
+        guard let userSessionFlowCoordinator else {
+            // there is not a user session yet
+            return false
+        }
+        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
+    }
+    
+    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
+        MXLog.info("[AppCoordinator] tappedNotification")
         
+        guard let roomID = content.roomID,
+              content.receiverID != nil else {
+            return
+        }
+        
+        // Handle here the account switching when available
+        
+        handleAppRoute(.room(roomID: roomID))
+    }
+    
+    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
+        MXLog.info("[AppCoordinator] handle notification reply")
+        
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return
+        }
+        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
+        switch await roomProxy?.sendMessage(replyText) {
+        case .success:
+            break
+        default:
+            // error or no room proxy
+            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
+                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
+        }
+    }
+    
     // MARK: - Private
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
@@ -143,6 +203,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionStore.reset()
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -349,89 +410,6 @@ class AppCoordinator: AppCoordinatorProtocol {
             }
     }
     
-    // MARK: Toasts and loading indicators
-    
-    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
-    
-    private func showLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-    
-    private func showLoginErrorToast() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
-    }
-
-    // MARK: - Application State
-
-    private func stopSync() {
-        userSession?.clientProxy.stopSync()
-    }
-
-    private func startSync() {
-        userSession?.clientProxy.startSync()
-        
-        let identifier = "StaleDataIndicator"
-        
-        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast, title: L10n.commonLoading, persistent: true))
-        
-        initialSyncObserver = userSession.clientProxy
-            .callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                if case .receivedSyncUpdate = callback {
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
-                    self?.initialSyncObserver?.cancel()
-                }
-            }
-    }
-
-    private func observeApplicationState() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillResignActive),
-                                               name: UIApplication.willResignActiveNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
-    }
-
-    @objc
-    private func applicationWillResignActive() {
-        MXLog.info("Application will resign active")
-        
-        guard backgroundTask == nil else {
-            return
-        }
-
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            self?.stopSync()
-            
-            self?.backgroundTask = nil
-            self?.isSuspended = true
-        }
-    }
-
-    @objc
-    private func applicationDidBecomeActive() {
-        MXLog.info("Application did become active")
-        
-        backgroundTask?.stop()
-        backgroundTask = nil
-
-        if isSuspended {
-            isSuspended = false
-            startSync()
-        }
-    }
-    
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
         networkMonitorObserver = ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
@@ -474,64 +452,149 @@ class AppCoordinator: AppCoordinatorProtocol {
             hideLoadingIndicator()
         }
     }
-}
-
-// MARK: - AuthenticationCoordinatorDelegate
-
-extension AppCoordinator: AuthenticationCoordinatorDelegate {
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
-        self.userSession = userSession
-        stateMachine.processEvent(.createdUserSession)
+    
+    // MARK: Toasts and loading indicators
+    
+    private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    
+    private func showLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: L10n.commonLoading,
+                                                                                    persistent: true))
     }
-}
-
-// MARK: - NotificationManagerDelegate
-
-extension AppCoordinator: NotificationManagerDelegate {
-    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
-        if granted {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
+    
+    private func hideLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
-
-    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
-            return true
-        }
-        guard let userSessionFlowCoordinator else {
-            // there is not a user session yet
-            return false
-        }
-        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
+    
+    private func showLoginErrorToast() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
     }
 
-    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
-        MXLog.info("[AppCoordinator] tappedNotification")
+    // MARK: - Application State
 
-        guard let roomID = content.roomID,
-              content.receiverID != nil else {
+    private func stopSync() {
+        userSession?.clientProxy.stopSync()
+    }
+
+    private func startSync() {
+        userSession?.clientProxy.startSync()
+        
+        let identifier = "StaleDataIndicator"
+        
+        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast, title: L10n.commonLoading, persistent: true))
+        
+        initialSyncObserver = userSession.clientProxy
+            .callbacks
+            .receive(on: DispatchQueue.main)
+            .filter(\.isSyncUpdate)
+            .sink { [weak self] _ in
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
+                self?.initialSyncObserver?.cancel()
+            }
+    }
+
+    private func observeApplicationState() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillResignActive() {
+        MXLog.info("Application will resign active")
+        
+        guard backgroundTask == nil else {
             return
         }
 
-        // Handle here the account switching when available
-
-        handleAppRoute(.room(roomID: roomID))
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+            guard let self else { return }
+            
+            stopSync()
+        
+            backgroundTask = nil
+            isSuspended = true
+        }
+        
+        // This does seem to work if scheduled from the background task above
+        // Schedule it here instead but with an earliest being date of 30 seconds
+        scheduleBackgroundAppRefresh()
     }
 
-    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        MXLog.info("[AppCoordinator] handle notification reply")
+    @objc
+    private func applicationDidBecomeActive() {
+        MXLog.info("Application did become active")
+        
+        backgroundTask?.stop()
+        backgroundTask = nil
 
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
-            return
+        if isSuspended {
+            isSuspended = false
+            startSync()
         }
-        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
-        switch await roomProxy?.sendMessage(replyText) {
-        case .success:
-            break
-        default:
-            // error or no room proxy
-            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
-                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
+    }
+    
+    // MARK: Background app refresh
+    
+    private func registerBackgroundAppRefresh() {
+        let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier, using: .main) { [weak self] task in
+            guard let task = task as? BGAppRefreshTask else {
+                MXLog.error("Invalid background app refresh configuration")
+                return
+            }
+            
+            self?.handleBackgroundAppRefresh(task)
         }
+        
+        MXLog.info("Register background app refresh with result: \(result)")
+    }
+    
+    private func scheduleBackgroundAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier)
+        
+        // We have other background tasks that keep the app alive
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 30)
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            MXLog.info("Successfully scheduled background app refresh task")
+        } catch {
+            MXLog.error("Failed scheduling background app refresh with error :\(error)")
+        }
+    }
+    
+    private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
+        MXLog.info("Started background app refresh")
+        
+        // This is important for the app to keep refreshing in the background
+        scheduleBackgroundAppRefresh()
+        
+        task.expirationHandler = { [weak self] in
+            MXLog.info("Background app refresh task expired")
+            self?.stopSync()
+            task.setTaskCompleted(success: true)
+        }
+        
+        startSync()
+        
+        // Be a good citizen, run for a max of 10 SS responses or 10 seconds
+        // An SS request will time out after 30 seconds if no new data is available
+        backgroundRefreshSyncObserver = userSession?.clientProxy
+            .callbacks
+            .filter(\.isSyncUpdate)
+            .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
+            .sink(receiveValue: { [weak self] _ in
+                MXLog.info("Background app refresh finished")
+                self?.backgroundRefreshSyncObserver?.cancel()
+                self?.stopSync()
+                task.setTaskCompleted(success: true)
+            })
     }
 }
