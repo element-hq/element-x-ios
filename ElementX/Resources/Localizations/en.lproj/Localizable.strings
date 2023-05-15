@@ -84,12 +84,14 @@
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
 "common_search_for_someone" = "Search for someone";
+"common_search_results" = "Search results";
 "common_security" = "Security";
 "common_select_your_server" = "Select your server";
 "common_sending" = "Sending…";
 "common_server_not_supported" = "Server not supported";
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
+"common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";
 "common_suggestions" = "Suggestions";
@@ -217,6 +219,8 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_already_a_member" = "Already a member";
+"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_share_room_title" = "Share room";

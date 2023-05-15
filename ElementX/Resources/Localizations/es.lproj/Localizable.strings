@@ -62,6 +62,7 @@
 "common_developer_options" = "Opciones de desarrollador";
 "common_edited_suffix" = "(editado)";
 "common_editing" = "Edición";
+"common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Cifrado activado";
 "common_error" = "Error";
 "common_file" = "Archivo";
@@ -83,12 +84,14 @@
 "common_report_a_bug" = "Informar de un error";
 "common_report_submitted" = "Informe enviado";
 "common_search_for_someone" = "Buscar a alguien";
+"common_search_results" = "Search results";
 "common_security" = "Seguridad";
 "common_select_your_server" = "Selecciona tu servidor";
 "common_sending" = "Enviando…";
 "common_server_not_supported" = "Servidor no compatible";
 "common_server_url" = "Dirección del servidor";
 "common_settings" = "Ajustes";
+"common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Terminado";
 "common_suggestions" = "Sugerencias";
@@ -216,6 +219,8 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_already_a_member" = "Already a member";
+"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_encryption_enabled_subtitle" = "Los mensajes están protegidos con \"candados\". Sólo tú y los destinatarios tenéis las llaves únicas para abrirlos.";
 "screen_room_details_encryption_enabled_title" = "Cifrado de mensajes activado";
 "screen_room_details_share_room_title" = "Compartir sala";

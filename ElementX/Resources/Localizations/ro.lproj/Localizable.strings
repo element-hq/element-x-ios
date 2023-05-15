@@ -62,6 +62,7 @@
 "common_developer_options" = "Opțiuni programator";
 "common_edited_suffix" = "(editat)";
 "common_editing" = "Editare";
+"common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Criptare activată";
 "common_error" = "Eroare";
 "common_file" = "Fişier";
@@ -83,12 +84,14 @@
 "common_report_a_bug" = "Raportați o eroare";
 "common_report_submitted" = "Raport trimis";
 "common_search_for_someone" = "Căutați pe cineva";
+"common_search_results" = "Search results";
 "common_security" = "Securitate";
 "common_select_your_server" = "Selectați serverul";
 "common_sending" = "Se trimite…";
 "common_server_not_supported" = "Serverul nu este compatibil";
 "common_server_url" = "Adresa URL a serverului";
 "common_settings" = "Setări";
+"common_starting_chat" = "Starting chat…";
 "common_sticker" = "Autocolant";
 "common_success" = "Succes";
 "common_suggestions" = "Sugestii";
@@ -216,6 +219,8 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_already_a_member" = "Already a member";
+"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_encryption_enabled_subtitle" = "Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca.";
 "screen_room_details_encryption_enabled_title" = "Criptarea mesajelor este activată";
 "screen_room_details_share_room_title" = "Partajați camera";

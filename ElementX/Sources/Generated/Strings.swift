@@ -190,6 +190,8 @@ public enum L10n {
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
+  /// Search results
+  public static var commonSearchResults: String { return L10n.tr("Localizable", "common_search_results") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Select your server
@@ -202,6 +204,8 @@ public enum L10n {
   public static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
   /// Settings
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
+  /// Starting chat…
+  public static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
   public static var commonSticker: String { return L10n.tr("Localizable", "common_sticker") }
   /// Success
@@ -570,6 +574,10 @@ public enum L10n {
   public static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
   /// Photo & Video Library
   public static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
+  /// Already a member
+  public static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
+  /// Already invited
+  public static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
