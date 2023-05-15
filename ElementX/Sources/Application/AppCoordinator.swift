@@ -403,7 +403,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 case .didReceiveAuthError(let isSoftLogout):
                     stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
                 case .updateRestorationToken:
-                    _ = userSessionStore.refreshRestorationToken(for: userSession)
+                    userSessionStore.refreshRestorationToken(for: userSession)
                 default:
                     break
                 }
