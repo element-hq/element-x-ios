@@ -2,7 +2,11 @@ name: UI Tests
 
 on:
   workflow_dispatch:
-  
+    inputs:
+      test_name:
+        description: 'Name of the specific test to run'
+        required: false
+
   schedule:
     - cron:  '0 0 * * 1-5'
 
@@ -30,12 +34,16 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Setup environment
-        run:
-          source ci_scripts/ci_common.sh && setup_github_actions_environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Run tests
-        run: bundle exec fastlane ui_tests
-      
+        run: |
+          if [[ -z "${{ github.event.inputs.test_name }}" ]]; then
+            bundle exec fastlane ui_tests
+          else
+            bundle exec fastlane ui_tests test_name:${{ github.event.inputs.test_name }}
+          fi
+
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         if: always()
@@ -49,3 +57,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           flags: uitests
+    

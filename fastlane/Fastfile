@@ -109,18 +109,25 @@ lane :unit_tests do
   )
 end
 
-lane :ui_tests do
+lane :ui_tests do |options|
   create_simulator_if_necessary(
     name: "iPad (9th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"
   )
+
+  if options[:test_name]
+    test_to_run = ["UITests/#{options[:test_name]}"]
+  else
+    test_to_run = nil
+  end
 
   run_tests(
     scheme: "UITests",
     devices: ["iPhone 14", "iPad (9th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
-    result_bundle: true
+    result_bundle: true,
+    only_testing: test_to_run
   )
 
   slather(
@@ -131,6 +138,7 @@ lane :ui_tests do
     binary_basename: "ElementX.app"
   )
 end
+
 
 lane :integration_tests do
   create_simulator_if_necessary(
