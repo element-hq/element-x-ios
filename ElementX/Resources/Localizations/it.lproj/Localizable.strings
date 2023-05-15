@@ -62,6 +62,7 @@
 "common_developer_options" = "Opzioni sviluppatore";
 "common_edited_suffix" = "(modificato)";
 "common_editing" = "Modifica in corso";
+"common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Crittografia abilitata";
 "common_error" = "Errore";
 "common_file" = "File";
@@ -83,12 +84,14 @@
 "common_report_a_bug" = "Segnala un problema";
 "common_report_submitted" = "Segnalazione inviata";
 "common_search_for_someone" = "Cerca qualcuno";
+"common_search_results" = "Search results";
 "common_security" = "Sicurezza";
 "common_select_your_server" = "Seleziona il tuo server";
 "common_sending" = "Invio in corso…";
 "common_server_not_supported" = "Server non supportato";
 "common_server_url" = "URL del server";
 "common_settings" = "Impostazioni";
+"common_starting_chat" = "Starting chat…";
 "common_sticker" = "Adesivo";
 "common_success" = "Operazione riuscita";
 "common_suggestions" = "Suggerimenti";
@@ -216,6 +219,8 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_already_a_member" = "Already a member";
+"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_encryption_enabled_subtitle" = "I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli.";
 "screen_room_details_encryption_enabled_title" = "Crittografia messaggi abilitata";
 "screen_room_details_share_room_title" = "Condividi stanza";
