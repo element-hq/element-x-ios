@@ -35,6 +35,7 @@ enum RoomProxyError: Error {
     case failedLeavingRoom
     case failedAcceptingInvite
     case failedRejectingInvite
+    case failedInvitingUser
 }
 
 @MainActor
@@ -104,6 +105,8 @@ protocol RoomProxyProtocol {
     func acceptInvitation() async -> Result<Void, RoomProxyError>
     
     func fetchDetails(for eventID: String)
+    
+    func invite(userID: String) async -> Result<Void, RoomProxyError>
     
     var invitedMembersCount: UInt { get }
     
