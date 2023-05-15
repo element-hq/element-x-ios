@@ -11,9 +11,9 @@
     {
       "identity" : "compound-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-ios.git",
+      "location" : "https://github.com/vector-im/compound-ios",
       "state" : {
-        "revision" : "b4f34edce9003ba1fde31500312f317b728f4ee3"
+        "revision" : "a6aec9a77bf008c86a296ba17d60005b5a8bfae4"
       }
     },
     {
@@ -172,7 +172,7 @@
     {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
       "state" : {
         "revision" : "cef5b3f6f11781dd4591bdd1dd0a3d22bd609334",
         "version" : "1.11.0"

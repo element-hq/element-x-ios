@@ -1,6 +1,22 @@
 {
   "pins" : [
     {
+      "identity" : "compound-design-tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/compound-design-tokens.git",
+      "state" : {
+        "revision" : "d9d1a792d8a124708c7e15becd359893ee9e9ea6"
+      }
+    },
+    {
+      "identity" : "compound-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/compound-ios.git",
+      "state" : {
+        "revision" : "a6aec9a77bf008c86a296ba17d60005b5a8bfae4"
+      }
+    },
+    {
       "identity" : "element-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/element-design-tokens.git",
@@ -14,8 +30,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
-        "revision" : "f2616860a41f9d9932da412a8978fec79c06fe24",
-        "version" : "0.1.4"
+        "revision" : "5b3f3996c7a2a84d5f4ba0e03cd7d584154778f2",
+        "version" : "0.3.1"
       }
     }
   ],

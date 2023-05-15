@@ -48,7 +48,7 @@ packages:
     path: DesignKit
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: b4f34edce9003ba1fde31500312f317b728f4ee3
+    revision: a6aec9a77bf008c86a296ba17d60005b5a8bfae4
     # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
