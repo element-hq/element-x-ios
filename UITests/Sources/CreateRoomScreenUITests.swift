@@ -38,7 +38,8 @@ class CreateRoomScreenUITests: XCTestCase {
     func testLongInputTopicText() {
         let app = Application.launch(.createRoom)
         let roomTopic = "Room topic\nvery\nvery\nvery long"
-        app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].clearAndTypeText(roomTopic)
+        app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].tap()
+        app.textViews[A11yIdentifiers.createRoomScreen.roomTopic].typeText(roomTopic)
         app.assertScreenshot(.createRoom, step: 3)
     }
 }
