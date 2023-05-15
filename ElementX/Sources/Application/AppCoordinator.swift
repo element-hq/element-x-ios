@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import BackgroundTasks
 import Combine
 import MatrixRustSDK
 import SwiftUI
@@ -49,6 +50,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     private var userSessionObserver: AnyCancellable?
     private var networkMonitorObserver: AnyCancellable?
     private var initialSyncObserver: AnyCancellable?
+    private var backgroundRefreshSyncObserver: AnyCancellable?
     
     let notificationManager: NotificationManagerProtocol
 
@@ -93,6 +95,8 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         observeApplicationState()
         observeNetworkState()
+        
+        registerBackgroundAppRefresh()
     }
     
     func start() {
@@ -143,6 +147,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionStore.reset()
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -342,7 +347,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 case .didReceiveAuthError(let isSoftLogout):
                     stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
                 case .updateRestorationToken:
-                    userSessionStore.refreshRestorationToken(for: userSession)
+                    _ = userSessionStore.refreshRestorationToken(for: userSession)
                 default:
                     break
                 }
@@ -384,11 +389,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         initialSyncObserver = userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                if case .receivedSyncUpdate = callback {
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
-                    self?.initialSyncObserver?.cancel()
-                }
+            .filter(\.isSyncUpdate)
+            .sink { [weak self] _ in
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
+                self?.initialSyncObserver?.cancel()
             }
     }
 
@@ -412,11 +416,17 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            self?.stopSync()
+            guard let self else { return }
             
-            self?.backgroundTask = nil
-            self?.isSuspended = true
+            stopSync()
+        
+            backgroundTask = nil
+            isSuspended = true
         }
+        
+        // This does seem to work if scheduled from the background task above
+        // Schedule it here instead but with an earliest being date of 30 seconds
+        scheduleBackgroundAppRefresh()
     }
 
     @objc
@@ -431,6 +441,8 @@ class AppCoordinator: AppCoordinatorProtocol {
             startSync()
         }
     }
+    
+    // MARK: Other
     
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
@@ -473,6 +485,63 @@ class AppCoordinator: AppCoordinatorProtocol {
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
         }
+    }
+    
+    // MARK: Background app refresh
+    
+    private func registerBackgroundAppRefresh() {
+        let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier, using: .main) { [weak self] task in
+            guard let task = task as? BGAppRefreshTask else {
+                MXLog.error("Invalid background app refresh configuration")
+                return
+            }
+            
+            self?.handleBackgroundAppRefresh(task)
+        }
+        
+        MXLog.info("Register background app refresh with result: \(result)")
+    }
+    
+    private func scheduleBackgroundAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier)
+        
+        // We have other background tasks that keep the app alive
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 30)
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            MXLog.info("Successfully scheduled background app refresh task")
+        } catch {
+            MXLog.error("Failed scheduling background app refresh with error :\(error)")
+        }
+    }
+    
+    private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
+        MXLog.info("Started background app refresh")
+        
+        // This is important for the app to keep refreshing in the background
+        scheduleBackgroundAppRefresh()
+        
+        task.expirationHandler = { [weak self] in
+            MXLog.info("Background app refresh task expired")
+            self?.stopSync()
+            task.setTaskCompleted(success: true)
+        }
+        
+        startSync()
+        
+        // Be a good citizen, run for a max of 10 SS responses or 10 seconds
+        // An SS request will time out after 30 seconds if no new data is available
+        backgroundRefreshSyncObserver = userSession?.clientProxy
+            .callbacks
+            .filter(\.isSyncUpdate)
+            .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
+            .sink(receiveValue: { [weak self] _ in
+                MXLog.info("Background app refresh finished")
+                self?.backgroundRefreshSyncObserver?.cancel()
+                self?.stopSync()
+                task.setTaskCompleted(success: true)
+            })
     }
 }
 

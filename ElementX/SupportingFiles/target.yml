@@ -64,6 +64,12 @@ targets:
         ]
         NSCameraUsageDescription: The camera is used to take and upload photos and videos.
         NSMicrophoneUsageDescription: The microphone is used to take videos.
+        UIBackgroundModes: [
+          fetch
+        ]
+        BGTaskSchedulerPermittedIdentifiers: [
+          io.element.elementx.background.refresh
+        ]
 
 
     settings:
