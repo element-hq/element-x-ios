@@ -31,7 +31,7 @@ class CreateRoomScreenUITests: XCTestCase {
     func testLongInputNameText() {
         let app = Application.launch(.createRoom)
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].tap()
-        app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n")
+        app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         app.assertScreenshot(.createRoom, step: 2)
     }
     
