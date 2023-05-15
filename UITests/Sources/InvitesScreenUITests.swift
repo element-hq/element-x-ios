@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class InvitesScreenUITests: XCTestCase {
     func testInvitesWithNoBadges() async throws {
         let app = Application.launch(.invites)

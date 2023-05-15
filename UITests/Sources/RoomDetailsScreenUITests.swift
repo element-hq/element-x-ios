@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class RoomDetailsScreenUITests: XCTestCase {
     func testInitialStateComponents() async throws {
         let app = Application.launch(.roomDetailsScreen)

@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class TemplateScreenUITests: XCTestCase {
     func testRegularScreen() async throws {
         let app = Application.launch(.simpleRegular)

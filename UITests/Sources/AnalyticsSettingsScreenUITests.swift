@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class AnalyticsSettingsScreenUITests: XCTestCase {
     /// Verify that the analytics option screen is displayed correctly.
     func testAnalyticsSettingsScreen() async throws {

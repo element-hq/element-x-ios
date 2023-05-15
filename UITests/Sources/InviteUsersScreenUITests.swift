@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class InviteUsersScreenUITests: XCTestCase {
     func testLanding() async throws {
         let app = Application.launch(.inviteUsers)

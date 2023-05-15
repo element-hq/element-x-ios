@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class AnalyticsPromptUITests: XCTestCase {
     /// Verify that the prompt is displayed correctly.
     func testAnalyticsPrompt() async throws {

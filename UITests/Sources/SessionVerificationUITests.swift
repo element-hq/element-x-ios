@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class SessionVerificationUITests: XCTestCase {
     enum Step {
         static let initialState = 0

@@ -16,6 +16,7 @@
 
 import XCTest
 
+@MainActor
 class HomeScreenUITests: XCTestCase {
     func testInitialStateComponents() async throws {
         let app = Application.launch(.home)

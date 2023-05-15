@@ -30,6 +30,7 @@ struct Application {
 }
 
 extension XCUIApplication {
+    @MainActor
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
     /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.

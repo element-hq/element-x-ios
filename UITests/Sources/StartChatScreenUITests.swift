@@ -17,6 +17,7 @@
 import ElementX
 import XCTest
 
+@MainActor
 class StartChatScreenUITests: XCTestCase {
     func testLanding() async throws {
         let app = Application.launch(.startChat)
