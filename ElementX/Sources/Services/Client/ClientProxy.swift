@@ -345,7 +345,7 @@ class ClientProxy: ClientProxyProtocol {
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
                 .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
-                .storageKey(name: "ElementX")
+                // .storageKey(name: "ElementX")
                 .build()
             
             // Don't forget to update the view proxies after building the slidingSync
