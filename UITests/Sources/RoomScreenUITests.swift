@@ -85,7 +85,7 @@ class RoomScreenUITests: XCTestCase {
 
         try await Task.sleep(for: .seconds(10)) // Allow the table to settle
         // Given a timeline that is neither at the top nor the bottom.
-        app.tables.element.swipeDown()
+        app.tables.element.swipeDown(velocity: .slow)
         try await Task.sleep(for: .seconds(10)) // Allow the table to settle
         try await app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
