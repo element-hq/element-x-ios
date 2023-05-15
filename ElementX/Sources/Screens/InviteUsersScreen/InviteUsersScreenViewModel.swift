@@ -20,7 +20,7 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
-    private let userSession: UserSessionProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
@@ -30,6 +30,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>, userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
+    init(mediaProvider: MediaProviderProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
+        self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value), imageProvider: userSession.mediaProvider)
         

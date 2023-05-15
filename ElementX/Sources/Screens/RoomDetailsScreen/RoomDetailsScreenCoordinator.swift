@@ -14,12 +14,14 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -30,7 +32,10 @@ enum RoomDetailsScreenCoordinatorAction {
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsScreenCoordinatorParameters
     private var viewModel: RoomDetailsScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
+    private var cancellables: Set<AnyCancellable> = .init()
+    private var navigationStackCoordinator: NavigationStackCoordinator {
+        parameters.navigationStackCoordinator
+    }
     
     var callback: ((RoomDetailsScreenCoordinatorAction) -> Void)?
     
@@ -62,6 +67,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
     
+    // MARK: - Private
+    
     private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
         let params = RoomMembersListScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                                 mediaProvider: parameters.mediaProvider,
@@ -69,5 +76,21 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    #warning("WIP")
+    private func presentInviteUsersScreen() {
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(mediaProvider: parameters.mediaProvider, userDiscoveryService: parameters.userDiscoveryService)
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        
+        coordinator.actions.sink { [weak self] result in
+            switch result {
+            case .close:
+                self?.navigationStackCoordinator.pop()
+            }
+        }
+        .store(in: &cancellables)
+        
+        parameters.navigationStackCoordinator.setSheetCoordinator(coordinator)
     }
 }

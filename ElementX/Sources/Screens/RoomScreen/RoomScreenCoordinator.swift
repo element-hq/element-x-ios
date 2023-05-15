@@ -22,6 +22,7 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let emojiProvider: EmojiProviderProtocol
+    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -163,7 +164,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private func displayRoomDetails() {
         let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                             roomProxy: parameters.roomProxy,
-                                                            mediaProvider: parameters.mediaProvider)
+                                                            mediaProvider: parameters.mediaProvider,
+                                                            userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {

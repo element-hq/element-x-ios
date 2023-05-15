@@ -203,7 +203,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
-                                                             emojiProvider: emojiProvider)
+                                                             emojiProvider: emojiProvider,
+                                                             userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             coordinator.callback = { [weak self] action in
                 switch action {
@@ -262,7 +263,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             
             let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
                                                                 roomProxy: roomProxy,
-                                                                mediaProvider: userSession.mediaProvider)
+                                                                mediaProvider: userSession.mediaProvider,
+                                                                userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy))
             
             let coordinator = RoomDetailsScreenCoordinator(parameters: params)
             
