@@ -25,58 +25,116 @@ struct TimelineReplyView: View {
             case .loaded(let sender, let content):
                 switch content {
                 case .audio(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, systemIconName: "waveform")
                 case .emote(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .file(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, systemIconName: "doc.text.fill")
                 case .image(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, mediaSource: content.thumbnailSource ?? content.source)
                 case .notice(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .text(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
                 case .video(let content):
-                    TimelineTextReplyView(sender: sender, plainBody: content.body, formattedBody: nil)
+                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, mediaSource: content.thumbnailSource)
                 }
             default:
-                Text("Missing in-reply-to details")
-                    .font(.compound.bodyMD)
-                    .foregroundColor(.element.secondaryContent)
-                    .padding()
+                LoadingReplyView()
             }
         }
     }
     
-    private struct TimelineTextReplyView: View {
+    private struct LoadingReplyView: View {
+        var body: some View {
+            ReplyView(sender: .init(id: "@alice:matrix.org"), plainBody: "Hello world", formattedBody: nil)
+                .redacted(reason: .placeholder)
+        }
+    }
+    
+    private struct ReplyView: View {
+        @EnvironmentObject private var context: RoomScreenViewModel.Context
+        @ScaledMetric private var imageContainerSize = 36.0
+        
         let sender: TimelineItemSender
         let plainBody: String
         let formattedBody: AttributedString?
         
+        var systemIconName: String?
+        var mediaSource: MediaSourceProxy?
+        
         var body: some View {
-            VStack(alignment: .leading) {
-                Text(sender.displayName ?? sender.id)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textPrimary)
+            HStack {
+                icon
+                    .frame(width: imageContainerSize, height: imageContainerSize)
+                    .foregroundColor(.element.primaryContent)
+                    .background(Color.compound.bgSubtlePrimary)
+                    .cornerRadius(9.0, corners: .allCorners)
                 
-                Text(formattedBody ?? AttributedString(plainBody))
-                    .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textPlaceholder)
-                    .tint(.element.links)
-                    .lineLimit(2)
+                VStack(alignment: .leading) {
+                    Text(sender.displayName ?? sender.id)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.textPrimary)
+                    
+                    Text(formattedBody ?? AttributedString(plainBody))
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textPlaceholder)
+                        .tint(.element.links)
+                        .lineLimit(2)
+                }
+            }
+        }
+        
+        @ViewBuilder
+        private var icon: some View {
+            if let mediaSource {
+                LoadableImage(mediaSource: mediaSource, size: .init(width: imageContainerSize, height: imageContainerSize), imageProvider: context.imageProvider) {
+                    Image(systemName: "photo")
+                        .padding(4.0)
+                }
+                .aspectRatio(contentMode: .fill)
+            }
+            
+            if let systemIconName {
+                Image(systemName: systemIconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding(4.0)
             }
         }
     }
 }
 
 struct TimelineReplyView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                            content: .text(.init(body: "This is a reply"))))
-            .background(Color.element.background)
-            .cornerRadius(8)
-            .padding(8)
-            .background(Color.element.bubblesYou)
-            .cornerRadius(12)
+        VStack(alignment: .leading) {
+            TimelineReplyView(timelineItemReplyDetails: .notLoaded(eventID: ""))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loading(eventID: ""))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                content: .text(.init(body: "This is a reply"))))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                content: .emote(.init(body: "says hello"))))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bot"),
+                                                                content: .notice(.init(body: "Hello world"))))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                content: .audio(.init(body: "Some audio", duration: 0, source: nil, contentType: nil))))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                content: .file(.init(body: "Some file", source: nil, thumbnailSource: nil, contentType: nil))))
+            
+            let imageSource = MediaSourceProxy(url: .init(staticString: "https://mock.com"), mimeType: "image/png")
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"), content: .image(.init(body: "Some image", source: imageSource, thumbnailSource: imageSource))))
+            
+            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"), content: .video(.init(body: "Some video", duration: 0, source: nil, thumbnailSource: imageSource))))
+        }
+        .environmentObject(viewModel.context)
     }
 }
