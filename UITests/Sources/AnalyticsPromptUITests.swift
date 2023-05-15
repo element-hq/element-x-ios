@@ -19,8 +19,8 @@ import XCTest
 
 class AnalyticsPromptUITests: XCTestCase {
     /// Verify that the prompt is displayed correctly.
-    func testAnalyticsPrompt() {
+    func testAnalyticsPrompt() async throws {
         let app = Application.launch(.analyticsPrompt)
-        app.assertScreenshot(.analyticsPrompt)
+        try await app.assertScreenshot(.analyticsPrompt)
     }
 }

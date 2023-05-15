@@ -18,8 +18,8 @@ import ElementX
 import XCTest
 
 class ReportContentScreenUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.reportContent)
-        app.assertScreenshot(.reportContent, step: 0)
+        try await app.assertScreenshot(.reportContent, step: 0)
     }
 }

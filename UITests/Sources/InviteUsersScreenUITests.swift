@@ -18,14 +18,14 @@ import ElementX
 import XCTest
 
 class InviteUsersScreenUITests: XCTestCase {
-    func testLanding() {
+    func testLanding() async throws {
         let app = Application.launch(.inviteUsers)
-        app.assertScreenshot(.inviteUsers)
+        try await app.assertScreenshot(.inviteUsers)
     }
 
-    func testSelectedUsers() {
+    func testSelectedUsers() async throws {
         let app = Application.launch(.inviteUsers)
         app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
-        app.assertScreenshot(.inviteUsers, step: 1)
+        try await app.assertScreenshot(.inviteUsers, step: 1)
     }
 }

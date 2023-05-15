@@ -24,7 +24,7 @@ class UserSessionScreenTests: XCTestCase {
         
         let app = Application.launch(.userSessionScreen)
 
-        app.assertScreenshot(.userSessionScreen, step: 1)
+        try await app.assertScreenshot(.userSessionScreen, step: 1)
         
         app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
         
@@ -32,10 +32,10 @@ class UserSessionScreenTests: XCTestCase {
         
         try await Task.sleep(for: .seconds(1))
     
-        app.assertScreenshot(.userSessionScreen, step: 2)
+        try await app.assertScreenshot(.userSessionScreen, step: 2)
         
         app.buttons[A11yIdentifiers.roomScreen.attachmentPicker].tap()
         
-        app.assertScreenshot(.userSessionScreen, step: 3)
+        try await app.assertScreenshot(.userSessionScreen, step: 3)
     }
 }

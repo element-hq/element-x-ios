@@ -19,15 +19,15 @@ import XCTest
 
 @MainActor
 class ServerSelectionUITests: XCTestCase {
-    func testNormalState() async {
+    func testNormalState() async throws {
         // Given the initial server selection screen as a modal.
         let app = Application.launch(.serverSelection)
         
         // Then it should be configured for matrix.org
-        app.assertScreenshot(.serverSelection, step: 0)
+        try await app.assertScreenshot(.serverSelection, step: 0)
     }
 
-    func testEmptyAddress() async {
+    func testEmptyAddress() async throws {
         // Given the initial server selection screen as a modal.
         let app = Application.launch(.serverSelection)
         
@@ -36,10 +36,10 @@ class ServerSelectionUITests: XCTestCase {
         app.textFields[A11yIdentifiers.changeServerScreen.server].buttons.element.tap()
         
         // Then the screen should not allow the user to continue.
-        app.assertScreenshot(.serverSelection, step: 1)
+        try await app.assertScreenshot(.serverSelection, step: 1)
     }
 
-    func testInvalidAddress() {
+    func testInvalidAddress() async throws {
         // Given the initial server selection screen as a modal.
         let app = Application.launch(.serverSelection)
         
@@ -47,16 +47,16 @@ class ServerSelectionUITests: XCTestCase {
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
         
         // Then an error should be shown and the confirmation button disabled.
-        app.assertScreenshot(.serverSelection, step: 2)
+        try await app.assertScreenshot(.serverSelection, step: 2)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The confirm button should be disabled when there is an error.")
     }
 
-    func testNonModalPresentation() {
+    func testNonModalPresentation() async throws {
         // Given the initial server selection screen pushed onto the stack.
         let app = Application.launch(.serverSelectionNonModal)
         
         // Then the screen should be tweaked slightly to reflect the change of navigation.
-        app.assertScreenshot(.serverSelectionNonModal)
+        try await app.assertScreenshot(.serverSelectionNonModal)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.dismiss].exists, "The dismiss button should be hidden when not in modal presentation.")
     }
 }

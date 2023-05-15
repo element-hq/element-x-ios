@@ -26,7 +26,7 @@ class SoftLogoutUITests: XCTestCase {
         app = nil
     }
 
-    func testInitialState() {
+    func testInitialState() async throws {
         app = Application.launch(.softLogout)
         
         XCTAssertTrue(app.staticTexts[A11yIdentifiers.softLogoutScreen.title].exists, "The title should be shown.")
@@ -38,6 +38,6 @@ class SoftLogoutUITests: XCTestCase {
         XCTAssertTrue(app.buttons[A11yIdentifiers.softLogoutScreen.forgotPassword].exists, "The forgot password button should be shown.")
         XCTAssertTrue(app.buttons[A11yIdentifiers.softLogoutScreen.clearData].exists, "The clear data button should be shown.")
 
-        app.assertScreenshot(.softLogout)
+        try await app.assertScreenshot(.softLogout)
     }
 }

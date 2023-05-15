@@ -18,34 +18,34 @@ import ElementX
 import XCTest
 
 class BugReportUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.bugReport)
         
         // Initial state without a screenshot attached.
-        app.assertScreenshot(.bugReport, step: 0)
+        try await app.assertScreenshot(.bugReport, step: 0)
     }
     
-    func testReportText() {
+    func testReportText() async throws {
         let app = Application.launch(.bugReport)
         
         // Type 4 characters and the send button should be disabled.
         app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Text")
         XCTAssert(app.switches[A11yIdentifiers.bugReportScreen.sendLogs].isOn)
-        app.assertScreenshot(.bugReport, step: 2)
+        try await app.assertScreenshot(.bugReport, step: 2)
         
         // Type more than 4 characters and send the button should become enabled.
         app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Longer text")
         XCTAssert(app.switches[A11yIdentifiers.bugReportScreen.sendLogs].isOn)
-        app.assertScreenshot(.bugReport, step: 3)
+        try await app.assertScreenshot(.bugReport, step: 3)
     }
     
-    func testInitialStateComponentsWithScreenshot() {
+    func testInitialStateComponentsWithScreenshot() async throws {
         let app = Application.launch(.bugReportWithScreenshot)
         
         // Initial state with a screenshot attached.
         XCTAssert(app.images[A11yIdentifiers.bugReportScreen.screenshot].exists)
         XCTAssert(app.buttons[A11yIdentifiers.bugReportScreen.removeScreenshot].exists)
-        app.assertScreenshot(.bugReportWithScreenshot)
+        try await app.assertScreenshot(.bugReportWithScreenshot)
     }
 }
 

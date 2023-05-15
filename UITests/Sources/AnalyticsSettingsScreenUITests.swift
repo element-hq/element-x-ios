@@ -19,8 +19,8 @@ import XCTest
 
 class AnalyticsSettingsScreenUITests: XCTestCase {
     /// Verify that the analytics option screen is displayed correctly.
-    func testAnalyticsSettingsScreen() {
+    func testAnalyticsSettingsScreen() async throws {
         let app = Application.launch(.analyticsSettingsScreen)
-        app.assertScreenshot(.analyticsSettingsScreen)
+        try await app.assertScreenshot(.analyticsSettingsScreen)
     }
 }
