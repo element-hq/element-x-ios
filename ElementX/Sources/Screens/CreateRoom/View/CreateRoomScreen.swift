@@ -56,7 +56,7 @@ struct CreateRoomScreen: View {
                     .clipShape(Circle())
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-                        .font(.compound.bodySM)
+                        .font(.compound.bodyXS)
                         .padding(.leading, 16)
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
@@ -85,6 +85,7 @@ struct CreateRoomScreen: View {
                 .lineLimit(3, reservesSpace: false)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
+                .formSectionHeader()
         } footer: {
             if !context.viewState.selectedUsers.isEmpty {
                 selectedUsersSection
@@ -143,6 +144,7 @@ struct CreateRoomScreen: View {
             .pickerStyle(.inline)
         } header: {
             Text(L10n.commonSecurity.uppercased())
+                .formSectionHeader()
         }
         .formSectionStyle()
     }
