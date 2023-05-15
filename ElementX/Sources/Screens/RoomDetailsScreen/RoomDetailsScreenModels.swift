@@ -23,7 +23,7 @@ import UIKit
 
 enum RoomDetailsScreenViewModelAction {
     case requestMemberDetailsPresentation([RoomMemberProxyProtocol])
-    case requestInvitePeoplePresentation(RoomProxyProtocol)
+    case requestInvitePeoplePresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
 }

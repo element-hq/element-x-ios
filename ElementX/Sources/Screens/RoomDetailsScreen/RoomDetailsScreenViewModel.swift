@@ -57,7 +57,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
         case .processTapInvite:
-            callback?(.requestInvitePeoplePresentation(roomProxy))
+            callback?(.requestInvitePeoplePresentation(members))
         case .processTapLeave:
             let joinedMembers = members.filter { $0.membership == .join }
             guard joinedMembers.count > 1 else {
