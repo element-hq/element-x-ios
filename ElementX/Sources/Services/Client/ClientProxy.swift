@@ -379,7 +379,7 @@ class ClientProxy: ClientProxyProtocol {
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
             .syncMode(mode: .selective)
-            .addRange(from: 0, to: 20)
+            .addRange(from: 0, toIncluded: 20)
             .onceBuilt(callback: visibleRoomsListProxy)
 
         self.visibleRoomsListBuilder = visibleRoomsListBuilder
