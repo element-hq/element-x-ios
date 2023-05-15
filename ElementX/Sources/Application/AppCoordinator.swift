@@ -20,7 +20,7 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -115,7 +115,63 @@ class AppCoordinator: AppCoordinatorProtocol {
     func toPresentable() -> AnyView {
         ServiceLocator.shared.userIndicatorController.toPresentable()
     }
+    
+    // MARK: - AuthenticationCoordinatorDelegate
+    
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
+        self.userSession = userSession
+        stateMachine.processEvent(.createdUserSession)
+    }
+    
+    // MARK: - NotificationManagerDelegate
+    
+    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
+        if granted {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+    }
+    
+    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return true
+        }
+        guard let userSessionFlowCoordinator else {
+            // there is not a user session yet
+            return false
+        }
+        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
+    }
+    
+    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
+        MXLog.info("[AppCoordinator] tappedNotification")
         
+        guard let roomID = content.roomID,
+              content.receiverID != nil else {
+            return
+        }
+        
+        // Handle here the account switching when available
+        
+        handleAppRoute(.room(roomID: roomID))
+    }
+    
+    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
+        MXLog.info("[AppCoordinator] handle notification reply")
+        
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return
+        }
+        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
+        switch await roomProxy?.sendMessage(replyText) {
+        case .success:
+            break
+        default:
+            // error or no room proxy
+            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
+                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
+        }
+    }
+    
     // MARK: - Private
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
@@ -354,6 +410,49 @@ class AppCoordinator: AppCoordinatorProtocol {
             }
     }
     
+    private func observeNetworkState() {
+        let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
+        networkMonitorObserver = ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
+            MXLog.info("Reachability changed to \(reachable)")
+            
+            if reachable {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
+            } else {
+                ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
+                                                                                    title: L10n.commonOffline,
+                                                                                    persistent: true))
+            }
+        }
+    }
+
+    private func handleAppRoute(_ appRoute: AppRoute) {
+        if let userSessionFlowCoordinator {
+            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
+        } else {
+            storedAppRoute = appRoute
+        }
+    }
+    
+    private func clearCache() {
+        showLoadingIndicator()
+        
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
+        
+        userSession.clientProxy.stopSync()
+        userSessionFlowCoordinator?.stop()
+        
+        let userID = userSession.userID
+        tearDownUserSession()
+    
+        // Allow for everything to deallocate properly
+        Task {
+            try await Task.sleep(for: .seconds(2))
+            userSessionStore.clearCache(for: userID)
+            stateMachine.processEvent(.startWithExistingSession)
+            hideLoadingIndicator()
+        }
+    }
+    
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
@@ -442,51 +541,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
     }
     
-    // MARK: Other
-    
-    private func observeNetworkState() {
-        let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
-        networkMonitorObserver = ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
-            MXLog.info("Reachability changed to \(reachable)")
-            
-            if reachable {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
-            } else {
-                ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
-                                                                                    title: L10n.commonOffline,
-                                                                                    persistent: true))
-            }
-        }
-    }
-
-    private func handleAppRoute(_ appRoute: AppRoute) {
-        if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
-        } else {
-            storedAppRoute = appRoute
-        }
-    }
-    
-    private func clearCache() {
-        showLoadingIndicator()
-        
-        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-        
-        userSession.clientProxy.stopSync()
-        userSessionFlowCoordinator?.stop()
-        
-        let userID = userSession.userID
-        tearDownUserSession()
-    
-        // Allow for everything to deallocate properly
-        Task {
-            try await Task.sleep(for: .seconds(2))
-            userSessionStore.clearCache(for: userID)
-            stateMachine.processEvent(.startWithExistingSession)
-            hideLoadingIndicator()
-        }
-    }
-    
     // MARK: Background app refresh
     
     private func registerBackgroundAppRefresh() {
@@ -542,65 +596,5 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self?.stopSync()
                 task.setTaskCompleted(success: true)
             })
-    }
-}
-
-// MARK: - AuthenticationCoordinatorDelegate
-
-extension AppCoordinator: AuthenticationCoordinatorDelegate {
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
-        self.userSession = userSession
-        stateMachine.processEvent(.createdUserSession)
-    }
-}
-
-// MARK: - NotificationManagerDelegate
-
-extension AppCoordinator: NotificationManagerDelegate {
-    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
-        if granted {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-    }
-
-    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
-            return true
-        }
-        guard let userSessionFlowCoordinator else {
-            // there is not a user session yet
-            return false
-        }
-        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
-    }
-
-    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
-        MXLog.info("[AppCoordinator] tappedNotification")
-
-        guard let roomID = content.roomID,
-              content.receiverID != nil else {
-            return
-        }
-
-        // Handle here the account switching when available
-
-        handleAppRoute(.room(roomID: roomID))
-    }
-
-    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        MXLog.info("[AppCoordinator] handle notification reply")
-
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
-            return
-        }
-        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
-        switch await roomProxy?.sendMessage(replyText) {
-        case .success:
-            break
-        default:
-            // error or no room proxy
-            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
-                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
-        }
     }
 }
