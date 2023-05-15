@@ -17,4 +17,5 @@
 import ElementX
 import XCTest
 
+@MainActor
 class MediaUploadPreviewScreenUITests: XCTestCase { }

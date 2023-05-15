@@ -2,7 +2,7 @@ require 'yaml'
 require_relative 'changelog'
 
 before_all do
-  xcversion(version: "~> 14.1")
+  xcversion(version: "~> 14.3")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -142,6 +142,7 @@ lane :integration_tests do
     scheme: "IntegrationTests",
     devices: ["iPhone 13 Pro"],
     ensure_devices_found: true,
+    result_bundle: true
   )
 
   slather(

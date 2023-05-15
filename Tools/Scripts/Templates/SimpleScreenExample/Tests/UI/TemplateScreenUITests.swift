@@ -17,8 +17,9 @@
 import ElementX
 import XCTest
 
+@MainActor
 class TemplateScreenUITests: XCTestCase {
-    func testRegularScreen() {
+    func testRegularScreen() async throws {
         let app = Application.launch(.simpleRegular)
         
         let title = app.staticTexts["title"]
@@ -26,10 +27,10 @@ class TemplateScreenUITests: XCTestCase {
         
         XCTAssertEqual(title.label, "Make this chat public?")
 
-        app.assertScreenshot(.simpleRegular)
+        try await app.assertScreenshot(.simpleRegular)
     }
     
-    func testUpgradeScreen() {
+    func testUpgradeScreen() async throws {
         let app = Application.launch(.simpleUpgrade)
         
         let title = app.staticTexts["title"]
@@ -37,6 +38,6 @@ class TemplateScreenUITests: XCTestCase {
         
         XCTAssertEqual(title.label, "Privacy warning")
 
-        app.assertScreenshot(.simpleUpgrade)
+        try await app.assertScreenshot(.simpleUpgrade)
     }
 }

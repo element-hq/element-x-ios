@@ -17,29 +17,30 @@
 import ElementX
 import XCTest
 
+@MainActor
 class InvitesScreenUITests: XCTestCase {
-    func testInvitesWithNoBadges() {
+    func testInvitesWithNoBadges() async throws {
         let app = Application.launch(.invites)
-        app.assertScreenshot(.invites)
+        try await app.assertScreenshot(.invites)
     }
     
-    func testInvitesWithBadges() {
+    func testInvitesWithBadges() async throws {
         let app = Application.launch(.invitesWithBadges)
-        app.assertScreenshot(.invitesWithBadges)
+        try await app.assertScreenshot(.invitesWithBadges)
     }
     
-    func testNoInvites() {
+    func testNoInvites() async throws {
         let app = Application.launch(.invitesNoInvites)
         XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
-        app.assertScreenshot(.invitesNoInvites)
+        try await app.assertScreenshot(.invitesNoInvites)
     }
     
-    func testDeclineInvite() {
+    func testDeclineInvite() async throws {
         let app = Application.launch(.invites)
         let declineButton = app.buttons[A11yIdentifiers.invitesScreen.decline].firstMatch
         XCTAssert(declineButton.exists)
         declineButton.tap()
         XCTAssertEqual(app.alerts.count, 1)
-        app.assertScreenshot(.invites, step: 1)
+        try await app.assertScreenshot(.invites, step: 1)
     }
 }

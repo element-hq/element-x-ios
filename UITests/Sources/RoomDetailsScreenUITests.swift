@@ -17,28 +17,29 @@
 import ElementX
 import XCTest
 
+@MainActor
 class RoomDetailsScreenUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.roomDetailsScreen)
         
         XCTAssert(app.staticTexts[A11yIdentifiers.roomDetailsScreen.avatar].exists)
         XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.people].waitForExistence(timeout: 1))
-        app.assertScreenshot(.roomDetailsScreen)
+        try await app.assertScreenshot(.roomDetailsScreen)
     }
 
-    func testInitialStateComponentsWithRoomAvatar() {
+    func testInitialStateComponentsWithRoomAvatar() async throws {
         let app = Application.launch(.roomDetailsScreenWithRoomAvatar)
 
         XCTAssert(app.images[A11yIdentifiers.roomDetailsScreen.avatar].waitForExistence(timeout: 1))
         XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.people].waitForExistence(timeout: 1))
-        app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
+        try await app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
     }
 
-    func testInitialStateComponentsDmDetails() {
+    func testInitialStateComponentsDmDetails() async throws {
         let app = Application.launch(.roomDetailsScreenDmDetails)
 
         XCTAssert(app.images[A11yIdentifiers.roomDetailsScreen.dmAvatar].waitForExistence(timeout: 1))
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomDetailsScreen.people].exists)
-        app.assertScreenshot(.roomDetailsScreenDmDetails)
+        try await app.assertScreenshot(.roomDetailsScreenDmDetails)
     }
 }

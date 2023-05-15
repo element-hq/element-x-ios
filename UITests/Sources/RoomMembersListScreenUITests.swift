@@ -17,34 +17,35 @@
 import ElementX
 import XCTest
 
+@MainActor
 class RoomMembersListScreenUITests: XCTestCase {
-    func testJoinedMembers() {
+    func testJoinedMembers() async throws {
         let app = Application.launch(.roomMembersListScreen)
         
-        app.assertScreenshot(.roomMembersListScreen)
+        try await app.assertScreenshot(.roomMembersListScreen)
     }
     
-    func testJoinedAndInvitedMembers() {
+    func testJoinedAndInvitedMembers() async throws {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
-        app.assertScreenshot(.roomMembersListScreenPendingInvites)
+        try await app.assertScreenshot(.roomMembersListScreenPendingInvites)
     }
     
-    func testSearchInvitedMember() {
+    func testSearchInvitedMember() async throws {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
         searchBar.clearAndTypeText("alice\n")
         
-        app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
+        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
     }
     
-    func testSearchJoinedMember() {
+    func testSearchJoinedMember() async throws {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
         searchBar.clearAndTypeText("bob\n")
         
-        app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
+        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
     }
 }

@@ -19,20 +19,20 @@ import XCTest
 
 @MainActor
 class LoginScreenUITests: XCTestCase {
-    func testMatrixDotOrg() {
+    func testMatrixDotOrg() async throws {
         // Given the initial login screen which defaults to matrix.org.
         let app = Application.launch(.login)
-        app.assertScreenshot(.login)
+        try await app.assertScreenshot(.login)
         
         // When typing in a username and password.
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:matrix.org")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
         
         // Then the form should be ready to submit.
-        app.assertScreenshot(.login, step: 0)
+        try await app.assertScreenshot(.login, step: 0)
     }
     
-    func testOIDC() {
+    func testOIDC() async throws {
         // Given the initial login screen.
         let app = Application.launch(.login)
         
@@ -40,10 +40,10 @@ class LoginScreenUITests: XCTestCase {
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:company.com\n")
         
         // Then the screen should be configured for OIDC.
-        app.assertScreenshot(.login, step: 1)
+        try await app.assertScreenshot(.login, step: 1)
     }
     
-    func testUnsupported() {
+    func testUnsupported() async throws {
         // Given the initial login screen.
         let app = Application.launch(.login)
         
@@ -51,6 +51,6 @@ class LoginScreenUITests: XCTestCase {
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n")
         
         // Then the screen should not allow login to continue.
-        app.assertScreenshot(.login, step: 2)
+        try await app.assertScreenshot(.login, step: 2)
     }
 }

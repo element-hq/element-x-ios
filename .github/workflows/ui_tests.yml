@@ -9,7 +9,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: macos-12
+    runs-on: macos-13
 
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.

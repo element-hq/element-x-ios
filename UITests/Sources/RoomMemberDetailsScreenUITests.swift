@@ -17,28 +17,29 @@
 import ElementX
 import XCTest
 
+@MainActor
 class RoomMemberDetailsScreenUITests: XCTestCase {
-    func testInitialStateComponentsForAccountOwner() {
+    func testInitialStateComponentsForAccountOwner() async throws {
         let app = Application.launch(.roomMemberDetailsAccountOwner)
 
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.ignore].exists)
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.unignore].exists)
-        app.assertScreenshot(.roomMemberDetailsAccountOwner)
+        try await app.assertScreenshot(.roomMemberDetailsAccountOwner)
     }
 
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.roomMemberDetails)
 
         XCTAssert(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.ignore].waitForExistence(timeout: 1))
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.unignore].exists)
-        app.assertScreenshot(.roomMemberDetails)
+        try await app.assertScreenshot(.roomMemberDetails)
     }
 
-    func testInitialStateComponentsForIgnoredUser() {
+    func testInitialStateComponentsForIgnoredUser() async throws {
         let app = Application.launch(.roomMemberDetailsIgnoredUser)
 
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.ignore].exists)
         XCTAssert(app.buttons[A11yIdentifiers.roomMemberDetailsScreen.unignore].waitForExistence(timeout: 1))
-        app.assertScreenshot(.roomMemberDetailsIgnoredUser)
+        try await app.assertScreenshot(.roomMemberDetailsIgnoredUser)
     }
 }

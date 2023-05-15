@@ -20,7 +20,7 @@ import XCTest
 
 @MainActor
 class AuthenticationCoordinatorUITests: XCTestCase {
-    func testLoginWithPassword() {
+    func testLoginWithPassword() async throws {
         // Given the authentication flow.
         let app = Application.launch(.authenticationFlow)
         
@@ -32,13 +32,12 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
 
-        app.assertScreenshot(.authenticationFlow)
+        try await app.assertScreenshot(.authenticationFlow)
         
         // Login Screen: Tap next
         app.buttons[A11yIdentifiers.loginScreen.continue].tap()
-        
-        // Then login should succeed.
-        XCTAssertFalse(app.alerts.element.exists, "No alert should be shown when logging in with valid credentials.")
+
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 1.0), "The analytics prompt screen should be seen after login")
     }
     
     func testLoginWithIncorrectPassword() async throws {

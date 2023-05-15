@@ -17,9 +17,10 @@
 import ElementX
 import XCTest
 
+@MainActor
 class SettingsScreenUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.settings)
-        app.assertScreenshot(.settings)
+        try await app.assertScreenshot(.settings)
     }
 }

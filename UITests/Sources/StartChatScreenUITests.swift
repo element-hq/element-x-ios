@@ -17,26 +17,27 @@
 import ElementX
 import XCTest
 
+@MainActor
 class StartChatScreenUITests: XCTestCase {
-    func testLanding() {
+    func testLanding() async throws {
         let app = Application.launch(.startChat)
-        app.assertScreenshot(.startChat)
+        try await app.assertScreenshot(.startChat)
     }
     
-    func testSearchWithNoResults() {
+    func testSearchWithNoResults() async throws {
         let app = Application.launch(.startChat)
         let searchField = app.searchFields.firstMatch
         searchField.clearAndTypeText("None")
         XCTAssert(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
-        app.assertScreenshot(.startChat, step: 1)
+        try await app.assertScreenshot(.startChat, step: 1)
     }
     
-    func testSearchWithResults() {
+    func testSearchWithResults() async throws {
         let app = Application.launch(.startChatWithSearchResults)
         let searchField = app.searchFields.firstMatch
         searchField.clearAndTypeText("Bob")
         XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
         XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
-        app.assertScreenshot(.startChat, step: 2)
+        try await app.assertScreenshot(.startChat, step: 2)
     }
 }

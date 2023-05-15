@@ -18,8 +18,8 @@ import XCTest
 
 @MainActor
 class OnboardingUITests: XCTestCase {
-    func testInitialStateComponents() {
+    func testInitialStateComponents() async throws {
         let app = Application.launch(.onboarding)
-        app.assertScreenshot(.onboarding)
+        try await app.assertScreenshot(.onboarding)
     }
 }
