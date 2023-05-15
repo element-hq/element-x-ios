@@ -83,9 +83,10 @@ class RoomScreenUITests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
 
+        try await Task.sleep(for: .seconds(10)) // Allow the table to settle
         // Given a timeline that is neither at the top nor the bottom.
         app.tables.element.swipeDown()
-        try await Task.sleep(for: .seconds(5)) // Allow the table to settle
+        try await Task.sleep(for: .seconds(10)) // Allow the table to settle
         try await app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
@@ -138,11 +139,11 @@ class RoomScreenUITests: XCTestCase {
         defer { try? client.stop() }
 
         // Some time for the timeline to settle
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(10))
         // When an incoming message arrives.
         try await performOperation(.incomingMessage, using: client)
         // Some time for the timeline to settle
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(10))
         
         // Then the timeline should scroll down to reveal the message.
         try await app.assertScreenshot(.roomLayoutBottom, step: 0)
@@ -150,8 +151,6 @@ class RoomScreenUITests: XCTestCase {
         // When the keyboard appears for the message composer.
         try await tapMessageComposer(in: app)
 
-        try await Task.sleep(for: .seconds(2))
-        // Then the timeline should still show the last message.
         try await app.assertScreenshot(.roomLayoutBottom, step: 1)
     }
     
@@ -165,6 +164,6 @@ class RoomScreenUITests: XCTestCase {
     
     private func tapMessageComposer(in app: XCUIApplication) async throws {
         app.textViews.element.tap()
-        try await Task.sleep(for: .seconds(5)) // Allow the animations to complete
+        try await Task.sleep(for: .seconds(10)) // Allow the animations to complete
     }
 }
