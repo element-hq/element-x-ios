@@ -43,7 +43,7 @@ extension XCUIApplication {
 
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
         if delayInMilliseconds > 0 {
-            try await Task.sleep(for: .microseconds(delayInMilliseconds))
+            try await Task.sleep(for: .milliseconds(delayInMilliseconds))
         }
         var snapshot = XCUIScreen.main.screenshot().image
         
