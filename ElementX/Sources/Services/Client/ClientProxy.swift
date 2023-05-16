@@ -465,13 +465,16 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: visibleRoomsListProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                          name: visibleRoomsListProxy.name)
         
         allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: allRoomsListProxy,
-                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                      name: allRoomsListProxy.name)
         
         invitesSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: invitesListProxy,
-                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                     name: invitesListProxy.name)
     }
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),

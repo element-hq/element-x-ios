@@ -22,6 +22,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncListProxy: SlidingSyncListProxy
     private let serialDispatchQueue: DispatchQueue
     private let eventStringBuilder: RoomEventStringBuilder
+    private let name: String
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -47,10 +48,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncListProxy: SlidingSyncListProxy, eventStringBuilder: RoomEventStringBuilder) {
+    init(slidingSyncListProxy: SlidingSyncListProxy, eventStringBuilder: RoomEventStringBuilder, name: String) {
         self.slidingSyncListProxy = slidingSyncListProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
+        self.name = name
         
         rooms = slidingSyncListProxy.currentRoomsList().map { roomListEntry in
             buildSummaryForRoomListEntry(roomListEntry)
@@ -80,23 +82,23 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncListRoomsListDiff]) {
-        let span = MXLog.createSpan("process_room_list_diffs")
+        let span = MXLog.createSpan("\(name).process_room_list_diffs")
         span.enter()
         defer {
             span.exit()
         }
         
-        MXLog.info("Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.info("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
-                    MXLog.error("Failed building CollectionDifference from \(diff)")
+                    MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
                     return currentItems
                 }
                 
                 guard let updatedItems = currentItems.applying(collectionDiff) else {
-                    MXLog.error("Failed applying diff: \(collectionDiff)")
+                    MXLog.error("\(name): Failed applying diff: \(collectionDiff)")
                     return currentItems
                 }
                 
@@ -105,12 +107,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         detectDuplicatesInRoomList(rooms)
         
-        MXLog.info("Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        MXLog.info("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
         guard let room = try? slidingSyncListProxy.roomForIdentifier(identifier) else {
-            MXLog.error("Failed finding room with id: \(identifier)")
+            MXLog.error("\(name): Failed finding room with id: \(identifier)")
             return .empty
         }
         
@@ -160,36 +162,36 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         switch diff {
         case .pushFront(let value):
-            MXLog.info("Push Front \(value.debugIdentifier)")
+            MXLog.info("\(name): Push Front \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
-            MXLog.info("Push Back \(value.debugIdentifier)")
+            MXLog.info("\(name): Push Back \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .append(values: let values):
             let debugIdentifiers = values.map(\.debugIdentifier)
-            MXLog.info("Append \(debugIdentifiers)")
+            MXLog.info("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
                 let summary = buildSummaryForRoomListEntry(value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .set(let index, let value):
-            MXLog.info("Update \(value.debugIdentifier) at \(index)")
+            MXLog.info("\(name): Update \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .insert(let index, let value):
-            MXLog.info("Insert at \(value.debugIdentifier) at \(index)")
+            MXLog.info("\(name): Insert at \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
-            MXLog.info("Remove \(summary.id ?? "") from \(index)")
+            MXLog.info("\(name): Remove \(summary.id ?? "") from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
             let debugIdentifiers = values.map(\.debugIdentifier)
-            MXLog.info("Replace all items with \(debugIdentifiers)")
+            MXLog.info("\(name): Replace all items with \(debugIdentifiers)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
@@ -198,16 +200,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
             }
         case .clear:
-            MXLog.info("Clear all items")
+            MXLog.info("\(name): Clear all items")
             for (index, value) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
         case .popFront:
-            MXLog.info("Pop Front")
+            MXLog.info("\(name): Pop Front")
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .popBack:
-            MXLog.info("Pop Back")
+            MXLog.info("\(name): Pop Back")
             guard let value = rooms.last else {
                 fatalError()
             }
@@ -233,7 +235,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let duplicates = groupedRooms.filter { $1.count > 1 }
         
         if duplicates.count > 0 {
-            MXLog.error("Found duplicated room room list items: \(duplicates)")
+            MXLog.error("\(name): Found duplicated room room list items: \(duplicates)")
         }
     }
 }
