@@ -57,7 +57,7 @@ private class SlidingSyncListObserver: SlidingSyncListRoomListObserver, SlidingS
 }
 
 class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
-    private let name: String
+    let name: String
     private var slidingSync: SlidingSyncProtocol?
     private var slidingSyncList: SlidingSyncListProtocol?
     
