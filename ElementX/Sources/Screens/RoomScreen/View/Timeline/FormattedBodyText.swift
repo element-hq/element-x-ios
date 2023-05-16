@@ -43,10 +43,17 @@ struct FormattedBodyText: View {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .timelineQuoteBubbleFormatting()
+                        .foregroundColor(.compound.textPlaceholder)
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.element.background)
-                        .cornerRadius(8)
+                        .padding(.leading, 12.0)
+                        .overlay(alignment: .leading) {
+                            // User an overlay here so that the rectangle's infinite height doesn't take priority
+                            Rectangle()
+                                .frame(width: 2.0)
+                                .padding(.leading, 6.0)
+                                .foregroundColor(.compound.textPlaceholder)
+                        }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
                     Text(component.attributedString)
@@ -62,7 +69,8 @@ struct FormattedBodyText: View {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .timelineQuoteBubbleFormatting()
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
                         .hidden()
                 }
