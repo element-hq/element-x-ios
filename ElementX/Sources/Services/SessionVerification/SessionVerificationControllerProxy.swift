@@ -72,57 +72,47 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
         
-        return await Task.dispatch(on: .global()) {
-            do {
-                try self.sessionVerificationController.requestVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedRequestingVerification)
-            }
+        do {
+            try await sessionVerificationController.requestVerification()
+            return .success(())
+        } catch {
+            return .failure(.failedRequestingVerification)
         }
     }
     
     func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.sessionVerificationController.startSasVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedStartingSasVerification)
-            }
+        do {
+            try await sessionVerificationController.startSasVerification()
+            return .success(())
+        } catch {
+            return .failure(.failedStartingSasVerification)
         }
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.sessionVerificationController.approveVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedApprovingVerification)
-            }
+        do {
+            try await sessionVerificationController.approveVerification()
+            return .success(())
+        } catch {
+            return .failure(.failedApprovingVerification)
         }
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.sessionVerificationController.declineVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedDecliningVerification)
-            }
+        do {
+            try await sessionVerificationController.declineVerification()
+            return .success(())
+        } catch {
+            return .failure(.failedDecliningVerification)
         }
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
-                try self.sessionVerificationController.cancelVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedCancellingVerification)
-            }
+        do {
+            try await sessionVerificationController.cancelVerification()
+            return .success(())
+        } catch {
+            return .failure(.failedCancellingVerification)
         }
     }
     
