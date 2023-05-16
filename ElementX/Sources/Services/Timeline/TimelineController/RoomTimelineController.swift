@@ -101,14 +101,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        // Fetch replied-to event details if unavailable at the point of displaying it in the timeline
         if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
-            switch messageTimelineItem.replyDetails {
-            case .notLoaded, .error:
-                roomProxy.fetchDetails(for: timelineItem.id)
-            default:
-                break
-            }
+            fetchEventDetails(for: messageTimelineItem, refetchOnError: true)
         }
     }
     
@@ -275,7 +269,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func buildTimelineItem(for itemProxy: TimelineItemProxy, chunkIndex: Int) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            return timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
+            
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+                // Avoid fetching this over and over again as it changes states if it keeps failing to load
+                // Errors will be handled again on appearance
+                fetchEventDetails(for: messageTimelineItem, refetchOnError: false)
+            }
+            
+            return timelineItem
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):
@@ -312,5 +314,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         return false
+    }
+    
+    private func fetchEventDetails(for timelineItem: EventBasedMessageTimelineItemProtocol, refetchOnError: Bool) {
+        switch timelineItem.replyDetails {
+        case .notLoaded:
+            roomProxy.fetchDetails(for: timelineItem.id)
+        case .error:
+            if refetchOnError {
+                roomProxy.fetchDetails(for: timelineItem.id)
+            }
+        default:
+            break
+        }
     }
 }
