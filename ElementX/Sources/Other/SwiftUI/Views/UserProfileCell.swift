@@ -14,10 +14,12 @@
 // limitations under the License.
 //
 
+import MatrixRustSDK
 import SwiftUI
 
 struct UserProfileCell: View {
     let user: UserProfile
+    let membership: MembershipState?
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
@@ -36,7 +38,7 @@ struct UserProfileCell: View {
                     .foregroundColor(.element.primaryContent)
                 
                 if user.displayName != nil {
-                    Text(user.userID)
+                    Text(subtitle)
                         .font(.compound.bodyMD)
                         .foregroundColor(.element.tertiaryContent)
                 }
@@ -54,6 +56,43 @@ struct UserProfileCell: View {
                 }
             }
             .accessibilityElement(children: .combine)
+        }
+    }
+    
+    private var subtitle: String {
+        switch membership {
+        case .join:
+            return L10n.screenRoomDetailsAlreadyAMember
+        case .invite:
+            return L10n.screenRoomDetailsAlreadyInvited
+        default:
+            return user.userID
+        }
+    }
+}
+
+struct UserProfileCell_Previews: PreviewProvider {
+    static let action: () -> Void = { }
+    
+    static var previews: some View {
+        Form {
+            Button(action: action) {
+                UserProfileCell(user: .mockAlice, membership: nil, imageProvider: MockMediaProvider())
+            }
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+            .previewDisplayName("Selected user")
+
+            Button(action: action) {
+                UserProfileCell(user: .mockBob, membership: nil, imageProvider: MockMediaProvider())
+            }
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
+            .previewDisplayName("Unselected user")
+            
+            Button(action: action) {
+                UserProfileCell(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider())
+            }
+            .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+            .previewDisplayName("Selected disabled user")
         }
     }
 }

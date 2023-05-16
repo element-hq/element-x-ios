@@ -89,7 +89,7 @@ struct StartChatScreen: View {
             Section {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                     Button { context.send(viewAction: .selectUser(user)) } label: {
-                        UserProfileCell(user: user, imageProvider: context.imageProvider)
+                        UserProfileCell(user: user, membership: nil, imageProvider: context.imageProvider)
                     }
                     .buttonStyle(FormButtonStyle())
                 }

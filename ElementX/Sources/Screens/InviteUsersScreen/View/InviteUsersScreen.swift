@@ -69,9 +69,11 @@ struct InviteUsersScreen: View {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .toggleUser(user)) } label: {
                     UserProfileCell(user: user,
+                                    membership: context.viewState.membershipState(user),
                                     imageProvider: context.imageProvider)
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+                .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
+                                             accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
             }
         } header: {
             if let title = context.viewState.usersSection.title {

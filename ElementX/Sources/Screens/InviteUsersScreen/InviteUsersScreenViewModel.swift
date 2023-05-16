@@ -15,6 +15,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
@@ -42,6 +43,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             }
             .store(in: &cancellables)
         
+        buildMembershipStateIfNeeded()
         setupSubscriptions()
     }
     
@@ -55,6 +57,24 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             actionsSubject.send(.proceed)
         case .toggleUser(let user):
             actionsSubject.send(.toggleUser(user))
+        }
+    }
+    
+    private func buildMembershipStateIfNeeded() {
+        guard case .room(let members) = roomContext else {
+            return
+        }
+        
+        Task.detached { [members] in
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            let membershipState = members
+                .reduce(into: [String: MembershipState]()) { partialResult, member in
+                    partialResult[member.userID] = member.membership
+                }
+            
+            Task { @MainActor in
+                self.state.membershipState = membershipState
+            }
         }
     }
 

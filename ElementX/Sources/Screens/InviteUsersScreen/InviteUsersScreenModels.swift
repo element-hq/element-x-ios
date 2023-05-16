@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum InviteUsersScreenErrorType: Error {
     case unknown
@@ -37,6 +38,7 @@ struct InviteUsersScreenViewState: BindableState {
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     
     var selectedUsers: [UserProfile] = []
+    var membershipState: [String: MembershipState] = .init()
     
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
@@ -49,7 +51,16 @@ struct InviteUsersScreenViewState: BindableState {
     var scrollToLastID: String?
     
     func isUserSelected(_ user: UserProfile) -> Bool {
-        selectedUsers.contains { $0.userID == user.userID }
+        isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
+    }
+    
+    func isUserDisabled(_ user: UserProfile) -> Bool {
+        let membershipState = membershipState(user)
+        return membershipState == .invite || membershipState == .join
+    }
+    
+    func membershipState(_ user: UserProfile) -> MembershipState? {
+        membershipState[user.userID]
     }
     
     let isCreatingRoom: Bool
