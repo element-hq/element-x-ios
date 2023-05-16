@@ -348,7 +348,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             hideLoadingIndicator()
         }
         
-        userSession.clientProxy.stopSync()
+        stopSync()
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -462,7 +462,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
-        userSession.clientProxy.stopSync()
+        stopSync()
         userSessionFlowCoordinator?.stop()
         
         let userID = userSession.userID
@@ -498,8 +498,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     // MARK: - Application State
 
-    private func stopSync() {
-        userSession?.clientProxy.stopSync()
+    private func stopSync(completionHandler: (() -> Void)? = nil) {
+        userSession?.clientProxy.stopSync(completionHandler: completionHandler)
     }
 
     private func startSync() {
@@ -544,9 +544,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             guard let self else { return }
             
-            stopSync()
-        
-            backgroundTask = nil
+            stopSync { [weak self] in
+                guard let self else { return }
+                backgroundTask?.stop()
+                backgroundTask = nil
+            }
+
             isSuspended = true
         }
         

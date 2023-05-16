@@ -43,7 +43,7 @@ class MockClientProxy: ClientProxyProtocol {
     
     func startSync() { }
     
-    func stopSync() { }
+    func stopSync(completionHandler: (() -> Void)?) { }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         .failure(.failedRetrievingDirectRoom)

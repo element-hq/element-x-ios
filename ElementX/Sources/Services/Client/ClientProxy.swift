@@ -162,10 +162,20 @@ class ClientProxy: ClientProxyProtocol {
         slidingSyncObserverToken = slidingSync?.sync()
     }
     
-    func stopSync() {
+    func stopSync(completionHandler: (() -> Void)?) {
+        guard let slidingSyncObserverToken else {
+            MXLog.info("No sync is present")
+            return
+        }
+
         MXLog.info("Stopping sync")
-        slidingSyncObserverToken?.cancel()
-        slidingSyncObserverToken = nil
+        slidingSyncObserverToken.cancel()
+
+        Task {
+            while !slidingSyncObserverToken.isFinished() { }
+            self.slidingSyncObserverToken = nil
+            completionHandler?()
+        }
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -178,7 +188,7 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-    
+
     func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
