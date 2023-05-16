@@ -4561,7 +4561,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.64-alpha";
+				version = "0.0.1-paginate-only-with-token";
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
@@ -4577,7 +4577,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = b4f34edce9003ba1fde31500312f317b728f4ee3;
+				revision = a6aec9a77bf008c86a296ba17d60005b5a8bfae4;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
