@@ -131,7 +131,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 TimelineReplyView(timelineItemReplyDetails: replyDetails)
-                    .timelineQuoteBubbleFormatting()
+                    .foregroundColor(.compound.textPlaceholder)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.element.background)
                     .cornerRadius(8)
@@ -139,7 +141,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 
                 // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
                 TimelineReplyView(timelineItemReplyDetails: replyDetails)
-                    .timelineQuoteBubbleFormatting()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
                     .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
                     .hidden()
             }

@@ -71,11 +71,3 @@ struct TimelineBubbleLayout: Layout {
         }
     }
 }
-
-extension View {
-    func timelineQuoteBubbleFormatting() -> some View {
-        foregroundColor(.compound.textPlaceholder)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(4.0)
-    }
-}
