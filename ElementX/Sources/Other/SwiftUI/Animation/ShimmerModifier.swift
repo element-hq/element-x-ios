@@ -43,7 +43,8 @@ struct ShimmerModifier: ViewModifier {
         content
             .mask { gradient }
             .task {
-                withAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
+                // This is the only way to disable this animation for UI Tests
+                withAnimation(Tests.isRunningUITests ? .none : .linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
                     animationTrigger.toggle()
                 }
             }

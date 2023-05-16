@@ -21,6 +21,6 @@ class HomeScreenUITests: XCTestCase {
     func testInitialStateComponents() async throws {
         let app = Application.launch(.home)
         // The gradient of the skeleton canges dynamically over time so the time may influence the match, better to have a lower precision for this one
-        try await app.assertScreenshot(.home, delayInMilliseconds: 1000, precision: 0.95)
+        try await app.assertScreenshot(.home)
     }
 }
