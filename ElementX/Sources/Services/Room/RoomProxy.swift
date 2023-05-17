@@ -33,7 +33,9 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     
-    private var timelineObservationToken: TaskHandle?
+    private var roomSubscriptionObservationToken: TaskHandle?
+    private var roomUnsubscriptionObservationToken: TaskHandle?
+    private var roomTimelineObservationToken: TaskHandle?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
@@ -142,8 +144,10 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
-        if let result = try? slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: settings) {
-            timelineObservationToken = result.taskHandle
+        roomSubscriptionObservationToken = slidingSyncRoom.subscribeToRoom(settings: settings)
+        
+        if let result = try? slidingSyncRoom.addTimelineListener(listener: listener) {
+            roomTimelineObservationToken = result.taskHandle
             Task {
                 await fetchMembers()
                 await updateMembers()
@@ -155,8 +159,12 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func removeTimelineListener() {
-        timelineObservationToken?.cancel()
-        timelineObservationToken = nil
+        roomTimelineObservationToken?.cancel()
+        roomTimelineObservationToken = nil
+        
+        roomSubscriptionObservationToken = nil
+        
+        roomUnsubscriptionObservationToken = slidingSyncRoom.unsubscribeFromRoom()
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
