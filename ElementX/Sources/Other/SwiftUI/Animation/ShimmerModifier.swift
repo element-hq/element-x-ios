@@ -43,7 +43,7 @@ struct ShimmerModifier: ViewModifier {
         content
             .mask { gradient }
             .task {
-                withAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
+                withElementAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
                     animationTrigger.toggle()
                 }
             }

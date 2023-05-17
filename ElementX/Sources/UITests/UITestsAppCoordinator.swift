@@ -24,7 +24,9 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
     
     init() {
+        // disabling View animations
         UIView.setAnimationsEnabled(false)
+
         navigationRootCoordinator = NavigationRootCoordinator()
         
         ServiceLocator.shared.register(userIndicatorController: MockUserIndicatorController())
@@ -37,6 +39,14 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
+        // disabling CA animations
+        UIApplication.shared.connectedScenes.forEach { scene in
+            guard let delegate = scene.delegate as? UIWindowSceneDelegate else {
+                return
+            }
+            delegate.window??.layer.speed = 0
+        }
+        
         guard let screenID = Tests.screenID else { fatalError("Unable to launch with unknown screen.") }
         
         let mockScreen = MockScreen(id: screenID)
