@@ -27,6 +27,7 @@ struct RoomDetailsScreenCoordinatorParameters {
 enum RoomDetailsScreenCoordinatorAction {
     case cancel
     case leftRoom
+    case invite(users: [String], in: RoomProxyProtocol)
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
@@ -91,13 +92,15 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
         coordinator.actions.sink { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .proceed:
                 break
             case .invite(let users):
-                #warning("Invite users here")
+                callback?(.invite(users: users, in: self.parameters.roomProxy))
             case .toggleUser(let user):
-                self?.toggleUser(user)
+                self.toggleUser(user)
             }
         }
         .store(in: &cancellables)

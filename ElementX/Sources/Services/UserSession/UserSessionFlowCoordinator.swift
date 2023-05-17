@@ -210,6 +210,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 switch action {
                 case .leftRoom:
                     self?.dismissRoom()
+                case let .invite(users, room):
+                    self?.inviteUsers(users, in: room)
                 }
             }
             
@@ -273,6 +275,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 case .cancel, .leftRoom:
                     self?.stateMachine.processEvent(.deselectRoom)
                     self?.detailNavigationStackCoordinator.setRootCoordinator(nil)
+                case .invite(let users, let room):
+                    self?.inviteUsers(users, in: room)
                 }
             }
             
@@ -409,5 +413,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.closedInvitesScreen)
         }
+    }
+    
+    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
+        detailNavigationStackCoordinator.setSheetCoordinator(nil)
     }
 }
