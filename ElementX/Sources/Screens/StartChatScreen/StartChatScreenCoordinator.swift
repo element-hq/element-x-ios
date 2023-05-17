@@ -89,10 +89,10 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch result {
-            case .close:
-                parameters.navigationStackCoordinator?.pop()
             case .proceed:
                 openCreateRoomScreen()
+            case .invite:
+                break
             case .toggleUser(let user):
                 toggleUser(user)
             }

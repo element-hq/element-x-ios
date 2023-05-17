@@ -47,10 +47,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
-        case .close:
-            actionsSubject.send(.close)
         case .proceed:
-            actionsSubject.send(.proceed)
+            switch roomType {
+            case .draft:
+                actionsSubject.send(.proceed)
+            case .room:
+                actionsSubject.send(.invite(users: state.selectedUsers.map(\.userID)))
+            }
         case .toggleUser(let user):
             actionsSubject.send(.toggleUser(user))
         }

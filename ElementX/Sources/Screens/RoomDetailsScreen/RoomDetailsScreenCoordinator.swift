@@ -92,10 +92,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         coordinator.actions.sink { [weak self] result in
             switch result {
-            case .close:
-                break
             case .proceed:
                 break
+            case .invite(let users):
+                #warning("Invite users here")
             case .toggleUser(let user):
                 self?.toggleUser(user)
             }

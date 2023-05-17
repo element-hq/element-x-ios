@@ -22,8 +22,8 @@ enum InviteUsersScreenErrorType: Error {
 }
 
 enum InviteUsersScreenViewModelAction {
-    case close
     case proceed
+    case invite(users: [String])
     case toggleUser(UserProfile)
 }
 
@@ -86,7 +86,6 @@ struct InviteUsersScreenViewStateBindings {
 }
 
 enum InviteUsersScreenViewAction {
-    case close
     case proceed
     case toggleUser(UserProfile)
 }
