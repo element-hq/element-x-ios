@@ -170,10 +170,10 @@ class ClientProxy: ClientProxyProtocol {
 
         MXLog.info("Stopping sync")
         slidingSyncObserverToken.cancel()
+        self.slidingSyncObserverToken = nil
 
         Task {
             while !slidingSyncObserverToken.isFinished() { }
-            self.slidingSyncObserverToken = nil
             completionHandler?()
         }
     }
