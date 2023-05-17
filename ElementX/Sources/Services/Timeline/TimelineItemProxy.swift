@@ -57,7 +57,7 @@ struct EventTimelineItemProxy {
         guard let localSendState = item.localSendState() else { return nil }
         
         switch localSendState {
-        case .notSendYet:
+        case .notSentYet:
             return .sending
         case .sendingFailed:
             return .sendingFailed

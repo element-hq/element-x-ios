@@ -62,6 +62,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private var slidingSyncObserverToken: TaskHandle?
     private var slidingSync: SlidingSyncProtocol?
+    private var slidingSyncTasks = [TaskHandle?]()
     
     var visibleRoomsListBuilder: SlidingSyncListBuilder?
     var visibleRoomsListProxy: SlidingSyncListProxy?
@@ -532,14 +533,14 @@ class ClientProxy: ClientProxyProtocol {
 
         if let allRoomsListBuilder {
             MXLog.info("Registering all rooms view")
-            _ = slidingSync?.addList(listBuilder: allRoomsListBuilder)
+            slidingSyncTasks.append(slidingSync?.addList(listBuilder: allRoomsListBuilder))
         } else {
             MXLog.error("All rooms sliding sync view unavailable")
         }
 
         if let invitesListBuilder {
             MXLog.info("Registering invites view")
-            _ = slidingSync?.addList(listBuilder: invitesListBuilder)
+            slidingSyncTasks.append(slidingSync?.addList(listBuilder: invitesListBuilder))
         } else {
             MXLog.error("Invites sliding sync view unavailable")
         }
@@ -547,7 +548,7 @@ class ClientProxy: ClientProxyProtocol {
         if ServiceLocator.shared.settings.enableLocalPushNotifications {
             if let notificationsListBuilder {
                 MXLog.info("Registering notifications view")
-                _ = slidingSync?.addList(listBuilder: notificationsListBuilder)
+                slidingSyncTasks.append(slidingSync?.addList(listBuilder: notificationsListBuilder))
             } else {
                 MXLog.error("Notifications sliding sync view unavailable")
             }
