@@ -541,18 +541,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
 
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            guard let self else { return }
-            
-            stopSync { [weak self] in
-                guard let self else { return }
-                backgroundTask?.stop()
-                backgroundTask = nil
-            }
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)")
 
-            isSuspended = true
+        stopSync { [weak self] in
+            guard let self else { return }
+            backgroundTask?.stop()
+            backgroundTask = nil
         }
-        
+        isSuspended = true
+
         // This does seem to work if scheduled from the background task above
         // Schedule it here instead but with an earliest being date of 30 seconds
         scheduleBackgroundAppRefresh()
