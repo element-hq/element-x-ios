@@ -433,7 +433,7 @@ class MockScreen: Identifiable {
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomContext: .draftRoom, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
+            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: .draft, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
             coordinator.actions.sink { action in
                 switch action {
                 case .toggleUser(let user):

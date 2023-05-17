@@ -83,7 +83,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     
     private func presentInviteUsersScreen(members: [RoomMemberProxyProtocol]) {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
-                                                                      roomContext: .room(members: members),
+                                                                      roomType: .room(members: members),
                                                                       mediaProvider: parameters.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)

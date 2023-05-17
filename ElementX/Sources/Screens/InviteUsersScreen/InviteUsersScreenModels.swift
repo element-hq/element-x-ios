@@ -27,8 +27,8 @@ enum InviteUsersScreenViewModelAction {
     case toggleUser(UserProfile)
 }
 
-enum InviteUsersScreenRoomContext {
-    case draftRoom
+enum InviteUsersScreenRoomType {
+    case draft
     case room(members: [RoomMemberProxyProtocol])
 }
 

@@ -126,7 +126,7 @@ struct InviteUsersScreen_Previews: PreviewProvider {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        return InviteUsersScreenViewModel(selectedUsers: .init([]), roomContext: .draftRoom, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
+        return InviteUsersScreenViewModel(selectedUsers: .init([]), roomType: .draft, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
     }()
     
     static var previews: some View {

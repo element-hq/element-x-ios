@@ -19,7 +19,7 @@ import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
     let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
-    let roomContext: InviteUsersScreenRoomContext
+    let roomType: InviteUsersScreenRoomType
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
@@ -44,7 +44,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers,
-                                               roomContext: parameters.roomContext,
+                                               roomType: parameters.roomType,
                                                mediaProvider: parameters.mediaProvider,
                                                userDiscoveryService: parameters.userDiscoveryService)
     }

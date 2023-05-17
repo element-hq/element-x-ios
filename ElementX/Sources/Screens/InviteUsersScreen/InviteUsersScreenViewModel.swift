@@ -23,7 +23,7 @@ typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreen
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
-    private let roomContext: InviteUsersScreenRoomContext
+    private let roomType: InviteUsersScreenRoomType
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
@@ -31,13 +31,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>,
-         roomContext: InviteUsersScreenRoomContext,
+         roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol) {
-        self.roomContext = roomContext
+        self.roomType = roomType
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomContext.isCreatingRoom), imageProvider: mediaProvider)
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
         buildMembershipStateIfNeeded()
         setupSubscriptions(selectedUsers: selectedUsers)
@@ -57,7 +57,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func buildMembershipStateIfNeeded() {
-        guard case .room(let members) = roomContext else {
+        guard case .room(let members) = roomType else {
             return
         }
         
@@ -133,10 +133,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
 }
 
-private extension InviteUsersScreenRoomContext {
+private extension InviteUsersScreenRoomType {
     var isCreatingRoom: Bool {
         switch self {
-        case .draftRoom:
+        case .draft:
             return true
         case .room:
             return false
