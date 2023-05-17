@@ -29,7 +29,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var backgroundTask: BackgroundTaskProtocol?
     private var isSuspended = false
     
-    private var userSession: UserSessionProtocol! {
+    private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
             
@@ -156,6 +156,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         MXLog.info("[AppCoordinator] handle notification reply")
         
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
@@ -266,6 +270,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
 
     private func startAuthenticationSoftLogout() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         Task {
             var displayName = ""
             if case .success(let name) = await userSession.clientProxy.loadUserDisplayName() {
@@ -299,6 +307,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func setupUserSession() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
@@ -326,6 +338,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func logout(isSoft: Bool) {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         showLoadingIndicator()
         
         defer {
@@ -395,6 +411,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func observeUserSessionChanges() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         userSessionObserver = userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
@@ -434,6 +454,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func clearCache() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
         showLoadingIndicator()
         
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
@@ -479,7 +503,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
 
     private func startSync() {
-        userSession?.clientProxy.startSync()
+        // We don't fatal error here because background app refreshes might be scheduled before the session is setup
+        guard let userSession else { return }
+        
+        userSession.clientProxy.startSync()
         
         let identifier = "StaleDataIndicator"
         
