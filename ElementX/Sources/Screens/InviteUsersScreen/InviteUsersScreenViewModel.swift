@@ -30,21 +30,17 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>, userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
-        self.userSession = userSession
-    init(mediaProvider: MediaProviderProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
+    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>,
+         roomContext: InviteUsersScreenRoomContext,
+         mediaProvider: MediaProviderProtocol,
+         userDiscoveryService: UserDiscoveryServiceProtocol) {
+        self.roomContext = roomContext
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value), imageProvider: userSession.mediaProvider)
-        
-        selectedUsers
-            .sink { [weak self] users in
-                self?.state.selectedUsers = users
-            }
-            .store(in: &cancellables)
-        
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomContext.isCreatingRoom), imageProvider: mediaProvider)
+                
         buildMembershipStateIfNeeded()
-        setupSubscriptions()
+        setupSubscriptions(selectedUsers: selectedUsers)
     }
     
     // MARK: - Public
@@ -80,7 +76,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
 
     // MARK: - Private
     
-    private func setupSubscriptions() {
+    @CancellableTask
+    private var fetchUsersTask: Task<Void, Never>?
+    
+    private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceAndRemoveDuplicates()
@@ -88,10 +87,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 self?.fetchUsers()
             }
             .store(in: &cancellables)
+        
+        selectedUsers
+            .sink { [weak self] users in
+                self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
     }
-    
-    @CancellableTask
-    private var fetchUsersTask: Task<Void, Never>?
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {

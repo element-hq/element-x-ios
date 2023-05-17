@@ -33,6 +33,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsScreenCoordinatorParameters
     private var viewModel: RoomDetailsScreenViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
+    private let selectedUsers: CurrentValueSubject<[UserProfile], Never> = .init([])
     private var navigationStackCoordinator: NavigationStackCoordinator {
         parameters.navigationStackCoordinator
     }
@@ -81,19 +82,36 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentInviteUsersScreen(members: [RoomMemberProxyProtocol]) {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(mediaProvider: parameters.mediaProvider, userDiscoveryService: parameters.userDiscoveryService, roomContext: .room(members: members))
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
+                                                                      roomContext: .room(members: members),
+                                                                      mediaProvider: parameters.mediaProvider,
+                                                                      userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         let navigationStackCoordinator = NavigationStackCoordinator()
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
-        coordinator.actions.sink { result in
+        coordinator.actions.sink { [weak self] result in
             switch result {
             case .close:
                 break
+            case .proceed:
+                break
+            case .toggleUser(let user):
+                self?.toggleUser(user)
             }
         }
         .store(in: &cancellables)
         
         parameters.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
+    }
+    
+    private func toggleUser(_ user: UserProfile) {
+        var selectedUsers = selectedUsers.value
+        if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+            selectedUsers.remove(at: index)
+        } else {
+            selectedUsers.append(user)
+        }
+        self.selectedUsers.send(selectedUsers)
     }
 }

@@ -80,9 +80,10 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession,
-                                                                      userDiscoveryService: parameters.userDiscoveryService,
-                                                                      selectedUsers: selectedUsersPublisher)
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: selectedUsersPublisher,
+                                                                      roomContext: .draftRoom,
+                                                                      mediaProvider: parameters.userSession.mediaProvider,
+                                                                      userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] result in
             guard let self else { return }

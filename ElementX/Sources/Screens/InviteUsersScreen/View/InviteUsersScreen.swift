@@ -123,11 +123,10 @@ struct InviteUsersScreen: View {
 
 struct InviteUsersScreen_Previews: PreviewProvider {
     static let viewModel = {
-        let mediaProvider = MockMediaProvider()
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        return InviteUsersScreenViewModel(selectedUsers: .init([]), userSession: userSession, userDiscoveryService: userDiscoveryService)
+        return InviteUsersScreenViewModel(selectedUsers: .init([]), roomContext: .draftRoom, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
     }()
     
     static var previews: some View {
