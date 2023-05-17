@@ -88,7 +88,10 @@ struct TimelineReplyView: View {
         @ViewBuilder
         private var icon: some View {
             if let mediaSource {
-                LoadableImage(mediaSource: mediaSource, size: .init(width: imageContainerSize, height: imageContainerSize), imageProvider: context.imageProvider) {
+                LoadableImage(mediaSource: mediaSource,
+                              size: .init(width: imageContainerSize,
+                                          height: imageContainerSize),
+                              imageProvider: context.imageProvider) {
                     Image(systemName: "photo")
                         .padding(4.0)
                 }
