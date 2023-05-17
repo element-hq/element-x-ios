@@ -417,5 +417,36 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
         detailNavigationStackCoordinator.setSheetCoordinator(nil)
+        
+        Task {
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await room.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            #warning("Show error here")
+        }
+    }
+}
+
+private extension Result {
+    var isFailure: Bool {
+        switch self {
+        case .success:
+            return false
+        case .failure:
+            return true
+        }
     }
 }
