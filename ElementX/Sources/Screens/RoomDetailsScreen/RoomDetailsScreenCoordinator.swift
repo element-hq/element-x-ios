@@ -89,12 +89,14 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentInviteUsersScreen(members: [RoomMemberProxyProtocol]) {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
-                                                                      roomType: .room(members: members),
+                                                                      roomType: .room(members: members, userIndicatorController: userIndicatorController),
                                                                       mediaProvider: parameters.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService)
+        
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
-        let navigationStackCoordinator = NavigationStackCoordinator()
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
         coordinator.actions.sink { [weak self] result in
@@ -111,7 +113,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
+        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
     private func toggleUser(_ user: UserProfile) {

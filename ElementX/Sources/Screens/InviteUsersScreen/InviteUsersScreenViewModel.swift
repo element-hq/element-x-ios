@@ -60,9 +60,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func buildMembershipStateIfNeeded() {
-        guard case .room(let members) = roomType else {
+        guard case let .room(members, userIndicatorController) = roomType else {
             return
         }
+        let indicatorID = UUID().uuidString
+        userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
         
         Task.detached { [members] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
@@ -73,6 +75,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             
             Task { @MainActor in
                 self.state.membershipState = membershipState
+                userIndicatorController.retractIndicatorWithId(indicatorID)
             }
         }
     }
