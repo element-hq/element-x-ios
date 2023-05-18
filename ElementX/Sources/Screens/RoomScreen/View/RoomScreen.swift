@@ -29,7 +29,8 @@ struct RoomScreen: View {
                     RoomAttachmentPicker(context: context)
                     messageComposer
                 }
-                .padding()
+                .padding([.horizontal, .bottom])
+                .padding(.top, 8)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }

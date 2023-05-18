@@ -37,7 +37,7 @@ enum TimelineItemProxy {
 /// The delivery status for the item.
 enum TimelineItemDeliveryStatus: Hashable {
     case sending
-    case sent(elapsedTime: TimeInterval)
+    case sent
     case sendingFailed
 }
 
@@ -54,7 +54,9 @@ struct EventTimelineItemProxy {
     }
     
     var deliveryStatus: TimelineItemDeliveryStatus? {
-        guard let localSendState = item.localSendState() else { return nil }
+        guard let localSendState = item.localSendState() else {
+            return nil
+        }
         
         switch localSendState {
         case .notSentYet:
@@ -62,7 +64,7 @@ struct EventTimelineItemProxy {
         case .sendingFailed:
             return .sendingFailed
         case .sent:
-            return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
+            return .sent
         }
     }
         
@@ -108,6 +110,10 @@ struct EventTimelineItemProxy {
     var debugInfo: TimelineItemDebugInfo {
         let debugInfo = item.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
+    }
+
+    var readReceipts: [String: Receipt] {
+        item.readReceipts()
     }
 }
 
@@ -160,5 +166,14 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
         }
         
         return String(data: jsonData, encoding: .utf8)
+    }
+}
+
+extension Receipt {
+    var dateTimestamp: Date? {
+        guard let timestamp else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
     }
 }

@@ -16,45 +16,27 @@
 
 import SwiftUI
 struct TimelineDeliveryStatusView: View {
-    let deliveryStatus: TimelineItemDeliveryStatus
-    
-    @State var showDeliveryStatus: Bool
-    
+    enum Status {
+        case sending
+        case sent
+    }
+
+    let deliveryStatus: Status
+
     private var systemImageName: String {
         switch deliveryStatus {
         case .sending:
             return "circle"
         case .sent:
             return "checkmark.circle"
-        case .sendingFailed:
-            return "exclamationmark.circle"
-        }
-    }
-    
-    init(deliveryStatus: TimelineItemDeliveryStatus) {
-        self.deliveryStatus = deliveryStatus
-        
-        switch deliveryStatus {
-        case .sending, .sendingFailed:
-            showDeliveryStatus = true
-        case let .sent(elapsedTime: elapsedTime):
-            showDeliveryStatus = elapsedTime < 3
         }
     }
     
     var body: some View {
         Image(systemName: systemImageName)
             .resizable()
-            .frame(width: 12.0, height: 12.0)
-            .opacity(showDeliveryStatus ? 1.0 : 0.0)
-            .task {
-                if case .sent = deliveryStatus {
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    withAnimation {
-                        showDeliveryStatus = false
-                    }
-                }
-            }
+            .foregroundColor(.element.secondaryContent)
+            .frame(width: 16.0, height: 16.0)
     }
 }
 
@@ -62,7 +44,7 @@ struct TimelineDeliveryStatusView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             TimelineDeliveryStatusView(deliveryStatus: .sending)
-            TimelineDeliveryStatusView(deliveryStatus: .sent(elapsedTime: Date().timeIntervalSince1970))
+            TimelineDeliveryStatusView(deliveryStatus: .sent)
         }
     }
 }
