@@ -25,25 +25,73 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
-    private let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
     private var cancellables: Set<AnyCancellable> = []
     
     var context: InviteUsersScreenViewModel.Context {
         viewModel.context
     }
     
-    override func setUpWithError() throws {
+    func testSelectUser() {
+        setupWithRoomType(roomType: .draft)
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        XCTAssertTrue(context.viewState.selectedUsers.count == 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+    }
+    
+    func testReselectUser() {
+        setupWithRoomType(roomType: .draft)
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+    }
+    
+    func testDeselectUser() {
+        setupWithRoomType(roomType: .draft)
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        context.send(viewAction: .toggleUser(.mockAlice))
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+    }
+     
+    func testInviteButton() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
+        setupWithRoomType(roomType: .room(members: mockedMembers, userIndicatorController: MockUserIndicatorController()))
+        _ = await viewModel.context.$viewState.values.first(where: { $0.membershipState.isEmpty == false })
+        context.send(viewAction: .toggleUser(.mockAlice))
+        
+        Task {
+            await Task.yield()
+            context.send(viewAction: .proceed)
+        }
+        
+        let action = await viewModel.actions.values.first()
+        
+        guard case let .invite(members) = action else {
+            XCTFail("Sent action should be 'invite'")
+            return
+        }
+        
+        XCTAssertEqual(members, [RoomMemberProxyMock.mockAlice.userID])
+    }
+    
+    private func setupWithRoomType(roomType: InviteUsersScreenRoomType) {
+        let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
         clientProxy = .init(userID: "")
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         usersSubject.send([])
-        let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: .draft, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
+        let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
         
-        viewModel.actions.sink { [weak self] action in
-            guard let self else { return }
+        viewModel.actions.sink { action in
             switch action {
             case .toggleUser(let user):
                 var selectedUsers = usersSubject.value
@@ -58,30 +106,5 @@ class InviteUsersScreenViewModelTests: XCTestCase {
             }
         }
         .store(in: &cancellables)
-    }
-    
-    func testSelectUser() {
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.count == 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-    }
-    
-    func testReselectUser() {
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-    }
-    
-    func testDeselectUser() {
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-        context.send(viewAction: .toggleUser(.mockAlice))
-        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
 }
