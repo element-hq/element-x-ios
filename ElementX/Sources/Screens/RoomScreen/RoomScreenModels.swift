@@ -20,7 +20,7 @@ import UIKit
 
 enum RoomScreenViewModelAction {
     case displayRoomDetails
-    case displayMediaFile(file: MediaFileHandleProxy, title: String?)
+    case displayMediaViewer(file: MediaFileHandleProxy, title: String?)
     case displayEmojiPicker(itemID: String)
     case displayReportContent(itemID: String, senderID: String)
     case displayCameraPicker

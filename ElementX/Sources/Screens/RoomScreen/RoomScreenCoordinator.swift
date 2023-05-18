@@ -14,30 +14,34 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
-    let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let emojiProvider: EmojiProviderProtocol
-    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
-    case leftRoom
+    case presentMediaViewer(file: MediaFileHandleProxy, title: String?)
+    case presentReportContent(itemID: String, senderID: String)
+    case presentMediaUploadPicker(MediaPickerScreenSource)
+    case presentMediaUploadPreviewScreen(URL)
+    case presentRoomDetails
+    case presentEmojiPicker(itemID: String)
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
 
     private var viewModel: RoomScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator {
-        parameters.navigationStackCoordinator
-    }
 
-    var callback: ((RoomScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<RoomScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -55,21 +59,21 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .displayRoomDetails:
-                self.displayRoomDetails()
-            case .displayMediaFile(let file, let title):
-                self.displayFilePreview(for: file, with: title)
+                actionsSubject.send(.presentRoomDetails)
+            case .displayMediaViewer(let file, let title):
+                actionsSubject.send(.presentMediaViewer(file: file, title: title))
             case .displayEmojiPicker(let itemID):
-                self.displayEmojiPickerScreen(for: itemID)
+                actionsSubject.send(.presentEmojiPicker(itemID: itemID))
             case .displayReportContent(let itemID, let senderID):
-                self.displayReportContent(for: itemID, from: senderID)
+                actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
             case .displayCameraPicker:
-                self.displayMediaPickerWithSource(.camera)
+                actionsSubject.send(.presentMediaUploadPicker(.camera))
             case .displayMediaPicker:
-                self.displayMediaPickerWithSource(.photoLibrary)
+                actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
             case .displayDocumentPicker:
-                self.displayMediaPickerWithSource(.documents)
+                actionsSubject.send(.presentMediaUploadPicker(.documents))
             case .displayMediaUploadPreviewScreen(let url):
-                self.displayMediaUploadPreviewScreenForFile(at: url)
+                actionsSubject.send(.presentMediaUploadPreviewScreen(url))
             }
         }
     }
@@ -80,124 +84,5 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(RoomScreen(context: viewModel.context))
-    }
-    
-    // MARK: - Private
-    
-    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
-        let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
-        
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
-            switch action {
-            case .cancel:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            case .selectMediaAtURL(let url):
-                self?.displayMediaUploadPreviewScreenForFile(at: url)
-            }
-        }
-        
-        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
-        
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
-    }
-    
-    private func displayMediaUploadPreviewScreenForFile(at url: URL) {
-        let stackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
-        
-        let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
-                                                                       roomProxy: parameters.roomProxy,
-                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
-                                                                       title: url.lastPathComponent,
-                                                                       url: url)
-        
-        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters) { [weak self] action in
-            switch action {
-            case .dismiss:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            }
-        }
-        
-        stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
-        
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
-    }
-
-    private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
-        let params = FilePreviewScreenCoordinatorParameters(mediaFile: file, title: title)
-        let coordinator = FilePreviewScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] _ in
-            self?.navigationStackCoordinator.pop()
-        }
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-    
-    private func displayEmojiPickerScreen(for itemId: String) {
-        let emojiPickerNavigationStackCoordinator = NavigationStackCoordinator()
-        
-        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: parameters.emojiProvider,
-                                                            itemId: itemId)
-        let coordinator = EmojiPickerScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] action in
-            switch action {
-            case let .emojiSelected(emoji: emoji, itemId: itemId):
-                MXLog.debug("Selected \(emoji) for \(itemId)")
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
-                Task {
-                    await self?.parameters.timelineController.sendReaction(emoji, to: itemId)
-                }
-            case .dismiss:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            }
-        }
-        
-        emojiPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
-        emojiPickerNavigationStackCoordinator.presentationDetents = [.medium, .large]
-        
-        navigationStackCoordinator.setSheetCoordinator(emojiPickerNavigationStackCoordinator)
-    }
-    
-    private func displayRoomDetails() {
-        let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                            roomProxy: parameters.roomProxy,
-                                                            mediaProvider: parameters.mediaProvider,
-                                                            userDiscoveryService: parameters.userDiscoveryService)
-        let coordinator = RoomDetailsScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] action in
-            switch action {
-            case .cancel:
-                self?.navigationStackCoordinator.pop()
-            case .leftRoom:
-                self?.callback?(.leftRoom)
-            }
-        }
-
-        navigationStackCoordinator.push(coordinator)
-    }
-    
-    private func displayReportContent(for itemID: String, from senderID: String) {
-        let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
-        let parameters = ReportContentScreenCoordinatorParameters(itemID: itemID,
-                                                                  senderID: senderID,
-                                                                  roomProxy: parameters.roomProxy,
-                                                                  userIndicatorController: userIndicatorController)
-        let coordinator = ReportContentScreenCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] completion in
-            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            switch completion {
-            case .cancel: break
-            case .finish:
-                self?.showSuccess(label: L10n.commonReportSubmitted)
-            }
-        }
-        navigationCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
-    }
-
-    private func showSuccess(label: String) {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
     }
 }

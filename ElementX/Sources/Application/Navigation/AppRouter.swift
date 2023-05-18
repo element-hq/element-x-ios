@@ -19,7 +19,9 @@ import Foundation
 import URLRouting
 
 enum AppRoute {
+    case roomList
     case room(roomID: String)
+    case roomDetails(roomID: String)
 }
 
 struct AppRouterManager {

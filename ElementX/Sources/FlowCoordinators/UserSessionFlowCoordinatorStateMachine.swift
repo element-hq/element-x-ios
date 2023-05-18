@@ -41,6 +41,10 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing invites list screen
         case invitesScreen(selectedRoomId: String?)
     }
+    
+    struct EventUserInfo {
+        let animated: Bool
+    }
 
     /// Events that can be triggered on the AppCoordinator state machine
     enum Event: EventType {
@@ -77,9 +81,6 @@ class UserSessionFlowCoordinatorStateMachine {
         case showInvitesScreen
         /// The invites screen has been dismissed
         case closedInvitesScreen
-        
-        /// Request presentation of the settings of a specific room
-        case selectRoomDetails(roomId: String)
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -101,8 +102,12 @@ class UserSessionFlowCoordinatorStateMachine {
             switch (event, fromState) {
             case (.selectRoom(let roomId), .roomList):
                 return .roomList(selectedRoomId: roomId)
+            case (.selectRoom(let roomId), .invitesScreen):
+                return .invitesScreen(selectedRoomId: roomId)
             case (.deselectRoom, .roomList):
                 return .roomList(selectedRoomId: nil)
+            case (.deselectRoom, .invitesScreen):
+                return .invitesScreen(selectedRoomId: nil)
 
             case (.showSettingsScreen, .roomList(let selectedRoomId)):
                 return .settingsScreen(selectedRoomId: selectedRoomId)
@@ -128,14 +133,7 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .invitesScreen(selectedRoomId: selectedRoomId)
             case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
-            case (.selectRoom(let roomId), .invitesScreen):
-                return .invitesScreen(selectedRoomId: roomId)
-            case (.deselectRoom, .invitesScreen):
-                return .invitesScreen(selectedRoomId: nil)
                 
-            case (.selectRoomDetails(let roomId), .roomList):
-                return .roomList(selectedRoomId: roomId)
-
             default:
                 return nil
             }
@@ -175,8 +173,4 @@ class UserSessionFlowCoordinatorStateMachine {
             return false
         }
     }
-}
-
-struct EventUserInfo {
-    let animated: Bool
 }

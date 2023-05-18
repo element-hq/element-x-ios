@@ -16,7 +16,7 @@ options:
     - pattern: ElementX
       order: [Sources, Resources, SupportingFiles]
     - pattern: Sources
-      order: [Application, UserSession, Services, Screens, Other, UITests]
+      order: [Application, UserSession, Services, FlowCoordinators, Screens, Other, UITests]
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
