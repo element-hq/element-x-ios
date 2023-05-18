@@ -76,7 +76,7 @@ struct UserProfileCell: View {
     }
 }
 
-extension MembershipState {
+private extension MembershipState {
     var localizedDescription: String? {
         switch self {
         case .join:

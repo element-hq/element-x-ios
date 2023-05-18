@@ -92,7 +92,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
         coordinator.actions.sink { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .proceed:
