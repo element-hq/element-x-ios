@@ -27,7 +27,6 @@ struct RoomScreenCoordinatorParameters {
 
 enum RoomScreenCoordinatorAction {
     case leftRoom
-    case invite(users: [String], in: RoomProxyProtocol)
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -174,8 +173,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self?.navigationStackCoordinator.pop()
             case .leftRoom:
                 self?.callback?(.leftRoom)
-            case let .invite(users, room):
-                self?.callback?(.invite(users: users, in: room))
             }
         }
 

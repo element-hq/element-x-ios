@@ -27,7 +27,6 @@ struct RoomDetailsScreenCoordinatorParameters {
 enum RoomDetailsScreenCoordinatorAction {
     case cancel
     case leftRoom
-    case invite(users: [String], in: RoomProxyProtocol)
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
@@ -98,7 +97,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             case .proceed:
                 break
             case .invite(let users):
-                callback?(.invite(users: users, in: self.parameters.roomProxy))
+                self.inviteUsers(users, in: parameters.roomProxy)
             case .toggleUser(let user):
                 self.toggleUser(user)
             }
@@ -116,5 +115,42 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             selectedUsers.append(user)
         }
         self.selectedUsers.send(selectedUsers)
+    }
+    
+    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
+        navigationStackCoordinator.setSheetCoordinator(nil)
+        
+        Task {
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await room.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.commonUnableToInviteTitle,
+                                                                            message: L10n.commonUnableToInviteMessage)
+        }
+    }
+}
+
+private extension Result {
+    var isFailure: Bool {
+        switch self {
+        case .success:
+            return false
+        case .failure:
+            return true
+        }
     }
 }

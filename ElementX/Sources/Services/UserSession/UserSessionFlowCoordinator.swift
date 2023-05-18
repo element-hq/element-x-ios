@@ -210,8 +210,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 switch action {
                 case .leftRoom:
                     self?.dismissRoom()
-                case let .invite(users, room):
-                    self?.inviteUsers(users, in: room)
                 }
             }
             
@@ -275,8 +273,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 case .cancel, .leftRoom:
                     self?.stateMachine.processEvent(.deselectRoom)
                     self?.detailNavigationStackCoordinator.setRootCoordinator(nil)
-                case .invite(let users, let room):
-                    self?.inviteUsers(users, in: room)
                 }
             }
             
@@ -412,43 +408,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.closedInvitesScreen)
-        }
-    }
-    
-    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
-        detailNavigationStackCoordinator.setSheetCoordinator(nil)
-        
-        Task {
-            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
-                for user in users {
-                    group.addTask {
-                        await room.invite(userID: user)
-                    }
-                }
-                
-                return await group.first { inviteResult in
-                    inviteResult.isFailure
-                } ?? .success(())
-            }
-            
-            guard case .failure = result else {
-                return
-            }
-            
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.commonUnableToInviteTitle,
-                                                                            message: L10n.commonUnableToInviteMessage)
-        }
-    }
-}
-
-private extension Result {
-    var isFailure: Bool {
-        switch self {
-        case .success:
-            return false
-        case .failure:
-            return true
         }
     }
 }
