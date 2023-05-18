@@ -43,7 +43,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             }
             callback?(.selectMember(member))
         case .invite:
-            break
+            callback?(.invite)
         }
     }
     

@@ -18,6 +18,7 @@ import Foundation
 
 enum RoomMembersListScreenViewModelAction {
     case selectMember(_ member: RoomMemberProxyProtocol)
+    case invite
 }
 
 struct RoomMembersListScreenViewState: BindableState {

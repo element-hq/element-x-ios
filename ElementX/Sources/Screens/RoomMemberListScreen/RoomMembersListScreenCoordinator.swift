@@ -22,7 +22,9 @@ struct RoomMembersListScreenCoordinatorParameters {
     let members: [RoomMemberProxyProtocol]
 }
 
-enum RoomMembersListScreenCoordinatorAction { }
+enum RoomMembersListScreenCoordinatorAction {
+    case invite
+}
 
 final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMembersListScreenCoordinatorParameters
@@ -45,6 +47,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
             switch action {
             case let .selectMember(member):
                 self.selectMember(member)
+            case .invite:
+                callback?(.invite)
             }
         }
     }
