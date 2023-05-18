@@ -20,17 +20,22 @@ import SwiftUI
 typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, CreateRoomViewAction>
 
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
+    private let userSession: UserSessionProtocol
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     private var createRoomParameters: CreateRoomFlowParameters
-
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    
     var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(userSession: UserSessionProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol?,
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
          selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
         let parameters = createRoomParameters.value
+        self.userSession = userSession
+        self.userIndicatorController = userIndicatorController
         self.createRoomParameters = parameters
         let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
@@ -50,7 +55,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     override func process(viewAction: CreateRoomViewAction) {
         switch viewAction {
         case .createRoom:
-            actionsSubject.send(.createRoom)
+            Task {
+                await createRoom()
+            }
         case .deselectUser(let user):
             actionsSubject.send(.deselectUser(user))
         }
@@ -70,5 +77,49 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
+    }
+    
+    private func displayError(_ type: ClientProxyError) {
+        switch type {
+        case .failedCreatingRoom:
+            state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
+                                                 title: L10n.commonError,
+                                                 message: L10n.screenStartChatErrorStartingChat)
+        case .failedSearchingUsers:
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
+        default:
+            break
+        }
+    }
+    
+    private var clientProxy: ClientProxyProtocol {
+        userSession.clientProxy
+    }
+    
+    private func createRoom() async {
+        showLoadingIndicator()
+        let result = await clientProxy.createRoom(with: createRoomParameters, users: state.selectedUsers)
+        hideLoadingIndicator()
+        switch result {
+        case .success(let roomId):
+            actionsSubject.send(.openRoom(withIdentifier: roomId))
+        case .failure(let failure):
+            displayError(failure)
+        }
+    }
+    
+    // MARK: Loading indicator
+    
+    private static let loadingIndicatorIdentifier = "CreateRoomLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                               type: .modal,
+                                                               title: L10n.commonLoading,
+                                                               persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

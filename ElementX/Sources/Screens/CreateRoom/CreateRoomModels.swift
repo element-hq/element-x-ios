@@ -16,8 +16,13 @@
 
 import Foundation
 
+enum CreateRoomScreenErrorType: Error {
+    case failedCreatingRoom
+    case unknown
+}
+
 enum CreateRoomViewModelAction {
-    case createRoom
+    case openRoom(withIdentifier: String)
     case deselectUser(UserProfile)
     case updateDetails(CreateRoomFlowParameters)
 }
@@ -35,6 +40,9 @@ struct CreateRoomViewStateBindings {
     var roomName: String
     var roomTopic: String
     var isRoomPrivate: Bool
+    
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
 }
 
 enum CreateRoomViewAction {

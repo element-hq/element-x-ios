@@ -57,6 +57,10 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedCreatingRoom)
     }
     
+    func createRoom(with parameters: CreateRoomFlowParameters, users: [UserProfile]) async -> Result<String, ClientProxyError> {
+        .failure(.failedCreatingRoom)
+    }
+    
     var roomForIdentifierMocks: [String: RoomProxyMock] = .init()
     @MainActor
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {

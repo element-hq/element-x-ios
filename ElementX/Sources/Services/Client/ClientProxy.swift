@@ -205,6 +205,25 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func createRoom(with parameters: CreateRoomFlowParameters, users: [UserProfile]) async -> Result<String, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                let parameters = CreateRoomParameters(name: parameters.name,
+                                                      topic: parameters.topic,
+                                                      isEncrypted: parameters.isRoomPrivate,
+                                                      isDirect: false,
+                                                      visibility: parameters.isRoomPrivate ? .private : .public,
+                                                      preset: parameters.isRoomPrivate ? .privateChat : .publicChat,
+                                                      invite: users.map(\.userID),
+                                                      avatar: nil)
+                let roomId = try self.client.createRoom(request: parameters)
+                return .success(roomId)
+            } catch {
+                return .failure(.failedCreatingRoom)
+            }
+        }
+    }
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)
