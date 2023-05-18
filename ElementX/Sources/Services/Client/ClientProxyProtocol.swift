@@ -81,10 +81,16 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var invitesSummaryProvider: RoomSummaryProviderProtocol? { get }
+
+    var isSyncing: Bool { get }
     
     func startSync()
-    
-    func stopSync(completionHandler: (() -> Void)?)
+
+    /// Stops the sync usiung non escaping closure.
+    /// It's supposed to be used for the expiration handlers to guarantee its synchronous execution
+    func stopSync(completionHandler: () -> Void)
+
+    func stopSync()
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     

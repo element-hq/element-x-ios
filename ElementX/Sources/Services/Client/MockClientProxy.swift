@@ -33,6 +33,8 @@ class MockClientProxy: ClientProxyProtocol {
     var invitesSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
+
+    var isSyncing: Bool { false }
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
@@ -43,7 +45,9 @@ class MockClientProxy: ClientProxyProtocol {
     
     func startSync() { }
     
-    func stopSync(completionHandler: (() -> Void)?) { }
+    func stopSync(completionHandler: () -> Void) { }
+
+    func stopSync() { }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         .failure(.failedRetrievingDirectRoom)

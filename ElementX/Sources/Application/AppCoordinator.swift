@@ -498,8 +498,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     // MARK: - Application State
 
-    private func stopSync(completionHandler: (() -> Void)? = nil) {
-        userSession?.clientProxy.stopSync(completionHandler: completionHandler)
+    private func stopSync() {
+        userSession?.clientProxy.stopSync()
     }
 
     private func startSync() {
@@ -536,18 +536,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     @objc
     private func applicationWillResignActive() {
         MXLog.info("Application will resign active")
-        
+
         guard backgroundTask == nil else {
             return
         }
 
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)")
-
-        stopSync { [weak self] in
-            guard let self else { return }
-            backgroundTask?.stop()
-            backgroundTask = nil
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+            self?.userSession?.clientProxy.stopSync { [weak self] in
+                guard let self else { return }
+                backgroundTask?.stop()
+                backgroundTask = nil
+            }
         }
+
         isSuspended = true
 
         // This does seem to work if scheduled from the background task above
@@ -562,10 +563,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask?.stop()
         backgroundTask = nil
 
-        if isSuspended {
-            isSuspended = false
+        if isSuspended, userSession?.clientProxy.isSyncing == false {
             startSync()
         }
+
+        isSuspended = false
     }
     
     // MARK: Background app refresh
