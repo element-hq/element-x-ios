@@ -98,7 +98,8 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         powerLevel: 50,
                                         normalizedPowerLevel: 50,
-                                        isAccountOwner: true))
+                                        isAccountOwner: true,
+                                        canInviteUsers: true))
     }
 
     static var mockIgnored: RoomMemberProxyMock {

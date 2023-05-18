@@ -180,4 +180,38 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
     }
+    
+    func testCannotInvitePeople() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        await context.nextViewState()
+        
+        XCTAssertFalse(context.viewState.canInviteUsers)
+    }
+    
+    func testInvitePeople() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        await context.nextViewState()
+        
+        XCTAssertTrue(context.viewState.canInviteUsers)
+        
+        var callbackCorrectlyCalled = false
+        viewModel.callback = { action in
+            switch action {
+            case .requestInvitePeoplePresentation(let members):
+                callbackCorrectlyCalled = members.map(\.userID) == mockedMembers.map(\.userID)
+            default:
+                callbackCorrectlyCalled = false
+            }
+        }
+        
+        context.send(viewAction: .processTapInvite)
+        await Task.yield()
+        XCTAssertTrue(callbackCorrectlyCalled)
+    }
 }
