@@ -29,4 +29,10 @@ class InviteUsersScreenUITests: XCTestCase {
         app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
         try await app.assertScreenshot(.inviteUsers, step: 1)
     }
+    
+    func testInviteUsers() async throws {
+        let app = Application.launch(.inviteUsersExistingRoom)
+        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        try await app.assertScreenshot(.inviteUsersExistingRoom, step: 1)
+    }
 }

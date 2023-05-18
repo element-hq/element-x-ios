@@ -439,7 +439,7 @@ class MockScreen: Identifiable {
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .inviteUsers:
+        case .inviteUsers, .inviteUsersExistingRoom:
             ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
@@ -447,7 +447,8 @@ class MockScreen: Identifiable {
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: .draft, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
+            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: [], userIndicatorController: MockUserIndicatorController())
+            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
             coordinator.actions.sink { action in
                 switch action {
                 case .toggleUser(let user):
