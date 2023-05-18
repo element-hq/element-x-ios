@@ -542,10 +542,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            self?.userSession?.clientProxy.stopSync { [weak self] in
-                guard let self else { return }
-                backgroundTask?.stop()
-                backgroundTask = nil
+            guard let self else {
+                return
+            }
+            userSession?.clientProxy.stopSync {
+                // No need to weakify self, this is a non escaping closure
+                self.backgroundTask?.stop()
+                self.backgroundTask = nil
             }
         }
 
