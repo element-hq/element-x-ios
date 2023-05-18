@@ -1,1 +1,0 @@
-Users can accept and decline invites.

@@ -1,1 +1,0 @@
-Migrate strings to Localazy, remove Android strings and use UntranslatedL10n to be clear when strings won't be translated.

@@ -1,1 +1,0 @@
-Added DM Details View.

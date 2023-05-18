@@ -1,1 +1,0 @@
-Enabled Push Notifications with static text.

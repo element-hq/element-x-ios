@@ -1,1 +1,0 @@
-Ignore User functionality added in the Room Member Details View.

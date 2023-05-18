@@ -1,1 +1,0 @@
-Fix all broken snapshot tests follow strings update. Use double-length pseudolanguage instead of German to avoid translators breaking tests. 

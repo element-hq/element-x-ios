@@ -1,1 +1,0 @@
-Added the Room Member Details Screen.

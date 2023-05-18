@@ -1,1 +1,0 @@
-Select members before creating a room (UI for selection)

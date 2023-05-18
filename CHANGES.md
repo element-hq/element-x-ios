@@ -1,3 +1,72 @@
+## Changes in 1.1.0 (2023-05-18)
+
+✨ Features
+
+- Add the entry point for the Start a new Chat flow, with button on home Screen and first page ([#680](https://github.com/vector-im/element-x-ios/pull/680))
+- Show or create direct message room ([#716](https://github.com/vector-im/element-x-ios/pull/716))
+- Add background app refresh support ([#892](https://github.com/vector-im/element-x-ios/pull/892))
+- Adopt compound-ios on the Settings and Bug Report screens. ([#43](https://github.com/vector-im/element-x-ios/issues/43))
+- Set up Analytics to track data. ([#106](https://github.com/vector-im/element-x-ios/issues/106))
+- Add Localazy to the project for strings. ([#124](https://github.com/vector-im/element-x-ios/issues/124))
+- Add user search when creating a new dm room. ([#593](https://github.com/vector-im/element-x-ios/issues/593))
+- Add invites list (UI only) ([#605](https://github.com/vector-im/element-x-ios/issues/605))
+- Users can accept and decline invites. ([#621](https://github.com/vector-im/element-x-ios/issues/621))
+- Added unread badges in the invites list. ([#714](https://github.com/vector-im/element-x-ios/issues/714))
+- Added the Room Member Details Screen. ([#723](https://github.com/vector-im/element-x-ios/issues/723))
+- Ignore User functionality added in the Room Member Details View. ([#733](https://github.com/vector-im/element-x-ios/issues/733))
+- Added DM Details View. ([#738](https://github.com/vector-im/element-x-ios/issues/738))
+- Enabled Push Notifications with static text. ([#759](https://github.com/vector-im/element-x-ios/issues/759))
+- Select members before creating a room (UI for selection) ([#766](https://github.com/vector-im/element-x-ios/issues/766))
+- Local notifications support, these can also be decrypted and shown as rich push notifications. ([#813](https://github.com/vector-im/element-x-ios/issues/813))
+- Remote Push Notifications can now be displayed as rich push notifications. ([#855](https://github.com/vector-im/element-x-ios/issues/855))
+- Create a room screen (UI only) ([#877](https://github.com/vector-im/element-x-ios/issues/877))
+
+🙌 Improvements
+
+- Bump the SDK version and fix breaking changes. ([#703](https://github.com/vector-im/element-x-ios/pull/703))
+- Updated dependencies, and added a tool to check for outdated ones. ([#721](https://github.com/vector-im/element-x-ios/pull/721))
+- Add test plans for other test targets. ([#740](https://github.com/vector-im/element-x-ios/pull/740))
+- change name to nil in direct room parameters ([#758](https://github.com/vector-im/element-x-ios/pull/758))
+- Guard user suggestions behind feature flag so that they don't impact releasability of other room creation features ([#770](https://github.com/vector-im/element-x-ios/pull/770))
+- Remove styling for developer toggles ([#771](https://github.com/vector-im/element-x-ios/pull/771))
+- Use iOS localization handling for strings. ([#803](https://github.com/vector-im/element-x-ios/pull/803))
+- Analytics: reset user's consents on logout. ([#816](https://github.com/vector-im/element-x-ios/pull/816))
+- Use the existing quote bubble layout with TimelineReplyView. ([#883](https://github.com/vector-im/element-x-ios/pull/883))
+- Use Compound fonts everywhere. Allow the search bar to be styled. ([#43](https://github.com/vector-im/element-x-ios/issues/43))
+- Add Block user toggle to Report Content screen. ([#115](https://github.com/vector-im/element-x-ios/issues/115))
+- Migrate strings to Localazy, remove Android strings and use UntranslatedL10n to be clear when strings won't be translated. ([#124](https://github.com/vector-im/element-x-ios/issues/124))
+- Move media file loading logic to the SDK. ([#316](https://github.com/vector-im/element-x-ios/issues/316))
+- Bump SDK version and fix breaking changes. ([#709](https://github.com/vector-im/element-x-ios/issues/709))
+- Animations are disabled when tapping on an animations when the app is in background. ([#776](https://github.com/vector-im/element-x-ios/issues/776))
+- Removed the about title copy from the people section. ([#777](https://github.com/vector-im/element-x-ios/issues/777))
+- Move search users into UserProvider service ([#789](https://github.com/vector-im/element-x-ios/issues/789))
+
+🐛 Bugfixes
+
+- Hides the scroll down button for VoiceOver users if it is hidden for visual users by Sem Pruijs ([#670](https://github.com/vector-im/element-x-ios/pull/670))
+- Hide the avatars when the users has larger font on by Sem Pruijs ([#690](https://github.com/vector-im/element-x-ios/pull/690))
+- Hide the message composer textfield placeholder for VoiceOver users by Sem Pruijs ([#695](https://github.com/vector-im/element-x-ios/pull/695))
+- Fix incorrect state string. ([#704](https://github.com/vector-im/element-x-ios/pull/704))
+- Use a local copy of the accent colour in the asset catalog so it is applied to Alerts, Xcode previews etc. ([#43](https://github.com/vector-im/element-x-ios/issues/43))
+- Fix all broken snapshot tests follow strings update. Use double-length pseudolanguage instead of German to avoid translators breaking tests. ([#124](https://github.com/vector-im/element-x-ios/issues/124))
+- Fixed room previews failing to load because of incorrect sliding sync view ranges ([#641](https://github.com/vector-im/element-x-ios/issues/641))
+- Fixed room list not loading in offline mode ([#676](https://github.com/vector-im/element-x-ios/issues/676))
+- Fixed incorrect link detection and handling in the timeline ([#687](https://github.com/vector-im/element-x-ios/issues/687))
+- Fixed a bug that prevented the right localisation to be used when the preferred language locale contained a region identifier. ([#764](https://github.com/vector-im/element-x-ios/issues/764))
+- Fixed a bug that crashed the app when tapping on push notifications while the app was in some specific unhandled screens. ([#779](https://github.com/vector-im/element-x-ios/issues/779))
+- Display the room list even if the room count is not exact. ([#796](https://github.com/vector-im/element-x-ios/issues/796))
+- Notifications are now handled when the app is in a killed state. ([#802](https://github.com/vector-im/element-x-ios/issues/802))
+- Fixed a bug that did not render the sender icon of a dm sometimes. ([#863](https://github.com/vector-im/element-x-ios/issues/863))
+
+📄 Documentation
+
+- Update the link of the element ios room to be the element x ios support room in CONTRIBUTING.md and README.md by Sem Pruijs ([#668](https://github.com/vector-im/element-x-ios/pull/668))
+
+🚧 In development 🚧
+
+- Remove AppAuth library and prepare for Rust OIDC. ([#261](https://github.com/vector-im/element-x-ios/issues/261))
+
+
 ## Changes in 1.0.24 (2023-03-10)
 
 ✨ Features

@@ -1,1 +1,0 @@
-Fixed a bug that prevented the right localisation to be used when the preferred language locale contained a region identifier.
