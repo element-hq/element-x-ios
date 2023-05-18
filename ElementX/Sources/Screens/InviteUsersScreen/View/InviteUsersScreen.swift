@@ -47,6 +47,7 @@ struct InviteUsersScreen: View {
                     EmptyView()
                 } header: {
                     selectedUsersSection
+                        .textCase(.none)
                 }
             }
             if context.viewState.hasEmptySearchResults {
