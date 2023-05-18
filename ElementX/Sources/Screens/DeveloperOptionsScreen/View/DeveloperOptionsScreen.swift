@@ -31,7 +31,7 @@ struct DeveloperOptionsScreen: View {
                 }
                 
                 Toggle(isOn: $context.startChatFlowEnabled) {
-                    Text("Show Start Chat flow")
+                    Text("Show start chat flow")
                 }
                 .onChange(of: context.startChatFlowEnabled) { _ in
                     context.send(viewAction: .changedStartChatFlowEnabled)
@@ -45,10 +45,17 @@ struct DeveloperOptionsScreen: View {
                 }
                                 
                 Toggle(isOn: $context.invitesFlowEnabled) {
-                    Text("Show Invites flow")
+                    Text("Show invites flow")
                 }
                 .onChange(of: context.invitesFlowEnabled) { _ in
                     context.send(viewAction: .changedInvitesFlowEnabled)
+                }
+                
+                Toggle(isOn: $context.inviteMorePeopleFlowEnabled) {
+                    Text("Show invite more people flow")
+                }
+                .onChange(of: context.inviteMorePeopleFlowEnabled) { _ in
+                    context.send(viewAction: .changedInviteMorePeopleFlowEnabled)
                 }
             }
             

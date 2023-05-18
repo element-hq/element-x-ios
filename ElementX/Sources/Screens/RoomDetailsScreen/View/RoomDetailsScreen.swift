@@ -130,7 +130,7 @@ struct RoomDetailsScreen: View {
                     }
                 }
                 
-                if context.viewState.canInviteUsers {
+                if context.viewState.canInviteUsers, ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled {
                     Button {
                         context.send(viewAction: .processTapInvite)
                     } label: {

@@ -30,6 +30,7 @@ final class AppSettings {
         case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
         case invitesFlowEnabled
+        case inviteMorePeopleFlowEnabled
         case readReceiptsEnabled
     }
     
@@ -187,6 +188,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
     var invitesFlowEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.inviteMorePeopleFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var inviteMorePeopleFlowEnabled
 
     // MARK: Receipts
 

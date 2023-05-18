@@ -21,16 +21,20 @@ typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOpt
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
     var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
     
+    private let appSettings: AppSettings
+    
     init() {
-        let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: ServiceLocator.shared.settings.shouldCollapseRoomStateEvents,
-                                                               startChatFlowEnabled: ServiceLocator.shared.settings.startChatFlowEnabled,
-                                                               startChatUserSuggestionsEnabled: ServiceLocator.shared.settings.startChatUserSuggestionsEnabled,
-                                                               invitesFlowEnabled: ServiceLocator.shared.settings.invitesFlowEnabled)
+        appSettings = ServiceLocator.shared.settings
+        let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
+                                                               startChatFlowEnabled: appSettings.startChatFlowEnabled,
+                                                               startChatUserSuggestionsEnabled: appSettings.startChatUserSuggestionsEnabled,
+                                                               invitesFlowEnabled: appSettings.invitesFlowEnabled,
+                                                               inviteMorePeopleFlowEnabled: appSettings.inviteMorePeopleFlowEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
         
-        ServiceLocator.shared.settings.$shouldCollapseRoomStateEvents
+        appSettings.$shouldCollapseRoomStateEvents
             .weakAssign(to: \.state.bindings.shouldCollapseRoomStateEvents, on: self)
             .store(in: &cancellables)
     }
@@ -38,13 +42,15 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     override func process(viewAction: DeveloperOptionsScreenViewAction) {
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
-            ServiceLocator.shared.settings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
+            appSettings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
         case .changedStartChatFlowEnabled:
-            ServiceLocator.shared.settings.startChatFlowEnabled = state.bindings.startChatFlowEnabled
+            appSettings.startChatFlowEnabled = state.bindings.startChatFlowEnabled
         case .changedStartChatUserSuggestionsEnabled:
-            ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = state.bindings.startChatUserSuggestionsEnabled
+            appSettings.startChatUserSuggestionsEnabled = state.bindings.startChatUserSuggestionsEnabled
         case .changedInvitesFlowEnabled:
-            ServiceLocator.shared.settings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
+            appSettings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
+        case .changedInviteMorePeopleFlowEnabled:
+            appSettings.inviteMorePeopleFlowEnabled = state.bindings.inviteMorePeopleFlowEnabled
         case .clearCache:
             callback?(.clearCache)
         }
