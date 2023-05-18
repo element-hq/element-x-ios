@@ -22,11 +22,12 @@ struct RoomMemberProxyMockConfiguration {
     var displayName: String
     var avatarURL: URL?
     var membership: MembershipState
-    var isNameAmbiguous: Bool
+    var isNameAmbiguous = false
     var powerLevel: Int
     var normalizedPowerLevel: Int
-    var isAccountOwner: Bool
-    var isIgnored: Bool
+    var isAccountOwner = false
+    var isIgnored = false
+    var canInviteUsers = false
 }
 
 extension RoomMemberProxyMock {
@@ -41,6 +42,7 @@ extension RoomMemberProxyMock {
         normalizedPowerLevel = configuration.normalizedPowerLevel
         isAccountOwner = configuration.isAccountOwner
         isIgnored = configuration.isIgnored
+        canInviteUsers = configuration.canInviteUsers
     }
 
     // Mocks
@@ -49,11 +51,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Alice",
                                         avatarURL: nil,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
-                                        isIgnored: false))
+                                        normalizedPowerLevel: 50))
     }
     
     static var mockInvitedAlice: RoomMemberProxyMock {
@@ -61,11 +60,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Alice",
                                         avatarURL: nil,
                                         membership: .invite,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
-                                        isIgnored: false))
+                                        normalizedPowerLevel: 50))
     }
 
     static var mockBob: RoomMemberProxyMock {
@@ -73,11 +69,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Bob",
                                         avatarURL: nil,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
-                                        isIgnored: false))
+                                        normalizedPowerLevel: 50))
     }
 
     static var mockCharlie: RoomMemberProxyMock {
@@ -85,11 +78,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Charlie",
                                         avatarURL: nil,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
-                                        isIgnored: false))
+                                        normalizedPowerLevel: 50))
     }
 
     static var mockDan: RoomMemberProxyMock {
@@ -97,11 +87,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Dan",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
-                                        isIgnored: false))
+                                        normalizedPowerLevel: 50))
     }
 
     static var mockMe: RoomMemberProxyMock {
@@ -109,11 +96,9 @@ extension RoomMemberProxyMock {
                                         displayName: "Me",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
                                         normalizedPowerLevel: 50,
-                                        isAccountOwner: true,
-                                        isIgnored: false))
+                                        isAccountOwner: true))
     }
 
     static var mockIgnored: RoomMemberProxyMock {
@@ -121,10 +106,8 @@ extension RoomMemberProxyMock {
                                         displayName: "Ignored",
                                         avatarURL: nil,
                                         membership: .join,
-                                        isNameAmbiguous: false,
                                         powerLevel: 50,
                                         normalizedPowerLevel: 50,
-                                        isAccountOwner: false,
                                         isIgnored: true))
     }
 }
