@@ -435,7 +435,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 return
             }
             
-            #warning("Show error here")
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.commonUnableToInviteTitle,
+                                                                            message: L10n.commonUnableToInviteMessage)
         }
     }
 }

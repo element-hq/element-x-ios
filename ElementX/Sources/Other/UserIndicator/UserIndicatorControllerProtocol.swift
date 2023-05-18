@@ -20,4 +20,5 @@ protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
     func submitIndicator(_ indicator: UserIndicator)
     func retractIndicatorWithId(_ id: String)
     func retractAllIndicators()
+    var alertInfo: AlertInfo<UUID>? { get set }
 }

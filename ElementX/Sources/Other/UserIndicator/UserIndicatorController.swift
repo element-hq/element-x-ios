@@ -39,6 +39,8 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         }
     }
     
+    @Published var alertInfo: AlertInfo<UUID>?
+    
     init(rootCoordinator: CoordinatorProtocol) {
         self.rootCoordinator = rootCoordinator
     }

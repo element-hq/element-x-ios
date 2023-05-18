@@ -40,5 +40,8 @@ struct UserIndicatorPresenter: View {
                 }
             }
         }
+        .alert(item: $userIndicatorController.alertInfo) {
+            $0.alert
+        }
     }
 }
