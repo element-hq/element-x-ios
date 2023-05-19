@@ -28,6 +28,7 @@ enum StartChatScreenViewModelAction {
 }
 
 struct StartChatScreenViewState: BindableState {
+    let userID: String
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
 
@@ -50,6 +51,5 @@ struct StartChatScreenViewStateBindings {
 enum StartChatScreenViewAction {
     case close
     case createRoom
-    case inviteFriends
     case selectUser(UserProfile)
 }

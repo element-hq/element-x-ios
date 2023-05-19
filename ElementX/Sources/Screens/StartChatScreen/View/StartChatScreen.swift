@@ -74,7 +74,7 @@ struct StartChatScreen: View {
     
     private var inviteFriendsSection: some View {
         Section {
-            Button(action: inviteFriends) {
+            MatrixUserShareLink(userID: context.viewState.userID) {
                 Label(L10n.actionInviteFriendsToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
             }
             .buttonStyle(FormButtonStyle())
@@ -119,10 +119,6 @@ struct StartChatScreen: View {
     
     private func createRoom() {
         context.send(viewAction: .createRoom)
-    }
-    
-    private func inviteFriends() {
-        context.send(viewAction: .inviteFriends)
     }
     
     private func close() {

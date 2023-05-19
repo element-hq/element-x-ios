@@ -40,8 +40,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
         invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
         
-        let invitePermalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userSession.userID)
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, invitePermalink: invitePermalink),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
