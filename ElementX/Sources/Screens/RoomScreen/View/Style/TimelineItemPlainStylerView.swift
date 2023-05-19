@@ -58,6 +58,11 @@ struct TimelineItemPlainStylerView<Content: View, DeliveryStatus: View>: View {
             
             content()
         }
+        .contextMenu {
+            context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
+                TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+            }
+        }
     }
     
     @ViewBuilder

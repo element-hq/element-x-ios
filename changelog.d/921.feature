@@ -1,0 +1,1 @@
+Redesigned the delivery status icon.
