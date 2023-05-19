@@ -27,6 +27,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     /// Common background task to resume long-running tasks in the background.
     /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
     private var backgroundTask: BackgroundTaskProtocol?
+
+    /// Task used while processing background app refreshes
+    private var backgroundAppRefreshTask: BGAppRefreshTask?
+    
     private var isSuspended = false
     
     private var userSession: UserSessionProtocol? {
@@ -500,13 +504,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     private func stopSync() {
         userSession?.clientProxy.stopSync()
+        
+        backgroundAppRefreshTask?.setTaskCompleted(success: true)
+        backgroundAppRefreshTask = nil
     }
 
     private func startSync() {
-        // We don't fatal error here because background app refreshes might be scheduled before the session is setup
-        guard let userSession else { return }
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
         
         userSession.clientProxy.startSync()
+        
+        installBackgroundAppRefreshMonitor()
         
         let identifier = "StaleDataIndicator"
         
@@ -542,13 +552,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            guard let self else {
-                return
-            }
+            guard let self else { return }
+            
             userSession?.clientProxy.stopSync {
                 // No need to weakify self, this is a non escaping closure
                 self.backgroundTask?.stop()
                 self.backgroundTask = nil
+                
+                self.backgroundAppRefreshTask?.setTaskCompleted(success: true)
+                self.backgroundAppRefreshTask = nil
             }
         }
 
@@ -605,20 +617,35 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
         MXLog.info("Started background app refresh")
         
+        backgroundAppRefreshTask = task
+        
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
         task.expirationHandler = { [weak self] in
             MXLog.info("Background app refresh task expired")
             self?.stopSync()
-            task.setTaskCompleted(success: true)
+        }
+        
+        guard let userSession, !userSession.clientProxy.isSyncing else {
+            return
         }
         
         startSync()
+    }
+    
+    private func installBackgroundAppRefreshMonitor() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
+        guard backgroundAppRefreshTask != nil else {
+            return
+        }
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
-        backgroundRefreshSyncObserver = userSession?.clientProxy
+        backgroundRefreshSyncObserver = userSession.clientProxy
             .callbacks
             .filter(\.isSyncUpdate)
             .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
@@ -626,7 +653,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 MXLog.info("Background app refresh finished")
                 self?.backgroundRefreshSyncObserver?.cancel()
                 self?.stopSync()
-                task.setTaskCompleted(success: true)
             })
     }
 }
