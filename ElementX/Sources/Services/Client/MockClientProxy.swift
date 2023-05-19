@@ -53,7 +53,7 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedRetrievingDirectRoom)
     }
     
-    func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
+    func createDirectRoom(with userProfile: UserProfile) async -> Result<String, ClientProxyError> {
         .failure(.failedCreatingRoom)
     }
     

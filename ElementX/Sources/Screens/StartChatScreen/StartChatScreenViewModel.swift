@@ -128,7 +128,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     private func createDirectRoom(with user: UserProfile) async {
         showLoadingIndicator()
-        let result = await clientProxy.createDirectRoom(with: user.userID)
+        let result = await clientProxy.createDirectRoom(with: user)
         hideLoadingIndicator()
         switch result {
         case .success(let roomId):

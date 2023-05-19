@@ -192,21 +192,23 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-
-    func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
+    
+    func createDirectRoom(with userProfile: UserProfile) async -> Result<String, ClientProxyError> {
+        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
+                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userProfile.userID], avatar: nil)
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
                 return .failure(.failedCreatingRoom)
             }
         }
+        
+        return await waitForRoomSummary(with: result, name: userProfile.displayName)
     }
     
     func createRoom(with parameters: CreateRoomFlowParameters, users: [UserProfile]) async -> Result<String, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
+        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
                 let parameters = CreateRoomParameters(name: parameters.name,
                                                       topic: parameters.topic,
@@ -222,6 +224,31 @@ class ClientProxy: ClientProxyProtocol {
                 return .failure(.failedCreatingRoom)
             }
         }
+        
+        return await waitForRoomSummary(with: result, name: parameters.name)
+    }
+    
+    /// Await the room to be available in the room summary list
+    /// - Parameter result: the result of a room creation Task with the roomId
+    private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
+        guard case .success(let roomId) = result else { return result }
+        let runner = Runner { [weak self] in
+            guard let roomLists = self?.visibleRoomsSummaryProvider?.roomListPublisher.values else {
+                return
+            }
+            // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
+            for await roomList in roomLists {
+                guard let summary = roomList.first(where: { $0.id == roomId }) else { continue }
+                guard let name else { break }
+                if summary.name == name {
+                    break
+                }
+            }
+        }
+        
+        // we want to ignore the timeout error, and return the .success case because the room it was properly created already, we are only waiting for it to appear
+        try? await runner.run(timeout: 10)
+        return result
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
