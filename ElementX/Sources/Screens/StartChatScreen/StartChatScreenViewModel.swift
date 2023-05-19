@@ -34,7 +34,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: StartChatScreenViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: StartChatScreenViewState(userID: userSession.userID), imageProvider: userSession.mediaProvider)
         
         setupBindings()
     }
@@ -47,8 +47,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             actionsSubject.send(.close)
         case .createRoom:
             actionsSubject.send(.createRoom)
-        case .inviteFriends:
-            break
         case .selectUser(let user):
             showLoadingIndicator()
             Task {

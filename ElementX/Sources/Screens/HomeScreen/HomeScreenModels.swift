@@ -71,9 +71,6 @@ struct HomeScreenViewState: BindableState {
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
-    /// The URL that will be shared when inviting friends to use the app.
-    let invitePermalink: URL?
-    
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
     

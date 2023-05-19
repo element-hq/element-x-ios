@@ -139,10 +139,8 @@ struct HomeScreen: View {
                 }
             }
             Section {
-                if let permalink = context.viewState.invitePermalink {
-                    ShareLink(item: permalink) {
-                        Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
-                    }
+                MatrixUserShareLink(userID: context.viewState.userID) {
+                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
                 }
                 Button(action: feedback) {
                     Label(L10n.commonReportABug, systemImage: "questionmark.circle")
