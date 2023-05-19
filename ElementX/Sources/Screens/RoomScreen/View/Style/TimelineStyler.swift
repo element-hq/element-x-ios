@@ -93,7 +93,7 @@ struct TimelineItemStyler_Previews: PreviewProvider {
 
     static let last: TextRoomTimelineItem = {
         let id = viewModel.state.items.last?.id ?? UUID().uuidString
-        var result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
+        let result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
         return result
     }()
 
