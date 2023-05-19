@@ -348,7 +348,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             hideLoadingIndicator()
         }
         
-        userSession.clientProxy.stopSync()
+        stopSync()
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -462,7 +462,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
-        userSession.clientProxy.stopSync()
+        stopSync()
         userSessionFlowCoordinator?.stop()
         
         let userID = userSession.userID
@@ -536,20 +536,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     @objc
     private func applicationWillResignActive() {
         MXLog.info("Application will resign active")
-        
+
         guard backgroundTask == nil else {
             return
         }
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
-            guard let self else { return }
-            
-            stopSync()
-        
-            backgroundTask = nil
-            isSuspended = true
+            guard let self else {
+                return
+            }
+            userSession?.clientProxy.stopSync {
+                // No need to weakify self, this is a non escaping closure
+                self.backgroundTask?.stop()
+                self.backgroundTask = nil
+            }
         }
-        
+
+        isSuspended = true
+
         // This does seem to work if scheduled from the background task above
         // Schedule it here instead but with an earliest being date of 30 seconds
         scheduleBackgroundAppRefresh()
@@ -562,10 +566,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask?.stop()
         backgroundTask = nil
 
-        if isSuspended {
-            isSuspended = false
+        if isSuspended, userSession?.clientProxy.isSyncing == false {
             startSync()
         }
+
+        isSuspended = false
     }
     
     // MARK: Background app refresh
