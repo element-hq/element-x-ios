@@ -159,7 +159,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func startSync() {
         MXLog.info("Starting sync")
-        guard slidingSyncObserverToken == nil else {
+        guard !isSyncing else {
             return
         }
         
