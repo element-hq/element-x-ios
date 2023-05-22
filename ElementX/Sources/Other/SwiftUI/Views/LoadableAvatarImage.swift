@@ -38,6 +38,7 @@ struct LoadableAvatarImage: View {
     var body: some View {
         avatar
             .frame(width: frameSize, height: frameSize)
+            .background(Color.element.background)
             .clipShape(Circle())
     }
     
