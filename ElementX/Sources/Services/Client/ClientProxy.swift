@@ -193,10 +193,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func createDirectRoom(with userProfile: UserProfile) async -> Result<String, ClientProxyError> {
+    func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
         let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userProfile.userID], avatar: nil)
+                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
@@ -204,10 +204,10 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
         
-        return await waitForRoomSummary(with: result, name: userProfile.displayName)
+        return await waitForRoomSummary(with: result, name: expectedRoomName)
     }
     
-    func createRoom(with parameters: CreateRoomFlowParameters, users: [UserProfile]) async -> Result<String, ClientProxyError> {
+    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError> {
         let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
                 let parameters = CreateRoomParameters(name: parameters.name,
@@ -216,7 +216,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       isDirect: false,
                                                       visibility: parameters.isRoomPrivate ? .private : .public,
                                                       preset: parameters.isRoomPrivate ? .privateChat : .publicChat,
-                                                      invite: users.map(\.userID),
+                                                      invite: userIDs,
                                                       avatar: nil)
                 let roomId = try self.client.createRoom(request: parameters)
                 return .success(roomId)
@@ -232,7 +232,7 @@ class ClientProxy: ClientProxyProtocol {
     /// - Parameter result: the result of a room creation Task with the roomId
     private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
         guard case .success(let roomId) = result else { return result }
-        let runner = Runner { [weak self] in
+        let runner = ExpiringTaskRunner { [weak self] in
             guard let roomLists = self?.visibleRoomsSummaryProvider?.roomListPublisher.values else {
                 return
             }
@@ -247,7 +247,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         // we want to ignore the timeout error, and return the .success case because the room it was properly created already, we are only waiting for it to appear
-        try? await runner.run(timeout: 10)
+        try? await runner.run(timeout: .seconds(10))
         return result
     }
     

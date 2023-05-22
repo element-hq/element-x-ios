@@ -97,10 +97,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     }
     
     private func createRoom() async {
+        defer {
+            hideLoadingIndicator()
+        }
         showLoadingIndicator()
-        let result = await clientProxy.createRoom(with: createRoomParameters, users: state.selectedUsers)
-        hideLoadingIndicator()
-        switch result {
+        switch await clientProxy.createRoom(with: createRoomParameters, userIDs: state.selectedUsers.map(\.userID)) {
         case .success(let roomId):
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):

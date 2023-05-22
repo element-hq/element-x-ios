@@ -16,11 +16,11 @@
 
 import Foundation
 
-enum RunnerError: Error {
+enum ExpiringTaskRunnerError: Error {
     case timeout
 }
 
-actor Runner<T> {
+actor ExpiringTaskRunner<T> {
     private var continuation: CheckedContinuation<T, Error>?
     
     private var task: () async throws -> T
@@ -29,13 +29,13 @@ actor Runner<T> {
         self.task = task
     }
     
-    func run(timeout: TimeInterval) async throws -> T {
+    func run(timeout: Duration) async throws -> T {
         try await withCheckedThrowingContinuation {
             continuation = $0
             
             Task {
-                try await Task.sleep(for: .seconds(timeout))
-                continuation?.resume(with: .failure(RunnerError.timeout))
+                try await Task.sleep(for: timeout)
+                continuation?.resume(with: .failure(ExpiringTaskRunnerError.timeout))
                 continuation = nil
             }
             

@@ -94,9 +94,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     
-    func createDirectRoom(with userProfile: UserProfile) async -> Result<String, ClientProxyError>
+    func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
-    func createRoom(with parameters: CreateRoomFlowParameters, users: [UserProfile]) async -> Result<String, ClientProxyError>
+    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
