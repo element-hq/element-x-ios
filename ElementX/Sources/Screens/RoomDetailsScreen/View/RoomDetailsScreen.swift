@@ -142,7 +142,6 @@ struct RoomDetailsScreen: View {
         .listRowSeparatorTint(.element.quinaryContent)
         .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
         .foregroundColor(.element.primaryContent)
-        
         .disabled(context.viewState.isLoadingMembers)
     }
 
