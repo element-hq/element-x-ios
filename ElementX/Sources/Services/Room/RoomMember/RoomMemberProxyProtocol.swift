@@ -33,6 +33,7 @@ protocol RoomMemberProxyProtocol {
     var normalizedPowerLevel: Int { get }
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
+    var canInviteUsers: Bool { get }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>
     func unignoreUser() async -> Result<Void, RoomMemberProxyError>

@@ -162,7 +162,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil)),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -172,7 +173,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: URL.picturesDirectory)),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -184,7 +186,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "New room", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -199,7 +202,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Small timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -214,7 +218,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Small timeline, paginating", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -229,7 +234,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -245,7 +251,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -260,7 +267,8 @@ class MockScreen: Identifiable {
                                                              roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             emojiProvider: EmojiProvider())
+                                                             emojiProvider: EmojiProvider(),
+                                                             userDiscoveryService: UserDiscoveryServiceMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -293,7 +301,8 @@ class MockScreen: Identifiable {
                                                       members: members))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
-                                                                             mediaProvider: MockMediaProvider()))
+                                                                             mediaProvider: MockMediaProvider(),
+                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithRoomAvatar:
@@ -308,7 +317,22 @@ class MockScreen: Identifiable {
                                                       members: members))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
-                                                                             mediaProvider: MockMediaProvider()))
+                                                                             mediaProvider: MockMediaProvider(),
+                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomDetailsScreenWithInvite:
+            ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled = true
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockCharlie]
+            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
+                                                      displayName: "Room",
+                                                      isEncrypted: true,
+                                                      members: members))
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                             roomProxy: roomProxy,
+                                                                             mediaProvider: MockMediaProvider(),
+                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreen:
@@ -381,7 +405,8 @@ class MockScreen: Identifiable {
                                                       members: members))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
-                                                                             mediaProvider: MockMediaProvider()))
+                                                                             mediaProvider: MockMediaProvider(),
+                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .invitesWithBadges:
@@ -414,15 +439,17 @@ class MockScreen: Identifiable {
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .inviteUsers:
+        case .inviteUsers, .inviteUsersInRoom, .inviteUsersInRoomExistingMembers:
             ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
-            let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
+            let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
-            let coordinator = InviteUsersScreenCoordinator(parameters: .init(userSession: userSession, userDiscoveryService: userDiscoveryMock, selectedUsers: usersSubject.asCurrentValuePublisher()))
+            let members: [RoomMemberProxyMock] = id == .inviteUsersInRoomExistingMembers ? [.mockInvitedAlice, .mockBob] : []
+            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: members, userIndicatorController: MockUserIndicatorController())
+            let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
             coordinator.actions.sink { action in
                 switch action {
                 case .toggleUser(let user):

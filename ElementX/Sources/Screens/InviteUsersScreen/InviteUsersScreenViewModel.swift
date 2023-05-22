@@ -15,49 +15,77 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
-    private let userSession: UserSessionProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
+    private let roomType: InviteUsersScreenRoomType
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>, userSession: UserSessionProtocol, userDiscoveryService: UserDiscoveryServiceProtocol) {
-        self.userSession = userSession
+    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>,
+         roomType: InviteUsersScreenRoomType,
+         mediaProvider: MediaProviderProtocol,
+         userDiscoveryService: UserDiscoveryServiceProtocol) {
+        self.roomType = roomType
+        self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value), imageProvider: userSession.mediaProvider)
-        
-        selectedUsers
-            .sink { [weak self] users in
-                self?.state.selectedUsers = users
-            }
-            .store(in: &cancellables)
-        
-        setupSubscriptions()
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
+                
+        buildMembershipStateIfNeeded()
+        setupSubscriptions(selectedUsers: selectedUsers)
     }
     
     // MARK: - Public
     
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
-        case .close:
-            actionsSubject.send(.close)
         case .proceed:
-            actionsSubject.send(.proceed)
+            switch roomType {
+            case .draft:
+                actionsSubject.send(.proceed)
+            case .room:
+                actionsSubject.send(.invite(users: state.selectedUsers.map(\.userID)))
+            }
         case .toggleUser(let user):
             actionsSubject.send(.toggleUser(user))
+        }
+    }
+    
+    private func buildMembershipStateIfNeeded() {
+        guard case let .room(members, userIndicatorController) = roomType else {
+            return
+        }
+        let indicatorID = UUID().uuidString
+        userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task.detached { [members] in
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            let membershipState = members
+                .reduce(into: [String: MembershipState]()) { partialResult, member in
+                    partialResult[member.userID] = member.membership
+                }
+            
+            Task { @MainActor in
+                self.state.membershipState = membershipState
+                userIndicatorController.retractIndicatorWithId(indicatorID)
+            }
         }
     }
 
     // MARK: - Private
     
-    private func setupSubscriptions() {
+    @CancellableTask
+    private var fetchUsersTask: Task<Void, Never>?
+    
+    private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceAndRemoveDuplicates()
@@ -65,10 +93,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 self?.fetchUsers()
             }
             .store(in: &cancellables)
+        
+        selectedUsers
+            .sink { [weak self] users in
+                self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
     }
-    
-    @CancellableTask
-    private var fetchUsersTask: Task<Void, Never>?
     
     private func fetchUsers() {
         guard searchQuery.count >= 3 else {
@@ -105,5 +136,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private var searchQuery: String {
         context.searchQuery
+    }
+}
+
+private extension InviteUsersScreenRoomType {
+    var isCreatingRoom: Bool {
+        switch self {
+        case .draft:
+            return true
+        case .room:
+            return false
+        }
     }
 }

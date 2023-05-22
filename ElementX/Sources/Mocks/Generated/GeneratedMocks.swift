@@ -331,6 +331,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingIsIgnored = value }
     }
     var underlyingIsIgnored: Bool!
+    var canInviteUsers: Bool {
+        get { return underlyingCanInviteUsers }
+        set(value) { underlyingCanInviteUsers = value }
+    }
+    var underlyingCanInviteUsers: Bool!
 
     //MARK: - ignoreUser
 
@@ -868,6 +873,27 @@ class RoomProxyMock: RoomProxyProtocol {
         fetchDetailsForReceivedEventID = eventID
         fetchDetailsForReceivedInvocations.append(eventID)
         fetchDetailsForClosure?(eventID)
+    }
+    //MARK: - invite
+
+    var inviteUserIDCallsCount = 0
+    var inviteUserIDCalled: Bool {
+        return inviteUserIDCallsCount > 0
+    }
+    var inviteUserIDReceivedUserID: String?
+    var inviteUserIDReceivedInvocations: [String] = []
+    var inviteUserIDReturnValue: Result<Void, RoomProxyError>!
+    var inviteUserIDClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func invite(userID: String) async -> Result<Void, RoomProxyError> {
+        inviteUserIDCallsCount += 1
+        inviteUserIDReceivedUserID = userID
+        inviteUserIDReceivedInvocations.append(userID)
+        if let inviteUserIDClosure = inviteUserIDClosure {
+            return await inviteUserIDClosure(userID)
+        } else {
+            return inviteUserIDReturnValue
+        }
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

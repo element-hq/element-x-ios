@@ -449,6 +449,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func invite(userID: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                MXLog.info("Inviting user \(userID)")
+                return try .success(self.room.inviteUserById(userId: userID))
+            } catch {
+                MXLog.error("Failed inviting user \(userID) with error: \(error)")
+                return .failure(.failedInvitingUser)
+            }
+        }
+    }
+    
     var invitedMembersCount: UInt {
         UInt(room.invitedMembersCount())
     }

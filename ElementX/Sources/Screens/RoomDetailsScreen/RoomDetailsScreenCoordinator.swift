@@ -14,12 +14,14 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -30,7 +32,11 @@ enum RoomDetailsScreenCoordinatorAction {
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsScreenCoordinatorParameters
     private var viewModel: RoomDetailsScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
+    private var cancellables: Set<AnyCancellable> = .init()
+    private let selectedUsers: CurrentValueSubject<[UserProfile], Never> = .init([])
+    private var navigationStackCoordinator: NavigationStackCoordinator {
+        parameters.navigationStackCoordinator
+    }
     
     var callback: ((RoomDetailsScreenCoordinatorAction) -> Void)?
     
@@ -50,6 +56,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .requestMemberDetailsPresentation(let members):
                 self.presentRoomMembersList(members)
+            case .requestInvitePeoplePresentation(let members):
+                self.presentInviteUsersScreen(members: members)
             case .cancel:
                 self.callback?(.cancel)
             case .leftRoom:
@@ -62,12 +70,96 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
     
+    // MARK: - Private
+    
     private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
         let params = RoomMembersListScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                                 mediaProvider: parameters.mediaProvider,
                                                                 members: members)
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
+        coordinator.callback = { [weak self] action in
+            switch action {
+            case .invite:
+                self?.presentInviteUsersScreen(members: members)
+            }
+        }
+        
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentInviteUsersScreen(members: [RoomMemberProxyProtocol]) {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
+                                                                      roomType: .room(members: members, userIndicatorController: userIndicatorController),
+                                                                      mediaProvider: parameters.mediaProvider,
+                                                                      userDiscoveryService: parameters.userDiscoveryService)
+        
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        coordinator.actions.sink { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .proceed:
+                break
+            case .invite(let users):
+                self.inviteUsers(users, in: parameters.roomProxy)
+            case .toggleUser(let user):
+                self.toggleUser(user)
+            }
+        }
+        .store(in: &cancellables)
+        
+        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+    }
+    
+    private func toggleUser(_ user: UserProfile) {
+        var selectedUsers = selectedUsers.value
+        if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+            selectedUsers.remove(at: index)
+        } else {
+            selectedUsers.append(user)
+        }
+        self.selectedUsers.send(selectedUsers)
+    }
+    
+    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
+        navigationStackCoordinator.setSheetCoordinator(nil)
+        
+        Task {
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await room.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.commonUnableToInviteTitle,
+                                                                            message: L10n.commonUnableToInviteMessage)
+        }
+    }
+}
+
+private extension Result {
+    var isFailure: Bool {
+        switch self {
+        case .success:
+            return false
+        case .failure:
+            return true
+        }
     }
 }

@@ -66,6 +66,10 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     var isIgnored: Bool {
         member.isIgnored()
     }
+    
+    var canInviteUsers: Bool {
+        member.canInvite()
+    }
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
         sendAccountDataEventBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)

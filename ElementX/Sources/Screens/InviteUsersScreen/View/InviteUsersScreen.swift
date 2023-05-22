@@ -69,9 +69,11 @@ struct InviteUsersScreen: View {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .toggleUser(user)) } label: {
                     UserProfileCell(user: user,
+                                    membership: context.viewState.membershipState(user),
                                     imageProvider: context.imageProvider)
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+                .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
+                                             accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
             }
         } header: {
             if let title = context.viewState.usersSection.title {
@@ -107,8 +109,9 @@ struct InviteUsersScreen: View {
     
     private var nextButton: some View {
         Button { context.send(viewAction: .proceed) } label: {
-            Text(context.viewState.selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext)
+            Text(context.viewState.actionText)
         }
+        .disabled(context.viewState.isActionDisabled)
     }
     
     private func deselect(_ user: UserProfile) {
@@ -120,12 +123,10 @@ struct InviteUsersScreen: View {
 
 struct InviteUsersScreen_Previews: PreviewProvider {
     static let viewModel = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
-                                          mediaProvider: MockMediaProvider())
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        return InviteUsersScreenViewModel(selectedUsers: .init([]), userSession: userSession, userDiscoveryService: userDiscoveryService)
+        return InviteUsersScreenViewModel(selectedUsers: .init([]), roomType: .draft, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
     }()
     
     static var previews: some View {

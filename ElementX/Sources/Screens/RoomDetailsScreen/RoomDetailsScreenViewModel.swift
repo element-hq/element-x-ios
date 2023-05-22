@@ -56,6 +56,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
+        case .processTapInvite:
+            callback?(.requestInvitePeoplePresentation(members))
         case .processTapLeave:
             let joinedMembers = members.filter { $0.membership == .join }
             guard joinedMembers.count > 1 else {
@@ -84,27 +86,29 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 guard let self else { return }
                 
                 buildMembersDetailsTask = Task {
-                    let (membersDetails, joinedMembersCount) = await self.buildMembersDetails(members: members)
+                    let roomMembersDetails = await self.buildMembersDetails(members: members)
                     
                     guard !Task.isCancelled else { return }
                     
                     if self.roomProxy.isDirect, self.roomProxy.isEncrypted, members.count == 2 {
                         self.dmRecipient = members.first(where: { !$0.isAccountOwner })
                     }
-                    
-                    self.state.members = membersDetails
-                    self.state.joinedMembersCount = joinedMembersCount
+
+                    self.state.members = roomMembersDetails.members
+                    self.state.joinedMembersCount = roomMembersDetails.joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
+                    self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
                     self.members = members
                 }
             }
             .store(in: &cancellables)
     }
     
-    private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> (memberDetails: [RoomMemberDetails], joinedMembersCount: Int) {
+    private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> RoomMembersDetails {
         await Task.detached {
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var roomMembersDetails: [RoomMemberDetails] = []
+            var accountOwner: RoomMemberProxyProtocol?
             var joinedMembersCount = 0
             roomMembersDetails.reserveCapacity(members.count)
             
@@ -114,9 +118,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 if member.membership == .join {
                     joinedMembersCount += 1
                 }
+                
+                if accountOwner == nil, member.isAccountOwner {
+                    accountOwner = member
+                }
             }
             
-            return (roomMembersDetails, joinedMembersCount)
+            return .init(members: roomMembersDetails, joinedMembersCount: joinedMembersCount, accountOwner: accountOwner)
         }
         .value
     }
@@ -124,7 +132,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
     private func leaveRoom() async {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
         let result = await roomProxy.leaveRoom()
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
         switch result {
@@ -158,4 +166,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
+}
+
+private struct RoomMembersDetails {
+    let members: [RoomMemberDetails]
+    let joinedMembersCount: Int
+    let accountOwner: RoomMemberProxyProtocol?
 }

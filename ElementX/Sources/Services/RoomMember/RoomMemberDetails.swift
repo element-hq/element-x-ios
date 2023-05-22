@@ -26,7 +26,7 @@ struct RoomMemberDetails: Identifiable, Equatable {
 
     init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userID
-        name = proxy.displayName
+        name = proxy.displayName ?? proxy.userID
         avatarURL = proxy.avatarURL
         permalink = proxy.permalink
         isAccountOwner = proxy.isAccountOwner

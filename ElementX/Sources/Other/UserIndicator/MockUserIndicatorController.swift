@@ -22,4 +22,6 @@ class MockUserIndicatorController: UserIndicatorControllerProtocol {
     func retractIndicatorWithId(_ id: String) { }
     
     func retractAllIndicators() { }
+    
+    var alertInfo: AlertInfo<UUID>?
 }

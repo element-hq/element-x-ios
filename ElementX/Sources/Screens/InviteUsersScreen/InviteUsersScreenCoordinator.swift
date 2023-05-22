@@ -18,14 +18,15 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
-    let userSession: UserSessionProtocol
-    let userDiscoveryService: UserDiscoveryServiceProtocol
     let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
+    let roomType: InviteUsersScreenRoomType
+    let mediaProvider: MediaProviderProtocol
+    let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
 enum InviteUsersScreenCoordinatorAction {
-    case close
     case proceed
+    case invite(users: [String])
     case toggleUser(UserProfile)
 }
 
@@ -42,17 +43,20 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     init(parameters: InviteUsersScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers, userSession: parameters.userSession, userDiscoveryService: parameters.userDiscoveryService)
+        viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers,
+                                               roomType: parameters.roomType,
+                                               mediaProvider: parameters.mediaProvider,
+                                               userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .close:
-                self.actionsSubject.send(.close)
             case .proceed:
                 self.actionsSubject.send(.proceed)
+            case .invite(let users):
+                self.actionsSubject.send(.invite(users: users))
             case .toggleUser(let user):
                 self.actionsSubject.send(.toggleUser(user))
             }

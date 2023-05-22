@@ -128,12 +128,22 @@ struct RoomDetailsScreen: View {
                     Label(L10n.commonPeople, systemImage: "person")
                 }
             }
-            .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
-            .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            .disabled(context.viewState.isLoadingMembers)
+            
+            if context.viewState.canInviteUsers, ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled {
+                Button {
+                    context.send(viewAction: .processTapInvite)
+                } label: {
+                    Label(L10n.screenRoomDetailsInvitePeopleTitle, systemImage: "person.badge.plus")
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+            }
         }
-        .formSectionStyle()
+        .listRowSeparatorTint(.element.quinaryContent)
+        .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
+        .foregroundColor(.element.primaryContent)
+        
+        .disabled(context.viewState.isLoadingMembers)
     }
 
     @ViewBuilder

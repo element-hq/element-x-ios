@@ -15,15 +15,21 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum InviteUsersScreenErrorType: Error {
     case unknown
 }
 
 enum InviteUsersScreenViewModelAction {
-    case close
     case proceed
+    case invite(users: [String])
     case toggleUser(UserProfile)
+}
+
+enum InviteUsersScreenRoomType {
+    case draft
+    case room(members: [RoomMemberProxyProtocol], userIndicatorController: UserIndicatorControllerProtocol)
 }
 
 struct InviteUsersScreenViewState: BindableState {
@@ -32,6 +38,7 @@ struct InviteUsersScreenViewState: BindableState {
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     
     var selectedUsers: [UserProfile] = []
+    var membershipState: [String: MembershipState] = .init()
     
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
@@ -44,7 +51,30 @@ struct InviteUsersScreenViewState: BindableState {
     var scrollToLastID: String?
     
     func isUserSelected(_ user: UserProfile) -> Bool {
-        selectedUsers.contains { $0.userID == user.userID }
+        isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
+    }
+    
+    func isUserDisabled(_ user: UserProfile) -> Bool {
+        let membershipState = membershipState(user)
+        return membershipState == .invite || membershipState == .join
+    }
+    
+    func membershipState(_ user: UserProfile) -> MembershipState? {
+        membershipState[user.userID]
+    }
+    
+    let isCreatingRoom: Bool
+    
+    var actionText: String {
+        if isCreatingRoom {
+            return selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext
+        } else {
+            return L10n.actionInvite
+        }
+    }
+    
+    var isActionDisabled: Bool {
+        isCreatingRoom ? false : selectedUsers.isEmpty
     }
 }
 
@@ -56,7 +86,6 @@ struct InviteUsersScreenViewStateBindings {
 }
 
 enum InviteUsersScreenViewAction {
-    case close
     case proceed
     case toggleUser(UserProfile)
 }
