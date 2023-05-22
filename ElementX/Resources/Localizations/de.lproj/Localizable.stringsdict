@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d Mitteilung</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d Mitteilungen</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
