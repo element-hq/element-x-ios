@@ -233,7 +233,7 @@ class ClientProxy: ClientProxyProtocol {
     private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
         guard case .success(let roomId) = result else { return result }
         let runner = ExpiringTaskRunner { [weak self] in
-            guard let roomLists = self?.visibleRoomsSummaryProvider?.roomListPublisher.values else {
+            guard let roomLists = self?.allRoomsSummaryProvider?.roomListPublisher.values else {
                 return
             }
             // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
