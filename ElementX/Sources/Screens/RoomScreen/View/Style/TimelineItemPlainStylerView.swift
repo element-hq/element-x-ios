@@ -17,29 +17,29 @@
 import Foundation
 import SwiftUI
 
-struct TimelineItemPlainStylerView<Content: View>: View {
+struct TimelineItemPlainStylerView<Content: View, DeliveryStatus: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
+    @ViewBuilder let deliveryStatus: () -> DeliveryStatus
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            header
-            
+        VStack(alignment: .trailing) {
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .firstTextBaseline) {
-                    contentWithReply
-                    
-                    Spacer()
-                    
-                    if let deliveryStatus = timelineItem.properties.deliveryStatus {
-                        TimelineDeliveryStatusView(deliveryStatus: deliveryStatus)
+                header
+
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(alignment: .firstTextBaseline) {
+                        contentWithReply
+
+                        Spacer()
                     }
+                    supplementaryViews
                 }
-                supplementaryViews
             }
+            deliveryStatus()
         }
     }
     
@@ -57,6 +57,11 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             }
             
             content()
+        }
+        .contextMenu {
+            context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
+                TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+            }
         }
     }
     

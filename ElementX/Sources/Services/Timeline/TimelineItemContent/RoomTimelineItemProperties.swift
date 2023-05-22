@@ -22,6 +22,6 @@ struct RoomTimelineItemProperties: Hashable {
     var isEdited = false
     /// The aggregated reactions that have been sent for this item.
     var reactions: [AggregatedReaction] = []
-    /// The delivery status for this item.
+    /// The delivery status for this item. If a sent message is echoed the value is nil.
     var deliveryStatus: TimelineItemDeliveryStatus?
 }

@@ -21,6 +21,12 @@ import SwiftUI
 
 struct TimelineStyler<Content: View>: View {
     @Environment(\.timelineStyle) private var style
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+
+    private var isLastOutgoingMessage: Bool {
+        context.viewState.items.last(where: { !$0.isUnsent })?.id == timelineItem.id &&
+            timelineItem.isOutgoing
+    }
 
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
@@ -28,9 +34,96 @@ struct TimelineStyler<Content: View>: View {
     var body: some View {
         switch style {
         case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content) {
+                deliveryStatusView
+            }
         case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
+            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content) {
+                deliveryStatusView
+            }
         }
+    }
+
+    @ViewBuilder
+    private var deliveryStatusView: some View {
+        switch timelineItem.properties.deliveryStatus {
+        case .sending:
+            TimelineDeliveryStatusView(deliveryStatus: .sending)
+        case .sent:
+            TimelineDeliveryStatusView(deliveryStatus: .sent)
+        case .none:
+            if isLastOutgoingMessage {
+                // We always display the sent icon for the latest echoed outgoing message
+                TimelineDeliveryStatusView(deliveryStatus: .sent)
+            }
+        case .sendingFailed:
+            if style == .plain {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .resizable()
+                    .foregroundColor(.element.alert)
+                    .frame(width: 16, height: 16)
+            }
+            // The bubbles handle the failure internally
+        }
+    }
+}
+
+struct TimelineItemStyler_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+
+    static let base = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
+
+    static let sent: TextRoomTimelineItem = {
+        var result = base
+        result.properties.deliveryStatus = .sent
+        return result
+    }()
+
+    static let sending: TextRoomTimelineItem = {
+        var result = base
+        result.properties.deliveryStatus = .sending
+        return result
+    }()
+
+    static let failed: TextRoomTimelineItem = {
+        var result = base
+        result.properties.deliveryStatus = .sendingFailed
+        return result
+    }()
+
+    static let last: TextRoomTimelineItem = {
+        let id = viewModel.state.items.last?.id ?? UUID().uuidString
+        let result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
+        return result
+    }()
+
+    static var testView: some View {
+        VStack {
+            TimelineStyler(timelineItem: sent) {
+                Text("Sent")
+            }
+            TimelineStyler(timelineItem: sending) {
+                Text("Sending")
+            }
+            TimelineStyler(timelineItem: base) {
+                Text("Normal")
+            }
+            TimelineStyler(timelineItem: last) {
+                Text("Last")
+            }
+            TimelineStyler(timelineItem: failed) {
+                Text("Failed")
+            }
+        }
+    }
+
+    static var previews: some View {
+        testView
+            .environmentObject(viewModel.context)
+            .environment(\.timelineStyle, .bubbles)
+
+        testView
+            .environmentObject(viewModel.context)
+            .environment(\.timelineStyle, .plain)
     }
 }

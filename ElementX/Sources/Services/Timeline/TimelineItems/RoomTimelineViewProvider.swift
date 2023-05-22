@@ -77,7 +77,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
             fatalError("Unknown timeline item")
         }
     }
-    
+
     var id: String {
         switch self {
         case .text(let item as RoomTimelineItemProtocol, _),
@@ -98,6 +98,26 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
              .state(let item as RoomTimelineItemProtocol, _),
              .group(let item as RoomTimelineItemProtocol, _):
             return item.id
+        }
+    }
+
+    var isUnsent: Bool {
+        switch self {
+        case .text(let item as EventBasedTimelineItemProtocol, _),
+             .image(let item as EventBasedTimelineItemProtocol, _),
+             .video(let item as EventBasedTimelineItemProtocol, _),
+             .audio(let item as EventBasedTimelineItemProtocol, _),
+             .file(let item as EventBasedTimelineItemProtocol, _),
+             .emote(let item as EventBasedTimelineItemProtocol, _),
+             .notice(let item as EventBasedTimelineItemProtocol, _),
+             .redacted(let item as EventBasedTimelineItemProtocol, _),
+             .encrypted(let item as EventBasedTimelineItemProtocol, _),
+             .sticker(let item as EventBasedTimelineItemProtocol, _),
+             .unsupported(let item as EventBasedTimelineItemProtocol, _),
+             .state(let item as EventBasedTimelineItemProtocol, _):
+            return item.properties.deliveryStatus == .sending || item.properties.deliveryStatus == .sendingFailed
+        default:
+            return false
         }
     }
     

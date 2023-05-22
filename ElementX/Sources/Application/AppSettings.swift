@@ -30,6 +30,7 @@ final class AppSettings {
         case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
         case invitesFlowEnabled
+        case readReceiptsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -186,4 +187,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
     var invitesFlowEnabled
+
+    // MARK: Receipts
+
+    @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var readReceiptsEnabled
 }

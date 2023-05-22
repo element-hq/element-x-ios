@@ -17,12 +17,13 @@
 import Foundation
 import SwiftUI
 
-struct TimelineItemBubbledStylerView<Content: View>: View {
+struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
+    @ViewBuilder let deliveryStatus: () -> DeliveryStatus
 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
@@ -44,10 +45,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
                 .padding(.horizontal, 16.0)
                 .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
-            }
-            
-            if let deliveryStatus = timelineItem.properties.deliveryStatus {
-                TimelineDeliveryStatusView(deliveryStatus: deliveryStatus)
             }
         }
     }
@@ -85,6 +82,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
             }
+
+            deliveryStatus()
+                .padding(.top, 10)
+                .padding(.bottom, 3)
         }
     }
     
@@ -114,6 +115,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     Text(L10n.commonEditedSuffix)
                         .font(.compound.bodyXS)
                         .foregroundColor(.element.tertiaryContent)
+                }
+
+                if timelineItem.properties.deliveryStatus == .sendingFailed {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .resizable()
+                        .foregroundColor(.element.alert)
+                        .frame(width: 16, height: 16)
                 }
             }
             .bubbleStyle(inset: true,
