@@ -21,32 +21,35 @@ struct InviteUsersScreen: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
     var body: some View {
-        VStack {
-            if !context.viewState.selectedUsers.isEmpty {
-                selectedUsersSection
+        mainContent
+            .scrollContentBackground(.hidden)
+            .background(Color.element.formBackground.ignoresSafeArea())
+            .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    nextButton
+                }
             }
-            searchContent
-        }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                nextButton
-            }
-        }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
-        .compoundSearchField()
-        .alert(item: $context.alertInfo) { $0.alert }
+            .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
+            .compoundSearchField()
+            .alert(item: $context.alertInfo) { $0.alert }
+            .background(ViewFrameReader(frame: $frame))
     }
     
     // MARK: - Private
     
-    /// The content shown in the form when a search query has been entered.
-    @ViewBuilder
-    private var searchContent: some View {
+    private var mainContent: some View {
         Form {
+            if !context.viewState.selectedUsers.isEmpty {
+                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
+                Section {
+                    EmptyView()
+                } header: {
+                    selectedUsersSection
+                        .textCase(.none)
+                }
+            }
             if context.viewState.hasEmptySearchResults {
                 noResultsContent
             } else {
@@ -84,7 +87,9 @@ struct InviteUsersScreen: View {
         .formSectionStyle()
     }
     
+    @State private var frame: CGRect = .zero
     @ScaledMetric private var cellWidth: CGFloat = 64
+
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
@@ -105,6 +110,7 @@ struct InviteUsersScreen: View {
                 .padding(.horizontal, 18)
             }
         }
+        .frame(width: frame.width)
     }
     
     private var nextButton: some View {

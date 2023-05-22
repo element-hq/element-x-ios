@@ -1,0 +1,1 @@
+Add creation of a room, fetching the summary, so the room will be ready to be presented.

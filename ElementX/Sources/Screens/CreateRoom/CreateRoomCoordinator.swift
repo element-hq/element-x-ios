@@ -19,12 +19,13 @@ import SwiftUI
 
 struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
     let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
 }
 
 enum CreateRoomCoordinatorAction {
-    case createRoom
+    case openRoom(withIdentifier: String)
     case deselectUser(UserProfile)
     case updateDetails(CreateRoomFlowParameters)
 }
@@ -42,6 +43,7 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     init(parameters: CreateRoomCoordinatorParameters) {
         self.parameters = parameters
         viewModel = CreateRoomViewModel(userSession: parameters.userSession,
+                                        userIndicatorController: parameters.userIndicatorController,
                                         createRoomParameters: parameters.createRoomParameters,
                                         selectedUsers: parameters.selectedUsers)
     }
@@ -52,8 +54,8 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
             switch action {
             case .deselectUser(let user):
                 self.actionsSubject.send(.deselectUser(user))
-            case .createRoom:
-                self.actionsSubject.send(.createRoom)
+            case .openRoom(let identifier):
+                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .updateDetails(let details):
                 self.actionsSubject.send(.updateDetails(details))
             }

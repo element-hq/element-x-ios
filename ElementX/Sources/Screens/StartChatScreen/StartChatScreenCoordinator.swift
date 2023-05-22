@@ -107,6 +107,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     private func openCreateRoomScreen() {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
+                                                               userIndicatorController: parameters.userIndicatorController,
                                                                createRoomParameters: createRoomParametersPublisher,
                                                                selectedUsers: selectedUsersPublisher)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
@@ -116,8 +117,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 self?.toggleUser(user)
             case .updateDetails(let details):
                 self?.createRoomParameters.send(details)
-            case .createRoom:
-                break
+            case .openRoom(let identifier):
+                self?.actionsSubject.send(.openRoom(withIdentifier: identifier))
             }
         }
         .store(in: &cancellables)

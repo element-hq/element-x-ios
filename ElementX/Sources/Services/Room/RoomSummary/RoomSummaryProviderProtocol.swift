@@ -39,6 +39,15 @@ enum RoomSummary: CustomStringConvertible {
         }
     }
     
+    var name: String? {
+        switch self {
+        case .empty:
+            return nil
+        case .invalidated(let details), .filled(let details):
+            return details.name
+        }
+    }
+    
     var description: String {
         switch self {
         case .empty:

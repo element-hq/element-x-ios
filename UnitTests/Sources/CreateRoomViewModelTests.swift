@@ -37,7 +37,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         let parameters = CreateRoomFlowParameters()
         usersSubject.send([.mockAlice, .mockBob, .mockCharlie])
-        let viewModel = CreateRoomViewModel(userSession: userSession, createRoomParameters: .init(parameters), selectedUsers: usersSubject.asCurrentValuePublisher())
+        let viewModel = CreateRoomViewModel(userSession: userSession, userIndicatorController: nil, createRoomParameters: .init(parameters), selectedUsers: usersSubject.asCurrentValuePublisher())
         self.viewModel = viewModel
         
         viewModel.actions.sink { [weak self] action in
