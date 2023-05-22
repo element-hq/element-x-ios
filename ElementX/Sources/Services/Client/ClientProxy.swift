@@ -393,7 +393,7 @@ class ClientProxy: ClientProxyProtocol {
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
-            .syncMode(mode: .selective)
+            .syncModeSelective()
             .addRange(from: 0, toIncluded: 20)
             .onceBuilt(callback: visibleRoomsListProxy)
 
@@ -425,8 +425,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
             .onceBuilt(callback: allRoomsListProxy)
 
         self.allRoomsListBuilder = allRoomsListBuilder
@@ -446,8 +445,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncInvitesRequiredState)
             .filters(filters: slidingSyncInviteFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
             .onceBuilt(callback: invitesListProxy)
 
         self.invitesListBuilder = invitesListBuilder
@@ -463,8 +461,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncNotificationsRequiredState)
             .filters(filters: slidingSyncNotificationsFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
         
         self.notificationsListBuilder = notificationsListBuilder
     }
