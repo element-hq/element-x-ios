@@ -109,25 +109,35 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                              corners: roundedCorners)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
-                contentWithReply
-
-                if timelineItem.properties.isEdited {
-                    Text(L10n.commonEditedSuffix)
-                        .font(.compound.bodyXS)
-                        .foregroundColor(.element.tertiaryContent)
-                }
-
-                if timelineItem.properties.deliveryStatus == .sendingFailed {
-                    Image(systemName: "exclamationmark.circle.fill")
-                        .resizable()
-                        .foregroundColor(.element.alert)
-                        .frame(width: 16, height: 16)
+                HStack(alignment: .bottom, spacing: 4) {
+                    contentWithReply
+                    if timelineItem.properties.isEdited {
+                        Text(L10n.commonEditedSuffix)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.element.secondaryContent)
+                    }
+                    timestamp
                 }
             }
             .bubbleStyle(inset: true,
                          color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
                          cornerRadius: cornerRadius,
                          corners: roundedCorners)
+        }
+    }
+
+    @ViewBuilder
+    var timestamp: some View {
+        HStack {
+            Text(timelineItem.timestamp)
+                .font(.compound.bodyXS)
+                .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
+            if timelineItem.properties.deliveryStatus == .sendingFailed {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .resizable()
+                    .foregroundColor(.element.alert)
+                    .frame(width: 16, height: 16)
+            }
         }
     }
     
