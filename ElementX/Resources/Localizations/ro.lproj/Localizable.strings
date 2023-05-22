@@ -22,6 +22,7 @@
 "action_edit" = "Editați";
 "action_enable" = "Activați";
 "action_invite" = "Invitați";
+"action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invitați prieteni în %1$@";
 "action_invites_list" = "Invitații";
 "action_learn_more" = "Aflați mai multe";
@@ -68,6 +69,7 @@
 "common_file" = "Fişier";
 "common_gif" = "GIF";
 "common_image" = "Imagine";
+"common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Linkul a fost copiat în clipboard";
 "common_loading" = "Se încarcă…";
 "common_message" = "Mesaj";
@@ -97,6 +99,8 @@
 "common_suggestions" = "Sugestii";
 "common_topic" = "Subiect";
 "common_unable_to_decrypt" = "Nu s-a putut decripta";
+"common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
+"common_unable_to_invite_title" = "Unable to send invite(s)";
 "common_unsupported_event" = "Eveniment neacceptat";
 "common_username" = "Utilizator";
 "common_verification_cancelled" = "Verificare anulată";
@@ -119,6 +123,7 @@
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";
+"invite_friends_rich_title" = "🔐️ Join me on %1$@";
 "invite_friends_text" = "Hei, vorbește cu mine pe %1$@: %2$@";
 "leave_room_alert_empty_subtitle" = "Sunteți sigur că vreți să părăsiți această cameră? Sunteți singura persoană de aici. Dacă o părasiți, nimeni nu se va mai putea alătura în viitor, inclusiv dumneavoastra.";
 "leave_room_alert_private_subtitle" = "Sunteți sigur că vrei să părăsiți această cameră? Această cameră nu este publică și nu va veti putea alătura din nou fără o invitație.";
@@ -221,9 +226,11 @@
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
+"screen_room_details_edition_error" = "An error occurred when updating the room details";
 "screen_room_details_encryption_enabled_subtitle" = "Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca.";
 "screen_room_details_encryption_enabled_title" = "Criptarea mesajelor este activată";
 "screen_room_details_share_room_title" = "Partajați camera";
+"screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Blocați";
 "screen_room_member_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";
 "screen_room_member_details_block_user" = "Blocați utilizatorul";
@@ -231,6 +238,7 @@
 "screen_room_member_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_room_member_details_unblock_user" = "Deblocați utilizatorul";
 "screen_room_member_list_pending_header_title" = "Pending";
+"screen_room_member_list_room_members_header_title" = "Room members";
 "screen_roomlist_a11y_create_message" = "Creați o conversație sau o cameră nouă";
 "screen_roomlist_main_space_title" = "Toate conversatiile";
 "screen_session_verification_cancelled_subtitle" = "Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă.";

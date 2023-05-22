@@ -22,6 +22,7 @@
 "action_edit" = "Edit";
 "action_enable" = "Enable";
 "action_invite" = "Invite";
+"action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invite friends to %1$@";
 "action_invites_list" = "Invites";
 "action_learn_more" = "Learn more";
@@ -68,6 +69,7 @@
 "common_file" = "File";
 "common_gif" = "GIF";
 "common_image" = "Image";
+"common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
 "common_loading" = "Loading…";
 "common_message" = "Message";
@@ -97,6 +99,8 @@
 "common_suggestions" = "Suggestions";
 "common_topic" = "Topic";
 "common_unable_to_decrypt" = "Unable to decrypt";
+"common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
+"common_unable_to_invite_title" = "Unable to send invite(s)";
 "common_unsupported_event" = "Unsupported event";
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
@@ -119,6 +123,7 @@
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
+"invite_friends_rich_title" = "🔐️ Join me on %1$@";
 "invite_friends_text" = "Hey, talk to me on %1$@: %2$@";
 "leave_room_alert_empty_subtitle" = "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.";
 "leave_room_alert_private_subtitle" = "Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.";
@@ -221,9 +226,11 @@
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
+"screen_room_details_edition_error" = "An error occurred when updating the room details";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_share_room_title" = "Share room";
+"screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
 "screen_room_member_details_block_user" = "Block user";
@@ -231,6 +238,7 @@
 "screen_room_member_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
 "screen_room_member_list_pending_header_title" = "Pending";
+"screen_room_member_list_room_members_header_title" = "Room members";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
