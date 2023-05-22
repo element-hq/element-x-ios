@@ -56,6 +56,8 @@ public enum L10n {
   public static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
   /// Invite
   public static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
+  /// Invite friends
+  public static var actionInviteFriends: String { return L10n.tr("Localizable", "action_invite_friends") }
   /// Invite friends to %1$@
   public static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))
@@ -152,6 +154,8 @@ public enum L10n {
   public static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
   public static var commonImage: String { return L10n.tr("Localizable", "common_image") }
+  /// Leaving room
+  public static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Link copied to clipboard
   public static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Loading…
@@ -216,6 +220,10 @@ public enum L10n {
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// Unable to decrypt
   public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
+  /// We were unable to successfully send invites to one or more users.
+  public static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
+  /// Unable to send invite(s)
+  public static var commonUnableToInviteTitle: String { return L10n.tr("Localizable", "common_unable_to_invite_title") }
   /// Unsupported event
   public static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
   /// Username
@@ -266,6 +274,10 @@ public enum L10n {
   public static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
   public static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
+  /// 🔐️ Join me on %1$@
+  public static func inviteFriendsRichTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "invite_friends_rich_title", String(describing: p1))
+  }
   /// Hey, talk to me on %1$@: %2$@
   public static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
@@ -578,6 +590,8 @@ public enum L10n {
   public static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
   /// Already invited
   public static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
+  /// An error occurred when updating the room details
+  public static var screenRoomDetailsEditionError: String { return L10n.tr("Localizable", "screen_room_details_edition_error") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
@@ -594,6 +608,8 @@ public enum L10n {
   public static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
+  /// Updating room…
+  public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Block
@@ -614,6 +630,8 @@ public enum L10n {
   }
   /// Pending
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
+  /// Room members
+  public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats

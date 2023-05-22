@@ -22,6 +22,7 @@
 "action_edit" = "Modifica";
 "action_enable" = "Attiva";
 "action_invite" = "Invita";
+"action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invita amici a %1$@";
 "action_invites_list" = "Invites";
 "action_learn_more" = "Ulteriori informazioni";
@@ -68,6 +69,7 @@
 "common_file" = "File";
 "common_gif" = "GIF";
 "common_image" = "Immagine";
+"common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Collegamento copiato negli appunti";
 "common_loading" = "Caricamento…";
 "common_message" = "Messaggio";
@@ -97,6 +99,8 @@
 "common_suggestions" = "Suggerimenti";
 "common_topic" = "Oggetto";
 "common_unable_to_decrypt" = "Impossibile decrittografare";
+"common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
+"common_unable_to_invite_title" = "Unable to send invite(s)";
 "common_unsupported_event" = "Evento non supportato";
 "common_username" = "Nome utente";
 "common_verification_cancelled" = "Verifica annullata";
@@ -119,6 +123,7 @@
 "error_no_compatible_app_found" = "Non è stata trovata alcuna app compatibile per gestire questa azione.";
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
+"invite_friends_rich_title" = "🔐️ Join me on %1$@";
 "invite_friends_text" = "Ehi, parlami su %1$@: %2$@";
 "leave_room_alert_empty_subtitle" = "Sei sicuro di voler lasciare questa stanza? Sei l'unica persona presente. Se esci, nessuno potrà unirsi in futuro, te compreso.";
 "leave_room_alert_private_subtitle" = "Sei sicuro di voler lasciare questa stanza? Questa stanza non è pubblica e non potrai rientrare senza un invito.";
@@ -221,9 +226,11 @@
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
+"screen_room_details_edition_error" = "An error occurred when updating the room details";
 "screen_room_details_encryption_enabled_subtitle" = "I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli.";
 "screen_room_details_encryption_enabled_title" = "Crittografia messaggi abilitata";
 "screen_room_details_share_room_title" = "Condividi stanza";
+"screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Blocca";
 "screen_room_member_details_block_alert_description" = "Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento.";
 "screen_room_member_details_block_user" = "Blocca utente";
@@ -231,6 +238,7 @@
 "screen_room_member_details_unblock_alert_description" = "Dopo aver sbloccato l'utente, potrai vedere nuovamente tutti i suoi messaggi.";
 "screen_room_member_details_unblock_user" = "Sblocca utente";
 "screen_room_member_list_pending_header_title" = "Pending";
+"screen_room_member_list_room_members_header_title" = "Room members";
 "screen_roomlist_a11y_create_message" = "Crea una nuova conversazione o stanza";
 "screen_roomlist_main_space_title" = "Tutte le conversazioni";
 "screen_session_verification_cancelled_subtitle" = "C'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata.";
