@@ -32,6 +32,9 @@ struct InviteUsersScreen: View {
                 }
             }
             .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
+            .introspectSearchController { searchViewController in
+                searchViewController.hidesNavigationBarDuringPresentation = false
+            }
             .compoundSearchField()
             .alert(item: $context.alertInfo) { $0.alert }
             .background(ViewFrameReader(frame: $frame))
