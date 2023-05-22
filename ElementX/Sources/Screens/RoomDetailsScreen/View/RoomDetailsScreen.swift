@@ -50,6 +50,14 @@ struct RoomDetailsScreen: View {
         .alert(item: $context.ignoreUserRoomAlertItem,
                actions: blockUserAlertActions,
                message: blockUserAlertMessage)
+        .toolbar {
+            #warning("Localise me!")
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Edit") {
+                    context.send(viewAction: .processTapEdit)
+                }
+            }
+        }
     }
     
     // MARK: - Private

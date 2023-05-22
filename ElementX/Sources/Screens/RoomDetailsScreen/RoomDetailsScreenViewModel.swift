@@ -71,6 +71,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
+        case .processTapEdit:
+            callback?(.requestEditDetailsPresentation)
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:

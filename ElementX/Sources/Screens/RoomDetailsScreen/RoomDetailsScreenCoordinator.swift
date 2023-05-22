@@ -62,6 +62,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.cancel)
             case .leftRoom:
                 self.callback?(.leftRoom)
+            case .requestEditDetailsPresentation:
+                self.presentRoomDetailsEditScreen()
             }
         }
     }
@@ -114,6 +116,28 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         .store(in: &cancellables)
         
         parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+    }
+    
+    private func presentRoomDetailsEditScreen() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(promptType: .regular)
+        let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
+        
+        roomDetailsEditCoordinator.actions
+            .sink { action in
+                switch action {
+                case .accept:
+                    break
+                case .cancel:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
+        
+        parameters.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func toggleUser(_ user: UserProfile) {

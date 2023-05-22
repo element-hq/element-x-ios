@@ -26,6 +26,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestInvitePeoplePresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
+    case requestEditDetailsPresentation
 }
 
 // MARK: View
@@ -130,6 +131,7 @@ enum RoomDetailsScreenViewAction {
     case processTapLeave
     case processTapIgnore
     case processTapUnignore
+    case processTapEdit
     case confirmLeave
     case ignoreConfirmed
     case unignoreConfirmed
