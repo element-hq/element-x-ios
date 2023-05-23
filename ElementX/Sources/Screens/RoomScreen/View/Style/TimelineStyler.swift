@@ -71,7 +71,7 @@ struct TimelineStyler<Content: View>: View {
 struct TimelineItemStyler_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
-    static let base = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
+    static let base = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
 
     static let sent: TextRoomTimelineItem = {
         var result = base
@@ -93,27 +93,17 @@ struct TimelineItemStyler_Previews: PreviewProvider {
 
     static let last: TextRoomTimelineItem = {
         let id = viewModel.state.items.last?.id ?? UUID().uuidString
-        let result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: ""))
+        let result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         return result
     }()
 
     static var testView: some View {
         VStack {
-            TimelineStyler(timelineItem: sent) {
-                Text("Sent")
-            }
-            TimelineStyler(timelineItem: sending) {
-                Text("Sending")
-            }
-            TimelineStyler(timelineItem: base) {
-                Text("Normal")
-            }
-            TimelineStyler(timelineItem: last) {
-                Text("Last")
-            }
-            TimelineStyler(timelineItem: failed) {
-                Text("Failed")
-            }
+            TextRoomTimelineView(timelineItem: sent)
+            TextRoomTimelineView(timelineItem: sending)
+            TextRoomTimelineView(timelineItem: base)
+            TextRoomTimelineView(timelineItem: last)
+            TextRoomTimelineView(timelineItem: failed)
         }
     }
 

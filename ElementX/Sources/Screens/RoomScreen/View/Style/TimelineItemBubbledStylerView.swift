@@ -28,6 +28,10 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
 
+    private var isTextItem: Bool {
+        timelineItem is TextRoomTimelineItem
+    }
+
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
             VStack(alignment: alignment, spacing: -12) {
@@ -118,22 +122,29 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        ZStack(alignment: .topLeading) {
-            contentWithReply
-                .layoutPriority(1)
-            VStack(alignment: .trailing, spacing: 0) {
-                Spacer()
-                HStack(alignment: .bottom, spacing: 4) {
+        if isTextItem {
+            ZStack(alignment: .topLeading) {
+                contentWithReply
+                    .layoutPriority(1)
+                VStack(alignment: .trailing, spacing: 0) {
                     Spacer()
-                    timestamp
+                    HStack(alignment: .bottom, spacing: 0) {
+                        Spacer()
+                        timestamp
+                    }
                 }
+            }
+        } else {
+            HStack(alignment: .bottom, spacing: 4) {
+                contentWithReply
+                timestamp
             }
         }
     }
 
     @ViewBuilder
     var timestamp: some View {
-        HStack {
+        HStack(spacing: 4) {
             Text(timelineItem.timestampString)
                 .font(.compound.bodyXS)
                 .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
@@ -141,9 +152,10 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                 Image(systemName: "exclamationmark.circle.fill")
                     .resizable()
                     .foregroundColor(.element.alert)
-                    .frame(width: 16, height: 16)
+                    .frame(width: 12, height: 12)
             }
         }
+        .padding(.bottom, -4)
     }
     
     @ViewBuilder

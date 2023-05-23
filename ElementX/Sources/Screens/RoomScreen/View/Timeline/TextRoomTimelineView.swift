@@ -26,14 +26,14 @@ struct TextRoomTimelineView: View {
         guard timelineStyle == .bubbles else {
             return ""
         }
-        var whiteSpaces = ""
+        var whiteSpaces = "\u{2004}"
         timelineItem.timestampString.forEach { _ in
             // fixed size whitespace of size 1/3 em per character
             whiteSpaces += "\u{2004}"
         }
         // To account for the extra spacing created by the alert icon
         if timelineItem.properties.deliveryStatus == .sendingFailed {
-            whiteSpaces += String(repeating: "\u{2004}", count: 5)
+            whiteSpaces += String(repeating: "\u{2004}", count: 3)
         }
         // braille whitespace, which is non breakable but makes previous whitespaces breakable
         return whiteSpaces + "\u{2800}"
