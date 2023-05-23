@@ -16,6 +16,13 @@
 
 enum RoomDetailsEditScreenViewModelAction { }
 
-struct RoomDetailsEditScreenViewState: BindableState { }
+struct RoomDetailsEditScreenViewStateBindings {
+    var roomName = ""
+    var roomTopic = ""
+}
+
+struct RoomDetailsEditScreenViewState: BindableState {
+    var bindings: RoomDetailsEditScreenViewStateBindings = .init()
+}
 
 enum RoomDetailsEditScreenViewAction { }

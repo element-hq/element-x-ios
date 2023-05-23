@@ -20,9 +20,78 @@ struct RoomDetailsEditScreen: View {
     @ObservedObject var context: RoomDetailsEditScreenViewModel.Context
     
     var body: some View {
+        mainContent
+            .scrollDismissesKeyboard(.immediately)
+    }
+    
+    // MARK: - Private
+    
+    private var mainContent: some View {
         Form {
-            Text("Hello world")
+            avatar
+            nameSection
+            topicSection
         }
+        .navigationTitle("Edit room")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save") { }
+            }
+        }
+    }
+    
+    private var avatar: some View {
+        LoadableAvatarImage(url: nil,
+                            name: "Avatar name",
+                            contentID: "some",
+                            avatarSize: .user(on: .memberDetails),
+                            imageProvider: context.imageProvider)
+            .overlay(alignment: .bottomTrailing) {
+                avatarOverlayIcon
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .listRowBackground(Color.clear)
+    }
+    
+    private var nameSection: some View {
+        Section {
+            TextField(L10n.screenCreateRoomRoomNameLabel,
+                      text: $context.roomName,
+                      prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
+                      axis: .horizontal)
+                .background(Color.element.formRowBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        } header: {
+            Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+                .font(.compound.bodyXS)
+                .formSectionHeader()
+        }
+    }
+    
+    private var topicSection: some View {
+        Section {
+            TextField(L10n.screenCreateRoomTopicLabel,
+                      text: $context.roomTopic,
+                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
+                      axis: .vertical)
+                .lineLimit(3, reservesSpace: true)
+        } header: {
+            Text(L10n.screenCreateRoomTopicLabel)
+                .formSectionHeader()
+        }
+    }
+    
+    private var avatarOverlayIcon: some View {
+        Image(systemName: "camera")
+            .padding(2)
+            .imageScale(.small)
+            .foregroundColor(.white)
+            .background {
+                Circle()
+                    .foregroundColor(.black)
+                    .aspectRatio(1, contentMode: .fill)
+            }
     }
 }
 
@@ -31,6 +100,8 @@ struct RoomDetailsEditScreen: View {
 struct RoomDetailsEditScreen_Previews: PreviewProvider {
     static let viewModel = RoomDetailsEditScreenViewModel()
     static var previews: some View {
-        RoomDetailsEditScreen(context: viewModel.context)
+        NavigationStack {
+            RoomDetailsEditScreen(context: viewModel.context)
+        }
     }
 }
