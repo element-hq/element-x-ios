@@ -240,6 +240,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+        mockTimeline
+            .environment(\.layoutDirection, .rightToLeft)
+            .previewDisplayName("Mock Timeline RTL")
         replies
             .previewDisplayName("Replies")
     }
