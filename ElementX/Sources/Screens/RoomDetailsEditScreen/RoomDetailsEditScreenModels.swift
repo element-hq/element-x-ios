@@ -17,15 +17,32 @@
 enum RoomDetailsEditScreenViewModelAction { }
 
 struct RoomDetailsEditScreenViewStateBindings {
-    var roomName = ""
-    var roomTopic = ""
+    var name: String
+    var topic: String
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
+    let initialName: String?
+    let initialTopic: String?
     let canEditAvatar: Bool
     let canEditName: Bool
     let canEditTopic: Bool
-    var bindings: RoomDetailsEditScreenViewStateBindings = .init()
+
+    var bindings: RoomDetailsEditScreenViewStateBindings
+    
+    var nameDidChange: Bool {
+        !bindings.name.isEmpty && bindings.name != initialName
+    }
+    
+    var topicDidChange: Bool {
+        !bindings.topic.isEmpty && bindings.topic != initialTopic
+    }
+
+    var canSave: Bool {
+        nameDidChange || topicDidChange
+    }
 }
 
-enum RoomDetailsEditScreenViewAction { }
+enum RoomDetailsEditScreenViewAction {
+    case save
+}

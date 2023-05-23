@@ -30,12 +30,23 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     init(accountOwner: RoomMemberProxyProtocol, roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         
-        super.init(initialViewState: RoomDetailsEditScreenViewState(canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
+        let roomName = roomProxy.name
+        let roomTopic = roomProxy.topic
+        
+        super.init(initialViewState: RoomDetailsEditScreenViewState(initialName: roomName,
+                                                                    initialTopic: roomTopic,
+                                                                    canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
                                                                     canEditName: accountOwner.canSendStateEvent(type: .roomName),
-                                                                    canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic)))
+                                                                    canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
+                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")))
     }
     
     // MARK: - Public
     
-    override func process(viewAction: RoomDetailsEditScreenViewAction) { }
+    override func process(viewAction: RoomDetailsEditScreenViewAction) {
+        switch viewAction {
+        case .save:
+            break
+        }
+    }
 }

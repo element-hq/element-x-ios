@@ -36,7 +36,10 @@ struct RoomDetailsEditScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Save") { }
+                Button(L10n.actionSave) {
+                    context.send(viewAction: .save)
+                }
+                .disabled(!context.viewState.canSave)
             }
         }
     }
@@ -59,7 +62,7 @@ struct RoomDetailsEditScreen: View {
     private var nameSection: some View {
         Section {
             TextField(L10n.screenCreateRoomRoomNameLabel,
-                      text: $context.roomName,
+                      text: $context.name,
                       prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                       axis: .horizontal)
                 .disabled(!context.viewState.canEditName)
@@ -75,7 +78,7 @@ struct RoomDetailsEditScreen: View {
     private var topicSection: some View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
-                      text: $context.roomTopic,
+                      text: $context.topic,
                       prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
                 .disabled(!context.viewState.canEditTopic)
