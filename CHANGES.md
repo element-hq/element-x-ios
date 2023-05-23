@@ -1,3 +1,16 @@
+## Changes in 1.1.1 (2023-05-23)
+
+✨ Features
+
+- Redesigned the delivery status icon. ([#921](https://github.com/vector-im/element-x-ios/issues/921))
+- Add creation of a room, fetching the summary, so the room will be ready to be presented. ([#925](https://github.com/vector-im/element-x-ios/issues/925))
+
+🐛 Bugfixes
+
+- Stopping bg task when the app is suspended and the slidingSyncObserver is finished. ([#438](https://github.com/vector-im/element-x-ios/issues/438))
+- Added the context menu to the plain style. ([#686](https://github.com/vector-im/element-x-ios/issues/686))
+
+
 ## Changes in 1.1.0 (2023-05-18)
 
 ✨ Features
