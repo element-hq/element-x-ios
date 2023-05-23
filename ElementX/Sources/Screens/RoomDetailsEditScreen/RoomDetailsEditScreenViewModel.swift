@@ -26,22 +26,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(promptType: RoomDetailsEditScreenPromptType, initialCount: Int = 0) {
-        super.init(initialViewState: RoomDetailsEditScreenViewState(promptType: promptType, count: 0))
+    init() {
+        super.init(initialViewState: RoomDetailsEditScreenViewState())
     }
     
     // MARK: - Public
     
-    override func process(viewAction: RoomDetailsEditScreenViewAction) {
-        switch viewAction {
-        case .accept:
-            actionsSubject.send(.accept)
-        case .cancel:
-            actionsSubject.send(.cancel)
-        case .incrementCount:
-            state.count += 1
-        case .decrementCount:
-            state.count -= 1
-        }
-    }
+    override func process(viewAction: RoomDetailsEditScreenViewAction) { }
 }

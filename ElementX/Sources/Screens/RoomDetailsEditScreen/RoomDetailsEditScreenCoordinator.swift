@@ -17,16 +17,9 @@
 import Combine
 import SwiftUI
 
-struct RoomDetailsEditScreenCoordinatorParameters {
-    let promptType: RoomDetailsEditScreenPromptType
-}
+struct RoomDetailsEditScreenCoordinatorParameters { }
 
-enum RoomDetailsEditScreenCoordinatorAction {
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum RoomDetailsEditScreenCoordinatorAction { }
 
 final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsEditScreenCoordinatorParameters
@@ -41,23 +34,17 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsEditScreenViewModel(promptType: parameters.promptType)
+        viewModel = RoomDetailsEditScreenViewModel()
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .accept:
-                MXLog.info("User accepted the prompt.")
-                self.actionsSubject.send(.accept)
-            case .cancel:
-                self.actionsSubject.send(.cancel)
+        viewModel.actions
+            .sink { [weak self] _ in
+                guard let self else { return }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomDetailsEditScreen(context: viewModel.context))
     }

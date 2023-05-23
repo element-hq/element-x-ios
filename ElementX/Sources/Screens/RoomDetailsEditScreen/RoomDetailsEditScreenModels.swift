@@ -14,52 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
+enum RoomDetailsEditScreenViewModelAction { }
 
-enum RoomDetailsEditScreenPromptType {
-    case regular
-    case upgrade
-}
+struct RoomDetailsEditScreenViewState: BindableState { }
 
-extension RoomDetailsEditScreenPromptType: Identifiable, CaseIterable {
-    var id: Self { self }
-    
-    var title: String {
-        switch self {
-        case .regular:
-            return "Make this chat public?"
-        case .upgrade:
-            return "Privacy warning"
-        }
-    }
-    
-    var imageSystemName: String {
-        switch self {
-        case .regular:
-            return "app.gift"
-        case .upgrade:
-            return "shield"
-        }
-    }
-}
-
-enum RoomDetailsEditScreenViewModelAction {
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
-
-struct RoomDetailsEditScreenViewState: BindableState {
-    var promptType: RoomDetailsEditScreenPromptType
-    var count: Int
-}
-
-enum RoomDetailsEditScreenViewAction {
-    case incrementCount
-    case decrementCount
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum RoomDetailsEditScreenViewAction { }

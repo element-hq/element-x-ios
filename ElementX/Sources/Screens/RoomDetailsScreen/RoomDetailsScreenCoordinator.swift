@@ -121,17 +121,11 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private func presentRoomDetailsEditScreen() {
         let navigationStackCoordinator = NavigationStackCoordinator()
         
-        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(promptType: .regular)
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters()
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions
-            .sink { action in
-                switch action {
-                case .accept:
-                    break
-                case .cancel:
-                    break
-                }
+            .sink { _ in
             }
             .store(in: &cancellables)
         

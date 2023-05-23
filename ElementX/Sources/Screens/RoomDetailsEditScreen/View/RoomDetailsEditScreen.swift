@@ -17,75 +17,11 @@
 import SwiftUI
 
 struct RoomDetailsEditScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
     @ObservedObject var context: RoomDetailsEditScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal)
-                .readableFrame()
-        }
-        .safeAreaInset(edge: .bottom) {
-            buttons
-                .padding(.horizontal)
-                .padding(.vertical)
-                .readableFrame()
-                .background(Color.element.system)
-        }
-    }
-    
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(spacing: 36) {
-            Text(context.viewState.promptType.title)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("title")
-            
-            Image(systemName: context.viewState.promptType.imageSystemName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
-            
-            HStack {
-                Text("Counter: \(context.viewState.count)")
-                    .font(.compound.bodyLG)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(counterColor)
-                
-                Button("−") {
-                    context.send(viewAction: .decrementCount)
-                }
-                .buttonStyle(.elementGhost())
-                
-                Button("+") {
-                    context.send(viewAction: .incrementCount)
-                }
-                .buttonStyle(.elementGhost())
-            }
-        }
-    }
-    
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .accept) } label: {
-                Text("Accept")
-            }
-            .buttonStyle(.elementAction(.xLarge))
-            
-            Button { context.send(viewAction: .cancel) } label: {
-                Text("Cancel")
-                    .padding(.vertical, 12)
-            }
+        Form {
+            Text("Hello world")
         }
     }
 }
@@ -93,12 +29,8 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider {
-    static let regularViewModel = RoomDetailsEditScreenViewModel(promptType: .regular)
-    static let upgradeViewModel = RoomDetailsEditScreenViewModel(promptType: .upgrade)
+    static let viewModel = RoomDetailsEditScreenViewModel()
     static var previews: some View {
-        RoomDetailsEditScreen(context: regularViewModel.context)
-            .previewDisplayName("Regular")
-        RoomDetailsEditScreen(context: upgradeViewModel.context)
-            .previewDisplayName("Upgrade")
+        RoomDetailsEditScreen(context: viewModel.context)
     }
 }
