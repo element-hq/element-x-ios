@@ -51,10 +51,11 @@ struct RoomDetailsScreen: View {
                actions: blockUserAlertActions,
                message: blockUserAlertMessage)
         .toolbar {
-            #warning("Localise me!")
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Edit") {
-                    context.send(viewAction: .processTapEdit)
+                if context.viewState.canEdit {
+                    Button(L10n.actionEdit) {
+                        context.send(viewAction: .processTapEdit)
+                    }
                 }
             }
         }

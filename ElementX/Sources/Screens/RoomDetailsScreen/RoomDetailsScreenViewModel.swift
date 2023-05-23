@@ -107,6 +107,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.joinedMembersCount = roomMembersDetails.joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
                     self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
+                    self.state.canEditRoomName = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomName) ?? false
+                    self.state.canEditRoomTopic = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
+                    self.state.canEditRoomAvatar = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
                     self.members = members
                 }
             }

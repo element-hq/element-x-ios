@@ -44,9 +44,16 @@ struct RoomDetailsScreenViewState: BindableState {
     var joinedMembersCount = 0
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
+    var canEditRoomName = false
+    var canEditRoomTopic = false
+    var canEditRoomAvatar = false
     
     var isLoadingMembers: Bool {
         members.isEmpty
+    }
+    
+    var canEdit: Bool {
+        canEditRoomName || canEditRoomTopic || canEditRoomAvatar
     }
 
     var bindings: RoomDetailsScreenViewStateBindings

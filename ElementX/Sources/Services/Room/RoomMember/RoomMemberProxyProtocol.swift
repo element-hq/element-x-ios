@@ -37,6 +37,7 @@ protocol RoomMemberProxyProtocol {
 
     func ignoreUser() async -> Result<Void, RoomMemberProxyError>
     func unignoreUser() async -> Result<Void, RoomMemberProxyError>
+    func canSendStateEvent(type: StateEventType) -> Bool
 }
 
 extension RoomMemberProxyProtocol {

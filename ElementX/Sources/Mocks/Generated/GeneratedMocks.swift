@@ -371,6 +371,27 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
             return unignoreUserReturnValue
         }
     }
+    //MARK: - canSendStateEvent
+
+    var canSendStateEventTypeCallsCount = 0
+    var canSendStateEventTypeCalled: Bool {
+        return canSendStateEventTypeCallsCount > 0
+    }
+    var canSendStateEventTypeReceivedType: StateEventType?
+    var canSendStateEventTypeReceivedInvocations: [StateEventType] = []
+    var canSendStateEventTypeReturnValue: Bool!
+    var canSendStateEventTypeClosure: ((StateEventType) -> Bool)?
+
+    func canSendStateEvent(type: StateEventType) -> Bool {
+        canSendStateEventTypeCallsCount += 1
+        canSendStateEventTypeReceivedType = type
+        canSendStateEventTypeReceivedInvocations.append(type)
+        if let canSendStateEventTypeClosure = canSendStateEventTypeClosure {
+            return canSendStateEventTypeClosure(type)
+        } else {
+            return canSendStateEventTypeReturnValue
+        }
+    }
 }
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {
