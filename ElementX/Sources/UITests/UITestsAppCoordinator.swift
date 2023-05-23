@@ -473,7 +473,7 @@ class MockScreen: Identifiable {
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
             let createRoomParameters = CreateRoomFlowParameters()
             let selectedUsers: [UserProfile] = [.mockAlice, .mockBob, .mockCharlie]
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: MockUserIndicatorController(), createRoomParameters: .init(createRoomParameters), selectedUsers: .init(selectedUsers))
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: nil, createRoomParameters: .init(createRoomParameters), selectedUsers: .init(selectedUsers))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -482,7 +482,7 @@ class MockScreen: Identifiable {
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
             let createRoomParameters = CreateRoomFlowParameters()
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: MockUserIndicatorController(), createRoomParameters: .init(createRoomParameters), selectedUsers: .init([]))
+            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: nil, createRoomParameters: .init(createRoomParameters), selectedUsers: .init([]))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
