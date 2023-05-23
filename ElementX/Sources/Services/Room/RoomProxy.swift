@@ -130,7 +130,19 @@ class RoomProxy: RoomProxyProtocol {
         //  return trusted image for now, should be updated after verification status known
         return Asset.Images.encryptionTrusted.image
     }
+
+    var invitedMembersCount: UInt {
+        UInt(room.invitedMembersCount())
+    }
+
+    var joinedMembersCount: UInt {
+        UInt(room.joinedMembersCount())
+    }
     
+    var activeMembersCount: UInt {
+        UInt(room.activeMembersCount())
+    }
+
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         do {
             guard let urlString = try await Task.dispatch(on: lowPriorityDispatchQueue, {
@@ -486,18 +498,26 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    var invitedMembersCount: UInt {
-        UInt(room.invitedMembersCount())
+    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.setName(name: name))
+            } catch {
+                return .failure(.failedSettingRoomName)
+            }
+        }
     }
-    
-    var joinedMembersCount: UInt {
-        UInt(room.joinedMembersCount())
+
+    func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.setTopic(topic: topic))
+            } catch {
+                return .failure(.failedSettingRoomTopic)
+            }
+        }
     }
-    
-    var activeMembersCount: UInt {
-        UInt(room.activeMembersCount())
-    }
-    
+
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener

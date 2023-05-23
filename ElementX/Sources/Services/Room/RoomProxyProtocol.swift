@@ -37,6 +37,8 @@ enum RoomProxyError: Error {
     case failedAcceptingInvite
     case failedRejectingInvite
     case failedInvitingUser
+    case failedSettingRoomName
+    case failedSettingRoomTopic
 }
 
 @MainActor
@@ -60,6 +62,12 @@ protocol RoomProxyProtocol {
     var avatarURL: URL? { get }
 
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
+    
+    var invitedMembersCount: UInt { get }
+    
+    var joinedMembersCount: UInt { get }
+    
+    var activeMembersCount: UInt { get }
     
     /// Publishes the room's updates.
     /// The publisher starts publishing after the first call to `registerTimelineListenerIfNeeded()`
@@ -114,11 +122,9 @@ protocol RoomProxyProtocol {
     
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
-    var invitedMembersCount: UInt { get }
+    func setName(_ name: String?) async -> Result<Void, RoomProxyError>
     
-    var joinedMembersCount: UInt { get }
-    
-    var activeMembersCount: UInt { get }
+    func setTopic(_ topic: String) async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

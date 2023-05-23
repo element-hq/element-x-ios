@@ -26,6 +26,7 @@ struct RoomDetailsEditScreen: View {
     
     // MARK: - Private
     
+    #warning("Localize me")
     private var mainContent: some View {
         Form {
             avatar

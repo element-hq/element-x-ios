@@ -905,6 +905,48 @@ class RoomProxyMock: RoomProxyProtocol {
             return inviteUserIDReturnValue
         }
     }
+    //MARK: - setName
+
+    var setNameCallsCount = 0
+    var setNameCalled: Bool {
+        return setNameCallsCount > 0
+    }
+    var setNameReceivedName: String?
+    var setNameReceivedInvocations: [String?] = []
+    var setNameReturnValue: Result<Void, RoomProxyError>!
+    var setNameClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+
+    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+        setNameCallsCount += 1
+        setNameReceivedName = name
+        setNameReceivedInvocations.append(name)
+        if let setNameClosure = setNameClosure {
+            return await setNameClosure(name)
+        } else {
+            return setNameReturnValue
+        }
+    }
+    //MARK: - setTopic
+
+    var setTopicCallsCount = 0
+    var setTopicCalled: Bool {
+        return setTopicCallsCount > 0
+    }
+    var setTopicReceivedTopic: String?
+    var setTopicReceivedInvocations: [String] = []
+    var setTopicReturnValue: Result<Void, RoomProxyError>!
+    var setTopicClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
+        setTopicCallsCount += 1
+        setTopicReceivedTopic = topic
+        setTopicReceivedInvocations.append(topic)
+        if let setTopicClosure = setTopicClosure {
+            return await setTopicClosure(topic)
+        } else {
+            return setTopicReturnValue
+        }
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
