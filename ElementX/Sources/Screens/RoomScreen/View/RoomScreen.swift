@@ -34,7 +34,6 @@ struct RoomScreen: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .toolbarRole(.editor) // Hide the back button title.
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }

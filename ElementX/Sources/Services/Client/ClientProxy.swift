@@ -192,9 +192,9 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-
-    func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
+    
+    func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
+        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
                 let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
                 let result = try self.client.createRoom(request: parameters)
@@ -203,6 +203,52 @@ class ClientProxy: ClientProxyProtocol {
                 return .failure(.failedCreatingRoom)
             }
         }
+        
+        return await waitForRoomSummary(with: result, name: expectedRoomName)
+    }
+    
+    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError> {
+        let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
+            do {
+                let parameters = CreateRoomParameters(name: parameters.name,
+                                                      topic: parameters.topic,
+                                                      isEncrypted: parameters.isRoomPrivate,
+                                                      isDirect: false,
+                                                      visibility: parameters.isRoomPrivate ? .private : .public,
+                                                      preset: parameters.isRoomPrivate ? .privateChat : .publicChat,
+                                                      invite: userIDs,
+                                                      avatar: nil)
+                let roomId = try self.client.createRoom(request: parameters)
+                return .success(roomId)
+            } catch {
+                return .failure(.failedCreatingRoom)
+            }
+        }
+        
+        return await waitForRoomSummary(with: result, name: parameters.name)
+    }
+    
+    /// Await the room to be available in the room summary list
+    /// - Parameter result: the result of a room creation Task with the roomId
+    private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
+        guard case .success(let roomId) = result else { return result }
+        let runner = ExpiringTaskRunner { [weak self] in
+            guard let roomLists = self?.allRoomsSummaryProvider?.roomListPublisher.values else {
+                return
+            }
+            // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
+            for await roomList in roomLists {
+                guard let summary = roomList.first(where: { $0.id == roomId }) else { continue }
+                guard let name else { break }
+                if summary.name == name {
+                    break
+                }
+            }
+        }
+        
+        // we want to ignore the timeout error, and return the .success case because the room it was properly created already, we are only waiting for it to appear
+        try? await runner.run(timeout: .seconds(10))
+        return result
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
@@ -393,7 +439,7 @@ class ClientProxy: ClientProxyProtocol {
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
-            .syncMode(mode: .selective)
+            .syncModeSelective()
             .addRange(from: 0, toIncluded: 20)
             .onceBuilt(callback: visibleRoomsListProxy)
 
@@ -425,8 +471,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
             .onceBuilt(callback: allRoomsListProxy)
 
         self.allRoomsListBuilder = allRoomsListBuilder
@@ -446,8 +491,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncInvitesRequiredState)
             .filters(filters: slidingSyncInviteFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
             .onceBuilt(callback: invitesListProxy)
 
         self.invitesListBuilder = invitesListBuilder
@@ -463,8 +507,7 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncNotificationsRequiredState)
             .filters(filters: slidingSyncNotificationsFilters)
-            .syncMode(mode: .growing)
-            .batchSize(batchSize: 100)
+            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
         
         self.notificationsListBuilder = notificationsListBuilder
     }
