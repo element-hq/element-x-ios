@@ -108,28 +108,33 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
         } else {
-            VStack(alignment: .trailing, spacing: 4) {
+            contentWithTimestamp
+                .bubbleStyle(inset: true,
+                             color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
+                             cornerRadius: cornerRadius,
+                             corners: roundedCorners)
+        }
+    }
+
+    @ViewBuilder
+    var contentWithTimestamp: some View {
+        ZStack(alignment: .topLeading) {
+            contentWithReply
+                .layoutPriority(1)
+            VStack(alignment: .trailing, spacing: 0) {
+                Spacer()
                 HStack(alignment: .bottom, spacing: 4) {
-                    contentWithReply
-                    if timelineItem.properties.isEdited {
-                        Text(L10n.commonEditedSuffix)
-                            .font(.compound.bodyXS)
-                            .foregroundColor(.element.secondaryContent)
-                    }
+                    Spacer()
                     timestamp
                 }
             }
-            .bubbleStyle(inset: true,
-                         color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
-                         cornerRadius: cornerRadius,
-                         corners: roundedCorners)
         }
     }
 
     @ViewBuilder
     var timestamp: some View {
         HStack {
-            Text(timelineItem.timestamp)
+            Text(timelineItem.timestampString)
                 .font(.compound.bodyXS)
                 .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
             if timelineItem.properties.deliveryStatus == .sendingFailed {

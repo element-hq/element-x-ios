@@ -34,4 +34,12 @@ struct TextRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable
     var body: String {
         content.body
     }
+
+    var timestampString: String {
+        var start = ""
+        if properties.isEdited {
+            start = "\(L10n.commonEditedSuffix) "
+        }
+        return start + timestamp
+    }
 }

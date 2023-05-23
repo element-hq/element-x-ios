@@ -31,4 +31,12 @@ extension EventBasedTimelineItemProtocol {
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
+
+    var timestampString: String {
+        var start = ""
+        if properties.isEdited {
+            start = "\(L10n.commonEditedSuffix) "
+        }
+        return start + timestamp
+    }
 }

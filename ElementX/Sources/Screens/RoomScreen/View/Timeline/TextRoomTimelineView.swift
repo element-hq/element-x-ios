@@ -19,13 +19,42 @@ import SwiftUI
 
 struct TextRoomTimelineView: View {
     let timelineItem: TextRoomTimelineItem
+    @Environment(\.timelineStyle) private var timelineStyle
+
+    // These is needed to create the slightly off inlined timestamp effect
+    private var untrimmableEnd: String {
+        guard timelineStyle == .bubbles else {
+            return ""
+        }
+        var whiteSpaces = ""
+        timelineItem.timestampString.forEach { _ in
+            // fixed size whitespace of size 1/3 em per character
+            whiteSpaces += "\u{2004}"
+        }
+        // To account for the extra spacing created by the alert icon
+        if timelineItem.properties.deliveryStatus == .sendingFailed {
+            whiteSpaces += String(repeating: "\u{2004}", count: 5)
+        }
+        // braille whitespace, which is non breakable but makes previous whitespaces breakable
+        return whiteSpaces + "\u{2800}"
+    }
+
+    private var attributedString: AttributedString? {
+        guard var attributedString = timelineItem.content.formattedBody else {
+            return nil
+        }
+        let untrimmableEnd = AttributedString(untrimmableEnd)
+        attributedString.insert(untrimmableEnd, at: attributedString.endIndex)
+        return attributedString
+    }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let attributedString = timelineItem.content.formattedBody {
+            if let attributedString {
                 FormattedBodyText(attributedString: attributedString)
             } else {
-                FormattedBodyText(text: timelineItem.content.body)
+                let body = timelineItem.content.body + untrimmableEnd
+                FormattedBodyText(text: body)
             }
         }
     }
