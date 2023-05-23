@@ -109,6 +109,10 @@ class TimelineTableViewController: UIViewController {
         tableView.backgroundColor = .element.background
         view.addSubview(tableView)
         
+        // Prevents XCUITest from invoking the diffable dataSource's cellProvider
+        // for each possible cell, causing layout issues
+        tableView.accessibilityElementsHidden = Tests.isRunningUITests
+        
         scrollToBottomPublisher
             .sink { [weak self] _ in
                 self?.scrollToBottom(animated: true)
