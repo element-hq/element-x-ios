@@ -22,6 +22,9 @@ struct RoomDetailsEditScreenViewStateBindings {
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
+    let canEditAvatar: Bool
+    let canEditName: Bool
+    let canEditTopic: Bool
     var bindings: RoomDetailsEditScreenViewStateBindings = .init()
 }
 

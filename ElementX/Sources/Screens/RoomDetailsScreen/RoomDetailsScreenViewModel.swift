@@ -23,6 +23,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
     private var dmRecipient: RoomMemberProxyProtocol?
+    private var accountOwner: RoomMemberProxyProtocol?
     
     @CancellableTask
     private var buildMembersDetailsTask: Task<Void, Never>?
@@ -52,6 +53,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
@@ -72,7 +74,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
         case .processTapEdit:
-            callback?(.requestEditDetailsPresentation)
+            guard let accountOwner else {
+                MXLog.error("Missing account owner when presenting the room's edit details screen")
+                return
+            }
+            callback?(.requestEditDetailsPresentation(accountOwner))
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:
@@ -111,6 +117,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.canEditRoomTopic = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
                     self.state.canEditRoomAvatar = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
                     self.members = members
+                    self.accountOwner = roomMembersDetails.accountOwner
                 }
             }
             .store(in: &cancellables)

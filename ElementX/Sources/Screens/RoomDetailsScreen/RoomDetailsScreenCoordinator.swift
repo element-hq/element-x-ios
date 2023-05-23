@@ -62,8 +62,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.cancel)
             case .leftRoom:
                 self.callback?(.leftRoom)
-            case .requestEditDetailsPresentation:
-                self.presentRoomDetailsEditScreen()
+            case .requestEditDetailsPresentation(let accountOwner):
+                self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
             }
         }
     }
@@ -118,10 +118,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
-    private func presentRoomDetailsEditScreen() {
+    private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
         let navigationStackCoordinator = NavigationStackCoordinator()
         
-        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters()
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner, roomProxy: parameters.roomProxy)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions

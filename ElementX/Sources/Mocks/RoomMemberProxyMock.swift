@@ -43,6 +43,7 @@ extension RoomMemberProxyMock {
         isAccountOwner = configuration.isAccountOwner
         isIgnored = configuration.isIgnored
         canInviteUsers = configuration.canInviteUsers
+        canSendStateEventTypeClosure = { _ in true }
     }
 
     // Mocks

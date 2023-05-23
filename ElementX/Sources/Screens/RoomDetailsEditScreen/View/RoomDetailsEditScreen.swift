@@ -48,7 +48,9 @@ struct RoomDetailsEditScreen: View {
                             avatarSize: .user(on: .memberDetails),
                             imageProvider: context.imageProvider)
             .overlay(alignment: .bottomTrailing) {
-                avatarOverlayIcon
+                if context.viewState.canEditAvatar {
+                    avatarOverlayIcon
+                }
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .listRowBackground(Color.clear)
@@ -60,6 +62,7 @@ struct RoomDetailsEditScreen: View {
                       text: $context.roomName,
                       prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                       axis: .horizontal)
+                .disabled(!context.viewState.canEditName)
                 .background(Color.element.formRowBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } header: {
@@ -75,6 +78,7 @@ struct RoomDetailsEditScreen: View {
                       text: $context.roomTopic,
                       prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
+                .disabled(!context.viewState.canEditTopic)
                 .lineLimit(3, reservesSpace: true)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
@@ -98,7 +102,8 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider {
-    static let viewModel = RoomDetailsEditScreenViewModel()
+    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice, roomProxy: RoomProxyMock())
+    
     static var previews: some View {
         NavigationStack {
             RoomDetailsEditScreen(context: viewModel.context)

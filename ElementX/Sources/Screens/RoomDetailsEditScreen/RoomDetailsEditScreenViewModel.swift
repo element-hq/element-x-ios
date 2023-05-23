@@ -21,13 +21,18 @@ typealias RoomDetailsEditScreenViewModelType = StateStoreViewModel<RoomDetailsEd
 
 class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDetailsEditScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
+    private let roomProxy: RoomProxyProtocol
     
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: RoomDetailsEditScreenViewState())
+    init(accountOwner: RoomMemberProxyProtocol, roomProxy: RoomProxyProtocol) {
+        self.roomProxy = roomProxy
+        
+        super.init(initialViewState: RoomDetailsEditScreenViewState(canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
+                                                                    canEditName: accountOwner.canSendStateEvent(type: .roomName),
+                                                                    canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic)))
     }
     
     // MARK: - Public

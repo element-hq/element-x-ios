@@ -26,7 +26,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestInvitePeoplePresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
-    case requestEditDetailsPresentation
+    case requestEditDetailsPresentation(RoomMemberProxyProtocol)
 }
 
 // MARK: View
