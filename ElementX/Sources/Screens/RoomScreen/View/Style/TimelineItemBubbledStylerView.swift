@@ -17,13 +17,12 @@
 import Foundation
 import SwiftUI
 
-struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View {
+struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-    @ViewBuilder let deliveryStatus: () -> DeliveryStatus
 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
@@ -87,7 +86,8 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                 }
             }
 
-            deliveryStatus()
+            TimelineReceiptView(timelineItem: timelineItem)
+                .environmentObject(context)
                 .padding(.top, 10)
                 .padding(.bottom, 3)
         }

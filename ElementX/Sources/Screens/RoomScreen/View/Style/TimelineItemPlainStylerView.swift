@@ -17,13 +17,12 @@
 import Foundation
 import SwiftUI
 
-struct TimelineItemPlainStylerView<Content: View, DeliveryStatus: View>: View {
+struct TimelineItemPlainStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-    @ViewBuilder let deliveryStatus: () -> DeliveryStatus
 
     var body: some View {
         VStack(alignment: .trailing) {
@@ -39,7 +38,8 @@ struct TimelineItemPlainStylerView<Content: View, DeliveryStatus: View>: View {
                     supplementaryViews
                 }
             }
-            deliveryStatus()
+            TimelineReceiptView(timelineItem: timelineItem)
+                .environmentObject(context)
         }
     }
     

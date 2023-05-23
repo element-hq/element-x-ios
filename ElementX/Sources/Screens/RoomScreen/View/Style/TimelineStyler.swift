@@ -21,12 +21,6 @@ import SwiftUI
 
 struct TimelineStyler<Content: View>: View {
     @Environment(\.timelineStyle) private var style
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
-
-    private var isLastOutgoingMessage: Bool {
-        context.viewState.items.last(where: { !$0.isUnsent })?.id == timelineItem.id &&
-            timelineItem.isOutgoing
-    }
 
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
@@ -34,36 +28,9 @@ struct TimelineStyler<Content: View>: View {
     var body: some View {
         switch style {
         case .plain:
-            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content) {
-                deliveryStatusView
-            }
+            TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
         case .bubbles:
-            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content) {
-                deliveryStatusView
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var deliveryStatusView: some View {
-        switch timelineItem.properties.deliveryStatus {
-        case .sending:
-            TimelineDeliveryStatusView(deliveryStatus: .sending)
-        case .sent:
-            TimelineDeliveryStatusView(deliveryStatus: .sent)
-        case .none:
-            if isLastOutgoingMessage {
-                // We always display the sent icon for the latest echoed outgoing message
-                TimelineDeliveryStatusView(deliveryStatus: .sent)
-            }
-        case .sendingFailed:
-            if style == .plain {
-                Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
-                    .foregroundColor(.element.alert)
-                    .frame(width: 16, height: 16)
-            }
-            // The bubbles handle the failure internally
+            TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
         }
     }
 }
