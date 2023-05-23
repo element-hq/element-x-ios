@@ -35,6 +35,12 @@ struct RoomDetailsEditScreen: View {
         .navigationTitle("Edit room")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(L10n.actionSave) {
                     context.send(viewAction: .save)

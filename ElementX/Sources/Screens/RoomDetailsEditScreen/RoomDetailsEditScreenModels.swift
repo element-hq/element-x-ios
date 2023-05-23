@@ -14,7 +14,9 @@
 // limitations under the License.
 //
 
-enum RoomDetailsEditScreenViewModelAction { }
+enum RoomDetailsEditScreenViewModelAction {
+    case cancel
+}
 
 struct RoomDetailsEditScreenViewStateBindings {
     var name: String
@@ -44,5 +46,6 @@ struct RoomDetailsEditScreenViewState: BindableState {
 }
 
 enum RoomDetailsEditScreenViewAction {
+    case cancel
     case save
 }

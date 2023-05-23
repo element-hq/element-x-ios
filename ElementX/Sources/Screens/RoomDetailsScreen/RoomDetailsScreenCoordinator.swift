@@ -124,10 +124,13 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner, roomProxy: parameters.roomProxy)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
-        roomDetailsEditCoordinator.actions
-            .sink { _ in
+        roomDetailsEditCoordinator.actions.sink { [weak self] action in
+            switch action {
+            case .cancel:
+                self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
             }
-            .store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         

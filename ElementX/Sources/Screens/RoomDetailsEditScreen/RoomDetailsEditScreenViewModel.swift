@@ -45,6 +45,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     
     override func process(viewAction: RoomDetailsEditScreenViewAction) {
         switch viewAction {
+        case .cancel:
+            actionsSubject.send(.cancel)
         case .save:
             break
         }

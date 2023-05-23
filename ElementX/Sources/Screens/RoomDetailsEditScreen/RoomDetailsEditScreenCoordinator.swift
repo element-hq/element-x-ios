@@ -22,7 +22,9 @@ struct RoomDetailsEditScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
 }
 
-enum RoomDetailsEditScreenCoordinatorAction { }
+enum RoomDetailsEditScreenCoordinatorAction {
+    case cancel
+}
 
 final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsEditScreenCoordinatorParameters
@@ -42,8 +44,11 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModel.actions
-            .sink { [weak self] _ in
-                guard let self else { return }
+            .sink { [weak self] action in
+                switch action {
+                case .cancel:
+                    self?.actionsSubject.send(.cancel)
+                }
             }
             .store(in: &cancellables)
     }
