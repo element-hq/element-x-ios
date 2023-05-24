@@ -31,12 +31,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
-         roomName: String?,
+         roomName: String,
          roomAvatarUrl: URL? = nil) {
         self.timelineController = timelineController
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
-                                                         roomTitle: roomName ?? "Unknown room 💥",
+                                                         roomTitle: roomName,
                                                          roomAvatarURL: roomAvatarUrl,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
                                                          bindings: .init(composerText: "", composerFocused: false)),
@@ -59,7 +59,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                         self.state.isBackPaginating = isBackPaginating
                     }
                 case .updatedStateEvents(let room):
-                    self.state.roomTitle = room.displayName ?? room.name ?? "Unknown room 💥"
+                    self.state.roomTitle = room.roomTitle
                     self.state.roomAvatarURL = room.avatarURL
                 }
             }

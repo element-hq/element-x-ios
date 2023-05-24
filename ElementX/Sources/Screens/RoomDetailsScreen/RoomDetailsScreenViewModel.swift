@@ -36,7 +36,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
-                                           title: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
+                                           title: roomProxy.roomTitle,
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            permalink: roomProxy.permalink,
@@ -100,6 +100,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
                     self.members = members
                 }
+            }
+            .store(in: &cancellables)
+        
+        roomProxy.updatesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.state.title = self.roomProxy.roomTitle
+                self.state.topic = self.roomProxy.topic
+                self.state.avatarURL = self.roomProxy.avatarURL
             }
             .store(in: &cancellables)
     }
