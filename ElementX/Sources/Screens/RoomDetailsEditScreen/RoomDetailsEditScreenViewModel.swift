@@ -22,13 +22,15 @@ typealias RoomDetailsEditScreenViewModelType = StateStoreViewModel<RoomDetailsEd
 class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDetailsEditScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: RoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(accountOwner: RoomMemberProxyProtocol, roomProxy: RoomProxyProtocol) {
+    init(accountOwner: RoomMemberProxyProtocol, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
         
         let roomName = roomProxy.name
         let roomTopic = roomProxy.topic
@@ -48,7 +50,42 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         case .cancel:
             actionsSubject.send(.cancel)
         case .save:
-            break
+            saveRoomDetails()
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func saveRoomDetails() {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            do {
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    if state.nameDidChange {
+                        group.addTask {
+                            try await self.roomProxy.setName(self.state.bindings.name).get()
+                        }
+                    }
+                    
+                    if state.topicDidChange {
+                        group.addTask {
+                            try await self.roomProxy.setTopic(self.state.bindings.topic).get()
+                        }
+                    }
+                    
+                    try await group.waitForAll()
+                }
+                
+                state.initialName = self.state.bindings.name
+                state.initialTopic = self.state.bindings.topic
+            } catch {
+                #warning("Add error handling")
+            }
         }
     }
 }

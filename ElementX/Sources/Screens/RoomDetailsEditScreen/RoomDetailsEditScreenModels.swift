@@ -24,8 +24,8 @@ struct RoomDetailsEditScreenViewStateBindings {
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
-    let initialName: String?
-    let initialTopic: String?
+    var initialName: String?
+    var initialTopic: String?
     let canEditAvatar: Bool
     let canEditName: Bool
     let canEditTopic: Bool

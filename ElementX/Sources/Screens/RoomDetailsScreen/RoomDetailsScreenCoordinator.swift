@@ -120,8 +120,9 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     
     private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
         let navigationStackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
         
-        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner, roomProxy: parameters.roomProxy)
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner, roomProxy: parameters.roomProxy, userIndicatorController: userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -134,7 +135,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator)
+        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
     private func toggleUser(_ user: UserProfile) {

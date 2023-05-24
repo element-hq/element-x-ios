@@ -121,7 +121,7 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider {
-    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice, roomProxy: RoomProxyMock())
+    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice, roomProxy: RoomProxyMock(), userIndicatorController: MockUserIndicatorController())
     
     static var previews: some View {
         NavigationStack {

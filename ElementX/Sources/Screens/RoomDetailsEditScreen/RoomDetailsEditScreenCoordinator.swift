@@ -20,6 +20,7 @@ import SwiftUI
 struct RoomDetailsEditScreenCoordinatorParameters {
     let accountOwner: RoomMemberProxyProtocol
     let roomProxy: RoomProxyProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -39,7 +40,9 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsEditScreenViewModel(accountOwner: parameters.accountOwner, roomProxy: parameters.roomProxy)
+        viewModel = RoomDetailsEditScreenViewModel(accountOwner: parameters.accountOwner,
+                                                   roomProxy: parameters.roomProxy,
+                                                   userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
