@@ -59,14 +59,13 @@ protocol RoomProxyProtocol {
     var avatarURL: URL? { get }
 
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
+    var updatesPublisher: AnyPublisher<TimelineDiff, Never> { get }
 
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError>
-    
-    func removeTimelineListener()
+    func setupTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError>
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     

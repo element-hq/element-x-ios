@@ -419,6 +419,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembersPublisher = value }
     }
     var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
+    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
+        get { return underlyingUpdatesPublisher }
+        set(value) { underlyingUpdatesPublisher = value }
+    }
+    var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
     var invitedMembersCount: UInt {
         get { return underlyingInvitedMembersCount }
         set(value) { underlyingInvitedMembersCount = value }
@@ -477,38 +482,22 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - addTimelineListener
+    //MARK: - setupTimelineListenerIfNeeded
 
-    var addTimelineListenerListenerCallsCount = 0
-    var addTimelineListenerListenerCalled: Bool {
-        return addTimelineListenerListenerCallsCount > 0
+    var setupTimelineListenerIfNeededCallsCount = 0
+    var setupTimelineListenerIfNeededCalled: Bool {
+        return setupTimelineListenerIfNeededCallsCount > 0
     }
-    var addTimelineListenerListenerReceivedListener: TimelineListener?
-    var addTimelineListenerListenerReceivedInvocations: [TimelineListener] = []
-    var addTimelineListenerListenerReturnValue: Result<[TimelineItem], RoomProxyError>!
-    var addTimelineListenerListenerClosure: ((TimelineListener) -> Result<[TimelineItem], RoomProxyError>)?
+    var setupTimelineListenerIfNeededReturnValue: Result<[TimelineItem], RoomProxyError>!
+    var setupTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem], RoomProxyError>)?
 
-    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
-        addTimelineListenerListenerCallsCount += 1
-        addTimelineListenerListenerReceivedListener = listener
-        addTimelineListenerListenerReceivedInvocations.append(listener)
-        if let addTimelineListenerListenerClosure = addTimelineListenerListenerClosure {
-            return addTimelineListenerListenerClosure(listener)
+    func setupTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
+        setupTimelineListenerIfNeededCallsCount += 1
+        if let setupTimelineListenerIfNeededClosure = setupTimelineListenerIfNeededClosure {
+            return setupTimelineListenerIfNeededClosure()
         } else {
-            return addTimelineListenerListenerReturnValue
+            return setupTimelineListenerIfNeededReturnValue
         }
-    }
-    //MARK: - removeTimelineListener
-
-    var removeTimelineListenerCallsCount = 0
-    var removeTimelineListenerCalled: Bool {
-        return removeTimelineListenerCallsCount > 0
-    }
-    var removeTimelineListenerClosure: (() -> Void)?
-
-    func removeTimelineListener() {
-        removeTimelineListenerCallsCount += 1
-        removeTimelineListenerClosure?()
     }
     //MARK: - paginateBackwards
 

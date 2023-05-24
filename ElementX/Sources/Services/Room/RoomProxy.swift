@@ -41,6 +41,12 @@ class RoomProxy: RoomProxyProtocol {
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.eraseToAnyPublisher()
     }
+    
+    private var timelineListener: RoomTimelineListener?
+    private let updatesSubject = PassthroughSubject<TimelineDiff, Never>()
+    var updatesPublisher: AnyPublisher<MatrixRustSDK.TimelineDiff, Never> {
+        updatesSubject.eraseToAnyPublisher()
+    }
         
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
@@ -139,12 +145,20 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
+    func setupTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
+        guard timelineListener == nil else {
+            return .success([])
+        }
+        
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
         roomSubscriptionObservationToken = slidingSyncRoom.subscribeToRoom(settings: settings)
+        
+        let listener = RoomTimelineListener { [weak self] timelineDiff in
+            self?.updatesSubject.send(timelineDiff)
+        }
         
         if let result = try? slidingSyncRoom.addTimelineListener(listener: listener) {
             roomTimelineObservationToken = result.taskHandle
@@ -473,6 +487,13 @@ class RoomProxy: RoomProxyProtocol {
         UInt(room.activeMembersCount())
     }
     
+    deinit {
+        Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
+            roomTimelineObservationToken?.cancel()
+            _ = slidingSyncRoom.unsubscribeFromRoom()
+        }
+    }
+
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
@@ -485,5 +506,17 @@ class RoomProxy: RoomProxyProtocol {
         
     private func update(displayName: String) {
         self.displayName = displayName
+    }
+}
+
+private class RoomTimelineListener: TimelineListener {
+    private let onUpdateClosure: (TimelineDiff) -> Void
+   
+    init(_ onUpdateClosure: @escaping (TimelineDiff) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(update: TimelineDiff) {
+        onUpdateClosure(update)
     }
 }
