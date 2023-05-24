@@ -126,19 +126,19 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             ZStack(alignment: .topLeading) {
                 contentWithReply
                     .layoutPriority(1)
-                timestamp
+                localisedSendInfo
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
         } else {
             HStack(alignment: .bottom, spacing: 4) {
                 contentWithReply
-                timestamp
+                localisedSendInfo
             }
         }
     }
 
     @ViewBuilder
-    var timestamp: some View {
+    var localisedSendInfo: some View {
         HStack(spacing: 4) {
             Text(timelineItem.localisedSendInfo)
             if timelineItem.properties.deliveryStatus == .sendingFailed {
