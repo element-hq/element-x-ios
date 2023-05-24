@@ -58,6 +58,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     if self.state.isBackPaginating != isBackPaginating {
                         self.state.isBackPaginating = isBackPaginating
                     }
+                case .updatedStateEvents(let room):
+                    self.state.roomTitle = room.displayName ?? room.name ?? "Unknown room 💥"
+                    self.state.roomAvatarURL = room.avatarURL
                 }
             }
             .store(in: &cancellables)

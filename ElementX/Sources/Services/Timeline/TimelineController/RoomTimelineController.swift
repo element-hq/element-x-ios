@@ -217,6 +217,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
+        var hasNewStateEvents = false
         var canBackPaginate = true
         var isBackPaginating = false
         
@@ -237,6 +238,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     isBackPaginating = true
                 } else if timelineItem is TimelineStartRoomTimelineItem {
                     canBackPaginate = false
+                } else if timelineItem is StateRoomTimelineItem {
+                    hasNewStateEvents = true
                 }
                 
                 return timelineItem
@@ -264,6 +267,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.canBackPaginate(canBackPaginate))
         callbacks.send(.isBackPaginating(isBackPaginating))
+        if hasNewStateEvents {
+            callbacks.send(.updatedStateEvents(roomProxy))
+        }
     }
     
     private func buildTimelineItem(for itemProxy: TimelineItemProxy, chunkIndex: Int) -> RoomTimelineItemProtocol? {
