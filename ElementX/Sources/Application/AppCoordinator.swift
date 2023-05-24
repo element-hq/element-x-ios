@@ -565,9 +565,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
         isSuspended = true
 
+        #warning("Intentionally disabled until we understand certain deadlocks")
         // This does seem to work if scheduled from the background task above
         // Schedule it here instead but with an earliest being date of 30 seconds
-        scheduleBackgroundAppRefresh()
+        // scheduleBackgroundAppRefresh()
     }
 
     @objc
