@@ -21,6 +21,8 @@ struct RoomDetailsEditScreen: View {
     
     var body: some View {
         mainContent
+            .scrollContentBackground(.hidden)
+            .background(Color.element.formBackground.ignoresSafeArea())
             .scrollDismissesKeyboard(.immediately)
     }
     
@@ -68,32 +70,39 @@ struct RoomDetailsEditScreen: View {
     
     private var nameSection: some View {
         Section {
+            let canEditName = context.viewState.canEditName
+            
             TextField(L10n.screenCreateRoomRoomNameLabel,
                       text: $context.name,
-                      prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
+                      prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
                       axis: .horizontal)
-                .disabled(!context.viewState.canEditName)
-                .background(Color.element.formRowBackground)
+                .disabled(!canEditName)
+                .listRowBackground(canEditName ? nil : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } header: {
             Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                 .font(.compound.bodyXS)
                 .formSectionHeader()
         }
+        .formSectionStyle()
     }
     
     private var topicSection: some View {
         Section {
+            let canEditTopic = context.viewState.canEditTopic
+            
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.topic,
-                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
+                      prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
                       axis: .vertical)
-                .disabled(!context.viewState.canEditTopic)
+                .disabled(!canEditTopic)
+                .listRowBackground(canEditTopic ? nil : Color.clear)
                 .lineLimit(3, reservesSpace: true)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
                 .formSectionHeader()
         }
+        .formSectionStyle()
     }
     
     private var avatarOverlayIcon: some View {
