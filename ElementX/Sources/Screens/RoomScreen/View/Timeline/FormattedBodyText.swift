@@ -18,52 +18,31 @@ import SwiftUI
 
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
-    @Environment(\.layoutDirection) private var layoutDirection
-
-    @State private var attributedString: AttributedString
-    @State private var hasAppeared = false
-    private var attributedComponents: [AttributedStringBuilderComponent] {
-        attributedString.formattedComponents
-    }
-
-    private let additionalWhitespacesCount: Int
+    
+    private let attributedComponents: [AttributedStringBuilderComponent]
 
     // These is needed to create the slightly off inlined timestamp effect
-    private func updateWhitespaceEnd() {
-        guard additionalWhitespacesCount > 0 else {
-            return
-        }
-
-        var whiteSpaces = ""
-        if layoutDirection == .rightToLeft {
-            whiteSpaces = "\u{202e}"
+    private static func getWhitespaceEnd(whitespaces: Int) -> String? {
+        guard whitespaces > 0 else {
+            return nil
         }
 
         // fixed size whitespace of size 1/3 em per character
-        whiteSpaces += String(repeating: "\u{2004}", count: additionalWhitespacesCount)
+        let whiteSpaces = String(repeating: "\u{2004}", count: whitespaces)
 
         // braille whitespace, which is non breakable but makes previous whitespaces breakable
-        whiteSpaces += "\u{2800}"
-        attributedString.append(AttributedString(stringLiteral: whiteSpaces))
+        return whiteSpaces + "\u{2800}"
     }
     
     init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
-        self.additionalWhitespacesCount = additionalWhitespacesCount
-        _attributedString = State(initialValue: attributedString)
+        var attributedString = attributedString
+        if let whitespaceEnd = FormattedBodyText.getWhitespaceEnd(whitespaces: additionalWhitespacesCount) {
+            attributedString.append(AttributedString(stringLiteral: whitespaceEnd))
+        }
+        attributedComponents = attributedString.formattedComponents
     }
     
     var body: some View {
-        mainContent
-            .onAppear {
-                if !hasAppeared {
-                    updateWhitespaceEnd()
-                    hasAppeared = true
-                }
-            }
-    }
-
-    @ViewBuilder
-    var mainContent: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
                 .tint(.element.links)
