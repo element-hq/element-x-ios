@@ -72,7 +72,7 @@ struct RoomDetailsEditScreen: View {
         Section {
             let canEditName = context.viewState.canEditName
             
-            TextField(L10n.screenCreateRoomRoomNameLabel,
+            TextField(L10n.commonRoomName,
                       text: $context.name,
                       prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
                       axis: .horizontal)
@@ -80,8 +80,7 @@ struct RoomDetailsEditScreen: View {
                 .listRowBackground(canEditName ? nil : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } header: {
-            Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-                .font(.compound.bodyXS)
+            Text(L10n.commonRoomName)
                 .formSectionHeader()
         }
         .formSectionStyle()
@@ -91,7 +90,7 @@ struct RoomDetailsEditScreen: View {
         Section {
             let canEditTopic = context.viewState.canEditTopic
             
-            TextField(L10n.screenCreateRoomTopicLabel,
+            TextField(L10n.commonTopic,
                       text: $context.topic,
                       prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
                       axis: .vertical)
@@ -99,7 +98,7 @@ struct RoomDetailsEditScreen: View {
                 .listRowBackground(canEditTopic ? nil : Color.clear)
                 .lineLimit(3, reservesSpace: true)
         } header: {
-            Text(L10n.screenCreateRoomTopicLabel)
+            Text(L10n.commonTopic)
                 .formSectionHeader()
         }
         .formSectionStyle()

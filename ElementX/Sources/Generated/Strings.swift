@@ -192,6 +192,8 @@ public enum L10n {
   public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
   /// Report submitted
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
+  /// Room name
+  public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results

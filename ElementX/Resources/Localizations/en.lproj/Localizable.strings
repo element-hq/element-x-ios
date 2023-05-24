@@ -85,6 +85,7 @@
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
+"common_room_name" = "Room name";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
