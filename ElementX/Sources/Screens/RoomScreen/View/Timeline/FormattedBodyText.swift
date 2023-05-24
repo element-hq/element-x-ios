@@ -18,28 +18,38 @@ import SwiftUI
 
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
-    
-    private let attributedComponents: [AttributedStringBuilderComponent]
+    @Environment(\.layoutDirection) private var layoutDirection
 
-    // These is needed to create the slightly off inlined timestamp effect
-    private static func getWhitespaceEnd(whitespaces: Int) -> String? {
-        guard whitespaces > 0 else {
-            return nil
-        }
+    private let attributedString: AttributedString
+    private let additionalWhitespacesCount: Int
 
-        // fixed size whitespace of size 1/3 em per character
-        let whiteSpaces = String(repeating: "\u{2004}", count: whitespaces)
-
-        // braille whitespace, which is non breakable but makes previous whitespaces breakable
-        return whiteSpaces + "\u{2800}"
+    private var attributedComponents: [AttributedStringBuilderComponent] {
+        var attributedString = attributedString
+        attributedString.append(AttributedString(stringLiteral: whitespacesEnd))
+        return attributedString.formattedComponents
     }
     
     init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
-        var attributedString = attributedString
-        if let whitespaceEnd = FormattedBodyText.getWhitespaceEnd(whitespaces: additionalWhitespacesCount) {
-            attributedString.append(AttributedString(stringLiteral: whitespaceEnd))
+        self.attributedString = attributedString
+        self.additionalWhitespacesCount = additionalWhitespacesCount
+    }
+
+    // These is needed to create the slightly off inlined timestamp effect
+    private var whitespacesEnd: String {
+        guard additionalWhitespacesCount > 0 else {
+            return ""
         }
-        attributedComponents = attributedString.formattedComponents
+
+        var whiteSpaces = ""
+        if layoutDirection == .rightToLeft {
+            whiteSpaces = "\u{202e}"
+        }
+
+        // fixed size whitespace of size 1/3 em per character
+        whiteSpaces += String(repeating: "\u{2004}", count: additionalWhitespacesCount)
+
+        // braille whitespace, which is non breakable but makes previous whitespaces breakable
+        return whiteSpaces + "\u{2800}"
     }
     
     var body: some View {
