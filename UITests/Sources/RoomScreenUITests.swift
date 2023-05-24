@@ -112,7 +112,7 @@ class RoomScreenUITests: XCTestCase {
     func testTimelineLayoutAtTop() async throws {
         let client = try UITestsSignalling.Client(mode: .tests)
         
-        let app = Application.launch(.roomLayoutTop)
+        let app = Application.launch(.roomLayoutTop, disableTimelineAccessibility: false)
         
         await client.waitForApp()
         defer { try? client.stop() }

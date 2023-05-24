@@ -18,12 +18,18 @@ import SnapshotTesting
 import XCTest
 
 struct Application {
-    static func launch(_ identifier: UITestsScreenIdentifier) -> XCUIApplication {
+    static func launch(_ identifier: UITestsScreenIdentifier, disableTimelineAccessibility: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchEnvironment = [
+        
+        var launchEnvironment = [
             "UI_TESTS_SCREEN": identifier.rawValue
         ]
         
+        if disableTimelineAccessibility {
+            launchEnvironment["UI_TESTS_DISABLE_TIMELINE_ACCESSIBILITY"] = "1"
+        }
+        
+        app.launchEnvironment = launchEnvironment
         app.launch()
         return app
     }
