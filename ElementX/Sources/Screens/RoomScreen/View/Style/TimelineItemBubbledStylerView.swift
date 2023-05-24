@@ -28,7 +28,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private let cornerRadius: CGFloat = 12
 
     private var isTextItem: Bool {
-        timelineItem is TextRoomTimelineItem
+        timelineItem is TextBasedRoomTimelineItem
     }
 
     var body: some View {
