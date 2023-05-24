@@ -162,6 +162,8 @@ class RoomProxy: RoomProxyProtocol {
         
         if let result = try? slidingSyncRoom.addTimelineListener(listener: listener) {
             roomTimelineObservationToken = result.taskHandle
+            timelineListener = listener
+            
             Task {
                 await fetchMembers()
                 await updateMembers()
