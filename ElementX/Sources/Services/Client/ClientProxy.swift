@@ -166,19 +166,9 @@ class ClientProxy: ClientProxyProtocol {
         slidingSyncObserverToken = slidingSync?.sync()
     }
 
-    func stopSync(completionHandler: () -> Void) {
-        guard let slidingSyncObserverToken else {
-            MXLog.info("No sync is present")
-            return
-        }
-        stopSync()
-        while !slidingSyncObserverToken.isFinished() { }
-        completionHandler()
-    }
-
     func stopSync() {
         MXLog.info("Stopping sync")
-        slidingSyncObserverToken?.cancel()
+        slidingSync?.stopSync()
         slidingSyncObserverToken = nil
     }
     
