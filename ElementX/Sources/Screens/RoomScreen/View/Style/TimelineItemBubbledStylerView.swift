@@ -126,13 +126,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             ZStack(alignment: .topLeading) {
                 contentWithReply
                     .layoutPriority(1)
-                VStack(alignment: .trailing, spacing: 0) {
-                    Spacer()
-                    HStack(alignment: .bottom, spacing: 0) {
-                        Spacer()
-                        timestamp
-                    }
-                }
+                timestamp
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
         } else {
             HStack(alignment: .bottom, spacing: 4) {
@@ -146,15 +141,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var timestamp: some View {
         HStack(spacing: 4) {
             Text(timelineItem.timestampString)
-                .font(.compound.bodyXS)
-                .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
             if timelineItem.properties.deliveryStatus == .sendingFailed {
                 Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
-                    .foregroundColor(.element.alert)
-                    .frame(width: 12, height: 12)
             }
         }
+        .font(.compound.bodyXS)
+        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
         .padding(.bottom, -4)
     }
     
