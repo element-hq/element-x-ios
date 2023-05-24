@@ -214,4 +214,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssertTrue(callbackCorrectlyCalled)
     }
+    
+    func testRoomSubscription() async {
+        await context.nextViewState()
+        XCTAssertEqual(roomProxyMock.registerTimelineListenerIfNeededCallsCount, 1)
+    }
 }
