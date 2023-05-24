@@ -18,31 +18,52 @@ import SwiftUI
 
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
-    
-    private let attributedComponents: [AttributedStringBuilderComponent]
+    @Environment(\.layoutDirection) private var layoutDirection
+
+    @State private var attributedString: AttributedString
+    @State private var hasAppeared = false
+    private var attributedComponents: [AttributedStringBuilderComponent] {
+        attributedString.formattedComponents
+    }
+
+    private let additionalWhitespacesCount: Int
 
     // These is needed to create the slightly off inlined timestamp effect
-    private static func getWhitespaceEnd(whitespaces: Int) -> String? {
-        guard whitespaces > 0 else {
-            return nil
+    private func updateWhitespaceEnd() {
+        guard additionalWhitespacesCount > 0 else {
+            return
+        }
+
+        var whiteSpaces = ""
+        if layoutDirection == .rightToLeft {
+            whiteSpaces = "\u{202e}"
         }
 
         // fixed size whitespace of size 1/3 em per character
-        let whiteSpaces = String(repeating: "\u{2004}", count: whitespaces)
+        whiteSpaces += String(repeating: "\u{2004}", count: additionalWhitespacesCount)
 
         // braille whitespace, which is non breakable but makes previous whitespaces breakable
-        return whiteSpaces + "\u{2800}"
+        whiteSpaces += "\u{2800}"
+        attributedString.append(AttributedString(stringLiteral: whiteSpaces))
     }
     
     init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
-        var attributedString = attributedString
-        if let whitespaceEnd = FormattedBodyText.getWhitespaceEnd(whitespaces: additionalWhitespacesCount) {
-            attributedString.append(AttributedString(stringLiteral: whitespaceEnd))
-        }
-        attributedComponents = attributedString.formattedComponents
+        self.additionalWhitespacesCount = additionalWhitespacesCount
+        _attributedString = State(initialValue: attributedString)
     }
     
     var body: some View {
+        mainContent
+            .onAppear {
+                if !hasAppeared {
+                    updateWhitespaceEnd()
+                    hasAppeared = true
+                }
+            }
+    }
+
+    @ViewBuilder
+    var mainContent: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
                 .tint(.element.links)
