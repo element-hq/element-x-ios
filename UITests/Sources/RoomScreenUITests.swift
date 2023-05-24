@@ -118,7 +118,7 @@ class RoomScreenUITests: XCTestCase {
         defer { try? client.stop() }
         
         // Given a timeline that is scrolled to the top.
-        while !app.staticTexts["Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs."].isHittable {
+        for _ in 0...5 {
             app.tables.element.swipeDown()
         }
         let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
