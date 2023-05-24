@@ -19,7 +19,7 @@ import Foundation
 
 struct RoomProxyMockConfiguration {
     var id = UUID().uuidString
-    let name: String? = nil
+    var name: String?
     let displayName: String?
     var topic: String?
     var avatarURL: URL?

@@ -122,7 +122,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
         
-        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner, roomProxy: parameters.roomProxy, userIndicatorController: userIndicatorController)
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
+                                                                                   mediaProvider: parameters.mediaProvider,
+                                                                                   roomProxy: parameters.roomProxy,
+                                                                                   userIndicatorController: userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in

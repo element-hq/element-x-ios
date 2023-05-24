@@ -28,19 +28,24 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(accountOwner: RoomMemberProxyProtocol, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(accountOwner: RoomMemberProxyProtocol,
+         mediaProvider: MediaProviderProtocol,
+         roomProxy: RoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
         let roomName = roomProxy.name
         let roomTopic = roomProxy.topic
         
-        super.init(initialViewState: RoomDetailsEditScreenViewState(initialName: roomName,
+        super.init(initialViewState: RoomDetailsEditScreenViewState(roomID: roomProxy.id,
+                                                                    avatarURL: roomProxy.avatarURL,
+                                                                    initialName: roomName,
                                                                     initialTopic: roomTopic,
                                                                     canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
                                                                     canEditName: accountOwner.canSendStateEvent(type: .roomName),
                                                                     canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
-                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")))
+                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
     }
     
     // MARK: - Public

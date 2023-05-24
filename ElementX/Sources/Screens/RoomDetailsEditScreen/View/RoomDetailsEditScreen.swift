@@ -54,9 +54,9 @@ struct RoomDetailsEditScreen: View {
     }
     
     private var avatar: some View {
-        LoadableAvatarImage(url: nil,
-                            name: "Avatar name",
-                            contentID: "some",
+        LoadableAvatarImage(url: context.viewState.avatarURL,
+                            name: context.viewState.initialName,
+                            contentID: context.viewState.roomID,
                             avatarSize: .user(on: .memberDetails),
                             imageProvider: context.imageProvider)
             .overlay(alignment: .bottomTrailing) {
@@ -120,7 +120,10 @@ struct RoomDetailsEditScreen: View {
 // MARK: - Previews
 
 struct RoomDetailsEditScreen_Previews: PreviewProvider {
-    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice, roomProxy: RoomProxyMock(), userIndicatorController: MockUserIndicatorController())
+    static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice,
+                                                          mediaProvider: MockMediaProvider(),
+                                                          roomProxy: RoomProxyMock(with: .init(name: "Room", displayName: "Room")),
+                                                          userIndicatorController: MockUserIndicatorController())
     
     static var previews: some View {
         NavigationStack {

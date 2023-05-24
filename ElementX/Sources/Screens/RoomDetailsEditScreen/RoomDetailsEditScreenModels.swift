@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+import Foundation
+
 enum RoomDetailsEditScreenViewModelAction {
     case cancel
 }
@@ -24,6 +26,8 @@ struct RoomDetailsEditScreenViewStateBindings {
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
+    let roomID: String
+    let avatarURL: URL?
     var initialName: String?
     var initialTopic: String?
     let canEditAvatar: Bool

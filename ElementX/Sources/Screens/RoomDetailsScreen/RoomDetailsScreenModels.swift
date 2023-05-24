@@ -53,7 +53,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canEdit: Bool {
-        canEditRoomName || canEditRoomTopic || canEditRoomAvatar
+        !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings
