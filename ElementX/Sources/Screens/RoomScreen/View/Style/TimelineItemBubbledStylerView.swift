@@ -140,7 +140,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var timestamp: some View {
         HStack(spacing: 4) {
-            Text(timelineItem.timestampString)
+            Text(timelineItem.localisedSendInfo)
             if timelineItem.properties.deliveryStatus == .sendingFailed {
                 Image(systemName: "exclamationmark.circle.fill")
             }

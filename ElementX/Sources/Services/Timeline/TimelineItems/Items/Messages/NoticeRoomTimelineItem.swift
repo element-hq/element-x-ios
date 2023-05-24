@@ -16,7 +16,7 @@
 
 import UIKit
 
-struct NoticeRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
+struct NoticeRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
     let id: String
     let timestamp: String
     let isOutgoing: Bool

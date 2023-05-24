@@ -20,8 +20,25 @@ struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     
     private let attributedComponents: [AttributedStringBuilderComponent]
+
+    // These is needed to create the slightly off inlined timestamp effect
+    private static func getWhitespaceEnd(whitespaces: Int) -> String? {
+        guard whitespaces > 0 else {
+            return nil
+        }
+
+        // fixed size whitespace of size 1/3 em per character
+        let whiteSpaces = String(repeating: "\u{2004}", count: whitespaces)
+
+        // braille whitespace, which is non breakable but makes previous whitespaces breakable
+        return whiteSpaces + "\u{2800}"
+    }
     
-    init(attributedString: AttributedString) {
+    init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
+        var attributedString = attributedString
+        if let whitespaceEnd = FormattedBodyText.getWhitespaceEnd(whitespaces: additionalWhitespacesCount) {
+            attributedString.append(AttributedString(stringLiteral: whitespaceEnd))
+        }
         attributedComponents = attributedString.formattedComponents
     }
     
@@ -109,8 +126,8 @@ struct FormattedBodyText: View {
 }
 
 extension FormattedBodyText {
-    init(text: String) {
-        self.init(attributedString: AttributedString(text))
+    init(text: String, additionalWhitespacesCount: Int = 0) {
+        self.init(attributedString: AttributedString(text), additionalWhitespacesCount: additionalWhitespacesCount)
     }
 }
 
