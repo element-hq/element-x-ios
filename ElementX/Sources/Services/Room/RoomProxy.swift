@@ -44,7 +44,7 @@ class RoomProxy: RoomProxyProtocol {
     
     private var timelineListener: RoomTimelineListener?
     private let updatesSubject = PassthroughSubject<TimelineDiff, Never>()
-    var updatesPublisher: AnyPublisher<MatrixRustSDK.TimelineDiff, Never> {
+    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
         updatesSubject.eraseToAnyPublisher()
     }
         
@@ -145,9 +145,9 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func setupTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem]?, RoomProxyError> {
         guard timelineListener == nil else {
-            return .success([])
+            return .success(nil)
         }
         
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
@@ -170,15 +170,6 @@ class RoomProxy: RoomProxyProtocol {
         } else {
             return .failure(.failedAddingTimelineListener)
         }
-    }
-    
-    func removeTimelineListener() {
-        roomTimelineObservationToken?.cancel()
-        roomTimelineObservationToken = nil
-        
-        roomSubscriptionObservationToken = nil
-        
-        roomUnsubscriptionObservationToken = slidingSyncRoom.unsubscribeFromRoom()
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {

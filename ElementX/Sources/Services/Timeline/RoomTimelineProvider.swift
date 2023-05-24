@@ -47,8 +47,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
             
-            switch roomProxy.setupTimelineListenerIfNeeded() {
-            case .success(let items):
+            switch roomProxy.registerTimelineListenerIfNeeded() {
+            case .success(.none):
+                MXLog.info("Listener already registered for the room: \(roomProxy.id)")
+            case let .success(.some(items)):
                 itemProxies = items.map(TimelineItemProxy.init)
                 MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
             case .failure:

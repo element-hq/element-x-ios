@@ -482,21 +482,21 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - setupTimelineListenerIfNeeded
+    //MARK: - registerTimelineListenerIfNeeded
 
-    var setupTimelineListenerIfNeededCallsCount = 0
-    var setupTimelineListenerIfNeededCalled: Bool {
-        return setupTimelineListenerIfNeededCallsCount > 0
+    var registerTimelineListenerIfNeededCallsCount = 0
+    var registerTimelineListenerIfNeededCalled: Bool {
+        return registerTimelineListenerIfNeededCallsCount > 0
     }
-    var setupTimelineListenerIfNeededReturnValue: Result<[TimelineItem], RoomProxyError>!
-    var setupTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem], RoomProxyError>)?
+    var registerTimelineListenerIfNeededReturnValue: Result<[TimelineItem]?, RoomProxyError>!
+    var registerTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem]?, RoomProxyError>)?
 
-    func setupTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
-        setupTimelineListenerIfNeededCallsCount += 1
-        if let setupTimelineListenerIfNeededClosure = setupTimelineListenerIfNeededClosure {
-            return setupTimelineListenerIfNeededClosure()
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem]?, RoomProxyError> {
+        registerTimelineListenerIfNeededCallsCount += 1
+        if let registerTimelineListenerIfNeededClosure = registerTimelineListenerIfNeededClosure {
+            return registerTimelineListenerIfNeededClosure()
         } else {
-            return setupTimelineListenerIfNeededReturnValue
+            return registerTimelineListenerIfNeededReturnValue
         }
     }
     //MARK: - paginateBackwards
