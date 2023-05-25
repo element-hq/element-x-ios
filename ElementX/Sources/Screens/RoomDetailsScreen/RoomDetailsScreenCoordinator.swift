@@ -130,7 +130,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
             switch action {
-            case .cancel:
+            case .dismiss:
                 self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }

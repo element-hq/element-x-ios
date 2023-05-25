@@ -88,6 +88,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 
                 state.initialName = self.state.bindings.name
                 state.initialTopic = self.state.bindings.topic
+                
+                actionsSubject.send(.saveFinished)
             } catch {
                 #warning("Add error handling")
             }

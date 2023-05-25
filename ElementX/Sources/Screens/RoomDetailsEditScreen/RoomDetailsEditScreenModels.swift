@@ -18,6 +18,7 @@ import Foundation
 
 enum RoomDetailsEditScreenViewModelAction {
     case cancel
+    case saveFinished
 }
 
 struct RoomDetailsEditScreenViewStateBindings {

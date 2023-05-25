@@ -25,7 +25,7 @@ struct RoomDetailsEditScreenCoordinatorParameters {
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
-    case cancel
+    case dismiss
 }
 
 final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
@@ -51,8 +51,8 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         viewModel.actions
             .sink { [weak self] action in
                 switch action {
-                case .cancel:
-                    self?.actionsSubject.send(.cancel)
+                case .cancel, .saveFinished:
+                    self?.actionsSubject.send(.dismiss)
                 }
             }
             .store(in: &cancellables)
