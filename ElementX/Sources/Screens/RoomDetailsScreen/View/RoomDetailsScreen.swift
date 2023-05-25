@@ -107,11 +107,22 @@ struct RoomDetailsScreen: View {
     
     @ViewBuilder
     private var topicSection: some View {
-        if let topic = context.viewState.topic {
+        if context.viewState.hasTopicSection {
             Section {
-                Text(topic)
-                    .foregroundColor(.element.secondaryContent)
-                    .font(.compound.bodySM)
+                if let topic = context.viewState.topic, !topic.isEmpty {
+                    Text(topic)
+                        .foregroundColor(.element.primaryContent)
+                        .listRowBackground(Color.clear)
+                        .font(.compound.bodyLG)
+                } else {
+                    Button {
+                        context.send(viewAction: .processTapAddTopic)
+                    } label: {
+                        Text(L10n.screenRoomDetailsAddTopicTitle)
+                            .foregroundColor(.element.primaryContent)
+                            .font(.compound.bodyLG)
+                    }
+                }
             } header: {
                 Text(L10n.commonTopic)
                     .formSectionHeader()

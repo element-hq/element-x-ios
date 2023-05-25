@@ -75,6 +75,8 @@ struct RoomDetailsEditScreen: View {
                       text: $context.name,
                       prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
                       axis: .horizontal)
+                .font(.compound.bodyLG)
+                .foregroundColor(.element.primaryContent)
                 .disabled(!canEditName)
                 .listRowBackground(canEditName ? nil : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -93,6 +95,8 @@ struct RoomDetailsEditScreen: View {
                       text: $context.topic,
                       prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
                       axis: .vertical)
+                .font(.compound.bodyLG)
+                .foregroundColor(.element.primaryContent)
                 .disabled(!canEditTopic)
                 .listRowBackground(canEditTopic ? nil : Color.clear)
                 .lineLimit(3, reservesSpace: true)

@@ -73,7 +73,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
-        case .processTapEdit:
+        case .processTapEdit, .processTapAddTopic:
             guard let accountOwner else {
                 MXLog.error("Missing account owner when presenting the room's edit details screen")
                 return

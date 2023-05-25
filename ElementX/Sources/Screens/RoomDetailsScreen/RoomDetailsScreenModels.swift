@@ -55,6 +55,10 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
+    
+    var hasTopicSection: Bool {
+        topic != nil || canEditRoomTopic
+    }
 
     var bindings: RoomDetailsScreenViewStateBindings
 
@@ -139,6 +143,7 @@ enum RoomDetailsScreenViewAction {
     case processTapIgnore
     case processTapUnignore
     case processTapEdit
+    case processTapAddTopic
     case confirmLeave
     case ignoreConfirmed
     case unignoreConfirmed
