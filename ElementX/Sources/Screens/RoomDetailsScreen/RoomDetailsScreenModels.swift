@@ -53,11 +53,11 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canEdit: Bool {
-        !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
+        !isDirect && ServiceLocator.shared.settings.editRoomDetailsFlowEnabled && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
     
     var hasTopicSection: Bool {
-        topic != nil || canEditRoomTopic
+        topic != nil || (canEditRoomTopic && ServiceLocator.shared.settings.editRoomDetailsFlowEnabled)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings

@@ -30,6 +30,7 @@ struct DeveloperOptionsScreenViewStateBindings {
     var startChatUserSuggestionsEnabled: Bool
     var invitesFlowEnabled: Bool
     var inviteMorePeopleFlowEnabled: Bool
+    var editRoomDetailsFlowEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -38,5 +39,6 @@ enum DeveloperOptionsScreenViewAction {
     case changedStartChatUserSuggestionsEnabled
     case changedInvitesFlowEnabled
     case changedInviteMorePeopleFlowEnabled
+    case changedEditRoomDetailsFlowEnabled
     case clearCache
 }
