@@ -24,6 +24,9 @@ struct RoomDetailsEditScreen: View {
             .scrollContentBackground(.hidden)
             .background(Color.element.formBackground.ignoresSafeArea())
             .scrollDismissesKeyboard(.immediately)
+            .confirmationDialog("", isPresented: $context.showMediaSheet) {
+                mediaActionSheet
+            }
     }
     
     // MARK: - Private
@@ -51,22 +54,27 @@ struct RoomDetailsEditScreen: View {
             }
         }
     }
-    
+
     private var avatar: some View {
-        LoadableAvatarImage(url: context.viewState.avatarURL,
-                            name: context.viewState.initialName,
-                            contentID: context.viewState.roomID,
-                            avatarSize: .user(on: .memberDetails),
-                            imageProvider: context.imageProvider)
-            .overlay(alignment: .bottomTrailing) {
-                if context.viewState.canEditAvatar {
-                    avatarOverlayIcon
+        Button {
+            context.send(viewAction: .presentMediaSource)
+        } label: {
+            LoadableAvatarImage(url: context.viewState.avatarURL,
+                                name: context.viewState.initialName,
+                                contentID: context.viewState.roomID,
+                                avatarSize: .user(on: .memberDetails),
+                                imageProvider: context.imageProvider)
+                .overlay(alignment: .bottomTrailing) {
+                    if context.viewState.canEditAvatar {
+                        avatarOverlayIcon
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .listRowBackground(Color.clear)
+        }
+        .disabled(!context.viewState.canEditAvatar)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .listRowBackground(Color.clear)
     }
-    
+
     private var nameSection: some View {
         Section {
             let canEditName = context.viewState.canEditName
@@ -117,6 +125,27 @@ struct RoomDetailsEditScreen: View {
                     .foregroundColor(.black)
                     .aspectRatio(1, contentMode: .fill)
             }
+    }
+    
+    @ViewBuilder
+    private var mediaActionSheet: some View {
+        Button {
+            context.send(viewAction: .displayCameraPicker)
+        } label: {
+            Text(L10n.actionTakePhoto)
+        }
+        Button {
+            context.send(viewAction: .displayMediaPicker)
+        } label: {
+            Text(L10n.actionChoosePhoto)
+        }
+        if true {
+            Button(role: .destructive) {
+                context.send(viewAction: .removeImage)
+            } label: {
+                Text(L10n.actionRemove)
+            }
+        }
     }
 }
 

@@ -56,6 +56,14 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             actionsSubject.send(.cancel)
         case .save:
             saveRoomDetails()
+        case .presentMediaSource:
+            state.bindings.showMediaSheet = true
+        case .displayCameraPicker:
+            break
+        case .displayMediaPicker:
+            break
+        case .removeImage:
+            break
         }
     }
     

@@ -24,6 +24,7 @@ enum RoomDetailsEditScreenViewModelAction {
 struct RoomDetailsEditScreenViewStateBindings {
     var name: String
     var topic: String
+    var showMediaSheet = false
 }
 
 struct RoomDetailsEditScreenViewState: BindableState {
@@ -53,4 +54,8 @@ struct RoomDetailsEditScreenViewState: BindableState {
 enum RoomDetailsEditScreenViewAction {
     case cancel
     case save
+    case presentMediaSource
+    case displayCameraPicker
+    case displayMediaPicker
+    case removeImage
 }
