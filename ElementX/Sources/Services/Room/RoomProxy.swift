@@ -41,7 +41,29 @@ class RoomProxy: RoomProxyProtocol {
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.eraseToAnyPublisher()
     }
-        
+    
+    private var timelineListener: RoomTimelineListener?
+    private let updatesSubject = PassthroughSubject<TimelineDiff, Never>()
+    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
+        updatesSubject.eraseToAnyPublisher()
+    }
+    
+    deinit {
+        Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
+            roomTimelineObservationToken?.cancel()
+            
+            let task = ExpiringTaskRunner {
+                let unsubscribeTask = slidingSyncRoom.unsubscribeFromRoom()
+                
+                while !unsubscribeTask.isFinished() {
+                    try await Task.sleep(for: .seconds(2))
+                }
+            }
+            
+            try? await task.run(timeout: .seconds(30))
+        }
+    }
+
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
@@ -139,15 +161,27 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
+        guard timelineListener == nil else {
+            return .failure(.roomListenerAlreadyRegistered)
+        }
+        
+        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
+                                                        RequiredState(key: "m.room.topic", value: ""),
+                                                        RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
         roomSubscriptionObservationToken = slidingSyncRoom.subscribeToRoom(settings: settings)
         
+        let listener = RoomTimelineListener { [weak self] timelineDiff in
+            self?.updatesSubject.send(timelineDiff)
+        }
+        
         if let result = try? slidingSyncRoom.addTimelineListener(listener: listener) {
             roomTimelineObservationToken = result.taskHandle
+            timelineListener = listener
+            
             Task {
                 await fetchMembers()
                 await updateMembers()
@@ -156,15 +190,6 @@ class RoomProxy: RoomProxyProtocol {
         } else {
             return .failure(.failedAddingTimelineListener)
         }
-    }
-    
-    func removeTimelineListener() {
-        roomTimelineObservationToken?.cancel()
-        roomTimelineObservationToken = nil
-        
-        roomSubscriptionObservationToken = nil
-        
-        roomUnsubscriptionObservationToken = slidingSyncRoom.unsubscribeFromRoom()
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
@@ -485,5 +510,17 @@ class RoomProxy: RoomProxyProtocol {
         
     private func update(displayName: String) {
         self.displayName = displayName
+    }
+}
+
+private class RoomTimelineListener: TimelineListener {
+    private let onUpdateClosure: (TimelineDiff) -> Void
+   
+    init(_ onUpdateClosure: @escaping (TimelineDiff) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(update: TimelineDiff) {
+        onUpdateClosure(update)
     }
 }

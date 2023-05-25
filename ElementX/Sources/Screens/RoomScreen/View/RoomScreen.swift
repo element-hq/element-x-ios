@@ -133,7 +133,7 @@ struct RoomScreen: View {
 struct RoomScreen_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
-                                               roomName: "Preview room")
+                                               roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")))
     
     static var previews: some View {
         NavigationStack {

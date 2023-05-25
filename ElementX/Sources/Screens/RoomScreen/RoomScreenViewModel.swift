@@ -27,17 +27,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         static let toastErrorID = "RoomScreenToastError"
     }
 
+    private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
-         roomName: String?,
-         roomAvatarUrl: URL? = nil) {
+         roomProxy: RoomProxyProtocol) {
+        self.roomProxy = roomProxy
         self.timelineController = timelineController
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
-                                                         roomTitle: roomName ?? "Unknown room 💥",
-                                                         roomAvatarURL: roomAvatarUrl,
+                                                         roomTitle: roomProxy.roomTitle,
+                                                         roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
@@ -69,6 +70,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             return self.contextMenuActionsForItemId(itemId)
         }
+        
+        roomProxy
+            .updatesPublisher
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.state.roomTitle = roomProxy.roomTitle
+                self.state.roomAvatarURL = roomProxy.avatarURL
+            }
+            .store(in: &cancellables)
         
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
@@ -406,5 +417,5 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
-                                          roomName: "Preview room")
+                                          roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")))
 }

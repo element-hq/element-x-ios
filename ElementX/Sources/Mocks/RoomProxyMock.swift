@@ -73,5 +73,7 @@ extension RoomProxyMock {
 
         updateMembersClosure = { }
         acceptInvitationClosure = { .success(()) }
+        registerTimelineListenerIfNeededClosure = { .success([]) }
+        underlyingUpdatesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
     }
 }

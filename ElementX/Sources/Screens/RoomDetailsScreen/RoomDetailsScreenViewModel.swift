@@ -36,7 +36,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
-                                           title: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
+                                           title: roomProxy.roomTitle,
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            permalink: roomProxy.permalink,
@@ -81,6 +81,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     // MARK: - Private
 
     private func setupSubscriptions() {
+        switch roomProxy.registerTimelineListenerIfNeeded() {
+        case .success, .failure(.roomListenerAlreadyRegistered):
+            break
+        case .failure:
+            MXLog.error("Failed to register a room listener in room's details for the room \(roomProxy.id)")
+        }
+        
         roomProxy.membersPublisher
             .sink { [weak self] members in
                 guard let self else { return }
@@ -100,6 +107,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
                     self.members = members
                 }
+            }
+            .store(in: &cancellables)
+        
+        roomProxy.updatesPublisher
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.state.title = self.roomProxy.roomTitle
+                self.state.topic = self.roomProxy.topic
+                self.state.avatarURL = self.roomProxy.avatarURL
             }
             .store(in: &cancellables)
     }

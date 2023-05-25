@@ -44,8 +44,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
-                                        roomName: parameters.roomProxy.displayName ?? parameters.roomProxy.name,
-                                        roomAvatarUrl: parameters.roomProxy.avatarURL)
+                                        roomProxy: parameters.roomProxy)
     }
     
     // MARK: - Public
@@ -76,7 +75,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
-        parameters.roomProxy.removeTimelineListener()
         viewModel.context.send(viewAction: .markRoomAsRead)
     }
     

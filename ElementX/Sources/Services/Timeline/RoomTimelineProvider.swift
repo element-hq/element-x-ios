@@ -18,14 +18,6 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-private class RoomTimelineListener: TimelineListener {
-    let itemsUpdatePublisher = PassthroughSubject<TimelineDiff, Never>()
-    
-    func onUpdate(update: TimelineDiff) {
-        itemsUpdatePublisher.send(update)
-    }
-}
-
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -48,21 +40,21 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxies = []
 
-        Task {
-            let roomTimelineListener = RoomTimelineListener()
-            
-            roomTimelineListener
-                .itemsUpdatePublisher
+        Task { @MainActor in
+            roomProxy
+                .updatesPublisher
                 .collect(.byTime(serialDispatchQueue, 0.1))
                 .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
             
-            switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
-            case .success(let items):
+            switch roomProxy.registerTimelineListenerIfNeeded() {
+            case let .success(items):
                 itemProxies = items.map(TimelineItemProxy.init)
                 MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
+            case .failure(.roomListenerAlreadyRegistered):
+                MXLog.info("Listener already registered for the room: \(roomProxy.id)")
             case .failure:
-                let roomID = await roomProxy.id
+                let roomID = roomProxy.id
                 MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
             }
         }
