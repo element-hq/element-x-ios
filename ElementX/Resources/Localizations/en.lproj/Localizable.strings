@@ -230,7 +230,8 @@
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
 "screen_room_details_edit_room_title" = "Edit Room";
-"screen_room_details_edition_error" = "An error occurred when updating the room details";
+"screen_room_details_edition_error" = "We were unable to update all the information for this room.";
+"screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_share_room_title" = "Share room";

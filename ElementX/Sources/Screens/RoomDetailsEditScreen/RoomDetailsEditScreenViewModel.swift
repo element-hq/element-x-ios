@@ -67,7 +67,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             defer {
                 userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.screenRoomDetailsUpdatingRoom, persistent: true))
             
             do {
                 try await withThrowingTaskGroup(of: Void.self) { group in
@@ -91,7 +91,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 
                 actionsSubject.send(.saveFinished)
             } catch {
-                #warning("Add error handling")
+                userIndicatorController.alertInfo = .init(id: .init(),
+                                                          title: L10n.screenRoomDetailsEditionErrorTitle,
+                                                          message: L10n.screenRoomDetailsEditionError)
             }
         }
     }

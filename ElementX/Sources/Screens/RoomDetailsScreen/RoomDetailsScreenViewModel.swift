@@ -123,7 +123,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
         
         roomProxy.updatesPublisher
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.state.title = self.roomProxy.roomTitle
