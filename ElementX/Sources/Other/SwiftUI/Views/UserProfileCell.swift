@@ -67,7 +67,7 @@ struct UserProfileCell: View {
                 Text(Image(systemName: "exclamationmark.circle.fill"))
                     .foregroundColor(.compound.textCriticalPrimary)
                 
-                Text(L10n.screenStartChatUnknownProfile)
+                Text(L10n.commonInviteUnknownProfile)
                     .foregroundColor(.secondary)
             }
             .font(.compound.bodyXS)

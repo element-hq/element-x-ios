@@ -28,14 +28,13 @@ struct RoomDetailsEditScreen: View {
     
     // MARK: - Private
     
-    #warning("Localize me")
     private var mainContent: some View {
         Form {
             avatar
             nameSection
             topicSection
         }
-        .navigationTitle("Edit room")
+        .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
