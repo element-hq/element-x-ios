@@ -166,7 +166,9 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.roomListenerAlreadyRegistered)
         }
         
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
+        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
+                                                        RequiredState(key: "m.room.topic", value: ""),
+                                                        RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
