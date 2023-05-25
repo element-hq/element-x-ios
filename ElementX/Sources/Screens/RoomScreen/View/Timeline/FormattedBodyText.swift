@@ -36,20 +36,7 @@ struct FormattedBodyText: View {
 
     // These is needed to create the slightly off inlined timestamp effect
     private var whitespacesEnd: String {
-        guard additionalWhitespacesCount > 0 else {
-            return ""
-        }
-
-        var whiteSpaces = ""
-        if layoutDirection == .rightToLeft {
-            whiteSpaces = "\u{202e}"
-        }
-
-        // fixed size whitespace of size 1/3 em per character
-        whiteSpaces += String(repeating: "\u{2004}", count: additionalWhitespacesCount)
-
-        // braille whitespace, which is non breakable but makes previous whitespaces breakable
-        return whiteSpaces + "\u{2800}"
+        .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, isRTL: layoutDirection == .rightToLeft)
     }
     
     var body: some View {

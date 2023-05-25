@@ -58,4 +58,26 @@ class StringTests: XCTestCase {
     func testStripsTheHeartbreakHotel() {
         XCTAssertEqual("Heartbreak Hotel 🏩".asciified(), "Heartbreak Hotel")
     }
+
+    func testGenerateBreakableWhitespaceEnd() {
+        var count = 5
+        var result = String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+
+        count = 3
+        result = String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+
+        count = 0
+        result = ""
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+
+        count = 4
+        result = "\u{202e}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: true), result)
+
+        count = 0
+        result = ""
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: true), result)
+    }
 }
