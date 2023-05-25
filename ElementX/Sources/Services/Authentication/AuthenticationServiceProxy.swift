@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -21,7 +22,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
     
+    @DidSetPublisher
     private(set) var homeserver = LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress, loginMode: .unknown)
+    var homeserverPublisher: AnyPublisher<LoginHomeserver, Never> { $homeserver }
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore

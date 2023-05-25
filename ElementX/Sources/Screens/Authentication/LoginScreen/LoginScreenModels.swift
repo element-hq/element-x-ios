@@ -17,8 +17,6 @@
 import Foundation
 
 enum LoginScreenViewModelAction: CustomStringConvertible {
-    /// The user would like to select another server.
-    case selectServer
     /// Parse the username and update the homeserver if included.
     case parseUsername(String)
     /// The user would like to reset their password.
@@ -31,8 +29,6 @@ enum LoginScreenViewModelAction: CustomStringConvertible {
     /// A string representation of the action, ignoring any associated values that could leak PII.
     var description: String {
         switch self {
-        case .selectServer:
-            return "selectServer"
         case .parseUsername:
             return "parseUsername"
         case .forgotPassword:
@@ -77,8 +73,6 @@ struct LoginScreenBindings {
 }
 
 enum LoginScreenViewAction {
-    /// The user would like to select another server.
-    case selectServer
     /// Parse the username to detect if a homeserver is included.
     case parseUsername
     /// The user would like to reset their password.

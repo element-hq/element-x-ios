@@ -27,8 +27,13 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
         
-        // Login Screen: Enter valid credentials
+        // Server Confirmation: Tap continue button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
+        // Login Screen: Confirm password login is available and not OIDC.
+        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.oidc].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
+        
+        // Login Screen: Enter valid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
 
@@ -46,6 +51,9 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
+        
+        // Server Confirmation: Tap continue button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
         // Login Screen: Enter invalid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice")
@@ -68,15 +76,15 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
         
-        // Login Screen: Tap edit server button.
-        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.oidc].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
-        app.buttons[A11yIdentifiers.loginScreen.changeServer].tap()
+        // Server Confirmation: Tap change server button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
-        // Server Selection: Clear the default and enter OIDC server.
+        // Server Selection: Clear the default, enter OIDC server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com")
-        
-        // Dismiss server screen.
         app.buttons[A11yIdentifiers.changeServerScreen.continue].tap()
+        
+        // Server Confirmation: Tap continue button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
         // Then the login form should be updated for OIDC.
         XCTAssertTrue(app.buttons[A11yIdentifiers.loginScreen.oidc].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")

@@ -20,8 +20,6 @@ import SwiftUI
 struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
-    /// The navigation router used to present the server selection screen.
-    let navigationStackCoordinator: NavigationStackCoordinator
 }
 
 enum LoginScreenCoordinatorAction {
@@ -37,7 +35,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
 
     var callback: (@MainActor (LoginScreenCoordinatorAction) -> Void)?
     
@@ -58,8 +55,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .selectServer:
-                self.presentServerSelectionScreen()
             case .parseUsername(let username):
                 self.parseUsername(username)
             case .forgotPassword:
@@ -197,31 +192,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         indicateSuccess()
     }
     
-    /// Presents the server selection screen as a modal.
-    private func presentServerSelectionScreen() {
-        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                    isModallyPresented: false)
-        
-        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self, weak coordinator] action in
-            guard let self, let coordinator else { return }
-            self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
-        }
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-    
-    /// Handles the result from the server selection modal, dismissing it after updating the view.
-    private func serverSelectionCoordinator(_ coordinator: ServerSelectionScreenCoordinator,
-                                            didCompleteWith action: ServerSelectionScreenCoordinatorAction) {
-        if action == .updated {
-            updateViewModel()
-        }
-        
-        navigationStackCoordinator.pop()
-    }
-
     /// Shows the forgot password screen.
     private func showForgotPasswordScreen() {
         viewModel.displayError(.alert("Not implemented."))

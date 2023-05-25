@@ -6,7 +6,6 @@
 
 // MARK: - Soft logout
 
-"soft_logout_forgot_password" = "Forgot password";
 "soft_logout_signin_title" = "Sign in";
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_e2e_warning_notice" = "Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.";

@@ -31,9 +31,6 @@ struct LoginScreen: View {
                     .padding(.top, UIConstants.titleTopPaddingToNavigationBar)
                     .padding(.bottom, 32)
                 
-                serverInfo
-                    .padding(.bottom, 32)
-                
                 switch context.viewState.loginMode {
                 case .password:
                     loginForm
@@ -51,19 +48,18 @@ struct LoginScreen: View {
         .alert(item: $context.alertInfo) { $0.alert }
     }
     
-    /// The header containing a Welcome Back title.
+    /// The header containing the title and icon.
     var header: some View {
-        Text(L10n.screenLoginTitle)
-            .font(.compound.headingLGBold)
-            .multilineTextAlignment(.center)
-            .foregroundColor(.element.primaryContent)
-    }
-    
-    /// The sever information section that includes a button to select a different server.
-    var serverInfo: some View {
-        LoginServerInfoSection(address: context.viewState.homeserver.address) {
-            context.send(viewAction: .selectServer)
+        VStack(spacing: 8) {
+            AuthenticationIconImage(image: Image(systemName: "lock.fill"))
+                .padding(.bottom, 8)
+            
+            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.element.primaryContent)
         }
+        .padding(.horizontal, 16)
     }
     
     /// The form with text fields for username and password, along with a submit button.

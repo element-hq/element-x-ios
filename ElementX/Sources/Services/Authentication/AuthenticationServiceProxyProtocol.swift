@@ -14,8 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
+
+/// Represents a particular authentication flow.
+enum AuthenticationFlow {
+    /// The flow for signing in to an existing account.
+    case login
+    /// The flow for creating a new account.
+    case register
+}
 
 enum AuthenticationServiceError: Error {
     /// An error occurred during OIDC authentication.
@@ -29,7 +38,10 @@ enum AuthenticationServiceError: Error {
 }
 
 protocol AuthenticationServiceProxyProtocol {
+    /// The currently configured homeserver.
     var homeserver: LoginHomeserver { get }
+    /// A publisher for the ``homeserver`` value.
+    var homeserverPublisher: AnyPublisher<LoginHomeserver, Never> { get }
     
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
