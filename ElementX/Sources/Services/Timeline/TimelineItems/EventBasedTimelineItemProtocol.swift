@@ -31,14 +31,4 @@ extension EventBasedTimelineItemProtocol {
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
-
-    /// contains the timestamp and an optional edited localised prefix
-    /// example: (edited) 12:17 PM
-    var localisedSendInfo: String {
-        var start = ""
-        if properties.isEdited {
-            start = "\(L10n.commonEditedSuffix) "
-        }
-        return start + timestamp
-    }
 }

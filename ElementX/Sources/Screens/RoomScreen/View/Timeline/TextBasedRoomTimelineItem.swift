@@ -17,3 +17,15 @@
 import Foundation
 
 protocol TextBasedRoomTimelineItem: EventBasedMessageTimelineItemProtocol { }
+
+extension TextBasedRoomTimelineItem {
+    /// contains the timestamp and an optional edited localised prefix
+    /// example: (edited) 12:17 PM
+    var localisedSendInfo: String {
+        var start = ""
+        if properties.isEdited {
+            start = "\(L10n.commonEditedSuffix) "
+        }
+        return start + timestamp
+    }
+}
