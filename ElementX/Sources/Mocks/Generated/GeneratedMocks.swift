@@ -488,10 +488,10 @@ class RoomProxyMock: RoomProxyProtocol {
     var registerTimelineListenerIfNeededCalled: Bool {
         return registerTimelineListenerIfNeededCallsCount > 0
     }
-    var registerTimelineListenerIfNeededReturnValue: Result<[TimelineItem]?, RoomProxyError>!
-    var registerTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem]?, RoomProxyError>)?
+    var registerTimelineListenerIfNeededReturnValue: Result<[TimelineItem], RoomProxyError>!
+    var registerTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem], RoomProxyError>)?
 
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem]?, RoomProxyError> {
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
         registerTimelineListenerIfNeededCallsCount += 1
         if let registerTimelineListenerIfNeededClosure = registerTimelineListenerIfNeededClosure {
             return registerTimelineListenerIfNeededClosure()

@@ -20,6 +20,7 @@ import MatrixRustSDK
 
 enum RoomProxyError: Error {
     case noMoreMessagesToBackPaginate
+    case roomListenerAlreadyRegistered
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
@@ -71,7 +72,7 @@ protocol RoomProxyProtocol {
     
     /// Registers a timeline listener if not registered already.
     /// Updates for this object will be published on the `updatesPublisher` publisher.
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem]?, RoomProxyError>
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError>
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     

@@ -51,7 +51,16 @@ class RoomProxy: RoomProxyProtocol {
     deinit {
         Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
             roomTimelineObservationToken?.cancel()
-            _ = slidingSyncRoom.unsubscribeFromRoom()
+            
+            let task = ExpiringTaskRunner {
+                let unsubscribeTask = slidingSyncRoom.unsubscribeFromRoom()
+                
+                while !unsubscribeTask.isFinished() {
+                    try await Task.sleep(for: .seconds(2))
+                }
+            }
+            
+            try? await task.run(timeout: .seconds(30))
         }
     }
 
@@ -152,9 +161,9 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem]?, RoomProxyError> {
+    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
         guard timelineListener == nil else {
-            return .success(nil)
+            return .failure(.roomListenerAlreadyRegistered)
         }
         
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),

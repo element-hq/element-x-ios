@@ -48,11 +48,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 .store(in: &cancellables)
             
             switch roomProxy.registerTimelineListenerIfNeeded() {
-            case .success(.none):
-                MXLog.info("Listener already registered for the room: \(roomProxy.id)")
-            case let .success(.some(items)):
+            case let .success(items):
                 itemProxies = items.map(TimelineItemProxy.init)
                 MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
+            case .failure(.roomListenerAlreadyRegistered):
+                MXLog.info("Listener already registered for the room: \(roomProxy.id)")
             case .failure:
                 let roomID = roomProxy.id
                 MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
