@@ -71,7 +71,7 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.backgroundTaskService = backgroundTaskService
     }
-    
+
     lazy var id: String = room.id()
     
     var name: String? {
