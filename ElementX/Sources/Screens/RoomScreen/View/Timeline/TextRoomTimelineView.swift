@@ -17,15 +17,16 @@
 import Foundation
 import SwiftUI
 
-struct TextRoomTimelineView: View {
+struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: TextRoomTimelineItem
+    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
-                FormattedBodyText(attributedString: attributedString)
+                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: additionalWhitespaces)
             } else {
-                FormattedBodyText(text: timelineItem.content.body)
+                FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: additionalWhitespaces)
             }
         }
     }

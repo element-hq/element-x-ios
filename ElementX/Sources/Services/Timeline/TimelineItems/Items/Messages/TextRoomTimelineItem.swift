@@ -16,7 +16,7 @@
 
 import UIKit
 
-struct TextRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
+struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
     let id: String
     
     let timestamp: String

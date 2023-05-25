@@ -17,16 +17,19 @@
 import Foundation
 import SwiftUI
 
-struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View {
+struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-    @ViewBuilder let deliveryStatus: () -> DeliveryStatus
 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
+
+    private var isTextItem: Bool {
+        timelineItem is TextBasedRoomTimelineItem
+    }
 
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
@@ -83,7 +86,8 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                 }
             }
 
-            deliveryStatus()
+            TimelineReceiptView(timelineItem: timelineItem)
+                .environmentObject(context)
                 .padding(.top, 10)
                 .padding(.bottom, 3)
         }
@@ -108,27 +112,47 @@ struct TimelineItemBubbledStylerView<Content: View, DeliveryStatus: View>: View 
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
         } else {
-            VStack(alignment: .trailing, spacing: 4) {
-                contentWithReply
-
-                if timelineItem.properties.isEdited {
-                    Text(L10n.commonEditedSuffix)
-                        .font(.compound.bodyXS)
-                        .foregroundColor(.element.tertiaryContent)
-                }
-
-                if timelineItem.properties.deliveryStatus == .sendingFailed {
-                    Image(systemName: "exclamationmark.circle.fill")
-                        .resizable()
-                        .foregroundColor(.element.alert)
-                        .frame(width: 16, height: 16)
-                }
-            }
-            .bubbleStyle(inset: true,
-                         color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
-                         cornerRadius: cornerRadius,
-                         corners: roundedCorners)
+            contentWithTimestamp
+                .bubbleStyle(inset: true,
+                             color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
+                             cornerRadius: cornerRadius,
+                             corners: roundedCorners)
         }
+    }
+
+    @ViewBuilder
+    var contentWithTimestamp: some View {
+        if isTextItem {
+            ZStack(alignment: .topLeading) {
+                contentWithReply
+                    .layoutPriority(1)
+                localizedSendInfo
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            }
+        } else {
+            HStack(alignment: .bottom, spacing: 4) {
+                contentWithReply
+                localizedSendInfo
+            }
+        }
+    }
+
+    @ViewBuilder
+    var localizedSendInfo: some View {
+        HStack(spacing: 4) {
+            if let timelineItem = timelineItem as? TextBasedRoomTimelineItem {
+                Text(timelineItem.localizedSendInfo)
+            } else {
+                Text(timelineItem.timestamp)
+            }
+
+            if timelineItem.properties.deliveryStatus == .sendingFailed {
+                Image(systemName: "exclamationmark.circle.fill")
+            }
+        }
+        .font(.compound.bodyXS)
+        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
+        .padding(.bottom, -4)
     }
     
     @ViewBuilder
@@ -213,6 +237,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+        mockTimeline
+            .environment(\.layoutDirection, .rightToLeft)
+            .previewDisplayName("Mock Timeline RTL")
         replies
             .previewDisplayName("Replies")
     }

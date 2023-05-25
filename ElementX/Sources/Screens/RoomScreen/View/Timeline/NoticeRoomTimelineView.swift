@@ -17,8 +17,9 @@
 import Foundation
 import SwiftUI
 
-struct NoticeRoomTimelineView: View {
+struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: NoticeRoomTimelineItem
+    @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -32,9 +33,9 @@ struct NoticeRoomTimelineView: View {
                     .foregroundColor(.element.secondaryContent)
                 
                 if let attributedString = timelineItem.content.formattedBody {
-                    FormattedBodyText(attributedString: attributedString)
+                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: additionalWhitespaces)
                 } else {
-                    FormattedBodyText(text: timelineItem.content.body)
+                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: additionalWhitespaces)
                 }
             }
             .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText

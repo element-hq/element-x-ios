@@ -18,11 +18,25 @@ import SwiftUI
 
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
+    @Environment(\.layoutDirection) private var layoutDirection
+
+    private let attributedString: AttributedString
+    private let additionalWhitespacesCount: Int
+
+    private var attributedComponents: [AttributedStringBuilderComponent] {
+        var attributedString = attributedString
+        attributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
+        return attributedString.formattedComponents
+    }
     
-    private let attributedComponents: [AttributedStringBuilderComponent]
-    
-    init(attributedString: AttributedString) {
-        attributedComponents = attributedString.formattedComponents
+    init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
+        self.attributedString = attributedString
+        self.additionalWhitespacesCount = additionalWhitespacesCount
+    }
+
+    // These is needed to create the slightly off inlined timestamp effect
+    private var additionalWhitespacesSuffix: String {
+        .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, isRTL: layoutDirection == .rightToLeft)
     }
     
     var body: some View {
@@ -109,8 +123,8 @@ struct FormattedBodyText: View {
 }
 
 extension FormattedBodyText {
-    init(text: String) {
-        self.init(attributedString: AttributedString(text))
+    init(text: String, additionalWhitespacesCount: Int = 0) {
+        self.init(attributedString: AttributedString(text), additionalWhitespacesCount: additionalWhitespacesCount)
     }
 }
 

@@ -16,7 +16,7 @@
 
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
+struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
     let id: String
     let timestamp: String
     let isOutgoing: Bool
