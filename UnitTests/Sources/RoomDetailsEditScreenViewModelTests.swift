@@ -20,32 +20,11 @@ import XCTest
 
 @MainActor
 class RoomDetailsEditScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
     var viewModel: RoomDetailsEditScreenViewModelProtocol!
     
     var context: RoomDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
-    
-    override func setUpWithError() throws {
-        viewModel = RoomDetailsEditScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-    }
 
-    func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-    }
+    override func setUpWithError() throws { }
 }

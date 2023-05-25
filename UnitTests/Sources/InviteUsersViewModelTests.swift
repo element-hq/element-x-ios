@@ -65,9 +65,8 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         _ = await viewModel.context.$viewState.values.first(where: { $0.membershipState.isEmpty == false })
         context.send(viewAction: .toggleUser(.mockAlice))
         
-        Task {
-            await Task.yield()
-            context.send(viewAction: .proceed)
+        Task.detached(priority: .low) {
+            await self.context.send(viewAction: .proceed)
         }
         
         let action = await viewModel.actions.values.first()
