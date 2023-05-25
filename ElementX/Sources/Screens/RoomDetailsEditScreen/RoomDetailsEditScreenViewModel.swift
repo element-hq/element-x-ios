@@ -64,7 +64,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            break
+            if state.localImage != nil {
+                state.localImage = nil
+            } else {
+                #warning("Delete remote image")
+            }
         }
     }
     
@@ -78,10 +82,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             
             switch await mediaPreprocessor.processMedia(at: url) {
             case let .success(.image(imageURL, thumbnailURL, _)):
-                state.localFullImageURL = imageURL
-                state.localThumbnailURL = thumbnailURL
+                state.localImage = (imageURL, thumbnailURL)
             case .failure, .success:
-                #warning("Show error")
+                break
             }
         }
     }

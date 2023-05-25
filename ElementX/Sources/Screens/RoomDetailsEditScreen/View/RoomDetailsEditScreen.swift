@@ -59,7 +59,7 @@ struct RoomDetailsEditScreen: View {
         Button {
             context.send(viewAction: .presentMediaSource)
         } label: {
-            LoadableEditableAvatarImage(localURL: context.viewState.localThumbnailURL,
+            LoadableEditableAvatarImage(localURL: context.viewState.localImage?.thumbnail,
                                         url: context.viewState.avatarURL,
                                         name: context.viewState.initialName,
                                         contentID: context.viewState.roomID,
@@ -140,7 +140,7 @@ struct RoomDetailsEditScreen: View {
         } label: {
             Text(L10n.actionChoosePhoto)
         }
-        if true {
+        if context.viewState.showDeleteImageAction {
             Button(role: .destructive) {
                 context.send(viewAction: .removeImage)
             } label: {
