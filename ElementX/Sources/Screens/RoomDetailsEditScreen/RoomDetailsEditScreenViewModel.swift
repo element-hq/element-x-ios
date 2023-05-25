@@ -105,7 +105,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 try await withThrowingTaskGroup(of: Void.self) { group in
                     if state.avatarDidChange {
                         group.addTask {
-                            #warning("update or delete avatar")
+                            if let localImage = await self.state.localImage {
+                                #warning("upload media and change avatar")
+                            } else if await self.state.avatarURL == nil {
+                                try await self.roomProxy.removeAvatar().get()
+                            }
                         }
                     }
                     

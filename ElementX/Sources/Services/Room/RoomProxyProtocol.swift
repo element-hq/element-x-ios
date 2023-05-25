@@ -39,6 +39,7 @@ enum RoomProxyError: Error {
     case failedInvitingUser
     case failedSettingRoomName
     case failedSettingRoomTopic
+    case failedRemovingAvatar
 }
 
 @MainActor
@@ -125,6 +126,8 @@ protocol RoomProxyProtocol {
     func setName(_ name: String?) async -> Result<Void, RoomProxyError>
     
     func setTopic(_ topic: String) async -> Result<Void, RoomProxyError>
+    
+    func removeAvatar() async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

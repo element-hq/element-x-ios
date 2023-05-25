@@ -517,6 +517,16 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+    
+    func removeAvatar() async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.removeAvatar())
+            } catch {
+                return .failure(.failedRemovingAvatar)
+            }
+        }
+    }
 
     // MARK: - Private
     

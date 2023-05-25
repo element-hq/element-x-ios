@@ -947,6 +947,23 @@ class RoomProxyMock: RoomProxyProtocol {
             return setTopicReturnValue
         }
     }
+    //MARK: - removeAvatar
+
+    var removeAvatarCallsCount = 0
+    var removeAvatarCalled: Bool {
+        return removeAvatarCallsCount > 0
+    }
+    var removeAvatarReturnValue: Result<Void, RoomProxyError>!
+    var removeAvatarClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func removeAvatar() async -> Result<Void, RoomProxyError> {
+        removeAvatarCallsCount += 1
+        if let removeAvatarClosure = removeAvatarClosure {
+            return await removeAvatarClosure()
+        } else {
+            return removeAvatarReturnValue
+        }
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
