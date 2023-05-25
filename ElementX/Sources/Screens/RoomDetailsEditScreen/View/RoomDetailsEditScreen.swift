@@ -18,12 +18,35 @@ import SwiftUI
 
 struct RoomDetailsEditScreen: View {
     @ObservedObject var context: RoomDetailsEditScreenViewModel.Context
+    @FocusState private var focus: Focus?
+    
+    enum Focus {
+        case name
+        case topic
+    }
     
     var body: some View {
         mainContent
             .scrollContentBackground(.hidden)
             .background(Color.element.formBackground.ignoresSafeArea())
             .scrollDismissesKeyboard(.immediately)
+            .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.actionCancel) {
+                        context.send(viewAction: .cancel)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(L10n.actionSave) {
+                        context.send(viewAction: .save)
+                        focus = nil
+                    }
+                    .disabled(!context.viewState.canSave)
+                }
+            }
             .confirmationDialog("", isPresented: $context.showMediaSheet) {
                 mediaActionSheet
             }
@@ -36,22 +59,6 @@ struct RoomDetailsEditScreen: View {
             avatar
             nameSection
             topicSection
-        }
-        .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(L10n.actionCancel) {
-                    context.send(viewAction: .cancel)
-                }
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(L10n.actionSave) {
-                    context.send(viewAction: .save)
-                }
-                .disabled(!context.viewState.canSave)
-            }
         }
     }
 
@@ -84,6 +91,7 @@ struct RoomDetailsEditScreen: View {
                       text: $context.name,
                       prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
                       axis: .horizontal)
+                .focused($focus, equals: .name)
                 .font(.compound.bodyLG)
                 .foregroundColor(.element.primaryContent)
                 .disabled(!canEditName)
@@ -104,6 +112,7 @@ struct RoomDetailsEditScreen: View {
                       text: $context.topic,
                       prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
                       axis: .vertical)
+                .focused($focus, equals: .topic)
                 .font(.compound.bodyLG)
                 .foregroundColor(.element.primaryContent)
                 .disabled(!canEditTopic)
