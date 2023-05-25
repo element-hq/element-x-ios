@@ -34,13 +34,13 @@ struct RoundedCornerShape: Shape {
         var topLeft: CGFloat = corners.contains(.topLeft) ? radius : 0.0
         var topRight: CGFloat = corners.contains(.topRight) ? radius : 0.0
         var bottomLeft: CGFloat = corners.contains(.bottomLeft) ? radius : 0.0
-        var bottomRight: CGFloat = corners.contains(.bottomRight) ? radius: 0.0
+        var bottomRight: CGFloat = corners.contains(.bottomRight) ? radius : 0.0
 
         // Make sure we do not exceed the size of the rectangle
-        topRight = min(min(topRight, height/2), width/2)
-        topLeft = min(min(topLeft, height/2), width/2)
-        bottomLeft = min(min(bottomLeft, height/2), width/2)
-        bottomRight = min(min(bottomRight, height/2), width/2)
+        topRight = min(min(topRight, height / 2), width / 2)
+        topLeft = min(min(topLeft, height / 2), width / 2)
+        bottomLeft = min(min(bottomLeft, height / 2), width / 2)
+        bottomRight = min(min(bottomRight, height / 2), width / 2)
 
         path.move(to: CGPoint(x: width / 2.0, y: 0))
         path.addLine(to: CGPoint(x: width - topRight, y: 0))
