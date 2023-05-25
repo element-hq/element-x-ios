@@ -23,6 +23,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     private var actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
     
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -59,11 +60,28 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         case .presentMediaSource:
             state.bindings.showMediaSheet = true
         case .displayCameraPicker:
-            break
+            actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
-            break
+            actionsSubject.send(.displayMediaPicker)
         case .removeImage:
             break
+        }
+    }
+    
+    func didSelectMediaUrl(url: URL) {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            switch await mediaPreprocessor.processMedia(at: url) {
+            case .success(let mediaInfo):
+                break
+            case .failure:
+                #warning("Show error")
+            }
         }
     }
     

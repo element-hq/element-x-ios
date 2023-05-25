@@ -15,9 +15,12 @@
 //
 
 import Combine
+import Foundation
 
 @MainActor
 protocol RoomDetailsEditScreenViewModelProtocol {
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> { get }
     var context: RoomDetailsEditScreenViewModelType.Context { get }
+    
+    func didSelectMediaUrl(url: URL)
 }

@@ -124,6 +124,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
                                                                                    mediaProvider: parameters.mediaProvider,
+                                                                                   navigationStackCoordinator: navigationStackCoordinator,
                                                                                    roomProxy: parameters.roomProxy,
                                                                                    userIndicatorController: userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)

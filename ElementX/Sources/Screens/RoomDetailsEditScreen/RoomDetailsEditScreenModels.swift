@@ -19,6 +19,8 @@ import Foundation
 enum RoomDetailsEditScreenViewModelAction {
     case cancel
     case saveFinished
+    case displayCameraPicker
+    case displayMediaPicker
 }
 
 struct RoomDetailsEditScreenViewStateBindings {
