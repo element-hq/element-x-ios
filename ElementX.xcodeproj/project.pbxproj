@@ -411,6 +411,8 @@
 		A733C86A2A1D17590055ECD6 /* TimelineReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733C8692A1D17590055ECD6 /* TimelineReceiptView.swift */; };
 		A733C86C2A1E149E0055ECD6 /* TextBasedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733C86B2A1E149E0055ECD6 /* TextBasedRoomTimelineItem.swift */; };
 		A733C86E2A1E1C190055ECD6 /* TextBasedRoomTimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733C86D2A1E1C190055ECD6 /* TextBasedRoomTimelineTests.swift */; };
+		A7C152962A1F4E4C0089FF9D /* TextBasedRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C152952A1F4E4C0089FF9D /* TextBasedRoomTimelineView.swift */; };
+		A7C152982A1F4E710089FF9D /* TextBasedRoomTimelineViewMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C152972A1F4E710089FF9D /* TextBasedRoomTimelineViewMock.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
@@ -1038,6 +1040,8 @@
 		A733C86B2A1E149E0055ECD6 /* TextBasedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBasedRoomTimelineItem.swift; sourceTree = "<group>"; };
 		A733C86D2A1E1C190055ECD6 /* TextBasedRoomTimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBasedRoomTimelineTests.swift; sourceTree = "<group>"; };
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
+		A7C152952A1F4E4C0089FF9D /* TextBasedRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBasedRoomTimelineView.swift; sourceTree = "<group>"; };
+		A7C152972A1F4E710089FF9D /* TextBasedRoomTimelineViewMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBasedRoomTimelineViewMock.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8903A9F615BBD0E6D7CD133 /* ApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationProtocol.swift; sourceTree = "<group>"; };
@@ -2718,6 +2722,8 @@
 				A2AC3C656E960E15B5905E05 /* UnsupportedRoomTimelineView.swift */,
 				1941C8817E6B6971BA4415F5 /* VideoRoomTimelineView.swift */,
 				A733C86B2A1E149E0055ECD6 /* TextBasedRoomTimelineItem.swift */,
+				A7C152952A1F4E4C0089FF9D /* TextBasedRoomTimelineView.swift */,
+				A7C152972A1F4E710089FF9D /* TextBasedRoomTimelineViewMock.swift */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
@@ -3883,6 +3889,7 @@
 				77D7DAA41AAB36800C1F2E2D /* RoomTimelineProviderProtocol.swift in Sources */,
 				CF82143AA4A4F7BD11D22946 /* RoomTimelineViewProvider.swift in Sources */,
 				B2F8E01ABA1BA30265B4ECBE /* RoundedCornerShape.swift in Sources */,
+				A7C152962A1F4E4C0089FF9D /* TextBasedRoomTimelineView.swift in Sources */,
 				50C90117FE25390BFBD40173 /* RustTracing.swift in Sources */,
 				0437765FF480249486893CC7 /* ScreenTrackerViewModifier.swift in Sources */,
 				0BFA67AFD757EE2BA569836A /* ScrollViewAdapter.swift in Sources */,
@@ -3948,6 +3955,7 @@
 				01CB8ACFA5E143E89C168CA8 /* TimelineItemContextMenu.swift in Sources */,
 				FBCCF1EA25A071324FCD8544 /* TimelineItemDebugView.swift in Sources */,
 				A733C86A2A1D17590055ECD6 /* TimelineReceiptView.swift in Sources */,
+				A7C152982A1F4E710089FF9D /* TextBasedRoomTimelineViewMock.swift in Sources */,
 				F508683B76EF7B23BB2CBD6D /* TimelineItemPlainStylerView.swift in Sources */,
 				440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */,
 				9586E90A447C4896C0CA3A8E /* TimelineItemReplyDetails.swift in Sources */,

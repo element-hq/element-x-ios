@@ -16,4 +16,18 @@
 
 import Foundation
 
-protocol TextBasedRoomTimelineItem: EventBasedMessageTimelineItemProtocol { }
+// generated with auto mockable and customised to support the generic
+class TextBasedRoomTimelineViewMock<TimelineItemType: TextBasedRoomTimelineItem>: TextBasedRoomTimelineView {
+    var timelineItem: TimelineItemType {
+        get { underlyingTimelineItem }
+        set(value) { underlyingTimelineItem = value }
+    }
+
+    var underlyingTimelineItem: TimelineItemType!
+    var timelineStyle: TimelineStyle {
+        get { underlyingTimelineStyle }
+        set(value) { underlyingTimelineStyle = value }
+    }
+
+    var underlyingTimelineStyle: TimelineStyle!
+}
