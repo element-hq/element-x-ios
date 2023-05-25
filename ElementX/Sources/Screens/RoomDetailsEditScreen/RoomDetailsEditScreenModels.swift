@@ -38,15 +38,15 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var bindings: RoomDetailsEditScreenViewStateBindings
     
     var nameDidChange: Bool {
-        !bindings.name.isEmpty && bindings.name != initialName
+        bindings.name != initialName
     }
     
     var topicDidChange: Bool {
-        !bindings.topic.isEmpty && bindings.topic != initialTopic
+        bindings.topic != initialTopic
     }
 
     var canSave: Bool {
-        nameDidChange || topicDidChange
+        !bindings.name.isEmpty && (nameDidChange || topicDidChange)
     }
 }
 
