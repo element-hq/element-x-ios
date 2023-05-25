@@ -31,13 +31,13 @@ struct RoomDetailsEditScreenViewStateBindings {
 
 struct RoomDetailsEditScreenViewState: BindableState {
     let roomID: String
-    var avatarURL: URL?
-    var initialAvatarURL: URL?
-    var initialName: String?
-    var initialTopic: String?
+    let initialAvatarURL: URL?
+    let initialName: String?
+    let initialTopic: String?
     let canEditAvatar: Bool
     let canEditName: Bool
     let canEditTopic: Bool
+    var avatarURL: URL?
     var localImage: (full: URL, thumbnail: URL)?
 
     var bindings: RoomDetailsEditScreenViewStateBindings

@@ -41,13 +41,13 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         let roomTopic = roomProxy.topic
         
         super.init(initialViewState: RoomDetailsEditScreenViewState(roomID: roomProxy.id,
-                                                                    avatarURL: roomAvatar,
                                                                     initialAvatarURL: roomAvatar,
                                                                     initialName: roomName,
                                                                     initialTopic: roomTopic,
                                                                     canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
                                                                     canEditName: accountOwner.canSendStateEvent(type: .roomName),
                                                                     canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
+                                                                    avatarURL: roomAvatar,
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
     }
     
@@ -127,9 +127,6 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                     
                     try await group.waitForAll()
                 }
-                
-                state.initialName = self.state.bindings.name
-                state.initialTopic = self.state.bindings.topic
                 
                 actionsSubject.send(.saveFinished)
             } catch {
