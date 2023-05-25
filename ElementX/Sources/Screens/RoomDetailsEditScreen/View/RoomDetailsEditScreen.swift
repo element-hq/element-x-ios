@@ -59,11 +59,12 @@ struct RoomDetailsEditScreen: View {
         Button {
             context.send(viewAction: .presentMediaSource)
         } label: {
-            LoadableAvatarImage(url: context.viewState.avatarURL,
-                                name: context.viewState.initialName,
-                                contentID: context.viewState.roomID,
-                                avatarSize: .user(on: .memberDetails),
-                                imageProvider: context.imageProvider)
+            LoadableEditableAvatarImage(localURL: context.viewState.localThumbnailURL,
+                                        url: context.viewState.avatarURL,
+                                        name: context.viewState.initialName,
+                                        contentID: context.viewState.roomID,
+                                        avatarSize: .user(on: .memberDetails),
+                                        imageProvider: context.imageProvider)
                 .overlay(alignment: .bottomTrailing) {
                     if context.viewState.canEditAvatar {
                         avatarOverlayIcon

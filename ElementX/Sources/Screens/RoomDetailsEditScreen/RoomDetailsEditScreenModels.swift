@@ -37,6 +37,8 @@ struct RoomDetailsEditScreenViewState: BindableState {
     let canEditAvatar: Bool
     let canEditName: Bool
     let canEditTopic: Bool
+    var localFullImageURL: URL?
+    var localThumbnailURL: URL?
 
     var bindings: RoomDetailsEditScreenViewStateBindings
     

@@ -77,9 +77,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             switch await mediaPreprocessor.processMedia(at: url) {
-            case .success(let mediaInfo):
-                break
-            case .failure:
+            case let .success(.image(imageURL, thumbnailURL, _)):
+                state.localFullImageURL = imageURL
+                state.localThumbnailURL = thumbnailURL
+            case .failure, .success:
                 #warning("Show error")
             }
         }
