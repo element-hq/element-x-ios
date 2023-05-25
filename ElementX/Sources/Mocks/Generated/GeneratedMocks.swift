@@ -964,6 +964,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return removeAvatarReturnValue
         }
     }
+    //MARK: - uploadAvatar
+
+    var uploadAvatarMediaCallsCount = 0
+    var uploadAvatarMediaCalled: Bool {
+        return uploadAvatarMediaCallsCount > 0
+    }
+    var uploadAvatarMediaReceivedMedia: MediaInfo?
+    var uploadAvatarMediaReceivedInvocations: [MediaInfo] = []
+    var uploadAvatarMediaReturnValue: Result<Void, RoomProxyError>!
+    var uploadAvatarMediaClosure: ((MediaInfo) async -> Result<Void, RoomProxyError>)?
+
+    func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
+        uploadAvatarMediaCallsCount += 1
+        uploadAvatarMediaReceivedMedia = media
+        uploadAvatarMediaReceivedInvocations.append(media)
+        if let uploadAvatarMediaClosure = uploadAvatarMediaClosure {
+            return await uploadAvatarMediaClosure(media)
+        } else {
+            return uploadAvatarMediaReturnValue
+        }
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {

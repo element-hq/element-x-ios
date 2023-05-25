@@ -527,6 +527,21 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+    
+    func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
+                return .failure(.failedUploadingAvatar)
+            }
+
+            do {
+                let data = try Data(contentsOf: imageURL)
+                return try .success(self.room.uploadAvatar(mimeType: mimeType, data: [UInt8](data)))
+            } catch {
+                return .failure(.failedUploadingAvatar)
+            }
+        }
+    }
 
     // MARK: - Private
     

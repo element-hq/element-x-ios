@@ -20,7 +20,7 @@ import SwiftUI
 typealias RoomDetailsEditScreenViewModelType = StateStoreViewModel<RoomDetailsEditScreenViewState, RoomDetailsEditScreenViewAction>
 
 class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDetailsEditScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
@@ -66,8 +66,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            if state.localImage != nil {
-                state.localImage = nil
+            if state.localMedia != nil {
+                state.localMedia = nil
             } else {
                 state.avatarURL = nil
             }
@@ -82,9 +82,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             }
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
             
-            switch await mediaPreprocessor.processMedia(at: url) {
-            case let .success(.image(imageURL, thumbnailURL, _)):
-                state.localImage = (imageURL, thumbnailURL)
+            let mediaResult = await mediaPreprocessor.processMedia(at: url)
+            
+            switch mediaResult {
+            case .success(.image):
+                state.localMedia = try? mediaResult.get()
             case .failure, .success:
                 #warning("Show error?")
             }
@@ -105,8 +107,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 try await withThrowingTaskGroup(of: Void.self) { group in
                     if state.avatarDidChange {
                         group.addTask {
-                            if let localImage = await self.state.localImage {
-                                #warning("upload media and change avatar")
+                            if let localMedia = await self.state.localMedia {
+                                try await self.roomProxy.uploadAvatar(media: localMedia).get()
                             } else if await self.state.avatarURL == nil {
                                 try await self.roomProxy.removeAvatar().get()
                             }

@@ -38,7 +38,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     let canEditName: Bool
     let canEditTopic: Bool
     var avatarURL: URL?
-    var localImage: (full: URL, thumbnail: URL)?
+    var localMedia: MediaInfo?
 
     var bindings: RoomDetailsEditScreenViewStateBindings
     
@@ -51,7 +51,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     }
     
     var avatarDidChange: Bool {
-        localImage != nil || avatarURL != initialAvatarURL
+        localMedia != nil || avatarURL != initialAvatarURL
     }
 
     var canSave: Bool {
@@ -59,7 +59,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     }
     
     var showDeleteImageAction: Bool {
-        localImage != nil || avatarURL != nil
+        localMedia != nil || avatarURL != nil
     }
 }
 

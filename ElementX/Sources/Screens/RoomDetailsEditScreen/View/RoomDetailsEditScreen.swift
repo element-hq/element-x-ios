@@ -59,7 +59,7 @@ struct RoomDetailsEditScreen: View {
         Button {
             context.send(viewAction: .presentMediaSource)
         } label: {
-            LoadableEditableAvatarImage(localURL: context.viewState.localImage?.thumbnail,
+            LoadableEditableAvatarImage(localURL: context.viewState.localMedia?.thumbnailURL,
                                         url: context.viewState.avatarURL,
                                         name: context.viewState.initialName,
                                         contentID: context.viewState.roomID,
