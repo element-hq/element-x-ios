@@ -14,20 +14,20 @@
 // limitations under the License.
 //
 
-protocol TextBasedRoomTimelineView {
+protocol TextBasedRoomTimelineViewProtocol {
     associatedtype TimelineItemType: TextBasedRoomTimelineItem
 
     var timelineItem: TimelineItemType { get }
     var timelineStyle: TimelineStyle { get }
 }
 
-extension TextBasedRoomTimelineView {
+extension TextBasedRoomTimelineViewProtocol {
     var additionalWhitespaces: Int {
         guard timelineStyle == .bubbles else {
             return 0
         }
         var whiteSpaces = 1
-        timelineItem.localisedSendInfo.forEach { _ in
+        timelineItem.localizedSendInfo.forEach { _ in
             whiteSpaces += 1
         }
 

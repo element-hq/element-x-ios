@@ -17,7 +17,7 @@
 import Foundation
 import SwiftUI
 
-struct NoticeRoomTimelineView: View, TextBasedRoomTimelineView {
+struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     let timelineItem: NoticeRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     

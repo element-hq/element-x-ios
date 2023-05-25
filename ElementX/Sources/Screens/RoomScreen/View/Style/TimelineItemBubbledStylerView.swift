@@ -126,22 +126,22 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             ZStack(alignment: .topLeading) {
                 contentWithReply
                     .layoutPriority(1)
-                localisedSendInfo
+                localizedSendInfo
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
         } else {
             HStack(alignment: .bottom, spacing: 4) {
                 contentWithReply
-                localisedSendInfo
+                localizedSendInfo
             }
         }
     }
 
     @ViewBuilder
-    var localisedSendInfo: some View {
+    var localizedSendInfo: some View {
         HStack(spacing: 4) {
             if let timelineItem = timelineItem as? TextBasedRoomTimelineItem {
-                Text(timelineItem.localisedSendInfo)
+                Text(timelineItem.localizedSendInfo)
             } else {
                 Text(timelineItem.timestamp)
             }

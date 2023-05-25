@@ -17,7 +17,7 @@
 import Foundation
 
 // generated with auto mockable and customised to support the generic
-class TextBasedRoomTimelineViewMock<TimelineItemType: TextBasedRoomTimelineItem>: TextBasedRoomTimelineView {
+class TextBasedRoomTimelineViewMock<TimelineItemType: TextBasedRoomTimelineItem>: TextBasedRoomTimelineViewProtocol {
     var timelineItem: TimelineItemType {
         get { underlyingTimelineItem }
         set(value) { underlyingTimelineItem = value }

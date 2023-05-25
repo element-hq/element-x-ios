@@ -25,7 +25,7 @@ struct FormattedBodyText: View {
 
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var attributedString = attributedString
-        attributedString.append(AttributedString(stringLiteral: whitespacesEnd))
+        attributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
         return attributedString.formattedComponents
     }
     
@@ -35,7 +35,7 @@ struct FormattedBodyText: View {
     }
 
     // These is needed to create the slightly off inlined timestamp effect
-    private var whitespacesEnd: String {
+    private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, isRTL: layoutDirection == .rightToLeft)
     }
     

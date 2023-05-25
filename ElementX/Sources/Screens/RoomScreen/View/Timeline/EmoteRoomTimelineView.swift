@@ -17,7 +17,7 @@
 import Foundation
 import SwiftUI
 
-struct EmoteRoomTimelineView: View, TextBasedRoomTimelineView {
+struct EmoteRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     @Environment(\.timelineStyle) var timelineStyle
     let timelineItem: EmoteRoomTimelineItem
     
