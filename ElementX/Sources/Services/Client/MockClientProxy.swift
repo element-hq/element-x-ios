@@ -57,8 +57,12 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedCreatingRoom)
     }
     
-    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], roomImageMatrixUrl: String?) async -> Result<String, ClientProxyError> {
         .failure(.failedCreatingRoom)
+    }
+    
+    func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
+        .failure(.failedUploadingMedia(.unknown))
     }
     
     var roomForIdentifierMocks: [String: RoomProxyMock] = .init()

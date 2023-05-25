@@ -197,17 +197,17 @@ class ClientProxy: ClientProxyProtocol {
         return await waitForRoomSummary(with: result, name: expectedRoomName)
     }
     
-    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], roomImageMatrixUrl: String?) async -> Result<String, ClientProxyError> {
         let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: parameters.name,
-                                                      topic: parameters.topic,
-                                                      isEncrypted: parameters.isRoomPrivate,
+                let parameters = CreateRoomParameters(name: name,
+                                                      topic: topic,
+                                                      isEncrypted: isRoomPrivate,
                                                       isDirect: false,
-                                                      visibility: parameters.isRoomPrivate ? .private : .public,
-                                                      preset: parameters.isRoomPrivate ? .privateChat : .publicChat,
+                                                      visibility: isRoomPrivate ? .private : .public,
+                                                      preset: isRoomPrivate ? .privateChat : .publicChat,
                                                       invite: userIDs,
-                                                      avatar: nil)
+                                                      avatar: roomImageMatrixUrl)
                 let roomId = try self.client.createRoom(request: parameters)
                 return .success(roomId)
             } catch {
@@ -215,7 +215,22 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
         
-        return await waitForRoomSummary(with: result, name: parameters.name)
+        return await waitForRoomSummary(with: result, name: name)
+    }
+    
+    func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
+        guard let mimeType = media.mimeType else { return .failure(ClientProxyError.mediaFileError) }
+        return await Task.dispatch(on: clientQueue) {
+            do {
+                let data = try Data(contentsOf: media.mainURL)
+                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: [UInt8](data))
+                return .success(matrixUrl)
+            } catch let error as ClientError {
+                return .failure(ClientProxyError.failedUploadingMedia(error.code))
+            } catch {
+                return .failure(ClientProxyError.mediaFileError)
+            }
+        }
     }
     
     /// Await the room to be available in the room summary list

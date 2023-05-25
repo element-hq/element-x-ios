@@ -41,6 +41,21 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
 
         super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
         
+        createRoomParameters
+            .map(\.roomImage)
+            .sink { [weak self] mediaInfo in
+                self?.createRoomParameters.roomImage = mediaInfo
+                switch mediaInfo {
+                case .image(_, let thumbUrl, _):
+                    self?.updateRoomImage(thumbUrl)
+                case nil:
+                    self?.state.roomImage = nil
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
         selectedUsers
             .sink { [weak self] users in
                 self?.state.selectedUsers = users
@@ -60,6 +75,12 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             }
         case .deselectUser(let user):
             actionsSubject.send(.deselectUser(user))
+        case .displayCameraPicker:
+            actionsSubject.send(.displayCameraPicker)
+        case .displayMediaPicker:
+            actionsSubject.send(.displayMediaPicker)
+        case .removeImage:
+            actionsSubject.send(.removeImage)
         }
     }
     
@@ -69,6 +90,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         context.$viewState
             .map(\.bindings)
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates(by: { old, new in
+                old.roomName == new.roomName || old.roomTopic == new.roomTopic || old.isRoomPrivate == new.isRoomPrivate
+            })
             .sink { [weak self] bindings in
                 guard let self else { return }
                 createRoomParameters.name = bindings.roomName
@@ -87,6 +111,17 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                  message: L10n.screenStartChatErrorStartingChat)
         case .failedSearchingUsers:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
+        case .failedUploadingMedia(let matrixError):
+            switch matrixError {
+            case .fileTooLarge:
+                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia,
+                                                     title: L10n.commonError,
+                                                     message: "File too large") // TODO: localize
+            default:
+                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
+            }
+        case .mediaFileError:
+            state.bindings.alertInfo = AlertInfo(id: .mediaFileError)
         default:
             break
         }
@@ -96,12 +131,45 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         userSession.clientProxy
     }
     
+    private func loadImageFrom(_ path: URL) async -> Data? {
+        await Task.detached {
+            try? Data(contentsOf: path)
+        }.value
+    }
+    
+    private func updateRoomImage(_ path: URL) {
+        showLoadingIndicator()
+        Task { [weak self] in
+            let data = await self?.loadImageFrom(path)
+            self?.state.roomImage = data
+            self?.hideLoadingIndicator()
+        }
+    }
+    
     private func createRoom() async {
         defer {
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await clientProxy.createRoom(with: createRoomParameters, userIDs: state.selectedUsers.map(\.userID)) {
+        
+        let roomImageMatrixUrl: String?
+        if let media = createRoomParameters.roomImage {
+            switch await clientProxy.uploadMedia(media) {
+            case .success(let url):
+                roomImageMatrixUrl = url
+            case .failure(let error):
+                displayError(error)
+                return
+            }
+        } else {
+            roomImageMatrixUrl = nil
+        }
+
+        switch await clientProxy.createRoom(name: createRoomParameters.name,
+                                            topic: createRoomParameters.topic,
+                                            isRoomPrivate: createRoomParameters.isRoomPrivate,
+                                            userIDs: state.selectedUsers.map(\.userID),
+                                            roomImageMatrixUrl: roomImageMatrixUrl) {
         case .success(let roomId):
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):

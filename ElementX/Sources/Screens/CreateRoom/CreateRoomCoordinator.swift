@@ -28,6 +28,8 @@ enum CreateRoomCoordinatorAction {
     case openRoom(withIdentifier: String)
     case deselectUser(UserProfileProxy)
     case updateDetails(CreateRoomFlowParameters)
+    case displayMediaPickerWithSource(MediaPickerScreenSource)
+    case removeImage
 }
 
 final class CreateRoomCoordinator: CoordinatorProtocol {
@@ -58,6 +60,12 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
                 self.actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .updateDetails(let details):
                 self.actionsSubject.send(.updateDetails(details))
+            case .displayCameraPicker:
+                self.actionsSubject.send(.displayMediaPickerWithSource(.camera))
+            case .displayMediaPicker:
+                self.actionsSubject.send(.displayMediaPickerWithSource(.photoLibrary))
+            case .removeImage:
+                self.actionsSubject.send(.removeImage)
             }
         }
         .store(in: &cancellables)

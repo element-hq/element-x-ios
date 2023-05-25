@@ -45,6 +45,14 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         selectedUsers.asCurrentValuePublisher()
     }
     
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
+    
+    private var userIndicatorController: UserIndicatorControllerProtocol? {
+        parameters.userIndicatorController
+    }
+    
     var actions: AnyPublisher<StartChatScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -99,7 +107,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator?.push(coordinator) { [weak self] in
+        navigationStackCoordinator?.push(coordinator) { [weak self] in
             self?.createRoomParameters.send(.init())
             self?.selectedUsers.send([])
         }
@@ -107,26 +115,66 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     private func openCreateRoomScreen() {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
-                                                               userIndicatorController: parameters.userIndicatorController,
+                                                               userIndicatorController: userIndicatorController,
                                                                createRoomParameters: createRoomParametersPublisher,
                                                                selectedUsers: selectedUsersPublisher)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
         coordinator.actions.sink { [weak self] result in
+            guard let self else { return }
             switch result {
             case .deselectUser(let user):
-                self?.toggleUser(user)
+                self.toggleUser(user)
             case .updateDetails(let details):
-                self?.createRoomParameters.send(details)
+                self.createRoomParameters.send(details)
             case .openRoom(let identifier):
-                self?.actionsSubject.send(.openRoom(withIdentifier: identifier))
+                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
+            case .displayMediaPickerWithSource(let source):
+                self.displayMediaPickerWithSource(source)
+            case .removeImage:
+                var parameters = self.createRoomParameters.value
+                parameters.roomImage = nil
+                self.createRoomParameters.send(parameters)
             }
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator?.push(coordinator)
+        navigationStackCoordinator?.push(coordinator)
     }
     
     // MARK: - Private
+    
+    let mediaUploadingPreprocessor = MediaUploadingPreprocessor()
+    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: stackCoordinator)
+        
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController, source: source) { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .cancel:
+                self.navigationStackCoordinator?.setSheetCoordinator(nil)
+            case .selectMediaAtURL(let url):
+                self.processUrl(url)
+            }
+        }
+        
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        
+        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+    }
+    
+    private func processUrl(_ url: URL) {
+        navigationStackCoordinator?.setSheetCoordinator(nil)
+        showLoadingIndicator()
+        Task { [weak self] in
+            guard let self else { return }
+            let media = try? await self.mediaUploadingPreprocessor.processMedia(at: url).get()
+            var parameters = self.createRoomParameters.value
+            parameters.roomImage = media
+            self.createRoomParameters.send(parameters)
+            self.hideLoadingIndicator()
+        }
+    }
     
     private func toggleUser(_ user: UserProfileProxy) {
         var selectedUsers = selectedUsers.value
@@ -136,5 +184,20 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             selectedUsers.append(user)
         }
         self.selectedUsers.send(selectedUsers)
+    }
+    
+    // MARK: Loading indicator
+    
+    private static let loadingIndicatorIdentifier = "StartChatCoordinatorLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                               type: .modal,
+                                                               title: L10n.commonLoading,
+                                                               persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

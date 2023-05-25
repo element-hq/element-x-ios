@@ -18,6 +18,8 @@ import Foundation
 
 enum CreateRoomScreenErrorType: Error {
     case failedCreatingRoom
+    case failedUploadingMedia
+    case mediaFileError
     case unknown
 }
 
@@ -25,12 +27,15 @@ enum CreateRoomViewModelAction {
     case openRoom(withIdentifier: String)
     case deselectUser(UserProfileProxy)
     case updateDetails(CreateRoomFlowParameters)
+    case displayMediaPicker
+    case displayCameraPicker
+    case removeImage
 }
 
 struct CreateRoomViewState: BindableState {
     var selectedUsers: [UserProfileProxy]
     var bindings: CreateRoomViewStateBindings
-    
+    var roomImage: Data?
     var canCreateRoom: Bool {
         !bindings.roomName.isEmpty
     }
@@ -48,4 +53,7 @@ struct CreateRoomViewStateBindings {
 enum CreateRoomViewAction {
     case createRoom
     case deselectUser(UserProfileProxy)
+    case displayCameraPicker
+    case displayMediaPicker
+    case removeImage
 }

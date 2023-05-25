@@ -18,6 +18,8 @@ import SwiftUI
 
 struct CreateRoomScreen: View {
     @ObservedObject var context: CreateRoomViewModel.Context
+    @State private var showAttachmentPopover = false
+    @State private var sheetContentHeight = CGFloat(0)
     
     var body: some View {
         mainContent
@@ -32,6 +34,25 @@ struct CreateRoomScreen: View {
                 }
             }
             .background(ViewFrameReader(frame: $frame))
+            .confirmationDialog("", isPresented: $showAttachmentPopover, actions: {
+                Button {
+                    context.send(viewAction: .displayCameraPicker)
+                } label: {
+                    Text(L10n.actionTakePhoto)
+                }
+                Button {
+                    context.send(viewAction: .displayMediaPicker)
+                } label: {
+                    Text(L10n.actionChoosePhoto)
+                }
+                if context.viewState.roomImage != nil {
+                    Button(role: .destructive) {
+                        context.send(viewAction: .removeImage)
+                    } label: {
+                        Text(L10n.actionRemove)
+                    }
+                }
+            })
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -49,11 +70,22 @@ struct CreateRoomScreen: View {
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
-                Image(systemName: "camera")
-                    .foregroundColor(.element.secondaryContent)
-                    .frame(width: roomIconSize, height: roomIconSize)
-                    .background(Color.element.quinaryContent)
-                    .clipShape(Circle())
+                Button {
+                    showAttachmentPopover = true
+                } label: {
+                    if let data = context.viewState.roomImage, let image = UIImage(data: data) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame(width: roomIconSize, height: roomIconSize)
+                            .clipShape(Circle())
+                    } else {
+                        Image(systemName: "camera")
+                            .foregroundColor(.element.secondaryContent)
+                            .frame(width: roomIconSize, height: roomIconSize)
+                            .background(Color.element.quinaryContent)
+                            .clipShape(Circle())
+                    }
+                }
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                         .font(.compound.bodyXS)
