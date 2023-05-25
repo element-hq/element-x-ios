@@ -47,7 +47,14 @@ class RoomProxy: RoomProxyProtocol {
     var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
         updatesSubject.eraseToAnyPublisher()
     }
-        
+    
+    deinit {
+        Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
+            roomTimelineObservationToken?.cancel()
+            _ = slidingSyncRoom.unsubscribeFromRoom()
+        }
+    }
+
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
@@ -55,7 +62,7 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.backgroundTaskService = backgroundTaskService
     }
-
+    
     lazy var id: String = room.id()
     
     var name: String? {
@@ -480,13 +487,6 @@ class RoomProxy: RoomProxyProtocol {
         UInt(room.activeMembersCount())
     }
     
-    deinit {
-        Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
-            roomTimelineObservationToken?.cancel()
-            _ = slidingSyncRoom.unsubscribeFromRoom()
-        }
-    }
-
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
