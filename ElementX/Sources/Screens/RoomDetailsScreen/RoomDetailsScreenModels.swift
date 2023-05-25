@@ -57,7 +57,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var hasTopicSection: Bool {
-        topic != nil || (canEditRoomTopic && ServiceLocator.shared.settings.editRoomDetailsFlowEnabled)
+        topic != nil || (canEdit && canEditRoomTopic)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings
