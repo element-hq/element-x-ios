@@ -36,11 +36,13 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
+        let roomAvatar = roomProxy.avatarURL
         let roomName = roomProxy.name
         let roomTopic = roomProxy.topic
         
         super.init(initialViewState: RoomDetailsEditScreenViewState(roomID: roomProxy.id,
-                                                                    avatarURL: roomProxy.avatarURL,
+                                                                    avatarURL: roomAvatar,
+                                                                    initialAvatarURL: roomAvatar,
                                                                     initialName: roomName,
                                                                     initialTopic: roomTopic,
                                                                     canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
@@ -67,7 +69,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             if state.localImage != nil {
                 state.localImage = nil
             } else {
-                #warning("Delete remote image")
+                state.avatarURL = nil
             }
         }
     }
@@ -84,7 +86,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             case let .success(.image(imageURL, thumbnailURL, _)):
                 state.localImage = (imageURL, thumbnailURL)
             case .failure, .success:
-                break
+                #warning("Show error?")
             }
         }
     }
@@ -101,6 +103,12 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             
             do {
                 try await withThrowingTaskGroup(of: Void.self) { group in
+                    if state.avatarDidChange {
+                        group.addTask {
+                            #warning("update or delete avatar")
+                        }
+                    }
+                    
                     if state.nameDidChange {
                         group.addTask {
                             try await self.roomProxy.setName(self.state.bindings.name).get()

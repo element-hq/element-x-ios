@@ -31,7 +31,8 @@ struct RoomDetailsEditScreenViewStateBindings {
 
 struct RoomDetailsEditScreenViewState: BindableState {
     let roomID: String
-    let avatarURL: URL?
+    var avatarURL: URL?
+    var initialAvatarURL: URL?
     var initialName: String?
     var initialTopic: String?
     let canEditAvatar: Bool
@@ -48,9 +49,13 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var topicDidChange: Bool {
         bindings.topic != initialTopic
     }
+    
+    var avatarDidChange: Bool {
+        localImage != nil || avatarURL != initialAvatarURL
+    }
 
     var canSave: Bool {
-        !bindings.name.isEmpty && (nameDidChange || topicDidChange)
+        !bindings.name.isEmpty && (avatarDidChange || nameDidChange || topicDidChange)
     }
     
     var showDeleteImageAction: Bool {
