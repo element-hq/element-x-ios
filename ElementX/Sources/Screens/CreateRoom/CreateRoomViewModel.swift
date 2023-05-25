@@ -91,7 +91,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .map(\.bindings)
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates(by: { old, new in
-                old.roomName == new.roomName || old.roomTopic == new.roomTopic || old.isRoomPrivate == new.isRoomPrivate
+                old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
             })
             .sink { [weak self] bindings in
                 guard let self else { return }
