@@ -20,7 +20,6 @@ import UIKit
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
-    case updatedStateEvents(RoomProxyProtocol)
     case canBackPaginate(Bool)
     case isBackPaginating(Bool)
 }

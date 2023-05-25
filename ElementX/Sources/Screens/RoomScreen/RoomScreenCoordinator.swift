@@ -44,8 +44,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
-                                        roomName: parameters.roomProxy.roomTitle,
-                                        roomAvatarUrl: parameters.roomProxy.avatarURL)
+                                        roomProxy: parameters.roomProxy)
     }
     
     // MARK: - Public
