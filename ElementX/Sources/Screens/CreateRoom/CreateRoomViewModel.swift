@@ -43,6 +43,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         createRoomParameters
             .map(\.roomImage)
+            .removeDuplicates(by: { old, new in
+                old?.mainURL == new?.mainURL
+            })
             .sink { [weak self] mediaInfo in
                 self?.createRoomParameters.roomImage = mediaInfo
                 switch mediaInfo {
