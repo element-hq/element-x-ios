@@ -114,9 +114,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .failedUploadingMedia(let matrixError):
             switch matrixError {
             case .fileTooLarge:
-                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia,
-                                                     title: L10n.commonError,
-                                                     message: "File too large") // TODO: localize
+                // waiting for proper copy
+                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
             default:
                 state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
             }
