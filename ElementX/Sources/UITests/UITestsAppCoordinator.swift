@@ -15,6 +15,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 import UIKit
 
@@ -351,6 +352,21 @@ class MockScreen: Identifiable {
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomEditDetails, .roomEditDetailsReadOnly:
+            let allowedStateEvents: [StateEventType] = id == .roomEditDetails ? [.roomAvatar, .roomName, .roomTopic] : []
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
+                                                      name: "Room",
+                                                      displayName: "Room",
+                                                      topic: "What a cool topic!",
+                                                      avatarURL: .picturesDirectory))
+            let coordinator = RoomDetailsEditScreenCoordinator(parameters: .init(accountOwner: RoomMemberProxyMock.mockOwner(allowedStateEvents: allowedStateEvents),
+                                                                                 mediaProvider: MockMediaProvider(),
+                                                                                 navigationStackCoordinator: navigationStackCoordinator,
+                                                                                 roomProxy: roomProxy,
+                                                                                 userIndicatorController: MockUserIndicatorController()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreen:
