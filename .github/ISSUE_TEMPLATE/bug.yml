@@ -49,8 +49,8 @@ body:
     id: version
     attributes:
       label: Application version
-      description: You can find the version information in Settings -> Help & About. 
-      placeholder: e.g. Element version 1.5.2
+      description: You can find the version information in the Settings of Element X. 
+      placeholder: e.g. Version: 1.1.1 (48)
     validations:
       required: false
   - type: input
