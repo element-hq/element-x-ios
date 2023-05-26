@@ -123,7 +123,7 @@ extension UNMutableNotificationContent {
                        senderID: String,
                        senderName: String,
                        iconType: NotificationIconType) async throws -> UNMutableNotificationContent {
-        var image: INImage?
+        var image = INImage(named: "")
         if let mediaSource = iconType.mediaSource {
             switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
             case .success(let data):
@@ -161,7 +161,7 @@ extension UNMutableNotificationContent {
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
-        if speakableGroupName != nil, let image {
+        if speakableGroupName != nil {
             intent.setImage(image, forParameterNamed: \.speakableGroupName)
         }
 
