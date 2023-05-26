@@ -112,23 +112,22 @@ class RoomScreenUITests: XCTestCase {
     func testTimelineLayoutAtTop() async throws {
         let client = try UITestsSignalling.Client(mode: .tests)
         
-        let app = Application.launch(.roomLayoutTop, disableTimelineAccessibility: false)
+        let app = Application.launch(.roomLayoutTop)
         
         await client.waitForApp()
         defer { try? client.stop() }
         
         // Given a timeline that is scrolled to the top.
         for _ in 0...5 {
-            app.tables.element.swipeDown()
+            app.swipeDown()
         }
-        let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
+        try await app.assertScreenshot(.roomLayoutTop) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
 
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped)
+        try await app.assertScreenshot(.roomLayoutTop)
     }
 
     func testTimelineLayoutAtBottom() async throws {
