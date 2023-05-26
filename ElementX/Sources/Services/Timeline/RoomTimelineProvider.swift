@@ -39,24 +39,22 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         self.roomProxy = roomProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxies = []
-
-        Task { @MainActor in
-            roomProxy
-                .updatesPublisher
-                .collect(.byTime(serialDispatchQueue, 0.1))
-                .sink { [weak self] in self?.updateItemsWithDiffs($0) }
-                .store(in: &cancellables)
-            
-            switch roomProxy.registerTimelineListenerIfNeeded() {
-            case let .success(items):
-                itemProxies = items.map(TimelineItemProxy.init)
-                MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
-            case .failure(.roomListenerAlreadyRegistered):
-                MXLog.info("Listener already registered for the room: \(roomProxy.id)")
-            case .failure:
-                let roomID = roomProxy.id
-                MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
-            }
+        
+        roomProxy
+            .updatesPublisher
+            .collect(.byTime(serialDispatchQueue, 0.1))
+            .sink { [weak self] in self?.updateItemsWithDiffs($0) }
+            .store(in: &cancellables)
+        
+        switch roomProxy.registerTimelineListenerIfNeeded() {
+        case let .success(items):
+            itemProxies = items.map(TimelineItemProxy.init)
+            MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
+        case .failure(.roomListenerAlreadyRegistered):
+            MXLog.info("Listener already registered for the room: \(roomProxy.id)")
+        case .failure:
+            let roomID = roomProxy.id
+            MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
         }
     }
     

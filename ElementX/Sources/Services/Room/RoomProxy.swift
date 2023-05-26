@@ -174,13 +174,14 @@ class RoomProxy: RoomProxyProtocol {
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
         roomSubscriptionObservationToken = slidingSyncRoom.subscribeToRoom(settings: settings)
         
-        let listener = RoomTimelineListener { [weak self] timelineDiff in
+        let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
             self?.updatesSubject.send(timelineDiff)
         }
         
-        if let result = try? slidingSyncRoom.addTimelineListener(listener: listener) {
+        self.timelineListener = timelineListener
+        
+        if let result = try? slidingSyncRoom.addTimelineListener(listener: timelineListener) {
             roomTimelineObservationToken = result.taskHandle
-            timelineListener = listener
             
             Task {
                 await fetchMembers()
@@ -188,6 +189,7 @@ class RoomProxy: RoomProxyProtocol {
             }
             return .success(result.items)
         } else {
+            self.timelineListener = nil
             return .failure(.failedAddingTimelineListener)
         }
     }
