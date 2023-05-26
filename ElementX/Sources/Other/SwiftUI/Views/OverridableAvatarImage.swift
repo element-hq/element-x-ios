@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-struct LoadableEditableAvatarImage: View {
-    private let localURL: URL?
+struct OverridableAvatarImage: View {
+    private let overrideURL: URL?
     private let url: URL?
     private let name: String?
     private let contentID: String?
@@ -26,8 +26,8 @@ struct LoadableEditableAvatarImage: View {
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(localURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, imageProvider: ImageProviderProtocol?) {
-        self.localURL = localURL
+    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, imageProvider: ImageProviderProtocol?) {
+        self.overrideURL = overrideURL
         self.url = url
         self.name = name
         self.contentID = contentID
@@ -38,8 +38,8 @@ struct LoadableEditableAvatarImage: View {
     }
     
     var body: some View {
-        if let localURL {
-            AsyncImage(url: localURL) { image in
+        if let overrideURL {
+            AsyncImage(url: overrideURL) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)

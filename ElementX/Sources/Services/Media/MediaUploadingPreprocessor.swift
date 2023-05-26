@@ -55,7 +55,7 @@ enum MediaInfo {
         }
     }
     
-    var mainURL: URL {
+    var url: URL {
         switch self {
         case .image(let url, _, _),
              .video(let url, _, _),
