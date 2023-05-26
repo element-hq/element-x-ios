@@ -57,6 +57,7 @@ struct CreateRoomScreen: View {
         Section {
             HStack(alignment: .center, spacing: 16) {
                 Button {
+                    focus = nil
                     context.showAttachmentConfirmationDialog = true
                 } label: {
                     if let url = context.viewState.roomImage {
@@ -194,8 +195,8 @@ struct CreateRoomScreen: View {
     
     private var createButton: some View {
         Button {
-            context.send(viewAction: .createRoom)
             focus = nil
+            context.send(viewAction: .createRoom)
         } label: {
             Text(L10n.actionCreate)
         }
