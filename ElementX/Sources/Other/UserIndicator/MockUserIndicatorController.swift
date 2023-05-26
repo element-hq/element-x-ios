@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 class MockUserIndicatorController: UserIndicatorControllerProtocol {
@@ -23,5 +24,11 @@ class MockUserIndicatorController: UserIndicatorControllerProtocol {
     
     func retractAllIndicators() { }
     
-    var alertInfo: AlertInfo<UUID>?
+    var alertInfo: AlertInfo<UUID>? {
+        didSet {
+            alertInfoPublisher.send(alertInfo)
+        }
+    }
+    
+    let alertInfoPublisher: PassthroughSubject<AlertInfo<UUID>?, Never> = .init()
 }

@@ -99,4 +99,12 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isIgnored: true))
     }
+    
+    static func mockOwner(allowedStateEvents: [StateEventType]) -> RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@foo:some.org",
+                                        displayName: "User owner",
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        canSendStateEvent: { allowedStateEvents.contains($0) }))
+    }
 }

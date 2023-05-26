@@ -42,8 +42,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         
         super.init(initialViewState: RoomDetailsEditScreenViewState(roomID: roomProxy.id,
                                                                     initialAvatarURL: roomAvatar,
-                                                                    initialName: roomName,
-                                                                    initialTopic: roomTopic,
+                                                                    initialName: roomName ?? "",
+                                                                    initialTopic: roomTopic ?? "",
                                                                     canEditAvatar: accountOwner.canSendStateEvent(type: .roomAvatar),
                                                                     canEditName: accountOwner.canSendStateEvent(type: .roomName),
                                                                     canEditTopic: accountOwner.canSendStateEvent(type: .roomTopic),
@@ -88,7 +88,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                #warning("Show error?")
+                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
             }
         }
     }

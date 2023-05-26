@@ -286,13 +286,3 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canEdit)
     }
 }
-
-private extension RoomMemberProxyMock {
-    static func mockOwner(allowedStateEvents: [StateEventType]) -> RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "@foo:some.org",
-                                        displayName: "User owner",
-                                        membership: .join,
-                                        isAccountOwner: true,
-                                        canSendStateEvent: { allowedStateEvents.contains($0) }))
-    }
-}
