@@ -127,7 +127,8 @@ lane :ui_tests do |options|
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true,
-    only_testing: test_to_run
+    only_testing: test_to_run,
+    number_of_retries: 3,
   )
 
   slather(
