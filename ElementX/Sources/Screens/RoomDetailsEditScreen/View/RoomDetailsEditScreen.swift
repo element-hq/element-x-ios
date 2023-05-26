@@ -20,7 +20,7 @@ struct RoomDetailsEditScreen: View {
     @ObservedObject var context: RoomDetailsEditScreenViewModel.Context
     @FocusState private var focus: Focus?
     
-    enum Focus {
+    private enum Focus {
         case name
         case topic
     }

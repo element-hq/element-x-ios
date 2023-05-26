@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import MatrixRustSDK
 import XCTest
 
 @testable import ElementX
@@ -27,6 +28,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     override func setUp() {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test"))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        AppSettings.reset()
+        ServiceLocator.shared.settings.editRoomDetailsFlowEnabled = true
     }
 
     func testLeaveRoomTappedWhenPublic() async {
@@ -218,5 +222,77 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testRoomSubscription() async {
         await context.nextViewState()
         XCTAssertEqual(roomProxyMock.registerTimelineListenerIfNeededCallsCount, 1)
+    }
+    
+    func testCanEditAvatar() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomAvatar]), .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        _ = await context.$viewState.values.first(where: { !$0.members.isEmpty })
+        
+        XCTAssertTrue(context.viewState.canEditRoomAvatar)
+        XCTAssertFalse(context.viewState.canEditRoomName)
+        XCTAssertFalse(context.viewState.canEditRoomTopic)
+        XCTAssertTrue(context.viewState.canEdit)
+    }
+    
+    func testCanEditName() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomName]), .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        _ = await context.$viewState.values.first(where: { !$0.members.isEmpty })
+        
+        XCTAssertFalse(context.viewState.canEditRoomAvatar)
+        XCTAssertTrue(context.viewState.canEditRoomName)
+        XCTAssertFalse(context.viewState.canEditRoomTopic)
+        XCTAssertTrue(context.viewState.canEdit)
+    }
+    
+    func testCanEditTopic() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomTopic]), .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        _ = await context.$viewState.values.first(where: { !$0.members.isEmpty })
+        
+        XCTAssertFalse(context.viewState.canEditRoomAvatar)
+        XCTAssertFalse(context.viewState.canEditRoomName)
+        XCTAssertTrue(context.viewState.canEditRoomTopic)
+        XCTAssertTrue(context.viewState.canEdit)
+    }
+    
+    func testCannotEditRoom() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: []), .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        _ = await context.$viewState.values.first(where: { !$0.members.isEmpty })
+
+        XCTAssertFalse(context.viewState.canEditRoomAvatar)
+        XCTAssertFalse(context.viewState.canEditRoomName)
+        XCTAssertFalse(context.viewState.canEditRoomTopic)
+        XCTAssertFalse(context.viewState.canEdit)
+    }
+    
+    func testCannotEditDirectRoom() async {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]), .mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isPublic: false, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        
+        _ = await context.$viewState.values.first(where: { !$0.members.isEmpty })
+
+        XCTAssertFalse(context.viewState.canEdit)
+    }
+}
+
+private extension RoomMemberProxyMock {
+    static func mockOwner(allowedStateEvents: [StateEventType]) -> RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@foo:some.org",
+                                        displayName: "User owner",
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        canSendStateEvent: { allowedStateEvents.contains($0) }))
     }
 }
