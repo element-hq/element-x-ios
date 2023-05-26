@@ -321,6 +321,24 @@ class MockScreen: Identifiable {
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomDetailsScreenWithEmptyTopic:
+            ServiceLocator.shared.settings.editRoomDetailsFlowEnabled = true
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomTopic]), .mockBob, .mockCharlie]
+            let roomProxy = RoomProxyMock(with: .init(id: "MockRoomIdentifier",
+                                                      displayName: "Room",
+                                                      topic: nil,
+                                                      avatarURL: URL.picturesDirectory,
+                                                      isDirect: false,
+                                                      isEncrypted: true,
+                                                      canonicalAlias: "#mock:room.org",
+                                                      members: members))
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                             roomProxy: roomProxy,
+                                                                             mediaProvider: MockMediaProvider(),
+                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomDetailsScreenWithInvite:
             ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()

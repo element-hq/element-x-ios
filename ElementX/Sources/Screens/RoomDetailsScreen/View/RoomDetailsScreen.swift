@@ -122,6 +122,7 @@ struct RoomDetailsScreen: View {
                             .foregroundColor(.element.primaryContent)
                             .font(.compound.bodyLG)
                     }
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
                 }
             } header: {
                 Text(L10n.commonTopic)
