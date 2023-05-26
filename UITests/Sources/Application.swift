@@ -41,17 +41,16 @@ extension XCUIApplication {
     /// - Parameter identifier: Identifier of the UI test screen
     /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.
     /// - Parameter insets: Optional insets with which to crop the image by.
-    func assertScreenshot(_ identifier: UITestsScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil, delayInMilliseconds: UInt = 2000, precision: Float = 0.99) async throws {
+    func assertScreenshot(_ identifier: UITestsScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil, delay: Duration = .seconds(1), precision: Float = 0.99) async throws {
         var snapshotName = identifier.rawValue
         if let step {
             snapshotName += "-\(step)"
         }
 
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
-        if delayInMilliseconds > 0 {
-            try await Task.sleep(for: .milliseconds(delayInMilliseconds))
-        }
-        var snapshot = XCUIScreen.main.screenshot().image
+        try await Task.sleep(for: delay)
+        
+        var snapshot = screenshot().image
         
         if let insets {
             snapshot = snapshot.inset(by: insets)
