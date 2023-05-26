@@ -23,6 +23,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
     private var dmRecipient: RoomMemberProxyProtocol?
+    private var accountOwner: RoomMemberProxyProtocol?
     
     @CancellableTask
     private var buildMembersDetailsTask: Task<Void, Never>?
@@ -52,6 +53,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
@@ -71,6 +73,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
+        case .processTapEdit, .processTapAddTopic:
+            guard let accountOwner else {
+                MXLog.error("Missing account owner when presenting the room's edit details screen")
+                return
+            }
+            callback?(.requestEditDetailsPresentation(accountOwner))
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:
@@ -105,13 +113,17 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                     self.state.joinedMembersCount = roomMembersDetails.joinedMembersCount
                     self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
                     self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
+                    self.state.canEditRoomName = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomName) ?? false
+                    self.state.canEditRoomTopic = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
+                    self.state.canEditRoomAvatar = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
                     self.members = members
+                    self.accountOwner = roomMembersDetails.accountOwner
                 }
             }
             .store(in: &cancellables)
         
         roomProxy.updatesPublisher
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.state.title = self.roomProxy.roomTitle

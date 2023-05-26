@@ -14,21 +14,18 @@
 // limitations under the License.
 //
 
-import Combine
-import Foundation
+import ElementX
+import XCTest
 
-class MockUserIndicatorController: UserIndicatorControllerProtocol {
-    func submitIndicator(_ indicator: UserIndicator) { }
-    
-    func retractIndicatorWithId(_ id: String) { }
-    
-    func retractAllIndicators() { }
-    
-    var alertInfo: AlertInfo<UUID>? {
-        didSet {
-            alertInfoPublisher.send(alertInfo)
-        }
+@MainActor
+class RoomDetailsEditScreenUITests: XCTestCase {
+    func testEditableRoom() async throws {
+        let app = Application.launch(.roomEditDetails)
+        try await app.assertScreenshot(.roomEditDetails)
     }
     
-    let alertInfoPublisher: PassthroughSubject<AlertInfo<UUID>?, Never> = .init()
+    func testReadOnlyRoom() async throws {
+        let app = Application.launch(.roomEditDetailsReadOnly)
+        try await app.assertScreenshot(.roomEditDetailsReadOnly)
+    }
 }

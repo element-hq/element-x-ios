@@ -130,7 +130,19 @@ class RoomProxy: RoomProxyProtocol {
         //  return trusted image for now, should be updated after verification status known
         return Asset.Images.encryptionTrusted.image
     }
+
+    var invitedMembersCount: UInt {
+        UInt(room.invitedMembersCount())
+    }
+
+    var joinedMembersCount: UInt {
+        UInt(room.joinedMembersCount())
+    }
     
+    var activeMembersCount: UInt {
+        UInt(room.activeMembersCount())
+    }
+
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         do {
             guard let urlString = try await Task.dispatch(on: lowPriorityDispatchQueue, {
@@ -486,18 +498,51 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    var invitedMembersCount: UInt {
-        UInt(room.invitedMembersCount())
+    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.setName(name: name))
+            } catch {
+                return .failure(.failedSettingRoomName)
+            }
+        }
+    }
+
+    func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.setTopic(topic: topic))
+            } catch {
+                return .failure(.failedSettingRoomTopic)
+            }
+        }
     }
     
-    var joinedMembersCount: UInt {
-        UInt(room.joinedMembersCount())
+    func removeAvatar() async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.removeAvatar())
+            } catch {
+                return .failure(.failedRemovingAvatar)
+            }
+        }
     }
     
-    var activeMembersCount: UInt {
-        UInt(room.activeMembersCount())
+    func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
+                return .failure(.failedUploadingAvatar)
+            }
+
+            do {
+                let data = try Data(contentsOf: imageURL)
+                return try .success(self.room.uploadAvatar(mimeType: mimeType, data: [UInt8](data)))
+            } catch {
+                return .failure(.failedUploadingAvatar)
+            }
+        }
     }
-    
+
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener

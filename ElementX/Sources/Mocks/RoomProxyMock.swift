@@ -19,7 +19,7 @@ import Foundation
 
 struct RoomProxyMockConfiguration {
     var id = UUID().uuidString
-    let name: String? = nil
+    var name: String?
     let displayName: String?
     var topic: String?
     var avatarURL: URL?
@@ -75,5 +75,7 @@ extension RoomProxyMock {
         acceptInvitationClosure = { .success(()) }
         registerTimelineListenerIfNeededClosure = { .success([]) }
         underlyingUpdatesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
+        setNameClosure = { _ in .success(()) }
+        setTopicClosure = { _ in .success(()) }
     }
 }

@@ -62,6 +62,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.cancel)
             case .leftRoom:
                 self.callback?(.leftRoom)
+            case .requestEditDetailsPresentation(let accountOwner):
+                self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
             }
         }
     }
@@ -112,6 +114,30 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+        
+        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+    }
+    
+    private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
+        
+        let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(accountOwner: accountOwner,
+                                                                                   mediaProvider: parameters.mediaProvider,
+                                                                                   navigationStackCoordinator: navigationStackCoordinator,
+                                                                                   roomProxy: parameters.roomProxy,
+                                                                                   userIndicatorController: userIndicatorController)
+        let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
+        
+        roomDetailsEditCoordinator.actions.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         
         parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }

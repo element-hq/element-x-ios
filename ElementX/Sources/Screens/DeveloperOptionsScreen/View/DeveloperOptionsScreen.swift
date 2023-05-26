@@ -57,6 +57,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.inviteMorePeopleFlowEnabled) { _ in
                     context.send(viewAction: .changedInviteMorePeopleFlowEnabled)
                 }
+                
+                Toggle(isOn: $context.editRoomDetailsFlowEnabled) {
+                    Text("Show edit room details flow")
+                }
+                .onChange(of: context.editRoomDetailsFlowEnabled) { _ in
+                    context.send(viewAction: .changedEditRoomDetailsFlowEnabled)
+                }
             }
             
             Section {

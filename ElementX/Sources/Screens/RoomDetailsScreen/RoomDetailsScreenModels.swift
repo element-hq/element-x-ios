@@ -26,6 +26,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestInvitePeoplePresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
+    case requestEditDetailsPresentation(RoomMemberProxyProtocol)
 }
 
 // MARK: View
@@ -43,9 +44,20 @@ struct RoomDetailsScreenViewState: BindableState {
     var joinedMembersCount = 0
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
+    var canEditRoomName = false
+    var canEditRoomTopic = false
+    var canEditRoomAvatar = false
     
     var isLoadingMembers: Bool {
         members.isEmpty
+    }
+    
+    var canEdit: Bool {
+        !isDirect && ServiceLocator.shared.settings.editRoomDetailsFlowEnabled && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
+    }
+    
+    var hasTopicSection: Bool {
+        topic != nil || (canEdit && canEditRoomTopic)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings
@@ -130,6 +142,8 @@ enum RoomDetailsScreenViewAction {
     case processTapLeave
     case processTapIgnore
     case processTapUnignore
+    case processTapEdit
+    case processTapAddTopic
     case confirmLeave
     case ignoreConfirmed
     case unignoreConfirmed

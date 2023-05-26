@@ -29,7 +29,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                                                startChatFlowEnabled: appSettings.startChatFlowEnabled,
                                                                startChatUserSuggestionsEnabled: appSettings.startChatUserSuggestionsEnabled,
                                                                invitesFlowEnabled: appSettings.invitesFlowEnabled,
-                                                               inviteMorePeopleFlowEnabled: appSettings.inviteMorePeopleFlowEnabled)
+                                                               inviteMorePeopleFlowEnabled: appSettings.inviteMorePeopleFlowEnabled,
+                                                               editRoomDetailsFlowEnabled: appSettings.editRoomDetailsFlowEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -51,6 +52,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
         case .changedInviteMorePeopleFlowEnabled:
             appSettings.inviteMorePeopleFlowEnabled = state.bindings.inviteMorePeopleFlowEnabled
+        case .changedEditRoomDetailsFlowEnabled:
+            appSettings.editRoomDetailsFlowEnabled = state.bindings.editRoomDetailsFlowEnabled
         case .clearCache:
             callback?(.clearCache)
         }

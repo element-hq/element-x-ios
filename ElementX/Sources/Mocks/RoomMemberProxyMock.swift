@@ -23,11 +23,12 @@ struct RoomMemberProxyMockConfiguration {
     var avatarURL: URL?
     var membership: MembershipState
     var isNameAmbiguous = false
-    var powerLevel: Int
-    var normalizedPowerLevel: Int
+    var powerLevel = 50
+    var normalizedPowerLevel = 50
     var isAccountOwner = false
     var isIgnored = false
     var canInviteUsers = false
+    var canSendStateEvent: (StateEventType) -> Bool = { _ in true }
 }
 
 extension RoomMemberProxyMock {
@@ -43,6 +44,7 @@ extension RoomMemberProxyMock {
         isAccountOwner = configuration.isAccountOwner
         isIgnored = configuration.isIgnored
         canInviteUsers = configuration.canInviteUsers
+        canSendStateEventTypeClosure = configuration.canSendStateEvent
     }
 
     // Mocks
@@ -50,45 +52,35 @@ extension RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
                                         avatarURL: nil,
-                                        membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        membership: .join))
     }
     
     static var mockInvitedAlice: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
                                         avatarURL: nil,
-                                        membership: .invite,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        membership: .invite))
     }
 
     static var mockBob: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org",
                                         displayName: "Bob",
                                         avatarURL: nil,
-                                        membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        membership: .join))
     }
 
     static var mockCharlie: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@charlie:matrix.org",
                                         displayName: "Charlie",
                                         avatarURL: nil,
-                                        membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        membership: .join))
     }
 
     static var mockDan: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@dan:matrix.org",
                                         displayName: "Dan",
                                         avatarURL: URL.picturesDirectory,
-                                        membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        membership: .join))
     }
 
     static var mockMe: RoomMemberProxyMock {
@@ -96,8 +88,6 @@ extension RoomMemberProxyMock {
                                         displayName: "Me",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50,
                                         isAccountOwner: true,
                                         canInviteUsers: true))
     }
@@ -107,8 +97,14 @@ extension RoomMemberProxyMock {
                                         displayName: "Ignored",
                                         avatarURL: nil,
                                         membership: .join,
-                                        powerLevel: 50,
-                                        normalizedPowerLevel: 50,
                                         isIgnored: true))
+    }
+    
+    static func mockOwner(allowedStateEvents: [StateEventType]) -> RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@foo:some.org",
+                                        displayName: "User owner",
+                                        membership: .join,
+                                        isAccountOwner: true,
+                                        canSendStateEvent: { allowedStateEvents.contains($0) }))
     }
 }

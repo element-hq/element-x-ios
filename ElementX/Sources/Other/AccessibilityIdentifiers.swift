@@ -94,6 +94,7 @@ struct A11yIdentifiers {
     }
     
     struct RoomDetailsScreen {
+        let addTopic = "room_details-add_topic"
         let avatar = "room_details-avatar"
         let dmAvatar = "room_details-dm_avatar"
         let people = "room_details-people"

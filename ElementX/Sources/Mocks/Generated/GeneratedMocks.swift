@@ -371,6 +371,27 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
             return unignoreUserReturnValue
         }
     }
+    //MARK: - canSendStateEvent
+
+    var canSendStateEventTypeCallsCount = 0
+    var canSendStateEventTypeCalled: Bool {
+        return canSendStateEventTypeCallsCount > 0
+    }
+    var canSendStateEventTypeReceivedType: StateEventType?
+    var canSendStateEventTypeReceivedInvocations: [StateEventType] = []
+    var canSendStateEventTypeReturnValue: Bool!
+    var canSendStateEventTypeClosure: ((StateEventType) -> Bool)?
+
+    func canSendStateEvent(type: StateEventType) -> Bool {
+        canSendStateEventTypeCallsCount += 1
+        canSendStateEventTypeReceivedType = type
+        canSendStateEventTypeReceivedInvocations.append(type)
+        if let canSendStateEventTypeClosure = canSendStateEventTypeClosure {
+            return canSendStateEventTypeClosure(type)
+        } else {
+            return canSendStateEventTypeReturnValue
+        }
+    }
 }
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {
@@ -419,11 +440,6 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembersPublisher = value }
     }
     var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
-    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
-        get { return underlyingUpdatesPublisher }
-        set(value) { underlyingUpdatesPublisher = value }
-    }
-    var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
     var invitedMembersCount: UInt {
         get { return underlyingInvitedMembersCount }
         set(value) { underlyingInvitedMembersCount = value }
@@ -439,6 +455,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingActiveMembersCount = value }
     }
     var underlyingActiveMembersCount: UInt!
+    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
+        get { return underlyingUpdatesPublisher }
+        set(value) { underlyingUpdatesPublisher = value }
+    }
+    var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
 
     //MARK: - loadAvatarURLForUserId
 
@@ -882,6 +903,86 @@ class RoomProxyMock: RoomProxyProtocol {
             return await inviteUserIDClosure(userID)
         } else {
             return inviteUserIDReturnValue
+        }
+    }
+    //MARK: - setName
+
+    var setNameCallsCount = 0
+    var setNameCalled: Bool {
+        return setNameCallsCount > 0
+    }
+    var setNameReceivedName: String?
+    var setNameReceivedInvocations: [String?] = []
+    var setNameReturnValue: Result<Void, RoomProxyError>!
+    var setNameClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+
+    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+        setNameCallsCount += 1
+        setNameReceivedName = name
+        setNameReceivedInvocations.append(name)
+        if let setNameClosure = setNameClosure {
+            return await setNameClosure(name)
+        } else {
+            return setNameReturnValue
+        }
+    }
+    //MARK: - setTopic
+
+    var setTopicCallsCount = 0
+    var setTopicCalled: Bool {
+        return setTopicCallsCount > 0
+    }
+    var setTopicReceivedTopic: String?
+    var setTopicReceivedInvocations: [String] = []
+    var setTopicReturnValue: Result<Void, RoomProxyError>!
+    var setTopicClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
+        setTopicCallsCount += 1
+        setTopicReceivedTopic = topic
+        setTopicReceivedInvocations.append(topic)
+        if let setTopicClosure = setTopicClosure {
+            return await setTopicClosure(topic)
+        } else {
+            return setTopicReturnValue
+        }
+    }
+    //MARK: - removeAvatar
+
+    var removeAvatarCallsCount = 0
+    var removeAvatarCalled: Bool {
+        return removeAvatarCallsCount > 0
+    }
+    var removeAvatarReturnValue: Result<Void, RoomProxyError>!
+    var removeAvatarClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func removeAvatar() async -> Result<Void, RoomProxyError> {
+        removeAvatarCallsCount += 1
+        if let removeAvatarClosure = removeAvatarClosure {
+            return await removeAvatarClosure()
+        } else {
+            return removeAvatarReturnValue
+        }
+    }
+    //MARK: - uploadAvatar
+
+    var uploadAvatarMediaCallsCount = 0
+    var uploadAvatarMediaCalled: Bool {
+        return uploadAvatarMediaCallsCount > 0
+    }
+    var uploadAvatarMediaReceivedMedia: MediaInfo?
+    var uploadAvatarMediaReceivedInvocations: [MediaInfo] = []
+    var uploadAvatarMediaReturnValue: Result<Void, RoomProxyError>!
+    var uploadAvatarMediaClosure: ((MediaInfo) async -> Result<Void, RoomProxyError>)?
+
+    func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError> {
+        uploadAvatarMediaCallsCount += 1
+        uploadAvatarMediaReceivedMedia = media
+        uploadAvatarMediaReceivedInvocations.append(media)
+        if let uploadAvatarMediaClosure = uploadAvatarMediaClosure {
+            return await uploadAvatarMediaClosure(media)
+        } else {
+            return uploadAvatarMediaReturnValue
         }
     }
 }

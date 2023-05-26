@@ -29,6 +29,7 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
+        case editRoomDetailsFlowEnabled
         case invitesFlowEnabled
         case inviteMorePeopleFlowEnabled
         case readReceiptsEnabled
@@ -196,4 +197,9 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
+    
+    // MARK: Room details edit
+
+    @UserPreference(key: UserDefaultsKeys.editRoomDetailsFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var editRoomDetailsFlowEnabled
 }

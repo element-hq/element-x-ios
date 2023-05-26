@@ -35,6 +35,13 @@ class RoomDetailsScreenUITests: XCTestCase {
         try await app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
     }
     
+    func testInitialStateComponentsWithEmptyTopic() async throws {
+        let app = Application.launch(.roomDetailsScreenWithEmptyTopic)
+        
+        XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.addTopic].waitForExistence(timeout: 1))
+        try await app.assertScreenshot(.roomDetailsScreenWithEmptyTopic)
+    }
+    
     func testInitialStateComponentsWithInvite() async throws {
         let app = Application.launch(.roomDetailsScreenWithInvite)
         

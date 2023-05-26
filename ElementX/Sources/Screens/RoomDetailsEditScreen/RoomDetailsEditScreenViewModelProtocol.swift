@@ -17,18 +17,10 @@
 import Combine
 import Foundation
 
-class MockUserIndicatorController: UserIndicatorControllerProtocol {
-    func submitIndicator(_ indicator: UserIndicator) { }
+@MainActor
+protocol RoomDetailsEditScreenViewModelProtocol {
+    var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> { get }
+    var context: RoomDetailsEditScreenViewModelType.Context { get }
     
-    func retractIndicatorWithId(_ id: String) { }
-    
-    func retractAllIndicators() { }
-    
-    var alertInfo: AlertInfo<UUID>? {
-        didSet {
-            alertInfoPublisher.send(alertInfo)
-        }
-    }
-    
-    let alertInfoPublisher: PassthroughSubject<AlertInfo<UUID>?, Never> = .init()
+    func didSelectMediaUrl(url: URL)
 }

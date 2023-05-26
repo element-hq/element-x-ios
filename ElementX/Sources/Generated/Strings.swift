@@ -154,6 +154,8 @@ public enum L10n {
   public static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
   public static var commonImage: String { return L10n.tr("Localizable", "common_image") }
+  /// We can’t validate this user’s Matrix ID. The invite might not be received.
+  public static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
   /// Leaving room
   public static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Link copied to clipboard
@@ -192,6 +194,8 @@ public enum L10n {
   public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
   /// Report submitted
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
+  /// Room name
+  public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
@@ -586,12 +590,18 @@ public enum L10n {
   public static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
   /// Photo & Video Library
   public static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
+  /// Add topic
+  public static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Already a member
   public static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
   /// Already invited
   public static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
-  /// An error occurred when updating the room details
+  /// Edit Room
+  public static var screenRoomDetailsEditRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_edit_room_title") }
+  /// We were unable to update all the information for this room.
   public static var screenRoomDetailsEditionError: String { return L10n.tr("Localizable", "screen_room_details_edition_error") }
+  /// Unable to update room
+  public static var screenRoomDetailsEditionErrorTitle: String { return L10n.tr("Localizable", "screen_room_details_edition_error_title") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
@@ -680,8 +690,6 @@ public enum L10n {
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// An error occurred when trying to start a chat
   public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
-  /// We can’t validate this user’s Matrix ID. The invite might not be received.
-  public static var screenStartChatUnknownProfile: String { return L10n.tr("Localizable", "screen_start_chat_unknown_profile") }
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Access your message history

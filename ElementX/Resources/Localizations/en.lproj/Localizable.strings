@@ -69,6 +69,7 @@
 "common_file" = "File";
 "common_gif" = "GIF";
 "common_image" = "Image";
+"common_invite_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
 "common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
 "common_loading" = "Loading…";
@@ -85,6 +86,7 @@
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
+"common_room_name" = "Room name";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
@@ -224,9 +226,12 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
-"screen_room_details_edition_error" = "An error occurred when updating the room details";
+"screen_room_details_edit_room_title" = "Edit Room";
+"screen_room_details_edition_error" = "We were unable to update all the information for this room.";
+"screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_share_room_title" = "Share room";
@@ -259,7 +264,6 @@
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
-"screen_start_chat_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
 "session_verification_banner_title" = "Access your message history";
 "settings_rageshake" = "Rageshake";
