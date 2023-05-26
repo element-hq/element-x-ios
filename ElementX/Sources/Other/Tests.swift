@@ -43,4 +43,16 @@ public enum Tests {
         nil
         #endif
     }
+    
+    static var shouldDisableTimelineAccessibility: Bool {
+        guard isRunningUITests else {
+            return false
+        }
+        
+        #if DEBUG
+        return ProcessInfo.processInfo.environment["UI_TESTS_DISABLE_TIMELINE_ACCESSIBILITY"] != nil
+        #else
+        return false
+        #endif
+    }
 }

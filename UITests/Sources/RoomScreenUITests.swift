@@ -75,39 +75,39 @@ class RoomScreenUITests: XCTestCase {
         try await app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
 
-    // This test is very flaky on the CI disabling it for now
-//    func testTimelineLayoutInMiddle() async throws {
-//        let client = try UITestsSignalling.Client(mode: .tests)
-//
-//        let app = Application.launch(.roomLayoutMiddle)
-//
-//        await client.waitForApp()
-//        defer { try? client.stop() }
-//
-//        try await Task.sleep(for: .seconds(10)) // Allow the table to settle
-//        // Given a timeline that is neither at the top nor the bottom.
-//        app.tables.element.swipeDown(velocity: .slow)
-//        try await Task.sleep(for: .seconds(10)) // Allow the table to settle
-//        try await app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
-//
-//        // When a back pagination occurs.
-//        try await performOperation(.paginate, using: client)
-//
-//        // Then the UI should remain unchanged.
-//        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
-//
-//        // When an incoming message arrives
-//        try await performOperation(.incomingMessage, using: client)
-//
-//        // Then the UI should still remain unchanged.
-//        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
-//
-//        // When the keyboard appears for the message composer.
-//        try await tapMessageComposer(in: app)
-//
-//        // Then the timeline scroll offset should remain unchanged.
-//        try await app.assertScreenshot(.roomLayoutMiddle, step: 1)
-//    }
+    // This test is DISABLED because it's flakey on the CI
+    func disabled_testTimelineLayoutInMiddle() async throws {
+        let client = try UITestsSignalling.Client(mode: .tests)
+        
+        let app = Application.launch(.roomLayoutMiddle)
+        
+        await client.waitForApp()
+        defer { try? client.stop() }
+        
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
+        // Given a timeline that is neither at the top nor the bottom.
+        app.swipeDown()
+        try await Task.sleep(for: .seconds(1)) // Allow the table to settle
+        try await app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
+        
+        // When a back pagination occurs.
+        try await performOperation(.paginate, using: client)
+        
+        // Then the UI should remain unchanged.
+        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        
+        // When an incoming message arrives
+        try await performOperation(.incomingMessage, using: client)
+        
+        // Then the UI should still remain unchanged.
+        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        // Then the timeline scroll offset should remain unchanged.
+        try await app.assertScreenshot(.roomLayoutMiddle, step: 1)
+    }
     
     func testTimelineLayoutAtTop() async throws {
         let client = try UITestsSignalling.Client(mode: .tests)
@@ -119,42 +119,40 @@ class RoomScreenUITests: XCTestCase {
         
         // Given a timeline that is scrolled to the top.
         for _ in 0...5 {
-            app.tables.element.swipeDown()
+            app.swipeDown()
         }
-        let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
+        try await app.assertScreenshot(.roomLayoutTop) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
 
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot(.roomLayoutTop, insets: cropped)
+        try await app.assertScreenshot(.roomLayoutTop)
     }
 
-    // This test is very flaky on the CI disabling it for now
-//    func testTimelineLayoutAtBottom() async throws {
-//        let client = try UITestsSignalling.Client(mode: .tests)
-//
-//        let app = Application.launch(.roomLayoutBottom)
-//
-//        await client.waitForApp()
-//        defer { try? client.stop() }
-//
-//        // Some time for the timeline to settle
-//        try await Task.sleep(for: .seconds(10))
-//        // When an incoming message arrives.
-//        try await performOperation(.incomingMessage, using: client)
-//        // Some time for the timeline to settle
-//        try await Task.sleep(for: .seconds(10))
-//
-//        // Then the timeline should scroll down to reveal the message.
-//        try await app.assertScreenshot(.roomLayoutBottom, step: 0)
-//
-//        // When the keyboard appears for the message composer.
-//        try await tapMessageComposer(in: app)
-//
-//        try await app.assertScreenshot(.roomLayoutBottom, step: 1)
-//    }
+    func testTimelineLayoutAtBottom() async throws {
+        let client = try UITestsSignalling.Client(mode: .tests)
+        
+        let app = Application.launch(.roomLayoutBottom)
+        
+        await client.waitForApp()
+        defer { try? client.stop() }
+        
+        // Some time for the timeline to settle
+        try await Task.sleep(for: .seconds(1))
+        // When an incoming message arrives.
+        try await performOperation(.incomingMessage, using: client)
+        // Some time for the timeline to settle
+        try await Task.sleep(for: .seconds(1))
+        
+        // Then the timeline should scroll down to reveal the message.
+        try await app.assertScreenshot(.roomLayoutBottom, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        try await app.assertScreenshot(.roomLayoutBottom, step: 1)
+    }
     
     // MARK: - Helper Methods
     

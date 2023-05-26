@@ -34,8 +34,8 @@ class TimelineItemCell: UITableViewCell {
 /// This class subclasses `UIViewController` as `UITableViewController` adds some
 /// extra keyboard handling magic that wasn't playing well with SwiftUI (as of iOS 16.1).
 class TimelineTableViewController: UIViewController {
-    let coordinator: TimelineView.Coordinator
-    let tableView = UITableView(frame: .zero, style: .plain)
+    private let coordinator: TimelineView.Coordinator
+    private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineStyle: TimelineStyle
     var timelineItems: [RoomTimelineViewProvider] = [] {
@@ -87,8 +87,8 @@ class TimelineTableViewController: UIViewController {
     private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
     private var hasPendingUpdates = false
-    /// Yucky hack to fix some layouts where the scroll view doesn't make it to the bottom on keyboard appearance.
-    private var keyboardWillShowLayout: LayoutDescriptor?
+    /// We need to store the previous layout as computing it on the fly leads to problems.
+    private var previousLayout: LayoutDescriptor?
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
@@ -108,6 +108,10 @@ class TimelineTableViewController: UIViewController {
         tableView.keyboardDismissMode = .onDrag
         tableView.backgroundColor = .element.background
         view.addSubview(tableView)
+        
+        // Prevents XCUITest from invoking the diffable dataSource's cellProvider
+        // for each possible cell, causing layout issues
+        tableView.accessibilityElementsHidden = Tests.shouldDisableTimelineAccessibility
         
         scrollToBottomPublisher
             .sink { [weak self] _ in
@@ -132,16 +136,9 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.keyboardWillShowLayout = self.layout()
-            }
-            .store(in: &cancellables)
-        
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
             .sink { [weak self] _ in
-                guard let self, let layout = self.keyboardWillShowLayout, layout.isBottomVisible else { return }
+                guard let self, let layout = self.previousLayout, layout.isBottomVisible else { return }
                 self.scrollToBottom(animated: false) // Force the bottom to be visible as some timelines misbehave.
             }
             .store(in: &cancellables)
@@ -170,18 +167,14 @@ class TimelineTableViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        guard tableView.frame.size != view.frame.size else { return }
-        tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+        if tableView.frame.size != view.frame.size {
+            tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+            
+            // Update the table's layout if necessary after the frame changed.
+            updateTopPadding()
+        }
         
-        // Update the table's layout if necessary after the frame changed.
-        updateTopPadding()
-        
-        guard composerMode == .default else { return }
-        
-        // The table view is yet to update its content so layout() returns a
-        // description of the timeline before the frame change occurs.
-        let previousLayout = layout()
-        if previousLayout.isBottomVisible {
+        if let previousLayout, previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         }
     }
@@ -235,6 +228,7 @@ class TimelineTableViewController: UIViewController {
         guard let dataSource else { return }
         
         let previousLayout = layout()
+        self.previousLayout = previousLayout
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>()
         snapshot.appendSections([.main])
