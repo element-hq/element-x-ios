@@ -2,7 +2,7 @@
 #
 # Ensure this file is checked in to source control!
 
-gem 'fastlane-plugin-diawi'
+gem 'fastlane-plugin-diawi', git: 'https://github.com/mhtranbn/fastlane-plugin-diawi.git'
 gem 'fastlane-plugin-xcodegen'
 gem 'fastlane-plugin-sentry'
 gem 'fastlane-plugin-browserstack'
