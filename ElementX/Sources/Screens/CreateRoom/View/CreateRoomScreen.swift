@@ -40,25 +40,6 @@ struct CreateRoomScreen: View {
                 }
             }
             .background(ViewFrameReader(frame: $frame))
-            .confirmationDialog("", isPresented: $showAttachmentPopover, actions: {
-                Button {
-                    context.send(viewAction: .displayCameraPicker)
-                } label: {
-                    Text(L10n.actionTakePhoto)
-                }
-                Button {
-                    context.send(viewAction: .displayMediaPicker)
-                } label: {
-                    Text(L10n.actionChoosePhoto)
-                }
-                if context.viewState.roomImage != nil {
-                    Button(role: .destructive) {
-                        context.send(viewAction: .removeImage)
-                    } label: {
-                        Text(L10n.actionRemove)
-                    }
-                }
-            })
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -94,6 +75,25 @@ struct CreateRoomScreen: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .confirmationDialog("", isPresented: $showAttachmentPopover, actions: {
+                    Button {
+                        context.send(viewAction: .displayCameraPicker)
+                    } label: {
+                        Text(L10n.actionTakePhoto)
+                    }
+                    Button {
+                        context.send(viewAction: .displayMediaPicker)
+                    } label: {
+                        Text(L10n.actionChoosePhoto)
+                    }
+                    if context.viewState.roomImage != nil {
+                        Button(role: .destructive) {
+                            context.send(viewAction: .removeImage)
+                        } label: {
+                            Text(L10n.actionRemove)
+                        }
+                    }
+                })
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                         .font(.compound.bodyXS)
