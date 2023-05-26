@@ -109,19 +109,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.info("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
-    
-    // The room summary provider needs to process diffs serially
-    // Switching to an actor here doesn't help because of all the suspension points
-    // and actor re-entrance
-    private static var latestRoomMessage: EventTimelineItem?
-    private func fetchLastMessage(room: SlidingSyncRoomProtocol) {
-        let semaphore = DispatchSemaphore(value: 0)
-        Task {
-            Self.latestRoomMessage = await room.latestRoomMessage()
-            semaphore.signal()
-        }
-        semaphore.wait()
-    }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
         guard let room = try? slidingSyncListProxy.roomForIdentifier(identifier) else {
@@ -132,12 +119,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var attributedLastMessage: AttributedString?
         var lastMessageFormattedTimestamp: String?
         
-        fetchLastMessage(room: room)
-        
-        if let latestRoomMessage = Self.latestRoomMessage {
-            let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
-            lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
+        // Dispatch onto another queue otherwise the rust method latestRoomMessage crashes.
+        // This will be fixed when we get async uniffi support.
+        DispatchQueue.global(qos: .userInitiated).sync {
+            if let latestRoomMessage = room.latestRoomMessage() {
+                let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
+                lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
+            }
         }
         
         let fullRoom = room.fullRoom()
