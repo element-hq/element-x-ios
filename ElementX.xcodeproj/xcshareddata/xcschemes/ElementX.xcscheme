@@ -83,7 +83,7 @@
          <EnvironmentVariable
             key = "HTTPS_PROXY"
             value = "192.168.50.131:9090"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "UI_TESTS_SCREEN"

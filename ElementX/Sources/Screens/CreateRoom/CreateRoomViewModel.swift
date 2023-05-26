@@ -47,7 +47,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 self?.createRoomParameters.roomImage = mediaInfo
                 switch mediaInfo {
                 case .image(_, let thumbUrl, _):
-                    self?.updateRoomImage(thumbUrl)
+                    self?.state.roomImage = thumbUrl
                 case nil:
                     self?.state.roomImage = nil
                 default:
@@ -129,21 +129,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     private var clientProxy: ClientProxyProtocol {
         userSession.clientProxy
-    }
-    
-    private func loadImageFrom(_ path: URL) async -> Data? {
-        await Task.detached {
-            try? Data(contentsOf: path)
-        }.value
-    }
-    
-    private func updateRoomImage(_ path: URL) {
-        showLoadingIndicator()
-        Task { [weak self] in
-            let data = await self?.loadImageFrom(path)
-            self?.state.roomImage = data
-            self?.hideLoadingIndicator()
-        }
     }
     
     private func createRoom() async {

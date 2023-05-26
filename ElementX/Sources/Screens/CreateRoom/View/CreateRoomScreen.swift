@@ -20,7 +20,13 @@ struct CreateRoomScreen: View {
     @ObservedObject var context: CreateRoomViewModel.Context
     @State private var showAttachmentPopover = false
     @State private var sheetContentHeight = CGFloat(0)
-    
+    @FocusState private var focus: Focus?
+
+    enum Focus {
+        case name
+        case topic
+    }
+
     var body: some View {
         mainContent
             .scrollDismissesKeyboard(.immediately)
@@ -73,17 +79,18 @@ struct CreateRoomScreen: View {
                 Button {
                     showAttachmentPopover = true
                 } label: {
-                    if let data = context.viewState.roomImage, let image = UIImage(data: data) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(width: roomIconSize, height: roomIconSize)
-                            .clipShape(Circle())
+                    if let url = context.viewState.roomImage {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            cameraImage
+                        }
+                        .frame(width: roomIconSize, height: roomIconSize)
+                        .clipShape(Circle())
                     } else {
-                        Image(systemName: "camera")
-                            .foregroundColor(.element.secondaryContent)
-                            .frame(width: roomIconSize, height: roomIconSize)
-                            .background(Color.element.quinaryContent)
-                            .clipShape(Circle())
+                        cameraImage
                     }
                 }
                 VStack(alignment: .leading, spacing: 8) {
@@ -95,6 +102,7 @@ struct CreateRoomScreen: View {
                               text: $context.roomName,
                               prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                               axis: .horizontal)
+                        .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                         .background(Color.element.formRowBackground)
@@ -107,12 +115,21 @@ struct CreateRoomScreen: View {
         .formSectionStyle()
     }
     
+    private var cameraImage: some View {
+        Image(systemName: "camera")
+            .foregroundColor(.element.secondaryContent)
+            .frame(width: roomIconSize, height: roomIconSize)
+            .background(Color.element.quinaryContent)
+            .clipShape(Circle())
+    }
+    
     private var topicSection: some View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
                       prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
+                .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
                 .lineLimit(3, reservesSpace: false)
         } header: {
@@ -182,7 +199,10 @@ struct CreateRoomScreen: View {
     }
     
     private var createButton: some View {
-        Button { context.send(viewAction: .createRoom) } label: {
+        Button {
+            context.send(viewAction: .createRoom)
+            focus = nil
+        } label: {
             Text(L10n.actionCreate)
         }
         .disabled(!context.viewState.canCreateRoom)
