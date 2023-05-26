@@ -118,7 +118,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             switch matrixError {
             case .fileTooLarge:
                 // waiting for proper copy
-                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
+                state.bindings.alertInfo = AlertInfo(id: .fileTooLarge)
             default:
                 state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
             }

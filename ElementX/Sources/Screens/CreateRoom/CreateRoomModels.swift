@@ -19,6 +19,7 @@ import Foundation
 enum CreateRoomScreenErrorType: Error {
     case failedCreatingRoom
     case failedUploadingMedia
+    case fileTooLarge
     case mediaFileError
     case unknown
 }
