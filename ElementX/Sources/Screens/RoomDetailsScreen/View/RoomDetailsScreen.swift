@@ -111,9 +111,9 @@ struct RoomDetailsScreen: View {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
-                        .foregroundColor(.element.primaryContent)
-                        .listRowBackground(Color.clear)
-                        .font(.compound.bodyLG)
+                        .foregroundColor(.element.secondaryContent)
+                        .font(.compound.bodySM)
+                        .lineLimit(3)
                 } else {
                     Button {
                         context.send(viewAction: .processTapAddTopic)
