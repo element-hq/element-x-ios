@@ -38,10 +38,9 @@ install_xcode_cloud_python_dependencies () {
 }
 
 setup_github_actions_environment() {
-    brew update && brew install xcodegen swiftformat git-lfs
+    brew update && brew install xcodegen swiftformat git-lfs imagemagick
     
     # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
-    # brew "imagemagick" # Upgrading imagemagick has failed!
 
     bundle config path vendor/bundle
     bundle install --jobs 4 --retry 3
