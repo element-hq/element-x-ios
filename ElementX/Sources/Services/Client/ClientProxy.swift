@@ -222,7 +222,7 @@ class ClientProxy: ClientProxyProtocol {
         guard let mimeType = media.mimeType else { return .failure(ClientProxyError.mediaFileError) }
         return await Task.dispatch(on: clientQueue) {
             do {
-                let data = try Data(contentsOf: media.mainURL)
+                let data = try Data(contentsOf: media.url)
                 let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: [UInt8](data))
                 return .success(matrixUrl)
             } catch let error as ClientError {

@@ -18,11 +18,9 @@ import SwiftUI
 
 struct CreateRoomScreen: View {
     @ObservedObject var context: CreateRoomViewModel.Context
-    @State private var showAttachmentPopover = false
-    @State private var sheetContentHeight = CGFloat(0)
     @FocusState private var focus: Focus?
 
-    enum Focus {
+    private enum Focus {
         case name
         case topic
     }
@@ -40,6 +38,7 @@ struct CreateRoomScreen: View {
                 }
             }
             .background(ViewFrameReader(frame: $frame))
+            .alert(item: $context.alertInfo) { $0.alert }
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -58,7 +57,7 @@ struct CreateRoomScreen: View {
         Section {
             HStack(alignment: .center, spacing: 16) {
                 Button {
-                    showAttachmentPopover = true
+                    context.showAttachmentConfirmationDialog = true
                 } label: {
                     if let url = context.viewState.roomImage {
                         AsyncImage(url: url) { image in
@@ -66,7 +65,7 @@ struct CreateRoomScreen: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                         } placeholder: {
-                            cameraImage
+                            ProgressView()
                         }
                         .frame(width: roomIconSize, height: roomIconSize)
                         .clipShape(Circle())
@@ -75,25 +74,19 @@ struct CreateRoomScreen: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .confirmationDialog("", isPresented: $showAttachmentPopover, actions: {
-                    Button {
+                .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
+                    Button(L10n.actionTakePhoto) {
                         context.send(viewAction: .displayCameraPicker)
-                    } label: {
-                        Text(L10n.actionTakePhoto)
                     }
-                    Button {
+                    Button(L10n.actionChoosePhoto) {
                         context.send(viewAction: .displayMediaPicker)
-                    } label: {
-                        Text(L10n.actionChoosePhoto)
                     }
                     if context.viewState.roomImage != nil {
-                        Button(role: .destructive) {
+                        Button(L10n.actionRemove, role: .destructive) {
                             context.send(viewAction: .removeImage)
-                        } label: {
-                            Text(L10n.actionRemove)
                         }
                     }
-                })
+                }
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                         .font(.compound.bodyXS)

@@ -55,17 +55,17 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .deselectUser(let user):
-                self.actionsSubject.send(.deselectUser(user))
+                actionsSubject.send(.deselectUser(user))
             case .openRoom(let identifier):
-                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
+                actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .updateDetails(let details):
-                self.actionsSubject.send(.updateDetails(details))
+                actionsSubject.send(.updateDetails(details))
             case .displayCameraPicker:
-                self.actionsSubject.send(.displayMediaPickerWithSource(.camera))
+                actionsSubject.send(.displayMediaPickerWithSource(.camera))
             case .displayMediaPicker:
-                self.actionsSubject.send(.displayMediaPickerWithSource(.photoLibrary))
+                actionsSubject.send(.displayMediaPickerWithSource(.photoLibrary))
             case .removeImage:
-                self.actionsSubject.send(.removeImage)
+                actionsSubject.send(.removeImage)
             }
         }
         .store(in: &cancellables)

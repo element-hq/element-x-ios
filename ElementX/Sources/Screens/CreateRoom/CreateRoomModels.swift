@@ -46,6 +46,7 @@ struct CreateRoomViewStateBindings {
     var roomName: String
     var roomTopic: String
     var isRoomPrivate: Bool
+    var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?

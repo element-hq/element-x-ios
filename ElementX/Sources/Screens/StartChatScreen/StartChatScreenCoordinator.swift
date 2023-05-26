@@ -20,7 +20,7 @@ import SwiftUI
 struct StartChatScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
-    let navigationStackCoordinator: NavigationStackCoordinator?
+    let navigationStackCoordinator: NavigationStackCoordinator
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
@@ -45,7 +45,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         selectedUsers.asCurrentValuePublisher()
     }
     
-    private var navigationStackCoordinator: NavigationStackCoordinator? {
+    private var navigationStackCoordinator: NavigationStackCoordinator {
         parameters.navigationStackCoordinator
     }
     
@@ -68,12 +68,12 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                self.actionsSubject.send(.close)
+                actionsSubject.send(.close)
             case .createRoom:
                 // before creating a room we select the users we would like to invite in that room
-                self.presentInviteUsersScreen()
+                presentInviteUsersScreen()
             case .openRoom(let identifier):
-                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
+                actionsSubject.send(.openRoom(withIdentifier: identifier))
             }
         }
         .store(in: &cancellables)
@@ -107,7 +107,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator?.push(coordinator) { [weak self] in
+        navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.createRoomParameters.send(.init())
             self?.selectedUsers.send([])
         }
@@ -138,7 +138,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator?.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     // MARK: - Private
@@ -152,27 +152,31 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .cancel:
-                self.navigationStackCoordinator?.setSheetCoordinator(nil)
+                navigationStackCoordinator.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                self.processUrl(url)
+                processUrl(url)
             }
         }
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
         
-        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
+        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
     private func processUrl(_ url: URL) {
-        navigationStackCoordinator?.setSheetCoordinator(nil)
+        navigationStackCoordinator.setSheetCoordinator(nil)
         showLoadingIndicator()
         Task { [weak self] in
             guard let self else { return }
-            let media = try? await self.mediaUploadingPreprocessor.processMedia(at: url).get()
-            var parameters = self.createRoomParameters.value
-            parameters.roomImage = media
-            self.createRoomParameters.send(parameters)
-            self.hideLoadingIndicator()
+            do {
+                let media = try await mediaUploadingPreprocessor.processMedia(at: url).get()
+                var parameters = createRoomParameters.value
+                parameters.roomImage = media
+                createRoomParameters.send(parameters)
+            } catch {
+                userIndicatorController?.alertInfo = AlertInfo(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+            }
+            hideLoadingIndicator()
         }
     }
     

@@ -43,14 +43,12 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         createRoomParameters
             .map(\.roomImage)
-            .removeDuplicates(by: { old, new in
-                old?.mainURL == new?.mainURL
-            })
+            .removeDuplicates { $0?.url == $1?.url }
             .sink { [weak self] mediaInfo in
                 self?.createRoomParameters.roomImage = mediaInfo
                 switch mediaInfo {
-                case .image(_, let thumbUrl, _):
-                    self?.state.roomImage = thumbUrl
+                case .image(_, let thumbnailURL, _):
+                    self?.state.roomImage = thumbnailURL
                 case nil:
                     self?.state.roomImage = nil
                 default:
@@ -93,9 +91,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         context.$viewState
             .map(\.bindings)
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
-            .removeDuplicates(by: { old, new in
+            .removeDuplicates { old, new in
                 old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
-            })
+            }
             .sink { [weak self] bindings in
                 guard let self else { return }
                 createRoomParameters.name = bindings.roomName
