@@ -78,6 +78,7 @@ struct RoomDetailsEditScreen: View {
                     }
                 }
         }
+        .buttonStyle(.plain)
         .disabled(!context.viewState.canEditAvatar)
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
