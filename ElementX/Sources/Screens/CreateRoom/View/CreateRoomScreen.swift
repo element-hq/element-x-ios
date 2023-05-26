@@ -93,6 +93,7 @@ struct CreateRoomScreen: View {
                         cameraImage
                     }
                 }
+                .buttonStyle(.plain)
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                         .font(.compound.bodyXS)
