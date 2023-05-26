@@ -47,9 +47,6 @@ struct RoomDetailsEditScreen: View {
                     .disabled(!context.viewState.canSave)
                 }
             }
-            .confirmationDialog("", isPresented: $context.showMediaSheet) {
-                mediaActionSheet
-            }
     }
     
     // MARK: - Private
@@ -76,6 +73,9 @@ struct RoomDetailsEditScreen: View {
                     if context.viewState.canEditAvatar {
                         avatarOverlayIcon
                     }
+                }
+                .confirmationDialog("", isPresented: $context.showMediaSheet) {
+                    mediaActionSheet
                 }
         }
         .buttonStyle(.plain)
