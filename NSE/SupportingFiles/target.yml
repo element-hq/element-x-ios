@@ -40,7 +40,7 @@ targets:
     info:
       path: ../SupportingFiles/Info.plist
       properties:
-        CFBundleDisplayName: $(PRODUCT_NAME)
+        CFBundleDisplayName: $(PRODUCT_DISPLAY_NAME)
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
@@ -52,7 +52,8 @@ targets:
 
     settings:
       base:
-        PRODUCT_NAME: $(APP_NAME)
+        PRODUCT_NAME: NSE
+        PRODUCT_DISPLAY_NAME: $(APP_NAME)
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.nse
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
