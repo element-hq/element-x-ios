@@ -37,6 +37,8 @@ struct GenerateSDKMocks: ParsableCommand {
             throw GenerateSDKMocksError.invalidFileUrl
         }
 
+        let semaphore = DispatchSemaphore(value: 0)
+
         let task = URLSession.shared.downloadTask(with: fileURL) { tempURL, _, error in
             guard let tempURL = tempURL else {
                 if let error = error {
@@ -51,11 +53,15 @@ struct GenerateSDKMocks: ParsableCommand {
                 sdkFilePath = NSTemporaryDirectory().appending("matrix_sdk_ffi.swift")
                 try FileManager.default.moveItem(at: tempURL, to: URL(fileURLWithPath: sdkFilePath))
                 try completionHandler(sdkFilePath)
+                semaphore.signal()
             } catch {
                 print("Error setting up SDK: \(error)")
+                semaphore.signal()
             }
         }
 
         task.resume()
+
+        _ = semaphore.wait(timeout: .distantFuture)
     }
 }
