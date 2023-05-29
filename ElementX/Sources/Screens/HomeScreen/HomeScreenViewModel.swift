@@ -346,6 +346,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .none, .some(.failure):
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
             case .some(.success):
+                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
+                                                                                            type: .modal,
+                                                                                            title: L10n.commonCurrentUserLeftRoom,
+                                                                                            iconName: "checkmark",
+                                                                                            loaderType: .none))
                 callback?(.roomLeft(roomIdentifier: roomId))
             }
         }
