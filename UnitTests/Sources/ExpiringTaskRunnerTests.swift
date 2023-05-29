@@ -42,7 +42,7 @@ class ExpiringTaskRunnerTests: XCTestCase {
         }
         
         do {
-            let result = try await runner.run(timeout: .seconds(1))
+            _ = try await runner.run(timeout: .seconds(1))
         } catch {
             XCTAssertEqual(error as? ExpiringTaskTestError, ExpiringTaskTestError.failed)
         }
@@ -55,7 +55,7 @@ class ExpiringTaskRunnerTests: XCTestCase {
         }
 
         do {
-            let result = try await runner.run(timeout: .milliseconds(100))
+            _ = try await runner.run(timeout: .milliseconds(100))
         } catch {
             XCTAssertEqual(error as? ExpiringTaskRunnerError, ExpiringTaskRunnerError.timeout)
         }
