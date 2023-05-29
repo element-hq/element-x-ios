@@ -94,7 +94,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         switch appRoute {
         case .room, .roomDetails, .roomList:
-            roomFlowCoordinator.handleAppRoute(appRoute, animated: true)
+            roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         }
     }
 
