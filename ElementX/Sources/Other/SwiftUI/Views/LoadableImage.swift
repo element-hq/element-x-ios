@@ -17,12 +17,68 @@
 import Kingfisher
 import SwiftUI
 
-struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
+struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let mediaSource: MediaSourceProxy
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
+    private var transformer: (AnyView) -> TransformerView
+    private let placeholder: () -> PlaceholderView
     
+    /// A SwiftUI view that automatically fetches images
+    /// It will try fetching the image from in-memory cache and if that's not available
+    /// it will fire a task to load it through the image provider
+    /// - Parameters:
+    ///   - mediaSource: the source of the image
+    ///   - blurhash: an optional blurhash
+    ///   - transformer: entry point for configuring the resulting image view
+    ///   - placeholder: a view to show while the image or blurhash are not available
+    init(mediaSource: MediaSourceProxy,
+         blurhash: String? = nil,
+         size: CGSize? = nil,
+         imageProvider: ImageProviderProtocol?,
+         transformer: @escaping (AnyView) -> TransformerView = { $0 },
+         placeholder: @escaping () -> PlaceholderView) {
+        self.mediaSource = mediaSource
+        self.blurhash = blurhash
+        self.size = size
+        self.imageProvider = imageProvider
+        self.transformer = transformer
+        self.placeholder = placeholder
+    }
+    
+    init(url: URL,
+         blurhash: String? = nil,
+         size: CGSize? = nil,
+         imageProvider: ImageProviderProtocol?,
+         transformer: @escaping (AnyView) -> TransformerView = { $0 },
+         placeholder: @escaping () -> PlaceholderView) {
+        self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
+                  blurhash: blurhash,
+                  size: size,
+                  imageProvider: imageProvider,
+                  transformer: transformer,
+                  placeholder: placeholder)
+    }
+    
+    var body: some View {
+        LoadableImageContent(mediaSource: mediaSource,
+                             blurhash: blurhash,
+                             size: size,
+                             imageProvider: imageProvider,
+                             transformer: transformer,
+                             placeholder: placeholder)
+            // Binds the lifecycle of the LoadableImage to the associated URL.
+            // This fixes the problem of the cache returning old values after a change in the URL.
+            .id(mediaSource.url)
+    }
+}
+
+private struct LoadableImageContent<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
+    private let mediaSource: MediaSourceProxy
+    private let blurhash: String?
+    private let size: CGSize?
+    private let imageProvider: ImageProviderProtocol?
     private var transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
@@ -46,30 +102,13 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View, ImageD
         self.blurhash = blurhash
         self.size = size
         self.imageProvider = imageProvider
-        
         self.transformer = transformer
         self.placeholder = placeholder
-        
         _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))
-    }
-    
-    init(url: URL,
-         blurhash: String? = nil,
-         size: CGSize? = nil,
-         imageProvider: ImageProviderProtocol?,
-         transformer: @escaping (AnyView) -> TransformerView = { $0 },
-         placeholder: @escaping () -> PlaceholderView) {
-        self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
-                  blurhash: blurhash,
-                  size: size,
-                  imageProvider: imageProvider,
-                  transformer: transformer,
-                  placeholder: placeholder)
     }
     
     var body: some View {
         let _ = Task {
-            // Future improvement: Does guarding against a nil image prevent the image being updated when the URL changes?
             guard contentLoader.content == nil else {
                 return
             }
