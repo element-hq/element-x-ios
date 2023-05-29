@@ -54,6 +54,8 @@ public enum L10n {
   public static var actionEdit: String { return L10n.tr("Localizable", "action_edit") }
   /// Enable
   public static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
+  /// Forgot password?
+  public static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
   /// Invite
   public static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
   /// Invite friends
@@ -562,6 +564,10 @@ public enum L10n {
   public static var screenLoginSubmit: String { return L10n.tr("Localizable", "screen_login_submit") }
   /// Welcome back!
   public static var screenLoginTitle: String { return L10n.tr("Localizable", "screen_login_title") }
+  /// Sign in to %1$@
+  public static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
+  }
   /// Username
   public static var screenLoginUsernameHint: String { return L10n.tr("Localizable", "screen_login_username_hint") }
   /// Failed selecting media, please try again.
@@ -646,6 +652,22 @@ public enum L10n {
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats
   public static var screenRoomlistMainSpaceTitle: String { return L10n.tr("Localizable", "screen_roomlist_main_space_title") }
+  /// Change account provider
+  public static var screenServerConfirmationChangeServer: String { return L10n.tr("Localizable", "screen_server_confirmation_change_server") }
+  /// A private server for Element employees.
+  public static var screenServerConfirmationMessageLoginElementDotIo: String { return L10n.tr("Localizable", "screen_server_confirmation_message_login_element_dot_io") }
+  /// Matrix is an open network for secure, decentralised communication.
+  public static var screenServerConfirmationMessageLoginMatrixDotOrg: String { return L10n.tr("Localizable", "screen_server_confirmation_message_login_matrix_dot_org") }
+  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
+  public static var screenServerConfirmationMessageRegister: String { return L10n.tr("Localizable", "screen_server_confirmation_message_register") }
+  /// You’re about to sign in to %1$@
+  public static func screenServerConfirmationTitleLogin(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_server_confirmation_title_login", String(describing: p1))
+  }
+  /// You’re about to create an account on %1$@
+  public static func screenServerConfirmationTitleRegister(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_server_confirmation_title_register", String(describing: p1))
+  }
   /// Something doesn’t seem right. Either the request timed out or the request was denied.
   public static var screenSessionVerificationCancelledSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_cancelled_subtitle") }
   /// Verification cancelled

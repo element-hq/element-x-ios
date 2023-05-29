@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d ungelesene benachrichtigte Nachricht</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d ungelesene benachrichtigte Nachrichten</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$d Raumänderung</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d Raumänderungen</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
