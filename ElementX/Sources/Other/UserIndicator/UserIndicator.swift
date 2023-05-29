@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 enum UserIndicatorType {
@@ -30,10 +31,24 @@ struct UserIndicator: Equatable, Identifiable {
             lhs.persistent == rhs.persistent
     }
 
+    enum LoaderType {
+        case unknownProgress
+        case progress(ProgressPublisher)
+    }
+    
     var id: String = UUID().uuidString
     var type = UserIndicatorType.toast
     var title: String
     var iconName: String?
     var persistent = false
-    var progressPublisher: ProgressPublisher?
+    var loaderType: LoaderType? = .unknownProgress
+    
+    var progressPublisher: AnyPublisher<Double, Never> {
+        switch loaderType {
+        case .none, .unknownProgress:
+            return Empty().eraseToAnyPublisher()
+        case .some(.progress(let publisher)):
+            return publisher.publisher.eraseToAnyPublisher()
+        }
+    }
 }
