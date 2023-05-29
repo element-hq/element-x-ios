@@ -87,7 +87,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     func registrationFailed(with error: Error) {
-        MXLog.info("[NotificationManager] device token registration failed with error: \(error)")
+        MXLog.error("[NotificationManager] device token registration failed with error: \(error)")
     }
 
     func showLocalNotification(with title: String, subtitle: String?) async {
