@@ -242,7 +242,29 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
-        let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+        // Try fetching the room from the cold cache (if available) first
+        var (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+            self.roomTupleForIdentifier(identifier)
+        }
+        
+        if let slidingSyncRoom, let room {
+            return await RoomProxy(slidingSyncRoom: slidingSyncRoom,
+                                   room: room,
+                                   backgroundTaskService: backgroundTaskService)
+        }
+        
+        // Else wait for the visible rooms list to go into fully loaded
+        
+        guard let visibleRoomsSummaryProvider else {
+            MXLog.error("Visible rooms summary provider not setup yet")
+            return nil
+        }
+        
+        if visibleRoomsSummaryProvider.statePublisher.value != .fullyLoaded {
+            _ = await visibleRoomsSummaryProvider.statePublisher.values.first(where: { $0 == .fullyLoaded })
+        }
+        
+        (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)
         }
 
