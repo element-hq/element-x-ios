@@ -130,7 +130,7 @@ private struct MessageComposerReplyHeader: View {
             Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.element.tertiaryContent)
                     .padding(12.0)
             }
         }
@@ -148,7 +148,7 @@ private struct MessageComposerEditHeader: View {
             Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.element.tertiaryContent)
                     .padding(12.0)
             }
         }
@@ -161,7 +161,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodyXS)
+        .font(.compound.bodySM)
         .foregroundColor(.element.secondaryContent)
         .lineLimit(1)
     }
