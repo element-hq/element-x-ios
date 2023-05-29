@@ -30,7 +30,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(selectedUsers: CurrentValuePublisher<[UserProfile], Never>,
+    init(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol) {
@@ -85,7 +85,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     
-    private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
+    private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>) {
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceAndRemoveDuplicates()
@@ -125,7 +125,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         }
     }
     
-    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
+    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)

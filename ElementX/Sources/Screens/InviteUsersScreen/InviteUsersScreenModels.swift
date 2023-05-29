@@ -24,7 +24,7 @@ enum InviteUsersScreenErrorType: Error {
 enum InviteUsersScreenViewModelAction {
     case proceed
     case invite(users: [String])
-    case toggleUser(UserProfile)
+    case toggleUser(UserProfileProxy)
 }
 
 enum InviteUsersScreenRoomType {
@@ -37,7 +37,7 @@ struct InviteUsersScreenViewState: BindableState {
     
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     
-    var selectedUsers: [UserProfile] = []
+    var selectedUsers: [UserProfileProxy] = []
     var membershipState: [String: MembershipState] = .init()
     
     var isSearching: Bool {
@@ -50,16 +50,16 @@ struct InviteUsersScreenViewState: BindableState {
     
     var scrollToLastID: String?
     
-    func isUserSelected(_ user: UserProfile) -> Bool {
+    func isUserSelected(_ user: UserProfileProxy) -> Bool {
         isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
     }
     
-    func isUserDisabled(_ user: UserProfile) -> Bool {
+    func isUserDisabled(_ user: UserProfileProxy) -> Bool {
         let membershipState = membershipState(user)
         return membershipState == .invite || membershipState == .join
     }
     
-    func membershipState(_ user: UserProfile) -> MembershipState? {
+    func membershipState(_ user: UserProfileProxy) -> MembershipState? {
         membershipState[user.userID]
     }
     
@@ -87,5 +87,5 @@ struct InviteUsersScreenViewStateBindings {
 
 enum InviteUsersScreenViewAction {
     case proceed
-    case toggleUser(UserProfile)
+    case toggleUser(UserProfileProxy)
 }

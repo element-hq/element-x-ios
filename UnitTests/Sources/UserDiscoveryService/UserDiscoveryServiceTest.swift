@@ -29,7 +29,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     }
     
     func testQueryShowingResults() async throws {
-        clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
+        clientProxy.searchUsersResult = .success(.init(results: [LocalUserProfile.mockAlice], limited: true))
         
         let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 1)
@@ -79,17 +79,17 @@ class UserDiscoveryServiceTest: XCTestCase {
     
     // MARK: - Private
     
-    private func assertSearchResults(_ results: [UserProfile], toBe count: Int) {
+    private func assertSearchResults(_ results: [LocalUserProfile], toBe count: Int) {
         XCTAssertTrue(count >= 0)
         XCTAssertEqual(results.count, count)
         XCTAssertEqual(results.isEmpty, count == 0)
     }
     
-    private func search(query: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
+    private func search(query: String) async -> Result<[LocalUserProfile], UserDiscoveryErrorType> {
         await service.searchProfiles(with: query)
     }
     
-    private var searchResults: [UserProfile] {
+    private var searchResults: [LocalUserProfile] {
         [
             .mockAlice,
             .mockBob,

@@ -21,12 +21,12 @@ struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
-    let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
+    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
 }
 
 enum CreateRoomCoordinatorAction {
     case openRoom(withIdentifier: String)
-    case deselectUser(UserProfile)
+    case deselectUser(UserProfileProxy)
     case updateDetails(CreateRoomFlowParameters)
 }
 

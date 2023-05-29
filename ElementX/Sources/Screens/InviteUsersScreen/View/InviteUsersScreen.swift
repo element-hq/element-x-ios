@@ -123,7 +123,7 @@ struct InviteUsersScreen: View {
         .disabled(context.viewState.isActionDisabled)
     }
     
-    private func deselect(_ user: UserProfile) {
+    private func deselect(_ user: UserProfileProxy) {
         context.send(viewAction: .toggleUser(user))
     }
 }

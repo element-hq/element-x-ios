@@ -351,7 +351,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 return try .success(.init(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
@@ -361,7 +361,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
+    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 return try .success(.init(sdkUserProfile: self.client.getProfile(userId: userID)))

@@ -1094,10 +1094,10 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
     }
     var searchProfilesWithReceivedSearchQuery: String?
     var searchProfilesWithReceivedInvocations: [String] = []
-    var searchProfilesWithReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
-    var searchProfilesWithClosure: ((String) async -> Result<[UserProfile], UserDiscoveryErrorType>)?
+    var searchProfilesWithReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>!
+    var searchProfilesWithClosure: ((String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType>)?
 
-    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         searchProfilesWithCallsCount += 1
         searchProfilesWithReceivedSearchQuery = searchQuery
         searchProfilesWithReceivedInvocations.append(searchQuery)
@@ -1113,10 +1113,10 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
     var fetchSuggestionsCalled: Bool {
         return fetchSuggestionsCallsCount > 0
     }
-    var fetchSuggestionsReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
-    var fetchSuggestionsClosure: (() async -> Result<[UserProfile], UserDiscoveryErrorType>)?
+    var fetchSuggestionsReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>!
+    var fetchSuggestionsClosure: (() async -> Result<[UserProfileProxy], UserDiscoveryErrorType>)?
 
-    func fetchSuggestions() async -> Result<[UserProfile], UserDiscoveryErrorType> {
+    func fetchSuggestions() async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         fetchSuggestionsCallsCount += 1
         if let fetchSuggestionsClosure = fetchSuggestionsClosure {
             return await fetchSuggestionsClosure()

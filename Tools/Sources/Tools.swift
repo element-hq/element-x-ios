@@ -8,5 +8,6 @@ struct Tools: ParsableCommand {
                                                                   SetupProject.self,
                                                                   OutdatedPackages.self,
                                                                   DownloadStrings.self,
-                                                                  Locheck.self])
+                                                                  Locheck.self,
+                                                                  GenerateSDKMocks.self])
 }

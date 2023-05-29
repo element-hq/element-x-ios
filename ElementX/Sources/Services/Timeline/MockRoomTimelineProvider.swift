@@ -15,6 +15,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 
 struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     var itemsPublisher = CurrentValuePublisher<[TimelineItemProxy], Never>([])

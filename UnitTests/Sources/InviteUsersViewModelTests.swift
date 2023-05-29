@@ -36,7 +36,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.count == 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, LocalUserProfile.mockAlice.userID)
     }
     
     func testReselectUser() {
@@ -44,7 +44,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, LocalUserProfile.mockAlice.userID)
         context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
@@ -54,7 +54,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, LocalUserProfile.mockAlice.userID)
         context.send(viewAction: .toggleUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
@@ -80,7 +80,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     }
     
     private func setupWithRoomType(roomType: InviteUsersScreenRoomType) {
-        let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+        let usersSubject = CurrentValueSubject<[LocalUserProfile], Never>([])
         clientProxy = .init(userID: "")
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])

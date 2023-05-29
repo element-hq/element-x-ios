@@ -117,7 +117,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
     
-    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfile], UserDiscoveryErrorType>) {
+    private func handleResult(for sectionType: UserDiscoverySectionType, result: Result<[UserProfileProxy], UserDiscoveryErrorType>) {
         switch result {
         case .success(let users):
             state.usersSection = .init(type: sectionType, users: users)
@@ -126,7 +126,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
     
-    private func createDirectRoom(with user: UserProfile) async {
+    private func createDirectRoom(with user: UserProfileProxy) async {
         defer {
             hideLoadingIndicator()
         }

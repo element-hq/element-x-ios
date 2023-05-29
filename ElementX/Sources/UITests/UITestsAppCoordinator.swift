@@ -464,7 +464,7 @@ class MockScreen: Identifiable {
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
             let mediaProvider = MockMediaProvider()
-            let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+            let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
             let members: [RoomMemberProxyMock] = id == .inviteUsersInRoomExistingMembers ? [.mockInvitedAlice, .mockBob] : []
             let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: members, userIndicatorController: MockUserIndicatorController())
             let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
@@ -490,7 +490,7 @@ class MockScreen: Identifiable {
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
             let createRoomParameters = CreateRoomFlowParameters()
-            let selectedUsers: [UserProfile] = [.mockAlice, .mockBob, .mockCharlie]
+            let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: nil, createRoomParameters: .init(createRoomParameters), selectedUsers: .init(selectedUsers))
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)

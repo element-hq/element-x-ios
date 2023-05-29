@@ -23,12 +23,12 @@ enum CreateRoomScreenErrorType: Error {
 
 enum CreateRoomViewModelAction {
     case openRoom(withIdentifier: String)
-    case deselectUser(UserProfile)
+    case deselectUser(UserProfileProxy)
     case updateDetails(CreateRoomFlowParameters)
 }
 
 struct CreateRoomViewState: BindableState {
-    var selectedUsers: [UserProfile]
+    var selectedUsers: [UserProfileProxy]
     var bindings: CreateRoomViewStateBindings
     
     var canCreateRoom: Bool {
@@ -47,5 +47,5 @@ struct CreateRoomViewStateBindings {
 
 enum CreateRoomViewAction {
     case createRoom
-    case deselectUser(UserProfile)
+    case deselectUser(UserProfileProxy)
 }

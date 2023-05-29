@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct UserProfile {
+struct UserProfileProxy {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
@@ -41,14 +41,14 @@ struct UserProfile {
     }
 }
 
-struct SearchUsersResults {
-    let results: [UserProfile]
+struct SearchUsersResultsProxy {
+    let results: [UserProfileProxy]
     let limited: Bool
 }
 
-extension SearchUsersResults {
+extension SearchUsersResultsProxy {
     init(sdkResults: MatrixRustSDK.SearchUsersResults) {
-        results = sdkResults.results.map(UserProfile.init)
+        results = sdkResults.results.map(UserProfileProxy.init)
         limited = sdkResults.limited
     }
 }

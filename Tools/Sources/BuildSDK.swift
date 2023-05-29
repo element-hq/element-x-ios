@@ -26,10 +26,7 @@ struct BuildSDK: ParsableCommand {
     
     @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
     var profile: Profile = .debug
-    
-    private var parentDirectoryURL: URL { Utilities.projectDirectoryURL.deletingLastPathComponent() }
-    private var sdkDirectoryURL: URL { parentDirectoryURL.appendingPathComponent("matrix-rust-sdk") }
-    
+
     enum Error: LocalizedError {
         case rustupOutputFailure
         case missingRustTargets([String])
@@ -81,14 +78,14 @@ struct BuildSDK: ParsableCommand {
     
     /// Clones the Rust SDK if a copy isn't found in the parent directory.
     func cloneSDKIfNeeded() throws {
-        guard !FileManager.default.fileExists(atPath: sdkDirectoryURL.path) else { return }
-        try Utilities.zsh("git clone https://github.com/matrix-org/matrix-rust-sdk", workingDirectoryURL: parentDirectoryURL)
+        guard !FileManager.default.fileExists(atPath: Utilities.sdkDirectoryURL.path) else { return }
+        try Utilities.zsh("git clone https://github.com/matrix-org/matrix-rust-sdk", workingDirectoryURL: Utilities.parentDirectoryURL)
     }
     
     /// Checkout the specified branch of the SDK if supplied.
     func checkoutBranchIfSupplied() throws {
         guard let branch else { return }
-        try Utilities.zsh("git checkout \(branch)", workingDirectoryURL: sdkDirectoryURL)
+        try Utilities.zsh("git checkout \(branch)", workingDirectoryURL: Utilities.sdkDirectoryURL)
     }
     
     /// Build the Rust SDK as an XCFramework with the debug profile.
@@ -98,7 +95,7 @@ struct BuildSDK: ParsableCommand {
         if let target {
             buildCommand.append(" --only-target \(target.rawValue)")
         }
-        try Utilities.zsh(buildCommand, workingDirectoryURL: sdkDirectoryURL)
+        try Utilities.zsh(buildCommand, workingDirectoryURL: Utilities.sdkDirectoryURL)
     }
     
     /// Update the Xcode project to use the build of the SDK.

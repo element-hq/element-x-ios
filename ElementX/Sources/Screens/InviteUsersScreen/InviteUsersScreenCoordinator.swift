@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
-    let selectedUsers: CurrentValuePublisher<[UserProfile], Never>
+    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
     let roomType: InviteUsersScreenRoomType
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
@@ -27,7 +27,7 @@ struct InviteUsersScreenCoordinatorParameters {
 enum InviteUsersScreenCoordinatorAction {
     case proceed
     case invite(users: [String])
-    case toggleUser(UserProfile)
+    case toggleUser(UserProfileProxy)
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {

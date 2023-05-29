@@ -110,7 +110,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func setPusher(with configuration: PusherConfiguration) async throws
     
-    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
     
-    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError>
+    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
 }

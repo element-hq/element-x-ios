@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct InviteUsersScreenSelectedItem: View {
-    let user: UserProfile
+    let user: UserProfileProxy
     let imageProvider: ImageProviderProtocol?
     let dismissAction: () -> Void
     
