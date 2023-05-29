@@ -22,7 +22,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
-    private var transformer: (AnyView) -> TransformerView
+    private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
     /// A SwiftUI view that automatically fetches images
@@ -79,24 +79,16 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
     private let blurhash: String?
     private let size: CGSize?
     private let imageProvider: ImageProviderProtocol?
-    private var transformer: (AnyView) -> TransformerView
+    private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
     @StateObject private var contentLoader: ContentLoader
     
-    /// A SwiftUI view that automatically fetches images
-    /// It will try fetching the image from in-memory cache and if that's not available
-    /// it will fire a task to load it through the image provider
-    /// - Parameters:
-    ///   - mediaSource: the source of the image
-    ///   - blurhash: an optional blurhash
-    ///   - transformer: entry point for configuring the resulting image view
-    ///   - placeholder: a view to show while the image or blurhash are not available
     init(mediaSource: MediaSourceProxy,
          blurhash: String? = nil,
          size: CGSize? = nil,
          imageProvider: ImageProviderProtocol?,
-         transformer: @escaping (AnyView) -> TransformerView = { $0 },
+         transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.blurhash = blurhash
