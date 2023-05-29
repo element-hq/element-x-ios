@@ -53,9 +53,6 @@ struct LoadableAvatarImage: View {
             } placeholder: {
                 PlaceholderAvatarImage(name: name, contentID: contentID)
             }
-            // Binds the lifecycle of the LoadableImage to the associated URL.
-            // This fixes the problem of the cache returning old values after a change in the URL.
-            .id(url)
         } else {
             PlaceholderAvatarImage(name: name, contentID: contentID)
         }
