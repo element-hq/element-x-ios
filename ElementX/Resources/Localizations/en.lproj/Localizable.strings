@@ -21,6 +21,7 @@
 "action_done" = "Done";
 "action_edit" = "Edit";
 "action_enable" = "Enable";
+"action_forgot_password" = "Forgot password?";
 "action_invite" = "Invite";
 "action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invite friends to %1$@";
@@ -215,6 +216,7 @@
 "screen_login_form_header" = "Enter your details";
 "screen_login_server_header" = "Where your conversations live";
 "screen_login_title" = "Welcome back!";
+"screen_login_title_with_homeserver" = "Sign in to %1$@";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
@@ -246,6 +248,12 @@
 "screen_room_member_list_room_members_header_title" = "Room members";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
+"screen_server_confirmation_change_server" = "Change account provider";
+"screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
+"screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralised communication.";
+"screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
+"screen_server_confirmation_title_login" = "You’re about to sign in to %1$@";
+"screen_server_confirmation_title_register" = "You’re about to create an account on %1$@";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirm that the emojis below match those shown on your other session.";
 "screen_session_verification_compare_emojis_title" = "Compare emojis";

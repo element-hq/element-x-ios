@@ -21,6 +21,7 @@
 "action_done" = "Hecho";
 "action_edit" = "Editar";
 "action_enable" = "Activar";
+"action_forgot_password" = "Forgot password?";
 "action_invite" = "Invitar";
 "action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invitar amigos a %1$@";
@@ -69,6 +70,7 @@
 "common_file" = "Archivo";
 "common_gif" = "GIF";
 "common_image" = "Imagen";
+"common_invite_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
 "common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Enlace copiado al portapapeles";
 "common_loading" = "Cargando…";
@@ -85,6 +87,7 @@
 "common_replying_to" = "Respondiendo a %1$@";
 "common_report_a_bug" = "Informar de un error";
 "common_report_submitted" = "Informe enviado";
+"common_room_name" = "Room name";
 "common_search_for_someone" = "Buscar a alguien";
 "common_search_results" = "Search results";
 "common_security" = "Seguridad";
@@ -213,6 +216,7 @@
 "screen_login_form_header" = "Introduce tus datos";
 "screen_login_server_header" = "Donde viven tus conversaciones";
 "screen_login_title" = "¡Hola de nuevo!";
+"screen_login_title_with_homeserver" = "Sign in to %1$@";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
@@ -224,9 +228,12 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
-"screen_room_details_edition_error" = "An error occurred when updating the room details";
+"screen_room_details_edit_room_title" = "Edit Room";
+"screen_room_details_edition_error" = "We were unable to update all the information for this room.";
+"screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Los mensajes están protegidos con \"candados\". Sólo tú y los destinatarios tenéis las llaves únicas para abrirlos.";
 "screen_room_details_encryption_enabled_title" = "Cifrado de mensajes activado";
 "screen_room_details_share_room_title" = "Compartir sala";
@@ -241,6 +248,12 @@
 "screen_room_member_list_room_members_header_title" = "Room members";
 "screen_roomlist_a11y_create_message" = "Crear una nueva conversación o sala";
 "screen_roomlist_main_space_title" = "Todos los chats";
+"screen_server_confirmation_change_server" = "Change account provider";
+"screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
+"screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralised communication.";
+"screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
+"screen_server_confirmation_title_login" = "You’re about to sign in to %1$@";
+"screen_server_confirmation_title_register" = "You’re about to create an account on %1$@";
 "screen_session_verification_cancelled_subtitle" = "Algo no fue bien. Se agotó el tiempo de espera de la solicitud o se rechazó.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirma que los emojis que aparecen a continuación coinciden con los que aparecen en tu otra sesión.";
 "screen_session_verification_compare_emojis_title" = "Comparar emojis";
@@ -259,7 +272,6 @@
 "screen_signout_confirmation_dialog_title" = "Cerrar sesión";
 "screen_signout_in_progress_dialog_content" = "Cerrando sesión…";
 "screen_start_chat_error_starting_chat" = "Se ha producido un error al intentar iniciar un chat";
-"screen_start_chat_unknown_profile" = "No podemos validar el ID de Matrix de este usuario. Es posible que no reciba la invitación.";
 "session_verification_banner_message" = "Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados.";
 "session_verification_banner_title" = "Accede a tu historial de mensajes";
 "settings_rageshake" = "Agitar con fuerza";
