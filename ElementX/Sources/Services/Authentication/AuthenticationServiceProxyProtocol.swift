@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -38,7 +39,9 @@ enum AuthenticationServiceError: Error {
 
 protocol AuthenticationServiceProxyProtocol {
     /// The currently configured homeserver.
-    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
+    var homeserver: LoginHomeserver { get }
+    /// A publisher for the ``homeserver`` value.
+    var homeserverPublisher: AnyPublisher<LoginHomeserver, Never> { get }
     
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>

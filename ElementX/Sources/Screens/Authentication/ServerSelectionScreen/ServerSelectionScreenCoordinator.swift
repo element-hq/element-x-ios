@@ -39,7 +39,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = ServerSelectionScreenViewModel(homeserverAddress: parameters.authenticationService.homeserver.value.address,
+        viewModel = ServerSelectionScreenViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
                                                    isModallyPresented: parameters.isModallyPresented)
         userIndicatorController = parameters.userIndicatorController
     }

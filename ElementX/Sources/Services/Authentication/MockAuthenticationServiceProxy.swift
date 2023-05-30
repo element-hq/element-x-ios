@@ -21,26 +21,27 @@ import MatrixRustSDK
 class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     
-    private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
-    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    @PublishedOnSet
+    private(set) var homeserver: LoginHomeserver
+    var homeserverPublisher: AnyPublisher<LoginHomeserver, Never> { $homeserver }
     
     init(homeserver: LoginHomeserver = .mockMatrixDotOrg) {
-        homeserverSubject = .init(homeserver)
+        self.homeserver = homeserver
     }
     
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         // Map the address to the mock homeservers
         if LoginHomeserver.mockMatrixDotOrg.address.contains(homeserverAddress) {
-            homeserverSubject.send(.mockMatrixDotOrg)
+            homeserver = .mockMatrixDotOrg
             return .success(())
         } else if LoginHomeserver.mockOIDC.address.contains(homeserverAddress) {
-            homeserverSubject.send(.mockOIDC)
+            homeserver = .mockOIDC
             return .success(())
         } else if LoginHomeserver.mockBasicServer.address.contains(homeserverAddress) {
-            homeserverSubject.send(.mockBasicServer)
+            homeserver = .mockBasicServer
             return .success(())
         } else if LoginHomeserver.mockUnsupported.address.contains(homeserverAddress) {
-            homeserverSubject.send(.mockUnsupported)
+            homeserver = .mockUnsupported
             return .success(())
         } else {
             // Otherwise fail with an invalid server.
