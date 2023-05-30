@@ -47,8 +47,8 @@ struct UserIndicator: Equatable, Identifiable {
         switch loaderType {
         case .none, .unknownProgress:
             return Empty().eraseToAnyPublisher()
-        case .some(.progress(let publisher)):
-            return publisher.publisher.eraseToAnyPublisher()
+        case .some(.progress(let progress)):
+            return progress.publisher.eraseToAnyPublisher()
         }
     }
 }
