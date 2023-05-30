@@ -70,7 +70,7 @@ class TimelineTableViewController: UIViewController {
         }
     }
         
-    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?
+    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
     
@@ -167,12 +167,14 @@ class TimelineTableViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if tableView.frame.size != view.frame.size {
-            tableView.frame = CGRect(origin: .zero, size: view.frame.size)
-            
-            // Update the table's layout if necessary after the frame changed.
-            updateTopPadding()
+        guard tableView.frame.size != view.frame.size else {
+            return
         }
+        
+        tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+        
+        // Update the table's layout if necessary after the frame changed.
+        updateTopPadding()
         
         if let previousLayout, previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
@@ -204,12 +206,6 @@ class TimelineTableViewController: UIViewController {
                         coordinator.send(viewAction: .linkClicked(url: url))
                         return .systemAction
                     })
-                    .onTapGesture(count: 2) {
-                        coordinator.send(viewAction: .itemDoubleTapped(id: timelineItem.id))
-                    }
-                    .onTapGesture {
-                        coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
-                    }
             }
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)

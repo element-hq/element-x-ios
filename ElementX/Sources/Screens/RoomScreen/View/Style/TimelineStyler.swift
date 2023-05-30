@@ -21,10 +21,10 @@ import SwiftUI
 
 struct TimelineStyler<Content: View>: View {
     @Environment(\.timelineStyle) private var style
-
+    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-
+    
     var body: some View {
         switch style {
         case .plain:

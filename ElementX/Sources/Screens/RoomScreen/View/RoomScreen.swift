@@ -39,6 +39,12 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
+            .sheet(item: $context.actionMenuInfo) { info in
+                context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in
+                    TimelineItemMenu(item: info.item, actions: actions)
+                        .environmentObject(context)
+                }
+            }
             .track(screen: .room)
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
