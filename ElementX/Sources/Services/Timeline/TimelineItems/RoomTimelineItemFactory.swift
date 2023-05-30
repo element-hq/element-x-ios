@@ -443,7 +443,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             avatarURL: nil)
             }
             
-            let replyContent: TimelineItemReplyContent
+            let replyContent: EventBasedMessageTimelineItemContentType
             switch message.msgtype() {
             case .audio(let content):
                 replyContent = .audio(buildAudioTimelineItemContent(content))
@@ -463,7 +463,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return nil
             }
             
-            return .loaded(sender: sender, content: replyContent)
+            return .loaded(sender: sender, contentType: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
         }

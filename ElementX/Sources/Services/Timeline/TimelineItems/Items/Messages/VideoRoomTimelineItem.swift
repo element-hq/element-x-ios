@@ -34,4 +34,8 @@ struct VideoRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiabl
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .video(content)
+    }
 }

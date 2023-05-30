@@ -34,4 +34,8 @@ struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiabl
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .image(content)
+    }
 }

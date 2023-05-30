@@ -32,4 +32,8 @@ struct AudioRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiabl
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .audio(content)
+    }
 }

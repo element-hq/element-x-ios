@@ -264,7 +264,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                                sender: .init(id: "whoever"),
                                                                content: .init(body: "A long message that should be on multiple lines."),
                                                                replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                     content: .text(.init(body: "Short")))),
+                                                                                     contentType: .text(.init(body: "Short")))),
                                           .single)
             
             RoomTimelineViewProvider.text(TextRoomTimelineItem(id: "",
@@ -274,7 +274,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                                sender: .init(id: "whoever"),
                                                                content: .init(body: "Short message"),
                                                                replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                     content: .text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))),
+                                                                                     contentType: .text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))),
                                           .single)
         }
         .environmentObject(viewModel.context)

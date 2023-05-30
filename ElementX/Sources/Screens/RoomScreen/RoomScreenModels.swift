@@ -31,7 +31,7 @@ enum RoomScreenViewModelAction {
 
 enum RoomScreenComposerMode: Equatable {
     case `default`
-    case reply(id: String, displayName: String)
+    case reply(itemID: String, replyDetails: TimelineItemReplyDetails)
     case edit(originalItemId: String)
     
     var isEdit: Bool {

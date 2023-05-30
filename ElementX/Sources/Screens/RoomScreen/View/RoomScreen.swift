@@ -28,6 +28,7 @@ struct RoomScreen: View {
                 HStack(spacing: 4.0) {
                     RoomAttachmentPicker(context: context)
                     messageComposer
+                        .environmentObject(context)
                 }
                 .padding([.horizontal, .bottom])
                 .padding(.top, 8)
@@ -69,7 +70,7 @@ struct RoomScreen: View {
         MessageComposer(text: $context.composerText,
                         focused: $context.composerFocused,
                         sendingDisabled: context.viewState.sendButtonDisabled,
-                        type: context.viewState.composerMode) {
+                        mode: context.viewState.composerMode) {
             sendMessage()
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))

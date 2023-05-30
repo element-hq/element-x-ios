@@ -34,4 +34,8 @@ struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .text(content)
+    }
 }

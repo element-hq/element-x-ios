@@ -24,6 +24,8 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringC
     
     var sender: TimelineItemSender { get }
     
+    var body: String { get }
+    
     var properties: RoomTimelineItemProperties { get }
 }
 

@@ -33,4 +33,8 @@ struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable 
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .emote(content)
+    }
 }
