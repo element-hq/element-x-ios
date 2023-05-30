@@ -18,7 +18,13 @@ import SwiftUI
 
 struct CreateRoomScreen: View {
     @ObservedObject var context: CreateRoomViewModel.Context
-    
+    @FocusState private var focus: Focus?
+
+    private enum Focus {
+        case name
+        case topic
+    }
+
     var body: some View {
         mainContent
             .scrollDismissesKeyboard(.immediately)
@@ -32,6 +38,7 @@ struct CreateRoomScreen: View {
                 }
             }
             .background(ViewFrameReader(frame: $frame))
+            .alert(item: $context.alertInfo) { $0.alert }
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -49,11 +56,38 @@ struct CreateRoomScreen: View {
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
-                Image(systemName: "camera")
-                    .foregroundColor(.element.secondaryContent)
-                    .frame(width: roomIconSize, height: roomIconSize)
-                    .background(Color.element.quinaryContent)
-                    .clipShape(Circle())
+                Button {
+                    focus = nil
+                    context.showAttachmentConfirmationDialog = true
+                } label: {
+                    if let url = context.viewState.avatarURL {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: roomIconSize, height: roomIconSize)
+                        .clipShape(Circle())
+                    } else {
+                        cameraImage
+                    }
+                }
+                .buttonStyle(.plain)
+                .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
+                    Button(L10n.actionTakePhoto) {
+                        context.send(viewAction: .displayCameraPicker)
+                    }
+                    Button(L10n.actionChoosePhoto) {
+                        context.send(viewAction: .displayMediaPicker)
+                    }
+                    if context.viewState.avatarURL != nil {
+                        Button(L10n.actionRemove, role: .destructive) {
+                            context.send(viewAction: .removeImage)
+                        }
+                    }
+                }
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
                         .font(.compound.bodyXS)
@@ -63,6 +97,7 @@ struct CreateRoomScreen: View {
                               text: $context.roomName,
                               prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
                               axis: .horizontal)
+                        .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
                         .background(Color.element.formRowBackground)
@@ -75,12 +110,21 @@ struct CreateRoomScreen: View {
         .formSectionStyle()
     }
     
+    private var cameraImage: some View {
+        Image(systemName: "camera")
+            .foregroundColor(.element.secondaryContent)
+            .frame(width: roomIconSize, height: roomIconSize)
+            .background(Color.element.quinaryContent)
+            .clipShape(Circle())
+    }
+    
     private var topicSection: some View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
                       prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
                       axis: .vertical)
+                .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
                 .lineLimit(3, reservesSpace: false)
         } header: {
@@ -150,7 +194,10 @@ struct CreateRoomScreen: View {
     }
     
     private var createButton: some View {
-        Button { context.send(viewAction: .createRoom) } label: {
+        Button {
+            focus = nil
+            context.send(viewAction: .createRoom)
+        } label: {
             Text(L10n.actionCreate)
         }
         .disabled(!context.viewState.canCreateRoom)

@@ -41,6 +41,22 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
 
         super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
         
+        createRoomParameters
+            .map(\.avatarImageMedia)
+            .removeDuplicates { $0?.url == $1?.url }
+            .sink { [weak self] mediaInfo in
+                self?.createRoomParameters.avatarImageMedia = mediaInfo
+                switch mediaInfo {
+                case .image(_, let thumbnailURL, _):
+                    self?.state.avatarURL = thumbnailURL
+                case nil:
+                    self?.state.avatarURL = nil
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
         selectedUsers
             .sink { [weak self] users in
                 self?.state.selectedUsers = users
@@ -60,6 +76,12 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             }
         case .deselectUser(let user):
             actionsSubject.send(.deselectUser(user))
+        case .displayCameraPicker:
+            actionsSubject.send(.displayCameraPicker)
+        case .displayMediaPicker:
+            actionsSubject.send(.displayMediaPicker)
+        case .removeImage:
+            actionsSubject.send(.removeImage)
         }
     }
     
@@ -69,6 +91,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         context.$viewState
             .map(\.bindings)
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates { old, new in
+                old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
+            }
             .sink { [weak self] bindings in
                 guard let self else { return }
                 createRoomParameters.name = bindings.roomName
@@ -87,6 +112,16 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                  message: L10n.screenStartChatErrorStartingChat)
         case .failedSearchingUsers:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
+        case .failedUploadingMedia(let matrixError):
+            switch matrixError {
+            case .fileTooLarge:
+                // waiting for proper copy
+                state.bindings.alertInfo = AlertInfo(id: .fileTooLarge)
+            default:
+                state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)
+            }
+        case .mediaFileError:
+            state.bindings.alertInfo = AlertInfo(id: .mediaFileError)
         default:
             break
         }
@@ -101,7 +136,25 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await clientProxy.createRoom(with: createRoomParameters, userIDs: state.selectedUsers.map(\.userID)) {
+        
+        let avatarURL: URL?
+        if let media = createRoomParameters.avatarImageMedia {
+            switch await clientProxy.uploadMedia(media) {
+            case .success(let url):
+                avatarURL = URL(string: url)
+            case .failure(let error):
+                displayError(error)
+                return
+            }
+        } else {
+            avatarURL = nil
+        }
+
+        switch await clientProxy.createRoom(name: createRoomParameters.name,
+                                            topic: createRoomParameters.topic,
+                                            isRoomPrivate: createRoomParameters.isRoomPrivate,
+                                            userIDs: state.selectedUsers.map(\.userID),
+                                            avatarURL: avatarURL) {
         case .success(let roomId):
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):

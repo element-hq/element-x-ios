@@ -41,6 +41,8 @@ enum ClientProxyError: Error {
     case failedSettingAccountData
     case failedRetrievingSessionVerificationController
     case failedLoadingMedia
+    case mediaFileError
+    case failedUploadingMedia(MatrixErrorCode)
     case failedSearchingUsers
     case failedGettingUserProfile
 }
@@ -92,7 +94,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
-    func createRoom(with parameters: CreateRoomFlowParameters, userIDs: [String]) async -> Result<String, ClientProxyError>
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError>
+    
+    func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
