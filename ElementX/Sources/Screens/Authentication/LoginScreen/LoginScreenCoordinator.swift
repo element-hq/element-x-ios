@@ -111,12 +111,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
-        case .oidcError(.notSupported):
-            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
-            viewModel.displayError(.alert(L10n.commonServerNotSupported))
-        case .oidcError(.userCancellation):
-            // No need to show an error, the user cancelled authentication.
-            break
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }
