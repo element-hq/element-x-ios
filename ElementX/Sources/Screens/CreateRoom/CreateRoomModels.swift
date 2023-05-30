@@ -36,7 +36,7 @@ enum CreateRoomViewModelAction {
 struct CreateRoomViewState: BindableState {
     var selectedUsers: [UserProfileProxy]
     var bindings: CreateRoomViewStateBindings
-    var roomImage: URL?
+    var avatarURL: URL?
     var canCreateRoom: Bool {
         !bindings.roomName.isEmpty
     }

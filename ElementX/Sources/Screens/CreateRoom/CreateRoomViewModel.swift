@@ -42,15 +42,15 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
         
         createRoomParameters
-            .map(\.roomImage)
+            .map(\.avatarImageMedia)
             .removeDuplicates { $0?.url == $1?.url }
             .sink { [weak self] mediaInfo in
-                self?.createRoomParameters.roomImage = mediaInfo
+                self?.createRoomParameters.avatarImageMedia = mediaInfo
                 switch mediaInfo {
                 case .image(_, let thumbnailURL, _):
-                    self?.state.roomImage = thumbnailURL
+                    self?.state.avatarURL = thumbnailURL
                 case nil:
-                    self?.state.roomImage = nil
+                    self?.state.avatarURL = nil
                 default:
                     break
                 }
@@ -138,7 +138,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         showLoadingIndicator()
         
         let avatarURL: URL?
-        if let media = createRoomParameters.roomImage {
+        if let media = createRoomParameters.avatarImageMedia {
             switch await clientProxy.uploadMedia(media) {
             case .success(let url):
                 avatarURL = URL(string: url)

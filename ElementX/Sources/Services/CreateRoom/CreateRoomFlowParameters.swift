@@ -21,5 +21,5 @@ struct CreateRoomFlowParameters {
     var name = ""
     var topic = ""
     var isRoomPrivate = true
-    var roomImage: MediaInfo?
+    var avatarImageMedia: MediaInfo?
 }

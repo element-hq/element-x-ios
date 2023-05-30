@@ -60,7 +60,7 @@ struct CreateRoomScreen: View {
                     focus = nil
                     context.showAttachmentConfirmationDialog = true
                 } label: {
-                    if let url = context.viewState.roomImage {
+                    if let url = context.viewState.avatarURL {
                         AsyncImage(url: url) { image in
                             image
                                 .resizable()
@@ -82,7 +82,7 @@ struct CreateRoomScreen: View {
                     Button(L10n.actionChoosePhoto) {
                         context.send(viewAction: .displayMediaPicker)
                     }
-                    if context.viewState.roomImage != nil {
+                    if context.viewState.avatarURL != nil {
                         Button(L10n.actionRemove, role: .destructive) {
                             context.send(viewAction: .removeImage)
                         }

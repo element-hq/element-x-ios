@@ -132,7 +132,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 self.displayMediaPickerWithSource(source)
             case .removeImage:
                 var parameters = self.createRoomParameters.value
-                parameters.roomImage = nil
+                parameters.avatarImageMedia = nil
                 self.createRoomParameters.send(parameters)
             }
         }
@@ -171,7 +171,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             do {
                 let media = try await mediaUploadingPreprocessor.processMedia(at: url).get()
                 var parameters = createRoomParameters.value
-                parameters.roomImage = media
+                parameters.avatarImageMedia = media
                 createRoomParameters.send(parameters)
             } catch {
                 userIndicatorController?.alertInfo = AlertInfo(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
