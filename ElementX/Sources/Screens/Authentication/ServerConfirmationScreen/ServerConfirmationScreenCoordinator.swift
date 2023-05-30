@@ -23,7 +23,7 @@ struct ServerConfirmationScreenCoordinatorParameters {
 }
 
 enum ServerConfirmationScreenCoordinatorAction {
-    case confirm
+    case `continue`(UIWindow?)
     case changeServer
 }
 
@@ -50,7 +50,7 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .confirm:
-                self.actionsSubject.send(.confirm)
+                self.actionsSubject.send(.continue(viewModel.context.viewState.window))
             case .changeServer:
                 self.actionsSubject.send(.changeServer)
             }

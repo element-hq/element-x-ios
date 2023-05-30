@@ -23,6 +23,8 @@ struct LoginScreenCoordinatorParameters {
 }
 
 enum LoginScreenCoordinatorAction {
+    /// Continue authentication using OIDC in a web session.
+    case continueWithOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
 }
@@ -33,7 +35,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     @CancellableTask private var currentTask: Task<Void, Error>?
     
-    private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
     var callback: (@MainActor (LoginScreenCoordinatorAction) -> Void)?
@@ -44,8 +45,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver.value)
-        
-        oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
     
     // MARK: - Public
@@ -56,13 +55,13 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .parseUsername(let username):
-                self.parseUsername(username)
+                parseUsername(username)
             case .forgotPassword:
-                self.showForgotPasswordScreen()
+                showForgotPasswordScreen()
             case .login(let username, let password):
-                self.login(username: username, password: password)
+                login(username: username, password: password)
             case .continueWithOIDC:
-                self.continueWithOIDC()
+                callback?(.continueWithOIDC)
             }
         }
     }
@@ -122,27 +121,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             break
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
-        }
-    }
-    
-    private func continueWithOIDC() {
-        startLoading(isInteractionBlocking: true)
-        
-        Task {
-            switch await authenticationService.urlForOIDCLogin() {
-            case .failure(let error):
-                stopLoading()
-                handleError(error)
-            case .success(let oidcData):
-                stopLoading()
-                
-                switch await oidcAuthenticationPresenter.authenticate(using: oidcData) {
-                case .success(let userSession):
-                    callback?(.signedIn(userSession))
-                case .failure(let error):
-                    handleError(error)
-                }
-            }
         }
     }
     

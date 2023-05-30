@@ -43,7 +43,6 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol
     
-    private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     
     var callback: (@MainActor (SoftLogoutScreenCoordinatorResult) -> Void)?
@@ -55,8 +54,6 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         viewModel = SoftLogoutScreenViewModel(credentials: parameters.credentials,
                                               homeserver: homeserver.value,
                                               keyBackupNeeded: parameters.keyBackupNeeded)
-        
-        oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
     
     // MARK: - Public
@@ -74,7 +71,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             case .clearAllData:
                 self.callback?(.clearAllData)
             case .continueWithOIDC:
-                self.continueWithOIDC()
+                self.continueWithOIDC(presentationAnchor: viewModel.context.viewState.window)
             }
         }
     }
@@ -130,7 +127,9 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         }
     }
 
-    private func continueWithOIDC() {
+    private func continueWithOIDC(presentationAnchor: UIWindow?) {
+        guard let presentationAnchor else { return }
+        
         startLoading()
         
         Task {
@@ -141,7 +140,8 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             case .success(let oidcData):
                 stopLoading()
                 
-                switch await oidcAuthenticationPresenter.authenticate(using: oidcData) {
+                let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService, presentationAnchor: presentationAnchor)
+                switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
                     callback?(.signedIn(userSession))
                 case .failure(let error):

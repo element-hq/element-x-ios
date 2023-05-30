@@ -26,15 +26,18 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let serviceLocator: ServiceLocator
     
     private var cancellables: Set<AnyCancellable> = []
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
-         navigationStackCoordinator: NavigationStackCoordinator) {
+         navigationStackCoordinator: NavigationStackCoordinator,
+         serviceLocator: ServiceLocator = .shared) {
         self.authenticationService = authenticationService
         self.navigationStackCoordinator = navigationStackCoordinator
+        self.serviceLocator = serviceLocator
     }
     
     func start() {
@@ -64,7 +67,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private func startAuthentication() async {
         startLoading()
         
-        switch await authenticationService.configure(for: ServiceLocator.shared.settings.defaultHomeserverAddress) {
+        switch await authenticationService.configure(for: serviceLocator.settings.defaultHomeserverAddress) {
         case .success:
             stopLoading()
             showServerConfirmationScreen()
@@ -76,7 +79,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showServerSelectionScreen(isModallyPresented: Bool) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController: UserIndicatorControllerProtocol! = isModallyPresented ? UserIndicatorController(rootCoordinator: navigationCoordinator) : ServiceLocator.shared.userIndicatorController
+        let userIndicatorController: UserIndicatorControllerProtocol! = isModallyPresented ? UserIndicatorController(rootCoordinator: navigationCoordinator) : serviceLocator.userIndicatorController
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     userIndicatorController: userIndicatorController,
@@ -115,15 +118,41 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .confirm:
-                self.showLoginScreen()
+            case .continue(let window):
+                if authenticationService.homeserver.value.loginMode == .oidc, let window {
+                    showOIDCAuthentication(presentationAnchor: window)
+                } else {
+                    showLoginScreen()
+                }
             case .changeServer:
-                self.showServerSelectionScreen(isModallyPresented: true)
+                showServerSelectionScreen(isModallyPresented: true)
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showOIDCAuthentication(presentationAnchor: UIWindow) {
+        startLoading()
+        
+        Task {
+            switch await authenticationService.urlForOIDCLogin() {
+            case .failure(let error):
+                stopLoading()
+                handleError(error)
+            case .success(let oidcData):
+                stopLoading()
+                
+                let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService, presentationAnchor: presentationAnchor)
+                switch await presenter.authenticate(using: oidcData) {
+                case .success(let userSession):
+                    userHasSignedIn(userSession: userSession)
+                case .failure(let error):
+                    handleError(error)
+                }
+            }
+        }
     }
     
     private func showLoginScreen() {
@@ -135,7 +164,9 @@ class AuthenticationCoordinator: CoordinatorProtocol {
 
             switch action {
             case .signedIn(let userSession):
-                self.userHasSignedIn(userSession: userSession)
+                userHasSignedIn(userSession: userSession)
+            case .continueWithOIDC:
+                showOIDCAuthentication()
             }
         }
 
@@ -150,7 +181,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
 
     private func showAnalyticsPromptIfNeeded(completion: @escaping () -> Void) {
-        guard ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt else {
+        guard serviceLocator.analytics.shouldShowAnalyticsPrompt else {
             completion()
             return
         }
@@ -164,13 +195,31 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
     
     private func startLoading() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true))
+        serviceLocator.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                             type: .modal,
+                                                                             title: L10n.commonLoading,
+                                                                             persistent: true))
     }
     
     private func stopLoading() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        serviceLocator.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    /// Processes an error to either update the flow or display it to the user.
+    private func handleError(_ error: AuthenticationServiceError) {
+        MXLog.warning("Error occurred: \(error)")
+        
+        switch error {
+        case .oidcError(.notSupported):
+            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
+            serviceLocator.userIndicatorController.alertInfo = AlertInfo(id: UUID(),
+                                                                         title: L10n.commonError,
+                                                                         message: L10n.commonServerNotSupported)
+        case .oidcError(.userCancellation):
+            // No need to show an error, the user cancelled authentication.
+            break
+        default:
+            serviceLocator.userIndicatorController.alertInfo = AlertInfo(id: UUID())
+        }
     }
 }

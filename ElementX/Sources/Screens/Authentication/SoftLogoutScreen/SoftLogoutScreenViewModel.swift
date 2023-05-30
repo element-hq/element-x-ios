@@ -43,6 +43,9 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
             callback?(.clearAllData)
         case .continueWithOIDC:
             callback?(.continueWithOIDC)
+        case .updateWindow(let window):
+            guard state.window != window else { return }
+            Task { state.window = window }
         }
     }
 

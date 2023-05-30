@@ -17,12 +17,15 @@
 import AuthenticationServices
 
 /// Presents a web authentication session for an OIDC request.
-class OIDCAuthenticationPresenter {
+@MainActor
+class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProxyProtocol
-    private let oidcPresentationContent = OIDCPresentationContext()
+    private let presentationAnchor: UIWindow
     
-    init(authenticationService: AuthenticationServiceProxyProtocol) {
+    init(authenticationService: AuthenticationServiceProxyProtocol, presentationAnchor: UIWindow) {
         self.authenticationService = authenticationService
+        self.presentationAnchor = presentationAnchor
+        super.init()
     }
     
     /// Presents a web authentication session for the supplied data.
@@ -48,7 +51,7 @@ class OIDCAuthenticationPresenter {
             }
             
             session.prefersEphemeralWebBrowserSession = false
-            session.presentationContextProvider = oidcPresentationContent
+            session.presentationContextProvider = self
             session.start()
         }
     }
@@ -67,11 +70,8 @@ class OIDCAuthenticationPresenter {
     }
 }
 
-class OIDCPresentationContext: NSObject, ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        guard let window = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first?.keyWindow else {
-            fatalError("Failed to find the main window.")
-        }
-        return window
-    }
+// MARK: ASWebAuthenticationPresentationContextProviding
+
+extension OIDCAuthenticationPresenter: ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor { presentationAnchor }
 }

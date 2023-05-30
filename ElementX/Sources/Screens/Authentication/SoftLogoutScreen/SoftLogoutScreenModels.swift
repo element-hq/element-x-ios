@@ -63,6 +63,9 @@ struct SoftLogoutScreenViewState: BindableState {
 
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
+    
+    /// The presentation anchor used for OIDC authentication.
+    var window: UIWindow?
 
     /// Whether to show recover encryption keys message
     var showRecoverEncryptionKeysMessage: Bool {
@@ -83,6 +86,8 @@ struct SoftLogoutScreenBindings {
 }
 
 enum SoftLogoutScreenViewAction {
+    /// Updates the window used as the OIDC presentation anchor.
+    case updateWindow(UIWindow?)
     /// Login.
     case login
     /// Forgot password

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import SwiftUI
 
 enum ServerConfirmationScreenViewModelAction {
     /// The user would like to continue with the current homeserver.
@@ -28,6 +28,8 @@ struct ServerConfirmationScreenViewState: BindableState {
     var homeserverAddress: String
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
+    /// The presentation anchor used for OIDC authentication.
+    var window: UIWindow?
     
     /// The screen's title.
     var title: String {
@@ -57,6 +59,8 @@ struct ServerConfirmationScreenViewState: BindableState {
 }
 
 enum ServerConfirmationScreenViewAction {
+    /// Updates the window used as the OIDC presentation anchor.
+    case updateWindow(UIWindow)
     /// The user would like to continue with the current homeserver.
     case confirm
     /// The user would like to change to a different homeserver.
