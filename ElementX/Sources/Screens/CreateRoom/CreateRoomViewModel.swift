@@ -32,7 +32,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     init(userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol?,
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
-         selectedUsers: CurrentValuePublisher<[UserProfile], Never>) {
+         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>) {
         let parameters = createRoomParameters.value
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController

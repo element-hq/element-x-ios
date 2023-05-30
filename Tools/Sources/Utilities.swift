@@ -14,6 +14,8 @@ enum Utilities {
     }
 
     static var projectDirectoryURL: URL { URL(fileURLWithPath: FileManager.default.currentDirectoryPath) }
+    static var parentDirectoryURL: URL { Utilities.projectDirectoryURL.deletingLastPathComponent() }
+    static var sdkDirectoryURL: URL { parentDirectoryURL.appendingPathComponent("matrix-rust-sdk") }
 
     /// Runs a command in zsh.
     @discardableResult

@@ -23,11 +23,11 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         self.clientProxy = clientProxy
     }
     
-    func fetchSuggestions() async -> Result<[UserProfile], UserDiscoveryErrorType> {
+    func fetchSuggestions() async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         .success([.mockAlice, .mockBob, .mockCharlie])
     }
     
-    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         do {
             async let queriedProfile = try? profileIfPossible(with: searchQuery).get()
             async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
@@ -38,8 +38,8 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         }
     }
     
-    private func merge(searchQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults) -> [UserProfile] {
-        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
+    private func merge(searchQuery: String, queriedProfile: UserProfileProxy?, searchResults: SearchUsersResultsProxy) -> [UserProfileProxy] {
+        let localProfile = queriedProfile ?? UserProfileProxy(searchQuery: searchQuery)
         let searchResults = searchResults.results
         guard let localProfile else {
             return searchResults
@@ -52,7 +52,7 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         return [localProfile] + filteredSearchResult
     }
     
-    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfile, ClientProxyError> {
+    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfileProxy, ClientProxyError> {
         guard searchQuery.isMatrixIdentifier else {
             return .failure(.failedGettingUserProfile)
         }
@@ -67,7 +67,7 @@ private extension String {
     }
 }
 
-private extension UserProfile {
+private extension UserProfileProxy {
     init?(searchQuery: String) {
         guard searchQuery.isMatrixIdentifier else {
             return nil

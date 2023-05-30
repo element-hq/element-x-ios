@@ -16,21 +16,21 @@
 
 import Foundation
 
-extension UserProfile {
+extension UserProfileProxy {
     // Mocks
-    static var mockAlice: UserProfile {
+    static var mockAlice: UserProfileProxy {
         .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
     }
 
-    static var mockBob: UserProfile {
+    static var mockBob: UserProfileProxy {
         .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
     }
 
-    static var mockBobby: UserProfile {
+    static var mockBobby: UserProfileProxy {
         .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
     }
 
-    static var mockCharlie: UserProfile {
+    static var mockCharlie: UserProfileProxy {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
     }
 }

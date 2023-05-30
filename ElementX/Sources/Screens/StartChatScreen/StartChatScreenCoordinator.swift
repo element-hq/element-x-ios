@@ -40,8 +40,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         createRoomParameters.asCurrentValuePublisher()
     }
     
-    private let selectedUsers = CurrentValueSubject<[UserProfile], Never>([])
-    private var selectedUsersPublisher: CurrentValuePublisher<[UserProfile], Never> {
+    private let selectedUsers = CurrentValueSubject<[UserProfileProxy], Never>([])
+    private var selectedUsersPublisher: CurrentValuePublisher<[UserProfileProxy], Never> {
         selectedUsers.asCurrentValuePublisher()
     }
     
@@ -128,7 +128,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func toggleUser(_ user: UserProfile) {
+    private func toggleUser(_ user: UserProfileProxy) {
         var selectedUsers = selectedUsers.value
         if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
             selectedUsers.remove(at: index)

@@ -15,14 +15,7 @@
 //
 
 import Foundation
-
-enum UserDiscoveryErrorType: Error {
-    case failedSearchingUsers
-    case failedFetchingSuggestedUsers
-}
+import MatrixRustSDK
 
 // sourcery: AutoMockable
-protocol UserDiscoveryServiceProtocol {
-    func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType>
-    func fetchSuggestions() async -> Result<[UserProfileProxy], UserDiscoveryErrorType>
-}
+protocol SDKClientProtocol: ClientProtocol { }

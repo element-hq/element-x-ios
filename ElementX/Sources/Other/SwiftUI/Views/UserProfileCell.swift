@@ -18,7 +18,7 @@ import MatrixRustSDK
 import SwiftUI
 
 struct UserProfileCell: View {
-    let user: UserProfile
+    let user: UserProfileProxy
     let membership: MembershipState?
     let imageProvider: ImageProviderProtocol?
     

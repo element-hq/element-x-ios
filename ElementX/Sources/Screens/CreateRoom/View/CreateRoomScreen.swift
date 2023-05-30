@@ -164,7 +164,7 @@ struct CreateRoom_Previews: PreviewProvider {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let parameters = CreateRoomFlowParameters()
-        let selectedUsers: [UserProfile] = [.mockAlice, .mockBob, .mockCharlie]
+        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         
         return CreateRoomViewModel(userSession: userSession, userIndicatorController: nil, createRoomParameters: .init(parameters), selectedUsers: .init(selectedUsers))
     }()

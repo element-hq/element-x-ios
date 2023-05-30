@@ -1,5 +1,8 @@
 sources:
-  - ../../ElementX
+  include:
+    - ../../ElementX
+  exclude:
+    - ../../ElementX/Sources/Mocks/SDK
 templates:
   - AutoMockable.stencil
 output:

@@ -33,7 +33,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsScreenCoordinatorParameters
     private var viewModel: RoomDetailsScreenViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
-    private let selectedUsers: CurrentValueSubject<[UserProfile], Never> = .init([])
+    private let selectedUsers: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
     private var navigationStackCoordinator: NavigationStackCoordinator {
         parameters.navigationStackCoordinator
     }
@@ -142,7 +142,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
-    private func toggleUser(_ user: UserProfile) {
+    private func toggleUser(_ user: UserProfileProxy) {
         var selectedUsers = selectedUsers.value
         if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
             selectedUsers.remove(at: index)

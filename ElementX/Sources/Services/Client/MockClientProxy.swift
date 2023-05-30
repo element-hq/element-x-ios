@@ -127,14 +127,14 @@ class MockClientProxy: ClientProxyProtocol {
         setPusherArgument = configuration
     }
     
-    var searchUsersResult: Result<SearchUsersResults, ClientProxyError> = .success(.init(results: [], limited: false))
-    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
+    var searchUsersResult: Result<SearchUsersResultsProxy, ClientProxyError> = .success(.init(results: [], limited: false))
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         searchUsersResult
     }
     
-    var getProfileResult: Result<UserProfile, ClientProxyError> = .success(.init(userID: "@a:b.com", displayName: "Some user"))
+    var getProfileResult: Result<UserProfileProxy, ClientProxyError> = .success(.init(userID: "@a:b.com", displayName: "Some user"))
     private(set) var getProfileCalled = false
-    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
+    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         getProfileCalled = true
         return getProfileResult
     }

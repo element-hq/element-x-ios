@@ -25,7 +25,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!
     
-    private let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
+    private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
     private var cancellables: Set<AnyCancellable> = []
     
     var context: CreateRoomViewModel.Context {
@@ -59,9 +59,9 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     func testDeselectUser() {
         XCTAssertFalse(context.viewState.selectedUsers.isEmpty)
         XCTAssertEqual(context.viewState.selectedUsers.count, 3)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
         context.send(viewAction: .deselectUser(.mockAlice))
-        XCTAssertNotEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        XCTAssertNotEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
     }
     
     func testDefaulSecurity() {
