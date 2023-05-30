@@ -154,7 +154,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                processUrl(url)
+                processAvatar(from: url)
             }
         }
         
@@ -163,7 +163,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
     
-    private func processUrl(_ url: URL) {
+    private func processAvatar(from url: URL) {
         navigationStackCoordinator.setSheetCoordinator(nil)
         showLoadingIndicator()
         Task { [weak self] in

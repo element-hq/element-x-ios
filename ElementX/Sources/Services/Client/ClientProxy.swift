@@ -197,7 +197,7 @@ class ClientProxy: ClientProxyProtocol {
         return await waitForRoomSummary(with: result, name: expectedRoomName)
     }
     
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], roomImageMatrixUrl: String?) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
         let result: Result<String, ClientProxyError> = await Task.dispatch(on: clientQueue) {
             do {
                 let parameters = CreateRoomParameters(name: name,
@@ -207,7 +207,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       visibility: isRoomPrivate ? .private : .public,
                                                       preset: isRoomPrivate ? .privateChat : .publicChat,
                                                       invite: userIDs,
-                                                      avatar: roomImageMatrixUrl)
+                                                      avatar: avatarURL?.absoluteString)
                 let roomId = try self.client.createRoom(request: parameters)
                 return .success(roomId)
             } catch {

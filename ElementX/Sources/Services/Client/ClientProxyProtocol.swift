@@ -94,7 +94,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], roomImageMatrixUrl: String?) async -> Result<String, ClientProxyError>
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError>
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     

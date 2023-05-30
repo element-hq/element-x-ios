@@ -57,7 +57,7 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedCreatingRoom)
     }
     
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], roomImageMatrixUrl: String?) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
         .failure(.failedCreatingRoom)
     }
     

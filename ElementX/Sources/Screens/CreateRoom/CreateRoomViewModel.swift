@@ -137,24 +137,24 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
         showLoadingIndicator()
         
-        let roomImageMatrixUrl: String?
+        let avatarURL: URL?
         if let media = createRoomParameters.roomImage {
             switch await clientProxy.uploadMedia(media) {
             case .success(let url):
-                roomImageMatrixUrl = url
+                avatarURL = URL(string: url)
             case .failure(let error):
                 displayError(error)
                 return
             }
         } else {
-            roomImageMatrixUrl = nil
+            avatarURL = nil
         }
 
         switch await clientProxy.createRoom(name: createRoomParameters.name,
                                             topic: createRoomParameters.topic,
                                             isRoomPrivate: createRoomParameters.isRoomPrivate,
                                             userIDs: state.selectedUsers.map(\.userID),
-                                            roomImageMatrixUrl: roomImageMatrixUrl) {
+                                            avatarURL: avatarURL) {
         case .success(let roomId):
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
