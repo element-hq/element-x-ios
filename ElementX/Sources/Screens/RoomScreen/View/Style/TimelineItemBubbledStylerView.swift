@@ -102,7 +102,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         styledContent
             .popover(isPresented: $showItemActionMenu) {
                 context.viewState.timelineItemMenuActionProvider?(timelineItem.id).map { actions in
-                    TimelineItemMenu(itemID: timelineItem.id, actions: actions)
+                    TimelineItemMenu(item: timelineItem, actions: actions)
                 }
             }
             .onTapGesture {

@@ -60,12 +60,16 @@ public struct TimelineItemMenu: View {
     
     @State private var sheetContentHeight = CGFloat(0)
     
-    let itemID: String
+    let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
     
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0.0) {
+                header
+                
+                Divider()
+                
                 viewsForActions(actions.actions)
                 
                 Divider()
@@ -76,6 +80,36 @@ public struct TimelineItemMenu: View {
             .presentationDragIndicator(.visible)
             .tint(.element.accent)
         }
+    }
+    
+    private var header: some View {
+        HStack {
+            LoadableAvatarImage(url: item.sender.avatarURL,
+                                name: item.sender.displayName,
+                                contentID: item.sender.id,
+                                avatarSize: .user(on: .timeline),
+                                imageProvider: context.imageProvider)
+            
+            VStack(alignment: .leading) {
+                HStack(alignment: .center) {
+                    Text(item.sender.displayName ?? item.sender.id)
+                        .font(.compound.bodySMSemibold)
+                        .foregroundColor(.compound.textPrimary)
+                    
+                    Spacer()
+                    
+                    Text(item.timestamp)
+                        .font(.compound.bodyXS)
+                        .foregroundColor(.compound.textSecondary)
+                }
+                
+                Text(item.body.trimmingCharacters(in: .whitespacesAndNewlines))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textSecondary)
+                    .lineLimit(1)
+            }
+        }
+        .padding()
     }
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
@@ -127,7 +161,7 @@ public struct TimelineItemMenu: View {
     
     private func send(_ action: TimelineItemMenuAction) {
         presentationMode.wrappedValue.dismiss()
-        context.send(viewAction: .timelineItemMenuAction(itemID: itemID, action: action))
+        context.send(viewAction: .timelineItemMenuAction(itemID: item.id, action: action))
     }
     
     private struct MenuLabel: View {
@@ -141,5 +175,20 @@ public struct TimelineItemMenu: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
         }
+    }
+}
+
+struct TimelineItemMenu_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
+    static var previews: some View {
+        VStack {
+            if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
+               let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply, .redact], debugActions: [.viewSource]) {
+                TimelineItemMenu(item: item, actions: actions)
+            }
+        }
+        .padding(.horizontal)
+        .environmentObject(viewModel.context)
     }
 }
