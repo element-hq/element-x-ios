@@ -51,7 +51,6 @@ enum RoomScreenViewAction {
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
-    case itemDoubleTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)
@@ -59,7 +58,11 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
-    case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
+    
+    case timelineItemMenu(itemID: String)
+    case timelineItemMenuAction(itemID: String, action: TimelineItemMenuAction)
+    
+    case displayEmojiPicker(itemID: String)
     
     case displayCameraPicker
     case displayMediaPicker
@@ -81,7 +84,7 @@ struct RoomScreenViewState: BindableState {
     
     var bindings: RoomScreenViewStateBindings
     
-    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?
+    var timelineItemMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
     
     var composerMode: RoomScreenComposerMode = .default
     
@@ -102,6 +105,16 @@ struct RoomScreenViewStateBindings {
     var alertInfo: AlertInfo<RoomScreenErrorType>?
 
     var debugInfo: TimelineItemDebugInfo?
+    
+    var actionMenuInfo: TimelineItemActionMenuInfo?
+}
+
+struct TimelineItemActionMenuInfo: Identifiable {
+    let item: EventBasedTimelineItemProtocol
+    
+    var id: String {
+        item.id
+    }
 }
 
 enum RoomScreenErrorType: Hashable {

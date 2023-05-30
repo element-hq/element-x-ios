@@ -67,12 +67,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        state.contextMenuActionProvider = { [weak self] itemId -> TimelineItemContextMenuActions? in
+        state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
             }
             
-            return self.contextMenuActionsForItemId(itemId)
+            return self.timelineItemMenuActionsForItemId(itemId)
         }
         
         roomProxy
@@ -109,8 +109,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.processItemDisappearance(id) }
         case .itemTapped(let id):
             Task { await itemTapped(with: id) }
-        case .itemDoubleTapped(let id):
-            itemDoubleTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
@@ -124,8 +122,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             Task { await markRoomAsRead() }
-        case .contextMenuAction(let itemID, let action):
-            processContentMenuAction(action, itemID: itemID)
+        case .timelineItemMenu(let itemID):
+            showTimelineItemActionMenu(for: itemID)
+        case .timelineItemMenuAction(let itemID, let action):
+            processTimelineItemMenuAction(action, itemID: itemID)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
         case .displayMediaPicker:
@@ -136,6 +136,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
+            
+        case .displayEmojiPicker(let itemID):
+            guard let item = state.items.first(where: { $0.id == itemID }), item.isReactable else { return }
+            callback?(.displayEmojiPicker(itemID: itemID))
         }
     }
     
@@ -166,12 +170,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         state.showLoading = false
     }
-    
-    private func itemDoubleTapped(with itemId: String) {
-        guard let item = state.items.first(where: { $0.id == itemId }), item.isReactable else { return }
-        callback?(.displayEmojiPicker(itemID: itemId))
-    }
-    
+        
     private func buildTimelineViews() {
         var timelineViews = [RoomTimelineViewProvider]()
         
@@ -259,9 +258,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    // MARK: ContextMenus
+    // MARK: TimelineItemActionMenu
     
-    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions? {
+    private func showTimelineItemActionMenu(for itemID: String) {
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            // Don't show a menu for non-event based items.
+            return
+        }
+        
+        state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
+    }
+    
+    private func timelineItemMenuActionsForItemId(_ itemId: String) -> TimelineItemMenuActions? {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
@@ -273,8 +282,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return nil
         }
         
-        var actions: [TimelineItemContextMenuAction] = [
-            .react, .reply, .copyPermalink
+        var actions: [TimelineItemMenuAction] = [
+            .reply, .copyPermalink
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
@@ -291,7 +300,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.report)
         }
         
-        var debugActions: [TimelineItemContextMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
+        var debugActions: [TimelineItemMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
         
         if let item = timelineItem as? EncryptedRoomTimelineItem,
            case let .megolmV1AesSha2(sessionID) = item.encryptionType {
@@ -302,15 +311,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemID: String) {
+    private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
         
         switch action {
-        case .react:
-            callback?(.displayEmojiPicker(itemID: eventTimelineItem.id))
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return

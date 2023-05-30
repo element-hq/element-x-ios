@@ -76,23 +76,10 @@ struct RoomAttachmentPicker: View {
         
         var body: some View {
             Label(title, systemImage: systemImageName)
-                .labelStyle(EqualIconWidthLabelStyle())
+                .labelStyle(FixedIconSizeLabelStyle())
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-        }
-    }
-}
-
-private struct EqualIconWidthLabelStyle: LabelStyle {
-    @ScaledMetric private var menuIconSize = 24.0
-    
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration
-                .icon
-                .frame(width: menuIconSize, height: menuIconSize)
-            configuration.title
         }
     }
 }

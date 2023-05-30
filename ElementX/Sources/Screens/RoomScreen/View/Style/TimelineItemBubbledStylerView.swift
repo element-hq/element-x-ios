@@ -21,11 +21,15 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
+    
+    @State private var showItemActionMenu = false
 
     private var isTextItem: Bool {
         timelineItem is TextBasedRoomTimelineItem
@@ -98,10 +102,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         styledContent
-            .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: roundedCorners)) // Rounded corners for the context menu animation.
-            .contextMenu {
-                context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
-                    TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+            .onTapGesture(count: 2) {
+                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
+            }
+            .onTapGesture {
+                context.send(viewAction: .itemTapped(id: timelineItem.id))
+            }
+            // We need a tap gesture before this long one so that it doesn't
+            // steal away the gestures from the scroll view
+            .onLongPressGesture(minimumDuration: 0.25) {
+                context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
+                feedbackGenerator.impactOccurred()
+            } onPressingChanged: { pressing in
+                if pressing {
+                    feedbackGenerator.prepare()
                 }
             }
             .padding(.top, messageBubbleTopPadding)
