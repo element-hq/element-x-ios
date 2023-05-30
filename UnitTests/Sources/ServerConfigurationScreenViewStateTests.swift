@@ -40,6 +40,6 @@ class ServerConfirmationScreenViewStateTests: XCTestCase {
         
         let otherLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
                                                            authenticationFlow: .register)
-        XCTAssertEqual(matrixDotOrgLogin.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        XCTAssertEqual(otherLogin.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
     }
 }
