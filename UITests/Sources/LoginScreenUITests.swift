@@ -32,17 +32,6 @@ class LoginScreenUITests: XCTestCase {
         try await app.assertScreenshot(.login, step: 0)
     }
     
-    func testOIDC() async throws {
-        // Given the initial login screen.
-        let app = Application.launch(.login)
-        
-        // When entering a username on a homeserver that only supports OIDC.
-        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:company.com\n")
-        
-        // Then the screen should be configured for OIDC.
-        try await app.assertScreenshot(.login, step: 1)
-    }
-    
     func testUnsupported() async throws {
         // Given the initial login screen.
         let app = Application.launch(.login)
@@ -51,6 +40,6 @@ class LoginScreenUITests: XCTestCase {
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n")
         
         // Then the screen should not allow login to continue.
-        try await app.assertScreenshot(.login, step: 2)
+        try await app.assertScreenshot(.login, step: 1)
     }
 }

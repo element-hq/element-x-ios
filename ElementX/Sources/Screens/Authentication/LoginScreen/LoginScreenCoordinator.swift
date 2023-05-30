@@ -23,8 +23,8 @@ struct LoginScreenCoordinatorParameters {
 }
 
 enum LoginScreenCoordinatorAction {
-    /// Continue authentication using OIDC in a web session.
-    case continueWithOIDC
+    /// The homeserver was updated to one that supports OIDC.
+    case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
 }
@@ -60,8 +60,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                 showForgotPasswordScreen()
             case .login(let username, let password):
                 login(username: username, password: password)
-            case .continueWithOIDC:
-                callback?(.continueWithOIDC)
             }
         }
     }
@@ -155,8 +153,12 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.configure(for: homeserverDomain) {
             case .success:
-                updateViewModel()
                 stopLoading()
+                if authenticationService.homeserver.value.loginMode == .oidc {
+                    callback?(.configuredForOIDC)
+                } else {
+                    updateViewModel()
+                }
             case .failure(let error):
                 stopLoading()
                 handleError(error)

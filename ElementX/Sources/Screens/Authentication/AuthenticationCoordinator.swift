@@ -165,8 +165,9 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             switch action {
             case .signedIn(let userSession):
                 userHasSignedIn(userSession: userSession)
-            case .continueWithOIDC:
-                showOIDCAuthentication()
+            case .configuredForOIDC:
+                // Pop back to the confirmation screen for OIDC login to continue.
+                navigationStackCoordinator.pop(animated: false)
             }
         }
 
