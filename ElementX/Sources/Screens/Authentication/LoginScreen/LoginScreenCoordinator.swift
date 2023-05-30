@@ -43,7 +43,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     init(parameters: LoginScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver)
+        viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver.value)
         
         oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
@@ -188,7 +188,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     /// Updates the view model with a different homeserver.
     private func updateViewModel() {
-        viewModel.update(homeserver: authenticationService.homeserver)
+        viewModel.update(homeserver: authenticationService.homeserver.value)
         indicateSuccess()
     }
     

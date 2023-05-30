@@ -27,10 +27,10 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     }
 
     init(authenticationService: AuthenticationServiceProxyProtocol, authenticationFlow: AuthenticationFlow) {
-        super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: authenticationService.homeserver.address,
+        super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: authenticationService.homeserver.value.address,
                                                                        authenticationFlow: authenticationFlow))
         
-        authenticationService.homeserverPublisher
+        authenticationService.homeserver
             .receive(on: DispatchQueue.main)
             .sink { [weak self] homeserver in
                 guard let self else { return }

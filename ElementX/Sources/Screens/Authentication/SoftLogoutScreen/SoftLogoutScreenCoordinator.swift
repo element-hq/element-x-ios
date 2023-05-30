@@ -53,7 +53,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         
         let homeserver = parameters.authenticationService.homeserver
         viewModel = SoftLogoutScreenViewModel(credentials: parameters.credentials,
-                                              homeserver: homeserver,
+                                              homeserver: homeserver.value,
                                               keyBackupNeeded: parameters.keyBackupNeeded)
         
         oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)

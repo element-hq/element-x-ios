@@ -22,9 +22,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
     
-    @DidSetPublisher
-    private(set) var homeserver = LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress, loginMode: .unknown)
-    var homeserverPublisher: AnyPublisher<LoginHomeserver, Never> { $homeserver }
+    private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never> = .init(LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress,
+                                                                                                       loginMode: .unknown))
+    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
@@ -63,7 +63,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                 }
             }
             
-            self.homeserver = homeserver
+            homeserverSubject.send(homeserver)
             return .success(())
         } catch AuthenticationError.SlidingSyncNotAvailable {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync.")
