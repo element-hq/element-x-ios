@@ -75,8 +75,19 @@ class MockScreen: Identifiable {
         switch id {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                       navigationStackCoordinator: navigationStackCoordinator))
+            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .serverConfirmationLogin:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = ServerConfirmationScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(homeserver: .mockMatrixDotOrg),
+                                                                                    authenticationFlow: .login))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .serverConfirmationRegister:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = ServerConfirmationScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(homeserver: .mockOIDC),
+                                                                                    authenticationFlow: .register))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelection:

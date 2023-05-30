@@ -30,8 +30,6 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
 
     override func process(viewAction: LoginScreenViewAction) {
         switch viewAction {
-        case .selectServer:
-            callback?(.selectServer)
         case .parseUsername:
             callback?(.parseUsername(state.bindings.username))
         case .forgotPassword:

@@ -26,6 +26,7 @@ struct A11yIdentifiers {
     static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
+    static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
@@ -73,7 +74,6 @@ struct A11yIdentifiers {
         let emailUsername = "login-email_username"
         let password = "login-password"
         let `continue` = "login-continue"
-        let changeServer = "login-change_server"
         let oidc = "login-oidc"
         let unsupportedServer = "login-unsupported_server"
     }
@@ -106,6 +106,11 @@ struct A11yIdentifiers {
         let unignore = "room_member_details-unignore"
     }
     
+    struct ServerConfirmationScreen {
+        let `continue` = "server_confirmation-continue"
+        let changeServer = "server_confirmation-change_server"
+    }
+    
     struct SessionVerificationScreen {
         let requestVerification = "session_verification-request_verification"
         let startSasVerification = "session_verification-start_sas_verification"
@@ -115,7 +120,7 @@ struct A11yIdentifiers {
         let verificationComplete = "session_verification-verification_complete"
         let close = "session_verification-close"
     }
-        
+    
     struct SoftLogoutScreen {
         let title = "soft_logout-title"
         let message = "soft_logout-message"

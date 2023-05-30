@@ -18,6 +18,8 @@ import Foundation
 
 enum UITestsScreenIdentifier: String {
     case login
+    case serverConfirmationLogin
+    case serverConfirmationRegister
     case serverSelection
     case serverSelectionNonModal
     case authenticationFlow
