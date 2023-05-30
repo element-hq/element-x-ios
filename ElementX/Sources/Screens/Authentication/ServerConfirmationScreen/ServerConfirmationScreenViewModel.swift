@@ -43,6 +43,9 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     
     override func process(viewAction: ServerConfirmationScreenViewAction) {
         switch viewAction {
+        case .updateWindow(let window):
+            guard state.window != window else { return }
+            Task { state.window = window }
         case .confirm:
             actionsSubject.send(.confirm)
         case .changeServer:

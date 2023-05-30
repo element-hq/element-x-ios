@@ -48,7 +48,7 @@ class ServerSelectionUITests: XCTestCase {
         
         // Then an error should be shown and the confirmation button disabled.
         try await app.assertScreenshot(.serverSelection, step: 2)
-        XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The confirm button should be disabled when there is an error.")
+        XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The continue button should be disabled when there is an error.")
     }
 
     func testNonModalPresentation() async throws {

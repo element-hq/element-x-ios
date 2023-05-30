@@ -34,6 +34,10 @@ struct ServerConfirmationScreen: View {
                 .readableFrame()
                 .background(Color.element.background.ignoresSafeArea())
         }
+        .introspectViewController { viewController in
+            guard let window = viewController.view.window else { return }
+            context.send(viewAction: .updateWindow(window))
+        }
     }
     
     /// The main content of the view to be shown in a scroll view.

@@ -23,8 +23,6 @@ enum LoginScreenViewModelAction: CustomStringConvertible {
     case forgotPassword
     /// Login using the supplied credentials.
     case login(username: String, password: String)
-    /// Continue using OIDC.
-    case continueWithOIDC
     
     /// A string representation of the action, ignoring any associated values that could leak PII.
     var description: String {
@@ -35,8 +33,6 @@ enum LoginScreenViewModelAction: CustomStringConvertible {
             return "forgotPassword"
         case .login:
             return "login"
-        case .continueWithOIDC:
-            return "continueWithOIDC"
         }
     }
 }
@@ -79,8 +75,6 @@ enum LoginScreenViewAction {
     case forgotPassword
     /// Continue using the input username and password.
     case next
-    /// Continue using OIDC.
-    case continueWithOIDC
 }
 
 enum LoginScreenErrorType: Hashable {

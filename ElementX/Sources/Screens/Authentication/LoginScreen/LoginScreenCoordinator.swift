@@ -23,6 +23,8 @@ struct LoginScreenCoordinatorParameters {
 }
 
 enum LoginScreenCoordinatorAction {
+    /// The homeserver was updated to one that supports OIDC.
+    case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
 }
@@ -33,7 +35,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     @CancellableTask private var currentTask: Task<Void, Error>?
     
-    private let oidcAuthenticationPresenter: OIDCAuthenticationPresenter
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
     var callback: (@MainActor (LoginScreenCoordinatorAction) -> Void)?
@@ -44,8 +45,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver.value)
-        
-        oidcAuthenticationPresenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService)
     }
     
     // MARK: - Public
@@ -56,13 +55,11 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .parseUsername(let username):
-                self.parseUsername(username)
+                parseUsername(username)
             case .forgotPassword:
-                self.showForgotPasswordScreen()
+                showForgotPasswordScreen()
             case .login(let username, let password):
-                self.login(username: username, password: password)
-            case .continueWithOIDC:
-                self.continueWithOIDC()
+                login(username: username, password: password)
             }
         }
     }
@@ -114,35 +111,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
-        case .oidcError(.notSupported):
-            // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
-            viewModel.displayError(.alert(L10n.commonServerNotSupported))
-        case .oidcError(.userCancellation):
-            // No need to show an error, the user cancelled authentication.
-            break
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
-        }
-    }
-    
-    private func continueWithOIDC() {
-        startLoading(isInteractionBlocking: true)
-        
-        Task {
-            switch await authenticationService.urlForOIDCLogin() {
-            case .failure(let error):
-                stopLoading()
-                handleError(error)
-            case .success(let oidcData):
-                stopLoading()
-                
-                switch await oidcAuthenticationPresenter.authenticate(using: oidcData) {
-                case .success(let userSession):
-                    callback?(.signedIn(userSession))
-                case .failure(let error):
-                    handleError(error)
-                }
-            }
         }
     }
     
@@ -177,8 +147,12 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.configure(for: homeserverDomain) {
             case .success:
-                updateViewModel()
                 stopLoading()
+                if authenticationService.homeserver.value.loginMode == .oidc {
+                    callback?(.configuredForOIDC)
+                } else {
+                    updateViewModel()
+                }
             case .failure(let error):
                 stopLoading()
                 handleError(error)

@@ -36,8 +36,6 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             callback?(.forgotPassword)
         case .next:
             callback?(.login(username: state.bindings.username, password: state.bindings.password))
-        case .continueWithOIDC:
-            callback?(.continueWithOIDC)
         }
     }
     

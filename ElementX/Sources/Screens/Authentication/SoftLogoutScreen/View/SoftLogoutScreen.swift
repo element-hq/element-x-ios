@@ -49,6 +49,10 @@ struct SoftLogoutScreen: View {
         }
         .background(Color.element.background.ignoresSafeArea())
         .alert(item: $context.alertInfo) { $0.alert }
+        .introspectViewController { viewController in
+            guard let window = viewController.view.window else { return }
+            context.send(viewAction: .updateWindow(window))
+        }
     }
 
     /// The title, message and icon at the top of the screen.

@@ -35,7 +35,8 @@ struct LoginScreen: View {
                 case .password:
                     loginForm
                 case .oidc:
-                    oidcButton
+                    // This should never be shown.
+                    ProgressView()
                 default:
                     loginUnavailableText
                 }
@@ -105,15 +106,6 @@ struct LoginScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.loginScreen.continue)
         }
     }
-
-    /// The OIDC button that can be used for login.
-    var oidcButton: some View {
-        Button { context.send(viewAction: .continueWithOIDC) } label: {
-            Text(L10n.actionContinue)
-        }
-        .buttonStyle(.elementAction(.xLarge))
-        .accessibilityIdentifier(A11yIdentifiers.loginScreen.oidc)
-    }
     
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
@@ -155,10 +147,10 @@ struct LoginScreen_Previews: PreviewProvider {
             .previewDisplayName("matrix.org")
         screen(for: credentialsViewModel)
             .previewDisplayName("Credentials Entered")
-        screen(for: LoginScreenViewModel(homeserver: .mockOIDC))
-            .previewDisplayName("OIDC")
         screen(for: LoginScreenViewModel(homeserver: .mockUnsupported))
             .previewDisplayName("Unsupported")
+        screen(for: LoginScreenViewModel(homeserver: .mockOIDC))
+            .previewDisplayName("OIDC Fallback")
     }
     
     static func screen(for viewModel: LoginScreenViewModel) -> some View {
