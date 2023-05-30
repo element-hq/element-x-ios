@@ -26,6 +26,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
+    
+    @State private var showItemActionMenu = false
 
     private var isTextItem: Bool {
         timelineItem is TextBasedRoomTimelineItem
@@ -98,11 +100,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         styledContent
-            .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: roundedCorners)) // Rounded corners for the context menu animation.
-            .contextMenu {
-                context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
-                    TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+            .popover(isPresented: $showItemActionMenu) {
+                context.viewState.timelineItemMenuActionProvider?(timelineItem.id).map { actions in
+                    TimelineItemMenu(itemID: timelineItem.id, actions: actions)
                 }
+            }
+            .onTapGesture {
+                showItemActionMenu = true
             }
             .padding(.top, messageBubbleTopPadding)
     }

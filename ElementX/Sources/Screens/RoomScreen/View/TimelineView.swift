@@ -70,7 +70,7 @@ struct TimelineView: UIViewControllerRepresentable {
             }
             
             // Doesn't have an equatable conformance :(
-            tableViewController.contextMenuActionProvider = context.viewState.contextMenuActionProvider
+            tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider
         }
         
         func send(viewAction: RoomScreenViewAction) {

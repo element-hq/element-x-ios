@@ -83,16 +83,3 @@ struct RoomAttachmentPicker: View {
         }
     }
 }
-
-private struct EqualIconWidthLabelStyle: LabelStyle {
-    @ScaledMetric private var menuIconSize = 24.0
-    
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration
-                .icon
-                .frame(width: menuIconSize, height: menuIconSize)
-            configuration.title
-        }
-    }
-}

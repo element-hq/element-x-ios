@@ -67,7 +67,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        state.contextMenuActionProvider = { [weak self] itemId -> TimelineItemContextMenuActions? in
+        state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
             }
@@ -124,7 +124,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             Task { await markRoomAsRead() }
-        case .contextMenuAction(let itemID, let action):
+        case .timelineItemMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
@@ -261,7 +261,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: ContextMenus
     
-    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions? {
+    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemMenuActions? {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
@@ -273,7 +273,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return nil
         }
         
-        var actions: [TimelineItemContextMenuAction] = [
+        var actions: [TimelineItemMenuAction] = [
             .react, .reply, .copyPermalink
         ]
         
@@ -291,7 +291,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.report)
         }
         
-        var debugActions: [TimelineItemContextMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
+        var debugActions: [TimelineItemMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
         
         if let item = timelineItem as? EncryptedRoomTimelineItem,
            case let .megolmV1AesSha2(sessionID) = item.encryptionType {
@@ -302,7 +302,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemID: String) {
+    private func processContentMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return

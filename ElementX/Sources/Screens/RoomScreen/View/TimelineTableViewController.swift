@@ -70,7 +70,7 @@ class TimelineTableViewController: UIViewController {
         }
     }
         
-    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?
+    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
     

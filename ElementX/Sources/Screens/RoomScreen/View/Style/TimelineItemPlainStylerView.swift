@@ -23,6 +23,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
+    
+    @State private var showItemActionMenu = false
 
     var body: some View {
         VStack(alignment: .trailing) {
@@ -59,10 +61,13 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             
             content()
         }
-        .contextMenu {
-            context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
-                TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+        .popover(isPresented: $showItemActionMenu) {
+            context.viewState.timelineItemMenuActionProvider?(timelineItem.id).map { actions in
+                TimelineItemMenu(itemID: timelineItem.id, actions: actions)
             }
+        }
+        .onTapGesture {
+            showItemActionMenu = true
         }
     }
     

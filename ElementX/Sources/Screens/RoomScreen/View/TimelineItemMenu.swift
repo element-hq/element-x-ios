@@ -16,11 +16,11 @@
 
 import SwiftUI
 
-struct TimelineItemContextMenuActions {
-    let actions: [TimelineItemContextMenuAction]
-    let debugActions: [TimelineItemContextMenuAction]
+struct TimelineItemMenuActions {
+    let actions: [TimelineItemMenuAction]
+    let debugActions: [TimelineItemMenuAction]
     
-    init?(actions: [TimelineItemContextMenuAction], debugActions: [TimelineItemContextMenuAction]) {
+    init?(actions: [TimelineItemMenuAction], debugActions: [TimelineItemMenuAction]) {
         if actions.isEmpty, debugActions.isEmpty {
             return nil
         }
@@ -30,7 +30,7 @@ struct TimelineItemContextMenuActions {
     }
 }
 
-enum TimelineItemContextMenuAction: Identifiable, Hashable {
+enum TimelineItemMenuAction: Identifiable, Hashable {
     case react
     case copy
     case edit
@@ -54,69 +54,92 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
     }
 }
 
-public struct TimelineItemContextMenu: View {
+public struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @Environment(\.presentationMode) private var presentationMode
+    
+    @State private var sheetContentHeight = CGFloat(0)
     
     let itemID: String
-    let contextMenuActions: TimelineItemContextMenuActions
+    let actions: TimelineItemMenuActions
     
     public var body: some View {
-        viewsForActions(contextMenuActions.actions)
-        Menu {
-            viewsForActions(contextMenuActions.debugActions)
-        } label: {
-            Label("Developer", systemImage: "hammer")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0.0) {
+                viewsForActions(actions.actions)
+                
+                Divider()
+                
+                viewsForActions(actions.debugActions)
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+            .tint(.element.accent)
         }
     }
     
-    private func viewsForActions(_ actions: [TimelineItemContextMenuAction]) -> some View {
+    private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
         ForEach(actions, id: \.self) { action in
             switch action {
             case .react:
                 Button { send(action) } label: {
-                    Label(L10n.commonReactions, systemImage: "face.smiling")
+                    MenuLabel(title: L10n.commonReactions, systemImageName: "face.smiling")
                 }
             case .copy:
                 Button { send(action) } label: {
-                    Label(L10n.actionCopy, systemImage: "doc.on.doc")
+                    MenuLabel(title: L10n.actionCopy, systemImageName: "doc.on.doc")
                 }
             case .edit:
                 Button { send(action) } label: {
-                    Label(L10n.actionEdit, systemImage: "pencil.line")
+                    MenuLabel(title: L10n.actionEdit, systemImageName: "pencil.line")
                 }
             case .quote:
                 Button { send(action) } label: {
-                    Label(L10n.actionQuote, systemImage: "quote.bubble")
+                    MenuLabel(title: L10n.actionQuote, systemImageName: "quote.bubble")
                 }
             case .copyPermalink:
                 Button { send(action) } label: {
-                    Label(L10n.commonPermalink, systemImage: "link")
+                    MenuLabel(title: L10n.commonPermalink, systemImageName: "link")
                 }
             case .reply:
                 Button { send(action) } label: {
-                    Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
+                    MenuLabel(title: L10n.actionReply, systemImageName: "arrowshape.turn.up.left")
                 }
             case .redact:
                 Button(role: .destructive) { send(action) } label: {
-                    Label(L10n.actionRemove, systemImage: "trash")
+                    MenuLabel(title: L10n.actionRemove, systemImageName: "trash")
                 }
             case .viewSource:
                 Button { send(action) } label: {
-                    Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
+                    MenuLabel(title: L10n.actionViewSource, systemImageName: "doc.text.below.ecg")
                 }
             case .retryDecryption:
                 Button { send(action) } label: {
-                    Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
+                    MenuLabel(title: L10n.actionRetryDecryption, systemImageName: "arrow.down.message")
                 }
             case .report:
                 Button(role: .destructive) { send(action) } label: {
-                    Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
+                    MenuLabel(title: L10n.actionReportContent, systemImageName: "exclamationmark.bubble")
                 }
             }
         }
     }
     
-    private func send(_ action: TimelineItemContextMenuAction) {
-        context.send(viewAction: .contextMenuAction(itemID: itemID, action: action))
+    private func send(_ action: TimelineItemMenuAction) {
+        presentationMode.wrappedValue.dismiss()
+        context.send(viewAction: .timelineItemMenuAction(itemID: itemID, action: action))
+    }
+    
+    private struct MenuLabel: View {
+        let title: String
+        let systemImageName: String
+        
+        var body: some View {
+            Label(title, systemImage: systemImageName)
+                .labelStyle(EqualIconWidthLabelStyle())
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+        }
     }
 }
