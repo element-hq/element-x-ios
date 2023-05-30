@@ -33,24 +33,7 @@ enum OnboardingViewModelAction {
     case login
 }
 
-struct OnboardingViewState: BindableState {
-    /// An array containing all content of the carousel pages
-    let content: [OnboardingPageContent]
-    var bindings: OnboardingBindings
-    
-    init() {
-        content = [
-            OnboardingPageContent(title: L10n.screenOnboardingWelcomeTitle.tinting(".", color: .element.accent),
-                                  message: L10n.screenOnboardingWelcomeSubtitle(InfoPlistReader.main.bundleDisplayName),
-                                  image: Asset.Images.onboardingAppLogo)
-        ]
-        bindings = OnboardingBindings()
-    }
-}
-
-struct OnboardingBindings {
-    var pageIndex = 0
-}
+struct OnboardingViewState: BindableState { }
 
 enum OnboardingViewAction {
     case login
