@@ -105,7 +105,7 @@ class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
         do {
             if let range {
                 MXLog.info("Setting '\(name)' list range to \(range)")
-                try slidingSyncList?.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
+                try slidingSyncList?.setSyncMode(builder: .init().addRange(start: UInt32(range.lowerBound), endInclusive: UInt32(range.upperBound)))
             }
             
             if let timelineLimit {

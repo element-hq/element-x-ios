@@ -466,8 +466,7 @@ class ClientProxy: ClientProxyProtocol {
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
-            .syncModeSelective()
-            .addRange(from: 0, toIncluded: 20)
+            .syncModeSelective(selectiveModeBuilder: .init().addRange(start: 0, endInclusive: 20))
             .onceBuilt(callback: visibleRoomsListProxy)
 
         self.visibleRoomsListBuilder = visibleRoomsListBuilder
