@@ -24,10 +24,10 @@ struct UserIndicatorModalView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
-                if let progressFraction {
-                    ProgressView(value: progressFraction)
-                } else {
+                if case .unknownProgress = indicator.loaderType {
                     ProgressView()
+                } else if case .progress = indicator.loaderType {
+                    ProgressView(value: progressFraction)
                 }
 
                 HStack {
@@ -45,7 +45,7 @@ struct UserIndicatorModalView: View {
             .background(Color.element.quinaryContent)
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
-            .onReceive(indicator.progressPublisher?.publisher ?? Empty().eraseToAnyPublisher()) { progress in
+            .onReceive(indicator.progressPublisher) { progress in
                 progressFraction = progress
             }
             .transition(.opacity)
@@ -68,9 +68,16 @@ struct UserIndicatorModalView_Previews: PreviewProvider {
             UserIndicatorModalView(indicator: UserIndicator(type: .modal,
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark",
-                                                            progressPublisher: ProgressTracker(initialValue: 0.5))
+                                                            loaderType: .progress(ProgressTracker(initialValue: 0.5)))
             )
             .previewDisplayName("Progress Bar")
+            
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+                                                            title: "Successfully logged in",
+                                                            iconName: "checkmark",
+                                                            loaderType: .none)
+            )
+            .previewDisplayName("No progress")
         }
     }
 }

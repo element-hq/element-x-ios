@@ -91,7 +91,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
                           type: .modal,
                           title: label,
                           persistent: true,
-                          progressPublisher: progressPublisher)
+                          loaderType: .progress(progressPublisher))
         )
     }
     
