@@ -123,7 +123,7 @@ private struct MessageComposerReplyHeader: View {
     let action: () -> Void
     
     var body: some View {
-        TimelineReplyView(timelineItemReplyDetails: replyDetails)
+        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(4.0)
             .background(.white)
