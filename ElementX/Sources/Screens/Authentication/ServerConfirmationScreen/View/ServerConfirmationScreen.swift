@@ -22,10 +22,11 @@ struct ServerConfirmationScreen: View {
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {
             header
-        } buttons: {
+        } bottomContent: {
             buttons
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
         .introspectViewController { viewController in
             guard let window = viewController.view.window else { return }
             context.send(viewAction: .updateWindow(window))

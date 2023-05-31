@@ -23,10 +23,11 @@ struct AnalyticsPromptScreen: View {
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.onboardingBreakerScreenTopPadding) {
             mainContent
-        } buttons: {
+        } bottomContent: {
             buttons
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }

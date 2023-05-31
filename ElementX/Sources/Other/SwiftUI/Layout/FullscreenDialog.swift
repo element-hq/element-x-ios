@@ -20,18 +20,21 @@ import SwiftUI
 /// the bottom for a dialogs that fill the entire screen. On larger devices (iPad/Mac),
 /// the height is constrained to keep the content relatively close to the buttons. If
 /// the content overflows the space available, it will become scrollable.
-struct FullscreenDialog<Content: View, Buttons: View>: View {
+///
+/// The background color behind the buttons is read from the `backgroundStyle`
+/// environment value, so make sure to set this to match the screen's background.
+struct FullscreenDialog<Content: View, BottomContent: View>: View {
     /// Padding applied to the top of the content automatically. Use `UIConstants` for preset values.
     var topPadding: CGFloat = UIConstants.titleTopPaddingToNavigationBar
     /// Padding applied to the content and buttons automatically
     var horizontalPadding: CGFloat = 16
     /// The spacing between the content and the buttons.
-    var spacing: CGFloat = 24
+    var spacing: CGFloat = 16
     
     /// The main content shown at the top of the layout.
     @ViewBuilder var content: () -> Content
-    /// The buttons shown at the bottom of the layout.
-    @ViewBuilder var buttons: () -> Buttons
+    /// The content shown at the bottom of the layout.
+    @ViewBuilder var bottomContent: () -> BottomContent
     
     var body: some View {
         GeometryReader { geometry in
@@ -44,20 +47,22 @@ struct FullscreenDialog<Content: View, Buttons: View>: View {
                         .readableFrame()
                         .padding(.horizontal, horizontalPadding)
                         .padding(.top, topPadding)
-                    
-                    Spacer(minLength: spacing)
-                    
-                    buttons()
+                }
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .safeAreaInset(edge: .bottom) {
+                VStack {
+                    bottomContent()
                         .readableFrame()
                         .padding(.horizontal, horizontalPadding)
+                        .padding(.top, spacing)
                         .padding(.bottom, UIConstants.actionButtonBottomPadding)
                     
                     Spacer()
                         .frame(height: UIConstants.spacerHeight(in: geometry))
                 }
-                .frame(minHeight: geometry.size.height)
+                .background()
             }
-            .scrollBounceBehavior(.basedOnSize)
         }
     }
 }
@@ -66,9 +71,11 @@ struct FullscreenDialog_Previews: PreviewProvider {
     static var previews: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {
             content
-        } buttons: {
+        } bottomContent: {
             buttons
         }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
     }
     
     private static var content: some View {
