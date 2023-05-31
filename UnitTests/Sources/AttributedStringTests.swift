@@ -25,14 +25,15 @@ class AttributedStringTests: XCTestCase {
             XCTFail("The attributed string should be built from the HTML.")
             return
         }
-        for run in originalString.runs { XCTAssertNotNil(run.font, "The original runs should all have a font.") }
+        for run in originalString.runs { XCTAssertNotNil(run.uiKit.font, "The original runs should all have a UIFont.") }
         
         // When replacing the font with a presentation intent.
         let string = originalString.replacingFontWithPresentationIntent()
         
         // Then the font should be removed with an inline presentation intent applied to the bold text.
         for run in string.runs {
-            XCTAssertNil(run.font, "The font should have been removed.")
+            XCTAssertNil(run.uiKit.font, "The UIFont should have been removed.")
+            XCTAssertNil(run.font, "No font should be in the run at all.")
             
             let substring = string[run.range]
             if String(substring.characters) == boldString {
