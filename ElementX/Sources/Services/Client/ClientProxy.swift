@@ -168,8 +168,13 @@ class ClientProxy: ClientProxyProtocol {
 
     func stopSync() {
         MXLog.info("Stopping sync")
-        slidingSync?.stopSync()
         slidingSyncObserverToken = nil
+        
+        do {
+            try slidingSync?.stopSync()
+        } catch {
+            MXLog.error("Failed stopping sync with error: \(error). Ignore this error if ran just before the app being suspended")
+        }
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
