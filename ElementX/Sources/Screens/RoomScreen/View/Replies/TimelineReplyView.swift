@@ -16,7 +16,13 @@
 
 import SwiftUI
 
+enum TimelineReplyViewPlacement {
+    case timeline
+    case composer
+}
+
 struct TimelineReplyView: View {
+    let placement: TimelineReplyViewPlacement
     let timelineItemReplyDetails: TimelineItemReplyDetails?
     
     var body: some View {
@@ -25,23 +31,50 @@ struct TimelineReplyView: View {
             case .loaded(let sender, let content):
                 switch content {
                 case .audio(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, systemIconName: "waveform")
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: nil,
+                              icon: .init(systemIconName: "waveform", cornerRadii: iconCornerRadii))
                 case .emote(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: content.formattedBody)
                 case .file(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, systemIconName: "doc.text.fill")
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: nil,
+                              icon: .init(systemIconName: "doc.text.fill", cornerRadii: iconCornerRadii))
                 case .image(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, mediaSource: content.thumbnailSource ?? content.source)
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: nil,
+                              icon: .init(mediaSource: content.thumbnailSource ?? content.source, cornerRadii: iconCornerRadii))
                 case .notice(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: content.formattedBody)
                 case .text(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: content.formattedBody)
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: content.formattedBody)
                 case .video(let content):
-                    ReplyView(sender: sender, plainBody: content.body, formattedBody: nil, mediaSource: content.thumbnailSource)
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: nil,
+                              icon: .init(mediaSource: content.thumbnailSource, cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
             }
+        }
+    }
+    
+    private var iconCornerRadii: Double {
+        switch placement {
+        case .composer:
+            return 9.0
+        case .timeline:
+            return 4.0
         }
     }
     
@@ -53,6 +86,12 @@ struct TimelineReplyView: View {
     }
     
     private struct ReplyView: View {
+        struct Icon {
+            var mediaSource: MediaSourceProxy?
+            var systemIconName: String?
+            let cornerRadii: Double
+        }
+        
         @EnvironmentObject private var context: RoomScreenViewModel.Context
         @ScaledMetric private var imageContainerSize = 36.0
         
@@ -60,16 +99,19 @@ struct TimelineReplyView: View {
         let plainBody: String
         let formattedBody: AttributedString?
         
-        var systemIconName: String?
-        var mediaSource: MediaSourceProxy?
+        var icon: Icon?
         
         var body: some View {
             HStack {
-                icon
+                iconView
                     .frame(width: imageContainerSize, height: imageContainerSize)
                     .foregroundColor(.element.primaryContent)
                     .background(Color.compound.bgSubtlePrimary)
-                    .cornerRadius(9.0, corners: .allCorners)
+                    .cornerRadius(icon?.cornerRadii ?? 0.0, corners: .allCorners)
+                
+                if icon?.mediaSource == nil, icon?.systemIconName == nil {
+                    Spacer().frame(width: 4.0)
+                }
                 
                 VStack(alignment: .leading) {
                     Text(sender.displayName ?? sender.id)
@@ -86,8 +128,8 @@ struct TimelineReplyView: View {
         }
         
         @ViewBuilder
-        private var icon: some View {
-            if let mediaSource {
+        private var iconView: some View {
+            if let mediaSource = icon?.mediaSource {
                 LoadableImage(mediaSource: mediaSource,
                               size: .init(width: imageContainerSize,
                                           height: imageContainerSize),
@@ -98,11 +140,11 @@ struct TimelineReplyView: View {
                 .aspectRatio(contentMode: .fill)
             }
             
-            if let systemIconName {
+            if let systemIconName = icon?.systemIconName {
                 Image(systemName: systemIconName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .padding(4.0)
+                    .padding(8.0)
             }
         }
     }
@@ -113,30 +155,50 @@ struct TimelineReplyView_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack(alignment: .leading) {
-            TimelineReplyView(timelineItemReplyDetails: .notLoaded(eventID: ""))
+            TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .notLoaded(eventID: ""))
             
-            TimelineReplyView(timelineItemReplyDetails: .loading(eventID: ""))
+            TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .loading(eventID: ""))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                content: .text(.init(body: "This is a reply"))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .text(.init(body: "This is a reply"))))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                content: .emote(.init(body: "says hello"))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .emote(.init(body: "says hello"))))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bot"),
-                                                                content: .notice(.init(body: "Hello world"))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bot"),
+                                                                contentType: .notice(.init(body: "Hello world"))))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                content: .audio(.init(body: "Some audio", duration: 0, source: nil, contentType: nil))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .audio(.init(body: "Some audio",
+                                                                                          duration: 0,
+                                                                                          source: nil,
+                                                                                          contentType: nil))))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                content: .file(.init(body: "Some file", source: nil, thumbnailSource: nil, contentType: nil))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .file(.init(body: "Some file",
+                                                                                         source: nil,
+                                                                                         thumbnailSource: nil,
+                                                                                         contentType: nil))))
             
             let imageSource = MediaSourceProxy(url: .init(staticString: "https://mock.com"), mimeType: "image/png")
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"), content: .image(.init(body: "Some image", source: imageSource, thumbnailSource: imageSource))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .image(.init(body: "Some image",
+                                                                                          source: imageSource,
+                                                                                          thumbnailSource: imageSource))))
             
-            TimelineReplyView(timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"), content: .video(.init(body: "Some video", duration: 0, source: nil, thumbnailSource: imageSource))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .video(.init(body: "Some video",
+                                                                                          duration: 0,
+                                                                                          source: nil,
+                                                                                          thumbnailSource: imageSource))))
         }
         .environmentObject(viewModel.context)
     }

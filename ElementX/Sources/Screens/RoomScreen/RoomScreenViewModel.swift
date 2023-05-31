@@ -339,7 +339,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .reply:
             state.bindings.composerFocused = true
-            state.composerMode = .reply(id: eventTimelineItem.id, displayName: eventTimelineItem.sender.displayName ?? eventTimelineItem.sender.id)
+            
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
+            
+            state.composerMode = .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)
         case .viewSource:
             let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
             MXLog.info(debugInfo)
@@ -409,6 +412,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
         }
+    }
+    
+    private func buildReplyContent(for item: EventBasedTimelineItemProtocol) -> EventBasedMessageTimelineItemContentType {
+        guard let messageItem = item as? EventBasedMessageTimelineItemProtocol else {
+            return .text(.init(body: item.body))
+        }
+        
+        return messageItem.contentType
     }
 }
 

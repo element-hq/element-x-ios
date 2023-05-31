@@ -52,7 +52,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     Rectangle()
                         .foregroundColor(.global.melon)
                         .frame(width: 4.0)
-                    TimelineReplyView(timelineItemReplyDetails: replyDetails)
+                    TimelineReplyView(placement: .timeline,
+                                      timelineItemReplyDetails: replyDetails)
                 }
             }
             

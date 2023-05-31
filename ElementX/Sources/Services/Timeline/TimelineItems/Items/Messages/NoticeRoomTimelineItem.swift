@@ -33,4 +33,8 @@ struct NoticeRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .notice(content)
+    }
 }

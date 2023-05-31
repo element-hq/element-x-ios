@@ -34,4 +34,8 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable
     var body: String {
         content.body
     }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .file(content)
+    }
 }

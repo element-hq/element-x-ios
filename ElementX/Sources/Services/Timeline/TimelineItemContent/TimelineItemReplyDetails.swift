@@ -16,19 +16,9 @@
 
 import Foundation
 
-enum TimelineItemReplyContent: Hashable {
-    case audio(AudioRoomTimelineItemContent)
-    case emote(EmoteRoomTimelineItemContent)
-    case file(FileRoomTimelineItemContent)
-    case image(ImageRoomTimelineItemContent)
-    case notice(NoticeRoomTimelineItemContent)
-    case text(TextRoomTimelineItemContent)
-    case video(VideoRoomTimelineItemContent)
-}
-
 enum TimelineItemReplyDetails: Hashable {
     case notLoaded(eventID: String)
     case loading(eventID: String)
-    case loaded(sender: TimelineItemSender, content: TimelineItemReplyContent)
+    case loaded(sender: TimelineItemSender, contentType: EventBasedMessageTimelineItemContentType)
     case error(eventID: String, message: String)
 }

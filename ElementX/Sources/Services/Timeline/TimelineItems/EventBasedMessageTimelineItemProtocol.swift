@@ -16,7 +16,17 @@
 
 import Foundation
 
+enum EventBasedMessageTimelineItemContentType: Hashable {
+    case audio(AudioRoomTimelineItemContent)
+    case emote(EmoteRoomTimelineItemContent)
+    case file(FileRoomTimelineItemContent)
+    case image(ImageRoomTimelineItemContent)
+    case notice(NoticeRoomTimelineItemContent)
+    case text(TextRoomTimelineItemContent)
+    case video(VideoRoomTimelineItemContent)
+}
+
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
-    var body: String { get }
     var replyDetails: TimelineItemReplyDetails? { get }
+    var contentType: EventBasedMessageTimelineItemContentType { get }
 }

@@ -20,7 +20,7 @@ struct MessageComposer: View {
     @Binding var text: String
     @Binding var focused: Bool
     let sendingDisabled: Bool
-    let type: RoomScreenComposerMode
+    let mode: RoomScreenComposerMode
     
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
@@ -75,14 +75,14 @@ struct MessageComposer: View {
         }
         // Explicitly disable all animations to fix weirdness with the header immediately
         // appearing whilst the text field and keyboard are still animating up to it.
-        .animation(.noAnimation, value: type)
+        .animation(.noAnimation, value: mode)
     }
-
+    
     @ViewBuilder
     private var header: some View {
-        switch type {
-        case .reply(_, let displayName):
-            MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
+        switch mode {
+        case .reply(_, let replyDetails):
+            MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
         case .edit:
             MessageComposerEditHeader(action: editCancellationAction)
         case .default:
@@ -94,22 +94,22 @@ struct MessageComposer: View {
         // ZStack with opacity so the button size is consistent.
         ZStack {
             Image(systemName: "checkmark")
-                .opacity(type.isEdit ? 1 : 0)
+                .opacity(mode.isEdit ? 1 : 0)
                 .fontWeight(.medium)
                 .accessibilityLabel(L10n.actionConfirm)
-                .accessibilityHidden(!type.isEdit)
+                .accessibilityHidden(!mode.isEdit)
             Image(asset: Asset.Images.timelineComposerSendMessage)
                 .resizable()
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
                 .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
-                .opacity(type.isEdit ? 0 : 1)
+                .opacity(mode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
-                .accessibilityHidden(type.isEdit)
+                .accessibilityHidden(mode.isEdit)
         }
     }
     
     private var borderRadius: CGFloat {
-        switch type {
+        switch mode {
         case .default:
             return isMultiline ? 20 : 28
         case .reply, .edit:
@@ -119,27 +119,31 @@ struct MessageComposer: View {
 }
 
 private struct MessageComposerReplyHeader: View {
-    let displayName: String
+    let replyDetails: TimelineItemReplyDetails
     let action: () -> Void
     
     var body: some View {
-        HStack(alignment: .center) {
-            Label(L10n.commonReplyingTo(displayName), systemImage: "arrowshape.turn.up.left")
-                .labelStyle(MessageComposerHeaderLabelStyle())
-            Spacer()
-            Button(action: action) {
-                Image(systemName: "xmark")
-                    .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.secondaryContent)
-                    .padding(12.0)
+        TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(4.0)
+            .background(.white)
+            .cornerRadius(13.0)
+            .padding([.trailing, .vertical], 8.0)
+            .padding([.leading], -4.0)
+            .overlay(alignment: .topTrailing) {
+                Button(action: action) {
+                    Image(systemName: "xmark")
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(.element.tertiaryContent)
+                        .padding(16.0)
+                }
             }
-        }
     }
 }
 
 private struct MessageComposerEditHeader: View {
     let action: () -> Void
-
+    
     var body: some View {
         HStack(alignment: .center) {
             Label(L10n.commonEditing, systemImage: "pencil.line")
@@ -148,7 +152,7 @@ private struct MessageComposerEditHeader: View {
             Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.element.tertiaryContent)
                     .padding(12.0)
             }
         }
@@ -161,19 +165,21 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodyXS)
+        .font(.compound.bodySM)
         .foregroundColor(.element.secondaryContent)
         .lineLimit(1)
     }
 }
 
 struct MessageComposer_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
         VStack {
             MessageComposer(text: .constant(""),
                             focused: .constant(false),
                             sendingDisabled: true,
-                            type: .default,
+                            mode: .default,
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
@@ -182,7 +188,7 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant("This is a short message."),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            type: .default,
+                            mode: .default,
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
@@ -191,7 +197,7 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant("This is a very long message that will wrap to 2 lines on an iPhone 14."),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            type: .default,
+                            mode: .default,
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
@@ -200,7 +206,7 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant("This is an even longer message that will wrap to 3 lines on an iPhone 14, just to see the difference it makes."),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            type: .default,
+                            mode: .default,
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
@@ -209,22 +215,47 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant("Some message"),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            type: .reply(id: UUID().uuidString,
-                                         displayName: "John Doe"),
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
-
-            MessageComposer(text: .constant("Some message"),
-                            focused: .constant(false),
-                            sendingDisabled: false,
-                            type: .edit(originalItemId: UUID().uuidString),
+                            mode: .edit(originalItemId: UUID().uuidString),
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
         }
         .padding(.horizontal)
+        
+        ScrollView {
+            VStack {
+                let replyTypes: [TimelineItemReplyDetails] = [
+                    .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, source: nil, contentType: nil))),
+                    .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
+                    .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
+                    .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",
+                                                                                  source: .init(url: .picturesDirectory, mimeType: nil),
+                                                                                  thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+                    .loaded(sender: .init(id: "Jason"), contentType: .notice(.init(body: "Notice: Too far gone?"))),
+                    .loaded(sender: .init(id: "Kirk"), contentType: .text(.init(body: "Text: Where the wild things are"))),
+                    .loaded(sender: .init(id: "Lars"), contentType: .video(.init(body: "Video: Through the never",
+                                                                                 duration: 100,
+                                                                                 source: nil,
+                                                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+                    .loading(eventID: "")
+                ]
+                
+                ForEach(replyTypes, id: \.self) { replyDetails in
+                    MessageComposer(text: .constant(""),
+                                    focused: .constant(false),
+                                    sendingDisabled: false,
+                                    mode: .reply(itemID: UUID().uuidString,
+                                                 replyDetails: replyDetails),
+                                    sendAction: { },
+                                    pasteAction: { _ in },
+                                    replyCancellationAction: { },
+                                    editCancellationAction: { })
+                }
+            }
+        }
+        .padding(.horizontal)
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Replying")
     }
 }
