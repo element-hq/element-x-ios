@@ -317,7 +317,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         if isRoot {
-            actionsSubject.send(.presentedRoom(roomID))
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
                 guard let self else { return }
                 if case .roomDetails(let detailsRoomID, _) = stateMachine.state, detailsRoomID == roomID {
@@ -328,6 +327,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             if navigationSplitCoordinator.detailCoordinator == nil {
                 navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
             }
+            
+            actionsSubject.send(.presentedRoom(roomID))
         } else {
             navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
                 guard let self else { return }

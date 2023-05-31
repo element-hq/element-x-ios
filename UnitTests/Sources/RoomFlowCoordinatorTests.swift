@@ -111,9 +111,9 @@ class RoomFlowCoordinatorTests: XCTestCase {
     // MARK: - Private
     
     func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction?) async {
-        let routeTask = Task {
-            try? await Task.sleep(for: .seconds(0.1))
-            roomFlowCoordinator.handleAppRoute(route, animated: true)
+        let routeTask = Task.detached(priority: .low) {
+            try? await Task.sleep(for: .seconds(0.2))
+            await self.roomFlowCoordinator.handleAppRoute(route, animated: true)
         }
         
         if let expectedAction {
