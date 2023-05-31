@@ -100,6 +100,14 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
+    func testReplaceDetailsWithTimeline() async {
+        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        
+        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+    }
+    
     // MARK: - Private
     
     func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction?) async {
