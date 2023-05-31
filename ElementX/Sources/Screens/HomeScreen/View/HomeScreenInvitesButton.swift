@@ -34,6 +34,8 @@ struct HomeScreenInvitesButton: View {
                     badge
                 }
             }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 8)
         }
     }
     
@@ -46,7 +48,7 @@ struct HomeScreenInvitesButton: View {
     }
 }
 
-struct InvitesButton_Previews: PreviewProvider {
+struct HomeScreenInvites_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreenInvitesButton(title: "Invites", hasBadge: true, action: { })
             .previewDisplayName("Badge on")
