@@ -281,6 +281,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.popToRoot(animated: animated)
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         roomProxy = nil
+        timelineController = nil
         
         actionsSubject.send(.dismissedRoom)
     }
