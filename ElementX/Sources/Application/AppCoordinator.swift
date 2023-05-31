@@ -436,19 +436,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
-        networkMonitorObserver = ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
-            MXLog.info("Reachability changed to \(reachable)")
-            
-            if reachable {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
-            } else {
-                ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
-                                                                                    title: L10n.commonOffline,
-                                                                                    persistent: true))
+        networkMonitorObserver = ServiceLocator.shared.networkMonitor
+            .reachabilityPublisher
+            .removeDuplicates()
+            .sink { reachable in
+                MXLog.info("Reachability changed to \(reachable)")
+                
+                if reachable {
+                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
+                } else {
+                    ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
+                                                                                        title: L10n.commonOffline,
+                                                                                        persistent: true))
+                }
             }
-        }
     }
-
+    
     private func handleAppRoute(_ appRoute: AppRoute) {
         if let userSessionFlowCoordinator {
             userSessionFlowCoordinator.handleAppRoute(appRoute, animated: UIApplication.shared.applicationState == .active)
