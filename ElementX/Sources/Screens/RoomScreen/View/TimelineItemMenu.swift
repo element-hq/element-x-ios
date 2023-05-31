@@ -58,28 +58,29 @@ public struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.presentationMode) private var presentationMode
     
-    @State private var sheetContentHeight = CGFloat(0)
-    
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
     
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0.0) {
-                header
-                
-                Divider()
-                
-                viewsForActions(actions.actions)
-                
-                Divider()
-                
-                viewsForActions(actions.debugActions)
+        VStack {
+            header
+                .frame(idealWidth: 300.0)
+            
+            Divider()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0.0) {
+                    viewsForActions(actions.actions)
+                    
+                    Divider()
+                    
+                    viewsForActions(actions.debugActions)
+                }
             }
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
-            .tint(.element.accent)
         }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+        .tint(.element.accent)
     }
     
     private var header: some View {
@@ -109,7 +110,7 @@ public struct TimelineItemMenu: View {
                     .lineLimit(1)
             }
         }
-        .padding()
+        .padding([.top, .horizontal])
     }
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {

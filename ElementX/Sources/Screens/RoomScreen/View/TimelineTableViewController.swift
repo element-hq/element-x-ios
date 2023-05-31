@@ -204,12 +204,6 @@ class TimelineTableViewController: UIViewController {
                         coordinator.send(viewAction: .linkClicked(url: url))
                         return .systemAction
                     })
-                    .onTapGesture(count: 2) {
-                        coordinator.send(viewAction: .itemDoubleTapped(id: timelineItem.id))
-                    }
-                    .onTapGesture {
-                        coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
-                    }
             }
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)

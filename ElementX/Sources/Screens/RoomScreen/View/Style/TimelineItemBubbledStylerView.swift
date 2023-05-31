@@ -106,6 +106,15 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .onTapGesture {
+                context.send(viewAction: .itemTapped(id: timelineItem.id))
+            }
+            .onTapGesture(count: 2) {
+                context.send(viewAction: .itemDoubleTapped(id: timelineItem.id))
+            }
+            // We need a tap gesture before this long one so that it doesn't
+            // steal away the gestures from the scroll view
+            .onLongPressGesture(minimumDuration: 0.1) {
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                 showItemActionMenu = true
             }
             .padding(.top, messageBubbleTopPadding)
