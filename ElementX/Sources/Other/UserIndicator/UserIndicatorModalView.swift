@@ -54,6 +54,7 @@ struct UserIndicatorModalView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black.opacity(0.1))
         .ignoresSafeArea()
+        .interactiveDismissDisabled(indicator.interactiveDismissDisabled)
     }
 }
 

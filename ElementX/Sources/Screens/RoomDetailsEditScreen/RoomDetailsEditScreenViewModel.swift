@@ -80,7 +80,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             defer {
                 userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(interactiveDismissDisabled: true),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
             
             let mediaResult = await mediaPreprocessor.processMedia(at: url)
             
@@ -101,7 +104,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             defer {
                 userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.screenRoomDetailsUpdatingRoom, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(interactiveDismissDisabled: true),
+                                                                  title: L10n.screenRoomDetailsUpdatingRoom,
+                                                                  persistent: true))
             
             do {
                 try await withThrowingTaskGroup(of: Void.self) { group in
