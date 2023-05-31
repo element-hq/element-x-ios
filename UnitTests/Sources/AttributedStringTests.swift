@@ -25,7 +25,7 @@ class AttributedStringTests: XCTestCase {
             XCTFail("The attributed string should be built from the HTML.")
             return
         }
-        for run in originalString.runs { XCTAssertNotNil(run.uiKit.font, "The original runs should all have a UIFont.") }
+        originalString.runs.forEach { XCTAssertNotNil($0.uiKit.font, "The original runs should all have a UIFont.") }
         
         // When replacing the font with a presentation intent.
         let string = originalString.replacingFontWithPresentationIntent()
