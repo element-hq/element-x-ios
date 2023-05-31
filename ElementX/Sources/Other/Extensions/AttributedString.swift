@@ -49,4 +49,18 @@ extension AttributedString {
         replacement.link = url
         replaceSubrange(range, with: replacement)
     }
+    
+    /// Returns a new attributed string, created by replacing any hard coded `UIFont` with
+    /// a simple presentation intent. This allows simple formatting to respond to Dynamic Type.
+    ///
+    /// Currently only supports regular and bold weights.
+    func replacingFontWithPresentationIntent() -> AttributedString {
+        var newValue = self
+        for run in newValue.runs {
+            guard let font = run.uiKit.font else { continue }
+            newValue[run.range].inlinePresentationIntent = font.fontDescriptor.symbolicTraits.contains(.traitBold) ? .stronglyEmphasized : nil
+            newValue[run.range].uiKit.font = nil
+        }
+        return newValue
+    }
 }

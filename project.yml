@@ -9,8 +9,8 @@ options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: "16.0"
-    macOS: "13.0"
+    iOS: "16.4"
+    macOS: "13.3"
   groupOrdering: 
     - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
     - pattern: ElementX
