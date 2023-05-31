@@ -311,8 +311,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
-            case .cancel:
-                self?.navigationStackCoordinator.pop()
             case .leftRoom:
                 self?.dismissRoom(animated: animated)
             }
