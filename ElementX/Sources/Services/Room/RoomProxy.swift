@@ -33,8 +33,6 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     
-    private var roomSubscriptionObservationToken: TaskHandle?
-    private var roomUnsubscriptionObservationToken: TaskHandle?
     private var roomTimelineObservationToken: TaskHandle?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
@@ -51,16 +49,7 @@ class RoomProxy: RoomProxyProtocol {
     deinit {
         Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
             roomTimelineObservationToken?.cancel()
-            
-            let task = ExpiringTaskRunner {
-                let unsubscribeTask = slidingSyncRoom.unsubscribeFromRoom()
-                
-                while !unsubscribeTask.isFinished() {
-                    try await Task.sleep(for: .seconds(2))
-                }
-            }
-            
-            try? await task.run(timeout: .seconds(30))
+            slidingSyncRoom.unsubscribeFromRoom()
         }
     }
 
@@ -184,7 +173,7 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
-        roomSubscriptionObservationToken = slidingSyncRoom.subscribeToRoom(settings: settings)
+        slidingSyncRoom.subscribeToRoom(settings: settings)
         
         let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
             self?.updatesSubject.send(timelineDiff)
