@@ -153,7 +153,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     private func showLoadingIndicator() {
         userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                               type: .modal,
+                                                               type: .modal(interactiveDismissDisabled: true),
                                                                title: L10n.commonLoading,
                                                                persistent: true))
     }
