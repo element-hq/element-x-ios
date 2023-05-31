@@ -26,11 +26,15 @@ struct TimelineStyler<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     var body: some View {
+        // Assign an unique identifier to the stylers so that SwiftUI doesn't get confused
+        // e.g. prevent timeline action menu automatically dismissing on timeline refreshes
         switch style {
         case .plain:
             TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
+                .id("styler-\(timelineItem.id)")
         case .bubbles:
             TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
+                .id("styler-\(timelineItem.id)")
         }
     }
 }
