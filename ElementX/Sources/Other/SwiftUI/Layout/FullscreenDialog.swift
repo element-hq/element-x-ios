@@ -24,6 +24,8 @@ import SwiftUI
 /// The background color behind the buttons is read from the `backgroundStyle`
 /// environment value, so make sure to set this to match the screen's background.
 struct FullscreenDialog<Content: View, BottomContent: View>: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    
     /// Padding applied to the top of the content automatically. Use `UIConstants` for preset values.
     var topPadding: CGFloat = UIConstants.titleTopPaddingToNavigationBar
     /// Padding applied to the content and buttons automatically
@@ -37,6 +39,15 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     @ViewBuilder var bottomContent: () -> BottomContent
     
     var body: some View {
+        if dynamicTypeSize < .accessibility1 {
+            standardLayout
+        } else {
+            accessibilityLayout
+        }
+    }
+    
+    /// A layout where the content scrolls with the bottom content overlaid. Used with regular font sizes.
+    var standardLayout: some View {
         GeometryReader { geometry in
             ScrollView {
                 VStack {
@@ -63,6 +74,35 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
                 }
                 .background()
             }
+        }
+    }
+    
+    /// A continuously scrolling layout used for accessibility font sizes.
+    var accessibilityLayout: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    Spacer()
+                        .frame(height: UIConstants.spacerHeight(in: geometry))
+                    
+                    content()
+                        .readableFrame()
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.top, topPadding)
+                    
+                    Spacer(minLength: spacing)
+                    
+                    bottomContent()
+                        .readableFrame()
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.bottom, UIConstants.actionButtonBottomPadding)
+                    
+                    Spacer()
+                        .frame(height: UIConstants.spacerHeight(in: geometry))
+                }
+                .frame(minHeight: geometry.size.height)
+            }
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 }
