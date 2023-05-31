@@ -30,7 +30,7 @@ extension Publisher where Output == String, Failure == Never {
     /// Clearing the text publishes the update immediately.
     func debounceAndRemoveDuplicates() -> AnyPublisher<String, Never> {
         map { query in
-            let milliseconds = query.isEmpty ? 0 : 500
+            let milliseconds = query.isEmpty ? 0 : 250
             return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
         }
         .switchToLatest()
