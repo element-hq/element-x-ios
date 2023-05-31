@@ -17,9 +17,13 @@
 import Combine
 import Foundation
 
-enum UserIndicatorType {
+enum UserIndicatorType: Equatable {
     case toast
-    case modal
+    case modal(interactiveDismissDisabled: Bool)
+    
+    static var modal: Self {
+        .modal(interactiveDismissDisabled: false)
+    }
 }
 
 struct UserIndicator: Equatable, Identifiable {
@@ -49,6 +53,15 @@ struct UserIndicator: Equatable, Identifiable {
             return Empty().eraseToAnyPublisher()
         case .some(.progress(let progress)):
             return progress.publisher.eraseToAnyPublisher()
+        }
+    }
+    
+    var interactiveDismissDisabled: Bool {
+        switch type {
+        case .toast:
+            return false
+        case .modal(let interactiveDismissDisabled):
+            return interactiveDismissDisabled
         }
     }
 }
