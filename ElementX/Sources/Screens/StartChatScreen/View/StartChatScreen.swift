@@ -65,6 +65,7 @@ struct StartChatScreen: View {
         Section {
             Button(action: createRoom) {
                 Label(L10n.actionCreateARoom, systemImage: "person.3")
+                    .imageScale(.small)
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         }
