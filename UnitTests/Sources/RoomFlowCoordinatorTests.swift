@@ -60,9 +60,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     func testRoomDetailsPresentation() async {
         await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
         await process(route: .roomList, expectedAction: .dismissedRoom)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
@@ -70,18 +68,58 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     func testStackUnwinding() async {
         await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
-        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
-        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
         await process(route: .room(roomID: "2"), expectedAction: .presentedRoom("2"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
     }
     
+    func testNoOp() async {
+        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        
+        await process(route: .roomDetails(roomID: "1"), expectedAction: nil)
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+    }
+    
+    func testSwitchToDifferentDetails() async {
+        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        
+        await process(route: .roomDetails(roomID: "2"), expectedAction: .presentedRoom("2"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+    }
+    
+    func testPushDetails() async {
+        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        
+        await process(route: .roomDetails(roomID: "1"), expectedAction: nil)
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
+    }
+    
+    func testReplaceDetailsWithTimeline() async {
+        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
+        
+        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+    }
+    
     // MARK: - Private
     
-    func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async {
-        Task { try? await Task.sleep(for: .seconds(0.1)); roomFlowCoordinator.handleAppRoute(route, animated: true) }
-        _ = await roomFlowCoordinator.actions.values.first(where: { $0 == expectedAction })
+    func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction?) async {
+        let routeTask = Task.detached(priority: .low) {
+            try? await Task.sleep(for: .seconds(0.2))
+            await self.roomFlowCoordinator.handleAppRoute(route, animated: true)
+        }
+        
+        if let expectedAction {
+            _ = await roomFlowCoordinator.actions.values.first(where: { $0 == expectedAction })
+        } else {
+            await routeTask.value
+        }
     }
 }

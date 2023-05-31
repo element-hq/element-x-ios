@@ -25,7 +25,6 @@ struct RoomDetailsScreenCoordinatorParameters {
 }
 
 enum RoomDetailsScreenCoordinatorAction {
-    case cancel
     case leftRoom
 }
 
@@ -58,8 +57,6 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 self.presentRoomMembersList(members)
             case .requestInvitePeoplePresentation(let members):
                 self.presentInviteUsersScreen(members: members)
-            case .cancel:
-                self.callback?(.cancel)
             case .leftRoom:
                 self.callback?(.leftRoom)
             case .requestEditDetailsPresentation(let accountOwner):
