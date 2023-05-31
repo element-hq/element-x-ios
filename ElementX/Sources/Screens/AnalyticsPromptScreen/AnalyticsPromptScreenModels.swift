@@ -38,8 +38,8 @@ struct AnalyticsPromptScreenViewState: BindableState {
 /// A collection of strings for the UI that need to be parsed from HTML
 struct AnalyticsPromptScreenStrings {
     let optInContent: AttributedString
-    let point1 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptDataUsage) ?? AttributedString(L10n.screenAnalyticsPromptDataUsage)
-    let point2 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptThirdPartySharing) ?? AttributedString(L10n.screenAnalyticsPromptThirdPartySharing)
+    let point1 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptDataUsage)?.replacingFontWithPresentationIntent() ?? AttributedString(L10n.screenAnalyticsPromptDataUsage)
+    let point2 = AttributedStringBuilder().fromHTML(L10n.screenAnalyticsPromptThirdPartySharing)?.replacingFontWithPresentationIntent() ?? AttributedString(L10n.screenAnalyticsPromptThirdPartySharing)
     let point3 = L10n.screenAnalyticsPromptSettings
     
     init(termsURL: URL) {

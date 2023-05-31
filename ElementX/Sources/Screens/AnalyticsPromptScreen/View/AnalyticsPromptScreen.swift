@@ -18,37 +18,16 @@ import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.
 struct AnalyticsPromptScreen: View {
-    private let horizontalPadding: CGFloat = 16
-    
     @ObservedObject var context: AnalyticsPromptScreenViewModel.Context
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
-                
-                mainContent
-                    .readableFrame()
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.top, UIConstants.onboardingBreakerScreenTopPadding)
-                    .padding(.bottom, 8)
-            }
-            .safeAreaInset(edge: .bottom) {
-                VStack {
-                    buttons
-                        .readableFrame()
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.bottom, UIConstants.actionButtonBottomPadding)
-                    
-                    Spacer()
-                        .frame(height: UIConstants.spacerHeight(in: geometry))
-                }
-                .padding(.top, 8)
-                .background(Color.element.background.ignoresSafeArea())
-            }
-            .background(Color.element.background.ignoresSafeArea())
+        FullscreenDialog(topPadding: UIConstants.onboardingBreakerScreenTopPadding) {
+            mainContent
+        } bottomContent: {
+            buttons
         }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
@@ -95,7 +74,7 @@ struct AnalyticsPromptScreen: View {
     
     /// The stack of enable/disable buttons.
     private var buttons: some View {
-        VStack {
+        VStack(spacing: 16) {
             Button { context.send(viewAction: .enable) } label: {
                 Text(L10n.actionEnable)
                     .font(.compound.bodyLGSemibold)
@@ -106,7 +85,7 @@ struct AnalyticsPromptScreen: View {
             Button { context.send(viewAction: .disable) } label: {
                 Text(L10n.actionNotNow)
                     .font(.compound.bodyLGSemibold)
-                    .padding(12)
+                    .padding(14)
             }
             .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)
         }

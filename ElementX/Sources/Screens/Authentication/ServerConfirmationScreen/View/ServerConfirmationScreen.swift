@@ -20,20 +20,13 @@ struct ServerConfirmationScreen: View {
     @ObservedObject var context: ServerConfirmationScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {
             header
-                .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
-                .padding(.horizontal, 16)
-                .readableFrame()
-        }
-        .background(Color.element.background.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom) {
+        } bottomContent: {
             buttons
-                .padding(.horizontal, 16)
-                .padding(.vertical, 16)
-                .readableFrame()
-                .background(Color.element.background.ignoresSafeArea())
         }
+        .background()
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
         .introspectViewController { viewController in
             guard let window = viewController.view.window else { return }
             context.send(viewAction: .updateWindow(window))
@@ -62,7 +55,7 @@ struct ServerConfirmationScreen: View {
     
     /// The action buttons shown at the bottom of the view.
     var buttons: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 16) {
             Button { context.send(viewAction: .confirm) } label: {
                 Text(L10n.actionContinue)
             }
@@ -72,7 +65,7 @@ struct ServerConfirmationScreen: View {
             Button { context.send(viewAction: .changeServer) } label: {
                 Text(L10n.screenServerConfirmationChangeServer)
                     .font(.compound.bodyLGSemibold)
-                    .padding(.vertical, 14)
+                    .padding(14)
             }
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
         }
