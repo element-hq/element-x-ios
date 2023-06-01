@@ -23,7 +23,6 @@ struct InvitesScreenCell: View {
     let acceptAction: () -> Void
     let declineAction: () -> Void
     
-    private let verticalInsets = 16.0
     @ScaledMetric private var badgeSize = 12.0
     
     var body: some View {
@@ -37,13 +36,13 @@ struct InvitesScreenCell: View {
             
             mainContent
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, verticalInsets)
+                .padding(.bottom, 16)
                 .padding(.trailing, 16)
                 .overlay(alignment: .bottom) {
                     separator
                 }
         }
-        .padding(.top, verticalInsets)
+        .padding(.top, 12)
         .padding(.leading, 16)
     }
     
@@ -75,12 +74,13 @@ struct InvitesScreenCell: View {
     @ViewBuilder
     private var inviterView: some View {
         if let invitedText = attributedInviteText, let name = invite.inviter?.displayName {
-            HStack {
+            HStack(alignment: .firstTextBaseline) {
                 LoadableAvatarImage(url: invite.inviter?.avatarURL,
                                     name: name,
                                     contentID: name,
                                     avatarSize: .custom(16),
                                     imageProvider: imageProvider)
+                    .alignmentGuide(.firstTextBaseline) { $0[.bottom] * 0.8 }
                 
                 Text(invitedText)
             }
@@ -150,6 +150,7 @@ struct InvitesScreenCell: View {
         attributedString.foregroundColor = .compound.textPlaceholder
         if let range = attributedString.range(of: inviterName) {
             attributedString[range].foregroundColor = .compound.textPrimary
+            attributedString[range].font = .compound.bodyMDSemibold
         }
         return attributedString
     }
@@ -164,13 +165,19 @@ struct InvitesScreenCell: View {
 struct InvitesScreenCell_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
-            InvitesScreenCell(invite: .dm, imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
-            
-            InvitesScreenCell(invite: .room(), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
-            
-            InvitesScreenCell(invite: .room(isUnread: false), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
-            
-            InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+            VStack(spacing: 0) {
+                InvitesScreenCell(invite: .dm, imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+                
+                InvitesScreenCell(invite: .room(), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+                
+                InvitesScreenCell(invite: .room(isUnread: false), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+                
+                InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+                
+                InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
+                    .dynamicTypeSize(.accessibility1)
+                    .previewDisplayName("Aliased room (AX1)")
+            }
         }
     }
 }
@@ -193,11 +200,11 @@ private extension InvitesScreenRoomDetails {
         return .init(roomDetails: dmRoom, inviter: inviter, isUnread: false)
     }
     
-    static func room(alias: String? = nil, isUnread: Bool = true) -> InvitesScreenRoomDetails {
+    static func room(alias: String? = nil, avatarURL: URL? = nil, isUnread: Bool = true) -> InvitesScreenRoomDetails {
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Awesome Room",
                                         isDirect: false,
-                                        avatarURL: nil,
+                                        avatarURL: avatarURL,
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
                                         unreadNotificationCount: 0,
@@ -205,8 +212,33 @@ private extension InvitesScreenRoomDetails {
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
         inviter.userID = "@jack:somewhere.nl"
-        inviter.avatarURL = nil
+        inviter.avatarURL = avatarURL
         
         return .init(roomDetails: dmRoom, inviter: inviter, isUnread: isUnread)
+    }
+}
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (1, 1, 1, 0)
+        }
+
+        self.init(.sRGB,
+                  red: Double(r) / 255,
+                  green: Double(g) / 255,
+                  blue: Double(b) / 255,
+                  opacity: Double(a) / 255)
     }
 }

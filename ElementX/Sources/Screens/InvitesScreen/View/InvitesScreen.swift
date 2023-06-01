@@ -22,7 +22,7 @@ struct InvitesScreen: View {
     var body: some View {
         ScrollView {
             if let rooms = context.viewState.invites, !rooms.isEmpty {
-                LazyVStack {
+                LazyVStack(spacing: 0) {
                     ForEach(rooms, id: \.roomDetails.id) { invite in
                         InvitesScreenCell(invite: invite,
                                           imageProvider: context.imageProvider,
