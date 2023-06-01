@@ -21,6 +21,8 @@ struct InviteUsersScreenSelectedItem: View {
     let imageProvider: ImageProviderProtocol?
     let dismissAction: () -> Void
     
+    @ScaledMetric private var buttonSize: CGFloat = 20
+    
     var body: some View {
         VStack(spacing: 4) {
             LoadableAvatarImage(url: user.avatarURL,
@@ -29,13 +31,15 @@ struct InviteUsersScreenSelectedItem: View {
                                 avatarSize: .user(on: .inviteUsers),
                                 imageProvider: imageProvider)
             Text(user.displayName ?? user.userID)
-                .font(.compound.headingSM)
+                .font(.compound.bodyMD)
                 .foregroundColor(.element.primaryContent)
                 .lineLimit(1)
         }
         .overlay(alignment: .topTrailing) {
             Button(action: dismissAction) {
                 Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .frame(width: buttonSize, height: buttonSize)
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(Color.element.systemPrimaryBackground, Color.element.primaryContent)
             }
