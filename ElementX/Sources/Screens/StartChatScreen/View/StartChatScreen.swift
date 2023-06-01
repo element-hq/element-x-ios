@@ -100,6 +100,8 @@ struct StartChatScreen: View {
             }
             .listRowSeparator(.automatic)
             .formSectionStyle()
+        } else {
+            Section.empty
         }
     }
     
