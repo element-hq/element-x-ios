@@ -69,24 +69,29 @@ struct InviteUsersScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
+    @ViewBuilder
     private var usersSection: some View {
-        Section {
-            ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                Button { context.send(viewAction: .toggleUser(user)) } label: {
-                    UserProfileCell(user: user,
-                                    membership: context.viewState.membershipState(user),
-                                    imageProvider: context.imageProvider)
+        if !context.viewState.usersSection.users.isEmpty {
+            Section {
+                ForEach(context.viewState.usersSection.users, id: \.userID) { user in
+                    Button { context.send(viewAction: .toggleUser(user)) } label: {
+                        UserProfileCell(user: user,
+                                        membership: context.viewState.membershipState(user),
+                                        imageProvider: context.imageProvider)
+                    }
+                    .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
+                                                 accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
                 }
-                .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
-                                             accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+            } header: {
+                if let title = context.viewState.usersSection.title {
+                    Text(title)
+                }
             }
-        } header: {
-            if let title = context.viewState.usersSection.title {
-                Text(title)
-            }
+            .listRowSeparator(.automatic)
+            .formSectionStyle()
+        } else {
+            Section.empty
         }
-        .listRowSeparator(.automatic)
-        .formSectionStyle()
     }
     
     @State private var frame: CGRect = .zero
