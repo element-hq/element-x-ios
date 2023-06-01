@@ -26,32 +26,26 @@ struct CreateRoomScreen: View {
     }
 
     var body: some View {
-        mainContent
-            .scrollDismissesKeyboard(.immediately)
-            .elementFormStyle()
-            .navigationTitle(L10n.screenCreateRoomTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    createButton
-                }
-            }
-            .background(ViewFrameReader(frame: $frame))
-            .alert(item: $context.alertInfo) { $0.alert }
-    }
-    
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
         Form {
             roomSection
             topicSection
-            Spacer()
-                .listRowBackground(Color.clear)
             securitySection
+                .padding(.top, 40)
         }
+        .elementFormStyle()
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(L10n.screenCreateRoomTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                createButton
+            }
+        }
+        .background(ViewFrameReader(frame: $frame))
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
-    @ScaledMetric private var roomIconSize: CGFloat = 64
+    @ScaledMetric private var roomIconSize: CGFloat = 70
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
@@ -111,6 +105,7 @@ struct CreateRoomScreen: View {
     
     private var cameraImage: some View {
         Image(systemName: "camera")
+            .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.element.secondaryContent)
             .frame(width: roomIconSize, height: roomIconSize)
             .background(Color.element.quinaryContent)
@@ -150,7 +145,7 @@ struct CreateRoomScreen: View {
                     .frame(width: invitedUserCellWidth)
                 }
             }
-            .padding(.init(top: 16, leading: 32, bottom: 16, trailing: 32))
+            .padding(.init(top: 16, leading: 32, bottom: 0, trailing: 32))
         }
         .frame(width: frame.width)
     }
