@@ -29,6 +29,7 @@ struct StartChatScreen: View {
             }
         }
         .elementFormStyle()
+        .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

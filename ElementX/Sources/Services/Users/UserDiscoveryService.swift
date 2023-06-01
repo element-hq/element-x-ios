@@ -30,7 +30,7 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
     func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
         do {
             async let queriedProfile = try? profileIfPossible(with: searchQuery).get()
-            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 5)
+            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 10)
             let users = try await merge(searchQuery: searchQuery, queriedProfile: queriedProfile, searchResults: searchedUsers.get())
             return .success(users)
         } catch {
