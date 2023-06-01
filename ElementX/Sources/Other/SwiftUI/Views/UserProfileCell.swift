@@ -39,7 +39,7 @@ struct UserProfileCell: View {
                 subtitleContent
                 
                 warningContent
-                    .padding(.top, 4)
+                    .padding(.top, 2)
             }
             .accessibilityElement(children: .combine)
         }
