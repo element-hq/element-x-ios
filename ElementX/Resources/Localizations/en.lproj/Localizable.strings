@@ -193,8 +193,8 @@
 "screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
 "screen_change_server_subtitle" = "What is the address of your server?";
 "screen_create_room_action_create_room" = "New room";
-"screen_create_room_action_invite_people" = "Invite people";
-"screen_create_room_add_people_title" = "Add people";
+"screen_create_room_action_invite_people" = "Invite friends to Element";
+"screen_create_room_add_people_title" = "Invite people";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.";
 "screen_create_room_private_option_title" = "Private room (invite only)";
@@ -220,6 +220,10 @@
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
+"screen_onboarding_sign_in_manually" = "Sign in manually";
+"screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
+"screen_onboarding_sign_up" = "Create account";
+"screen_onboarding_subtitle" = "Communicate and collaborate securely";
 "screen_onboarding_welcome_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Be in your Element";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
@@ -356,7 +360,7 @@
 "screen_login_submit" = "Continue";
 "screen_login_username_hint" = "Username";
 "screen_report_content_block_user" = "Block user";
-"screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_invite_people_title" = "Invite friends to Element";
 "screen_room_details_leave_room_title" = "Leave room";
 "screen_room_details_people_title" = "People";
 "screen_room_details_security_title" = "Security";

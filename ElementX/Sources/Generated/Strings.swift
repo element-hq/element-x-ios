@@ -492,9 +492,9 @@ public enum L10n {
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite people
+  /// Invite friends to Element
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
-  /// Add people
+  /// Invite people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
   /// An error occurred when creating the room
   public static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
@@ -576,6 +576,14 @@ public enum L10n {
   public static var screenMediaUploadPreviewErrorFailedProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_processing") }
   /// Failed uploading media, please try again.
   public static var screenMediaUploadPreviewErrorFailedSending: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_sending") }
+  /// Sign in manually
+  public static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
+  /// Sign in with QR code
+  public static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
+  /// Create account
+  public static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
+  /// Communicate and collaborate securely
+  public static var screenOnboardingSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_subtitle") }
   /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
   public static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
@@ -612,7 +620,7 @@ public enum L10n {
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
   public static var screenRoomDetailsEncryptionEnabledTitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_title") }
-  /// Invite people
+  /// Invite friends to Element
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
