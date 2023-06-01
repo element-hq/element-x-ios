@@ -187,7 +187,8 @@ struct CreateRoomScreen: View {
                 .formSectionHeader()
                 .padding(.top, 40)
         }
-        .formSectionStyle()
+        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowBackground(Color.element.formRowBackground)
     }
     
     private var createButton: some View {
