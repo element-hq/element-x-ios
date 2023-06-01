@@ -170,7 +170,17 @@ final class AppSettings {
     // MARK: - Other
     
     let permalinkBaseURL = URL(staticString: "https://matrix.to")
+    
+    // MARK: - Maps
+    
+    // dynamic
+    let lightTileMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/style.json"
+    let darkTileMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/style.json"
 
+    // static
+    let lightTileStaticMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/{z}/{x}/{y}.png"
+    let darkTileStaticMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/{z}/{x}/{y}.png"
+    
     // MARK: - Feature Flags
     
     // MARK: Start Chat
