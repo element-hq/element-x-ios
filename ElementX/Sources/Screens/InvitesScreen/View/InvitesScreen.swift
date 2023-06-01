@@ -34,6 +34,7 @@ struct InvitesScreen: View {
                 noInvitesContent
             }
         }
+        .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.actionInvitesList)
         .alert(item: $context.alertInfo) { $0.alert }
     }
