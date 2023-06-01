@@ -30,7 +30,6 @@ struct CreateRoomScreen: View {
             roomSection
             topicSection
             securitySection
-                .padding(.top, 40)
         }
         .elementFormStyle()
         .scrollDismissesKeyboard(.immediately)
@@ -154,23 +153,26 @@ struct CreateRoomScreen: View {
         Section {
             Picker(L10n.commonSecurity, selection: $context.isRoomPrivate) {
                 Label {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenCreateRoomPrivateOptionTitle)
+                            .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPrivateOptionDescription)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.element.secondaryContent)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.element.tertiaryContent)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
                 }
                 .tag(true)
                 .labelStyle(FormRowLabelStyle(alignment: .top))
+                
                 Label {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenCreateRoomPublicOptionTitle)
+                            .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPublicOptionDescription)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.element.secondaryContent)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.element.tertiaryContent)
                     }
                 } icon: {
                     Image(systemName: "exclamationmark.shield")
@@ -183,6 +185,7 @@ struct CreateRoomScreen: View {
         } header: {
             Text(L10n.commonSecurity.uppercased())
                 .formSectionHeader()
+                .padding(.top, 40)
         }
         .formSectionStyle()
     }
