@@ -49,25 +49,23 @@ struct InvitesScreenCell: View {
     // MARK: - Private
 
     private var mainContent: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            informationalContent
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 16) {
+                textualContent
+                    .padding(.trailing, invite.isUnread ? 0 : 16)
+                
+                if invite.isUnread {
+                    badge
+                }
+            }
+            
+            inviterView
+                .padding(.top, 6)
+                .padding(.trailing, 16)
             
             buttons
+                .padding(.top, 14)
                 .padding(.trailing, 22)
-        }
-    }
-
-    @ViewBuilder
-    private var informationalContent: some View {
-        HStack(alignment: .firstTextBaseline) {
-            VStack(alignment: .leading, spacing: 6) {
-                textualContent
-                inviterView
-            }
-            
-            if invite.isUnread {
-                badge
-            }
         }
     }
 
@@ -211,7 +209,7 @@ private extension InvitesScreenRoomDetails {
                                         canonicalAlias: alias)
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
-        inviter.userID = "@jack:somewhere.nl"
+        inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
         return .init(roomDetails: dmRoom, inviter: inviter, isUnread: isUnread)
