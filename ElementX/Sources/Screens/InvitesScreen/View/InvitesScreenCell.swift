@@ -130,11 +130,15 @@ struct InvitesScreenCell: View {
     }
     
     private var attributedInviteText: AttributedString? {
-        guard invite.roomDetails.isDirect == false, let inviterName = invite.inviter?.displayName else {
+        guard
+            invite.roomDetails.isDirect == false,
+            let inviterName = invite.inviter?.displayName,
+            let inviterID = invite.inviter?.userID
+        else {
             return nil
         }
         
-        let text = L10n.screenInvitesInvitedYou(inviterName)
+        let text = L10n.screenInvitesInvitedYou(inviterName, inviterID)
         var attributedString = AttributedString(text)
         attributedString.font = .compound.bodyMD
         attributedString.foregroundColor = .compound.textPlaceholder

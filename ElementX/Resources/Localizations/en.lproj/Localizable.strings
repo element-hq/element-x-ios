@@ -209,6 +209,7 @@
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline to chat with %1$@?";
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
+"screen_invites_invited_you" = "%1$@ (%2$@) invited you";
 "screen_login_error_deactivated_account" = "This account has been deactivated.";
 "screen_login_error_invalid_credentials" = "Incorrect username and/or password";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
@@ -355,7 +356,6 @@
 "screen_dm_details_unblock_alert_action" = "Unblock";
 "screen_dm_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
 "screen_dm_details_unblock_user" = "Unblock user";
-"screen_invites_invited_you" = "%1$@ invited you";
 "screen_login_password_hint" = "Password";
 "screen_login_submit" = "Continue";
 "screen_login_username_hint" = "Username";

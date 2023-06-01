@@ -542,9 +542,9 @@ public enum L10n {
   public static var screenInvitesDeclineDirectChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_direct_chat_title") }
   /// No Invites
   public static var screenInvitesEmptyList: String { return L10n.tr("Localizable", "screen_invites_empty_list") }
-  /// %1$@ invited you
-  public static func screenInvitesInvitedYou(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1))
+  /// %1$@ (%2$@) invited you
+  public static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
   /// This account has been deactivated.
   public static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
