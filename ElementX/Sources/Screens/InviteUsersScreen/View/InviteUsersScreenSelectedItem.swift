@@ -24,7 +24,7 @@ struct InviteUsersScreenSelectedItem: View {
     @ScaledMetric private var buttonSize: CGFloat = 20
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 0) {
             LoadableAvatarImage(url: user.avatarURL,
                                 name: user.displayName,
                                 contentID: user.userID,
