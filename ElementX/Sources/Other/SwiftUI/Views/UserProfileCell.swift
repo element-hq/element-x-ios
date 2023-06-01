@@ -108,13 +108,13 @@ struct UserProfileCell_Previews: PreviewProvider {
             Button(action: action) {
                 UserProfileCell(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true, isDisabled: true)))
             .previewDisplayName("Selected disabled user")
             
             Button(action: action) {
                 UserProfileCell(user: .init(userID: "@someone:matrix.org"), membership: .join, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true, isDisabled: true)))
             .previewDisplayName("Unverified joined user")
             
             Button(action: action) {

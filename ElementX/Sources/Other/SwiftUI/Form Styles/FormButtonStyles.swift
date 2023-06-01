@@ -20,7 +20,7 @@ import SwiftUI
 enum FormRowAccessory: View {
     case navigationLink
     case progressView
-    case selection(isSelected: Bool)
+    case selection(isSelected: Bool, isDisabled: Bool = false)
     
     var body: some View {
         switch self {
@@ -30,10 +30,10 @@ enum FormRowAccessory: View {
                 .foregroundColor(.element.quaternaryContent)
         case .progressView:
             ProgressView()
-        case .selection(let isSelected):
+        case .selection(let isSelected, let isDisabled):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
-                .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
+                .foregroundColor(isSelected && !isDisabled ? .element.primaryContent : .element.tertiaryContent)
         }
     }
 }
@@ -44,8 +44,6 @@ enum FormRowAccessory: View {
 /// to change the background colour depending on whether the button is currently pressed or not.
 struct FormButtonStyle: PrimitiveButtonStyle {
     var iconAlignment: VerticalAlignment = .firstTextBaseline
-    /// Disables the button while providing an entry point for UI customizations
-    var isDisabled = false
     /// An accessory to be added on the trailing side of the row.
     var accessory: FormRowAccessory?
     
@@ -55,14 +53,12 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                 .labelStyle(FormRowLabelStyle(alignment: iconAlignment, role: configuration.role))
                 .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
-        .buttonStyle(Style(isDisabled: isDisabled, accessory: accessory))
+        .buttonStyle(Style(accessory: accessory))
         .listRowInsets(EdgeInsets()) // Remove insets so the background fills the cell.
-        .disabled(isDisabled)
     }
     
     /// Inner style used to set the pressed background colour.
     struct Style: ButtonStyle {
-        var isDisabled: Bool
         var accessory: FormRowAccessory?
         
         func makeBody(configuration: Configuration) -> some View {
@@ -73,7 +69,6 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 accessory
-                    .opacity(isDisabled ? 0.54 : 1)
             }
             .contentShape(Rectangle())
             .padding(FormRow.insets) // Re-apply the normal insets using padding.
@@ -142,7 +137,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 Button { } label: {
                     Text("Selected (disabled)")
                 }
-                .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true, isDisabled: true)))
                 Button { } label: {
                     Text("Unselected")
                 }
