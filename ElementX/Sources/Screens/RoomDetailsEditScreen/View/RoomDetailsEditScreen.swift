@@ -89,7 +89,7 @@ struct RoomDetailsEditScreen: View {
             
             TextField(L10n.commonRoomName,
                       text: $context.name,
-                      prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
+                      prompt: canEditName ? Text(L10n.commonRoomNamePlaceholder) : nil,
                       axis: .horizontal)
                 .focused($focus, equals: .name)
                 .font(.compound.bodyLG)
@@ -110,7 +110,7 @@ struct RoomDetailsEditScreen: View {
             
             TextField(L10n.commonTopic,
                       text: $context.topic,
-                      prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
+                      prompt: canEditTopic ? Text(L10n.commonTopicPlaceholder) : nil,
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .font(.compound.bodyLG)

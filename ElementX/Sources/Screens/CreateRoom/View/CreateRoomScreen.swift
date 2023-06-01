@@ -94,7 +94,7 @@ struct CreateRoomScreen: View {
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
-                              prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
+                              prompt: Text(L10n.commonRoomNamePlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -121,7 +121,7 @@ struct CreateRoomScreen: View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
-                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
+                      prompt: Text(L10n.commonTopicPlaceholder),
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)

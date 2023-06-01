@@ -198,6 +198,8 @@ public enum L10n {
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Room name
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
+  /// e.g. Product Sprint
+  public static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
@@ -224,6 +226,8 @@ public enum L10n {
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
+  /// What is this room about?
+  public static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
   /// Unable to decrypt
   public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
   /// We were unable to successfully send invites to one or more users.
@@ -626,10 +630,16 @@ public enum L10n {
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
+  /// Room name
+  public static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
+  /// e.g. Product Sprint
+  public static var screenRoomDetailsRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_room_details_room_name_placeholder") }
   /// Security
   public static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
   /// Share room
   public static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
+  /// What is this room about?
+  public static var screenRoomDetailsTopicPlaceholder: String { return L10n.tr("Localizable", "screen_room_details_topic_placeholder") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…

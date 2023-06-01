@@ -88,6 +88,7 @@
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
 "common_room_name" = "Room name";
+"common_room_name_placeholder" = "e.g. Product Sprint";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
@@ -101,6 +102,7 @@
 "common_success" = "Success";
 "common_suggestions" = "Suggestions";
 "common_topic" = "Topic";
+"common_topic_placeholder" = "What is this room about?";
 "common_unable_to_decrypt" = "Unable to decrypt";
 "common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
@@ -241,7 +243,10 @@
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
+"screen_room_details_room_name_label" = "Room name";
+"screen_room_details_room_name_placeholder" = "e.g. Product Sprint";
 "screen_room_details_share_room_title" = "Share room";
+"screen_room_details_topic_placeholder" = "What is this room about?";
 "screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
