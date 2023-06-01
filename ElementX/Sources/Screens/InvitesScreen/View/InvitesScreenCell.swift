@@ -38,12 +38,13 @@ struct InvitesScreenCell: View {
             mainContent
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, verticalInsets)
+                .padding(.trailing, 16)
                 .overlay(alignment: .bottom) {
                     separator
                 }
         }
         .padding(.top, verticalInsets)
-        .padding(.horizontal, 16)
+        .padding(.leading, 16)
     }
     
     // MARK: - Private
@@ -170,9 +171,6 @@ struct InvitesScreenCell_Previews: PreviewProvider {
             InvitesScreenCell(invite: .room(isUnread: false), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
             
             InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
-            
-            InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
-                .dynamicTypeSize(.accessibility1)
         }
     }
 }
