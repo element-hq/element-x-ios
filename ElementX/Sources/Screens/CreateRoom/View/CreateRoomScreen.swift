@@ -37,7 +37,7 @@ struct CreateRoomScreen: View {
         .navigationTitle(L10n.screenCreateRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem {
                 createButton
             }
         }
