@@ -30,9 +30,6 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
-        // Login Screen: Confirm password login is available and not OIDC.
-        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.oidc].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
-        
         // Login Screen: Enter valid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
@@ -86,7 +83,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
-        // Then the login form should be updated for OIDC.
-        XCTAssertTrue(app.buttons[A11yIdentifiers.loginScreen.oidc].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")
+        // Then the login form shouldn't be shown as OIDC will be used instead.
+        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.continue].waitForExistence(timeout: 1), "The login screen should not be shown after selecting a homeserver with OIDC.")
     }
 }
