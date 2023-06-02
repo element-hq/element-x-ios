@@ -74,7 +74,6 @@ struct A11yIdentifiers {
         let emailUsername = "login-email_username"
         let password = "login-password"
         let `continue` = "login-continue"
-        let oidc = "login-oidc"
         let unsupportedServer = "login-unsupported_server"
     }
     
