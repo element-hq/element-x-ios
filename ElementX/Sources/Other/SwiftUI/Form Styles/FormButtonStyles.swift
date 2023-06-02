@@ -17,24 +17,46 @@
 import SwiftUI
 
 /// A view to be added on the trailing edge of a form row.
-enum FormRowAccessory: View {
-    case navigationLink
-    case progressView
-    case selection(isSelected: Bool, isDisabled: Bool = false)
+struct FormRowAccessory: View {
+    @Environment(\.isEnabled) private var isEnabled
+    
+    enum Kind {
+        case navigationLink
+        case progressView
+        case selection(isSelected: Bool)
+    }
+    
+    let kind: Kind
+    
+    static var navigationLink: Self {
+        .init(kind: .navigationLink)
+    }
+    
+    static var progressView: Self {
+        .init(kind: .progressView)
+    }
+    
+    static func selection(isSelected: Bool) -> Self {
+        .init(kind: .selection(isSelected: isSelected))
+    }
     
     var body: some View {
-        switch self {
+        switch kind {
         case .navigationLink:
             Image(systemName: "chevron.forward")
                 .font(.compound.bodyMD.bold())
                 .foregroundColor(.element.quaternaryContent)
         case .progressView:
             ProgressView()
-        case .selection(let isSelected, let isDisabled):
+        case .selection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
-                .foregroundColor(isSelected && !isDisabled ? .element.primaryContent : .element.tertiaryContent)
+                .foregroundColor(isSelected && isEnabled ? .element.primaryContent : .element.tertiaryContent)
         }
+    }
+    
+    private init(kind: Kind) {
+        self.kind = kind
     }
 }
 
@@ -44,6 +66,8 @@ enum FormRowAccessory: View {
 /// to change the background colour depending on whether the button is currently pressed or not.
 struct FormButtonStyle: PrimitiveButtonStyle {
     var iconAlignment: VerticalAlignment = .firstTextBaseline
+    /// Disables the button while providing an entry point for UI customizations
+    var isDisabled = false
     /// An accessory to be added on the trailing side of the row.
     var accessory: FormRowAccessory?
     
@@ -53,12 +77,14 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                 .labelStyle(FormRowLabelStyle(alignment: iconAlignment, role: configuration.role))
                 .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
-        .buttonStyle(Style(accessory: accessory))
+        .buttonStyle(Style(isDisabled: isDisabled, accessory: accessory))
         .listRowInsets(EdgeInsets()) // Remove insets so the background fills the cell.
+        .disabled(isDisabled)
     }
     
     /// Inner style used to set the pressed background colour.
-    struct Style: ButtonStyle {
+    private struct Style: ButtonStyle {
+        var isDisabled: Bool
         var accessory: FormRowAccessory?
         
         func makeBody(configuration: Configuration) -> some View {
@@ -68,7 +94,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                     .foregroundColor(.element.primaryContent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                accessory
+                accessory?.environment(\.isEnabled, !isDisabled)
             }
             .contentShape(Rectangle())
             .padding(FormRow.insets) // Re-apply the normal insets using padding.
@@ -130,14 +156,17 @@ struct FormButtonStyles_Previews: PreviewProvider {
                     Text("Hello world")
                 }
                 .buttonStyle(FormButtonStyle())
+               
                 Button { } label: {
                     Text("Selected")
                 }
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+                
                 Button { } label: {
                     Text("Selected (disabled)")
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true, isDisabled: true)))
+                .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+               
                 Button { } label: {
                     Text("Unselected")
                 }
