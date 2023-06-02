@@ -126,7 +126,7 @@ private struct MessageComposerReplyHeader: View {
         TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(4.0)
-            .background(.white)
+            .background(Color.element.background)
             .cornerRadius(13.0)
             .padding([.trailing, .vertical], 8.0)
             .padding([.leading], -4.0)
