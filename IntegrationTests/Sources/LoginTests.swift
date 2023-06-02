@@ -31,7 +31,7 @@ class LoginTests: XCTestCase {
             XCTFail("Couldn't retrieve duration")
             return
         }
-        
+        print("LoginTests: \(actualDuration)") 
         XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
     }
     
