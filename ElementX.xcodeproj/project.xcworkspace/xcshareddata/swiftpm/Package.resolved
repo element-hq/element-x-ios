@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "845cce377a4e039a9bac1aaa09f55450dcb638b9",
-        "version" : "2.0.2"
+        "revision" : "3a6afc24d6bde730a19470d4e6b713f44d076ad9",
+        "version" : "2.0.3"
       }
     },
     {
@@ -172,7 +172,7 @@
     {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
         "revision" : "cef5b3f6f11781dd4591bdd1dd0a3d22bd609334",
         "version" : "1.11.0"
