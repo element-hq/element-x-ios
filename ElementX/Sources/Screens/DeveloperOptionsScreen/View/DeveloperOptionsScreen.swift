@@ -85,8 +85,7 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .overlay(effectsView)
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .elementFormStyle()
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
     }

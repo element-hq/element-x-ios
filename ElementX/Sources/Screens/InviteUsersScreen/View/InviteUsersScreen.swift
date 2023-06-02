@@ -22,8 +22,7 @@ struct InviteUsersScreen: View {
     
     var body: some View {
         mainContent
-            .scrollContentBackground(.hidden)
-            .background(Color.element.formBackground.ignoresSafeArea())
+            .elementFormStyle()
             .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

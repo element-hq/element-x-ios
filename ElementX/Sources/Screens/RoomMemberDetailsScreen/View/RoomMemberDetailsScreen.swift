@@ -27,8 +27,7 @@ struct RoomMemberDetailsScreen: View {
                 blockUserSection
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .elementFormStyle()
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .errorAlert(item: $context.errorAlert)
     }

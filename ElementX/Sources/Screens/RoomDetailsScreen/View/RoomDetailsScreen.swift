@@ -41,8 +41,7 @@ struct RoomDetailsScreen: View {
                 leaveRoomSection
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .elementFormStyle()
         .alert(item: $context.alertInfo) { $0.alert }
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
