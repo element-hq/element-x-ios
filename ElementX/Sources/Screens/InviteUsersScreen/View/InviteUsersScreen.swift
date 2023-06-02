@@ -23,6 +23,7 @@ struct InviteUsersScreen: View {
     var body: some View {
         mainContent
             .elementFormStyle()
+            .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
