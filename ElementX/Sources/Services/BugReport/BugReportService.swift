@@ -96,7 +96,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     // swiftlint:disable:next function_body_length
-    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
+    func submitBugReport(_ bugReport: BugReport,
+                         progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
             MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
             MultipartFormData(key: "text", type: .text(value: bugReport.text))
@@ -111,8 +112,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let zippedFiles = try await zipFiles(includeLogs: bugReport.includeLogs,
-                                             includeCrashLog: bugReport.includeCrashLog)
+        let zippedFiles = await zipFiles(includeLogs: bugReport.includeLogs,
+                                         includeCrashLog: bugReport.includeCrashLog)
         //  log or compressed-log
         if !zippedFiles.isEmpty {
             for url in zippedFiles {
@@ -131,7 +132,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         let boundary = "Boundary-\(UUID().uuidString)"
         var body = Data()
         for param in params {
-            try body.appendParam(param, boundary: boundary)
+            do {
+                try body.appendParam(param, boundary: boundary)
+            } catch {
+                MXLog.error("Failed to attach parameter at \(param.key)")
+                // Continue to the next parameter and try to submit something.
+            }
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
@@ -141,30 +147,50 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        let data: Data
+        var delegate: URLSessionTaskDelegate?
         if let progressListener {
             progressSubject
                 .receive(on: DispatchQueue.main)
                 .weakAssign(to: \.value, on: progressListener.progressSubject)
                 .store(in: &cancellables)
-            (data, _) = try await session.data(for: request, delegate: self)
-        } else {
-            (data, _) = try await session.data(for: request)
-        }
-
-        // Parse the JSON data
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let result = try decoder.decode(SubmitBugReportResponse.self, from: data)
-
-        if !result.reportUrl.isEmpty {
-            MXLogger.deleteCrashLog()
-            lastCrashEventId = nil
+            delegate = self
         }
         
-        MXLog.info("Feedback submitted.")
-        
-        return result
+        do {
+            let (data, response) = try await session.data(for: request, delegate: delegate)
+            
+            // TODO: Retry the request a second time if it fails.
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+                MXLog.error("Failed to submit bug report: \(errorDescription)")
+                MXLog.error("Response: \(response)")
+                return .failure(.serverError(response, errorDescription))
+            }
+            
+            guard httpResponse.statusCode == 200 else {
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+                MXLog.error("Failed to submit bug report: \(errorDescription) (\(httpResponse.statusCode))")
+                MXLog.error("Response: \(httpResponse)")
+                return .failure(.httpError(httpResponse, errorDescription))
+            }
+            
+            // Parse the JSON data
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
+            
+            if !uploadResponse.reportUrl.isEmpty {
+                MXLogger.deleteCrashLog()
+                lastCrashEventId = nil
+            }
+            
+            MXLog.info("Feedback submitted.")
+            
+            return .success(uploadResponse)
+        } catch {
+            return .failure(.uploadFailure(error))
+        }
     }
 
     // MARK: - Private
@@ -200,7 +226,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     private func zipFiles(includeLogs: Bool,
-                          includeCrashLog: Bool) async throws -> [URL] {
+                          includeCrashLog: Bool) async -> [URL] {
         MXLog.info("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
@@ -216,26 +242,31 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         var zippedFiles: [URL] = []
 
         for url in filesToCompress {
-            let zippedFileURL = URL.temporaryDirectory
-                .appendingPathComponent(url.lastPathComponent)
-
-            //  remove old zipped file if exists
-            try? FileManager.default.removeItem(at: zippedFileURL)
-
-            let rawData = try Data(contentsOf: url)
-            if rawData.isEmpty {
-                continue
+            do {
+                let zippedFileURL = URL.temporaryDirectory
+                    .appendingPathComponent(url.lastPathComponent)
+                
+                //  remove old zipped file if exists
+                try? FileManager.default.removeItem(at: zippedFileURL)
+                
+                let rawData = try Data(contentsOf: url)
+                if rawData.isEmpty {
+                    continue
+                }
+                guard let zippedData = (rawData as NSData).gzipped() else {
+                    continue
+                }
+                
+                totalSize += rawData.count
+                totalZippedSize += zippedData.count
+                
+                try zippedData.write(to: zippedFileURL)
+                
+                zippedFiles.append(zippedFileURL)
+            } catch {
+                MXLog.error("Failed to compress log at \(url)")
+                // Continue so that other logs can still be sent.
             }
-            guard let zippedData = (rawData as NSData).gzipped() else {
-                continue
-            }
-
-            totalSize += rawData.count
-            totalZippedSize += zippedData.count
-
-            try zippedData.write(to: zippedFileURL)
-
-            zippedFiles.append(zippedFileURL)
         }
 
         MXLog.info("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
