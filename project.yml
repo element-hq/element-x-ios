@@ -80,7 +80,7 @@ packages:
     minorVersion: 0.2.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 2.0.0
+    minorVersion: 2.0.3
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
