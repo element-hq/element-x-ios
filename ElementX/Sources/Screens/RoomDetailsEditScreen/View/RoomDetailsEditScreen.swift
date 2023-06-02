@@ -27,8 +27,7 @@ struct RoomDetailsEditScreen: View {
     
     var body: some View {
         mainContent
-            .scrollContentBackground(.hidden)
-            .background(Color.element.formBackground.ignoresSafeArea())
+            .elementFormStyle()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
             .navigationBarTitleDisplayMode(.inline)

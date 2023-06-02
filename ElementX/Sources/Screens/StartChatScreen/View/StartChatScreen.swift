@@ -28,8 +28,7 @@ struct StartChatScreen: View {
                 searchContent
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .elementFormStyle()
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

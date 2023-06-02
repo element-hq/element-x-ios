@@ -28,8 +28,7 @@ struct CreateRoomScreen: View {
     var body: some View {
         mainContent
             .scrollDismissesKeyboard(.immediately)
-            .scrollContentBackground(.hidden)
-            .background(Color.element.formBackground.ignoresSafeArea())
+            .elementFormStyle()
             .navigationTitle(L10n.screenCreateRoomTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

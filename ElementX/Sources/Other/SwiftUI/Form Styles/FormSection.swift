@@ -16,32 +16,23 @@
 
 import SwiftUI
 
-/// Style for form section headers
-struct FormSectionHeaderStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .foregroundColor(.element.secondaryContent)
-            .font(.compound.bodyXS)
-    }
-}
-
-/// Standard style for form sections
-struct FormSectionStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .listRowSeparator(.hidden)
-            .listRowInsets(FormRow.insets)
-            .listRowBackground(Color.element.formRowBackground)
-    }
-}
-
 extension View {
-    /// Applies the `FormSectionHeaderStyle` modifier to the view
-    func formSectionHeader() -> some View {
-        modifier(FormSectionHeaderStyle())
+    /// Applies a standard style to forms.
+    func elementFormStyle() -> some View {
+        scrollContentBackground(.hidden)
+            .background(Color.element.formBackground.ignoresSafeArea())
     }
     
+    /// Applies a standard style for form header text.
+    func formSectionHeader() -> some View {
+        foregroundColor(.element.secondaryContent)
+            .font(.compound.bodyXS)
+    }
+    
+    /// Applies a standard style for form sections.
     func formSectionStyle() -> some View {
-        modifier(FormSectionStyle())
+        listRowSeparator(.hidden)
+            .listRowInsets(FormRow.insets)
+            .listRowBackground(Color.element.formRowBackground)
     }
 }
