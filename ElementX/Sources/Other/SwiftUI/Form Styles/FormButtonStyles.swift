@@ -66,8 +66,6 @@ struct FormRowAccessory: View {
 /// to change the background colour depending on whether the button is currently pressed or not.
 struct FormButtonStyle: PrimitiveButtonStyle {
     var iconAlignment: VerticalAlignment = .firstTextBaseline
-    /// Disables the button while providing an entry point for UI customizations
-    var isDisabled = false
     /// An accessory to be added on the trailing side of the row.
     var accessory: FormRowAccessory?
     
@@ -77,14 +75,12 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                 .labelStyle(FormRowLabelStyle(alignment: iconAlignment, role: configuration.role))
                 .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
-        .buttonStyle(Style(isDisabled: isDisabled, accessory: accessory))
+        .buttonStyle(Style(accessory: accessory))
         .listRowInsets(EdgeInsets()) // Remove insets so the background fills the cell.
-        .disabled(isDisabled)
     }
     
     /// Inner style used to set the pressed background colour.
     private struct Style: ButtonStyle {
-        var isDisabled: Bool
         var accessory: FormRowAccessory?
         
         func makeBody(configuration: Configuration) -> some View {
@@ -94,7 +90,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                     .foregroundColor(.element.primaryContent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                accessory?.environment(\.isEnabled, !isDisabled)
+                accessory
             }
             .contentShape(Rectangle())
             .padding(FormRow.insets) // Re-apply the normal insets using padding.
@@ -165,7 +161,8 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 Button { } label: {
                     Text("Selected (disabled)")
                 }
-                .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+                .disabled(true)
                
                 Button { } label: {
                     Text("Unselected")

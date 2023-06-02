@@ -80,8 +80,8 @@ struct InviteUsersScreen: View {
                                         membership: context.viewState.membershipState(user),
                                         imageProvider: context.imageProvider)
                     }
-                    .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
-                                                 accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+                    .disabled(context.viewState.isUserDisabled(user))
+                    .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {
