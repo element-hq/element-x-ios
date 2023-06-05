@@ -24,7 +24,7 @@ class BugReportServiceTests: XCTestCase {
     override func setUpWithError() throws {
         bugReportService = BugReportServiceMock()
         bugReportService.underlyingCrashedLastRun = false
-        bugReportService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://www.example.com/123")
+        bugReportService.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportUrl: "https://www.example.com/123"))
     }
 
     func testInitialStateWithMockService() {
@@ -39,8 +39,8 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let result = try await bugReportService.submitBugReport(bugReport, progressListener: nil)
-        XCTAssertFalse(result.reportUrl.isEmpty)
+        let response = try await bugReportService.submitBugReport(bugReport, progressListener: nil).get()
+        XCTAssertFalse(response.reportUrl.isEmpty)
     }
     
     func testInitialStateWithRealService() throws {
@@ -64,17 +64,18 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let result = try await service.submitBugReport(bugReport, progressListener: nil)
+        let response = try await service.submitBugReport(bugReport, progressListener: nil).get()
         
-        XCTAssertEqual(result.reportUrl, "https://example.com/123")
+        XCTAssertEqual(response.reportUrl, "https://example.com/123")
     }
 }
 
 private class MockURLProtocol: URLProtocol {
     override func startLoading() {
         let response = "{\"report_url\":\"https://example.com/123\"}"
-        if let data = response.data(using: .utf8) {
-            let urlResponse = URLResponse()
+        if let data = response.data(using: .utf8),
+           let url = request.url,
+           let urlResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil) {
             client?.urlProtocol(self, didReceive: urlResponse, cacheStoragePolicy: .allowedInMemoryOnly)
             client?.urlProtocol(self, didLoad: data)
             client?.urlProtocolDidFinishLoading(self)

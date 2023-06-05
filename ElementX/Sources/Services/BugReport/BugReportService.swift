@@ -24,6 +24,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryURL: URL
     private let applicationId: String
+    private let maxUploadSize: Int
     private let session: URLSession
     private var lastCrashEventId: String?
     private let progressSubject = PassthroughSubject<Double, Never>()
@@ -32,10 +33,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
          applicationId: String = ServiceLocator.shared.settings.bugReportApplicationId,
+         maxUploadSize: Int = ServiceLocator.shared.settings.bugReportMaxUploadSize,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryURL = sentryURL
         self.applicationId = applicationId
+        self.maxUploadSize = maxUploadSize
         self.session = session
         super.init()
         
@@ -157,9 +160,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
         
         do {
-            let (data, response) = try await session.data(for: request, delegate: delegate)
-            
-            // TODO: Retry the request a second time if it fails.
+            let (data, response) = try await session.dataWithRetry(for: request, delegate: delegate)
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
@@ -246,7 +247,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                 let zippedFileURL = URL.temporaryDirectory
                     .appendingPathComponent(url.lastPathComponent)
                 
-                //  remove old zipped file if exists
+                // Remove old zipped file if exists
                 try? FileManager.default.removeItem(at: zippedFileURL)
                 
                 let rawData = try Data(contentsOf: url)
@@ -255,6 +256,11 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                 }
                 guard let zippedData = (rawData as NSData).gzipped() else {
                     continue
+                }
+                
+                guard totalZippedSize + zippedData.count < maxUploadSize else {
+                    MXLog.error("Max files size exceeded, excluding remaining logs.")
+                    break
                 }
                 
                 totalSize += rawData.count
@@ -314,5 +320,16 @@ extension BugReportService: URLSessionTaskDelegate {
                 self?.progressSubject.send(value)
             }
             .store(in: &cancellables)
+    }
+}
+
+private extension URLSession {
+    /// The same as `data(for:delegate:)` but with an additional immediate retry if the first attempt fails.
+    func dataWithRetry(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
+        if let firstTryResult = try? await data(for: request, delegate: delegate) {
+            return firstTryResult
+        }
+        
+        return try await data(for: request, delegate: delegate)
     }
 }

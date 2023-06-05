@@ -125,6 +125,8 @@ final class AppSettings {
     // Use the name allocated by the bug report server
     let bugReportApplicationId = "element-x-ios"
     let bugReportUISIId = "element-auto-uisi"
+    /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
+    let bugReportMaxUploadSize = 95 * 1024 * 1024
     
     // MARK: - Analytics
     
