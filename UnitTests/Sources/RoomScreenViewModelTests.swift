@@ -154,15 +154,6 @@ class RoomScreenViewModelTests: XCTestCase {
     func testGoToUserDetailsSuccessNoDelay() async {
         // Setup
         let timelineController = MockRoomTimelineController()
-        let items = [
-            TextRoomTimelineItem(text: "Message 1",
-                                 sender: "bob"),
-            TextRoomTimelineItem(text: "Message 2",
-                                 sender: "bob"),
-            TextRoomTimelineItem(text: "Message 3",
-                                 sender: "bob",
-                                 addReactions: true)
-        ]
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         let roomMemberMock = RoomMemberProxyMock()
         roomMemberMock.userID = "bob"
