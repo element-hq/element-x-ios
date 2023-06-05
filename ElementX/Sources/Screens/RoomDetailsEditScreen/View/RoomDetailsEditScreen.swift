@@ -126,7 +126,8 @@ struct RoomDetailsEditScreen: View {
     
     private var avatarOverlayIcon: some View {
         Image(systemName: "camera")
-            .padding(2)
+            .font(.system(size: 14, weight: .semibold))
+            .padding(3)
             .imageScale(.small)
             .foregroundColor(.white)
             .background {

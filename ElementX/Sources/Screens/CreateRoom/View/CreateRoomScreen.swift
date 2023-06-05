@@ -136,7 +136,7 @@ struct CreateRoomScreen: View {
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 28) {
+            LazyHStack(spacing: 23) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                     InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                         context.send(viewAction: .deselectUser(user))
@@ -144,7 +144,7 @@ struct CreateRoomScreen: View {
                     .frame(width: invitedUserCellWidth)
                 }
             }
-            .padding(.init(top: 16, leading: 32, bottom: 0, trailing: 32))
+            .padding(.init(top: 22, leading: 16, bottom: 0, trailing: 32))
         }
         .frame(width: frame.width)
     }

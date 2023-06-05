@@ -101,7 +101,7 @@ struct InviteUsersScreen: View {
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
-                HStack(spacing: 28) {
+                HStack(spacing: 23) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                         InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
