@@ -23,7 +23,7 @@ import XCTest
 class RoomDetailsEditScreenViewModelTests: XCTestCase {
     var viewModel: RoomDetailsEditScreenViewModel!
     
-    var userIndicatorController: MockUserIndicatorController!
+    var userIndicatorController: UserIndicatorControllerMock!
     
     var context: RoomDetailsEditScreenViewModelType.Context {
         viewModel.context
@@ -104,19 +104,14 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
                        roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
-        
-        let alertInfo = await userIndicatorController.alertInfoPublisher
-            .compactMap { $0 }
-            .values
-            .first()
-        
-        XCTAssertNotNil(alertInfo)
+        try? await Task.sleep(for: .milliseconds(100))
+        XCTAssertNotNil(userIndicatorController.alertInfo)
     }
     
     // MARK: - Private
     
     private func setupViewModel(accountOwner: RoomMemberProxyMock, roomProxyConfiguration: RoomProxyMockConfiguration) {
-        userIndicatorController = MockUserIndicatorController()
+        userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(accountOwner: accountOwner,
                           mediaProvider: MockMediaProvider(),
                           roomProxy: RoomProxyMock(with: roomProxyConfiguration),

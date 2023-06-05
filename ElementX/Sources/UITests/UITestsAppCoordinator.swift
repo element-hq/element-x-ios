@@ -30,7 +30,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
 
         navigationRootCoordinator = NavigationRootCoordinator()
         
-        ServiceLocator.shared.register(userIndicatorController: MockUserIndicatorController())
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
         AppSettings.reset()
@@ -93,13 +93,13 @@ class MockScreen: Identifiable {
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                                 userIndicatorController: MockUserIndicatorController(),
+                                                                                 userIndicatorController: UserIndicatorControllerMock.default,
                                                                                  isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelectionNonModal:
             return ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                      userIndicatorController: MockUserIndicatorController(),
+                                                                      userIndicatorController: UserIndicatorControllerMock.default,
                                                                       isModallyPresented: false))
         case .analyticsPrompt:
             return AnalyticsPromptScreenCoordinator()
@@ -361,7 +361,7 @@ class MockScreen: Identifiable {
                                                                                  mediaProvider: MockMediaProvider(),
                                                                                  navigationStackCoordinator: navigationStackCoordinator,
                                                                                  roomProxy: roomProxy,
-                                                                                 userIndicatorController: MockUserIndicatorController()))
+                                                                                 userIndicatorController: UserIndicatorControllerMock.default))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreen:
@@ -477,7 +477,7 @@ class MockScreen: Identifiable {
             let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
             let members: [RoomMemberProxyMock] = id == .inviteUsersInRoomExistingMembers ? [.mockInvitedAlice, .mockBob] : []
-            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: members, userIndicatorController: MockUserIndicatorController())
+            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: members, userIndicatorController: UserIndicatorControllerMock.default)
             let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
             coordinator.actions.sink { action in
                 switch action {

@@ -70,12 +70,17 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     private var header: some View {
         if shouldShowSenderDetails {
             HStack {
-                TimelineSenderAvatarView(timelineItem: timelineItem)
-                Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                    .font(.subheadline)
-                    .foregroundColor(.element.primaryContent)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
+                HStack {
+                    TimelineSenderAvatarView(timelineItem: timelineItem)
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                        .font(.subheadline)
+                        .foregroundColor(.element.primaryContent)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                }
+                .onTapGesture {
+                    context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
+                }
                 Spacer()
                 Text(timelineItem.timestamp)
                     .foregroundColor(Color.element.tertiaryContent)

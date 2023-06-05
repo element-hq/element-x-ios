@@ -23,7 +23,7 @@ enum RoomMemberProxyError: Error {
 }
 
 // sourcery: AutoMockable
-protocol RoomMemberProxyProtocol {
+protocol RoomMemberProxyProtocol: AnyObject {
     var userID: String { get }
     var displayName: String? { get }
     var avatarURL: URL? { get }

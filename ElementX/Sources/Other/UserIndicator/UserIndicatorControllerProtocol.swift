@@ -16,6 +16,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
     func submitIndicator(_ indicator: UserIndicator)
     func retractIndicatorWithId(_ id: String)

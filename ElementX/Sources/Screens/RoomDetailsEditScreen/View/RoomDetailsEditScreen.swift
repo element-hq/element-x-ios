@@ -165,7 +165,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider {
     static let viewModel = RoomDetailsEditScreenViewModel(accountOwner: RoomMemberProxyMock.mockAlice,
                                                           mediaProvider: MockMediaProvider(),
                                                           roomProxy: RoomProxyMock(with: .init(name: "Room", displayName: "Room")),
-                                                          userIndicatorController: MockUserIndicatorController())
+                                                          userIndicatorController: UserIndicatorControllerMock.default)
     
     static var previews: some View {
         NavigationStack {

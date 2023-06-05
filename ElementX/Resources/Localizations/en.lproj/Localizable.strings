@@ -245,6 +245,7 @@
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
+"screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
 "screen_room_member_details_block_user" = "Block user";

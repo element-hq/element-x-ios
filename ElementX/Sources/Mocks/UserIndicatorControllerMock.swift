@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,18 +17,12 @@
 import Combine
 import Foundation
 
-class MockUserIndicatorController: UserIndicatorControllerProtocol {
-    func submitIndicator(_ indicator: UserIndicator) { }
-    
-    func retractIndicatorWithId(_ id: String) { }
-    
-    func retractAllIndicators() { }
-    
-    var alertInfo: AlertInfo<UUID>? {
-        didSet {
-            alertInfoPublisher.send(alertInfo)
-        }
+extension UserIndicatorControllerMock {
+    static var `default`: UserIndicatorControllerMock {
+        let mock = UserIndicatorControllerMock()
+        mock.submitIndicatorClosure = { _ in }
+        mock.retractIndicatorWithIdClosure = { _ in }
+        mock.retractAllIndicatorsClosure = { }
+        return mock
     }
-    
-    let alertInfoPublisher: PassthroughSubject<AlertInfo<UUID>?, Never> = .init()
 }

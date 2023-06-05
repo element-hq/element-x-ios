@@ -20,7 +20,7 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
     
     init() {
-        ServiceLocator.shared.register(userIndicatorController: MockUserIndicatorController())
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorControllerMock.default)
         
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
         AppSettings.reset()

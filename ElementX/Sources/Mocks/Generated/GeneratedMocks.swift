@@ -4,8 +4,9 @@
 // swiftlint:disable all
 import Combine
 import Foundation
-import MatrixRustSDK
+import SwiftUI
 import AnalyticsEvents
+import MatrixRustSDK
 class AnalyticsClientMock: AnalyticsClientProtocol {
     var isRunning: Bool {
         get { return underlyingIsRunning }
@@ -813,6 +814,27 @@ class RoomProxyMock: RoomProxyProtocol {
         updateMembersCallsCount += 1
         await updateMembersClosure?()
     }
+    //MARK: - getMember
+
+    var getMemberUserIDCallsCount = 0
+    var getMemberUserIDCalled: Bool {
+        return getMemberUserIDCallsCount > 0
+    }
+    var getMemberUserIDReceivedUserID: String?
+    var getMemberUserIDReceivedInvocations: [String] = []
+    var getMemberUserIDReturnValue: Result<RoomMemberProxyProtocol, RoomProxyError>!
+    var getMemberUserIDClosure: ((String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>)?
+
+    func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
+        getMemberUserIDCallsCount += 1
+        getMemberUserIDReceivedUserID = userID
+        getMemberUserIDReceivedInvocations.append(userID)
+        if let getMemberUserIDClosure = getMemberUserIDClosure {
+            return await getMemberUserIDClosure(userID)
+        } else {
+            return getMemberUserIDReturnValue
+        }
+    }
     //MARK: - inviter
 
     var inviterCallsCount = 0
@@ -1118,6 +1140,95 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
             return await fetchSuggestionsClosure()
         } else {
             return fetchSuggestionsReturnValue
+        }
+    }
+}
+class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
+    var alertInfo: AlertInfo<UUID>?
+
+    //MARK: - submitIndicator
+
+    var submitIndicatorCallsCount = 0
+    var submitIndicatorCalled: Bool {
+        return submitIndicatorCallsCount > 0
+    }
+    var submitIndicatorReceivedIndicator: UserIndicator?
+    var submitIndicatorReceivedInvocations: [UserIndicator] = []
+    var submitIndicatorClosure: ((UserIndicator) -> Void)?
+
+    func submitIndicator(_ indicator: UserIndicator) {
+        submitIndicatorCallsCount += 1
+        submitIndicatorReceivedIndicator = indicator
+        submitIndicatorReceivedInvocations.append(indicator)
+        submitIndicatorClosure?(indicator)
+    }
+    //MARK: - retractIndicatorWithId
+
+    var retractIndicatorWithIdCallsCount = 0
+    var retractIndicatorWithIdCalled: Bool {
+        return retractIndicatorWithIdCallsCount > 0
+    }
+    var retractIndicatorWithIdReceivedId: String?
+    var retractIndicatorWithIdReceivedInvocations: [String] = []
+    var retractIndicatorWithIdClosure: ((String) -> Void)?
+
+    func retractIndicatorWithId(_ id: String) {
+        retractIndicatorWithIdCallsCount += 1
+        retractIndicatorWithIdReceivedId = id
+        retractIndicatorWithIdReceivedInvocations.append(id)
+        retractIndicatorWithIdClosure?(id)
+    }
+    //MARK: - retractAllIndicators
+
+    var retractAllIndicatorsCallsCount = 0
+    var retractAllIndicatorsCalled: Bool {
+        return retractAllIndicatorsCallsCount > 0
+    }
+    var retractAllIndicatorsClosure: (() -> Void)?
+
+    func retractAllIndicators() {
+        retractAllIndicatorsCallsCount += 1
+        retractAllIndicatorsClosure?()
+    }
+    //MARK: - start
+
+    var startCallsCount = 0
+    var startCalled: Bool {
+        return startCallsCount > 0
+    }
+    var startClosure: (() -> Void)?
+
+    func start() {
+        startCallsCount += 1
+        startClosure?()
+    }
+    //MARK: - stop
+
+    var stopCallsCount = 0
+    var stopCalled: Bool {
+        return stopCallsCount > 0
+    }
+    var stopClosure: (() -> Void)?
+
+    func stop() {
+        stopCallsCount += 1
+        stopClosure?()
+    }
+    //MARK: - toPresentable
+
+    var toPresentableCallsCount = 0
+    var toPresentableCalled: Bool {
+        return toPresentableCallsCount > 0
+    }
+    var toPresentableReturnValue: AnyView!
+    var toPresentableClosure: (() -> AnyView)?
+
+    func toPresentable() -> AnyView {
+        toPresentableCallsCount += 1
+        if let toPresentableClosure = toPresentableClosure {
+            return toPresentableClosure()
+        } else {
+            return toPresentableReturnValue
         }
     }
 }
