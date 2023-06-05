@@ -112,7 +112,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction?) async {
         let routeTask = Task.detached(priority: .low) {
-            try? await Task.sleep(for: .seconds(0.2))
+            try? await Task.sleep(for: .milliseconds(500))
             await self.roomFlowCoordinator.handleAppRoute(route, animated: true)
         }
         
