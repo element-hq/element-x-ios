@@ -121,7 +121,7 @@ struct HomeScreen: View {
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar(showingBottomToolbar ? .visible : .hidden, for: .bottomBar)
+        .toolbar(showingBottomToolbar ? .automatic : .hidden, for: .bottomBar)
         .toolbar { toolbar }
         .background(Color.element.background.ignoresSafeArea())
         .track(screen: .home)
