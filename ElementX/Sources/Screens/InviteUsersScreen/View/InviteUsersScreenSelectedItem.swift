@@ -25,30 +25,46 @@ struct InviteUsersScreenSelectedItem: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            LoadableAvatarImage(url: user.avatarURL,
-                                name: user.displayName,
-                                contentID: user.userID,
-                                avatarSize: .user(on: .inviteUsers),
-                                imageProvider: imageProvider)
+            avatar
+            
             Text(user.displayName ?? user.userID)
                 .font(.compound.bodyMD)
                 .foregroundColor(.element.primaryContent)
                 .lineLimit(1)
         }
-        .overlay(alignment: .topTrailing) {
-            Button(action: dismissAction) {
-                Image(systemName: "xmark.circle.fill")
-                    .resizable()
-                    .frame(width: buttonSize, height: buttonSize)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Color.element.systemPrimaryBackground, Color.element.primaryContent)
+    }
+    
+    // MARK: - Private
+    
+    var avatar: some View {
+        LoadableAvatarImage(url: user.avatarURL,
+                            name: user.displayName,
+                            contentID: user.userID,
+                            avatarSize: .user(on: .inviteUsers),
+                            imageProvider: imageProvider)
+            .overlay(alignment: .topTrailing) {
+                Button(action: dismissAction) {
+                    Image(systemName: "xmark.circle.fill")
+                        .resizable()
+                        .frame(width: buttonSize, height: buttonSize)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(Color.element.systemPrimaryBackground, Color.element.primaryContent)
+                }
             }
-        }
     }
 }
 
 struct InviteUsersScreenSelectedItem_Previews: PreviewProvider {
+    static let people: [UserProfileProxy] = [.mockAlice, .mockVerbose]
+    
     static var previews: some View {
-        InviteUsersScreenSelectedItem(user: .mockAlice, imageProvider: MockMediaProvider(), dismissAction: { })
+        ScrollView(.horizontal) {
+            HStack(spacing: 28) {
+                ForEach(Self.people, id: \.userID) { user in
+                    InviteUsersScreenSelectedItem(user: user, imageProvider: MockMediaProvider(), dismissAction: { })
+                        .frame(width: 72)
+                }
+            }
+        }
     }
 }

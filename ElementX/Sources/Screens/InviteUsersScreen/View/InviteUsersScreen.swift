@@ -96,12 +96,12 @@ struct InviteUsersScreen: View {
     }
     
     @State private var frame: CGRect = .zero
-    @ScaledMetric private var cellWidth: CGFloat = 64
+    @ScaledMetric private var cellWidth: CGFloat = 72
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
-                HStack(spacing: 23) {
+                HStack(spacing: 16) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                         InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
@@ -115,7 +115,7 @@ struct InviteUsersScreen: View {
                         scrollView.scrollTo(id)
                     }
                 }
-                .padding(.horizontal, 18)
+                .padding(.horizontal, 14)
             }
         }
         .frame(width: frame.width)
