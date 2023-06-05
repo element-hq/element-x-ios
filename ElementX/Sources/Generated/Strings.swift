@@ -198,7 +198,7 @@ public enum L10n {
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Room name
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
-  /// e.g. Product Sprint
+  /// e.g. your project name
   public static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
@@ -512,14 +512,10 @@ public enum L10n {
   public static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
   /// Room name
   public static var screenCreateRoomRoomNameLabel: String { return L10n.tr("Localizable", "screen_create_room_room_name_label") }
-  /// e.g. Product Sprint
-  public static var screenCreateRoomRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_create_room_room_name_placeholder") }
   /// Create a room
   public static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
   /// Topic (optional)
   public static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
-  /// What is this room about?
-  public static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
   /// Block
   public static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
   /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
@@ -624,7 +620,7 @@ public enum L10n {
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
   public static var screenRoomDetailsEncryptionEnabledTitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_title") }
-  /// Invite friends to Element
+  /// Invite people
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
@@ -632,14 +628,10 @@ public enum L10n {
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
   /// Room name
   public static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
-  /// e.g. Product Sprint
-  public static var screenRoomDetailsRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_room_details_room_name_placeholder") }
   /// Security
   public static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
   /// Share room
   public static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
-  /// What is this room about?
-  public static var screenRoomDetailsTopicPlaceholder: String { return L10n.tr("Localizable", "screen_room_details_topic_placeholder") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…

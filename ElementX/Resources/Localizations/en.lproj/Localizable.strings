@@ -88,7 +88,7 @@
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
 "common_room_name" = "Room name";
-"common_room_name_placeholder" = "e.g. Product Sprint";
+"common_room_name_placeholder" = "e.g. your project name";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
@@ -203,9 +203,7 @@
 "screen_create_room_public_option_description" = "Messages are not encrypted and anyone can read them. You can enable encryption at a later date.";
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
-"screen_create_room_room_name_placeholder" = "e.g. Product Sprint";
 "screen_create_room_topic_label" = "Topic (optional)";
-"screen_create_room_topic_placeholder" = "What is this room about?";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline to chat with %1$@?";
@@ -243,10 +241,9 @@
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
+"screen_room_details_invite_people_title" = "Invite people";
 "screen_room_details_room_name_label" = "Room name";
-"screen_room_details_room_name_placeholder" = "e.g. Product Sprint";
 "screen_room_details_share_room_title" = "Share room";
-"screen_room_details_topic_placeholder" = "What is this room about?";
 "screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
@@ -365,7 +362,6 @@
 "screen_login_submit" = "Continue";
 "screen_login_username_hint" = "Username";
 "screen_report_content_block_user" = "Block user";
-"screen_room_details_invite_people_title" = "Invite friends to Element";
 "screen_room_details_leave_room_title" = "Leave room";
 "screen_room_details_people_title" = "People";
 "screen_room_details_security_title" = "Security";
