@@ -26,35 +26,34 @@ struct RoomDetailsEditScreen: View {
     }
     
     var body: some View {
-        mainContent
-            .elementFormStyle()
-            .scrollDismissesKeyboard(.immediately)
-            .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(L10n.actionCancel) {
-                        context.send(viewAction: .cancel)
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(L10n.actionSave) {
-                        context.send(viewAction: .save)
-                        focus = nil
-                    }
-                    .disabled(!context.viewState.canSave)
-                }
-            }
-    }
-    
-    // MARK: - Private
-    
-    private var mainContent: some View {
         Form {
             avatar
             nameSection
             topicSection
+        }
+        .elementFormStyle()
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+    }
+    
+    // MARK: - Private
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionSave) {
+                context.send(viewAction: .save)
+                focus = nil
+            }
+            .disabled(!context.viewState.canSave)
         }
     }
 
