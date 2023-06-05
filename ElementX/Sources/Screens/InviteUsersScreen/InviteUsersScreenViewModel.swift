@@ -55,6 +55,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 actionsSubject.send(.invite(users: state.selectedUsers.map(\.userID)))
             }
         case .toggleUser(let user):
+            let willSelectUser = !state.selectedUsers.contains(user)
+            state.scrollToLastID = willSelectUser ? user.userID : nil
             actionsSubject.send(.toggleUser(user))
         }
     }

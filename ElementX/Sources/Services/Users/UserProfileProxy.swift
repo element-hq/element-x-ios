@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct UserProfileProxy {
+struct UserProfileProxy: Equatable {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
