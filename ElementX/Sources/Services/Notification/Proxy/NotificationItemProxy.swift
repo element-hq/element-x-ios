@@ -234,7 +234,7 @@ extension NotificationItemProxyProtocol {
                                                             senderID: event.senderID,
                                                             senderName: senderDisplayName ?? event.senderID,
                                                             iconType: iconType)
-        notification.body = L10n.stateEventRoomInviteYou("")
+        notification.body = L10n.notificationInviteBody
         return notification
     }
 

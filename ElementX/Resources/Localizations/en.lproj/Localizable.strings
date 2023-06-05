@@ -141,6 +141,7 @@
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invitation_action_join" = "Join";
 "notification_invitation_action_reject" = "Reject";
+"notification_invite_body" = "invited you";
 "notification_new_messages" = "New Messages";
 "notification_room_action_mark_as_read" = "Mark as read";
 "notification_sender_me" = "Me";
@@ -189,6 +190,10 @@
 "screen_bug_report_include_logs" = "Send logs to help";
 "screen_bug_report_include_screenshot" = "Send screenshot";
 "screen_bug_report_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
+"screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is an open network for secure, decentralized communication.";
+"screen_change_account_provider_other" = "Other";
+"screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
+"screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_no_sliding_sync_message" = "This server currently doesn’t support sliding sync.";
 "screen_change_server_form_header" = "Homeserver URL";
