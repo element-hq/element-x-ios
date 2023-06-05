@@ -88,6 +88,7 @@
 "common_report_a_bug" = "Segnala un problema";
 "common_report_submitted" = "Segnalazione inviata";
 "common_room_name" = "Room name";
+"common_room_name_placeholder" = "e.g. Product Sprint";
 "common_search_for_someone" = "Cerca qualcuno";
 "common_search_results" = "Search results";
 "common_security" = "Sicurezza";
@@ -101,6 +102,7 @@
 "common_success" = "Operazione riuscita";
 "common_suggestions" = "Suggerimenti";
 "common_topic" = "Oggetto";
+"common_topic_placeholder" = "What is this room about?";
 "common_unable_to_decrypt" = "Impossibile decrittografare";
 "common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
@@ -201,14 +203,13 @@
 "screen_create_room_public_option_description" = "Messages are not encrypted and anyone can read them. You can enable encryption at a later date.";
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
-"screen_create_room_room_name_placeholder" = "e.g. Product Sprint";
 "screen_create_room_topic_label" = "Topic (optional)";
-"screen_create_room_topic_placeholder" = "What is this room about?";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
 "screen_invites_decline_direct_chat_message" = "Are you sure you want to decline to chat with %1$@?";
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
+"screen_invites_invited_you" = "%1$@ (%2$@) ti ha invitato";
 "screen_login_error_deactivated_account" = "Questo profilo è stato disattivato.";
 "screen_login_error_invalid_credentials" = "Nome utente e/o password errati";
 "screen_login_error_invalid_user_id" = "Questo non è un identificatore utente valido. Formato previsto: '@user:homeserver.org'";
@@ -220,6 +221,10 @@
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
+"screen_onboarding_sign_in_manually" = "Sign in manually";
+"screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
+"screen_onboarding_sign_up" = "Create account";
+"screen_onboarding_subtitle" = "Communicate and collaborate securely";
 "screen_onboarding_welcome_subtitle" = "Benvenuto nella beta di %1$@. Potenziato in velocità e semplicità.";
 "screen_onboarding_welcome_title" = "Sii nel tuo elemento";
 "screen_report_content_block_user_hint" = "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente";
@@ -236,6 +241,8 @@
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli.";
 "screen_room_details_encryption_enabled_title" = "Crittografia messaggi abilitata";
+"screen_room_details_invite_people_title" = "Invita persone";
+"screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Condividi stanza";
 "screen_room_details_updating_room" = "Updating room…";
 "screen_room_member_details_block_alert_action" = "Blocca";
@@ -351,12 +358,10 @@
 "screen_dm_details_unblock_alert_action" = "Sblocca";
 "screen_dm_details_unblock_alert_description" = "Dopo aver sbloccato l'utente, potrai vedere nuovamente tutti i suoi messaggi.";
 "screen_dm_details_unblock_user" = "Sblocca utente";
-"screen_invites_invited_you" = "%1$@ ti ha invitato";
 "screen_login_password_hint" = "Password";
 "screen_login_submit" = "Continua";
 "screen_login_username_hint" = "Nome utente";
 "screen_report_content_block_user" = "Blocca utente";
-"screen_room_details_invite_people_title" = "Invita persone";
 "screen_room_details_leave_room_title" = "Esci dalla stanza";
 "screen_room_details_people_title" = "Persone";
 "screen_room_details_security_title" = "Sicurezza";
