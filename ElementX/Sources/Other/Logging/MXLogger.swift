@@ -128,7 +128,7 @@ class MXLogger {
     
     /// The list of all log file URLs, sorted chronologically.
     static var logFiles: [URL] {
-        var logFiles = [(URL, Date)]()
+        var logFiles = [(url: URL, modificationDate: Date)]()
         
         let fileManager = FileManager.default
         let enumerator = fileManager.enumerator(at: logsFolderURL, includingPropertiesForKeys: [.contentModificationDateKey])
@@ -144,9 +144,9 @@ class MXLogger {
             }
         }
         
-        let sortedFiles = logFiles.sorted { $0.1 > $1.1 }.map(\.0)
+        let sortedFiles = logFiles.sorted { $0.modificationDate > $1.modificationDate }.map(\.url)
         
-        MXLog.info("logFiles: \(sortedFiles)")
+        MXLog.info("logFiles: \(sortedFiles.map(\.lastPathComponent))")
         
         return sortedFiles
     }

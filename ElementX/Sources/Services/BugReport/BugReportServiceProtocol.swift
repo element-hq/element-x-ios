@@ -40,9 +40,9 @@ enum BugReportServiceError: LocalizedError {
         switch self {
         case .uploadFailure(let error):
             return error.localizedDescription
-        case .serverError(let urlResponse, let errorDescription):
+        case .serverError(_, let errorDescription):
             return errorDescription
-        case .httpError(let httpResponse, let errorDescription):
+        case .httpError(_, let errorDescription):
             return errorDescription
         }
     }

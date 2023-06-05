@@ -100,6 +100,6 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     }
     
     private func showError(label: String) {
-        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
+        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label, iconName: "xmark"))
     }
 }

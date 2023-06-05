@@ -98,7 +98,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
@@ -115,13 +115,11 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let zippedFiles = await zipFiles(includeLogs: bugReport.includeLogs,
-                                         includeCrashLog: bugReport.includeCrashLog)
-        //  log or compressed-log
-        if !zippedFiles.isEmpty {
-            for url in zippedFiles {
-                params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
-            }
+        let logAttachments = await zipFiles(includeLogs: bugReport.includeLogs,
+                                            includeCrashLog: bugReport.includeCrashLog)
+        
+        for url in logAttachments.files {
+            params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
         }
         
         if let crashEventId = lastCrashEventId {
@@ -227,7 +225,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     private func zipFiles(includeLogs: Bool,
-                          includeCrashLog: Bool) async -> [URL] {
+                          includeCrashLog: Bool) async -> Logs {
         MXLog.info("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
@@ -237,47 +235,69 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         if includeCrashLog, let crashLogFile = MXLogger.crashLog {
             filesToCompress.append(crashLogFile)
         }
-
-        var totalSize = 0
-        var totalZippedSize = 0
-        var zippedFiles: [URL] = []
-
+        
+        var compressedLogs = Logs(maxFileSize: maxUploadSize)
+        
         for url in filesToCompress {
             do {
-                let zippedFileURL = URL.temporaryDirectory
-                    .appendingPathComponent(url.lastPathComponent)
-                
-                // Remove old zipped file if exists
-                try? FileManager.default.removeItem(at: zippedFileURL)
-                
-                let rawData = try Data(contentsOf: url)
-                if rawData.isEmpty {
-                    continue
-                }
-                guard let zippedData = (rawData as NSData).gzipped() else {
-                    continue
-                }
-                
-                guard totalZippedSize + zippedData.count < maxUploadSize else {
-                    MXLog.error("Max files size exceeded, excluding remaining logs.")
-                    break
-                }
-                
-                totalSize += rawData.count
-                totalZippedSize += zippedData.count
-                
-                try zippedData.write(to: zippedFileURL)
-                
-                zippedFiles.append(zippedFileURL)
+                try attachFile(at: url, to: &compressedLogs)
             } catch {
                 MXLog.error("Failed to compress log at \(url)")
                 // Continue so that other logs can still be sent.
             }
         }
+        
+        MXLog.info("zipFiles: originalSize: \(compressedLogs.originalSize), zippedSize: \(compressedLogs.zippedSize)")
 
-        MXLog.info("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
-
-        return zippedFiles
+        return compressedLogs
+    }
+    
+    /// Zips a file creating chunks based on 10MB inputs.
+    private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
+        let fileHandle = try FileHandle(forReadingFrom: url)
+        
+        var chunkIndex = -1
+        while let data = try fileHandle.read(upToCount: 10 * 1024 * 1024) {
+            do {
+                chunkIndex += 1
+                if let zippedData = (data as NSData).gzipped() {
+                    let zippedFilename = url.deletingPathExtension().lastPathComponent + "_\(chunkIndex).log"
+                    let chunkURL = URL.temporaryDirectory.appending(path: zippedFilename)
+                    
+                    // Remove old zipped file if exists
+                    try? FileManager.default.removeItem(at: chunkURL)
+                    
+                    try zippedData.write(to: chunkURL)
+                    zippedFiles.appendFile(at: chunkURL, zippedSize: zippedData.count, originalSize: data.count)
+                }
+            } catch {
+                MXLog.error("Failed attaching log chunk \(chunkIndex) from (\(url.lastPathComponent)")
+                continue
+            }
+        }
+    }
+    
+    /// A collection of logs to be uploaded to the bug report service.
+    struct Logs {
+        /// The maximum total size of all the files.
+        let maxFileSize: Int
+        
+        /// The files included.
+        private(set) var files: [URL] = []
+        /// The total size of the files after compression.
+        private(set) var zippedSize = 0
+        /// The original size of the files.
+        private(set) var originalSize = 0
+        
+        mutating func appendFile(at url: URL, zippedSize: Int, originalSize: Int) {
+            guard self.zippedSize + zippedSize < maxFileSize else {
+                MXLog.error("Logs too large, skipping attachment: \(url.lastPathComponent)")
+                return
+            }
+            files.append(url)
+            self.originalSize += originalSize
+            self.zippedSize += zippedSize
+        }
     }
 }
 

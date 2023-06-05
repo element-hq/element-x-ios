@@ -68,6 +68,31 @@ class BugReportServiceTests: XCTestCase {
         
         XCTAssertEqual(response.reportUrl, "https://example.com/123")
     }
+    
+    func testLogsMaxSize() {
+        // Given a new set of logs
+        var logs = BugReportService.Logs(maxFileSize: 1000)
+        XCTAssertEqual(logs.zippedSize, 0)
+        XCTAssertEqual(logs.originalSize, 0)
+        XCTAssertTrue(logs.files.isEmpty)
+        
+        // When adding new files within the size limit
+        logs.appendFile(at: .homeDirectory, zippedSize: 250, originalSize: 1000)
+        logs.appendFile(at: .picturesDirectory, zippedSize: 500, originalSize: 2000)
+        
+        // Then the logs should be included
+        XCTAssertEqual(logs.zippedSize, 750)
+        XCTAssertEqual(logs.originalSize, 3000)
+        XCTAssertEqual(logs.files, [.homeDirectory, .picturesDirectory])
+        
+        // When adding a new file larger that will exceed the size limit
+        logs.appendFile(at: .homeDirectory, zippedSize: 500, originalSize: 2000)
+        
+        // Then the files shouldn't be included.
+        XCTAssertEqual(logs.zippedSize, 750)
+        XCTAssertEqual(logs.originalSize, 3000)
+        XCTAssertEqual(logs.files, [.homeDirectory, .picturesDirectory])
+    }
 }
 
 private class MockURLProtocol: URLProtocol {
