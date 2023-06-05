@@ -77,8 +77,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
     func testNoOp() async {
         await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
-        
-        await process(route: .roomDetails(roomID: "1"), expectedAction: nil)
+        roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
+        await Task.yield()
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
     }
     
@@ -117,9 +117,9 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         if let expectedAction {
-            _ = await roomFlowCoordinator.actions.values.first(where: { $0 == expectedAction })
+            await roomFlowCoordinator.actions.values.first(where: { $0 == expectedAction })
         } else {
-            await routeTask.value
+            await roomFlowCoordinator.actions.values.first()
         }
     }
 }
