@@ -36,6 +36,7 @@ class CreateRoomScreenUITests: XCTestCase {
         // repeat the same letter enough times to avoid that but also to work on iPads
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].tap()
         app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText(.init(repeating: "x", count: 200))
+        app.textFields[A11yIdentifiers.createRoomScreen.roomName].typeText("\n")
         try await app.assertScreenshot(.createRoom, step: 1)
     }
     
