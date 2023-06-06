@@ -108,6 +108,14 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         XCTAssertNotNil(userIndicatorController.alertInfo)
     }
     
+    func testDeleteAvatar() {
+        setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
+                       roomProxyConfiguration: .init(name: "Some room", displayName: "Some room", avatarURL: .picturesDirectory))
+        XCTAssertNotNil(context.viewState.avatarURL)
+        context.send(viewAction: .removeImage)
+        XCTAssertNil(context.viewState.avatarURL)
+    }
+    
     // MARK: - Private
     
     private func setupViewModel(accountOwner: RoomMemberProxyMock, roomProxyConfiguration: RoomProxyMockConfiguration) {
