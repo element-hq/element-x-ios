@@ -51,7 +51,6 @@ enum RoomScreenViewAction {
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
-    case itemDoubleTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)
@@ -60,6 +59,8 @@ enum RoomScreenViewAction {
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
     case timelineItemMenuAction(itemID: String, action: TimelineItemMenuAction)
+    
+    case displayEmojiPicker(itemID: String)
     
     case displayCameraPicker
     case displayMediaPicker

@@ -109,8 +109,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.processItemDisappearance(id) }
         case .itemTapped(let id):
             Task { await itemTapped(with: id) }
-        case .itemDoubleTapped(let id):
-            itemDoubleTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
@@ -136,6 +134,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
+            
+        case .displayEmojiPicker(let itemID):
+            guard let item = state.items.first(where: { $0.id == itemID }), item.isReactable else { return }
+            callback?(.displayEmojiPicker(itemID: itemID))
         }
     }
     
@@ -166,12 +168,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         state.showLoading = false
     }
-    
-    private func itemDoubleTapped(with itemId: String) {
-        guard let item = state.items.first(where: { $0.id == itemId }), item.isReactable else { return }
-        callback?(.displayEmojiPicker(itemID: itemId))
-    }
-    
+        
     private func buildTimelineViews() {
         var timelineViews = [RoomTimelineViewProvider]()
         
@@ -274,7 +271,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         var actions: [TimelineItemMenuAction] = [
-            .react, .reply, .copyPermalink
+            .reply, .copyPermalink
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
@@ -309,8 +306,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         switch action {
-        case .react:
-            callback?(.displayEmojiPicker(itemID: eventTimelineItem.id))
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return

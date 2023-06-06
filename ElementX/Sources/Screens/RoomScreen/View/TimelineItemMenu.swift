@@ -31,7 +31,6 @@ struct TimelineItemMenuActions {
 }
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
-    case react
     case copy
     case edit
     case quote
@@ -71,6 +70,12 @@ public struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
+                    reactionsSection
+                        .padding()
+                    
+                    Divider()
+                        .background(Color.compound.bgSubtlePrimary)
+                    
                     viewsForActions(actions.actions)
                     
                     Divider()
@@ -118,13 +123,51 @@ public struct TimelineItemMenu: View {
         .padding(.bottom, 4.0)
     }
     
+    private var reactionsSection: some View {
+        HStack(alignment: .center, spacing: 0.0) {
+            reactionButton(for: "👍️")
+            reactionButton(for: "👎️")
+            reactionButton(for: "🔥")
+            reactionButton(for: "❤️")
+            reactionButton(for: "👏")
+            
+            Button {
+                presentationMode.wrappedValue.dismiss()
+                context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+            } label: {
+                Image(systemName: "plus.circle")
+                    .font(.compound.headingLG)
+            }
+        }
+    }
+    
+    private func reactionButton(for emoji: String) -> some View {
+        Button {
+            presentationMode.wrappedValue.dismiss()
+            context.send(viewAction: .sendReaction(key: emoji, eventID: item.id))
+        } label: {
+            ZStack {
+                Circle()
+                    .foregroundColor(reactionBackground(for: emoji))
+                    .padding(8.0)
+                
+                Text(emoji)
+                    .font(.compound.headingLG)
+            }
+        }
+    }
+    
+    private func reactionBackground(for emoji: String) -> Color {
+        if item.properties.reactions.first(where: { $0.key == emoji }) != nil {
+            return .element.brand
+        } else {
+            return .clear
+        }
+    }
+    
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
         ForEach(actions, id: \.self) { action in
             switch action {
-            case .react:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.commonReactions, systemImageName: "face.smiling")
-                }
             case .copy:
                 Button { send(action) } label: {
                     MenuLabel(title: L10n.actionCopy, systemImageName: "doc.on.doc")

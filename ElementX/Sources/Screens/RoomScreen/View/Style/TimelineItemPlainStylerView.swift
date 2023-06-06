@@ -70,13 +70,13 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             context.send(viewAction: .itemTapped(id: timelineItem.id))
         }
         .onTapGesture(count: 2) {
-            context.send(viewAction: .itemDoubleTapped(id: timelineItem.id))
+            context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
         }
         // We need a tap gesture before this long one so that it doesn't
         // steal away the gestures from the scroll view
-        .onLongPressGesture {
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        .onLongPressGesture(minimumDuration: 0.25) {
             showItemActionMenu = true
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         }
     }
     
