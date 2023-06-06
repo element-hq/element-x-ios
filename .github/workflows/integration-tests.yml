@@ -46,6 +46,33 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: Archive raw file
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: raw-output
+          path: ~/Library/Logs/scan/IntegrationTests-IntegrationTests.log
+          retention-days: 2
+          if-no-files-found: ignore
+  
+     
+      - name: checkout gh-pages branch (for perf stats)
+        if: always()
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Post-process archive to obtain performance metrics and upload to gh-pages
+        if: always()
+        run: |
+          ./Tools/Scripts/parsePerformanceMetrics.sh ~/Library/Logs/scan/IntegrationTests-IntegrationTests.log $GITHUB_SHA | tee perf-results.csv
+          cat perf-results.csv >> $GITHUB_WORKSPACE/gh-pages/performance/perf-data.csv
+          cd $GITHUB_WORKSPACE/gh-pages/performance/
+          git add .
+          git commit -m "Results for $GITHUB_SHA"
+          git push
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
