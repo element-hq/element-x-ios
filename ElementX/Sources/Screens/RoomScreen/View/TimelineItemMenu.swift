@@ -67,12 +67,14 @@ public struct TimelineItemMenu: View {
                 .frame(idealWidth: 300.0)
             
             Divider()
+                .background(Color.compound.bgSubtlePrimary)
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
                     viewsForActions(actions.actions)
                     
                     Divider()
+                        .background(Color.compound.bgSubtlePrimary)
                     
                     viewsForActions(actions.debugActions)
                 }
@@ -84,33 +86,36 @@ public struct TimelineItemMenu: View {
     }
     
     private var header: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 0.0) {
             LoadableAvatarImage(url: item.sender.avatarURL,
                                 name: item.sender.displayName,
                                 contentID: item.sender.id,
                                 avatarSize: .user(on: .timeline),
                                 imageProvider: context.imageProvider)
             
+            Spacer(minLength: 8.0)
+            
             VStack(alignment: .leading) {
-                HStack(alignment: .center) {
-                    Text(item.sender.displayName ?? item.sender.id)
-                        .font(.compound.bodySMSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                    
-                    Spacer()
-                    
-                    Text(item.timestamp)
-                        .font(.compound.bodyXS)
-                        .foregroundColor(.compound.textSecondary)
-                }
+                Text(item.sender.displayName ?? item.sender.id)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundColor(.compound.textPrimary)
                 
                 Text(item.body.trimmingCharacters(in: .whitespacesAndNewlines))
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
                     .lineLimit(1)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer(minLength: 16.0)
+            
+            Text(item.timestamp)
+                .font(.compound.bodyXS)
+                .foregroundColor(.compound.textSecondary)
         }
-        .padding([.top, .horizontal])
+        .padding(.horizontal)
+        .padding(.top, 32.0)
+        .padding(.bottom, 4.0)
     }
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
