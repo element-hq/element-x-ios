@@ -167,12 +167,14 @@ class TimelineTableViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if tableView.frame.size != view.frame.size {
-            tableView.frame = CGRect(origin: .zero, size: view.frame.size)
-            
-            // Update the table's layout if necessary after the frame changed.
-            updateTopPadding()
+        guard tableView.frame.size != view.frame.size else {
+            return
         }
+        
+        tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+        
+        // Update the table's layout if necessary after the frame changed.
+        updateTopPadding()
         
         if let previousLayout, previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
