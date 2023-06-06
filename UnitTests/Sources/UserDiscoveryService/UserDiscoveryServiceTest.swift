@@ -54,6 +54,30 @@ class UserDiscoveryServiceTest: XCTestCase {
         XCTAssertTrue(clientProxy.getProfileCalled)
     }
     
+    func testLocalResultShowsOnSearchError() async {
+        clientProxy.searchUsersResult = .failure(.failedSearchingUsers)
+        clientProxy.getProfileResult = .success(.init(userID: "@some:matrix.org"))
+        
+        let results = await (try? search(query: "@a:b.com").get()) ?? []
+        
+        assertSearchResults(results, toBe: 1)
+        XCTAssertTrue(clientProxy.getProfileCalled)
+    }
+    
+    func testSearchErrorTriggers() async {
+        clientProxy.searchUsersResult = .failure(.failedSearchingUsers)
+        clientProxy.getProfileResult = .success(.init(userID: "@some:matrix.org"))
+        
+        switch await search(query: "some query") {
+        case .success:
+            XCTFail("Search users must fail")
+        case .failure(let error):
+            XCTAssertEqual(error, UserDiscoveryErrorType.failedSearchingUsers)
+        }
+        
+        XCTAssertFalse(clientProxy.getProfileCalled)
+    }
+    
     func testLocalResultWithDuplicates() async {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .success(.init(userID: "@bob:matrix.org"))
