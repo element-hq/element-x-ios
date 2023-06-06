@@ -23,3 +23,14 @@ protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
     func retractAllIndicators()
     var alertInfo: AlertInfo<UUID>? { get set }
 }
+
+extension UserIndicatorControllerProtocol {
+    /// Allows to submit a delayed indicator, this returns a Task so that it's also possible to cancel the action
+    func submitIndicator(_ indicator: UserIndicator, delay: Duration) -> Task<Void, Never> {
+        Task {
+            try? await Task.sleep(for: delay)
+            guard !Task.isCancelled else { return }
+            submitIndicator(indicator)
+        }
+    }
+}

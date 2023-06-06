@@ -487,10 +487,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 }
 
 private extension RoomFlowCoordinator {
-    struct RoomMember: Hashable {
+    struct HashableRoomMemberWrapper: Hashable {
         let value: RoomMemberProxyProtocol
 
-        static func == (lhs: RoomMember, rhs: RoomMember) -> Bool {
+        static func == (lhs: HashableRoomMemberWrapper, rhs: HashableRoomMemberWrapper) -> Bool {
             lhs.value.userID == rhs.value.userID
         }
 
@@ -508,7 +508,7 @@ private extension RoomFlowCoordinator {
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: String)
-        case roomMemberDetails(roomID: String, member: RoomMember)
+        case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
     }
     
     struct EventUserInfo {
@@ -537,7 +537,7 @@ private extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: String)
         case dismissEmojiPicker
 
-        case presentRoomMemberDetails(member: RoomMember)
+        case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
         case dismissRoomMemberDetails
     }
 }

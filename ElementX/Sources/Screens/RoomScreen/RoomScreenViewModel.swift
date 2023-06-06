@@ -431,11 +431,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func handleTappedUser(userID: String) async {
         // This is generally fast but it could take some time for rooms with thousands of users on first load
         // Show a loader only if it takes more than 0.1 seconds
-        loadingTask = Task {
-            try? await Task.sleep(for: .milliseconds(100))
-            guard !Task.isCancelled else { return }
-            showLoadingIndicator()
-        }
+        loadingTask = showLoadingIndicator(with: .milliseconds(100))
         let result = await roomProxy.getMember(userID: userID)
         loadingTask?.cancel()
         hideLoadingIndicator()
@@ -451,11 +447,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
 
-    private func showLoadingIndicator() {
+    private func showLoadingIndicator(with delay: Duration) -> Task<Void, Never> {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal(interactiveDismissDisabled: true),
                                                               title: L10n.commonLoading,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: delay)
     }
 
     private func hideLoadingIndicator() {
