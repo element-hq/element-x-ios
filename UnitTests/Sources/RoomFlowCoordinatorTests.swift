@@ -94,7 +94,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        await process(route: .roomDetails(roomID: "1"), expectedAction: nil)
+        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
@@ -104,22 +104,25 @@ class RoomFlowCoordinatorTests: XCTestCase {
         await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+        await process(route: .room(roomID: "1"), expectedActions: [.dismissedRoom, .presentedRoom("1")])
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
     }
     
     // MARK: - Private
     
-    func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction?) async {
-        let routeTask = Task.detached(priority: .low) {
-            try? await Task.sleep(for: .milliseconds(500))
-            await self.roomFlowCoordinator.handleAppRoute(route, animated: true)
+    private func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async {
+        await process(route: route, expectedActions: [expectedAction])
+    }
+    
+    private func process(route: AppRoute, expectedActions: [RoomFlowCoordinatorAction]) async {
+        Task {
+            await Task.yield()
+            self.roomFlowCoordinator.handleAppRoute(route, animated: true)
         }
         
-        if let expectedAction {
-            await roomFlowCoordinator.actions.values.first(where: { $0 == expectedAction })
-        } else {
-            await roomFlowCoordinator.actions.values.first()
+        if !expectedActions.isEmpty {
+            let actions = await roomFlowCoordinator.actions.collect(expectedActions.count).values.first()
+            XCTAssertEqual(actions, expectedActions)
         }
     }
 }
