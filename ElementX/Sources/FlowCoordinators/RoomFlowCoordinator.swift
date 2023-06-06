@@ -95,6 +95,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .room(roomID: roomID)
             case (.dismissRoom, .roomDetails):
                 return .initial
+
+            case (.presentRoomMemberDetails(let member), .room(let roomID)):
+                return .roomMemberDetails(roomID: roomID, member: member)
+            case (.dismissRoomMemberDetails, .roomMemberDetails(let roomID, _)):
+                return .room(roomID: roomID)
                 
             case (.presentMediaViewer(let file, let title), .room(let roomID)):
                 return .mediaViewer(roomID: roomID, file: file, title: title)
@@ -122,7 +127,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .emojiPicker(roomID: roomID, itemID: itemID)
             case (.dismissEmojiPicker, .emojiPicker(let roomID, _)):
                 return .room(roomID: roomID)
-            
+
             default:
                 return nil
             }
@@ -178,6 +183,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentEmojiPicker, .emojiPicker(_, let itemID)):
                 presentEmojiPicker(for: itemID)
             case (.emojiPicker, .dismissEmojiPicker, .room):
+                break
+
+            case (.room, .presentRoomMemberDetails, .roomMemberDetails(_, let member)):
+                presentRoomMemberDetails(member: member.value)
+            case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
                 break
                 
             default:
@@ -256,6 +266,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
                 case .presentEmojiPicker(let itemID):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
+                case .presentRoomMemberDetails(member: let member):
+                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 }
             }
             .store(in: &cancellables)
@@ -460,12 +472,33 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
+    private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
+        let params = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: userSession.mediaProvider)
+        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
+
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissRoomMemberDetails)
+        }
+    }
+
     private func showSuccess(label: String) {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
     }
 }
 
 private extension RoomFlowCoordinator {
+    struct HashableRoomMemberWrapper: Hashable {
+        let value: RoomMemberProxyProtocol
+
+        static func == (lhs: HashableRoomMemberWrapper, rhs: HashableRoomMemberWrapper) -> Bool {
+            lhs.value.userID == rhs.value.userID
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(value.userID)
+        }
+    }
+
     enum State: StateType {
         case initial
         case room(roomID: String)
@@ -475,6 +508,7 @@ private extension RoomFlowCoordinator {
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: String)
+        case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
     }
     
     struct EventUserInfo {
@@ -502,5 +536,8 @@ private extension RoomFlowCoordinator {
         
         case presentEmojiPicker(itemID: String)
         case dismissEmojiPicker
+
+        case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
+        case dismissRoomMemberDetails
     }
 }

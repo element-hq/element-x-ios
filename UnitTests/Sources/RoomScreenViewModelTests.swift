@@ -150,6 +150,94 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.items[1].timelineGroupStyle, .middle, "Nothing should prevent the second message from being grouped.")
         XCTAssertEqual(viewModel.state.items[2].timelineGroupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
     }
+
+    func testGoToUserDetailsSuccessNoDelay() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomMemberMock = RoomMemberProxyMock()
+        roomMemberMock.userID = "bob"
+        roomProxyMock.getMemberUserIDReturnValue = .success(roomMemberMock)
+        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock,
+                                            userIndicatorController: userIndicatorControllerMock)
+        viewModel.callback = { action in
+            switch action {
+            case .displayRoomMemberDetails(let member):
+                XCTAssert(member === roomMemberMock)
+            default:
+                XCTFail("Did not received the expected action")
+            }
+        }
+
+        // Test
+        viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
+        await Task.yield()
+        XCTAssertFalse(userIndicatorControllerMock.submitIndicatorCalled)
+        XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
+        XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
+    }
+
+    func testGoToUserDetailsSuccessWithDelay() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomMemberMock = RoomMemberProxyMock()
+        roomMemberMock.userID = "bob"
+        roomProxyMock.getMemberUserIDClosure = { _ in
+            try? await Task.sleep(for: .milliseconds(200))
+            return .success(roomMemberMock)
+        }
+        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock,
+                                            userIndicatorController: userIndicatorControllerMock)
+        viewModel.callback = { action in
+            switch action {
+            case .displayRoomMemberDetails(let member):
+                XCTAssert(member === roomMemberMock)
+            default:
+                XCTFail("Did not received the expected action")
+            }
+        }
+
+        // Test
+        viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
+        try? await Task.sleep(for: .milliseconds(300))
+        XCTAssert(userIndicatorControllerMock.submitIndicatorCallsCount == 1)
+        XCTAssert(userIndicatorControllerMock.retractIndicatorWithIdCallsCount == 1)
+        XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
+        XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
+    }
+
+    func testGoToUserDetailsFailure() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        let roomMemberMock = RoomMemberProxyMock()
+        roomMemberMock.userID = "bob"
+        roomProxyMock.getMemberUserIDClosure = { _ in
+            .failure(.failedRetrievingMember)
+        }
+        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock,
+                                            userIndicatorController: userIndicatorControllerMock)
+        viewModel.callback = { _ in
+            XCTFail("Should not receive any action")
+        }
+
+        // Test
+        viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
+        await viewModel.context.nextViewState()
+        XCTAssertFalse(viewModel.state.bindings.alertInfo.isNil)
+        XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
+        XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
+    }
 }
 
 private extension TextRoomTimelineItem {

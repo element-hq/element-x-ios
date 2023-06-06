@@ -29,12 +29,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
+    private unowned let userIndicatorController: UserIndicatorControllerProtocol
+    private var loadingTask: Task<Void, Never>?
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
-         roomProxy: RoomProxyProtocol) {
+         roomProxy: RoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol = ServiceLocator.shared.userIndicatorController) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -130,6 +134,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             callback?(.displayDocumentPicker)
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
+        case .tappedOnUser(userID: let userID):
+            Task { await handleTappedUser(userID: userID) }
         }
     }
     
@@ -246,10 +252,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                  title: L10n.commonError,
                                                  message: message)
         case .toast(let message):
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
-                                                                                        type: .toast,
-                                                                                        title: message,
-                                                                                        iconName: "xmark"))
+            userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
+                                                                  type: .toast,
+                                                                  title: message,
+                                                                  iconName: "xmark"))
         }
     }
     
@@ -376,9 +382,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         _ = provider.loadDataRepresentation(for: contentType) { data, error in
             Task { @MainActor in
                 let loadingIndicatorIdentifier = UUID().uuidString
-                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+                self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
                 defer {
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                    self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
                 }
 
                 if let error {
@@ -420,6 +426,37 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         return messageItem.contentType
+    }
+
+    private func handleTappedUser(userID: String) async {
+        // This is generally fast but it could take some time for rooms with thousands of users on first load
+        // Show a loader only if it takes more than 0.1 seconds
+        loadingTask = showLoadingIndicator(with: .milliseconds(100))
+        let result = await roomProxy.getMember(userID: userID)
+        loadingTask?.cancel()
+        hideLoadingIndicator()
+        
+        switch result {
+        case .success(let member):
+            callback?(.displayRoomMemberDetails(member: member))
+        case .failure(let error):
+            displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
+            MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
+        }
+    }
+
+    private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
+
+    private func showLoadingIndicator(with delay: Duration) -> Task<Void, Never> {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(interactiveDismissDisabled: true),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: delay)
+    }
+
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
 

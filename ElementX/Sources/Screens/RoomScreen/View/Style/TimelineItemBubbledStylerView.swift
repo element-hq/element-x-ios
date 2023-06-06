@@ -68,6 +68,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .padding(.vertical, senderNameVerticalPadding)
                 }
                 .accessibilityElement(children: .combine)
+                .onTapGesture {
+                    context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
+                }
             }
         }
     }

@@ -389,6 +389,22 @@ class RoomProxy: RoomProxyProtocol {
             return
         }
     }
+
+    func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                let member = try self.room.member(userId: userID)
+                return .success(RoomMemberProxy(member: member, backgroundTaskService: self.backgroundTaskService))
+            } catch {
+                return .failure(.failedRetrievingMember)
+            }
+        }
+    }
     
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)

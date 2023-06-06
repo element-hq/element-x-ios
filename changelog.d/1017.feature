@@ -1,0 +1,1 @@
+Tapping on a user avatar/name in the timeline opens the User Details view for that user.
