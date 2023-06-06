@@ -23,6 +23,7 @@ struct InviteUsersScreen: View {
     var body: some View {
         mainContent
             .elementFormStyle()
+            .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -69,33 +70,38 @@ struct InviteUsersScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
+    @ViewBuilder
     private var usersSection: some View {
-        Section {
-            ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                Button { context.send(viewAction: .toggleUser(user)) } label: {
-                    UserProfileCell(user: user,
-                                    membership: context.viewState.membershipState(user),
-                                    imageProvider: context.imageProvider)
+        if !context.viewState.usersSection.users.isEmpty {
+            Section {
+                ForEach(context.viewState.usersSection.users, id: \.userID) { user in
+                    Button { context.send(viewAction: .toggleUser(user)) } label: {
+                        UserProfileCell(user: user,
+                                        membership: context.viewState.membershipState(user),
+                                        imageProvider: context.imageProvider)
+                    }
+                    .disabled(context.viewState.isUserDisabled(user))
+                    .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
                 }
-                .buttonStyle(FormButtonStyle(isDisabled: context.viewState.isUserDisabled(user),
-                                             accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+            } header: {
+                if let title = context.viewState.usersSection.title {
+                    Text(title)
+                }
             }
-        } header: {
-            if let title = context.viewState.usersSection.title {
-                Text(title)
-            }
+            .listRowSeparator(.automatic)
+            .formSectionStyle()
+        } else {
+            Section.empty
         }
-        .listRowSeparator(.automatic)
-        .formSectionStyle()
     }
     
     @State private var frame: CGRect = .zero
-    @ScaledMetric private var cellWidth: CGFloat = 64
+    @ScaledMetric private var cellWidth: CGFloat = 72
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
-                HStack(spacing: 28) {
+                HStack(spacing: 16) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                         InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
@@ -109,7 +115,7 @@ struct InviteUsersScreen: View {
                         scrollView.scrollTo(id)
                     }
                 }
-                .padding(.horizontal, 18)
+                .padding(.horizontal, 14)
             }
         }
         .frame(width: frame.width)

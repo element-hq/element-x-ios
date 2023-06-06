@@ -26,32 +26,25 @@ struct CreateRoomScreen: View {
     }
 
     var body: some View {
-        mainContent
-            .scrollDismissesKeyboard(.immediately)
-            .elementFormStyle()
-            .navigationTitle(L10n.screenCreateRoomTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    createButton
-                }
-            }
-            .background(ViewFrameReader(frame: $frame))
-            .alert(item: $context.alertInfo) { $0.alert }
-    }
-    
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
         Form {
             roomSection
             topicSection
-            Spacer()
-                .listRowBackground(Color.clear)
             securitySection
         }
+        .elementFormStyle()
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(L10n.screenCreateRoomTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                createButton
+            }
+        }
+        .background(ViewFrameReader(frame: $frame))
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
-    @ScaledMetric private var roomIconSize: CGFloat = 64
+    @ScaledMetric private var roomIconSize: CGFloat = 70
     private var roomSection: some View {
         Section {
             HStack(alignment: .center, spacing: 16) {
@@ -94,7 +87,7 @@ struct CreateRoomScreen: View {
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
-                              prompt: Text(L10n.screenCreateRoomRoomNamePlaceholder),
+                              prompt: Text(L10n.commonRoomNamePlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -111,6 +104,7 @@ struct CreateRoomScreen: View {
     
     private var cameraImage: some View {
         Image(systemName: "camera")
+            .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.element.secondaryContent)
             .frame(width: roomIconSize, height: roomIconSize)
             .background(Color.element.quinaryContent)
@@ -121,7 +115,7 @@ struct CreateRoomScreen: View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
-                      prompt: Text(L10n.screenCreateRoomTopicPlaceholder),
+                      prompt: Text(L10n.commonTopicPlaceholder),
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
@@ -138,11 +132,11 @@ struct CreateRoomScreen: View {
     }
     
     @State private var frame: CGRect = .zero
-    @ScaledMetric private var invitedUserCellWidth: CGFloat = 64
+    @ScaledMetric private var invitedUserCellWidth: CGFloat = 72
 
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 28) {
+            LazyHStack(spacing: 16) {
                 ForEach(context.viewState.selectedUsers, id: \.userID) { user in
                     InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
                         context.send(viewAction: .deselectUser(user))
@@ -150,7 +144,7 @@ struct CreateRoomScreen: View {
                     .frame(width: invitedUserCellWidth)
                 }
             }
-            .padding(.init(top: 16, leading: 32, bottom: 16, trailing: 32))
+            .padding(.init(top: 22, leading: 20, bottom: 0, trailing: 32))
         }
         .frame(width: frame.width)
     }
@@ -159,23 +153,26 @@ struct CreateRoomScreen: View {
         Section {
             Picker(L10n.commonSecurity, selection: $context.isRoomPrivate) {
                 Label {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenCreateRoomPrivateOptionTitle)
+                            .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPrivateOptionDescription)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.element.secondaryContent)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.element.tertiaryContent)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
                 }
                 .tag(true)
                 .labelStyle(FormRowLabelStyle(alignment: .top))
+                
                 Label {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenCreateRoomPublicOptionTitle)
+                            .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPublicOptionDescription)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.element.secondaryContent)
+                            .font(.compound.bodyXS)
+                            .foregroundColor(.element.tertiaryContent)
                     }
                 } icon: {
                     Image(systemName: "exclamationmark.shield")
@@ -188,8 +185,10 @@ struct CreateRoomScreen: View {
         } header: {
             Text(L10n.commonSecurity.uppercased())
                 .formSectionHeader()
+                .padding(.top, 40)
         }
-        .formSectionStyle()
+        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowBackground(Color.element.formRowBackground)
     }
     
     private var createButton: some View {

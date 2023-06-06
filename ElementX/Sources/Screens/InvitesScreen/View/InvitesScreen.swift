@@ -22,7 +22,7 @@ struct InvitesScreen: View {
     var body: some View {
         ScrollView {
             if let rooms = context.viewState.invites, !rooms.isEmpty {
-                LazyVStack {
+                LazyVStack(spacing: 0) {
                     ForEach(rooms, id: \.roomDetails.id) { invite in
                         InvitesScreenCell(invite: invite,
                                           imageProvider: context.imageProvider,
@@ -34,6 +34,7 @@ struct InvitesScreen: View {
                 noInvitesContent
             }
         }
+        .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.actionInvitesList)
         .alert(item: $context.alertInfo) { $0.alert }
     }

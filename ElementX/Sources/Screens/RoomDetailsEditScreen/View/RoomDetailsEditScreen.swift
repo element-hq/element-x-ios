@@ -26,35 +26,34 @@ struct RoomDetailsEditScreen: View {
     }
     
     var body: some View {
-        mainContent
-            .elementFormStyle()
-            .scrollDismissesKeyboard(.immediately)
-            .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(L10n.actionCancel) {
-                        context.send(viewAction: .cancel)
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(L10n.actionSave) {
-                        context.send(viewAction: .save)
-                        focus = nil
-                    }
-                    .disabled(!context.viewState.canSave)
-                }
-            }
-    }
-    
-    // MARK: - Private
-    
-    private var mainContent: some View {
         Form {
             avatar
             nameSection
             topicSection
+        }
+        .elementFormStyle()
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+    }
+    
+    // MARK: - Private
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionSave) {
+                context.send(viewAction: .save)
+                focus = nil
+            }
+            .disabled(!context.viewState.canSave)
         }
     }
 
@@ -89,7 +88,7 @@ struct RoomDetailsEditScreen: View {
             
             TextField(L10n.commonRoomName,
                       text: $context.name,
-                      prompt: canEditName ? Text(L10n.screenCreateRoomRoomNamePlaceholder) : nil,
+                      prompt: canEditName ? Text(L10n.commonRoomNamePlaceholder) : nil,
                       axis: .horizontal)
                 .focused($focus, equals: .name)
                 .font(.compound.bodyLG)
@@ -110,7 +109,7 @@ struct RoomDetailsEditScreen: View {
             
             TextField(L10n.commonTopic,
                       text: $context.topic,
-                      prompt: canEditTopic ? Text(L10n.screenCreateRoomTopicPlaceholder) : nil,
+                      prompt: canEditTopic ? Text(L10n.commonTopicPlaceholder) : nil,
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .font(.compound.bodyLG)
@@ -127,7 +126,8 @@ struct RoomDetailsEditScreen: View {
     
     private var avatarOverlayIcon: some View {
         Image(systemName: "camera")
-            .padding(2)
+            .font(.system(size: 14, weight: .semibold))
+            .padding(3)
             .imageScale(.small)
             .foregroundColor(.white)
             .background {

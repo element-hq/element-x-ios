@@ -29,10 +29,9 @@ struct UserProfileCell: View {
                                 contentID: user.userID,
                                 avatarSize: .user(on: .startChat),
                                 imageProvider: imageProvider)
-                .padding(.vertical, 10)
                 .accessibilityHidden(true)
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(user.displayName ?? user.userID)
                     .font(.compound.headingSM)
                     .foregroundColor(.element.primaryContent)
@@ -40,6 +39,7 @@ struct UserProfileCell: View {
                 subtitleContent
                 
                 warningContent
+                    .padding(.top, 2)
             }
             .accessibilityElement(children: .combine)
         }
@@ -63,15 +63,14 @@ struct UserProfileCell: View {
     @ViewBuilder
     private var warningContent: some View {
         if !user.isVerified, membership == nil {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 5) {
                 Text(Image(systemName: "exclamationmark.circle.fill"))
                     .foregroundColor(.compound.textCriticalPrimary)
                 
                 Text(L10n.commonInviteUnknownProfile)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.element.tertiaryContent)
             }
             .font(.compound.bodyXS)
-            .padding(.top, 4)
         }
     }
 }
@@ -109,13 +108,15 @@ struct UserProfileCell_Previews: PreviewProvider {
             Button(action: action) {
                 UserProfileCell(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+            .disabled(true)
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
             .previewDisplayName("Selected disabled user")
             
             Button(action: action) {
                 UserProfileCell(user: .init(userID: "@someone:matrix.org"), membership: .join, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(isDisabled: true, accessory: .selection(isSelected: true)))
+            .disabled(true)
+            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
             .previewDisplayName("Unverified joined user")
             
             Button(action: action) {

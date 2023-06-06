@@ -18,6 +18,11 @@ import Combine
 import UIKit
 
 class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
+    enum ScrollDirection {
+        case up
+        case down
+    }
+    
     var scrollView: UIScrollView? {
         didSet {
             oldValue?.delegate = nil
@@ -25,13 +30,28 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         }
     }
     
-    let didScroll = PassthroughSubject<Void, Never>()
-    let isScrolling = CurrentValueSubject<Bool, Never>(false)
+    private let didScrollSubject = PassthroughSubject<Void, Never>()
+    var didScroll: AnyPublisher<Void, Never> {
+        didScrollSubject.eraseToAnyPublisher()
+    }
+    
+    private let isScrollingSubject = CurrentValueSubject<Bool, Never>(false)
+    var isScrolling: CurrentValuePublisher<Bool, Never> {
+        .init(isScrollingSubject)
+    }
+    
+    private let scrollDirectionSubject: PassthroughSubject<ScrollDirection, Never> = .init()
+    var scrollDirection: AnyPublisher<ScrollDirection, Never> {
+        scrollDirectionSubject
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+    }
     
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        didScroll.send(())
+        didScrollSubject.send(())
+        updateScrollDirection(scrollView)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -57,6 +77,20 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     // MARK: - Private
     
     private func updateDidScroll(_ scrollView: UIScrollView) {
-        isScrolling.send(scrollView.isDragging || scrollView.isDecelerating)
+        isScrollingSubject.send(scrollView.isDragging || scrollView.isDecelerating)
+    }
+    
+    private func updateScrollDirection(_ scrollView: UIScrollView) {
+        let velocity = scrollView.panGestureRecognizer.velocity(in: nil)
+
+        if velocity.y > Constant.scrollDirectionThreshold {
+            scrollDirectionSubject.send(.down)
+        } else if velocity.y < -Constant.scrollDirectionThreshold {
+            scrollDirectionSubject.send(.up)
+        }
+    }
+    
+    private enum Constant {
+        static let scrollDirectionThreshold: CGFloat = 200
     }
 }

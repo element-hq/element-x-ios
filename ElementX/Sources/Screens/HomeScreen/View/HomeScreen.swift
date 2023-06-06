@@ -26,6 +26,7 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingLogoutConfirmation = false
+    @State private var showingBottomToolbar = true
     
     var body: some View {
         ScrollView {
@@ -99,6 +100,11 @@ struct HomeScreen: View {
                 }
             }
         }
+        .onReceive(scrollViewAdapter.scrollDirection) { direction in
+            withAnimation(.elementDefault) {
+                showingBottomToolbar = (direction == .down)
+            }
+        }
         .onChange(of: context.viewState.visibleRooms) { _ in
             // Give the view a chance to update
             DispatchQueue.main.async {
@@ -115,19 +121,26 @@ struct HomeScreen: View {
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                userMenuButton
-            }
-            if context.viewState.startChatFlowEnabled {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    newRoomButton
-                }
-            }
-        }
+        .toolbar(showingBottomToolbar ? .automatic : .hidden, for: .bottomBar)
+        .toolbar { toolbar }
         .background(Color.element.background.ignoresSafeArea())
         .track(screen: .home)
+    }
+    
+    // MARK: - Private
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            userMenuButton
+        }
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            if context.viewState.startChatFlowEnabled {
+                Spacer()
+                newRoomButton
+            }
+        }
     }
 
     @ViewBuilder

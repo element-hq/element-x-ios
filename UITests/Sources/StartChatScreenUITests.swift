@@ -27,7 +27,7 @@ class StartChatScreenUITests: XCTestCase {
     func testSearchWithNoResults() async throws {
         let app = Application.launch(.startChat)
         let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("None")
+        searchField.clearAndTypeText("None\n")
         XCTAssert(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
         try await app.assertScreenshot(.startChat, step: 1)
     }
@@ -35,7 +35,7 @@ class StartChatScreenUITests: XCTestCase {
     func testSearchWithResults() async throws {
         let app = Application.launch(.startChatWithSearchResults)
         let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText("Bob")
+        searchField.clearAndTypeText("Bob\n")
         XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
         XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
         try await app.assertScreenshot(.startChat, step: 2)

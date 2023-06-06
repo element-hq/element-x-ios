@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
 // limitations under the License.
 //
 
-import XCTest
+import SwiftUI
 
-@MainActor
-class HomeScreenUITests: XCTestCase {
-    func testInitialStateComponents() async throws {
-        let app = Application.launch(.home)
-        // The gradient of the skeleton changes dynamically over time so the time may influence the match, better to have a lower precision for this one
-        try await app.assertScreenshot(.home)
+extension Section where Parent == Color, Content == EmptyView, Footer == EmptyView {
+    // An empty section whose purpose is to keep Form's background color when there is no content into it.
+    static var empty: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Color.clear
+        }
     }
 }

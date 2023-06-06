@@ -198,6 +198,8 @@ public enum L10n {
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Room name
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
+  /// e.g. your project name
+  public static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
@@ -224,6 +226,8 @@ public enum L10n {
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
+  /// What is this room about?
+  public static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
   /// Unable to decrypt
   public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
   /// We were unable to successfully send invites to one or more users.
@@ -492,9 +496,9 @@ public enum L10n {
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite people
+  /// Invite friends to Element
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
-  /// Add people
+  /// Invite people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
   /// An error occurred when creating the room
   public static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
@@ -508,14 +512,10 @@ public enum L10n {
   public static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
   /// Room name
   public static var screenCreateRoomRoomNameLabel: String { return L10n.tr("Localizable", "screen_create_room_room_name_label") }
-  /// e.g. Product Sprint
-  public static var screenCreateRoomRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_create_room_room_name_placeholder") }
   /// Create a room
   public static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
   /// Topic (optional)
   public static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
-  /// What is this room about?
-  public static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
   /// Block
   public static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
   /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
@@ -542,9 +542,9 @@ public enum L10n {
   public static var screenInvitesDeclineDirectChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_direct_chat_title") }
   /// No Invites
   public static var screenInvitesEmptyList: String { return L10n.tr("Localizable", "screen_invites_empty_list") }
-  /// %1$@ invited you
-  public static func screenInvitesInvitedYou(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1))
+  /// %1$@ (%2$@) invited you
+  public static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
   /// This account has been deactivated.
   public static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
@@ -576,6 +576,14 @@ public enum L10n {
   public static var screenMediaUploadPreviewErrorFailedProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_processing") }
   /// Failed uploading media, please try again.
   public static var screenMediaUploadPreviewErrorFailedSending: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_sending") }
+  /// Sign in manually
+  public static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
+  /// Sign in with QR code
+  public static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
+  /// Create account
+  public static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
+  /// Communicate and collaborate securely
+  public static var screenOnboardingSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_subtitle") }
   /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
   public static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
@@ -618,6 +626,8 @@ public enum L10n {
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
+  /// Room name
+  public static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security
   public static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
   /// Share room
