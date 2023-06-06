@@ -429,9 +429,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private func handleTappedUser(userID: String) async {
-        // This is fast it could only take some times for room with thousands of users
-        // and only the first time they are loaded so we show a loader only if it takes more
-        // than 0.1 seconds
+        // This is generally fast but it could take some time for rooms with thousands of users on first load
+        // Show a loader only if it takes more than 0.1 seconds
         loadingTask = Task {
             try? await Task.sleep(for: .milliseconds(100))
             guard !Task.isCancelled else { return }
