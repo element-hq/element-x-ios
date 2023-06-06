@@ -16,14 +16,14 @@
 
 import SwiftUI
 
-struct EqualIconWidthLabelStyle: LabelStyle {
-    @ScaledMetric private var menuIconSize = 24.0
+struct FixedIconSizeLabelStyle: LabelStyle {
+    @ScaledMetric private var iconSize = 24.0
     
     func makeBody(configuration: Configuration) -> some View {
         HStack {
             configuration
                 .icon
-                .frame(width: menuIconSize, height: menuIconSize)
+                .frame(width: iconSize, height: iconSize)
             configuration.title
         }
     }

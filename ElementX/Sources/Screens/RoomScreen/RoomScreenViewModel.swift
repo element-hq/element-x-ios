@@ -72,7 +72,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return nil
             }
             
-            return self.contextMenuActionsForItemId(itemId)
+            return self.timelineItemMenuActionsForItemId(itemId)
         }
         
         roomProxy
@@ -122,8 +122,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             Task { await markRoomAsRead() }
+        case .timelineItemMenu(let itemID):
+            showTimelineItemActionMenu(for: itemID)
         case .timelineItemMenuAction(let itemID, let action):
-            processContentMenuAction(action, itemID: itemID)
+            processTimelineItemMenuAction(action, itemID: itemID)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
         case .displayMediaPicker:
@@ -256,9 +258,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    // MARK: ContextMenus
+    // MARK: TimelineItemActionMenu
     
-    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemMenuActions? {
+    private func showTimelineItemActionMenu(for itemID: String) {
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            // Don't show a menu for non-event based items.
+            return
+        }
+        
+        state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
+    }
+    
+    private func timelineItemMenuActionsForItemId(_ itemId: String) -> TimelineItemMenuActions? {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
@@ -299,7 +311,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func processContentMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
+    private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return

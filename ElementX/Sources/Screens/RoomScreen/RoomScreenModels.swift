@@ -58,6 +58,8 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
+    
+    case timelineItemMenu(itemID: String)
     case timelineItemMenuAction(itemID: String, action: TimelineItemMenuAction)
     
     case displayEmojiPicker(itemID: String)
@@ -103,6 +105,16 @@ struct RoomScreenViewStateBindings {
     var alertInfo: AlertInfo<RoomScreenErrorType>?
 
     var debugInfo: TimelineItemDebugInfo?
+    
+    var actionMenuInfo: TimelineItemActionMenuInfo?
+}
+
+struct TimelineItemActionMenuInfo: Identifiable {
+    let item: EventBasedTimelineItemProtocol
+    
+    var id: String {
+        item.id
+    }
 }
 
 enum RoomScreenErrorType: Hashable {

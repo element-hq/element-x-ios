@@ -124,7 +124,7 @@ public struct TimelineItemMenu: View {
     }
     
     private var reactionsSection: some View {
-        HStack(alignment: .center, spacing: 0.0) {
+        HStack(alignment: .center, spacing: 32.0) {
             reactionButton(for: "👍️")
             reactionButton(for: "👎️")
             reactionButton(for: "🔥")
@@ -139,6 +139,7 @@ public struct TimelineItemMenu: View {
                     .font(.compound.headingLG)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .center)
     }
     
     private func reactionButton(for emoji: String) -> some View {
@@ -146,22 +147,17 @@ public struct TimelineItemMenu: View {
             presentationMode.wrappedValue.dismiss()
             context.send(viewAction: .sendReaction(key: emoji, eventID: item.id))
         } label: {
-            ZStack {
-                Circle()
-                    .foregroundColor(reactionBackground(for: emoji))
-                    .padding(8.0)
-                
-                Text(emoji)
-                    .font(.compound.headingLG)
-            }
+            Text(emoji)
+                .font(.compound.headingLG)
+                .opacity(reactionOpacity(for: emoji))
         }
     }
     
-    private func reactionBackground(for emoji: String) -> Color {
+    private func reactionOpacity(for emoji: String) -> Double {
         if item.properties.reactions.first(where: { $0.key == emoji }) != nil {
-            return .element.brand
+            return 0.5
         } else {
-            return .clear
+            return 1.0
         }
     }
     
@@ -219,7 +215,7 @@ public struct TimelineItemMenu: View {
         
         var body: some View {
             Label(title, systemImage: systemImageName)
-                .labelStyle(EqualIconWidthLabelStyle())
+                .labelStyle(FixedIconSizeLabelStyle())
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()

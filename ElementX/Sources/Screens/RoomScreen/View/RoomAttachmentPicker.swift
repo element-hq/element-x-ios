@@ -76,7 +76,7 @@ struct RoomAttachmentPicker: View {
         
         var body: some View {
             Label(title, systemImage: systemImageName)
-                .labelStyle(EqualIconWidthLabelStyle())
+                .labelStyle(FixedIconSizeLabelStyle())
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
