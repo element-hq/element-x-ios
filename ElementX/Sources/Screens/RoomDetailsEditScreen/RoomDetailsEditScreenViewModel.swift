@@ -66,11 +66,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            if state.localMedia != nil {
-                state.localMedia = nil
-            } else {
-                state.avatarURL = nil
-            }
+            state.avatarURL = nil
+            state.localMedia = nil
         }
     }
     
