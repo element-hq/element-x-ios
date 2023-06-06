@@ -31,6 +31,23 @@ struct SubmitBugReportResponse: Decodable {
     var reportUrl: String
 }
 
+enum BugReportServiceError: LocalizedError {
+    case uploadFailure(Error)
+    case serverError(URLResponse, String)
+    case httpError(HTTPURLResponse, String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .uploadFailure(let error):
+            return error.localizedDescription
+        case .serverError(_, let errorDescription):
+            return errorDescription
+        case .httpError(_, let errorDescription):
+            return errorDescription
+        }
+    }
+}
+
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol {
     var isRunning: Bool { get }
@@ -46,5 +63,5 @@ protocol BugReportServiceProtocol {
     func crash()
     
     func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse
+                         progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError>
 }

@@ -24,6 +24,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryURL: URL
     private let applicationId: String
+    private let maxUploadSize: Int
     private let session: URLSession
     private var lastCrashEventId: String?
     private let progressSubject = PassthroughSubject<Double, Never>()
@@ -32,10 +33,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
          applicationId: String = ServiceLocator.shared.settings.bugReportApplicationId,
+         maxUploadSize: Int = ServiceLocator.shared.settings.bugReportMaxUploadSize,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryURL = sentryURL
         self.applicationId = applicationId
+        self.maxUploadSize = maxUploadSize
         self.session = session
         super.init()
         
@@ -95,8 +98,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    // swiftlint:disable:next function_body_length
-    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    func submitBugReport(_ bugReport: BugReport,
+                         progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
             MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
             MultipartFormData(key: "text", type: .text(value: bugReport.text))
@@ -111,13 +115,11 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let zippedFiles = try await zipFiles(includeLogs: bugReport.includeLogs,
-                                             includeCrashLog: bugReport.includeCrashLog)
-        //  log or compressed-log
-        if !zippedFiles.isEmpty {
-            for url in zippedFiles {
-                params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
-            }
+        let logAttachments = await zipFiles(includeLogs: bugReport.includeLogs,
+                                            includeCrashLog: bugReport.includeCrashLog)
+        
+        for url in logAttachments.files {
+            params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
         }
         
         if let crashEventId = lastCrashEventId {
@@ -131,7 +133,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         let boundary = "Boundary-\(UUID().uuidString)"
         var body = Data()
         for param in params {
-            try body.appendParam(param, boundary: boundary)
+            do {
+                try body.appendParam(param, boundary: boundary)
+            } catch {
+                MXLog.error("Failed to attach parameter at \(param.key)")
+                // Continue to the next parameter and try to submit something.
+            }
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
@@ -141,30 +148,48 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        let data: Data
+        var delegate: URLSessionTaskDelegate?
         if let progressListener {
             progressSubject
                 .receive(on: DispatchQueue.main)
                 .weakAssign(to: \.value, on: progressListener.progressSubject)
                 .store(in: &cancellables)
-            (data, _) = try await session.data(for: request, delegate: self)
-        } else {
-            (data, _) = try await session.data(for: request)
-        }
-
-        // Parse the JSON data
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let result = try decoder.decode(SubmitBugReportResponse.self, from: data)
-
-        if !result.reportUrl.isEmpty {
-            MXLogger.deleteCrashLog()
-            lastCrashEventId = nil
+            delegate = self
         }
         
-        MXLog.info("Feedback submitted.")
-        
-        return result
+        do {
+            let (data, response) = try await session.dataWithRetry(for: request, delegate: delegate)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+                MXLog.error("Failed to submit bug report: \(errorDescription)")
+                MXLog.error("Response: \(response)")
+                return .failure(.serverError(response, errorDescription))
+            }
+            
+            guard httpResponse.statusCode == 200 else {
+                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+                MXLog.error("Failed to submit bug report: \(errorDescription) (\(httpResponse.statusCode))")
+                MXLog.error("Response: \(httpResponse)")
+                return .failure(.httpError(httpResponse, errorDescription))
+            }
+            
+            // Parse the JSON data
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
+            
+            if !uploadResponse.reportUrl.isEmpty {
+                MXLogger.deleteCrashLog()
+                lastCrashEventId = nil
+            }
+            
+            MXLog.info("Feedback submitted.")
+            
+            return .success(uploadResponse)
+        } catch {
+            return .failure(.uploadFailure(error))
+        }
     }
 
     // MARK: - Private
@@ -200,7 +225,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     private func zipFiles(includeLogs: Bool,
-                          includeCrashLog: Bool) async throws -> [URL] {
+                          includeCrashLog: Bool) async -> Logs {
         MXLog.info("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
@@ -210,37 +235,69 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         if includeCrashLog, let crashLogFile = MXLogger.crashLog {
             filesToCompress.append(crashLogFile)
         }
-
-        var totalSize = 0
-        var totalZippedSize = 0
-        var zippedFiles: [URL] = []
-
+        
+        var compressedLogs = Logs(maxFileSize: maxUploadSize)
+        
         for url in filesToCompress {
-            let zippedFileURL = URL.temporaryDirectory
-                .appendingPathComponent(url.lastPathComponent)
-
-            //  remove old zipped file if exists
-            try? FileManager.default.removeItem(at: zippedFileURL)
-
-            let rawData = try Data(contentsOf: url)
-            if rawData.isEmpty {
-                continue
+            do {
+                try attachFile(at: url, to: &compressedLogs)
+            } catch {
+                MXLog.error("Failed to compress log at \(url)")
+                // Continue so that other logs can still be sent.
             }
-            guard let zippedData = (rawData as NSData).gzipped() else {
-                continue
-            }
-
-            totalSize += rawData.count
-            totalZippedSize += zippedData.count
-
-            try zippedData.write(to: zippedFileURL)
-
-            zippedFiles.append(zippedFileURL)
         }
+        
+        MXLog.info("zipFiles: originalSize: \(compressedLogs.originalSize), zippedSize: \(compressedLogs.zippedSize)")
 
-        MXLog.info("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
-
-        return zippedFiles
+        return compressedLogs
+    }
+    
+    /// Zips a file creating chunks based on 10MB inputs.
+    private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
+        let fileHandle = try FileHandle(forReadingFrom: url)
+        
+        var chunkIndex = -1
+        while let data = try fileHandle.read(upToCount: 10 * 1024 * 1024) {
+            do {
+                chunkIndex += 1
+                if let zippedData = (data as NSData).gzipped() {
+                    let zippedFilename = url.deletingPathExtension().lastPathComponent + "_\(chunkIndex).log"
+                    let chunkURL = URL.temporaryDirectory.appending(path: zippedFilename)
+                    
+                    // Remove old zipped file if exists
+                    try? FileManager.default.removeItem(at: chunkURL)
+                    
+                    try zippedData.write(to: chunkURL)
+                    zippedFiles.appendFile(at: chunkURL, zippedSize: zippedData.count, originalSize: data.count)
+                }
+            } catch {
+                MXLog.error("Failed attaching log chunk \(chunkIndex) from (\(url.lastPathComponent)")
+                continue
+            }
+        }
+    }
+    
+    /// A collection of logs to be uploaded to the bug report service.
+    struct Logs {
+        /// The maximum total size of all the files.
+        let maxFileSize: Int
+        
+        /// The files included.
+        private(set) var files: [URL] = []
+        /// The total size of the files after compression.
+        private(set) var zippedSize = 0
+        /// The original size of the files.
+        private(set) var originalSize = 0
+        
+        mutating func appendFile(at url: URL, zippedSize: Int, originalSize: Int) {
+            guard self.zippedSize + zippedSize < maxFileSize else {
+                MXLog.error("Logs too large, skipping attachment: \(url.lastPathComponent)")
+                return
+            }
+            files.append(url)
+            self.originalSize += originalSize
+            self.zippedSize += zippedSize
+        }
     }
 }
 
@@ -283,5 +340,16 @@ extension BugReportService: URLSessionTaskDelegate {
                 self?.progressSubject.send(value)
             }
             .store(in: &cancellables)
+    }
+}
+
+private extension URLSession {
+    /// The same as `data(for:delegate:)` but with an additional immediate retry if the first attempt fails.
+    func dataWithRetry(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
+        if let firstTryResult = try? await data(for: request, delegate: delegate) {
+            return firstTryResult
+        }
+        
+        return try await data(for: request, delegate: delegate)
     }
 }

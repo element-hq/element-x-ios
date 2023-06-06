@@ -64,27 +64,35 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private func submitBugReport() async {
         let progressTracker = ProgressTracker()
         actionsSubject.send(.submitStarted(progressTracker: progressTracker))
-        do {
-            var files: [URL] = []
-            if let screenshot = context.viewState.screenshot {
-                let imageURL = URL.temporaryDirectory.appendingPathComponent("Screenshot.png")
-                let pngData = screenshot.pngData()
-                try pngData?.write(to: imageURL)
+        
+        var files: [URL] = []
+        if let screenshot = context.viewState.screenshot,
+           let pngData = screenshot.pngData() {
+            let imageURL = URL.temporaryDirectory.appendingPathComponent("Screenshot.png")
+            
+            do {
+                try pngData.write(to: imageURL)
                 files.append(imageURL)
+            } catch {
+                MXLog.error("Failed writing screenshot to disk")
+                // Continue anyway without the screenshot.
             }
-            let bugReport = BugReport(userID: userID,
-                                      deviceID: deviceID,
-                                      text: context.reportText,
-                                      includeLogs: context.sendingLogsEnabled,
-                                      includeCrashLog: true,
-                                      githubLabels: [],
-                                      files: files)
-            let result = try await bugReportService.submitBugReport(bugReport,
-                                                                    progressListener: progressTracker)
-            MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
+        }
+        let bugReport = BugReport(userID: userID,
+                                  deviceID: deviceID,
+                                  text: context.reportText,
+                                  includeLogs: context.sendingLogsEnabled,
+                                  includeCrashLog: true,
+                                  githubLabels: [],
+                                  files: files)
+        
+        switch await bugReportService.submitBugReport(bugReport,
+                                                      progressListener: progressTracker) {
+        case .success(let response):
+            MXLog.info("Submission uploaded to: \(response.reportUrl)")
             actionsSubject.send(.submitFinished)
-        } catch {
-            MXLog.error("SubmitBugReport failed: \(error)")
+        case .failure(let error):
+            MXLog.error("Submission failed: \(error)")
             actionsSubject.send(.submitFailed(error: error))
         }
     }

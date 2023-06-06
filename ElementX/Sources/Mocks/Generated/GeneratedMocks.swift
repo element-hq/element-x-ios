@@ -172,25 +172,21 @@ class BugReportServiceMock: BugReportServiceProtocol {
     }
     //MARK: - submitBugReport
 
-    var submitBugReportProgressListenerThrowableError: Error?
     var submitBugReportProgressListenerCallsCount = 0
     var submitBugReportProgressListenerCalled: Bool {
         return submitBugReportProgressListenerCallsCount > 0
     }
     var submitBugReportProgressListenerReceivedArguments: (bugReport: BugReport, progressListener: ProgressListener?)?
     var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: ProgressListener?)] = []
-    var submitBugReportProgressListenerReturnValue: SubmitBugReportResponse!
-    var submitBugReportProgressListenerClosure: ((BugReport, ProgressListener?) async throws -> SubmitBugReportResponse)?
+    var submitBugReportProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
+    var submitBugReportProgressListenerClosure: ((BugReport, ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
 
-    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        if let error = submitBugReportProgressListenerThrowableError {
-            throw error
-        }
+    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         submitBugReportProgressListenerCallsCount += 1
         submitBugReportProgressListenerReceivedArguments = (bugReport: bugReport, progressListener: progressListener)
         submitBugReportProgressListenerReceivedInvocations.append((bugReport: bugReport, progressListener: progressListener))
         if let submitBugReportProgressListenerClosure = submitBugReportProgressListenerClosure {
-            return try await submitBugReportProgressListenerClosure(bugReport, progressListener)
+            return await submitBugReportProgressListenerClosure(bugReport, progressListener)
         } else {
             return submitBugReportProgressListenerReturnValue
         }

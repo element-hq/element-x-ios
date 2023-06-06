@@ -126,23 +126,29 @@ class MXLogger {
         }
     }
     
-    /// The list of all log file URLs.
+    /// The list of all log file URLs, sorted chronologically.
     static var logFiles: [URL] {
-        var logFiles = [URL]()
+        var logFiles = [(url: URL, modificationDate: Date)]()
         
         let fileManager = FileManager.default
-        let enumerator = fileManager.enumerator(at: logsFolderURL, includingPropertiesForKeys: nil)
+        let enumerator = fileManager.enumerator(at: logsFolderURL, includingPropertiesForKeys: [.contentModificationDateKey])
         
-        // Find all *.log files
+        // Find all *.log files and their modification dates.
         while let logURL = enumerator?.nextObject() as? URL {
-            if logURL.lastPathComponent.hasPrefix("console") {
-                logFiles.append(logURL)
+            guard let resourceValues = try? logURL.resourceValues(forKeys: [.contentModificationDateKey]),
+                  let modificationDate = resourceValues.contentModificationDate
+            else { continue }
+            
+            if logURL.pathExtension == "log" {
+                logFiles.append((logURL, modificationDate))
             }
         }
         
-        MXLog.info("logFiles: \(logFiles)")
+        let sortedFiles = logFiles.sorted { $0.modificationDate > $1.modificationDate }.map(\.url)
         
-        return logFiles
+        MXLog.info("logFiles: \(sortedFiles.map(\.lastPathComponent))")
+        
+        return sortedFiles
     }
     
     // MARK: - Exceptions and crashes

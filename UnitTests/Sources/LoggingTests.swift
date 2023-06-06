@@ -161,6 +161,61 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
     }
     
+    func testLogFileSorting() async throws {
+        // Given a collection of log files.
+        XCTAssertTrue(MXLogger.logFiles.isEmpty)
+        
+        // When creating new logs.
+        let logsFileDirectory = URL.appGroupContainerDirectory
+        for i in 1...5 {
+            let filename = "console.\(i).log"
+            try "console".write(to: logsFileDirectory.appending(path: filename), atomically: true, encoding: .utf8)
+        }
+        
+        for i in 1...5 {
+            let nseFilename = "console-nse.\(i).log"
+            try "nse".write(to: logsFileDirectory.appending(path: nseFilename), atomically: true, encoding: .utf8)
+        }
+        
+        // Then the logs should be sorted chronologically (newest first) and not alphabetically.
+        XCTAssertEqual(MXLogger.logFiles.map(\.lastPathComponent),
+                       ["console-nse.5.log",
+                        "console-nse.4.log",
+                        "console-nse.3.log",
+                        "console-nse.2.log",
+                        "console-nse.1.log",
+                        "console.5.log",
+                        "console.4.log",
+                        "console.3.log",
+                        "console.2.log",
+                        "console.1.log"])
+        
+        // When updating the oldest log file.
+        let currentLogFile = logsFileDirectory.appending(path: "console.1.log")
+        let fileHandle = try FileHandle(forWritingTo: currentLogFile)
+        try fileHandle.seekToEnd()
+        guard let newLineData = "newline".data(using: .utf8) else {
+            XCTFail("Couldn't create data to write to disk.")
+            return
+        }
+        
+        try fileHandle.write(contentsOf: newLineData)
+        try fileHandle.close()
+        
+        // Then that file should now be the first log file.
+        XCTAssertEqual(MXLogger.logFiles.map(\.lastPathComponent),
+                       ["console.1.log",
+                        "console-nse.5.log",
+                        "console-nse.4.log",
+                        "console-nse.3.log",
+                        "console-nse.2.log",
+                        "console-nse.1.log",
+                        "console.5.log",
+                        "console.4.log",
+                        "console.3.log",
+                        "console.2.log"])
+    }
+    
     func testRoomSummaryContentIsRedacted() throws {
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"

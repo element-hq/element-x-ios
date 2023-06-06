@@ -64,7 +64,7 @@ class BugReportViewModelTests: XCTestCase {
         let mockService = BugReportServiceMock()
         mockService.submitBugReportProgressListenerClosure = { _, _ in
             await Task.yield()
-            return SubmitBugReportResponse(reportUrl: "https://test.test")
+            return .success(SubmitBugReportResponse(reportUrl: "https://test.test"))
         }
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
                                                  userID: "@mock.client.com",
@@ -90,7 +90,7 @@ class BugReportViewModelTests: XCTestCase {
     func testSendReportWithError() async throws {
         let mockService = BugReportServiceMock()
         mockService.submitBugReportProgressListenerClosure = { _, _ in
-            throw TestError.testError
+            .failure(.uploadFailure(TestError.testError))
         }
         let viewModel = BugReportScreenViewModel(bugReportService: mockService,
                                                  userID: "@mock.client.com",
