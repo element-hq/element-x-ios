@@ -132,7 +132,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        aspectRatio: aspectRatio,
                                        blurhash: imageInfo.blurhash,
                                        properties: RoomTimelineItemProperties(reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                              deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                              deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                              orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildEncryptedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -182,7 +183,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                    deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                    deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -198,7 +200,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                     deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -214,7 +217,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                     deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildAudioTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -230,7 +234,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                     deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -246,7 +251,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                    deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                    deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildNoticeTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -262,7 +268,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                                properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                       reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                      deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildEmoteTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -278,7 +285,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                     deliveryStatus: eventItemProxy.deliveryStatus))
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
@@ -286,6 +294,19 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let isHighlighted = false // reaction.details.contains(where: { $0.sender.id == userID })
             return AggregatedReaction(key: reaction.key, count: Int(reaction.count), isHighlighted: isHighlighted)
         }
+    }
+
+    private func orderReadReceipts(_ receipts: [String: Receipt]) -> [ReadReceipt] {
+        receipts
+            .sorted { firstElement, secondElement in
+                // If there is no timestamp we order them as last
+                let firstTimestamp = firstElement.value.dateTimestamp ?? Date(timeIntervalSince1970: 0)
+                let secondTimestamp = secondElement.value.dateTimestamp ?? Date(timeIntervalSince1970: 0)
+                return firstTimestamp > secondTimestamp
+            }
+            .map { key, receipt in
+                ReadReceipt(userID: key, formattedTimestamp: receipt.dateTimestamp?.formatted(date: .omitted, time: .shortened))
+            }
     }
     
     // MARK: - Message events content

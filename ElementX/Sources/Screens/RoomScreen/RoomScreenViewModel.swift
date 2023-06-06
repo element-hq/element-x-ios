@@ -88,6 +88,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
+
+        roomProxy.membersPublisher
+            .map { members in
+                members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
+                    dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
+                }
+            }
+            .weakAssign(to: \.state.members, on: self)
+            .store(in: &cancellables)
                 
         buildTimelineViews()
     }

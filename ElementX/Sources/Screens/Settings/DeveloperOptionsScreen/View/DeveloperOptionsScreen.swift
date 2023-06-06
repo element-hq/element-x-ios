@@ -36,6 +36,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.userSuggestionsEnabled) { _ in
                     context.send(viewAction: .changedUserSuggestionsEnabled)
                 }
+
+                Toggle(isOn: $context.readReceiptsEnabled) {
+                    Text("Show read receipts")
+                }
+                .onChange(of: context.readReceiptsEnabled) { _ in
+                    context.send(viewAction: .changedReadReceiptsEnabled)
+                }
             }
             
             Section {

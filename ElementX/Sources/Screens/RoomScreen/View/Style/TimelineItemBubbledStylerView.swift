@@ -93,7 +93,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
 
-            TimelineReceiptView(timelineItem: timelineItem)
+            TimelineStatusView(timelineItem: timelineItem)
                 .environmentObject(context)
                 .padding(.top, 10)
                 .padding(.bottom, 3)
