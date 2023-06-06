@@ -172,6 +172,11 @@
 "room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "room_timeline_read_marker_title" = "New";
+"screen_account_provider_change" = "Change account provider";
+"screen_account_provider_continue" = "Continue";
+"screen_account_provider_signin_title" = "You’re about to sign in to %@";
+"screen_account_provider_signup_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
+"screen_account_provider_signup_title" = "You’re about to create an account on %@";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";

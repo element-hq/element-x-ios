@@ -88,7 +88,7 @@
 "common_report_a_bug" = "Segnala un problema";
 "common_report_submitted" = "Segnalazione inviata";
 "common_room_name" = "Room name";
-"common_room_name_placeholder" = "e.g. Product Sprint";
+"common_room_name_placeholder" = "e.g. your project name";
 "common_search_for_someone" = "Cerca qualcuno";
 "common_search_results" = "Search results";
 "common_security" = "Sicurezza";
@@ -141,6 +141,7 @@
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invitation_action_join" = "Join";
 "notification_invitation_action_reject" = "Reject";
+"notification_invite_body" = "invited you";
 "notification_new_messages" = "New Messages";
 "notification_room_action_mark_as_read" = "Mark as read";
 "notification_sender_me" = "Me";
@@ -171,6 +172,11 @@
 "room_timeline_beginning_of_room" = "Questo è l'inizio di %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Questo è l'inizio della conversazione.";
 "room_timeline_read_marker_title" = "Nuovo";
+"screen_account_provider_change" = "Change account provider";
+"screen_account_provider_continue" = "Continue";
+"screen_account_provider_signin_title" = "You’re about to sign in to %@";
+"screen_account_provider_signup_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
+"screen_account_provider_signup_title" = "You’re about to create an account on %@";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
@@ -189,6 +195,10 @@
 "screen_bug_report_include_logs" = "Invia i log per aiutarci";
 "screen_bug_report_include_screenshot" = "Invia istantanea schermo";
 "screen_bug_report_logs_description" = "Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Questi saranno privati. Per inviare solo il tuo messaggio, disattiva questa impostazione.";
+"screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is an open network for secure, decentralized communication.";
+"screen_change_account_provider_other" = "Other";
+"screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
+"screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_invalid_homeserver" = "Non siamo riusciti a raggiungere questo homserver. Verifica di aver inserito correttamente l'URL del server domestico. Se l'URL è corretto, contatta l'amministratore del tuo server domestico per ulteriore assistenza.";
 "screen_change_server_error_no_sliding_sync_message" = "Questo server attualmente non supporta la sincronizzazione scorrevole.";
 "screen_change_server_form_header" = "URL dell'homeserver";
@@ -245,6 +255,7 @@
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Condividi stanza";
 "screen_room_details_updating_room" = "Updating room…";
+"screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_member_details_block_alert_action" = "Blocca";
 "screen_room_member_details_block_alert_description" = "Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento.";
 "screen_room_member_details_block_user" = "Blocca utente";

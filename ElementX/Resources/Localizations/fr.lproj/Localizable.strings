@@ -88,7 +88,7 @@
 "common_report_a_bug" = "Signaler un problème";
 "common_report_submitted" = "Rapport envoyé";
 "common_room_name" = "Nom de la salle";
-"common_room_name_placeholder" = "e.g. Product Sprint";
+"common_room_name_placeholder" = "e.g. your project name";
 "common_search_for_someone" = "Rechercher quelqu'un";
 "common_search_results" = "Search results";
 "common_security" = "Sécurité";
@@ -141,6 +141,7 @@
 "notification_inline_reply_failed" = "** Échec de l'envoi - veuillez ouvrir la salle";
 "notification_invitation_action_join" = "Rejoindre";
 "notification_invitation_action_reject" = "Refuser";
+"notification_invite_body" = "invited you";
 "notification_new_messages" = "Nouveaux messages";
 "notification_room_action_mark_as_read" = "Marquer comme lu";
 "notification_sender_me" = "Moi";
@@ -171,6 +172,11 @@
 "room_timeline_beginning_of_room" = "Ceci est le début de %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Ceci est le début de cette conversation.";
 "room_timeline_read_marker_title" = "Nouveau";
+"screen_account_provider_change" = "Change account provider";
+"screen_account_provider_continue" = "Continue";
+"screen_account_provider_signin_title" = "You’re about to sign in to %@";
+"screen_account_provider_signup_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
+"screen_account_provider_signup_title" = "You’re about to create an account on %@";
 "screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
 "screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
@@ -189,6 +195,10 @@
 "screen_bug_report_include_logs" = "Envoyer le journal pour nous aider";
 "screen_bug_report_include_screenshot" = "Envoyer une capture d’écran";
 "screen_bug_report_logs_description" = "Pour vérifier que les choses fonctionnent comme prévu, les journaux seront envoyés avec votre message. Ceux-ci seront privées. Pour simplement envoyer votre message, désactivez ce paramètre.";
+"screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is an open network for secure, decentralized communication.";
+"screen_change_account_provider_other" = "Other";
+"screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
+"screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_invalid_homeserver" = "Nous n'avons pas pu atteindre ce serveur domestique. Vérifiez que vous avez correctement saisi l'URL du serveur d'accueil. Si l'URL est correcte, contactez l'administrateur de votre serveur domestique pour obtenir de l'aide.";
 "screen_change_server_error_no_sliding_sync_message" = "Ce serveur ne prend actuellement pas en charge la synchronisation glissante.";
 "screen_change_server_form_header" = "URL du serveur d'accueil";
@@ -241,10 +251,11 @@
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Les messages sont sécurisés par des verrous. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller.";
 "screen_room_details_encryption_enabled_title" = "Chiffrement des messages activé";
-"screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_invite_people_title" = "Inviter des personnes";
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Partager la salle";
 "screen_room_details_updating_room" = "Updating room…";
+"screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_member_details_block_alert_action" = "Bloquer";
 "screen_room_member_details_block_alert_description" = "Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez annuler cette action à tout moment.";
 "screen_room_member_details_block_user" = "Bloquer l'utilisateur";

@@ -88,7 +88,7 @@
 "common_report_a_bug" = "Nahlásit chybu";
 "common_report_submitted" = "Zpráva odeslána";
 "common_room_name" = "Název místnosti";
-"common_room_name_placeholder" = "např. Produktový sprint";
+"common_room_name_placeholder" = "např. název vašeho projektu";
 "common_search_for_someone" = "Hledat někoho";
 "common_search_results" = "Výsledky hledání";
 "common_security" = "Zabezpečení";
@@ -141,6 +141,7 @@
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invitation_action_join" = "Vstoupit";
 "notification_invitation_action_reject" = "Odmítnout";
+"notification_invite_body" = "vás pozval";
 "notification_new_messages" = "Nové zprávy";
 "notification_room_action_mark_as_read" = "Označit jako přečtené";
 "notification_sender_me" = "Já";
@@ -171,6 +172,11 @@
 "room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
 "room_timeline_read_marker_title" = "Nové";
+"screen_account_provider_change" = "Změna poskytovatele účtu";
+"screen_account_provider_continue" = "Pokračovat";
+"screen_account_provider_signin_title" = "Chystáte se přihlásit do %@";
+"screen_account_provider_signup_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
+"screen_account_provider_signup_title" = "Chystáte se vytvořit účet na %@";
 "screen_analytics_prompt_data_usage" = "<b>Nezaznamenáváme ani neprofilujeme</b> žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Pomozte nám identifikovat problémy a vylepšit %1$@ sdílením anonymních údajů o používání.";
 "screen_analytics_prompt_read_terms" = "Můžete si přečíst všechny naše podmínky %1$@.";
@@ -189,6 +195,10 @@
 "screen_bug_report_include_logs" = "Odeslat protokoly pro pomoc";
 "screen_bug_report_include_screenshot" = "Odeslat snímek obrazovky";
 "screen_bug_report_logs_description" = "Aby bylo možné zkontrolovat, zda věci fungují podle očekávání, budou s vaší zprávou odeslány protokoly. Tyto budou soukromé. Chcete-li pouze odeslat zprávu, vypněte toto nastavení.";
+"screen_change_account_provider_matrix_org_subtitle" = "Matrix.org je otevřená síť pro bezpečnou, decentralizovanou komunikaci.";
+"screen_change_account_provider_other" = "Jiný";
+"screen_change_account_provider_subtitle" = "Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet.";
+"screen_change_account_provider_title" = "Změnit poskytovatele účtu";
 "screen_change_server_error_invalid_homeserver" = "Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc.";
 "screen_change_server_error_no_sliding_sync_message" = "Tento server v současné době nepodporuje klouzavou synchronizaci.";
 "screen_change_server_form_header" = "Adresa URL domovského serveru";
@@ -241,10 +251,11 @@
 "screen_room_details_edition_error_title" = "Nelze aktualizovat místnost";
 "screen_room_details_encryption_enabled_subtitle" = "Zprávy jsou zabezpečeny zámky. Pouze vy a příjemci máte jedinečné klíče k jejich odemčení.";
 "screen_room_details_encryption_enabled_title" = "Šifrování zpráv povoleno";
-"screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_invite_people_title" = "Pozvat lidi";
 "screen_room_details_room_name_label" = "Název místnosti";
 "screen_room_details_share_room_title" = "Sdílet místnost";
 "screen_room_details_updating_room" = "Aktualizace místnosti...";
+"screen_room_error_failed_retrieving_user_details" = "Nepodařilo se načíst údaje o uživateli";
 "screen_room_member_details_block_alert_action" = "Zablokovat";
 "screen_room_member_details_block_alert_description" = "Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny zprávy od nich budou skryty. Tuto akci můžete kdykoli vrátit zpět.";
 "screen_room_member_details_block_user" = "Zablokovat uživatele";
