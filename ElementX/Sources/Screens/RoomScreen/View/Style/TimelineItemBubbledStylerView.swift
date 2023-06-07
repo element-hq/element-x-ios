@@ -42,16 +42,28 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     header
                         .zIndex(1)
                 }
-                
-                HStack {
-                    if timelineItem.isOutgoing {
-                        Spacer()
+
+                VStack(alignment: alignment, spacing: 0) {
+                    HStack {
+                        if timelineItem.isOutgoing {
+                            Spacer()
+                        }
+
+                        messageBubbleWithReactions
                     }
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
                     
-                    messageBubbleWithReactions
+                    HStack(spacing: 0) {
+                        if !timelineItem.isOutgoing {
+                            Spacer()
+                        }
+                        TimelineStatusView(timelineItem: timelineItem)
+                            .environmentObject(context)
+                            .padding(.top, 8)
+                            .padding(.bottom, 3)
+                    }
                 }
-                .padding(.horizontal, 16.0)
-                .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
+                .padding(.horizontal, 16)
             }
         }
     }
@@ -92,11 +104,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
             }
-
-            TimelineStatusView(timelineItem: timelineItem)
-                .environmentObject(context)
-                .padding(.top, 10)
-                .padding(.bottom, 3)
         }
     }
     
