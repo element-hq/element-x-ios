@@ -307,7 +307,8 @@ class MockScreen: Identifiable {
                                                       displayName: "Room",
                                                       isEncrypted: true,
                                                       members: members))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
+                                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
@@ -323,7 +324,8 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
+                                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
@@ -340,7 +342,8 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
+                                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
@@ -353,7 +356,8 @@ class MockScreen: Identifiable {
                                                       displayName: "Room",
                                                       isEncrypted: true,
                                                       members: members))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
+                                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))
@@ -442,7 +446,8 @@ class MockScreen: Identifiable {
                                                       isDirect: true,
                                                       isEncrypted: true,
                                                       members: members))
-            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+            let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
+                                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock()))

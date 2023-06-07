@@ -30,7 +30,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
 
-    init(roomProxy: RoomProxyProtocol,
+    init(accountUserID: String,
+         roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
         super.init(initialViewState: .init(roomId: roomProxy.id,
