@@ -4344,7 +4344,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
-				PRODUCT_NAME = "$(APP_NAME)";
+				PRODUCT_NAME = ElementX;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
@@ -4367,7 +4367,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
-				PRODUCT_NAME = "$(APP_NAME)";
+				PRODUCT_NAME = ElementX;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
@@ -4398,7 +4398,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
-				APP_NAME = ElementX;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Colors/AccentColor;
 				BASE_APP_GROUP_IDENTIFIER = io.element;
 				BASE_BUNDLE_IDENTIFIER = io.element.elementx;
@@ -4466,7 +4465,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
-				APP_NAME = ElementX;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Colors/AccentColor;
 				BASE_APP_GROUP_IDENTIFIER = io.element;
 				BASE_BUNDLE_IDENTIFIER = io.element.elementx;
