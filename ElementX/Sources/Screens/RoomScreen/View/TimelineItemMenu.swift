@@ -124,7 +124,7 @@ public struct TimelineItemMenu: View {
     }
     
     private var reactionsSection: some View {
-        HStack(alignment: .center, spacing: 32.0) {
+        HStack(alignment: .center) {
             reactionButton(for: "👍️")
             reactionButton(for: "👎️")
             reactionButton(for: "🔥")
@@ -133,7 +133,10 @@ public struct TimelineItemMenu: View {
             
             Button {
                 presentationMode.wrappedValue.dismiss()
-                context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+                // Otherwise we get errors that a sheet is already presented
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+                }
             } label: {
                 Image(systemName: "plus.circle")
                     .font(.compound.headingLG)
@@ -148,16 +151,18 @@ public struct TimelineItemMenu: View {
             context.send(viewAction: .sendReaction(key: emoji, eventID: item.id))
         } label: {
             Text(emoji)
+                .padding(8.0)
                 .font(.compound.headingLG)
-                .opacity(reactionOpacity(for: emoji))
+                .background(Circle()
+                    .foregroundColor(reactionBackgroundColor(for: emoji)))
         }
     }
     
-    private func reactionOpacity(for emoji: String) -> Double {
+    private func reactionBackgroundColor(for emoji: String) -> Color {
         if item.properties.reactions.first(where: { $0.key == emoji }) != nil {
-            return 0.5
+            return .element.quinaryContent
         } else {
-            return 1.0
+            return .clear
         }
     }
     
