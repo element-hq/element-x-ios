@@ -537,7 +537,6 @@ class ClientProxy: ClientProxyProtocol {
             .noTimelineLimit()
             .requiredState(requiredState: slidingSyncNotificationsRequiredState)
             .filters(filters: slidingSyncNotificationsFilters)
-            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
         
         self.notificationsListBuilder = notificationsListBuilder
     }
