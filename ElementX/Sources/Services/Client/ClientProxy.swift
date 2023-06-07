@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, SlidingSyncObserver {
+private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -43,13 +43,6 @@ private class WeakClientProxyWrapper: ClientDelegate, NotificationDelegate, Slid
     func didReceiveSyncUpdate(summary: UpdateSummary) {
         MXLog.info("Received sliding sync update")
         clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
-    }
-
-    // MARK: - NotificationDelegate
-
-    func didReceiveNotification(notification: MatrixRustSDK.NotificationItem) {
-        guard let userID = clientProxy?.userID else { return }
-        clientProxy?.didReceiveNotification(notification: NotificationItemProxy(notificationItem: notification, receiverID: userID))
     }
 }
 
@@ -76,7 +69,7 @@ class ClientProxy: ClientProxyProtocol {
     var invitesListProxy: SlidingSyncListProxy?
     var invitesSummaryProvider: RoomSummaryProviderProtocol?
 
-    var notificationsListBuilder: SlidingSyncListBuilder?
+    private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
@@ -109,13 +102,6 @@ class ClientProxy: ClientProxyProtocol {
 
         let delegate = WeakClientProxyWrapper(clientProxy: self)
         client.setDelegate(delegate: delegate)
-
-        // Set up sync listener for generating local notifications.
-        if ServiceLocator.shared.settings.enableLocalPushNotifications {
-            await Task.dispatch(on: clientQueue) {
-                client.setNotificationDelegate(notificationDelegate: delegate)
-            }
-        }
         
         configureSlidingSync()
 
@@ -414,31 +400,24 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let slidingSyncBuilder = client.slidingSync()
+            let slidingSyncBuilder = try client.slidingSync(id: "ElementX")
             
             // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
             // cold cache state and count updates will be lost
             buildAndConfigureVisibleRoomsSlidingSyncList()
             buildAndConfigureAllRoomsSlidingSyncList()
             buildAndConfigureInvitesSlidingSyncList()
-            if ServiceLocator.shared.settings.enableLocalPushNotifications {
-                buildAndConfigureNotificationsSlidingSyncList()
-            }
             
             guard let visibleRoomsListBuilder else {
                 MXLog.error("Visible rooms sliding sync view unavailable")
                 return
             }
-            
-            let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
-            
+
             // Add the visibleRoomsSlidingSyncList here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncList later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
-                .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
-                // .storageKey(name: "ElementX")
                 .build()
             
             // Don't forget to update the view proxies after building the slidingSync
@@ -466,12 +445,13 @@ class ClientProxy: ClientProxyProtocol {
         let listName = "CurrentlyVisibleRooms"
         
         let visibleRoomsListProxy = SlidingSyncListProxy(name: listName)
-        
+
         let visibleRoomsListBuilder = SlidingSyncListBuilder(name: listName)
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
             .syncModeSelective(selectiveModeBuilder: .init().addRange(start: 0, endInclusive: 20))
+            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: visibleRoomsListProxy)
 
         self.visibleRoomsListBuilder = visibleRoomsListBuilder
@@ -503,6 +483,7 @@ class ClientProxy: ClientProxyProtocol {
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
             .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
+            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: allRoomsListProxy)
 
         self.allRoomsListBuilder = allRoomsListBuilder
@@ -527,20 +508,6 @@ class ClientProxy: ClientProxyProtocol {
 
         self.invitesListBuilder = invitesListBuilder
         self.invitesListProxy = invitesListProxy
-    }
-
-    private func buildAndConfigureNotificationsSlidingSyncList() {
-        guard notificationsListBuilder == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        let notificationsListBuilder = SlidingSyncListBuilder(name: "Notifications")
-            .noTimelineLimit()
-            .requiredState(requiredState: slidingSyncNotificationsRequiredState)
-            .filters(filters: slidingSyncNotificationsFilters)
-            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
-        
-        self.notificationsListBuilder = notificationsListBuilder
     }
 
     private func buildRoomSummaryProviders() {
@@ -569,10 +536,6 @@ class ClientProxy: ClientProxyProtocol {
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                  RequiredState(key: "m.room.encryption", value: ""),
                                                  RequiredState(key: "m.room.power_levels", value: "")]
-
-    private lazy var slidingSyncNotificationsRequiredState = [RequiredState(key: "m.room.member", value: "$ME"),
-                                                              RequiredState(key: "m.room.power_levels", value: ""),
-                                                              RequiredState(key: "m.room.name", value: "")]
     
     private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.encryption", value: ""),
@@ -589,17 +552,6 @@ class ClientProxy: ClientProxyProtocol {
                                                                         roomNameLike: nil,
                                                                         tags: [],
                                                                         notTags: [])
-
-    private lazy var slidingSyncNotificationsFilters = SlidingSyncRequestListFilters(isDm: nil,
-                                                                                     spaces: [],
-                                                                                     isEncrypted: nil,
-                                                                                     isInvite: nil,
-                                                                                     isTombstoned: false,
-                                                                                     roomTypes: [],
-                                                                                     notRoomTypes: ["m.space"],
-                                                                                     roomNameLike: nil,
-                                                                                     tags: [],
-                                                                                     notTags: [])
     
     private lazy var slidingSyncInviteFilters = SlidingSyncRequestListFilters(isDm: nil,
                                                                               spaces: [],
@@ -633,15 +585,6 @@ class ClientProxy: ClientProxyProtocol {
         } else {
             MXLog.error("Invites sliding sync view unavailable")
         }
-
-        if ServiceLocator.shared.settings.enableLocalPushNotifications {
-            if let notificationsListBuilder {
-                MXLog.info("Registering notifications view")
-                slidingSyncTasks.append(slidingSync?.addList(listBuilder: notificationsListBuilder))
-            } else {
-                MXLog.error("Notifications sliding sync view unavailable")
-            }
-        }
     }
     
     private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
@@ -666,10 +609,6 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
-    }
-
-    fileprivate func didReceiveNotification(notification: NotificationItemProxyProtocol) {
-        callbacks.send(.receivedNotification(notification))
     }
 }
 

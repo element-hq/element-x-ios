@@ -22,7 +22,6 @@ import UserNotifications
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private var userSession: UserSessionProtocol?
-    var clientCancellable: AnyCancellable?
 
     init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.notificationCenter = notificationCenter
@@ -73,17 +72,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func setUserSession(_ userSession: UserSessionProtocol?) {
         self.userSession = userSession
-        clientCancellable = userSession?.clientProxy.callbacks.sink { [weak self] value in
-            guard let self else { return }
-            switch value {
-            case let .receivedNotification(notification):
-                Task {
-                    await self.showLocalNotification(notification)
-                }
-            default:
-                return
-            }
-        }
     }
 
     func registrationFailed(with error: Error) {
@@ -104,28 +92,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             MXLog.info("[NotificationManager] show local notification succeeded")
         } catch {
             MXLog.error("[NotificationManager] show local notification failed: \(error)")
-        }
-    }
-
-    private func showLocalNotification(_ notification: NotificationItemProxyProtocol) async {
-        guard let userSession,
-              notification.event.timestamp > ServiceLocator.shared.settings.lastLaunchDate else { return }
-        do {
-            guard let identifier = notification.id else {
-                return
-            }
-
-            let content = try await notification.process(mediaProvider: userSession.mediaProvider)
-            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
-            
-            guard !ServiceLocator.shared.settings.servedNotificationIdentifiers.contains(identifier) else {
-                MXLog.info("NotificationManager] local notification discarded because it has already been served")
-                return
-            }
-            ServiceLocator.shared.settings.servedNotificationIdentifiers.insert(identifier)
-            try await notificationCenter.add(request)
-        } catch {
-            MXLog.error("[NotificationManager] show local notification item failed: \(error)")
         }
     }
     
