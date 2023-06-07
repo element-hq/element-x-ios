@@ -18,15 +18,6 @@ import Combine
 import Mapbox
 import SwiftUI
 
-/*
- Behavior mode of the current user's location, can be hidden, only shown and shown following the user
- */
-enum ShowUserLocationMode {
-    case follow
-    case show
-    case hide
-}
-
 struct LocationSharingMapView: UIViewRepresentable {
     // MARK: - Constants
     
@@ -36,20 +27,22 @@ struct LocationSharingMapView: UIViewRepresentable {
     
     // MARK: - Properties
     
-    /// Map style URL (https://docs.mapbox.com/api/maps/styles/)
-    let tileServerMapURL: URL
+    @Environment(\.colorScheme) var colorScheme
+    
+    var lightTileServerMapURL: URL {
+        let appSettings = ServiceLocator.shared.settings!
+        let key = appSettings.mapTilerApiKey
+        return URL(string: appSettings.lightTileMapStyleURL + "?key=" + key)!
+    }
+    
+    var darkTileServerMapURL: URL {
+        let appSettings = ServiceLocator.shared.settings!
+        let key = appSettings.mapTilerApiKey
+        return URL(string: appSettings.darkTileMapStyleURL + "?key=" + key)!
+    }
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
-    
-    /// True to indicate that a touch on user annotation can show a callout
-    var userAnnotationCanShowCallout = false
-
-    /// Last user location if `showsUserLocation` has been enabled
-    @Binding var userLocation: CLLocationCoordinate2D?
-    
-    /// Coordinate of the center of the map
-    @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
     
     /// Publish view errors if any
     let errorSubject: PassthroughSubject<LocationSharingViewError, Never>
@@ -65,6 +58,34 @@ struct LocationSharingMapView: UIViewRepresentable {
     func updateUIView(_ mapView: MGLMapView, context: Context) {
         mapView.vc_removeAllAnnotations()
         
+        if colorScheme == .dark {
+            mapView.styleURL = darkTileServerMapURL
+        } else {
+            mapView.styleURL = lightTileServerMapURL
+        }
+        
+        showUserLocation(in: mapView)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    // MARK: - Private
+    
+    private func makeMapView() -> MGLMapView {
+        let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? darkTileServerMapURL : lightTileServerMapURL)
+
+        mapView.logoView.isHidden = true
+        mapView.attributionButton.isHidden = true
+        mapView.zoomLevel = Constants.mapZoomLevel
+        
+        showUserLocation(in: mapView)
+        
+        return mapView
+    }
+    
+    func showUserLocation(in mapView: MGLMapView) {
         switch showsUserLocationMode {
         case .follow:
             mapView.showsUserLocation = true
@@ -76,21 +97,6 @@ struct LocationSharingMapView: UIViewRepresentable {
             mapView.showsUserLocation = false
             mapView.userTrackingMode = .none
         }
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    // MARK: - Private
-    
-    private func makeMapView() -> MGLMapView {
-        let mapView = MGLMapView(frame: .zero, styleURL: tileServerMapURL)
-
-        mapView.logoView.isHidden = true
-        mapView.attributionButton.isHidden = true
-        
-        return mapView
     }
 }
 
@@ -110,13 +116,20 @@ extension LocationSharingMapView {
         
         // MARK: - MGLMapViewDelegate
         
+        func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
+            if let pinLocationAnnotation = annotation as? PinLocationAnnotation {
+                return LocationAnnotationView(pinLocationAnnotation: pinLocationAnnotation)
+            } else if annotation is MGLUserLocation {
+                return LocationAnnotationView(userPinLocationAnnotation: annotation)
+            }
+            return nil
+        }
+        
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
             locationSharingMapView.errorSubject.send(.failedLoadingMap)
         }
         
-        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
-            locationSharingMapView.userLocation = userLocation?.coordinate
-        }
+        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
             guard mapView.showsUserLocation else {
@@ -131,14 +144,12 @@ extension LocationSharingMapView {
             }
         }
         
-        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
-            locationSharingMapView.mapCenterCoordinate = mapView.centerCoordinate
-        }
+        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) { }
         
         // MARK: Callout
                 
         func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
-            locationSharingMapView.userAnnotationCanShowCallout
+            false
         }
         
         // MARK: UIGestureRecognizer

@@ -18,7 +18,6 @@ import SwiftUI
 
 struct StaticLocationScreen: View {
     @ObservedObject var context: StaticLocationScreenViewModel.Context
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         mapView
@@ -27,10 +26,7 @@ struct StaticLocationScreen: View {
     }
     
     var mapView: LocationSharingMapView {
-        LocationSharingMapView(tileServerMapURL: colorScheme == .dark ? context.viewState.darkURL : context.viewState.lightURL,
-                               showsUserLocationMode: .show,
-                               userLocation: Binding.constant(nil),
-                               mapCenterCoordinate: Binding.constant(nil),
+        LocationSharingMapView(showsUserLocationMode: .show,
                                errorSubject: .init())
     }
 }

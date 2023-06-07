@@ -23,11 +23,17 @@ enum LocationSharingViewError {
     case failedSharingLocation
 }
 
+/*
+ Behavior mode of the current user's location, can be hidden, only shown and shown following the user
+ */
+enum ShowUserLocationMode {
+    case follow
+    case show
+    case hide
+}
+
 enum StaticLocationScreenViewModelAction { }
 
-struct StaticLocationScreenViewState: BindableState {
-    var lightURL: URL
-    var darkURL: URL
-}
+struct StaticLocationScreenViewState: BindableState { }
 
 enum StaticLocationScreenViewAction { }

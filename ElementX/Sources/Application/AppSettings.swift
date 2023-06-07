@@ -173,11 +173,14 @@ final class AppSettings {
     
     // MARK: - Maps
     
-    // dynamic
+    // maptiler dynamic map urls
     let lightTileMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/style.json"
     let darkTileMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/style.json"
 
-    // static
+    // maptiler api key
+    let mapTilerApiKey = "fU3vlMsMn4Jb6dnEIFsx"
+    
+    // maptiler static map urls
     let lightTileStaticMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/{z}/{x}/{y}.png"
     let darkTileStaticMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/{z}/{x}/{y}.png"
     

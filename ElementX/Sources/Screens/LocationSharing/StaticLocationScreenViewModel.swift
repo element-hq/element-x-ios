@@ -27,10 +27,6 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
     }
     
     init() {
-        let appSettings = ServiceLocator.shared.settings!
-        
-        let lightURL = URL(string: appSettings.lightTileMapStyleURL + key)!
-        let darkURL = URL(string: appSettings.darkTileMapStyleURL + key)!
-        super.init(initialViewState: StaticLocationScreenViewState(lightURL: lightURL, darkURL: darkURL))
+        super.init(initialViewState: StaticLocationScreenViewState())
     }
 }
