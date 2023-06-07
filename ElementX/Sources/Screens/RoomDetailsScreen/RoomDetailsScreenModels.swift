@@ -35,21 +35,17 @@ struct RoomDetailsScreenViewState: BindableState {
     let canonicalAlias: String?
     let isEncrypted: Bool
     let isDirect: Bool
+    let permalink: URL?
+
     var title = ""
     var topic: String?
     var avatarURL: URL?
-    let permalink: URL?
-    var members: [RoomMemberDetails] = []
-    var joinedMembersCount = 0
+    var joinedMembersCount: UInt
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
     var canEditRoomName = false
     var canEditRoomTopic = false
     var canEditRoomAvatar = false
-    
-    var isLoadingMembers: Bool {
-        members.isEmpty
-    }
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -62,10 +58,6 @@ struct RoomDetailsScreenViewState: BindableState {
     var bindings: RoomDetailsScreenViewStateBindings
 
     var dmRecipient: RoomMemberDetails?
-
-    private var isDMRoom: Bool {
-        isEncrypted && isDirect && members.count == 2
-    }
 }
 
 struct RoomDetailsScreenViewStateBindings {

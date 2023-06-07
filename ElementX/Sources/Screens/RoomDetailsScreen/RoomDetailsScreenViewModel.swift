@@ -20,36 +20,33 @@ import SwiftUI
 typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
 
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
+    private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
-    private var members: [RoomMemberProxyProtocol] = []
-    private var dmRecipient: RoomMemberProxyProtocol?
+
     private var accountOwner: RoomMemberProxyProtocol?
-    
-    @CancellableTask
-    private var buildMembersDetailsTask: Task<Void, Never>?
+    private var dmRecipient: RoomMemberProxyProtocol?
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
-
+    
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
+        self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
+                                           permalink: roomProxy.permalink,
                                            title: roomProxy.roomTitle,
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
-                                           permalink: roomProxy.permalink,
+                                           joinedMembersCount: roomProxy.joinedMembersCount,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
         
         setupSubscriptions()
-
-        Task {
-            await roomProxy.updateMembers()
-        }
+        fetchMembers()
     }
     
     // MARK: - Public
@@ -58,12 +55,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
-            callback?(.requestMemberDetailsPresentation(members))
+            #warning("Fix me")
+            callback?(.requestMemberDetailsPresentation([]))
         case .processTapInvite:
-            callback?(.requestInvitePeoplePresentation(members))
+            #warning("Fix me")
+            callback?(.requestInvitePeoplePresentation([]))
         case .processTapLeave:
-            let joinedMembers = members.filter { $0.membership == .join }
-            guard joinedMembers.count > 1 else {
+            guard state.joinedMembersCount > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomProxy.id, state: .empty)
                 return
             }
@@ -99,27 +97,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         roomProxy.membersPublisher
             .sink { [weak self] members in
-                guard let self else { return }
+                guard let self, isEncryptedDirectRoom else { return }
                 
-                buildMembersDetailsTask = Task {
-                    let roomMembersDetails = await self.buildMembersDetails(members: members)
-                    
-                    guard !Task.isCancelled else { return }
-                    
-                    if self.roomProxy.isDirect, self.roomProxy.isEncrypted, members.count == 2 {
-                        self.dmRecipient = members.first(where: { !$0.isAccountOwner })
-                    }
-
-                    self.state.members = roomMembersDetails.members
-                    self.state.joinedMembersCount = roomMembersDetails.joinedMembersCount
-                    self.state.dmRecipient = self.dmRecipient.map(RoomMemberDetails.init(withProxy:))
-                    self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
-                    self.state.canEditRoomName = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomName) ?? false
-                    self.state.canEditRoomTopic = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
-                    self.state.canEditRoomAvatar = roomMembersDetails.accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
-                    self.members = members
-                    self.accountOwner = roomMembersDetails.accountOwner
-                }
+                let dmRecipient = members.first(where: { !$0.isAccountOwner })
+                self.dmRecipient = dmRecipient
+                self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
             }
             .store(in: &cancellables)
         
@@ -130,33 +112,44 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 self.state.title = self.roomProxy.roomTitle
                 self.state.topic = self.roomProxy.topic
                 self.state.avatarURL = self.roomProxy.avatarURL
+                self.state.joinedMembersCount = self.roomProxy.joinedMembersCount
             }
             .store(in: &cancellables)
     }
     
-    private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> RoomMembersDetails {
-        await Task.detached {
-            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
-            var roomMembersDetails: [RoomMemberDetails] = []
-            var accountOwner: RoomMemberProxyProtocol?
-            var joinedMembersCount = 0
-            roomMembersDetails.reserveCapacity(members.count)
-            
-            for member in members {
-                roomMembersDetails.append(RoomMemberDetails(withProxy: member))
-                
-                if member.membership == .join {
-                    joinedMembersCount += 1
-                }
-                
-                if accountOwner == nil, member.isAccountOwner {
-                    accountOwner = member
-                }
-            }
-            
-            return .init(members: roomMembersDetails, joinedMembersCount: joinedMembersCount, accountOwner: accountOwner)
+    private func fetchMembers() {
+        Task {
+            await fetchMembersIfNeeded()
+            await fetchAccountOwner()
         }
-        .value
+    }
+    
+    private func fetchMembersIfNeeded() async {
+        guard isEncryptedDirectRoom else {
+            return
+        }
+        await roomProxy.updateMembers()
+    }
+    
+    private func fetchAccountOwner() async {
+        switch await roomProxy.getMember(userID: accountUserID) {
+        case .success(let member):
+            accountOwner = member
+            updatePowerLevelPermissions()
+        case .failure(let error):
+            MXLog.error("Failed (error: \(error) to get account owner member with id: \(accountUserID), in room: \(roomProxy.id)")
+        }
+    }
+    
+    private func updatePowerLevelPermissions() {
+        state.canInviteUsers = accountOwner?.canInviteUsers ?? false
+        state.canEditRoomName = accountOwner?.canSendStateEvent(type: .roomName) ?? false
+        state.canEditRoomTopic = accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
+        state.canEditRoomAvatar = accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
+    }
+    
+    private var isEncryptedDirectRoom: Bool {
+        roomProxy.isDirect && roomProxy.isEncrypted && roomProxy.joinedMembersCount == 2
     }
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
@@ -196,10 +189,4 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
-}
-
-private struct RoomMembersDetails {
-    let members: [RoomMemberDetails]
-    let joinedMembersCount: Int
-    let accountOwner: RoomMemberProxyProtocol?
 }
