@@ -28,50 +28,50 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
     }
     
     func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
+        async let queriedProfile = profileIfPossible(with: searchQuery)
+        
         do {
-            async let queriedProfile = try? profileIfPossible(with: searchQuery).get()
-            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 10)
-            let users = try await merge(searchQuery: searchQuery, queriedProfile: queriedProfile, searchResults: searchedUsers.get())
+            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 10).get()
+            let users = try await merge(queriedProfile: queriedProfile, searchResults: searchedUsers)
             return .success(users)
         } catch {
-            return .failure(.failedSearchingUsers)
+            // we want to show the profile (if any) even if the search fails
+            if let queriedProfile = await queriedProfile {
+                return .success([queriedProfile])
+            } else {
+                return .failure(.failedSearchingUsers)
+            }
         }
     }
     
-    private func merge(searchQuery: String, queriedProfile: UserProfileProxy?, searchResults: SearchUsersResultsProxy) -> [UserProfileProxy] {
-        let localProfile = queriedProfile ?? UserProfileProxy(searchQuery: searchQuery)
+    private func merge(queriedProfile: UserProfileProxy?, searchResults: SearchUsersResultsProxy) -> [UserProfileProxy] {
         let searchResults = searchResults.results
-        guard let localProfile else {
+        
+        guard let queriedProfile else {
             return searchResults
         }
         
         let filteredSearchResult = searchResults.filter {
-            $0.userID != localProfile.userID
+            $0.userID != queriedProfile.userID
         }
 
-        return [localProfile] + filteredSearchResult
+        return [queriedProfile] + filteredSearchResult
     }
     
-    private func profileIfPossible(with searchQuery: String) async -> Result<UserProfileProxy, ClientProxyError> {
+    private func profileIfPossible(with searchQuery: String) async -> UserProfileProxy? {
         guard searchQuery.isMatrixIdentifier else {
-            return .failure(.failedGettingUserProfile)
+            return nil
         }
         
-        return await clientProxy.profile(for: searchQuery)
+        let getProfileResult = try? await clientProxy.profile(for: searchQuery).get()
+        
+        // fallback to a "local profile" if the profile api fails
+        return getProfileResult ?? .init(userID: searchQuery)
     }
 }
 
 private extension String {
     var isMatrixIdentifier: Bool {
         MatrixEntityRegex.isMatrixUserIdentifier(self)
-    }
-}
-
-private extension UserProfileProxy {
-    init?(searchQuery: String) {
-        guard searchQuery.isMatrixIdentifier else {
-            return nil
-        }
-        self.init(userID: searchQuery)
     }
 }
