@@ -26,11 +26,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     init() {
         appSettings = ServiceLocator.shared.settings
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
-                                                               startChatFlowEnabled: appSettings.startChatFlowEnabled,
-                                                               startChatUserSuggestionsEnabled: appSettings.startChatUserSuggestionsEnabled,
-                                                               invitesFlowEnabled: appSettings.invitesFlowEnabled,
-                                                               inviteMorePeopleFlowEnabled: appSettings.inviteMorePeopleFlowEnabled,
-                                                               editRoomDetailsFlowEnabled: appSettings.editRoomDetailsFlowEnabled)
+                                                               startChatUserSuggestionsEnabled: appSettings.startChatUserSuggestionsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -44,16 +40,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
             appSettings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
-        case .changedStartChatFlowEnabled:
-            appSettings.startChatFlowEnabled = state.bindings.startChatFlowEnabled
         case .changedStartChatUserSuggestionsEnabled:
             appSettings.startChatUserSuggestionsEnabled = state.bindings.startChatUserSuggestionsEnabled
-        case .changedInvitesFlowEnabled:
-            appSettings.invitesFlowEnabled = state.bindings.invitesFlowEnabled
-        case .changedInviteMorePeopleFlowEnabled:
-            appSettings.inviteMorePeopleFlowEnabled = state.bindings.inviteMorePeopleFlowEnabled
-        case .changedEditRoomDetailsFlowEnabled:
-            appSettings.editRoomDetailsFlowEnabled = state.bindings.editRoomDetailsFlowEnabled
         case .clearCache:
             callback?(.clearCache)
         }

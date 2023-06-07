@@ -34,7 +34,7 @@ struct HomeScreen: View {
                 sessionVerificationBanner
             }
 
-            if context.viewState.hasPendingInvitations, ServiceLocator.shared.settings.invitesFlowEnabled {
+            if context.viewState.hasPendingInvitations {
                 HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
                     context.send(viewAction: .selectInvites)
                 }
@@ -136,10 +136,8 @@ struct HomeScreen: View {
         }
         
         ToolbarItemGroup(placement: .bottomBar) {
-            if context.viewState.startChatFlowEnabled {
-                Spacer()
-                newRoomButton
-            }
+            Spacer()
+            newRoomButton
         }
     }
 

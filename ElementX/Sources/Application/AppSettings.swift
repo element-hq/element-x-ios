@@ -27,11 +27,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
-        case startChatFlowEnabled
         case startChatUserSuggestionsEnabled
-        case editRoomDetailsFlowEnabled
-        case invitesFlowEnabled
-        case inviteMorePeopleFlowEnabled
         case readReceiptsEnabled
     }
     
@@ -181,27 +177,11 @@ final class AppSettings {
     
     // MARK: Start Chat
     
-    @UserPreference(key: UserDefaultsKeys.startChatFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var startChatFlowEnabled
-    
     @UserPreference(key: UserDefaultsKeys.startChatUserSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var startChatUserSuggestionsEnabled
-        
-    // MARK: Invites
-    
-    @UserPreference(key: UserDefaultsKeys.invitesFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var invitesFlowEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.inviteMorePeopleFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var inviteMorePeopleFlowEnabled
 
     // MARK: Receipts
 
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
-    
-    // MARK: Room details edit
-
-    @UserPreference(key: UserDefaultsKeys.editRoomDetailsFlowEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var editRoomDetailsFlowEnabled
 }

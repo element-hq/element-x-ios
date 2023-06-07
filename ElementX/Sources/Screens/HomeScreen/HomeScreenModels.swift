@@ -74,10 +74,6 @@ struct HomeScreenViewState: BindableState {
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
     
-    var startChatFlowEnabled: Bool {
-        ServiceLocator.shared.settings.startChatFlowEnabled
-    }
-    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms

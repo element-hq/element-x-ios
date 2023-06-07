@@ -26,19 +26,11 @@ struct DeveloperOptionsScreenViewState: BindableState {
 
 struct DeveloperOptionsScreenViewStateBindings {
     var shouldCollapseRoomStateEvents: Bool
-    var startChatFlowEnabled: Bool
     var startChatUserSuggestionsEnabled: Bool
-    var invitesFlowEnabled: Bool
-    var inviteMorePeopleFlowEnabled: Bool
-    var editRoomDetailsFlowEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
     case changedShouldCollapseRoomStateEvents
-    case changedStartChatFlowEnabled
     case changedStartChatUserSuggestionsEnabled
-    case changedInvitesFlowEnabled
-    case changedInviteMorePeopleFlowEnabled
-    case changedEditRoomDetailsFlowEnabled
     case clearCache
 }

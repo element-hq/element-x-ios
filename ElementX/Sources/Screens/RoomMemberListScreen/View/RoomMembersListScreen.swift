@@ -61,7 +61,7 @@ struct RoomMembersListScreen: View {
     
     @ViewBuilder
     private var inviteButton: some View {
-        if context.viewState.canInviteUsers, ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled {
+        if context.viewState.canInviteUsers {
             Button {
                 context.send(viewAction: .invite)
             } label: {
