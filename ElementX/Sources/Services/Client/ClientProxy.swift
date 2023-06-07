@@ -78,6 +78,8 @@ class ClientProxy: ClientProxyProtocol {
 
     var notificationsListBuilder: SlidingSyncListBuilder?
 
+    private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
+
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
     var avatarURLPublisher: AnyPublisher<URL?, Never> {
@@ -463,8 +465,6 @@ class ClientProxy: ClientProxyProtocol {
         
         let visibleRoomsListProxy = SlidingSyncListProxy(name: listName)
 
-        let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
-        
         let visibleRoomsListBuilder = SlidingSyncListBuilder(name: listName)
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
@@ -522,6 +522,7 @@ class ClientProxy: ClientProxyProtocol {
             .requiredState(requiredState: slidingSyncInvitesRequiredState)
             .filters(filters: slidingSyncInviteFilters)
             .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
+            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: invitesListProxy)
 
         self.invitesListBuilder = invitesListBuilder
