@@ -330,6 +330,8 @@ public enum L10n {
   public static func notificationInvitations(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_invitations", p1)
   }
+  /// invited you
+  public static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
   /// New Messages
   public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
   /// Plural format key: "%#@COUNT@"
@@ -422,6 +424,20 @@ public enum L10n {
   public static func roomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "room_timeline_state_changes", p1)
   }
+  /// Change account provider
+  public static var screenAccountProviderChange: String { return L10n.tr("Localizable", "screen_account_provider_change") }
+  /// Continue
+  public static var screenAccountProviderContinue: String { return L10n.tr("Localizable", "screen_account_provider_continue") }
+  /// You’re about to sign in to %@
+  public static func screenAccountProviderSigninTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_account_provider_signin_title", String(describing: p1))
+  }
+  /// This is where you conversations will live — just like you would use an email provider to keep your emails.
+  public static var screenAccountProviderSignupSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signup_subtitle") }
+  /// You’re about to create an account on %@
+  public static func screenAccountProviderSignupTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_account_provider_signup_title", String(describing: p1))
+  }
   /// We <b>don't</b> record or profile any account data
   public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
   /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
@@ -478,6 +494,14 @@ public enum L10n {
   public static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
+  /// Matrix.org is an open network for secure, decentralized communication.
+  public static var screenChangeAccountProviderMatrixOrgSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_matrix_org_subtitle") }
+  /// Other
+  public static var screenChangeAccountProviderOther: String { return L10n.tr("Localizable", "screen_change_account_provider_other") }
+  /// Use a different account provider, such as your own private server or a work account.
+  public static var screenChangeAccountProviderSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_subtitle") }
+  /// Change account provider
+  public static var screenChangeAccountProviderTitle: String { return L10n.tr("Localizable", "screen_change_account_provider_title") }
   /// We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.
   public static var screenChangeServerErrorInvalidHomeserver: String { return L10n.tr("Localizable", "screen_change_server_error_invalid_homeserver") }
   /// This server currently doesn’t support sliding sync.
