@@ -22,7 +22,6 @@ import UserNotifications
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private var userSession: UserSessionProtocol?
-    var clientCancellable: AnyCancellable?
 
     init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.notificationCenter = notificationCenter
@@ -73,17 +72,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func setUserSession(_ userSession: UserSessionProtocol?) {
         self.userSession = userSession
-        clientCancellable = userSession?.clientProxy.callbacks.sink { [weak self] value in
-            guard let self else { return }
-            switch value {
-            case let .receivedNotification(notification):
-                Task {
-                    await self.showLocalNotification(notification)
-                }
-            default:
-                return
-            }
-        }
     }
 
     func registrationFailed(with error: Error) {
