@@ -19,17 +19,19 @@ import SwiftUI
 typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
+    private let roomProxy: RoomProxyProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let members: [RoomMemberProxyProtocol]
+    private var members: [RoomMemberProxyProtocol] = []
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
-    init(mediaProvider: MediaProviderProtocol, members: [RoomMemberProxyProtocol]) {
+    init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
-        self.members = members
         super.init(initialViewState: .init(), imageProvider: mediaProvider)
         
-        setupState(members: members)
+        #warning("Fix me")
+        setupState(members: [])
     }
     
     // MARK: - Public

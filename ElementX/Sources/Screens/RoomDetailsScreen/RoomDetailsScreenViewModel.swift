@@ -55,11 +55,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
-            #warning("Fix me")
-            callback?(.requestMemberDetailsPresentation([]))
+            callback?(.requestMemberDetailsPresentation)
         case .processTapInvite:
-            #warning("Fix me")
-            callback?(.requestInvitePeoplePresentation([]))
+            callback?(.requestInvitePeoplePresentation)
         case .processTapLeave:
             guard state.joinedMembersCount > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomProxy.id, state: .empty)

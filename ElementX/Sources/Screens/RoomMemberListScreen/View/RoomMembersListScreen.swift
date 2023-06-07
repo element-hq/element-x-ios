@@ -80,8 +80,8 @@ struct RoomMembersListScreen_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        return RoomMembersListScreenViewModel(mediaProvider: MockMediaProvider(),
-                                              members: members)
+        return RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+                                              mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {

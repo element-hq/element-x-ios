@@ -383,7 +383,7 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                  mediaProvider: MockMediaProvider(),
-                                                                                 members: members))
+                                                                                 roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreenPendingInvites:
@@ -391,7 +391,7 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomMembersListScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                  mediaProvider: MockMediaProvider(),
-                                                                                 members: members))
+                                                                                 roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .reportContent:
@@ -492,7 +492,8 @@ class MockScreen: Identifiable {
             let mediaProvider = MockMediaProvider()
             let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
             let members: [RoomMemberProxyMock] = id == .inviteUsersInRoomExistingMembers ? [.mockInvitedAlice, .mockBob] : []
-            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(members: members, userIndicatorController: UserIndicatorControllerMock.default)
+            let roomProxy = RoomProxyMock(with: .init(displayName: "test", members: members))
+            let roomType: InviteUsersScreenRoomType = id == .inviteUsers ? .draft : .room(roomProxy: roomProxy, userIndicatorController: UserIndicatorControllerMock.default)
             let coordinator = InviteUsersScreenCoordinator(parameters: .init(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: mediaProvider, userDiscoveryService: userDiscoveryMock))
             coordinator.actions.sink { action in
                 switch action {

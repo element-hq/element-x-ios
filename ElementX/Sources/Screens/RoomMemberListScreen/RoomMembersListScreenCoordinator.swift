@@ -19,7 +19,7 @@ import SwiftUI
 struct RoomMembersListScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let mediaProvider: MediaProviderProtocol
-    let members: [RoomMemberProxyProtocol]
+    let roomProxy: RoomProxyProtocol
 }
 
 enum RoomMembersListScreenCoordinatorAction {
@@ -36,8 +36,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomMembersListScreenViewModel(mediaProvider: parameters.mediaProvider,
-                                                   members: parameters.members)
+        viewModel = RoomMembersListScreenViewModel(roomProxy: parameters.roomProxy,
+                                                   mediaProvider: parameters.mediaProvider)
     }
     
     func start() {

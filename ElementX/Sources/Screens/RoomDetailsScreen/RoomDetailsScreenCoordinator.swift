@@ -55,10 +55,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .requestMemberDetailsPresentation(let members):
-                self.presentRoomMembersList(members)
-            case .requestInvitePeoplePresentation(let members):
-                self.presentInviteUsersScreen(members: members)
+            case .requestMemberDetailsPresentation:
+                self.presentRoomMembersList()
+            case .requestInvitePeoplePresentation:
+                self.presentInviteUsersScreen()
             case .leftRoom:
                 self.callback?(.leftRoom)
             case .requestEditDetailsPresentation(let accountOwner):
@@ -73,27 +73,27 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
+    private func presentRoomMembersList() {
         let params = RoomMembersListScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                                 mediaProvider: parameters.mediaProvider,
-                                                                members: members)
+                                                                roomProxy: parameters.roomProxy)
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
         coordinator.callback = { [weak self] action in
             switch action {
             case .invite:
-                self?.presentInviteUsersScreen(members: members)
+                self?.presentInviteUsersScreen()
             }
         }
         
         navigationStackCoordinator.push(coordinator)
     }
     
-    private func presentInviteUsersScreen(members: [RoomMemberProxyProtocol]) {
+    private func presentInviteUsersScreen() {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
-                                                                      roomType: .room(members: members, userIndicatorController: userIndicatorController),
+                                                                      roomType: .room(roomProxy: parameters.roomProxy, userIndicatorController: userIndicatorController),
                                                                       mediaProvider: parameters.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService)
         

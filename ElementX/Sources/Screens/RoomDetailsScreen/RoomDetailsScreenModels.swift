@@ -22,8 +22,8 @@ import UIKit
 // MARK: View model
 
 enum RoomDetailsScreenViewModelAction {
-    case requestMemberDetailsPresentation([RoomMemberProxyProtocol])
-    case requestInvitePeoplePresentation([RoomMemberProxyProtocol])
+    case requestMemberDetailsPresentation
+    case requestInvitePeoplePresentation
     case leftRoom
     case requestEditDetailsPresentation(RoomMemberProxyProtocol)
 }
