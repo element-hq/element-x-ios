@@ -44,6 +44,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
+                                                         readReceiptsEnabled: ServiceLocator.shared.settings.readReceiptsEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -87,6 +88,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
+            .store(in: &cancellables)
+
+        ServiceLocator.shared.settings.$readReceiptsEnabled
+            .weakAssign(to: \.state.readReceiptsEnabled, on: self)
             .store(in: &cancellables)
 
         roomProxy.membersPublisher

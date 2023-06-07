@@ -52,7 +52,8 @@ enum RoomTimelineItemFixtures {
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
-                             content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!")),
+                             content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
+                             properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "5 PM",
                              isOutgoing: true,
@@ -68,7 +69,11 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
-                             ])),
+                             ],
+                             orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "bob", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "charlie", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "5 PM",
                              isOutgoing: false,

@@ -127,7 +127,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(.top, messageBubbleTopPadding)
     }
-    
+
     @ViewBuilder
     var styledContent: some View {
         if shouldAvoidBubbling {
@@ -261,6 +261,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+        mockTimeline
+            .environment(\.readReceiptsEnabled, true)
+            .previewDisplayName("Mock Timeline with read receipts")
         mockTimeline
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Mock Timeline RTL")

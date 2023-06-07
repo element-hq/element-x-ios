@@ -19,6 +19,7 @@ import SwiftUI
 struct TimelineStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     @Environment(\.timelineStyle) private var style
+    @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     @State private var shouldShowDeliveryStatus = true
@@ -33,8 +34,7 @@ struct TimelineStatusView: View {
     }
 
     var body: some View {
-        if !timelineItem.properties.orderedReadReceipts.isEmpty,
-           ServiceLocator.shared.settings.readReceiptsEnabled {
+        if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts
         } else if shouldShowDeliveryStatus {
             deliveryStatus

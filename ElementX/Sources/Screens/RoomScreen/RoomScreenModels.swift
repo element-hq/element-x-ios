@@ -82,6 +82,7 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
+    var readReceiptsEnabled: Bool
     
     var bindings: RoomScreenViewStateBindings
     
