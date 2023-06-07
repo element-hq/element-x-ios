@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+  </head>
+  <body>
+    <h2>Launch time performance</h2>
+    <div style="width: 800px"><canvas id="launchPerformance"/></div>
+    <h2>Login performance</h2>
+    <div style="width: 800px"><canvas id="loginPerformance"/></div>
+  <script>
+  d3.csv('./perf-data.csv').then(makeCharts);
+  
+    
+  function makeCharts(perfdata) { 
+    var launchPerformance = perfdata.filter(function (d) { return d.Test == "launchPerformance"  });
+    makeChart(launchPerformance,"launchPerformance")
+    var loginPerformance = perfdata.filter(function (d) { return d.Test == "loginPerformance"  });
+    makeChart(loginPerformance,"loginPerformance")
+  }
+    
+  function makeChart(perfdata, canvas_id) {
+    console.log(perfdata);
+    var avgData = perfdata.map(
+      function(d) {
+        d1 = parseFloat(d.Data1);
+        d2 = parseFloat(d.Data2);
+        d3 = parseFloat(d.Data3);
+        d4 = parseFloat(d.Data4);
+        d5 = parseFloat(d.Data5);
+        console.log(d1,d2,d3,d4,d5);
+        return {
+          x: d.Date,
+          y: (d1+d2+d3+d4+d5)/5
+        }
+      }
+    );
+    console.log(avgData);
+    var chart = new Chart(canvas_id, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            data: avgData
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+            }
+          }
+        }
+      }
+    });
+  }
+  </script>
+  </body>
+
+</html>
+  
+    
