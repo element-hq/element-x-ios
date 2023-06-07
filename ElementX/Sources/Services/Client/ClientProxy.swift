@@ -429,16 +429,12 @@ class ClientProxy: ClientProxyProtocol {
                 MXLog.error("Visible rooms sliding sync view unavailable")
                 return
             }
-            
-            let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
-            
+
             // Add the visibleRoomsSlidingSyncList here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncList later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
-//                .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
-                // .storageKey(name: "ElementX")
                 .build()
             
             // Don't forget to update the view proxies after building the slidingSync
@@ -466,12 +462,15 @@ class ClientProxy: ClientProxyProtocol {
         let listName = "CurrentlyVisibleRooms"
         
         let visibleRoomsListProxy = SlidingSyncListProxy(name: listName)
+
+        let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
         
         let visibleRoomsListBuilder = SlidingSyncListBuilder(name: listName)
             .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
             .syncModeSelective(selectiveModeBuilder: .init().addRange(start: 0, endInclusive: 20))
+            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: visibleRoomsListProxy)
 
         self.visibleRoomsListBuilder = visibleRoomsListBuilder
