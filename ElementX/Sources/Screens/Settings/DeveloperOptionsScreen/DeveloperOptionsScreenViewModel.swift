@@ -26,7 +26,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     init() {
         appSettings = ServiceLocator.shared.settings
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
-                                                               userSuggestionsEnabled: appSettings.userSuggestionsEnabled)
+                                                               userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
+                                                               readReceiptsEnabled: appSettings.readReceiptsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -42,6 +43,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
         case .changedUserSuggestionsEnabled:
             appSettings.userSuggestionsEnabled = state.bindings.userSuggestionsEnabled
+        case .changedReadReceiptsEnabled:
+            appSettings.readReceiptsEnabled = state.bindings.readReceiptsEnabled
         case .clearCache:
             callback?(.clearCache)
         }
