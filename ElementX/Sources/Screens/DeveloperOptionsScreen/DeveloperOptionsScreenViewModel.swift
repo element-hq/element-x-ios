@@ -26,7 +26,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     init() {
         appSettings = ServiceLocator.shared.settings
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
-                                                               startChatUserSuggestionsEnabled: appSettings.startChatUserSuggestionsEnabled)
+                                                               userSuggestionsEnabled: appSettings.userSuggestionsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -40,8 +40,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
             appSettings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
-        case .changedStartChatUserSuggestionsEnabled:
-            appSettings.startChatUserSuggestionsEnabled = state.bindings.startChatUserSuggestionsEnabled
+        case .changedUserSuggestionsEnabled:
+            appSettings.userSuggestionsEnabled = state.bindings.userSuggestionsEnabled
         case .clearCache:
             callback?(.clearCache)
         }

@@ -386,7 +386,7 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChat:
-            ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
+            ServiceLocator.shared.settings.userSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
@@ -467,7 +467,7 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .inviteUsers, .inviteUsersInRoom, .inviteUsersInRoomExistingMembers:
-            ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
+            ServiceLocator.shared.settings.userSuggestionsEnabled = true
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userDiscoveryMock = UserDiscoveryServiceMock()
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])

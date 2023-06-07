@@ -106,7 +106,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     private func fetchSuggestions() {
-        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+        guard ServiceLocator.shared.settings.userSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }

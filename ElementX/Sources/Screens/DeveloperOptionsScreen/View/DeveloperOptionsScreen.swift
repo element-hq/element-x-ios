@@ -30,11 +30,11 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
                 
-                Toggle(isOn: $context.startChatUserSuggestionsEnabled) {
-                    Text("Start chat user suggestions")
+                Toggle(isOn: $context.userSuggestionsEnabled) {
+                    Text("User suggestions")
                 }
-                .onChange(of: context.startChatUserSuggestionsEnabled) { _ in
-                    context.send(viewAction: .changedStartChatUserSuggestionsEnabled)
+                .onChange(of: context.userSuggestionsEnabled) { _ in
+                    context.send(viewAction: .changedUserSuggestionsEnabled)
                 }
             }
             

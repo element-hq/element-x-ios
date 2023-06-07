@@ -37,7 +37,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
         
         AppSettings.reset()
-        ServiceLocator.shared.settings.startChatUserSuggestionsEnabled = true
+        ServiceLocator.shared.settings.userSuggestionsEnabled = true
     }
     
     func testQueryShowingNoResults() async throws {

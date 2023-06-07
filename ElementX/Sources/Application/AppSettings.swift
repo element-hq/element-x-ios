@@ -27,7 +27,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
-        case startChatUserSuggestionsEnabled
+        case userSuggestionsEnabled
         case readReceiptsEnabled
     }
     
@@ -177,8 +177,8 @@ final class AppSettings {
     
     // MARK: Start Chat
     
-    @UserPreference(key: UserDefaultsKeys.startChatUserSuggestionsEnabled, defaultValue: false, storageType: .volatile)
-    var startChatUserSuggestionsEnabled
+    @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
+    var userSuggestionsEnabled
 
     // MARK: Receipts
 
