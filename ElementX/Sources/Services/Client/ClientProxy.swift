@@ -483,6 +483,7 @@ class ClientProxy: ClientProxyProtocol {
             .requiredState(requiredState: slidingSyncRequiredState)
             .filters(filters: slidingSyncFilters)
             .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
+            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: allRoomsListProxy)
 
         self.allRoomsListBuilder = allRoomsListBuilder
@@ -503,7 +504,6 @@ class ClientProxy: ClientProxyProtocol {
             .requiredState(requiredState: slidingSyncInvitesRequiredState)
             .filters(filters: slidingSyncInviteFilters)
             .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
-            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
             .onceBuilt(callback: invitesListProxy)
 
         self.invitesListBuilder = invitesListBuilder
