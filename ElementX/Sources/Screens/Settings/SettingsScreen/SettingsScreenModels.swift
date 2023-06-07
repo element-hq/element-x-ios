@@ -21,6 +21,7 @@ enum SettingsScreenViewModelAction {
     case close
     case analytics
     case reportBug
+    case about
     case sessionVerification
     case developerOptions
     case logout
@@ -44,6 +45,7 @@ enum SettingsScreenViewAction {
     case close
     case analytics
     case reportBug
+    case about
     case sessionVerification
     case logout
     case changedTimelineStyle

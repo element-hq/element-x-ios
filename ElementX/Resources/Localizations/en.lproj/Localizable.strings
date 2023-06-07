@@ -33,6 +33,7 @@
 "action_no" = "No";
 "action_not_now" = "Not now";
 "action_ok" = "OK";
+"action_open_with" = "Open with";
 "action_quick_reply" = "Quick reply";
 "action_quote" = "Quote";
 "action_remove" = "Remove";
@@ -55,9 +56,11 @@
 "action_view_source" = "View Source";
 "action_yes" = "Yes";
 "common_about" = "About";
+"common_acceptable_use_policy" = "Acceptable use policy";
 "common_analytics" = "Analytics";
 "common_audio" = "Audio";
 "common_bubbles" = "Bubbles";
+"common_copyright" = "Copyright";
 "common_creating_room" = "Creating room…";
 "common_current_user_left_room" = "Left room";
 "common_decryption_error" = "Decryption error";
@@ -83,6 +86,7 @@
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
+"common_privacy_policy" = "Privacy policy";
 "common_reactions" = "Reactions";
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
@@ -101,6 +105,7 @@
 "common_sticker" = "Sticker";
 "common_success" = "Success";
 "common_suggestions" = "Suggestions";
+"common_third_party_notices" = "Third-party notices";
 "common_topic" = "Topic";
 "common_topic_placeholder" = "What is this room about?";
 "common_unable_to_decrypt" = "Unable to decrypt";
@@ -174,6 +179,10 @@
 "room_timeline_read_marker_title" = "New";
 "screen_account_provider_change" = "Change account provider";
 "screen_account_provider_continue" = "Continue";
+"screen_account_provider_form_hint" = "Homeserver address";
+"screen_account_provider_form_notice" = "Enter a search term or a domain address.";
+"screen_account_provider_form_subtitle" = "Search for a company, community, or private server.";
+"screen_account_provider_form_title" = "Find an account provider";
 "screen_account_provider_signin_title" = "You’re about to sign in to %@";
 "screen_account_provider_signup_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_title" = "You’re about to create an account on %@";
@@ -235,7 +244,7 @@
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
 "screen_onboarding_sign_up" = "Create account";
 "screen_onboarding_subtitle" = "Communicate and collaborate securely";
-"screen_onboarding_welcome_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
+"screen_onboarding_welcome_subtitle" = "Welcome to %1$@. Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Be in your Element";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
 "screen_room_attachment_source_camera" = "Camera";
