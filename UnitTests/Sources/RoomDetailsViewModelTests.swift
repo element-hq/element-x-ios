@@ -30,7 +30,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         AppSettings.reset()
-        ServiceLocator.shared.settings.editRoomDetailsFlowEnabled = true
     }
 
     func testLeaveRoomTappedWhenPublic() async {

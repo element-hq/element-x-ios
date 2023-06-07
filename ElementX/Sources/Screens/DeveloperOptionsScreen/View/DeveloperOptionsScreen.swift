@@ -30,39 +30,11 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
                 
-                Toggle(isOn: $context.startChatFlowEnabled) {
-                    Text("Show start chat flow")
+                Toggle(isOn: $context.userSuggestionsEnabled) {
+                    Text("User suggestions")
                 }
-                .onChange(of: context.startChatFlowEnabled) { _ in
-                    context.send(viewAction: .changedStartChatFlowEnabled)
-                }
-                
-                Toggle(isOn: $context.startChatUserSuggestionsEnabled) {
-                    Text("Start chat user suggestions")
-                }
-                .onChange(of: context.startChatUserSuggestionsEnabled) { _ in
-                    context.send(viewAction: .changedStartChatUserSuggestionsEnabled)
-                }
-                                
-                Toggle(isOn: $context.invitesFlowEnabled) {
-                    Text("Show invites flow")
-                }
-                .onChange(of: context.invitesFlowEnabled) { _ in
-                    context.send(viewAction: .changedInvitesFlowEnabled)
-                }
-                
-                Toggle(isOn: $context.inviteMorePeopleFlowEnabled) {
-                    Text("Show invite more people flow")
-                }
-                .onChange(of: context.inviteMorePeopleFlowEnabled) { _ in
-                    context.send(viewAction: .changedInviteMorePeopleFlowEnabled)
-                }
-                
-                Toggle(isOn: $context.editRoomDetailsFlowEnabled) {
-                    Text("Show edit room details flow")
-                }
-                .onChange(of: context.editRoomDetailsFlowEnabled) { _ in
-                    context.send(viewAction: .changedEditRoomDetailsFlowEnabled)
+                .onChange(of: context.userSuggestionsEnabled) { _ in
+                    context.send(viewAction: .changedUserSuggestionsEnabled)
                 }
             }
             

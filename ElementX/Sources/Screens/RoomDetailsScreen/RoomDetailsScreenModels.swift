@@ -52,7 +52,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canEdit: Bool {
-        !isDirect && ServiceLocator.shared.settings.editRoomDetailsFlowEnabled && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
+        !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
     
     var hasTopicSection: Bool {

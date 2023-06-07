@@ -150,7 +150,7 @@ struct RoomDetailsScreen: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             
-            if context.viewState.canInviteUsers, ServiceLocator.shared.settings.inviteMorePeopleFlowEnabled {
+            if context.viewState.canInviteUsers {
                 Button {
                     context.send(viewAction: .processTapInvite)
                 } label: {
