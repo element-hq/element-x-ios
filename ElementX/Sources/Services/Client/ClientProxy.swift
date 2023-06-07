@@ -414,7 +414,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let slidingSyncBuilder = client.slidingSync()
+            let slidingSyncBuilder = try client.slidingSync(id: "ElementX")
             
             // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
             // cold cache state and count updates will be lost
@@ -437,7 +437,7 @@ class ClientProxy: ClientProxyProtocol {
             let slidingSync = try slidingSyncBuilder
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
-                .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
+//                .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
                 // .storageKey(name: "ElementX")
                 .build()
             

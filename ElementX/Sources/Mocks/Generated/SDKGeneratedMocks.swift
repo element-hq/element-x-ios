@@ -192,27 +192,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - `getMediaFile`
 
-    public var getMediaFileMediaSourceBodyMimeTypeThrowableError: Error?
-    public var getMediaFileMediaSourceBodyMimeTypeCallsCount = 0
-    public var getMediaFileMediaSourceBodyMimeTypeCalled: Bool {
-        return getMediaFileMediaSourceBodyMimeTypeCallsCount > 0
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirThrowableError: Error?
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount = 0
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirCalled: Bool {
+        return getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount > 0
     }
-    public var getMediaFileMediaSourceBodyMimeTypeReceivedArguments: (`mediaSource`: MediaSource, `body`: String?, `mimeType`: String)?
-    public var getMediaFileMediaSourceBodyMimeTypeReceivedInvocations: [(`mediaSource`: MediaSource, `body`: String?, `mimeType`: String)] = []
-    public var getMediaFileMediaSourceBodyMimeTypeReturnValue: MediaFileHandle!
-    public var getMediaFileMediaSourceBodyMimeTypeClosure: ((MediaSource, String?, String) throws -> MediaFileHandle)?
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments: (`mediaSource`: MediaSource, `body`: String?, `mimeType`: String, `tempDir`: String?)?
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations: [(`mediaSource`: MediaSource, `body`: String?, `mimeType`: String, `tempDir`: String?)] = []
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirReturnValue: MediaFileHandle!
+    public var getMediaFileMediaSourceBodyMimeTypeTempDirClosure: ((MediaSource, String?, String, String?) throws -> MediaFileHandle)?
 
-    public func `getMediaFile`(`mediaSource`: MediaSource, `body`: String?, `mimeType`: String) throws -> MediaFileHandle {
-        if let error = getMediaFileMediaSourceBodyMimeTypeThrowableError {
+    public func `getMediaFile`(`mediaSource`: MediaSource, `body`: String?, `mimeType`: String, `tempDir`: String?) throws -> MediaFileHandle {
+        if let error = getMediaFileMediaSourceBodyMimeTypeTempDirThrowableError {
             throw error
         }
-        getMediaFileMediaSourceBodyMimeTypeCallsCount += 1
-        getMediaFileMediaSourceBodyMimeTypeReceivedArguments = (`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`)
-        getMediaFileMediaSourceBodyMimeTypeReceivedInvocations.append((`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`))
-        if let getMediaFileMediaSourceBodyMimeTypeClosure = getMediaFileMediaSourceBodyMimeTypeClosure {
-            return try getMediaFileMediaSourceBodyMimeTypeClosure(`mediaSource`, `body`, `mimeType`)
+        getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount += 1
+        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments = (`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`, `tempDir`: `tempDir`)
+        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations.append((`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`, `tempDir`: `tempDir`))
+        if let getMediaFileMediaSourceBodyMimeTypeTempDirClosure = getMediaFileMediaSourceBodyMimeTypeTempDirClosure {
+            return try getMediaFileMediaSourceBodyMimeTypeTempDirClosure(`mediaSource`, `body`, `mimeType`, `tempDir`)
         } else {
-            return getMediaFileMediaSourceBodyMimeTypeReturnValue
+            return getMediaFileMediaSourceBodyMimeTypeTempDirReturnValue
         }
     }
     //MARK: - `getMediaThumbnail`
@@ -559,23 +559,6 @@ class SDKClientMock: SDKClientProtocol {
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((`identifiers`: `identifiers`, `kind`: `kind`, `appDisplayName`: `appDisplayName`, `deviceDisplayName`: `deviceDisplayName`, `profileTag`: `profileTag`, `lang`: `lang`))
         try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(`identifiers`, `kind`, `appDisplayName`, `deviceDisplayName`, `profileTag`, `lang`)
     }
-    //MARK: - `slidingSync`
-
-    public var slidingSyncCallsCount = 0
-    public var slidingSyncCalled: Bool {
-        return slidingSyncCallsCount > 0
-    }
-    public var slidingSyncReturnValue: SlidingSyncBuilder!
-    public var slidingSyncClosure: (() -> SlidingSyncBuilder)?
-
-    public func `slidingSync`() -> SlidingSyncBuilder {
-        slidingSyncCallsCount += 1
-        if let slidingSyncClosure = slidingSyncClosure {
-            return slidingSyncClosure()
-        } else {
-            return slidingSyncReturnValue
-        }
-    }
     //MARK: - `unignoreUser`
 
     public var unignoreUserUserIdThrowableError: Error?
@@ -640,6 +623,31 @@ class SDKClientMock: SDKClientProtocol {
             return try userIdClosure()
         } else {
             return userIdReturnValue
+        }
+    }
+    //MARK: - `slidingSync`
+
+    public var slidingSyncIdThrowableError: Error?
+    public var slidingSyncIdCallsCount = 0
+    public var slidingSyncIdCalled: Bool {
+        return slidingSyncIdCallsCount > 0
+    }
+    public var slidingSyncIdReceivedId: String?
+    public var slidingSyncIdReceivedInvocations: [String] = []
+    public var slidingSyncIdReturnValue: SlidingSyncBuilder!
+    public var slidingSyncIdClosure: ((String) throws -> SlidingSyncBuilder)?
+
+    public func `slidingSync`(`id`: String) throws -> SlidingSyncBuilder {
+        if let error = slidingSyncIdThrowableError {
+            throw error
+        }
+        slidingSyncIdCallsCount += 1
+        slidingSyncIdReceivedId = id
+        slidingSyncIdReceivedInvocations.append(`id`)
+        if let slidingSyncIdClosure = slidingSyncIdClosure {
+            return try slidingSyncIdClosure(`id`)
+        } else {
+            return slidingSyncIdReturnValue
         }
     }
 }
