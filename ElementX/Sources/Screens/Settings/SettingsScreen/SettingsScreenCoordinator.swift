@@ -51,6 +51,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 self.presentAnalyticsScreen()
             case .reportBug:
                 self.presentBugReportScreen()
+            case .about:
+                self.presentLegalInformationScreen()
             case .sessionVerification:
                 self.verifySession()
             case .developerOptions:
@@ -94,6 +96,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         }
         
         parameters.navigationStackCoordinator?.push(coordinator)
+    }
+    
+    private func presentLegalInformationScreen() {
+        parameters.navigationStackCoordinator?.push(LegalInformationScreenCoordinator())
     }
     
     private func verifySession() {

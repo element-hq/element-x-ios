@@ -122,10 +122,17 @@ struct SettingsScreen: View {
             
             // Report Bug
             Button { context.send(viewAction: .reportBug) } label: {
-                Label(L10n.actionReportBug, systemImage: "questionmark.circle")
+                Label(L10n.actionReportBug, systemImage: "ladybug")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
+            
+            // About
+            Button { context.send(viewAction: .about) } label: {
+                Label(L10n.commonAbout, systemImage: "questionmark.circle")
+            }
+            .buttonStyle(.compoundForm(accessory: .navigationLink))
+            .accessibilityIdentifier("aboutButton")
         }
         .compoundFormSection()
     }

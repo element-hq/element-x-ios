@@ -102,18 +102,14 @@ class SlidingSyncListProxy: SlidingSyncListOnceBuilt {
     }
     
     func updateVisibleRange(_ range: Range<Int>?, timelineLimit: UInt?) {
-        do {
-            if let range {
-                MXLog.info("Setting '\(name)' list range to \(range)")
-                try slidingSyncList?.setSyncMode(builder: .init().addRange(start: UInt32(range.lowerBound), endInclusive: UInt32(range.upperBound)))
-            }
-            
-            if let timelineLimit {
-                MXLog.info("Setting '\(name)' list timeline limit to \(timelineLimit)")
-                slidingSyncList?.setTimelineLimit(value: UInt32(timelineLimit))
-            }
-        } catch {
-            MXLog.error("Failed setting sliding sync list range with error: \(error)")
+        if let range {
+            MXLog.info("Setting '\(name)' list range to \(range)")
+            slidingSyncList?.setSyncMode(builder: .init().addRange(start: UInt32(range.lowerBound), endInclusive: UInt32(range.upperBound)))
+        }
+        
+        if let timelineLimit {
+            MXLog.info("Setting '\(name)' list timeline limit to \(timelineLimit)")
+            slidingSyncList?.setTimelineLimit(value: UInt32(timelineLimit))
         }
     }
     

@@ -1,0 +1,1 @@
+Added an `About` section and links to legal information in the application settings

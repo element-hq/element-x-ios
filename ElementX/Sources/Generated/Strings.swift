@@ -80,6 +80,8 @@ public enum L10n {
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   public static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
+  /// Open with
+  public static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
   /// Quick reply
   public static var actionQuickReply: String { return L10n.tr("Localizable", "action_quick_reply") }
   /// Quote
@@ -124,12 +126,16 @@ public enum L10n {
   public static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
   /// About
   public static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
+  /// Acceptable use policy
+  public static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
   /// Analytics
   public static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
   /// Audio
   public static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
   /// Bubbles
   public static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
+  /// Copyright
+  public static var commonCopyright: String { return L10n.tr("Localizable", "common_copyright") }
   /// Creating room…
   public static var commonCreatingRoom: String { return L10n.tr("Localizable", "common_creating_room") }
   /// Left room
@@ -186,6 +192,8 @@ public enum L10n {
   public static var commonPeople: String { return L10n.tr("Localizable", "common_people") }
   /// Permalink
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
+  /// Privacy policy
+  public static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
   /// Reactions
   public static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
   /// Replying to %1$@
@@ -224,6 +232,8 @@ public enum L10n {
   public static var commonSuccess: String { return L10n.tr("Localizable", "common_success") }
   /// Suggestions
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
+  /// Third-party notices
+  public static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// What is this room about?
@@ -428,6 +438,14 @@ public enum L10n {
   public static var screenAccountProviderChange: String { return L10n.tr("Localizable", "screen_account_provider_change") }
   /// Continue
   public static var screenAccountProviderContinue: String { return L10n.tr("Localizable", "screen_account_provider_continue") }
+  /// Homeserver address
+  public static var screenAccountProviderFormHint: String { return L10n.tr("Localizable", "screen_account_provider_form_hint") }
+  /// Enter a search term or a domain address.
+  public static var screenAccountProviderFormNotice: String { return L10n.tr("Localizable", "screen_account_provider_form_notice") }
+  /// Search for a company, community, or private server.
+  public static var screenAccountProviderFormSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_form_subtitle") }
+  /// Find an account provider
+  public static var screenAccountProviderFormTitle: String { return L10n.tr("Localizable", "screen_account_provider_form_title") }
   /// You’re about to sign in to %@
   public static func screenAccountProviderSigninTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signin_title", String(describing: p1))
@@ -608,7 +626,7 @@ public enum L10n {
   public static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
   /// Communicate and collaborate securely
   public static var screenOnboardingSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_subtitle") }
-  /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
+  /// Welcome to %1$@. Supercharged, for speed and simplicity.
   public static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
   }

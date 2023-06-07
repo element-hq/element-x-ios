@@ -81,6 +81,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.analytics)
         case .reportBug:
             callback?(.reportBug)
+        case .about:
+            callback?(.about)
         case .logout:
             callback?(.logout)
         case .sessionVerification:
