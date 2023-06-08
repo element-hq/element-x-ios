@@ -58,6 +58,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         
         roomProxy.membersPublisher
             .filter { !$0.isEmpty }
+            .first()
             .sink { [weak self] members in
                 self?.updateState(members: members)
             }
