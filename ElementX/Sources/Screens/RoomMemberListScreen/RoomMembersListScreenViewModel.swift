@@ -20,14 +20,12 @@ typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersLi
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private let mediaProvider: MediaProviderProtocol
     private var members: [RoomMemberProxyProtocol] = []
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
     init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
-        self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount),
                    imageProvider: mediaProvider)
         

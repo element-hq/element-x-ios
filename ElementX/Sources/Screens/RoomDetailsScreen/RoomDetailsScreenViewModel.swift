@@ -45,7 +45,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            bindings: .init()),
                    imageProvider: mediaProvider)
         
-        setupSubscriptions()
+        setupRoomSubscription()
         fetchMembers()
     }
     
@@ -85,23 +85,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Private
 
-    private func setupSubscriptions() {
+    private func setupRoomSubscription() {
         switch roomProxy.registerTimelineListenerIfNeeded() {
         case .success, .failure(.roomListenerAlreadyRegistered):
             break
         case .failure:
             MXLog.error("Failed to register a room listener in room's details for the room \(roomProxy.id)")
         }
-        
-        roomProxy.membersPublisher
-            .sink { [weak self] members in
-                guard let self, isEncryptedDirectRoom else { return }
-                
-                let dmRecipient = members.first(where: { !$0.isAccountOwner })
-                self.dmRecipient = dmRecipient
-                self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
-            }
-            .store(in: &cancellables)
         
         roomProxy.updatesPublisher
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
@@ -123,9 +113,20 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func fetchMembersIfNeeded() async {
+        // We need to fetch members just in 1-to-1 chat to get the member object for the other person
         guard isEncryptedDirectRoom else {
             return
         }
+        
+        roomProxy.membersPublisher
+            .sink { [weak self] members in
+                guard let self else { return }
+                let dmRecipient = members.first(where: { !$0.isAccountOwner })
+                self.dmRecipient = dmRecipient
+                self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
+            }
+            .store(in: &cancellables)
+        
         await roomProxy.updateMembers()
     }
     
