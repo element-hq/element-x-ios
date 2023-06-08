@@ -18,7 +18,7 @@ import Combine
 import Mapbox
 import SwiftUI
 
-struct LocationSharingMapView: UIViewRepresentable {
+struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Constants
     
     private enum Constants {
@@ -29,16 +29,12 @@ struct LocationSharingMapView: UIViewRepresentable {
     
     @Environment(\.colorScheme) var colorScheme
     
-    var lightTileServerMapURL: URL {
-        let appSettings = ServiceLocator.shared.settings!
-        let key = appSettings.mapTilerApiKey
-        return URL(string: appSettings.lightTileMapStyleURL + "?key=" + key)!
+    var lightTileServerMapURL: URL? {
+        MapTilerStyleBuilder.shared.dynamicMapURL(for: .light)
     }
     
-    var darkTileServerMapURL: URL {
-        let appSettings = ServiceLocator.shared.settings!
-        let key = appSettings.mapTilerApiKey
-        return URL(string: appSettings.darkTileMapStyleURL + "?key=" + key)!
+    var darkTileServerMapURL: URL? {
+        MapTilerStyleBuilder.shared.dynamicMapURL(for: .dark)
     }
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
@@ -102,16 +98,16 @@ struct LocationSharingMapView: UIViewRepresentable {
 
 // MARK: - Coordinator
 
-extension LocationSharingMapView {
+extension MapLibreMapView {
     class Coordinator: NSObject, MGLMapViewDelegate, UIGestureRecognizerDelegate {
         // MARK: - Properties
 
-        var locationSharingMapView: LocationSharingMapView
+        var mapLibreView: MapLibreMapView
         
         // MARK: - Setup
 
-        init(_ locationSharingMapView: LocationSharingMapView) {
-            self.locationSharingMapView = locationSharingMapView
+        init(_ mapLibreView: MapLibreMapView) {
+            self.mapLibreView = mapLibreView
         }
         
         // MARK: - MGLMapViewDelegate
@@ -126,7 +122,7 @@ extension LocationSharingMapView {
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
-            locationSharingMapView.errorSubject.send(.failedLoadingMap)
+            mapLibreView.errorSubject.send(.failedLoadingMap)
         }
         
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
@@ -138,7 +134,7 @@ extension LocationSharingMapView {
             
             switch manager.authorizationStatus {
             case .denied, .restricted:
-                locationSharingMapView.errorSubject.send(.invalidLocationAuthorization)
+                mapLibreView.errorSubject.send(.invalidLocationAuthorization)
             default:
                 break
             }

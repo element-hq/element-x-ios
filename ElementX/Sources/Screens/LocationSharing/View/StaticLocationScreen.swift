@@ -25,9 +25,9 @@ struct StaticLocationScreen: View {
             .navigationBarTitleDisplayMode(.inline)
     }
     
-    var mapView: LocationSharingMapView {
-        LocationSharingMapView(showsUserLocationMode: .show,
-                               errorSubject: .init())
+    var mapView: MapLibreMapView {
+        MapLibreMapView(showsUserLocationMode: .show,
+                        errorSubject: .init())
     }
 }
 
