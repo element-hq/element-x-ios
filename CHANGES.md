@@ -1,3 +1,29 @@
+## Changes in 1.1.2 (2023-06-08)
+
+✨ Features
+
+- Timestamp for messages incorporated in a bubble. ([#948](https://github.com/vector-im/element-x-ios/issues/948))
+- Add the image picker flow for the creation of a room ([#961](https://github.com/vector-im/element-x-ios/issues/961))
+- Update reply composer mode UI to include message being replied to ([#976](https://github.com/vector-im/element-x-ios/issues/976))
+- Added an `About` section and links to legal information in the application settings ([#1011](https://github.com/vector-im/element-x-ios/issues/1011))
+- Tapping on a user avatar/name in the timeline opens the User Details view for that user. ([#1017](https://github.com/vector-im/element-x-ios/issues/1017))
+
+🙌 Improvements
+
+- Improve bug report uploads with file size checks and better error handling. ([#1018](https://github.com/vector-im/element-x-ios/pull/1018))
+- Showing the iOS default contact/group silhouette in notifications when the avatar is missing. ([#965](https://github.com/vector-im/element-x-ios/pull/965))
+
+🐛 Bugfixes
+
+- Update PostHog to 2.0.3 to fix the app's accent colour. ([#1006](https://github.com/vector-im/element-x-ios/pull/1006))
+- Fix an incorrect colour when replying to a message in dark mode. ([#1007](https://github.com/vector-im/element-x-ios/pull/1007))
+- Prevent room navigation back button from jumping while animating ([#945](https://github.com/vector-im/element-x-ios/pull/945))
+
+⚠️ API Changes
+
+- Bump the minimum supported iOS version to 16.4. ([#994](https://github.com/vector-im/element-x-ios/pull/994))
+
+
 ## Changes in 1.1.1 (2023-05-23)
 
 ✨ Features

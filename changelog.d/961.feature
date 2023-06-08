@@ -1,1 +1,0 @@
-Add the image picker flow for the creation of a room
