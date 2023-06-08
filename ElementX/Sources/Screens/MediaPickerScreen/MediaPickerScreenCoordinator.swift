@@ -48,7 +48,7 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
         case .camera:
             cameraPicker
         case .photoLibrary:
-            PhotoLibraryPicker { [weak self] action in
+            PhotoLibraryPicker(userIndicatorController: userIndicatorController) { [weak self] action in
                 switch action {
                 case .cancel:
                     self?.callback?(.cancel)
@@ -62,7 +62,7 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
         case .documents:
             // The document picker automatically dismisses everything on selection
             // Strongly retain self in the callback to forward actions correctly
-            DocumentPicker { action in
+            DocumentPicker(userIndicatorController: userIndicatorController) { action in
                 switch action {
                 case .cancel:
                     self.callback?(.cancel)
@@ -77,7 +77,7 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     private var cameraPicker: some View {
-        CameraPicker { [weak self] action in
+        CameraPicker(userIndicatorController: userIndicatorController) { [weak self] action in
             switch action {
             case .cancel:
                 self?.callback?(.cancel)
