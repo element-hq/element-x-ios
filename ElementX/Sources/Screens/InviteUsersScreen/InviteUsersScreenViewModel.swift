@@ -39,8 +39,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.userDiscoveryService = userDiscoveryService
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
-        buildMembershipStateIfNeeded()
         setupSubscriptions(selectedUsers: selectedUsers)
+        fetchMembersIfNeeded()
     }
     
     // MARK: - Public
@@ -60,30 +60,29 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             actionsSubject.send(.toggleUser(user))
         }
     }
-    
-    private func buildMembershipStateIfNeeded() {
-        #warning("Fix me")
-        /* guard case let .room(members, userIndicatorController) = roomType else {
-             return
-         }
-         let indicatorID = UUID().uuidString
-         userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
-        
-         Task.detached { [members] in
-             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
-             let membershipState = members
-                 .reduce(into: [String: MembershipState]()) { partialResult, member in
-                     partialResult[member.userID] = member.membership
-                 }
-            
-             Task { @MainActor in
-                 self.state.membershipState = membershipState
-                 userIndicatorController.retractIndicatorWithId(indicatorID)
-             }
-         } */
-    }
 
     // MARK: - Private
+    
+    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
+        guard case let .room(_, userIndicatorController) = roomType else {
+            return
+        }
+        
+        showLoader(using: userIndicatorController)
+        
+        Task.detached { [members] in
+            // accessing RoomMember's properties is very slow. We need to do it in a background thread.
+            let membershipState = members
+                .reduce(into: [String: MembershipState]()) { partialResult, member in
+                    partialResult[member.userID] = member.membership
+                }
+            
+            Task { @MainActor in
+                self.state.membershipState = membershipState
+                self.hideLoader(using: userIndicatorController)
+            }
+        }
+    }
     
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
@@ -100,6 +99,25 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         selectedUsers
             .sink { [weak self] users in
                 self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchMembersIfNeeded() {
+        guard case let .room(roomProxy, userIndicatorController) = roomType else {
+            return
+        }
+        
+        Task {
+            showLoader(using: userIndicatorController)
+            await roomProxy.updateMembers()
+            hideLoader(using: userIndicatorController)
+        }
+        
+        roomProxy.membersPublisher
+            .filter { !$0.isEmpty }
+            .sink { [weak self] members in
+                self?.buildMembershipStateIfNeeded(members: members)
             }
             .store(in: &cancellables)
     }
@@ -139,6 +157,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private var searchQuery: String {
         context.searchQuery
+    }
+    
+    private let userIndicatorID = UUID().uuidString
+    
+    private func showLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+    }
+    
+    private func hideLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
+        userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
 

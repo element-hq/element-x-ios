@@ -114,7 +114,9 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+            self?.selectedUsers.value = []
+        }
     }
     
     private func presentRoomDetailsEditScreen(accountOwner: RoomMemberProxyProtocol) {

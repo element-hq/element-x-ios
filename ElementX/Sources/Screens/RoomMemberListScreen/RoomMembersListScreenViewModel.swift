@@ -69,6 +69,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         Task {
             showLoader()
             let roomMembersDetails = await buildMembersDetails(members: members)
+            self.members = members
             self.state = .init(joinedMembers: roomMembersDetails.joinedMembers, invitedMembers: roomMembersDetails.invitedMembers)
             self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
             hideLoader()
@@ -102,14 +103,14 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         .value
     }
     
-    private let indicatorId = UUID().uuidString
+    private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
     }
     
     private func hideLoader() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
 
