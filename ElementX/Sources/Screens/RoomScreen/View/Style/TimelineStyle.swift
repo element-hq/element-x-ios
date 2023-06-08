@@ -58,6 +58,10 @@ private struct TimelineGroupStyleKey: EnvironmentKey {
     static let defaultValue = TimelineGroupStyle.single
 }
 
+private struct ReadReceiptsEnabledKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 extension EnvironmentValues {
     var timelineStyle: TimelineStyle {
         get { self[TimelineStyleKey.self] }
@@ -68,14 +72,9 @@ extension EnvironmentValues {
         get { self[TimelineGroupStyleKey.self] }
         set { self[TimelineGroupStyleKey.self] = newValue }
     }
-}
 
-extension View {
-    func timelineStyle(_ style: TimelineStyle) -> some View {
-        environment(\.timelineStyle, style)
-    }
-    
-    func timelineGroupStyle(_ groupStyle: TimelineGroupStyle) -> some View {
-        environment(\.timelineGroupStyle, groupStyle)
+    var readReceiptsEnabled: Bool {
+        get { self[ReadReceiptsEnabledKey.self] }
+        set { self[ReadReceiptsEnabledKey.self] = newValue }
     }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,23 +16,11 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction {
-    case clearCache
+struct ReadReceipt: Hashable {
+    let userID: String
+    let formattedTimestamp: String?
 }
 
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
-}
-
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var userSuggestionsEnabled: Bool
-    var readReceiptsEnabled: Bool
-}
-
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedUserSuggestionsEnabled
-    case changedReadReceiptsEnabled
-    case clearCache
+extension ReadReceipt: Identifiable {
+    var id: String { userID }
 }

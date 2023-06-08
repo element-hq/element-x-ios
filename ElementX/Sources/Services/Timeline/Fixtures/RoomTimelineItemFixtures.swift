@@ -52,7 +52,8 @@ enum RoomTimelineItemFixtures {
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
-                             content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!")),
+                             content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
+                             properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "5 PM",
                              isOutgoing: true,
@@ -68,7 +69,11 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
-                             ])),
+                             ],
+                             orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "bob", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "charlie", formattedTimestamp: nil),
+                                                   ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "5 PM",
                              isOutgoing: false,
@@ -84,6 +89,28 @@ enum RoomTimelineItemFixtures {
                               senderDisplayName: "Alice"),
          TextRoomTimelineItem(text: "How are you?",
                               senderDisplayName: "Alice")]
+    }
+
+    /// A small chunk of events, containing 2 text items.
+    static var smallChunkWithReadReceipts: [RoomTimelineItemProtocol] {
+        [TextRoomTimelineItem(text: "Hey there 👋",
+                              senderDisplayName: "Alice")
+                .withReadReceipts([ReadReceipt(userID: "a1", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "How are you?",
+                                 senderDisplayName: "Alice")
+                .withReadReceipts([ReadReceipt(userID: "a2", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b2", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "Fine, Thanks!",
+                                 senderDisplayName: "Bob")
+                .withReadReceipts([ReadReceipt(userID: "a3", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b3", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "c3", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "What about you?",
+                                 senderDisplayName: "Bob")
+                .withReadReceipts([ReadReceipt(userID: "a4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "c4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "d4", formattedTimestamp: nil)])]
     }
     
     /// A chunk of events that contains a single text item.
@@ -192,5 +219,13 @@ private extension TextRoomTimelineItem {
                   isEditable: false,
                   sender: .init(id: "", displayName: senderDisplayName),
                   content: .init(body: text))
+    }
+}
+
+private extension TextRoomTimelineItem {
+    func withReadReceipts(_ receipts: [ReadReceipt]) -> TextRoomTimelineItem {
+        var newSelf = self
+        newSelf.properties.orderedReadReceipts = receipts
+        return newSelf
     }
 }

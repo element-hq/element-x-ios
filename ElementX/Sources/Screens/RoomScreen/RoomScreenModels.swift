@@ -77,10 +77,12 @@ struct RoomScreenViewState: BindableState {
     var roomTitle = ""
     var roomAvatarURL: URL?
     var items: [RoomTimelineViewProvider] = []
+    var members: [String: RoomMemberState] = [:]
     var canBackPaginate = true
     var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
+    var readReceiptsEnabled: Bool
     
     var bindings: RoomScreenViewStateBindings
     
@@ -122,4 +124,9 @@ enum RoomScreenErrorType: Hashable {
     case alert(String)
     /// A specific error message shown in a toast.
     case toast(String)
+}
+
+struct RoomMemberState {
+    let displayName: String?
+    let avatarURL: URL?
 }

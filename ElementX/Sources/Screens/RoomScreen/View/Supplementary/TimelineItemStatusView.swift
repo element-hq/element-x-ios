@@ -16,10 +16,10 @@
 
 import SwiftUI
 
-// This is also going to be used for read receipts in the future
-struct TimelineReceiptView: View {
+struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     @Environment(\.timelineStyle) private var style
+    @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     @State private var shouldShowDeliveryStatus = true
@@ -34,7 +34,9 @@ struct TimelineReceiptView: View {
     }
 
     var body: some View {
-        if shouldShowDeliveryStatus {
+        if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
+            readReceipts
+        } else if shouldShowDeliveryStatus {
             deliveryStatus
                 .onChange(of: timelineItem.properties.deliveryStatus) { newValue in
                     if newValue == .sent, !isLast {
@@ -70,5 +72,10 @@ struct TimelineReceiptView: View {
             }
             // The bubbles handle the failure internally
         }
+    }
+
+    var readReceipts: some View {
+        TimelineReadReceiptsView(timelineItem: timelineItem)
+            .environmentObject(context)
     }
 }

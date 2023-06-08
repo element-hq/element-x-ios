@@ -42,16 +42,28 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     header
                         .zIndex(1)
                 }
-                
-                HStack {
-                    if timelineItem.isOutgoing {
-                        Spacer()
+
+                VStack(alignment: alignment, spacing: 0) {
+                    HStack {
+                        if timelineItem.isOutgoing {
+                            Spacer()
+                        }
+
+                        messageBubbleWithReactions
                     }
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
                     
-                    messageBubbleWithReactions
+                    HStack(spacing: 0) {
+                        if !timelineItem.isOutgoing {
+                            Spacer()
+                        }
+                        TimelineItemStatusView(timelineItem: timelineItem)
+                            .environmentObject(context)
+                            .padding(.top, 8)
+                            .padding(.bottom, 3)
+                    }
                 }
-                .padding(.horizontal, 16.0)
-                .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
+                .padding(.horizontal, 16)
             }
         }
     }
@@ -92,11 +104,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
             }
-
-            TimelineReceiptView(timelineItem: timelineItem)
-                .environmentObject(context)
-                .padding(.top, 10)
-                .padding(.bottom, 3)
         }
     }
     
@@ -120,7 +127,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(.top, messageBubbleTopPadding)
     }
-    
+
     @ViewBuilder
     var styledContent: some View {
         if shouldAvoidBubbling {
@@ -255,6 +262,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
         mockTimeline
             .previewDisplayName("Mock Timeline")
         mockTimeline
+            .environment(\.readReceiptsEnabled, true)
+            .previewDisplayName("Mock Timeline with read receipts")
+        mockTimeline
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Mock Timeline RTL")
         replies
@@ -267,7 +277,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                 item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }
-        .timelineStyle(.bubbles)
+        .environment(\.timelineStyle, .bubbles)
         .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
     }
