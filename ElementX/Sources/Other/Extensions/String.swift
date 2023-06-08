@@ -64,13 +64,16 @@ extension String {
 }
 
 extension String {
-    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, isRTL: Bool) -> String {
+    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, systemLayoutDirection: LayoutDirection) -> String {
         guard whitespaceCount > 0 else {
             return ""
         }
 
-        var whiteSpaces = ""
-        if isRTL {
+        var whiteSpaces: String
+        switch systemLayoutDirection {
+        case .leftToRight:
+            whiteSpaces = "\u{202d}"
+        case .rightToLeft:
             whiteSpaces = "\u{202e}"
         }
 
