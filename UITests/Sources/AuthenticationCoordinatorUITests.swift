@@ -77,8 +77,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
         // Server Selection: Clear the default, enter OIDC server and continue.
-        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com")
-        app.buttons[A11yIdentifiers.changeServerScreen.continue].tap()
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com\n")
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
