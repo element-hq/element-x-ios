@@ -57,7 +57,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {
-        body.environmentObject(viewModel.context)
+        body
+            .environmentObject(viewModel.context)
         body
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)

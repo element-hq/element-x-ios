@@ -130,8 +130,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContent: some View {
-        if shouldAvoidBubbling {
-            contentWithReply
+        if isMediaType {
+            contentWithTimestamp
                 .bubbleStyle(inset: false,
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
@@ -147,11 +147,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithTimestamp: some View {
         if isTextItem {
-            ZStack(alignment: .topLeading) {
+            ZStack(alignment: .bottomTrailing) {
                 contentWithReply
-                    .layoutPriority(1)
                 localizedSendInfo
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            }
+        } else if isMediaType {
+            ZStack(alignment: .bottomTrailing) {
+                contentWithReply
+                localizedSendInfo
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
+                    .background(Color.element.system)
+                    .cornerRadius(10)
+                    .padding(.trailing, 4)
+                    .padding(.bottom, 4)
             }
         } else {
             HStack(alignment: .bottom, spacing: 4) {
@@ -176,7 +185,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .font(.compound.bodyXS)
         .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
-        .padding(.bottom, -4)
+        .padding(.bottom, isMediaType ? 0 : -4)
     }
     
     @ViewBuilder
@@ -213,7 +222,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
 
-    private var shouldAvoidBubbling: Bool {
+    private var isMediaType: Bool {
         timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem || timelineItem is StickerRoomTimelineItem
     }
     
