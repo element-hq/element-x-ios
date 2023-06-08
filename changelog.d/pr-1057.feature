@@ -1,0 +1,1 @@
+Timestamp added to non bubbled messages like images and videos for bubble style.
