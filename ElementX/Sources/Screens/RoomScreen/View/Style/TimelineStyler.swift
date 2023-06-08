@@ -64,17 +64,17 @@ struct TimelineItemStyler_Previews: PreviewProvider {
         return result
     }()
 
-    static let ltrString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+    static let ltrString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house!"))
 
-    static let rtlString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת"))
+    static let rtlString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת!"))
 
-    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house -- באמת‏ -- house."))
+    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house! -- באמת‏! -- house!"))
 
-    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏ -- house -- באמת"))
+    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏! -- house! -- באמת!"))
 
-    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house -- באמת"))
+    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house! -- באמת!"))
 
-    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏ -- house"))
+    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏! -- house!"))
 
     static var testView: some View {
         VStack {

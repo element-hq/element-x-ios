@@ -61,11 +61,11 @@ class StringTests: XCTestCase {
 
     func testGenerateBreakableWhitespaceEnd() {
         var count = 5
-        var result = "\u{200e}\u{200e}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        var result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
         XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 3
-        result = "\u{200e}\u{200e}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
         XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 0
@@ -73,7 +73,7 @@ class StringTests: XCTestCase {
         XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 4
-        result = "\u{200f}\u{202e}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        result = "\u{2067}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
         XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
 
         count = 0

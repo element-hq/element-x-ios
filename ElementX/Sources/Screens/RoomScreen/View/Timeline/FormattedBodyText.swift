@@ -43,9 +43,9 @@ struct FormattedBodyText: View {
     private var layoutPrefix: AttributedString {
         switch layoutDirection {
         case .leftToRight:
-            return "\u{200e}"
+            return "\u{2066}"
         case .rightToLeft:
-            return "\u{200f}"
+            return "\u{2067}"
         default:
             return ""
         }

@@ -72,9 +72,9 @@ extension String {
         var whiteSpaces: String
         switch layoutDirection {
         case .leftToRight:
-            whiteSpaces = "\u{200e}\u{200e}"
+            whiteSpaces = "\u{2066}"
         case .rightToLeft:
-            whiteSpaces = "\u{200f}\u{202e}"
+            whiteSpaces = "\u{2067}"
         default:
             whiteSpaces = ""
         }
