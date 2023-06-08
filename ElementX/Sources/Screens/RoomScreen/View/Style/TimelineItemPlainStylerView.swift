@@ -42,7 +42,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     supplementaryViews
                 }
             }
-            TimelineStatusView(timelineItem: timelineItem)
+            TimelineItemStatusView(timelineItem: timelineItem)
                 .environmentObject(context)
         }
     }
@@ -139,7 +139,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
                     .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }
-        .timelineStyle(.plain)
+        .environment(\.timelineStyle, .plain)
         .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
     }

@@ -80,10 +80,6 @@ extension EnvironmentValues {
 }
 
 extension View {
-    func timelineStyle(_ style: TimelineStyle) -> some View {
-        environment(\.timelineStyle, style)
-    }
-    
     func timelineGroupStyle(_ groupStyle: TimelineGroupStyle) -> some View {
         environment(\.timelineGroupStyle, groupStyle)
     }

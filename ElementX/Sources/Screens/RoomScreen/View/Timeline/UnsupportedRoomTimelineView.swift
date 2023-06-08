@@ -43,7 +43,9 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-        body.timelineStyle(.plain).environmentObject(viewModel.context)
+        body
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
     }
     
     static var body: some View {

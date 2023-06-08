@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct TimelineStatusView: View {
+struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     @Environment(\.timelineStyle) private var style
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled

@@ -134,7 +134,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body
         body
-            .timelineStyle(.plain)
+            .environment(\.timelineStyle, .plain)
     }
     
     @ViewBuilder

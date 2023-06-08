@@ -49,8 +49,7 @@ struct TimelineReadReceiptsView: View {
     }
 }
 
-struct TimelineReadReceiptsView_Previews:
-    PreviewProvider {
+struct TimelineReadReceiptsView_Previews: PreviewProvider {
     static let members: [RoomMemberProxyMock] = [
         .mockAlice,
         .mockBob,

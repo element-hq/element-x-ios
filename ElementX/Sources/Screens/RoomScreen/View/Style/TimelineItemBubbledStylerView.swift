@@ -57,7 +57,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         if !timelineItem.isOutgoing {
                             Spacer()
                         }
-                        TimelineStatusView(timelineItem: timelineItem)
+                        TimelineItemStatusView(timelineItem: timelineItem)
                             .environmentObject(context)
                             .padding(.top, 8)
                             .padding(.bottom, 3)
@@ -277,7 +277,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                 item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }
-        .timelineStyle(.bubbles)
+        .environment(\.timelineStyle, .bubbles)
         .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
     }
