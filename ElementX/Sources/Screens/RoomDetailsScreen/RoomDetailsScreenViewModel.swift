@@ -23,7 +23,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
 
-    private var accountOwner: RoomMemberProxyProtocol?
+    private var accountOwner: RoomMemberProxyProtocol? {
+        didSet { updatePowerLevelPermissions() }
+    }
+
     private var dmRecipient: RoomMemberProxyProtocol?
     
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
@@ -134,7 +137,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         switch await roomProxy.getMember(userID: accountUserID) {
         case .success(let member):
             accountOwner = member
-            updatePowerLevelPermissions()
         case .failure(let error):
             MXLog.error("Failed (error: \(error) to get account owner member with id: \(accountUserID), in room: \(roomProxy.id)")
         }
