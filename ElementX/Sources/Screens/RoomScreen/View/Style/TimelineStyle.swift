@@ -78,9 +78,3 @@ extension EnvironmentValues {
         set { self[ReadReceiptsEnabledKey.self] = newValue }
     }
 }
-
-extension View {
-    func timelineGroupStyle(_ groupStyle: TimelineGroupStyle) -> some View {
-        environment(\.timelineGroupStyle, groupStyle)
-    }
-}

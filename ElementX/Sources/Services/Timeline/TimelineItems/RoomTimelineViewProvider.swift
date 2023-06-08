@@ -139,7 +139,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
 extension RoomTimelineViewProvider: View {
     var body: some View {
         timelineView
-            .timelineGroupStyle(timelineGroupStyle)
+            .environment(\.timelineGroupStyle, timelineGroupStyle)
     }
     
     @ViewBuilder private var timelineView: some View {
