@@ -64,17 +64,19 @@ extension String {
 }
 
 extension String {
-    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, systemLayoutDirection: LayoutDirection) -> String {
+    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, layoutDirection: LayoutDirection) -> String {
         guard whitespaceCount > 0 else {
             return ""
         }
 
         var whiteSpaces: String
-        switch systemLayoutDirection {
+        switch layoutDirection {
         case .leftToRight:
-            whiteSpaces = "\u{202d}"
+            whiteSpaces = "\u{200e}\u{200e}"
         case .rightToLeft:
-            whiteSpaces = "\u{202e}"
+            whiteSpaces = "\u{200f}\u{202e}"
+        default:
+            whiteSpaces = ""
         }
 
         // fixed size whitespace of size 1/3 em per character

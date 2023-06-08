@@ -66,7 +66,15 @@ struct TimelineItemStyler_Previews: PreviewProvider {
 
     static let ltrString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
 
-    static let rtlString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "!באמת"))
+    static let rtlString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת"))
+
+    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house -- באמת‏ -- house."))
+
+    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏ -- house -- באמת"))
+
+    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house -- באמת"))
+
+    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏ -- house"))
 
     static var testView: some View {
         VStack {
@@ -82,6 +90,10 @@ struct TimelineItemStyler_Previews: PreviewProvider {
         VStack {
             TextRoomTimelineView(timelineItem: ltrString)
             TextRoomTimelineView(timelineItem: rtlString)
+            TextRoomTimelineView(timelineItem: ltrStringThatContainsRtl)
+            TextRoomTimelineView(timelineItem: rtlStringThatContainsLtr)
+            TextRoomTimelineView(timelineItem: ltrStringThatFinishesInRtl)
+            TextRoomTimelineView(timelineItem: rtlStringThatFinishesInLtr)
         }
     }
 
