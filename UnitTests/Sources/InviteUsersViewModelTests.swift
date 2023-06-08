@@ -61,7 +61,8 @@ class InviteUsersScreenViewModelTests: XCTestCase {
      
     func testInviteButton() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
-        setupWithRoomType(roomType: .room(members: mockedMembers, userIndicatorController: UserIndicatorControllerMock.default))
+        setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: mockedMembers)),
+                                          userIndicatorController: UserIndicatorControllerMock.default))
         _ = await viewModel.context.$viewState.values.first(where: { $0.membershipState.isEmpty == false })
         context.send(viewAction: .toggleUser(.mockAlice))
         
