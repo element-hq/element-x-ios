@@ -30,8 +30,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(), imageProvider: mediaProvider)
         
-        #warning("Fix me")
-        setupState(members: [])
+        setupMembers()
     }
     
     // MARK: - Public
@@ -51,17 +50,28 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Private
     
-    private func setupState(members: [RoomMemberProxyProtocol]) {
+    private func setupMembers() {
         Task {
-            let indicatorId = UUID().uuidString
-            defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
+            showLoader()
+            await roomProxy.updateMembers()
+            hideLoader()
+        }
+        
+        roomProxy.membersPublisher
+            .filter { !$0.isEmpty }
+            .sink { [weak self] members in
+                self?.updateState(members: members)
             }
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
-            
+            .store(in: &cancellables)
+    }
+    
+    private func updateState(members: [RoomMemberProxyProtocol]) {
+        Task {
+            showLoader()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.state = .init(joinedMembers: roomMembersDetails.joinedMembers, invitedMembers: roomMembersDetails.invitedMembers)
             self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
+            hideLoader()
         }
     }
     
@@ -90,6 +100,16 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             return .init(invitedMembers: invitedMembers, joinedMembers: joinedMembers, accountOwner: accountOwner)
         }
         .value
+    }
+    
+    private let indicatorId = UUID().uuidString
+    
+    private func showLoader() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
+    }
+    
+    private func hideLoader() {
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
     }
 }
 
