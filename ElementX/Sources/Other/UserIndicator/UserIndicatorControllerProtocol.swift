@@ -27,7 +27,7 @@ protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
 extension UserIndicatorControllerProtocol {
     /// Allows to submit a delayed indicator, this returns a Task so that it's also possible to cancel the action
     func submitIndicator(_ indicator: UserIndicator, delay: Duration) -> Task<Void, Never> {
-        Task {
+        Task { @MainActor in
             try? await Task.sleep(for: delay)
             guard !Task.isCancelled else { return }
             submitIndicator(indicator)

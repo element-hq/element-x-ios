@@ -25,6 +25,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let roomType: InviteUsersScreenRoomType
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
+    @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -63,11 +64,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
 
     // MARK: - Private
     
-    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
-        guard case let .room(_, userIndicatorController) = roomType else {
-            return
-        }
-        
+    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol], userIndicatorController: UserIndicatorControllerProtocol) {
         showLoader(using: userIndicatorController)
         
         Task.detached { [members] in
@@ -118,7 +115,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             .filter { !$0.isEmpty }
             .first()
             .sink { [weak self] members in
-                self?.buildMembershipStateIfNeeded(members: members)
+                self?.buildMembershipStateIfNeeded(members: members,
+                                                   userIndicatorController: userIndicatorController)
             }
             .store(in: &cancellables)
     }
@@ -163,10 +161,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
-        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+        showLoaderTask = userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
     private func hideLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
+        showLoaderTask = nil
         userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }

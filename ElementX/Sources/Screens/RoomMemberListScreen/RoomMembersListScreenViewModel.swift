@@ -21,6 +21,7 @@ typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersLi
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = []
+    @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
@@ -108,10 +109,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+        showLoaderTask = ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
     private func hideLoader() {
+        showLoaderTask = nil
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
