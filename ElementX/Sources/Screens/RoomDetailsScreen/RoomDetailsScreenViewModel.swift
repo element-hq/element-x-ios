@@ -117,7 +117,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func fetchMembersIfNeeded() async {
         // We need to fetch members just in 1-to-1 chat to get the member object for the other person
-        guard isEncryptedDirectRoom else {
+        guard roomProxy.isEncryptedDirectRoom else {
             return
         }
         
@@ -147,10 +147,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomName = accountOwner?.canSendStateEvent(type: .roomName) ?? false
         state.canEditRoomTopic = accountOwner?.canSendStateEvent(type: .roomTopic) ?? false
         state.canEditRoomAvatar = accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
-    }
-    
-    private var isEncryptedDirectRoom: Bool {
-        roomProxy.isDirect && roomProxy.isEncrypted && roomProxy.joinedMembersCount == 2
     }
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
@@ -189,5 +185,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
+    }
+}
+
+private extension RoomProxyProtocol {
+    var isEncryptedDirectRoom: Bool {
+        isDirect && isEncrypted && joinedMembersCount == 2
     }
 }
