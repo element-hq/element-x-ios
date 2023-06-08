@@ -28,7 +28,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
-        super.init(initialViewState: .init(), imageProvider: mediaProvider)
+        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount),
+                   imageProvider: mediaProvider)
         
         setupMembers()
     }
@@ -70,7 +71,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             showLoader()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
-            self.state = .init(joinedMembers: roomMembersDetails.joinedMembers, invitedMembers: roomMembersDetails.invitedMembers)
+            self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,
+                               joinedMembers: roomMembersDetails.joinedMembers,
+                               invitedMembers: roomMembersDetails.invitedMembers)
             self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
             hideLoader()
         }

@@ -26,7 +26,7 @@ struct RoomMembersListScreen: View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
-                membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(context.viewState.joinedMembersCount))
+                membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))

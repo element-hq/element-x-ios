@@ -24,10 +24,16 @@ enum RoomMembersListScreenViewModelAction {
 struct RoomMembersListScreenViewState: BindableState {
     private var joinedMembers: [RoomMemberDetails]
     private var invitedMembers: [RoomMemberDetails]
+    
+    let joinedMembersCount: UInt
     var canInviteUsers = false
     var bindings: RoomMembersListScreenViewStateBindings
     
-    init(joinedMembers: [RoomMemberDetails] = [], invitedMembers: [RoomMemberDetails] = [], bindings: RoomMembersListScreenViewStateBindings = .init()) {
+    init(joinedMembersCount: UInt,
+         joinedMembers: [RoomMemberDetails] = [],
+         invitedMembers: [RoomMemberDetails] = [],
+         bindings: RoomMembersListScreenViewStateBindings = .init()) {
+        self.joinedMembersCount = joinedMembersCount
         self.joinedMembers = joinedMembers
         self.invitedMembers = invitedMembers
         self.bindings = bindings
@@ -45,10 +51,6 @@ struct RoomMembersListScreenViewState: BindableState {
             .filter { member in
                 member.matches(searchQuery: bindings.searchQuery)
             }
-    }
-    
-    var joinedMembersCount: Int {
-        joinedMembers.count
     }
 }
 
