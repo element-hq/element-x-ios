@@ -90,6 +90,28 @@ enum RoomTimelineItemFixtures {
          TextRoomTimelineItem(text: "How are you?",
                               senderDisplayName: "Alice")]
     }
+
+    /// A small chunk of events, containing 2 text items.
+    static var smallChunkWithReadReceipts: [RoomTimelineItemProtocol] {
+        [TextRoomTimelineItem(text: "Hey there 👋",
+                              senderDisplayName: "Alice")
+                .withReadReceipts([ReadReceipt(userID: "a1", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "How are you?",
+                                 senderDisplayName: "Alice")
+                .withReadReceipts([ReadReceipt(userID: "a2", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b2", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "Fine, Thanks!",
+                                 senderDisplayName: "Bob")
+                .withReadReceipts([ReadReceipt(userID: "a3", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b3", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "c3", formattedTimestamp: nil)]),
+            TextRoomTimelineItem(text: "What about you?",
+                                 senderDisplayName: "Bob")
+                .withReadReceipts([ReadReceipt(userID: "a4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "b4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "c4", formattedTimestamp: nil),
+                                   ReadReceipt(userID: "d4", formattedTimestamp: nil)])]
+    }
     
     /// A chunk of events that contains a single text item.
     static var singleMessageChunk: [RoomTimelineItemProtocol] {
@@ -197,5 +219,13 @@ private extension TextRoomTimelineItem {
                   isEditable: false,
                   sender: .init(id: "", displayName: senderDisplayName),
                   content: .init(body: text))
+    }
+}
+
+private extension TextRoomTimelineItem {
+    func withReadReceipts(_ receipts: [ReadReceipt]) -> TextRoomTimelineItem {
+        var newSelf = self
+        newSelf.properties.orderedReadReceipts = receipts
+        return newSelf
     }
 }

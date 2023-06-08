@@ -197,6 +197,18 @@ class MockScreen: Identifiable {
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomSmallTimelineWithReadReceipts:
+            ServiceLocator.shared.settings.readReceiptsEnabled = true
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.smallChunkWithReadReceipts
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "New room", avatarURL: URL.picturesDirectory)),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomSmallTimelineIncomingAndSmallPagination:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
