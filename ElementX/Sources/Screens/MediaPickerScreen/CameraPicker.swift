@@ -29,9 +29,11 @@ enum CameraPickerError: Error {
 }
 
 struct CameraPicker: UIViewControllerRepresentable {
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let callback: (CameraPickerAction) -> Void
     
-    init(callback: @escaping (CameraPickerAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol?, callback: @escaping (CameraPickerAction) -> Void) {
+        self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
 
@@ -61,7 +63,16 @@ struct CameraPicker: UIViewControllerRepresentable {
             self.cameraPicker = cameraPicker
         }
         
+        private static let loadingIndicatorIdentifier = "CameraPickerLoadingIndicator"
+        
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            picker.delegate = nil
+            
+            cameraPicker.userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
+            defer {
+                cameraPicker.userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+            }
+            
             if let videoURL = info[.mediaURL] as? URL {
                 cameraPicker.callback(.selectFile(videoURL))
             } else if let image = info[.originalImage] as? UIImage {

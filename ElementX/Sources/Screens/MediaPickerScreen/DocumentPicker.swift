@@ -27,9 +27,11 @@ enum DocumentPickerError: Error {
 }
 
 struct DocumentPicker: UIViewControllerRepresentable {
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let callback: (DocumentPickerAction) -> Void
     
-    init(callback: @escaping (DocumentPickerAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol?, callback: @escaping (DocumentPickerAction) -> Void) {
+        self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
 
@@ -60,11 +62,21 @@ struct DocumentPicker: UIViewControllerRepresentable {
             documentPicker.callback(.cancel)
         }
         
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        private static let loadingIndicatorIdentifier = "DocumentPickerLoadingIndicator"
+        
+        func documentPicker(_ picker: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             guard let url = urls.first else {
                 documentPicker.callback(.error(DocumentPickerError.unknown))
                 return
             }
+            
+            picker.delegate = nil
+            
+            documentPicker.userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
+            defer {
+                documentPicker.userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+            }
+            
             do {
                 let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
                 documentPicker.callback(.selectFile(newURL))
