@@ -78,6 +78,6 @@ extension RoomProxyMock {
         underlyingUpdatesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
-        getMemberUserIDClosure = { _ in .success(configuration.memberForID) }
+        getMemberUserIDReturnValue = .success(configuration.memberForID)
     }
 }
