@@ -193,7 +193,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                   joinedMembersCount: UInt(mockedMembers.count)))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertFalse(context.viewState.canInviteUsers)
     }
@@ -203,7 +203,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertTrue(context.viewState.canInviteUsers)
         
@@ -232,7 +232,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertTrue(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -246,7 +246,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertTrue(context.viewState.canEditRoomName)
@@ -260,7 +260,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -274,7 +274,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: false, isPublic: false, members: mockedMembers, memberForID: owner))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
 
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -287,7 +287,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
-        await context.nextViewState()
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
 
         XCTAssertFalse(context.viewState.canEdit)
     }
