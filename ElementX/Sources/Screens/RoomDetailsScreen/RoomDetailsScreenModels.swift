@@ -40,7 +40,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var title = ""
     var topic: String?
     var avatarURL: URL?
-    var joinedMembersCount: UInt
+    var joinedMembersCount: Int
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
     var canEditRoomName = false

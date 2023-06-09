@@ -117,7 +117,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func fetchMembersIfNeeded() async {
         // We need to fetch members just in 1-to-1 chat to get the member object for the other person
-        guard roomProxy.isEncryptedDirectRoom else {
+        guard roomProxy.isEncryptedOneToOneRoom else {
             return
         }
         
@@ -185,11 +185,5 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
-    }
-}
-
-private extension RoomProxyProtocol {
-    var isEncryptedDirectRoom: Bool {
-        isDirect && isEncrypted && joinedMembersCount == 2
     }
 }

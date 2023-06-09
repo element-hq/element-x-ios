@@ -75,7 +75,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     private func setup(with members: [RoomMemberProxyMock]) {
-        viewModel = .init(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members, joinedMembersCount: UInt(members.filter { $0.membership == .join }.count))),
+        viewModel = .init(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members, joinedMembersCount: members.filter { $0.membership == .join }.count)),
                           mediaProvider: MockMediaProvider())
     }
 }

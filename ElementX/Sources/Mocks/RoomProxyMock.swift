@@ -35,9 +35,9 @@ struct RoomProxyMockConfiguration {
     var inviter: RoomMemberProxyMock?
     var memberForID: RoomMemberProxyMock = .mockMe
     
-    var invitedMembersCount: UInt = 100
-    var joinedMembersCount: UInt = 50
-    var activeMembersCount: UInt = 25
+    var invitedMembersCount = 100
+    var joinedMembersCount = 50
+    var activeMembersCount = 25
 }
 
 extension RoomProxyMock {

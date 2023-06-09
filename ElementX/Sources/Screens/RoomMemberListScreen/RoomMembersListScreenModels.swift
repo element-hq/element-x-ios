@@ -25,11 +25,11 @@ struct RoomMembersListScreenViewState: BindableState {
     private var joinedMembers: [RoomMemberDetails]
     private var invitedMembers: [RoomMemberDetails]
     
-    let joinedMembersCount: UInt
+    let joinedMembersCount: Int
     var canInviteUsers = false
     var bindings: RoomMembersListScreenViewStateBindings
     
-    init(joinedMembersCount: UInt,
+    init(joinedMembersCount: Int,
          joinedMembers: [RoomMemberDetails] = [],
          invitedMembers: [RoomMemberDetails] = [],
          bindings: RoomMembersListScreenViewStateBindings = .init()) {

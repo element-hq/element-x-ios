@@ -88,7 +88,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testInitialDMDetailsState() async {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
@@ -101,7 +101,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
@@ -123,7 +123,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.ignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
@@ -146,7 +146,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
@@ -168,7 +168,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.unignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
@@ -190,7 +190,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                   isPublic: true,
                                                   members: mockedMembers,
                                                   memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                  joinedMembersCount: UInt(mockedMembers.count)))
+                                                  joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
@@ -200,7 +200,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, joinedMembersCount: UInt(mockedMembers.count)))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()

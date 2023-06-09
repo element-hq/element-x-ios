@@ -120,16 +120,16 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
 
-    var invitedMembersCount: UInt {
-        UInt(room.invitedMembersCount())
+    var invitedMembersCount: Int {
+        Int(room.invitedMembersCount())
     }
 
-    var joinedMembersCount: UInt {
-        UInt(room.joinedMembersCount())
+    var joinedMembersCount: Int {
+        Int(room.joinedMembersCount())
     }
     
-    var activeMembersCount: UInt {
-        UInt(room.activeMembersCount())
+    var activeMembersCount: Int {
+        Int(room.activeMembersCount())
     }
 
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
