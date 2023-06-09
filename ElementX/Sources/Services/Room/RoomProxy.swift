@@ -380,11 +380,13 @@ class RoomProxy: RoomProxyProtocol {
 
     func updateMembers() async {
         do {
-            let roomMembers = try await Task.dispatch(on: .global()) {
-                try self.room.members()
+            let roomMembersProxies = try await Task.dispatch(on: .global()) {
+                try self.room.members().map {
+                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+                }
             }
             
-            membersSubject.value = buildRoomMemberProxies(members: roomMembers)
+            membersSubject.value = roomMembersProxies
         } catch {
             return
         }
@@ -422,11 +424,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    @MainActor
-    private func buildRoomMemberProxies(members: [RoomMember]) -> [RoomMemberProxy] {
-        members.map { RoomMemberProxy(member: $0, backgroundTaskService: backgroundTaskService) }
-    }
-    
     func retryDecryption(for sessionID: String) async {
         await Task.dispatch(on: .global()) { [weak self] in
             self?.room.retryDecryption(sessionIds: [sessionID])
