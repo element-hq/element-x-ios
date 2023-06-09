@@ -27,8 +27,8 @@ import {{ import }}
         {% call swiftifyMethodName method.selectorName %}ReceivedInvocations.append({% for param in method.parameters %}{{ param.name }}){% endfor %}
     {% else %}
     {% if not method.parameters.count == 0 and not hasNonEscapingClosures %}
-        {% call swiftifyMethodName method.selectorName %}ReceivedArguments = ({% for param in method.parameters %}{{ param.name }}: {{ param.name }}{% if not forloop.last%}, {% endif %}{% endfor %})
-        {% call swiftifyMethodName method.selectorName %}ReceivedInvocations.append(({% for param in method.parameters %}{{ param.name }}: {{ param.name }}{% if not forloop.last%}, {% endif %}{% endfor %}))
+        {% call swiftifyMethodName method.selectorName %}ReceivedArguments = ({% for param in method.parameters %}{{ param.name | replace:"`","" }}: {{ param.name | replace:"`",""  }}{% if not forloop.last%}, {% endif %}{% endfor %})
+        {% call swiftifyMethodName method.selectorName %}ReceivedInvocations.append(({% for param in method.parameters %}{{ param.name | replace:"`","" }}: {{ param.name | replace:"`",""  }}{% if not forloop.last%}, {% endif %}{% endfor %}))
     {% endif %}
     {% endif %}
 {% endmacro %}
