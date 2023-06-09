@@ -4,12 +4,21 @@
     <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <title>element-x-ios perf</title>
   </head>
   <body>
-    <h2>Launch time performance</h2>
-    <div style="width: 800px"><canvas id="launchPerformance"/></div>
-    <h2>Login performance</h2>
-    <div style="width: 800px"><canvas id="loginPerformance"/></div>
+    <h1>Performance metrics from element-x-ios nightly integration runs</h2>
+    <div>Also see the <a href="./perf-data.csv">raw data</a>. Be aware these are not absolute timings, the performance of the github runner will affect the time. Compare them as a relative action only.</div>
+    <table>
+      <tr>
+        <td><h2>Launch time</h2></td>
+        <td><h2>Login time</h2></td>
+      </tr>
+      <tr>
+        <td><canvas id="launchPerformance"/></td>
+        <td><canvas id="loginPerformance"/></td>
+      </tr>
+     </table>
   <script>
   d3.csv('./perf-data.csv').then(makeCharts);
   
@@ -49,9 +58,6 @@
         }
       }
     );
-    console.log(minData);
-    console.log(avgData);
-    console.log(maxData);
     var chart = new Chart(canvas_id, {
       type: 'line',
       data: {
@@ -83,14 +89,14 @@
         scales: {
           x: {
             type: 'time',
-            label: "Test run date",
+            title: "Test run date",
             display: "true",
             time: {
             }
           },
           y: {
             display: "true",
-            label: "Duration" 
+            title: "Duration" 
           }
         }
       }
