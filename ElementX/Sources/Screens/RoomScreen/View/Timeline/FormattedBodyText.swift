@@ -36,7 +36,7 @@ struct FormattedBodyText: View {
 
     // These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
-        .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, isRTL: layoutDirection == .rightToLeft)
+        .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
     
     var body: some View {

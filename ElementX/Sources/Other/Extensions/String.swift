@@ -64,15 +64,12 @@ extension String {
 }
 
 extension String {
-    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, isRTL: Bool) -> String {
+    static func generateBreakableWhitespaceEnd(whitespaceCount: Int, layoutDirection: LayoutDirection) -> String {
         guard whitespaceCount > 0 else {
             return ""
         }
 
-        var whiteSpaces = ""
-        if isRTL {
-            whiteSpaces = "\u{202e}"
-        }
+        var whiteSpaces = layoutDirection.isolateLayoutUnicodeString
 
         // fixed size whitespace of size 1/3 em per character
         whiteSpaces += String(repeating: "\u{2004}", count: whitespaceCount)

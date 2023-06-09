@@ -61,23 +61,23 @@ class StringTests: XCTestCase {
 
     func testGenerateBreakableWhitespaceEnd() {
         var count = 5
-        var result = String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+        var result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 3
-        result = String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+        result = "\u{2066}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 0
         result = ""
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: false), result)
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .leftToRight), result)
 
         count = 4
-        result = "\u{202e}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: true), result)
+        result = "\u{2067}" + String(repeating: "\u{2004}", count: count) + "\u{2800}"
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
 
         count = 0
         result = ""
-        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, isRTL: true), result)
+        XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
     }
 }

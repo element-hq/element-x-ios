@@ -64,6 +64,18 @@ struct TimelineItemStyler_Previews: PreviewProvider {
         return result
     }()
 
+    static let ltrString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house!"))
+
+    static let rtlString = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת!"))
+
+    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house! -- באמת‏! -- house!"))
+
+    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏! -- house! -- באמת!"))
+
+    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "house! -- באמת!"))
+
+    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "באמת‏! -- house!"))
+
     static var testView: some View {
         VStack {
             TextRoomTimelineView(timelineItem: sent)
@@ -74,13 +86,37 @@ struct TimelineItemStyler_Previews: PreviewProvider {
         }
     }
 
+    static var languagesTestView: some View {
+        VStack {
+            TextRoomTimelineView(timelineItem: ltrString)
+            TextRoomTimelineView(timelineItem: rtlString)
+            TextRoomTimelineView(timelineItem: ltrStringThatContainsRtl)
+            TextRoomTimelineView(timelineItem: rtlStringThatContainsLtr)
+            TextRoomTimelineView(timelineItem: ltrStringThatFinishesInRtl)
+            TextRoomTimelineView(timelineItem: rtlStringThatFinishesInLtr)
+        }
+    }
+
     static var previews: some View {
         testView
             .environmentObject(viewModel.context)
             .environment(\.timelineStyle, .bubbles)
+            .previewDisplayName("Bubbles")
 
         testView
             .environmentObject(viewModel.context)
             .environment(\.timelineStyle, .plain)
+            .previewDisplayName("Plain")
+
+        languagesTestView
+            .environmentObject(viewModel.context)
+            .environment(\.timelineStyle, .bubbles)
+            .previewDisplayName("Bubbles LTR with different layout languages")
+
+        languagesTestView
+            .environmentObject(viewModel.context)
+            .environment(\.timelineStyle, .bubbles)
+            .environment(\.layoutDirection, .rightToLeft)
+            .previewDisplayName("Bubbles RTL with different layout languages")
     }
 }
