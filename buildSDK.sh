@@ -1,1 +1,1 @@
-swift build && .build/arm64-apple-macosx/debug/tools build-sdk
+swift build && .build/debug/tools build-sdk
