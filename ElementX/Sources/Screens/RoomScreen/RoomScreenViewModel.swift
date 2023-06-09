@@ -31,7 +31,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private var loadingTask: Task<Void, Never>?
-    
+
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
@@ -47,26 +47,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          readReceiptsEnabled: ServiceLocator.shared.settings.readReceiptsEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
-        
-        timelineController.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                guard let self else { return }
-                
-                switch callback {
-                case .updatedTimelineItems:
-                    self.buildTimelineViews()
-                case .canBackPaginate(let canBackPaginate):
-                    if self.state.canBackPaginate != canBackPaginate {
-                        self.state.canBackPaginate = canBackPaginate
-                    }
-                case .isBackPaginating(let isBackPaginating):
-                    if self.state.isBackPaginating != isBackPaginating {
-                        self.state.isBackPaginating = isBackPaginating
-                    }
-                }
-            }
-            .store(in: &cancellables)
+
+        setupSubscriptions()
         
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
@@ -75,34 +57,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             return self.timelineItemMenuActionsForItemId(itemId)
         }
-        
-        roomProxy
-            .updatesPublisher
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.state.roomTitle = roomProxy.roomTitle
-                self.state.roomAvatarURL = roomProxy.avatarURL
-            }
-            .store(in: &cancellables)
-        
-        ServiceLocator.shared.settings.$timelineStyle
-            .weakAssign(to: \.state.timelineStyle, on: self)
-            .store(in: &cancellables)
 
-        ServiceLocator.shared.settings.$readReceiptsEnabled
-            .weakAssign(to: \.state.readReceiptsEnabled, on: self)
-            .store(in: &cancellables)
-
-        roomProxy.membersPublisher
-            .map { members in
-                members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
-                    dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
-                }
-            }
-            .weakAssign(to: \.state.members, on: self)
-            .store(in: &cancellables)
-                
         buildTimelineViews()
     }
     
@@ -158,6 +113,55 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+
+    private func setupSubscriptions() {
+        timelineController.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                guard let self else { return }
+
+                switch callback {
+                case .updatedTimelineItems:
+                    self.buildTimelineViews()
+                case .canBackPaginate(let canBackPaginate):
+                    if self.state.canBackPaginate != canBackPaginate {
+                        self.state.canBackPaginate = canBackPaginate
+                    }
+                case .isBackPaginating(let isBackPaginating):
+                    if self.state.isBackPaginating != isBackPaginating {
+                        self.state.isBackPaginating = isBackPaginating
+                    }
+                }
+            }
+            .store(in: &cancellables)
+
+        roomProxy
+            .updatesPublisher
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.state.roomTitle = roomProxy.roomTitle
+                self.state.roomAvatarURL = roomProxy.avatarURL
+            }
+            .store(in: &cancellables)
+
+        ServiceLocator.shared.settings.$timelineStyle
+            .weakAssign(to: \.state.timelineStyle, on: self)
+            .store(in: &cancellables)
+
+        ServiceLocator.shared.settings.$readReceiptsEnabled
+            .weakAssign(to: \.state.readReceiptsEnabled, on: self)
+            .store(in: &cancellables)
+
+        roomProxy.membersPublisher
+            .map { members in
+                members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
+                    dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
+                }
+            }
+            .weakAssign(to: \.state.members, on: self)
+            .store(in: &cancellables)
+    }
     
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {

@@ -198,7 +198,7 @@ class RoomProxy: RoomProxyProtocol {
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         do {
             try await Task.dispatch(on: .global()) {
-                try self.room.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems)))
+                try self.room.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems), waitForToken: true))
             }
             
             return .success(())
