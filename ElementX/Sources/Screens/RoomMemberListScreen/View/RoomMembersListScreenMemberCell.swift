@@ -53,8 +53,8 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let viewModel = RoomMembersListScreenViewModel(mediaProvider: MockMediaProvider(),
-                                                       members: members)
+        let viewModel = RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
+                                                       mediaProvider: MockMediaProvider())
         
         return VStack {
             ForEach(members, id: \.userID) { member in

@@ -19,17 +19,18 @@ import SwiftUI
 typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
-    private let mediaProvider: MediaProviderProtocol
-    private let members: [RoomMemberProxyProtocol]
+    private let roomProxy: RoomProxyProtocol
+    private var members: [RoomMemberProxyProtocol] = []
+    @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
-    init(mediaProvider: MediaProviderProtocol, members: [RoomMemberProxyProtocol]) {
-        self.mediaProvider = mediaProvider
-        self.members = members
-        super.init(initialViewState: .init(), imageProvider: mediaProvider)
+    init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
+        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount),
+                   imageProvider: mediaProvider)
         
-        setupState(members: members)
+        setupMembers()
     }
     
     // MARK: - Public
@@ -49,17 +50,32 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Private
     
-    private func setupState(members: [RoomMemberProxyProtocol]) {
+    private func setupMembers() {
         Task {
-            let indicatorId = UUID().uuidString
-            defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(indicatorId)
+            showLoader()
+            await roomProxy.updateMembers()
+            hideLoader()
+        }
+        
+        roomProxy.membersPublisher
+            .filter { !$0.isEmpty }
+            .first()
+            .sink { [weak self] members in
+                self?.updateState(members: members)
             }
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: indicatorId, type: .modal, title: L10n.commonLoading, persistent: true))
-            
+            .store(in: &cancellables)
+    }
+    
+    private func updateState(members: [RoomMemberProxyProtocol]) {
+        Task {
+            showLoader()
             let roomMembersDetails = await buildMembersDetails(members: members)
-            self.state = .init(joinedMembers: roomMembersDetails.joinedMembers, invitedMembers: roomMembersDetails.invitedMembers)
+            self.members = members
+            self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,
+                               joinedMembers: roomMembersDetails.joinedMembers,
+                               invitedMembers: roomMembersDetails.invitedMembers)
             self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
+            hideLoader()
         }
     }
     
@@ -88,6 +104,17 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             return .init(invitedMembers: invitedMembers, joinedMembers: joinedMembers, accountOwner: accountOwner)
         }
         .value
+    }
+    
+    private let userIndicatorID = UUID().uuidString
+    
+    private func showLoader() {
+        showLoaderTask = ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+    }
+    
+    private func hideLoader() {
+        showLoaderTask = nil
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
 

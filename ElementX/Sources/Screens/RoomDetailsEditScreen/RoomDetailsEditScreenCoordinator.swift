@@ -20,9 +20,9 @@ import SwiftUI
 struct RoomDetailsEditScreenCoordinatorParameters {
     let accountOwner: RoomMemberProxyProtocol
     let mediaProvider: MediaProviderProtocol
-    let navigationStackCoordinator: NavigationStackCoordinator
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let roomProxy: RoomProxyProtocol
-    let userIndicatorController: UserIndicatorControllerProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -77,14 +77,14 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .cancel:
-                parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaUrl(url: url)
             }
         }
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
-        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
     }
 }

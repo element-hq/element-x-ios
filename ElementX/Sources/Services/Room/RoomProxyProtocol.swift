@@ -66,11 +66,11 @@ protocol RoomProxyProtocol {
 
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
     
-    var invitedMembersCount: UInt { get }
+    var invitedMembersCount: Int { get }
     
-    var joinedMembersCount: UInt { get }
+    var joinedMembersCount: Int { get }
     
-    var activeMembersCount: UInt { get }
+    var activeMembersCount: Int { get }
     
     /// Publishes the room's updates.
     /// The publisher starts publishing after the first call to `registerTimelineListenerIfNeeded()`
@@ -156,5 +156,9 @@ extension RoomProxyProtocol {
     // Probably this should be done in rust.
     var roomTitle: String {
         displayName ?? name ?? "Unknown room 💥"
+    }
+    
+    var isEncryptedOneToOneRoom: Bool {
+        isDirect && isEncrypted && joinedMembersCount == 2
     }
 }

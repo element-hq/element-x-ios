@@ -437,21 +437,21 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingMembersPublisher = value }
     }
     var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
-    var invitedMembersCount: UInt {
+    var invitedMembersCount: Int {
         get { return underlyingInvitedMembersCount }
         set(value) { underlyingInvitedMembersCount = value }
     }
-    var underlyingInvitedMembersCount: UInt!
-    var joinedMembersCount: UInt {
+    var underlyingInvitedMembersCount: Int!
+    var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
     }
-    var underlyingJoinedMembersCount: UInt!
-    var activeMembersCount: UInt {
+    var underlyingJoinedMembersCount: Int!
+    var activeMembersCount: Int {
         get { return underlyingActiveMembersCount }
         set(value) { underlyingActiveMembersCount = value }
     }
-    var underlyingActiveMembersCount: UInt!
+    var underlyingActiveMembersCount: Int!
     var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
         get { return underlyingUpdatesPublisher }
         set(value) { underlyingUpdatesPublisher = value }

@@ -24,7 +24,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let roomType: InviteUsersScreenRoomType
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
+    @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -33,14 +35,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     init(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol) {
+         userDiscoveryService: UserDiscoveryServiceProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol?) {
         self.roomType = roomType
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
+        self.userIndicatorController = userIndicatorController
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
-        buildMembershipStateIfNeeded()
         setupSubscriptions(selectedUsers: selectedUsers)
+        fetchMembersIfNeeded()
     }
     
     // MARK: - Public
@@ -60,13 +64,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             actionsSubject.send(.toggleUser(user))
         }
     }
+
+    // MARK: - Private
     
-    private func buildMembershipStateIfNeeded() {
-        guard case let .room(members, userIndicatorController) = roomType else {
-            return
-        }
-        let indicatorID = UUID().uuidString
-        userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
+        showLoader()
         
         Task.detached { [members] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
@@ -77,12 +79,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             
             Task { @MainActor in
                 self.state.membershipState = membershipState
-                userIndicatorController.retractIndicatorWithId(indicatorID)
+                self.hideLoader()
             }
         }
     }
-
-    // MARK: - Private
     
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
@@ -99,6 +99,26 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         selectedUsers
             .sink { [weak self] users in
                 self?.state.selectedUsers = users
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchMembersIfNeeded() {
+        guard case let .room(roomProxy) = roomType else {
+            return
+        }
+        
+        Task {
+            showLoader()
+            await roomProxy.updateMembers()
+            hideLoader()
+        }
+        
+        roomProxy.membersPublisher
+            .filter { !$0.isEmpty }
+            .first()
+            .sink { [weak self] members in
+                self?.buildMembershipStateIfNeeded(members: members)
             }
             .store(in: &cancellables)
     }
@@ -138,6 +158,17 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private var searchQuery: String {
         context.searchQuery
+    }
+    
+    private let userIndicatorID = UUID().uuidString
+    
+    private func showLoader() {
+        showLoaderTask = userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+    }
+    
+    private func hideLoader() {
+        showLoaderTask = nil
+        userIndicatorController?.retractIndicatorWithId(userIndicatorID)
     }
 }
 

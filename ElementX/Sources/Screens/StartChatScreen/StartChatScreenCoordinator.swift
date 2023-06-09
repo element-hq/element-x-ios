@@ -20,7 +20,7 @@ import SwiftUI
 struct StartChatScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
-    let navigationStackCoordinator: NavigationStackCoordinator
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userDiscoveryService: UserDiscoveryServiceProtocol
 }
 
@@ -45,7 +45,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         selectedUsers.asCurrentValuePublisher()
     }
     
-    private var navigationStackCoordinator: NavigationStackCoordinator {
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
         parameters.navigationStackCoordinator
     }
     
@@ -107,7 +107,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.push(coordinator) { [weak self] in
+        navigationStackCoordinator?.push(coordinator) { [weak self] in
             self?.createRoomParameters.send(.init())
             self?.selectedUsers.send([])
         }
@@ -138,7 +138,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator?.push(coordinator)
     }
     
     // MARK: - Private
@@ -152,7 +152,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .cancel:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
                 processAvatar(from: url)
             }
@@ -160,11 +160,11 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
         
-        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
     }
     
     private func processAvatar(from url: URL) {
-        navigationStackCoordinator.setSheetCoordinator(nil)
+        navigationStackCoordinator?.setSheetCoordinator(nil)
         showLoadingIndicator()
         Task { [weak self] in
             guard let self else { return }

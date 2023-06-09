@@ -317,7 +317,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let params = RoomDetailsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+        let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
+                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
                                                             userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy))

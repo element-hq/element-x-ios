@@ -61,7 +61,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
      
     func testInviteButton() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
-        setupWithRoomType(roomType: .room(members: mockedMembers, userIndicatorController: UserIndicatorControllerMock.default))
+        setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: mockedMembers))))
         _ = await viewModel.context.$viewState.values.first(where: { $0.membershipState.isEmpty == false })
         context.send(viewAction: .toggleUser(.mockAlice))
         
@@ -86,7 +86,10 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         usersSubject.send([])
-        let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(), roomType: roomType, mediaProvider: MockMediaProvider(), userDiscoveryService: userDiscoveryService)
+        let viewModel = InviteUsersScreenViewModel(selectedUsers: usersSubject.asCurrentValuePublisher(),
+                                                   roomType: roomType, mediaProvider: MockMediaProvider(),
+                                                   userDiscoveryService: userDiscoveryService,
+                                                   userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
         

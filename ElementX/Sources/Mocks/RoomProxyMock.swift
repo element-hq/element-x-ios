@@ -33,10 +33,11 @@ struct RoomProxyMockConfiguration {
     var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxyProtocol]?
     var inviter: RoomMemberProxyMock?
+    var memberForID: RoomMemberProxyMock = .mockMe
     
-    var invitedMembersCount: UInt = 100
-    var joinedMembersCount: UInt = 50
-    var activeMembersCount: UInt = 25
+    var invitedMembersCount = 100
+    var joinedMembersCount = 50
+    var activeMembersCount = 25
 }
 
 extension RoomProxyMock {
@@ -77,5 +78,6 @@ extension RoomProxyMock {
         underlyingUpdatesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
+        getMemberUserIDReturnValue = .success(configuration.memberForID)
     }
 }

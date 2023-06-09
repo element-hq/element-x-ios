@@ -137,13 +137,9 @@ struct RoomDetailsScreen: View {
                 context.send(viewAction: .processTapPeople)
             } label: {
                 LabeledContent {
-                    if context.viewState.isLoadingMembers {
-                        ProgressView()
-                    } else {
-                        Text(String(context.viewState.joinedMembersCount))
-                            .foregroundColor(.element.tertiaryContent)
-                            .font(.compound.bodyLG)
-                    }
+                    Text(String(context.viewState.joinedMembersCount))
+                        .foregroundColor(.element.tertiaryContent)
+                        .font(.compound.bodyLG)
                 } label: {
                     Label(L10n.commonPeople, systemImage: "person")
                 }
@@ -160,9 +156,8 @@ struct RoomDetailsScreen: View {
             }
         }
         .listRowSeparatorTint(.element.quinaryContent)
-        .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
+        .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         .foregroundColor(.element.primaryContent)
-        .disabled(context.viewState.isLoadingMembers)
     }
 
     @ViewBuilder
@@ -257,7 +252,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
         
-        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+                                          roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider())
     }()
     
@@ -274,7 +270,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
         
-        return RoomDetailsScreenViewModel(roomProxy: roomProxy,
+        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+                                          roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider())
     }()
     

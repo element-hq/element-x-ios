@@ -17,9 +17,9 @@
 import SwiftUI
 
 struct RoomMembersListScreenCoordinatorParameters {
-    let navigationStackCoordinator: NavigationStackCoordinator
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let mediaProvider: MediaProviderProtocol
-    let members: [RoomMemberProxyProtocol]
+    let roomProxy: RoomProxyProtocol
 }
 
 enum RoomMembersListScreenCoordinatorAction {
@@ -29,15 +29,17 @@ enum RoomMembersListScreenCoordinatorAction {
 final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMembersListScreenCoordinatorParameters
     private var viewModel: RoomMembersListScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
     
     var callback: ((RoomMembersListScreenCoordinatorAction) -> Void)?
     
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomMembersListScreenViewModel(mediaProvider: parameters.mediaProvider,
-                                                   members: parameters.members)
+        viewModel = RoomMembersListScreenViewModel(roomProxy: parameters.roomProxy,
+                                                   mediaProvider: parameters.mediaProvider)
     }
     
     func start() {
@@ -63,6 +65,6 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         let parameters = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: parameters.mediaProvider)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: parameters)
 
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator?.push(coordinator)
     }
 }
