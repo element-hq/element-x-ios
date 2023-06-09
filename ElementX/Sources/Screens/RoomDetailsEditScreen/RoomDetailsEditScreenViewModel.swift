@@ -22,17 +22,17 @@ typealias RoomDetailsEditScreenViewModelType = StateStoreViewModel<RoomDetailsEd
 class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: RoomProxyProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
     
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(accountOwner: RoomMemberProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol?) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
@@ -75,12 +75,12 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+                userIndicatorController?.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(interactiveDismissDisabled: true),
-                                                                  title: L10n.commonLoading,
-                                                                  persistent: true))
+            userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                   type: .modal(interactiveDismissDisabled: true),
+                                                                   title: L10n.commonLoading,
+                                                                   persistent: true))
             
             let mediaResult = await mediaPreprocessor.processMedia(at: url)
             
@@ -88,7 +88,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+                userIndicatorController?.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
             }
         }
     }
@@ -99,12 +99,12 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+                userIndicatorController?.retractIndicatorWithId(userIndicatorID)
             }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(interactiveDismissDisabled: true),
-                                                                  title: L10n.screenRoomDetailsUpdatingRoom,
-                                                                  persistent: true))
+            userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                   type: .modal(interactiveDismissDisabled: true),
+                                                                   title: L10n.screenRoomDetailsUpdatingRoom,
+                                                                   persistent: true))
             
             do {
                 try await withThrowingTaskGroup(of: Void.self) { group in
@@ -135,9 +135,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 
                 actionsSubject.send(.saveFinished)
             } catch {
-                userIndicatorController.alertInfo = .init(id: .init(),
-                                                          title: L10n.screenRoomDetailsEditionErrorTitle,
-                                                          message: L10n.screenRoomDetailsEditionError)
+                userIndicatorController?.alertInfo = .init(id: .init(),
+                                                           title: L10n.screenRoomDetailsEditionErrorTitle,
+                                                           message: L10n.screenRoomDetailsEditionError)
             }
         }
     }

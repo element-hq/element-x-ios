@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomMembersListScreenCoordinatorParameters {
-    let navigationStackCoordinator: NavigationStackCoordinator
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let mediaProvider: MediaProviderProtocol
     let roomProxy: RoomProxyProtocol
 }
@@ -29,7 +29,9 @@ enum RoomMembersListScreenCoordinatorAction {
 final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMembersListScreenCoordinatorParameters
     private var viewModel: RoomMembersListScreenViewModelProtocol
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
     
     var callback: ((RoomMembersListScreenCoordinatorAction) -> Void)?
     
@@ -63,6 +65,6 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         let parameters = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: parameters.mediaProvider)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: parameters)
 
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator?.push(coordinator)
     }
 }

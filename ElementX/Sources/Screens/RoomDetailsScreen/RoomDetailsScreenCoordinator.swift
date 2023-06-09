@@ -19,7 +19,7 @@ import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
     let accountUserID: String
-    let navigationStackCoordinator: NavigationStackCoordinator
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
@@ -34,7 +34,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: RoomDetailsScreenViewModelProtocol
     private var cancellables: Set<AnyCancellable> = .init()
     private let selectedUsers: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
-    private var navigationStackCoordinator: NavigationStackCoordinator {
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
         parameters.navigationStackCoordinator
     }
     
@@ -86,19 +86,19 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             }
         }
         
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator?.push(coordinator)
     }
     
     private func presentInviteUsersScreen() {
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationStackCoordinator)
+        let inviteUsersStackCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: inviteUsersStackCoordinator)
         let inviteParameters = InviteUsersScreenCoordinatorParameters(selectedUsers: .init(selectedUsers),
-                                                                      roomType: .room(roomProxy: parameters.roomProxy, userIndicatorController: userIndicatorController),
+                                                                      roomType: .room(roomProxy: parameters.roomProxy),
                                                                       mediaProvider: parameters.mediaProvider,
-                                                                      userDiscoveryService: parameters.userDiscoveryService)
+                                                                      userDiscoveryService: parameters.userDiscoveryService, userIndicatorController: userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+        inviteUsersStackCoordinator.setRootCoordinator(coordinator)
         
         coordinator.actions.sink { [weak self] result in
             guard let self else { return }
@@ -114,7 +114,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+        parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.selectedUsers.value = []
         }
     }
@@ -133,14 +133,14 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
             switch action {
             case .dismiss:
-                self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+                self?.navigationStackCoordinator?.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(roomDetailsEditCoordinator)
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+        self.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController)
     }
     
     private func toggleUser(_ user: UserProfileProxy) {
@@ -154,7 +154,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
-        navigationStackCoordinator.setSheetCoordinator(nil)
+        navigationStackCoordinator?.setSheetCoordinator(nil)
         
         Task {
             let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in

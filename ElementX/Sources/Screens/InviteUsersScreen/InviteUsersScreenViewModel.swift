@@ -24,6 +24,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let roomType: InviteUsersScreenRoomType
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
@@ -34,10 +35,12 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     init(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol) {
+         userDiscoveryService: UserDiscoveryServiceProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol?) {
         self.roomType = roomType
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
+        self.userIndicatorController = userIndicatorController
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
         setupSubscriptions(selectedUsers: selectedUsers)
@@ -64,8 +67,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
 
     // MARK: - Private
     
-    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol], userIndicatorController: UserIndicatorControllerProtocol) {
-        showLoader(using: userIndicatorController)
+    private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
+        showLoader()
         
         Task.detached { [members] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
@@ -76,7 +79,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             
             Task { @MainActor in
                 self.state.membershipState = membershipState
-                self.hideLoader(using: userIndicatorController)
+                self.hideLoader()
             }
         }
     }
@@ -101,22 +104,21 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func fetchMembersIfNeeded() {
-        guard case let .room(roomProxy, userIndicatorController) = roomType else {
+        guard case let .room(roomProxy) = roomType else {
             return
         }
         
         Task {
-            showLoader(using: userIndicatorController)
+            showLoader()
             await roomProxy.updateMembers()
-            hideLoader(using: userIndicatorController)
+            hideLoader()
         }
         
         roomProxy.membersPublisher
             .filter { !$0.isEmpty }
             .first()
             .sink { [weak self] members in
-                self?.buildMembershipStateIfNeeded(members: members,
-                                                   userIndicatorController: userIndicatorController)
+                self?.buildMembershipStateIfNeeded(members: members)
             }
             .store(in: &cancellables)
     }
@@ -160,13 +162,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private let userIndicatorID = UUID().uuidString
     
-    private func showLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
-        showLoaderTask = userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+    private func showLoader() {
+        showLoaderTask = userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
-    private func hideLoader(using userIndicatorController: UserIndicatorControllerProtocol) {
+    private func hideLoader() {
         showLoaderTask = nil
-        userIndicatorController.retractIndicatorWithId(userIndicatorID)
+        userIndicatorController?.retractIndicatorWithId(userIndicatorID)
     }
 }
 

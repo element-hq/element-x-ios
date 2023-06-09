@@ -22,6 +22,7 @@ struct InviteUsersScreenCoordinatorParameters {
     let roomType: InviteUsersScreenRoomType
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 enum InviteUsersScreenCoordinatorAction {
@@ -46,7 +47,8 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
         viewModel = InviteUsersScreenViewModel(selectedUsers: parameters.selectedUsers,
                                                roomType: parameters.roomType,
                                                mediaProvider: parameters.mediaProvider,
-                                               userDiscoveryService: parameters.userDiscoveryService)
+                                               userDiscoveryService: parameters.userDiscoveryService,
+                                               userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
