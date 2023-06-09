@@ -54,6 +54,7 @@ struct BuildSDK: ParsableCommand {
         try checkoutBranchIfSupplied()
         try buildFramework()
         try updateXcodeProject()
+        try generateSDKMocks()
     }
     
     /// Checks that all of the required targets have been added through rustup
@@ -114,5 +115,11 @@ struct BuildSDK: ParsableCommand {
         
         let updatedYAMLString = try Yams.serialize(node: projectConfig)
         try updatedYAMLString.write(to: yamlURL, atomically: true, encoding: .utf8)
+    }
+
+    func generateSDKMocks() throws {
+        var command = GenerateSDKMocks()
+        command.version = "local"
+        try command.run()
     }
 }
