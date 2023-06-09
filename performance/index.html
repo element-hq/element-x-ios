@@ -13,8 +13,21 @@
   <script>
   d3.csv('./perf-data.csv').then(makeCharts);
   
+  function floatify(perfdata) {
+    return perfdata.map(
+      function(d) {
+        d.Data1 = parseFloat(d.Data1);
+        d.Data2 = parseFloat(d.Data2);
+        d.Data3 = parseFloat(d.Data3);
+        d.Data4 = parseFloat(d.Data4);
+        d.Data5 = parseFloat(d.Data5);
+        return d
+      }
+    );
+  }
     
-  function makeCharts(perfdata) { 
+  function makeCharts(stringdata) { 
+    var perfdata = floatify(stringdata);
     var launchPerformance = perfdata.filter(function (d) { return d.Test == "launchPerformance"  });
     makeChart(launchPerformance,"launchPerformance")
     var loginPerformance = perfdata.filter(function (d) { return d.Test == "loginPerformance"  });
@@ -23,36 +36,61 @@
     
   function makeChart(perfdata, canvas_id) {
     console.log(perfdata);
+    var maxData = perfdata.map(
+      function(d) { return { x: d.Date, y: Math.max(d.Data1, d.Data2, d.Data3, d.Data4, d.Data5) } });
+    var minData = perfdata.map(
+      function(d) { return { x: d.Date, y: Math.min(d.Data1, d.Data2, d.Data3, d.Data4, d.Data5) } });
+
     var avgData = perfdata.map(
       function(d) {
-        d1 = parseFloat(d.Data1);
-        d2 = parseFloat(d.Data2);
-        d3 = parseFloat(d.Data3);
-        d4 = parseFloat(d.Data4);
-        d5 = parseFloat(d.Data5);
-        console.log(d1,d2,d3,d4,d5);
         return {
           x: d.Date,
-          y: (d1+d2+d3+d4+d5)/5
+          y: (d.Data1 + d.Data2 + d.Data3 + d.Data4 + d.Data5)/5
         }
       }
     );
+    console.log(minData);
     console.log(avgData);
+    console.log(maxData);
     var chart = new Chart(canvas_id, {
       type: 'line',
       data: {
         datasets: [
           {
-            data: avgData
+            label: "min",
+            data: minData,
+            fill: "+1",
+            borderColor: "#CCFFCC"
+          },
+          {
+            label: "avg",
+            data: avgData,
+            borderColor: "#CCCCFF"
+          },
+          {
+            label: "max",
+            data: maxData,
+            fill: "-1",
+            borderColor: "#FFCCCC"
           }
         ]
       },
       options: {
+        interaction: {
+          intersect: false,
+          mode: 'index', 
+        },
         scales: {
           x: {
             type: 'time',
+            label: "Test run date",
+            display: "true",
             time: {
             }
+          },
+          y: {
+            display: "true",
+            label: "Duration" 
           }
         }
       }
