@@ -24,7 +24,7 @@ struct FormattedBodyText: View {
     private let additionalWhitespacesCount: Int
 
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var attributedString = layoutPrefix + attributedString
+        var attributedString = attributedString
         attributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
         return attributedString.formattedComponents
     }
@@ -37,18 +37,6 @@ struct FormattedBodyText: View {
     // These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
-    }
-
-    // This allows to render the start and only the start of the string with the layout of the UI for the current user
-    private var layoutPrefix: AttributedString {
-        switch layoutDirection {
-        case .leftToRight:
-            return "\u{2066}"
-        case .rightToLeft:
-            return "\u{2067}"
-        default:
-            return ""
-        }
     }
     
     var body: some View {

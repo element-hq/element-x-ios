@@ -69,15 +69,7 @@ extension String {
             return ""
         }
 
-        var whiteSpaces: String
-        switch layoutDirection {
-        case .leftToRight:
-            whiteSpaces = "\u{2066}"
-        case .rightToLeft:
-            whiteSpaces = "\u{2067}"
-        default:
-            whiteSpaces = ""
-        }
+        var whiteSpaces = layoutDirection.isolateLayoutUnicodeString
 
         // fixed size whitespace of size 1/3 em per character
         whiteSpaces += String(repeating: "\u{2004}", count: whitespaceCount)
