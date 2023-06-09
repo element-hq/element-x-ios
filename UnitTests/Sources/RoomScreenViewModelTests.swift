@@ -19,6 +19,12 @@ import XCTest
 
 @MainActor
 class RoomScreenViewModelTests: XCTestCase {
+    var userIndicatorControllerMock: UserIndicatorControllerMock!
+
+    override func setUp() async throws {
+        userIndicatorControllerMock = nil
+    }
+
     func testMessageGrouping() {
         // Given 3 messages from Bob.
         let items = [
@@ -158,7 +164,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomMemberMock = RoomMemberProxyMock()
         roomMemberMock.userID = "bob"
         roomProxyMock.getMemberUserIDReturnValue = .success(roomMemberMock)
-        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        userIndicatorControllerMock = UserIndicatorControllerMock.default
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
@@ -190,7 +196,7 @@ class RoomScreenViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(200))
             return .success(roomMemberMock)
         }
-        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        userIndicatorControllerMock = UserIndicatorControllerMock.default
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
@@ -222,7 +228,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.getMemberUserIDClosure = { _ in
             .failure(.failedRetrievingMember)
         }
-        let userIndicatorControllerMock = UserIndicatorControllerMock.default
+        userIndicatorControllerMock = UserIndicatorControllerMock.default
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
