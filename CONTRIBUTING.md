@@ -43,6 +43,11 @@ This will clone a copy of the SDK if needed, build it for all supported architec
 swift run tools build-sdk --help
 ```
 
+In case the command is having trouble compiling `libsqlite3-sys` for different targets you can use the .sh script provided in the root folder
+```
+./buildSDK.sh
+```
+
 ### Tools
 
 The project depends on some tools for the build process. These are all included in the `Brewfile` and can be easily installed by running
