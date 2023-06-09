@@ -22,7 +22,7 @@ class RoomScreenViewModelTests: XCTestCase {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
 
     override func setUp() async throws {
-        userIndicatorControllerMock = nil
+        userIndicatorControllerMock = UserIndicatorControllerMock.default
     }
 
     func testMessageGrouping() {
@@ -164,7 +164,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomMemberMock = RoomMemberProxyMock()
         roomMemberMock.userID = "bob"
         roomProxyMock.getMemberUserIDReturnValue = .success(roomMemberMock)
-        userIndicatorControllerMock = UserIndicatorControllerMock.default
+
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
@@ -196,7 +196,7 @@ class RoomScreenViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(200))
             return .success(roomMemberMock)
         }
-        userIndicatorControllerMock = UserIndicatorControllerMock.default
+
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
@@ -228,7 +228,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.getMemberUserIDClosure = { _ in
             .failure(.failedRetrievingMember)
         }
-        userIndicatorControllerMock = UserIndicatorControllerMock.default
+
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
