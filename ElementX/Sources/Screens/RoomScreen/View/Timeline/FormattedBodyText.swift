@@ -39,7 +39,7 @@ struct FormattedBodyText: View {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
 
-    // This alllows to render the start and only the start of the string with the layout of the UI for the current user
+    // This allows to render the start and only the start of the string with the layout of the UI for the current user
     private var layoutPrefix: AttributedString {
         switch layoutDirection {
         case .leftToRight:
