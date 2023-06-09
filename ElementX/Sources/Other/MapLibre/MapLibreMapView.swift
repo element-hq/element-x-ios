@@ -18,6 +18,12 @@ import Combine
 import Mapbox
 import SwiftUI
 
+enum MapLibreError {
+    case failedLoadingMap
+    case failedLocatingUser
+    case invalidLocationAuthorization
+}
+
 struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Constants
     
@@ -29,19 +35,14 @@ struct MapLibreMapView: UIViewRepresentable {
     
     @Environment(\.colorScheme) var colorScheme
     
-    var lightTileServerMapURL: URL? {
-        MapTilerStyleBuilder.shared.dynamicMapURL(for: .light)
-    }
-    
-    var darkTileServerMapURL: URL? {
-        MapTilerStyleBuilder.shared.dynamicMapURL(for: .dark)
-    }
+    let lightTileServerMapURL: URL?
+    let darkTileServerMapURL: URL?
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
     
-    /// Publish view errors if any
-    let errorSubject: PassthroughSubject<LocationSharingViewError, Never>
+    /// Bind view errors if any
+    let error: Binding<MapLibreError?>
 
     // MARK: - UIViewRepresentable
     
@@ -81,7 +82,7 @@ struct MapLibreMapView: UIViewRepresentable {
         return mapView
     }
     
-    func showUserLocation(in mapView: MGLMapView) {
+    private func showUserLocation(in mapView: MGLMapView) {
         switch showsUserLocationMode {
         case .follow:
             mapView.showsUserLocation = true
@@ -122,7 +123,7 @@ extension MapLibreMapView {
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
-            mapLibreView.errorSubject.send(.failedLoadingMap)
+            mapLibreView.error.wrappedValue = .failedLoadingMap
         }
         
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
@@ -134,7 +135,7 @@ extension MapLibreMapView {
             
             switch manager.authorizationStatus {
             case .denied, .restricted:
-                mapLibreView.errorSubject.send(.invalidLocationAuthorization)
+                mapLibreView.error.wrappedValue = .invalidLocationAuthorization
             default:
                 break
             }

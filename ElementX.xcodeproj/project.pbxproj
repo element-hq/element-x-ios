@@ -2928,7 +2928,6 @@
 		C0937E3B06A8F0E2DB7C8241 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				CE58F4DC2A31BACB00C6BB94 /* MapLibre */,
 				04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */,
 				E24B88AD3D1599E8CB1376E0 /* AvatarSize.swift */,
 				E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */,
@@ -2952,6 +2951,7 @@
 				44BBB96FAA2F0D53C507396B /* Extensions */,
 				8F9A844EB44B6AD7CA18FD96 /* HTMLParsing */,
 				06501F0E978B2D5C92771DC7 /* Logging */,
+				CE58F4DC2A31BACB00C6BB94 /* MapLibre */,
 				052CC920F473C10B509F9FC1 /* SwiftUI */,
 				B687E3E8C23415A06A3D5C65 /* UserIndicator */,
 			);
@@ -3040,8 +3040,8 @@
 		CE58F4DC2A31BACB00C6BB94 /* MapLibre */ = {
 			isa = PBXGroup;
 			children = (
-				652CEF1BB3625E7E75692E85 /* MapLibreMapView.swift */,
 				53CA5CD0918581E2FC753AE7 /* LocationAnnotation.swift */,
+				652CEF1BB3625E7E75692E85 /* MapLibreMapView.swift */,
 			);
 			path = MapLibre;
 			sourceTree = "<group>";

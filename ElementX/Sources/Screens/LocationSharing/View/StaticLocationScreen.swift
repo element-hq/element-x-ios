@@ -23,11 +23,14 @@ struct StaticLocationScreen: View {
         mapView
             .ignoresSafeArea(.all, edges: [.bottom])
             .navigationBarTitleDisplayMode(.inline)
+            .alert(item: $context.alertInfo) { $0.alert }
     }
     
     var mapView: MapLibreMapView {
-        MapLibreMapView(showsUserLocationMode: .show,
-                        errorSubject: .init())
+        MapLibreMapView(lightTileServerMapURL: MapTilerStyleBuilder.shared.dynamicMapURL(for: .light),
+                        darkTileServerMapURL: MapTilerStyleBuilder.shared.dynamicMapURL(for: .dark),
+                        showsUserLocationMode: .follow,
+                        error: $context.mapError)
     }
 }
 
