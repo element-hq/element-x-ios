@@ -207,8 +207,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         getMediaFileMediaSourceBodyMimeTypeTempDirCallsCount += 1
-        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments = (`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`, `tempDir`: `tempDir`)
-        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations.append((`mediaSource`: `mediaSource`, `body`: `body`, `mimeType`: `mimeType`, `tempDir`: `tempDir`))
+        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, tempDir: tempDir)
+        getMediaFileMediaSourceBodyMimeTypeTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, tempDir: tempDir))
         if let getMediaFileMediaSourceBodyMimeTypeTempDirClosure = getMediaFileMediaSourceBodyMimeTypeTempDirClosure {
             return try getMediaFileMediaSourceBodyMimeTypeTempDirClosure(`mediaSource`, `body`, `mimeType`, `tempDir`)
         } else {
@@ -232,8 +232,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         getMediaThumbnailMediaSourceWidthHeightCallsCount += 1
-        getMediaThumbnailMediaSourceWidthHeightReceivedArguments = (`mediaSource`: `mediaSource`, `width`: `width`, `height`: `height`)
-        getMediaThumbnailMediaSourceWidthHeightReceivedInvocations.append((`mediaSource`: `mediaSource`, `width`: `width`, `height`: `height`))
+        getMediaThumbnailMediaSourceWidthHeightReceivedArguments = (mediaSource: mediaSource, width: width, height: height)
+        getMediaThumbnailMediaSourceWidthHeightReceivedInvocations.append((mediaSource: mediaSource, width: width, height: height))
         if let getMediaThumbnailMediaSourceWidthHeightClosure = getMediaThumbnailMediaSourceWidthHeightClosure {
             return try getMediaThumbnailMediaSourceWidthHeightClosure(`mediaSource`, `width`, `height`)
         } else {
@@ -257,8 +257,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         getNotificationItemRoomIdEventIdCallsCount += 1
-        getNotificationItemRoomIdEventIdReceivedArguments = (`roomId`: `roomId`, `eventId`: `eventId`)
-        getNotificationItemRoomIdEventIdReceivedInvocations.append((`roomId`: `roomId`, `eventId`: `eventId`))
+        getNotificationItemRoomIdEventIdReceivedArguments = (roomId: roomId, eventId: eventId)
+        getNotificationItemRoomIdEventIdReceivedInvocations.append((roomId: roomId, eventId: eventId))
         if let getNotificationItemRoomIdEventIdClosure = getNotificationItemRoomIdEventIdClosure {
             return try getNotificationItemRoomIdEventIdClosure(`roomId`, `eventId`)
         } else {
@@ -364,8 +364,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount += 1
-        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (`username`: `username`, `password`: `password`, `initialDeviceName`: `initialDeviceName`, `deviceId`: `deviceId`)
-        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((`username`: `username`, `password`: `password`, `initialDeviceName`: `initialDeviceName`, `deviceId`: `deviceId`))
+        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedArguments = (username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
+        loginUsernamePasswordInitialDeviceNameDeviceIdReceivedInvocations.append((username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
         try loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(`username`, `password`, `initialDeviceName`, `deviceId`)
     }
     //MARK: - `logout`
@@ -438,8 +438,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         searchUsersSearchTermLimitCallsCount += 1
-        searchUsersSearchTermLimitReceivedArguments = (`searchTerm`: `searchTerm`, `limit`: `limit`)
-        searchUsersSearchTermLimitReceivedInvocations.append((`searchTerm`: `searchTerm`, `limit`: `limit`))
+        searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
+        searchUsersSearchTermLimitReceivedInvocations.append((searchTerm: searchTerm, limit: limit))
         if let searchUsersSearchTermLimitClosure = searchUsersSearchTermLimitClosure {
             return try searchUsersSearchTermLimitClosure(`searchTerm`, `limit`)
         } else {
@@ -483,8 +483,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         setAccountDataEventTypeContentCallsCount += 1
-        setAccountDataEventTypeContentReceivedArguments = (`eventType`: `eventType`, `content`: `content`)
-        setAccountDataEventTypeContentReceivedInvocations.append((`eventType`: `eventType`, `content`: `content`))
+        setAccountDataEventTypeContentReceivedArguments = (eventType: eventType, content: content)
+        setAccountDataEventTypeContentReceivedInvocations.append((eventType: eventType, content: content))
         try setAccountDataEventTypeContentClosure?(`eventType`, `content`)
     }
     //MARK: - `setDelegate`
@@ -555,9 +555,34 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount += 1
-        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (`identifiers`: `identifiers`, `kind`: `kind`, `appDisplayName`: `appDisplayName`, `deviceDisplayName`: `deviceDisplayName`, `profileTag`: `profileTag`, `lang`: `lang`)
-        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((`identifiers`: `identifiers`, `kind`: `kind`, `appDisplayName`: `appDisplayName`, `deviceDisplayName`: `deviceDisplayName`, `profileTag`: `profileTag`, `lang`: `lang`))
+        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang)
+        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(`identifiers`, `kind`, `appDisplayName`, `deviceDisplayName`, `profileTag`, `lang`)
+    }
+    //MARK: - `slidingSync`
+
+    public var slidingSyncIdThrowableError: Error?
+    public var slidingSyncIdCallsCount = 0
+    public var slidingSyncIdCalled: Bool {
+        return slidingSyncIdCallsCount > 0
+    }
+    public var slidingSyncIdReceivedId: String?
+    public var slidingSyncIdReceivedInvocations: [String] = []
+    public var slidingSyncIdReturnValue: SlidingSyncBuilder!
+    public var slidingSyncIdClosure: ((String) throws -> SlidingSyncBuilder)?
+
+    public func `slidingSync`(`id`: String) throws -> SlidingSyncBuilder {
+        if let error = slidingSyncIdThrowableError {
+            throw error
+        }
+        slidingSyncIdCallsCount += 1
+        slidingSyncIdReceivedId = id
+        slidingSyncIdReceivedInvocations.append(`id`)
+        if let slidingSyncIdClosure = slidingSyncIdClosure {
+            return try slidingSyncIdClosure(`id`)
+        } else {
+            return slidingSyncIdReturnValue
+        }
     }
     //MARK: - `unignoreUser`
 
@@ -596,8 +621,8 @@ class SDKClientMock: SDKClientProtocol {
             throw error
         }
         uploadMediaMimeTypeDataCallsCount += 1
-        uploadMediaMimeTypeDataReceivedArguments = (`mimeType`: `mimeType`, `data`: `data`)
-        uploadMediaMimeTypeDataReceivedInvocations.append((`mimeType`: `mimeType`, `data`: `data`))
+        uploadMediaMimeTypeDataReceivedArguments = (mimeType: mimeType, data: data)
+        uploadMediaMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
         if let uploadMediaMimeTypeDataClosure = uploadMediaMimeTypeDataClosure {
             return try uploadMediaMimeTypeDataClosure(`mimeType`, `data`)
         } else {
@@ -623,31 +648,6 @@ class SDKClientMock: SDKClientProtocol {
             return try userIdClosure()
         } else {
             return userIdReturnValue
-        }
-    }
-    //MARK: - `slidingSync`
-
-    public var slidingSyncIdThrowableError: Error?
-    public var slidingSyncIdCallsCount = 0
-    public var slidingSyncIdCalled: Bool {
-        return slidingSyncIdCallsCount > 0
-    }
-    public var slidingSyncIdReceivedId: String?
-    public var slidingSyncIdReceivedInvocations: [String] = []
-    public var slidingSyncIdReturnValue: SlidingSyncBuilder!
-    public var slidingSyncIdClosure: ((String) throws -> SlidingSyncBuilder)?
-
-    public func `slidingSync`(`id`: String) throws -> SlidingSyncBuilder {
-        if let error = slidingSyncIdThrowableError {
-            throw error
-        }
-        slidingSyncIdCallsCount += 1
-        slidingSyncIdReceivedId = id
-        slidingSyncIdReceivedInvocations.append(`id`)
-        if let slidingSyncIdClosure = slidingSyncIdClosure {
-            return try slidingSyncIdClosure(`id`)
-        } else {
-            return slidingSyncIdReturnValue
         }
     }
 }
