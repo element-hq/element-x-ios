@@ -25,6 +25,10 @@ class RoomScreenViewModelTests: XCTestCase {
         userIndicatorControllerMock = UserIndicatorControllerMock.default
     }
 
+    override func tearDown() async throws {
+        userIndicatorControllerMock = nil
+    }
+
     func testMessageGrouping() {
         // Given 3 messages from Bob.
         let items = [
