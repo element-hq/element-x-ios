@@ -17,6 +17,33 @@
       }
     },
     {
+      "identity" : "devicekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/devicekit/DeviceKit",
+      "state" : {
+        "revision" : "691fe8112cca20ebf0020a1709d4e0205400311c",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "dtcoretext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Cocoanetics/DTCoreText",
+      "state" : {
+        "revision" : "b664664825da565b4c2b7a17dbe2369f68ae43d9",
+        "version" : "1.6.26"
+      }
+    },
+    {
+      "identity" : "dtfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Cocoanetics/DTFoundation.git",
+      "state" : {
+        "revision" : "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
+        "version" : "1.7.18"
+      }
+    },
+    {
       "identity" : "element-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/element-design-tokens.git",
@@ -26,12 +53,174 @@
       }
     },
     {
+      "identity" : "gzip",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/GZIP",
+      "state" : {
+        "revision" : "c45c8526dad61240a79aaff5b1cf6e082d2b90b2",
+        "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
+      "state" : {
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
+        "version" : "7.6.2"
+      }
+    },
+    {
+      "identity" : "kzfilewatchers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzysztofzablocki/KZFileWatchers",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4"
+      }
+    },
+    {
+      "identity" : "matrix-analytics-events",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matrix-org/matrix-analytics-events",
+      "state" : {
+        "revision" : "2f5fa5f1e2f6c6ae1a47c33d953a3ce289167eb0",
+        "version" : "0.5.0"
+      }
+    },
+    {
+      "identity" : "matrix-rust-components-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
+      "state" : {
+        "revision" : "849e6c5c47d0172b28d757dee0c7d203bf4b34cc",
+        "version" : "1.0.73-alpha"
+      }
+    },
+    {
+      "identity" : "posthog-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PostHog/posthog-ios",
+      "state" : {
+        "revision" : "3a6afc24d6bde730a19470d4e6b713f44d076ad9",
+        "version" : "2.0.3"
+      }
+    },
+    {
+      "identity" : "sentry-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getsentry/sentry-cocoa",
+      "state" : {
+        "revision" : "e6dcfba32f2861438b82c7ad34e058b23c83daf6",
+        "version" : "8.6.0"
+      }
+    },
+    {
+      "identity" : "swift-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-algorithms",
+      "state" : {
+        "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "swift-case-paths",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-case-paths",
+      "state" : {
+        "revision" : "fc45e7b2cfece9dd80b5a45e6469ffe67fe67984",
+        "version" : "0.14.1"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections",
+      "state" : {
+        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics",
+      "state" : {
+        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swift-parsing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-parsing",
+      "state" : {
+        "revision" : "27c941bbd22a4bbc53005a15a0440443fd892f70",
+        "version" : "0.12.1"
+      }
+    },
+    {
+      "identity" : "swift-snapshot-testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
+      "state" : {
+        "revision" : "cef5b3f6f11781dd4591bdd1dd0a3d22bd609334",
+        "version" : "1.11.0"
+      }
+    },
+    {
+      "identity" : "swift-url-routing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-url-routing",
+      "state" : {
+        "revision" : "2f4f0404b3de0a0711feb7190f724d8a80bc1cfd",
+        "version" : "0.5.0"
+      }
+    },
+    {
+      "identity" : "swiftstate",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactKit/SwiftState",
+      "state" : {
+        "revision" : "887e75b96da6be36a062e1b0ef832c32a803348b",
+        "version" : "6.0.1"
+      }
+    },
+    {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "revision" : "c18951c747ab62af7c15e17a81bd37d4fd5a9979",
         "version" : "0.2.3"
+      }
+    },
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mxcl/Version",
+      "state" : {
+        "revision" : "1fe824b80d89201652e7eca7c9252269a1d85e25",
+        "version" : "2.0.1"
+      }
+    },
+    {
+      "identity" : "xctest-dynamic-overlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
+      "state" : {
+        "revision" : "4af50b38daf0037cfbab15514a241224c3f62f98",
+        "version" : "0.8.5"
       }
     }
   ],
