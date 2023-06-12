@@ -19,9 +19,14 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     private let client: ClientProtocol
+    private var notificationSlidingSync: NotificationSync!
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
+
+    var userID: String? {
+        try? client.userId()
+    }
 
     init(credentials: KeychainCredentials) throws {
         let builder = ClientBuilder()
@@ -30,6 +35,9 @@ final class NSEUserSession {
 
         client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
+
+        let listener = WeakNSEUserSessionWrapper(userSession: self)
+        notificationSlidingSync = try client.notificationSlidingSync(id: "NSE", listener: listener)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
@@ -45,5 +53,17 @@ final class NSEUserSession {
                 return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
             }
         }
+    }
+}
+
+final class WeakNSEUserSessionWrapper: NotificationSyncListener {
+    private unowned let userSession: NSEUserSession
+
+    init(userSession: NSEUserSession) {
+        self.userSession = userSession
+    }
+    
+    func didTerminate() {
+        MXLog.info("NSE: Notification Sync stopped for user: \(userSession.userID ?? "unknown")")
     }
 }

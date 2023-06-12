@@ -19,6 +19,7 @@ import MatrixRustSDK
 import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
+    private static var userSession: [String: NSEUserSession] = [:]
     private let settings = NSESettings()
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -70,12 +71,20 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession = try NSEUserSession(credentials: credentials)
-            
-            guard let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
-                MXLog.info("\(tag) no notification for this event")
-                return discard()
+            let userSession: NSEUserSession
+            if let existingUserSession = Self.userSession[credentials.userID] {
+                userSession = existingUserSession
+            } else {
+                userSession = try NSEUserSession(credentials: credentials)
+                Self.userSession[credentials.userID] = userSession
             }
+
+            // We try to decrypt the notification for 10 seconds at most
+            var itemProxy: NotificationItemProxyProtocol
+            let date = Date()
+            repeat {
+                itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+            } while itemProxy.isEncrypted && date.timeIntervalSinceNow < 10
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)

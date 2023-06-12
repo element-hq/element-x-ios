@@ -19,6 +19,32 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
+private class WeakClientProxyWrapper: ClientDelegate, NotificationSyncListener {
+    private weak var clientProxy: ClientProxy?
+    
+    init(clientProxy: ClientProxy) {
+        self.clientProxy = clientProxy
+    }
+    
+    // MARK: - ClientDelegate
+
+    func didReceiveAuthError(isSoftLogout: Bool) {
+        MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
+        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
+    }
+    
+    func didRefreshTokens() {
+        MXLog.info("The session has updated tokens.")
+        clientProxy?.updateRestorationToken()
+    }
+
+    // MARK: - NotificationSyncListener
+
+    func didTerminate() {
+        MXLog.info("NotificationSyncListener terminated")
+    }
+}
+
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -28,7 +54,10 @@ class ClientProxy: ClientProxyProtocol {
         
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
-    
+
+    // The naming is a bit misleading since in this context the NotificationSync does nothing related to notification, it's just a way to sync the encryption keys
+    private var encryptionSync: NotificationSync?
+
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
 
@@ -66,6 +95,7 @@ class ClientProxy: ClientProxyProtocol {
             self?.callbacks.send(.updateRestorationToken)
         })
         
+        configureEncryptionSync(listener: delegate)
         await configureRoomListService()
 
         loadUserAvatarURLFromCache()
@@ -359,7 +389,15 @@ class ClientProxy: ClientProxyProtocol {
             self.avatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-        
+
+    private func configureEncryptionSync(listener: NotificationSyncListener) {
+        do {
+            try encryptionSync = client.notificationSlidingSync(id: "MainApp", listener: listener)
+        } catch {
+            MXLog.error("Configure encryption sync failed with error: \(error)")
+        }
+    }
+
     private func configureRoomListService() async {
         guard roomListService == nil else {
             fatalError("This shouldn't be called more than once")
