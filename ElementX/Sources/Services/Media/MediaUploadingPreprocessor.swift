@@ -190,7 +190,7 @@ struct MediaUploadingPreprocessor {
                                                   mimetype: thumbnailResult.mimeType,
                                                   size: thumbnailSize)
                 
-                let videoInfo = VideoInfo(duration: UInt64(result.duration),
+                let videoInfo = VideoInfo(duration: result.duration,
                                           height: UInt64(result.height),
                                           width: UInt64(result.width),
                                           mimetype: result.mimeType,
@@ -223,7 +223,7 @@ struct MediaUploadingPreprocessor {
             return .failure(.failedProcessingAudio)
         }
         
-        let audioInfo = AudioInfo(duration: UInt64(durationInSeconds * 1000), size: fileSize, mimetype: mimeType)
+        let audioInfo = AudioInfo(duration: durationInSeconds * 1000, size: fileSize, mimetype: mimeType)
         return .success(.audio(audioURL: url, audioInfo: audioInfo))
     }
     

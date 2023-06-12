@@ -21,9 +21,8 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
-    private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
-    private let invitesSummaryProvider: RoomSummaryProviderProtocol?
+    private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    private let inviteSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var visibleItemRangeObservationToken: AnyCancellable?
@@ -36,9 +35,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
         
-        visibleRoomsSummaryProvider = userSession.clientProxy.visibleRoomsSummaryProvider
-        allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
-        invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
+        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
+        inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
         super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
@@ -61,21 +59,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider, let invitesSummaryProvider else {
+        guard let roomSummaryProvider, let inviteSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
-        // Combine all 3 publishers to correctly compute the screen state
-        Publishers.CombineLatest3(visibleRoomsSummaryProvider.statePublisher,
-                                  visibleRoomsSummaryProvider.countPublisher,
-                                  visibleRoomsSummaryProvider.roomListPublisher)
+        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
+                                 roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
+            .sink { [weak self] state, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count < totalCount)
-                let hasNoRooms = roomSummaryProviderState == .fullyLoaded && totalCount == 0
+                let isLoadingData = state == .notLoaded
+                let hasNoRooms = (state == .fullyLoaded && rooms.count == 0)
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {
@@ -93,9 +89,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
-                if roomListMode == .skeletons {
-                    MXLog.info("roomSummaryProviderState: \(roomSummaryProviderState). rooms.count: \(rooms.count) / totalCount: \(totalCount)")
-                }
                 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
@@ -112,16 +105,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        // Listen to changes from both roomSummaryProviders and update state accordingly
-        
-        visibleRoomsSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateRooms()
-            }
-            .store(in: &cancellables)
-        
-        allRoomsSummaryProvider.roomListPublisher
+        roomSummaryProvider.roomListPublisher
             .dropFirst(1) // We don't care about its initial value
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -129,11 +113,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 // Wait for the all rooms view to receive its first update before installing
                 // dynamic timeline modifiers
-                self?.installDynamicTimelineLimitModifiers()
+                self?.installListRangeModifiers()
             }
             .store(in: &cancellables)
         
-        invitesSummaryProvider.roomListPublisher
+        inviteSummaryProvider.roomListPublisher
             .combineLatest(ServiceLocator.shared.settings.$seenInvites)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] summaries, readInvites in
@@ -196,15 +180,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Private
     
-    /// We want the timeline limit to be set to 1 while scrolling the list so that last messages load up fast. We also want to set that back to 20 when the scrolling
-    /// stops to load room history. Also we don't want this to be setup before the initial sync is over so we only call it when the allRoomsSummaryProvider
-    /// first receives some changes
-    private func installDynamicTimelineLimitModifiers() {
+    private func installListRangeModifiers() {
         guard visibleItemRangeObservationToken == nil else {
             return
         }
         
         visibleItemRangeObservationToken = visibleItemRangePublisher
+            .filter { $0.isScrolling == false }
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates(by: { $0.isScrolling == $1.isScrolling && $0.range == $1.range })
             .sink { [weak self] value in
@@ -215,7 +197,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                self.updateVisibleRange(value.range, timelineLimit: value.isScrolling ? SlidingSyncConstants.lastMessageTimelineLimit : SlidingSyncConstants.timelinePrecachingTimelineLimit)
+                self.updateVisibleRange(value.range)
             }
     }
         
@@ -223,7 +205,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
     /// This ensures that we show as many room details as possible without loading up timelines
     private func updateRooms() {
-        guard let visibleRoomsSummaryProvider else {
+        guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
@@ -231,50 +213,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Updating rooms")
         
         var rooms = [HomeScreenRoom]()
-        var createdRoomIdentifiers = [String: Bool]()
         
-        // This works around duplicated room list items which happens because the 2 different ss lists used
-        // update at different times. That will be fixed once we move this logic to the Rust side
-        func appendRoom(_ room: HomeScreenRoom, allRoomsProvider: Bool) {
-            guard createdRoomIdentifiers[room.id] == nil else {
-                MXLog.error("Built duplicated room for identifier: \(room.id). AllRoomsSummaryProvider: \(allRoomsProvider). Ignoring")
-                return
-            }
-            
-            createdRoomIdentifiers[room.id] = true
-            rooms.append(room)
-        }
-        
-        // Try merging together results from both the visibleRoomsSummaryProvider and the allRoomsSummaryProvider
-        // Empty or invalidated items in the visibleRoomsSummaryProvider might have more details in the allRoomsSummaryProvider
-        // If items are unavailable in the allRoomsSummaryProvider (hasn't be added to SS yet / cold cache) then use what's available
-        for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
+        for summary in roomSummaryProvider.roomListPublisher.value {
             switch summary {
-            case .filled(let details):
-                let room = buildRoom(with: details, invalidated: false, isLoading: false)
-                appendRoom(room, allRoomsProvider: false)
-            case .empty, .invalidated:
-                // Try getting details from the allRoomsSummaryProvider
-                guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
-                    if case let .invalidated(details) = summary {
-                        let room = buildRoom(with: details, invalidated: true, isLoading: false)
-                        appendRoom(room, allRoomsProvider: true)
-                    } else {
-                        rooms.append(HomeScreenRoom.placeholder())
-                    }
-                    continue
-                }
-
-                switch allRoomsRoomSummary {
-                case .empty:
-                    rooms.append(HomeScreenRoom.placeholder())
-                case .filled(let details):
-                    let room = buildRoom(with: details, invalidated: false, isLoading: true)
-                    appendRoom(room, allRoomsProvider: true)
-                case .invalidated(let details):
-                    let room = buildRoom(with: details, invalidated: true, isLoading: true)
-                    appendRoom(room, allRoomsProvider: true)
-                }
+            case .empty:
+                rooms.append(HomeScreenRoom.placeholder())
+            case .filled(let details), .invalidated(let details):
+                let room = buildRoom(with: details)
+                rooms.append(room)
             }
         }
         
@@ -283,29 +229,27 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Finished updating rooms")
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool, isLoading: Bool) -> HomeScreenRoom {
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
-        
-        return HomeScreenRoom(id: identifier,
-                              roomId: details.id,
-                              name: details.name,
-                              hasUnreads: details.unreadNotificationCount > 0,
-                              timestamp: details.lastMessageFormattedTimestamp,
-                              lastMessage: .init(attributedString: details.lastMessage, isLoading: isLoading),
-                              avatarURL: details.avatarURL)
+    private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
+        HomeScreenRoom(id: details.id,
+                       roomId: details.id,
+                       name: details.name,
+                       hasUnreads: details.unreadNotificationCount > 0,
+                       timestamp: details.lastMessageFormattedTimestamp,
+                       lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
+                       avatarURL: details.avatarURL)
     }
     
-    private func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
+    private func updateVisibleRange(_ range: Range<Int>) {
         guard !range.isEmpty else {
             return
         }
         
-        guard let visibleRoomsSummaryProvider else {
+        guard let roomSummaryProvider else {
             MXLog.error("Visible rooms summary provider unavailable")
             return
         }
         
-        visibleRoomsSummaryProvider.updateVisibleRange(range, timelineLimit: timelineLimit)
+        roomSummaryProvider.updateVisibleRange(range)
     }
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"

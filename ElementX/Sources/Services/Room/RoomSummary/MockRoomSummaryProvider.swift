@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 enum MockRoomSummaryProviderState {
     case loading
@@ -25,7 +26,6 @@ enum MockRoomSummaryProviderState {
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     let roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>
     let statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>
-    let countPublisher: CurrentValuePublisher<UInt, Never>
     
     convenience init() {
         self.init(state: .loading)
@@ -36,15 +36,16 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         case .loading:
             roomListPublisher = .init([])
             statePublisher = .init(.notLoaded)
-            countPublisher = .init(0)
         case .loaded(let rooms):
             roomListPublisher = .init(rooms)
             statePublisher = .init(.fullyLoaded)
-            countPublisher = .init(UInt(rooms.count))
         }
     }
     
-    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) { }
+    func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
+                              entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) { }
+    
+    func updateVisibleRange(_ range: Range<Int>) { }
 }
 
 extension Array where Element == RoomSummary {

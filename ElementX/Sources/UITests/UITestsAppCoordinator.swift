@@ -472,7 +472,7 @@ class MockScreen: Identifiable {
             clientProxy.roomForIdentifierMocks["someAwesomeRoomId1"] = .init(with: .init(displayName: "First room", inviter: .mockCharlie))
             clientProxy.roomForIdentifierMocks["someAwesomeRoomId2"] = .init(with: .init(displayName: "Second room", inviter: .mockCharlie))
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-            clientProxy.invitesSummaryProvider = summaryProvider
+            clientProxy.inviteSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -484,7 +484,7 @@ class MockScreen: Identifiable {
             clientProxy.roomForIdentifierMocks["someAwesomeRoomId1"] = .init(with: .init(displayName: "First room", inviter: .mockCharlie))
             clientProxy.roomForIdentifierMocks["someAwesomeRoomId2"] = .init(with: .init(displayName: "Second room", inviter: .mockCharlie))
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-            clientProxy.invitesSummaryProvider = summaryProvider
+            clientProxy.inviteSummaryProvider = summaryProvider
             
             let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)

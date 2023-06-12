@@ -19,7 +19,7 @@ import UniformTypeIdentifiers
 
 struct AudioRoomTimelineItemContent: Hashable {
     let body: String
-    let duration: UInt64
+    let duration: TimeInterval
     let source: MediaSourceProxy?
     let contentType: UTType?
 }

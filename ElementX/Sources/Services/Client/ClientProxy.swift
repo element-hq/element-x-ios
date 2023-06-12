@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
+private class WeakClientProxyWrapper: ClientDelegate {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -37,13 +37,6 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         MXLog.info("The session has updated tokens.")
         clientProxy?.updateRestorationToken()
     }
-
-    // MARK: - SlidingSyncDelegate
-    
-    func didReceiveSyncUpdate(summary: UpdateSummary) {
-        MXLog.info("Received sliding sync update")
-        clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
-    }
 }
 
 class ClientProxy: ClientProxyProtocol {
@@ -52,22 +45,13 @@ class ClientProxy: ClientProxyProtocol {
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
+        
+    private var roomListService: RoomList?
+    private var roomListSyncTaskHandle: TaskHandle?
+    private var roomListStateUpdateTaskHandle: TaskHandle?
     
-    private var slidingSyncObserverToken: TaskHandle?
-    private var slidingSync: SlidingSyncProtocol?
-    private var slidingSyncTasks = [TaskHandle?]()
-    
-    var visibleRoomsListBuilder: SlidingSyncListBuilder?
-    var visibleRoomsListProxy: SlidingSyncListProxy?
-    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
-    
-    var allRoomsListBuilder: SlidingSyncListBuilder?
-    var allRoomsListProxy: SlidingSyncListProxy?
-    var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
-
-    var invitesListBuilder: SlidingSyncListBuilder?
-    var invitesListProxy: SlidingSyncListProxy?
-    var invitesSummaryProvider: RoomSummaryProviderProtocol?
+    var roomSummaryProvider: RoomSummaryProviderProtocol?
+    var inviteSummaryProvider: RoomSummaryProviderProtocol?
 
     private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
@@ -87,8 +71,7 @@ class ClientProxy: ClientProxyProtocol {
         // These need to be inlined instead of using stopSync()
         // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
-        slidingSyncObserverToken?.cancel()
-        slidingSync?.setObserver(observer: nil)
+        roomListSyncTaskHandle?.cancel()
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -103,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
         let delegate = WeakClientProxyWrapper(clientProxy: self)
         client.setDelegate(delegate: delegate)
         
-        configureSlidingSync()
+        await configureRoomListService()
 
         loadUserAvatarURLFromCache()
     }
@@ -140,7 +123,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        slidingSyncObserverToken != nil
+        roomListSyncTaskHandle != nil
     }
     
     func startSync() {
@@ -149,18 +132,13 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        slidingSyncObserverToken = slidingSync?.sync()
+        roomListSyncTaskHandle = roomListService?.sync()
     }
 
     func stopSync() {
         MXLog.info("Stopping sync")
-        slidingSyncObserverToken = nil
-        
-        do {
-            try slidingSync?.stopSync()
-        } catch {
-            MXLog.error("Failed stopping sync with error: \(error). Ignore this error if ran just before the app being suspended")
-        }
+        roomListSyncTaskHandle?.cancel()
+        roomListSyncTaskHandle = nil
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -229,7 +207,7 @@ class ClientProxy: ClientProxyProtocol {
     private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
         guard case .success(let roomId) = result else { return result }
         let runner = ExpiringTaskRunner { [weak self] in
-            guard let roomLists = self?.allRoomsSummaryProvider?.roomListPublisher.values else {
+            guard let roomLists = self?.roomSummaryProvider?.roomListPublisher.values else {
                 return
             }
             // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
@@ -249,42 +227,42 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         // Try fetching the room from the cold cache (if available) first
-        var (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+        var (roomListItem, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)
         }
         
-        if let slidingSyncRoom, let room {
-            return await RoomProxy(slidingSyncRoom: slidingSyncRoom,
+        if let roomListItem, let room {
+            return await RoomProxy(roomListItem: roomListItem,
                                    room: room,
                                    backgroundTaskService: backgroundTaskService)
         }
         
         // Else wait for the visible rooms list to go into fully loaded
         
-        guard let visibleRoomsSummaryProvider else {
-            MXLog.error("Visible rooms summary provider not setup yet")
+        guard let roomSummaryProvider else {
+            MXLog.error("Rooms summary provider not setup yet")
             return nil
         }
         
-        if visibleRoomsSummaryProvider.statePublisher.value != .fullyLoaded {
-            _ = await visibleRoomsSummaryProvider.statePublisher.values.first(where: { $0 == .fullyLoaded })
+        if roomSummaryProvider.statePublisher.value != .fullyLoaded {
+            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0 == .fullyLoaded })
         }
         
-        (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+        (roomListItem, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)
         }
-
-        guard let slidingSyncRoom else {
-            MXLog.error("Invalid slidingSyncRoom for identifier \(identifier)")
+        
+        guard let roomListItem else {
+            MXLog.error("Invalid roomListItem for identifier \(identifier)")
             return nil
         }
         
         guard let room else {
-            MXLog.error("Invalid slidingSyncRoom fullRoom for identifier \(identifier)")
+            MXLog.error("Invalid roomListItem fullRoom for identifier \(identifier)")
             return nil
         }
-
-        return await RoomProxy(slidingSyncRoom: slidingSyncRoom,
+        
+        return await RoomProxy(roomListItem: roomListItem,
                                room: room,
                                backgroundTaskService: backgroundTaskService)
     }
@@ -378,6 +356,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+    
+    private func restartSync() {
+        stopSync()
+        startSync()
+    }
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
@@ -394,210 +377,59 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
         
-    private func configureSlidingSync() {
-        guard slidingSync == nil else {
+    private func configureRoomListService() async {
+        guard roomListService == nil else {
             fatalError("This shouldn't be called more than once")
         }
         
         do {
-            let slidingSyncBuilder = try client.slidingSync(id: "ElementX")
+            let roomListService = try client.roomList()
+            roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
+                guard let self else { return }
+                MXLog.info("Received room list update: \(state)")
+                
+                if state == .allRooms || state == .carryOn {
+                    self.callbacks.send(.receivedSyncUpdate)
+                }
+                
+                #warning("Not great, not terrible (ツ)")
+                if state == .terminated {
+                    self.restartSync()
+                }
+                
+                if state == .allRooms {
+                    Task {
+                        // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
+                        await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
+                                                                               // This state function is wrong but it's not used
+                                                                               entriesLoadingStateFunction: roomListService.entriesLoadingState(listener:))
+                    }
+                }
+            })
             
-            // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
-            // cold cache state and count updates will be lost
-            buildAndConfigureVisibleRoomsSlidingSyncList()
-            buildAndConfigureAllRoomsSlidingSyncList()
-            buildAndConfigureInvitesSlidingSyncList()
-            
-            guard let visibleRoomsListBuilder else {
-                MXLog.error("Visible rooms sliding sync view unavailable")
-                return
-            }
-
-            // Add the visibleRoomsSlidingSyncList here so that it can take advantage of the SS builder cold cache
-            // We will still register the allRoomsSlidingSyncList later, and than will have no cache
-            var slidingSyncBuilderWithExtension = slidingSyncBuilder
-                .addList(listBuilder: visibleRoomsListBuilder)
-                .withCommonExtensions()
-
-            if !ServiceLocator.shared.settings.readReceiptsEnabled {
-                slidingSyncBuilderWithExtension = slidingSyncBuilderWithExtension.withoutReceiptExtension()
-            }
-
-            let slidingSync = try slidingSyncBuilderWithExtension.build()
-            
-            // Don't forget to update the view proxies after building the slidingSync
-            visibleRoomsListProxy?.setSlidingSync(slidingSync: slidingSync)
-            allRoomsListProxy?.setSlidingSync(slidingSync: slidingSync)
-            invitesListProxy?.setSlidingSync(slidingSync: slidingSync)
-            
-            // Build the room summary providers later so the sliding sync view proxies are up to date and the
-            // currentRoomList is populated with the data from the cold cache
-            buildRoomSummaryProviders()
-            
-            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
-            
-            self.slidingSync = slidingSync
-        } catch {
-            MXLog.error("Failed building sliding sync with error: \(error)")
-        }
-    }
-    
-    private func buildAndConfigureVisibleRoomsSlidingSyncList() {
-        guard visibleRoomsListBuilder == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        let listName = "CurrentlyVisibleRooms"
-        
-        let visibleRoomsListProxy = SlidingSyncListProxy(name: listName)
-
-        let visibleRoomsListBuilder = SlidingSyncListBuilder(name: listName)
-            .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
-            .requiredState(requiredState: slidingSyncRequiredState)
-            .filters(filters: slidingSyncFilters)
-            .syncModeSelective(selectiveModeBuilder: .init().addRange(start: 0, endInclusive: 20))
-            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
-            .onceBuilt(callback: visibleRoomsListProxy)
-
-        self.visibleRoomsListBuilder = visibleRoomsListBuilder
-        self.visibleRoomsListProxy = visibleRoomsListProxy
-
-        // The allRoomsSlidingSyncList will be registered as soon as the visibleRoomsSlidingSyncList receives its first update
-        visibleRoomsListProxyStateObservationToken = visibleRoomsListProxy.statePublisher.sink { [weak self] state in
-            guard state == .fullyLoaded else {
-                return
-            }
-            
-            MXLog.info("Visible rooms view received first update, configuring views post initial sync")
-            self?.configureViewsPostInitialSync()
-            self?.visibleRoomsListProxyStateObservationToken = nil
-        }
-    }
-    
-    private func buildAndConfigureAllRoomsSlidingSyncList() {
-        guard allRoomsListBuilder == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        let listName = "AllRooms"
-        
-        let allRoomsListProxy = SlidingSyncListProxy(name: listName)
-
-        let allRoomsListBuilder = SlidingSyncListBuilder(name: listName)
-            .noTimelineLimit()
-            .requiredState(requiredState: slidingSyncRequiredState)
-            .filters(filters: slidingSyncFilters)
-            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
-            .bumpEventTypes(bumpEventTypes: roomListRecencyOrderingAllowedEventTypes)
-            .onceBuilt(callback: allRoomsListProxy)
-
-        self.allRoomsListBuilder = allRoomsListBuilder
-        self.allRoomsListProxy = allRoomsListProxy
-    }
-
-    private func buildAndConfigureInvitesSlidingSyncList() {
-        guard invitesListBuilder == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        let listName = "Invites"
-        
-        let invitesListProxy = SlidingSyncListProxy(name: "Invites")
-
-        let invitesListBuilder = SlidingSyncListBuilder(name: listName)
-            .noTimelineLimit()
-            .requiredState(requiredState: slidingSyncInvitesRequiredState)
-            .filters(filters: slidingSyncInviteFilters)
-            .syncModeGrowing(batchSize: 100, maximumNumberOfRoomsToFetch: nil)
-            .onceBuilt(callback: invitesListProxy)
-
-        self.invitesListBuilder = invitesListBuilder
-        self.invitesListProxy = invitesListProxy
-    }
-
-    private func buildRoomSummaryProviders() {
-        guard visibleRoomsSummaryProvider == nil, allRoomsSummaryProvider == nil, invitesSummaryProvider == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        guard let visibleRoomsListProxy, let allRoomsListProxy, let invitesListProxy else {
-            MXLog.error("Sliding sync view proxies unavailable")
-            return
-        }
-        
-        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: visibleRoomsListProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
-                                                          name: visibleRoomsListProxy.name)
-        
-        allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: allRoomsListProxy,
+            roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
-                                                      name: allRoomsListProxy.name)
-        
-        invitesSummaryProvider = RoomSummaryProvider(slidingSyncListProxy: invitesListProxy,
-                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
-                                                     name: invitesListProxy.name)
-    }
-    
-    private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                 RequiredState(key: "m.room.encryption", value: ""),
-                                                 RequiredState(key: "m.room.power_levels", value: "")]
-    
-    private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.encryption", value: ""),
-                                                        RequiredState(key: "m.room.member", value: "$ME"),
-                                                        RequiredState(key: "m.room.canonical_alias", value: "")]
-    
-    private lazy var slidingSyncFilters = SlidingSyncRequestListFilters(isDm: nil,
-                                                                        spaces: [],
-                                                                        isEncrypted: nil,
-                                                                        isInvite: false,
-                                                                        isTombstoned: false,
-                                                                        roomTypes: [],
-                                                                        notRoomTypes: ["m.space"],
-                                                                        roomNameLike: nil,
-                                                                        tags: [],
-                                                                        notTags: [])
-    
-    private lazy var slidingSyncInviteFilters = SlidingSyncRequestListFilters(isDm: nil,
-                                                                              spaces: [],
-                                                                              isEncrypted: nil,
-                                                                              isInvite: true,
-                                                                              isTombstoned: false,
-                                                                              roomTypes: [],
-                                                                              notRoomTypes: ["m.space"],
-                                                                              roomNameLike: nil,
-                                                                              tags: [],
-                                                                              notTags: [])
-    
-    private func configureViewsPostInitialSync() {
-        if let visibleRoomsListProxy {
-            MXLog.info("Setting visible rooms view timeline limit to \(SlidingSyncConstants.lastMessageTimelineLimit)")
-            visibleRoomsListProxy.updateVisibleRange(nil, timelineLimit: SlidingSyncConstants.lastMessageTimelineLimit)
-        } else {
-            MXLog.error("Visible rooms sliding sync view unavailable")
-        }
-
-        if let allRoomsListBuilder {
-            MXLog.info("Registering all rooms view")
-            slidingSyncTasks.append(slidingSync?.addList(listBuilder: allRoomsListBuilder))
-        } else {
-            MXLog.error("All rooms sliding sync view unavailable")
-        }
-
-        if let invitesListBuilder {
-            MXLog.info("Registering invites view")
-            slidingSyncTasks.append(slidingSync?.addList(listBuilder: invitesListBuilder))
-        } else {
-            MXLog.error("Invites sliding sync view unavailable")
+                                                      name: "AllRooms")
+            
+            await roomSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.entries(listener:),
+                                                            entriesLoadingStateFunction: roomListService.entriesLoadingState(listener:))
+            
+            inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                        eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                        name: "Invites")
+            
+            self.roomListService = roomListService
+        } catch {
+            MXLog.error("Failed building room list service with error: \(error)")
         }
     }
     
-    private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
+    private func roomTupleForIdentifier(_ identifier: String) -> (RoomListItem?, Room?) {
         do {
-            let slidingSyncRoom = try slidingSync?.getRoom(roomId: identifier)
-            let fullRoom = slidingSyncRoom?.fullRoom()
-
-            return (slidingSyncRoom, fullRoom)
+            let roomListItem = try roomListService?.room(roomId: identifier)
+            let fullRoom = roomListItem?.fullRoom()
+            
+            return (roomListItem, fullRoom)
         } catch {
             MXLog.error("Failed retrieving room with identifier: \(identifier)")
             return (nil, nil)
@@ -610,10 +442,6 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
-    }
-    
-    fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
-        callbacks.send(.receivedSyncUpdate)
     }
 }
 
@@ -628,5 +456,17 @@ extension ClientProxy: MediaLoaderProtocol {
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
         try await mediaLoader.loadMediaFileForSource(source, body: body)
+    }
+}
+
+private class RoomListStateListenerProxy: RoomListStateListener {
+    private let onUpdateClosure: (RoomListState) -> Void
+   
+    init(_ onUpdateClosure: @escaping (RoomListState) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(state: RoomListState) {
+        onUpdateClosure(state)
     }
 }

@@ -67,8 +67,8 @@ protocol RoomSummaryProviderProtocol {
     /// Publishes the current state the summary provider is finding itself in
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
     
-    /// Publishes the total number of rooms
-    var countPublisher: CurrentValuePublisher<UInt, Never> { get }
-        
-    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt)
+    func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
+                              entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) async
+    
+    func updateVisibleRange(_ range: Range<Int>)
 }
