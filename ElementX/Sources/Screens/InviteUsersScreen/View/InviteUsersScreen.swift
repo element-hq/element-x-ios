@@ -31,6 +31,8 @@ struct InviteUsersScreen: View {
                     nextButton
                 }
             }
+            .disableInteractiveDismissOnSearch()
+            .dismissSearchOnDisappear()
             .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
             .introspectSearchController { searchViewController in
                 searchViewController.hidesNavigationBarDuringPresentation = false
