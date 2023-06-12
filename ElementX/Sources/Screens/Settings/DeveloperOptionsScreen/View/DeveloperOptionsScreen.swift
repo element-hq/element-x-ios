@@ -39,6 +39,7 @@ struct DeveloperOptionsScreen: View {
 
                 Toggle(isOn: $context.readReceiptsEnabled) {
                     Text("Show read receipts")
+                    Text("requires app reboot")
                 }
                 .onChange(of: context.readReceiptsEnabled) { _ in
                     context.send(viewAction: .changedReadReceiptsEnabled)

@@ -415,10 +415,15 @@ class ClientProxy: ClientProxyProtocol {
 
             // Add the visibleRoomsSlidingSyncList here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncList later, and than will have no cache
-            let slidingSync = try slidingSyncBuilder
+            var slidingSyncBuilderWithExtension = slidingSyncBuilder
                 .addList(listBuilder: visibleRoomsListBuilder)
                 .withCommonExtensions()
-                .build()
+
+            if !ServiceLocator.shared.settings.readReceiptsEnabled {
+                slidingSyncBuilderWithExtension = slidingSyncBuilderWithExtension.withoutReceiptExtension()
+            }
+
+            let slidingSync = try slidingSyncBuilderWithExtension.build()
             
             // Don't forget to update the view proxies after building the slidingSync
             visibleRoomsListProxy?.setSlidingSync(slidingSync: slidingSync)
