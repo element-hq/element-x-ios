@@ -159,6 +159,6 @@ extension RoomProxyProtocol {
     }
     
     var isEncryptedOneToOneRoom: Bool {
-        isDirect && isEncrypted && joinedMembersCount == 2
+        isDirect && isEncrypted && activeMembersCount == 2
     }
 }
