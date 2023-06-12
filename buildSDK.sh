@@ -1,1 +1,0 @@
-swift build && .build/debug/tools build-sdk
