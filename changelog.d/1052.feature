@@ -1,1 +1,0 @@
-Read Receipts with avatars will be displayed at the bottom of the messages (only for Nightly, can be enabled in developer settings).

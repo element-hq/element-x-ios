@@ -1,3 +1,15 @@
+## Changes in 1.1.3 (2023-06-12)
+
+✨ Features
+
+- Timestamp added to non bubbled messages like images and videos for bubble style. ([#1057](https://github.com/vector-im/element-x-ios/pull/1057))
+- Read Receipts with avatars will be displayed at the bottom of the messages (only for Nightly, can be enabled in developer settings). ([#1052](https://github.com/vector-im/element-x-ios/issues/1052))
+
+🐛 Bugfixes
+
+- Improved timestamp rendering for RTL and bidirectional mixed text. ([#1055](https://github.com/vector-im/element-x-ios/pull/1055))
+
+
 ## Changes in 1.1.2 (2023-06-08)
 
 ✨ Features
