@@ -91,8 +91,7 @@ struct BuildSDK: ParsableCommand {
     
     /// Build the Rust SDK as an XCFramework with the debug profile.
     func buildFramework() throws {
-        // unset fixed an issue where swift compilation prevents building from other targets
-        // other than macOS X
+        // unset fixes an issue where swift compilation prevents building for targets other than macOS X
         var buildCommand = "unset SDKROOT && cargo xtask swift build-framework"
         buildCommand.append(" --profile \(profile.rawValue)")
         if let target {
