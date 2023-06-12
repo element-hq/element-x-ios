@@ -159,7 +159,7 @@ extension MapLibreMapView {
 
 // MARK: - MGLMapView convenient methods
 
-extension MGLMapView {
+private extension MGLMapView {
     func vc_removeAllAnnotations() {
         guard let annotations else {
             return
