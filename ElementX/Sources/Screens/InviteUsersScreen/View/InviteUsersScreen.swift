@@ -24,7 +24,7 @@ struct InviteUsersScreen: View {
         mainContent
             .elementFormStyle()
             .scrollDismissesKeyboard(.immediately)
-            .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
+            .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
