@@ -30,4 +30,10 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
         
         viewModel = StaticLocationScreenViewModel()
     }
+    
+    // MARK: - Public
+    
+    func toPresentable() -> AnyView {
+        AnyView(StaticLocationScreen(context: viewModel.context))
+    }
 }

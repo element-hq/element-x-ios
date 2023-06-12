@@ -33,7 +33,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     // MARK: - Properties
     
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
     
     let lightTileServerMapURL: URL?
     let darkTileServerMapURL: URL?
@@ -53,7 +53,7 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
-        mapView.vc_removeAllAnnotations()
+        mapView.removeAllAnnotations()
         
         if colorScheme == .dark {
             mapView.styleURL = darkTileServerMapURL
@@ -160,7 +160,7 @@ extension MapLibreMapView {
 // MARK: - MGLMapView convenient methods
 
 private extension MGLMapView {
-    func vc_removeAllAnnotations() {
+    func removeAllAnnotations() {
         guard let annotations else {
             return
         }
