@@ -62,8 +62,6 @@ public enum L10n {
   public static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
   /// Invite
   public static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
-  /// Invite friends
-  public static var actionInviteFriends: String { return L10n.tr("Localizable", "action_invite_friends") }
   /// Invite friends to %1$@
   public static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))

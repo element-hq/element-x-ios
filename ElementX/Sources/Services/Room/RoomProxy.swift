@@ -219,6 +219,24 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+        
+    func getMessageEventContent(for eventID: String) -> RoomMessageEventContent? {
+        try? room.getTimelineEventContentByEventId(eventId: eventID)
+    }
+    
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let transactionId = genTransactionId()
+        
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            self.room.send(msg: messageContent, txnId: transactionId)
+            return .success(())
+        }
+    }
     
     func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)

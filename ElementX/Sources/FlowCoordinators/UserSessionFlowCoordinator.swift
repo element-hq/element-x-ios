@@ -59,7 +59,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                   navigationStackCoordinator: detailNavigationStackCoordinator,
                                                   navigationSplitCoordinator: navigationSplitCoordinator,
-                                                  emojiProvider: EmojiProvider())
+                                                  emojiProvider: EmojiProvider(),
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         setupStateMachine()
         

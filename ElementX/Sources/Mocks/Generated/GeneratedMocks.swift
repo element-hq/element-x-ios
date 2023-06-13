@@ -559,6 +559,48 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReadReceiptForReturnValue
         }
     }
+    //MARK: - getMessageEventContent
+
+    var getMessageEventContentForCallsCount = 0
+    var getMessageEventContentForCalled: Bool {
+        return getMessageEventContentForCallsCount > 0
+    }
+    var getMessageEventContentForReceivedEventID: String?
+    var getMessageEventContentForReceivedInvocations: [String] = []
+    var getMessageEventContentForReturnValue: RoomMessageEventContent?
+    var getMessageEventContentForClosure: ((String) -> RoomMessageEventContent?)?
+
+    func getMessageEventContent(for eventID: String) -> RoomMessageEventContent? {
+        getMessageEventContentForCallsCount += 1
+        getMessageEventContentForReceivedEventID = eventID
+        getMessageEventContentForReceivedInvocations.append(eventID)
+        if let getMessageEventContentForClosure = getMessageEventContentForClosure {
+            return getMessageEventContentForClosure(eventID)
+        } else {
+            return getMessageEventContentForReturnValue
+        }
+    }
+    //MARK: - sendMessageEventContent
+
+    var sendMessageEventContentCallsCount = 0
+    var sendMessageEventContentCalled: Bool {
+        return sendMessageEventContentCallsCount > 0
+    }
+    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContent?
+    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContent] = []
+    var sendMessageEventContentReturnValue: Result<Void, RoomProxyError>!
+    var sendMessageEventContentClosure: ((RoomMessageEventContent) async -> Result<Void, RoomProxyError>)?
+
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
+        sendMessageEventContentCallsCount += 1
+        sendMessageEventContentReceivedMessageContent = messageContent
+        sendMessageEventContentReceivedInvocations.append(messageContent)
+        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
+            return await sendMessageEventContentClosure(messageContent)
+        } else {
+            return sendMessageEventContentReturnValue
+        }
+    }
     //MARK: - sendMessage
 
     var sendMessageInReplyToCallsCount = 0

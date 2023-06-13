@@ -53,7 +53,7 @@ struct HomeScreenRoomCell: View {
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
     }
     
-    @ViewBuilder
+    @ViewBuilder @MainActor
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             LoadableAvatarImage(url: room.avatarURL,
