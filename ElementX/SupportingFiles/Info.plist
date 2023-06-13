@@ -30,6 +30,8 @@
 	<string>The camera is used to take and upload photos and videos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The microphone is used to take videos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allows saving photos and videos to your library.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>

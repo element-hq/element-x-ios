@@ -64,6 +64,7 @@ targets:
         ]
         NSCameraUsageDescription: The camera is used to take and upload photos and videos.
         NSMicrophoneUsageDescription: The microphone is used to take videos.
+        NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
         UIBackgroundModes: [
           fetch
         ]
