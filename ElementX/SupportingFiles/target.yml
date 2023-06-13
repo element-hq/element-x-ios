@@ -62,8 +62,8 @@ targets:
         NSUserActivityTypes: [
           INSendMessageIntent
         ]
-        NSCameraUsageDescription: To take pictures or videos and send them as a message Element X needs access to the camera.
-        NSMicrophoneUsageDescription: To take videos with audio and send them as a message Element X needs access to the microphone.
+        NSCameraUsageDescription: To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.
+        NSMicrophoneUsageDescription: To take videos with audio and send them as a message $(APP_DISPLAY_NAME) needs access to the microphone.
         NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
         UIBackgroundModes: [
           fetch
