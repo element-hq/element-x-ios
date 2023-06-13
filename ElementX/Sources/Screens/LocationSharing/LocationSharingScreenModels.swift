@@ -21,15 +21,6 @@ enum LocationSharingViewError: Hashable {
     case mapError(MapLibreError)
 }
 
-/*
- Behavior mode of the current user's location, can be hidden, only shown and shown following the user
- */
-enum ShowUserLocationMode {
-    case follow
-    case show
-    case hide
-}
-
 enum StaticLocationScreenViewModelAction { }
 
 struct StaticLocationScreenViewState: BindableState {

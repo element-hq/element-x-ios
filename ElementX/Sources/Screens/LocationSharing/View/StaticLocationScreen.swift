@@ -19,16 +19,19 @@ import SwiftUI
 struct StaticLocationScreen: View {
     @ObservedObject var context: StaticLocationScreenViewModel.Context
     
+    private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
+    
     var body: some View {
-        mapView
-            .ignoresSafeArea(.all, edges: [.bottom])
-            .navigationBarTitleDisplayMode(.inline)
-            .alert(item: $context.alertInfo) { $0.alert }
+        NavigationView {
+            mapView
+                .ignoresSafeArea(.all, edges: [.bottom])
+                .navigationBarTitleDisplayMode(.inline)
+                .errorAlert(item: $context.errorAlert)
+        }
     }
     
     var mapView: MapLibreMapView {
-        MapLibreMapView(lightTileServerMapURL: MapTilerStyleBuilder.shared.dynamicMapURL(for: .light),
-                        darkTileServerMapURL: MapTilerStyleBuilder.shared.dynamicMapURL(for: .dark),
+        MapLibreMapView(builder: builder,
                         showsUserLocationMode: .follow,
                         error: $context.mapError)
     }

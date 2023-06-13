@@ -16,31 +16,19 @@
 
 import Foundation
 
+/*
+ Behavior mode of the current user's location, can be hidden, only shown and shown following the user
+ */
+enum ShowUserLocationMode {
+    /// this mode will show the user pin in map and track him, panning the map automatically
+    case follow
+    /// this mode will show the user pin in map
+    case show
+    /// this mode will not show the user pin in map
+    case hide
+}
+
 enum MapTilerStyle {
     case light
     case dark
-}
-
-class MapTilerStyleBuilder {
-    private let appSettings: AppSettings
-    private let authorization = MapTilerAuthorization()
-    
-    static let shared = MapTilerStyleBuilder()
-    
-    private init() {
-        appSettings = ServiceLocator.shared.settings
-    }
-    
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
-        let path: String
-        switch style {
-        case .light:
-            path = appSettings.lightTileMapStyleURL
-        case .dark:
-            path = appSettings.darkTileMapStyleURL
-        }
-        
-        guard let url = URL(string: path) else { return nil }
-        return authorization.authorizateURL(url)
-    }
 }

@@ -17,12 +17,10 @@
 import Foundation
 
 struct MapTilerAuthorization {
-    private let appSettings: AppSettings
     private let key: String
     
-    init() {
-        appSettings = ServiceLocator.shared.settings
-        key = appSettings.mapTilerApiKey
+    init(key: String) {
+        self.key = key
     }
     
     func authorizateURL(_ url: URL) -> URL {

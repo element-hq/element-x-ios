@@ -35,8 +35,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    let lightTileServerMapURL: URL?
-    let darkTileServerMapURL: URL?
+    let builder: MapTilerStyleBuilderProtocol
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
@@ -56,9 +55,9 @@ struct MapLibreMapView: UIViewRepresentable {
         mapView.removeAllAnnotations()
         
         if colorScheme == .dark {
-            mapView.styleURL = darkTileServerMapURL
+            mapView.styleURL = builder.dynamicMapURL(for: .dark)
         } else {
-            mapView.styleURL = lightTileServerMapURL
+            mapView.styleURL = builder.dynamicMapURL(for: .light)
         }
         
         showUserLocation(in: mapView)
@@ -71,7 +70,7 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
     
     private func makeMapView() -> MGLMapView {
-        let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? darkTileServerMapURL : lightTileServerMapURL)
+        let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
 
         mapView.logoView.isHidden = true
         mapView.attributionButton.isHidden = true
