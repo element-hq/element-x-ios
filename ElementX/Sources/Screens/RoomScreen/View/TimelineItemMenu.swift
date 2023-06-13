@@ -215,7 +215,10 @@ public struct TimelineItemMenu: View {
     
     private func send(_ action: TimelineItemMenuAction) {
         presentationMode.wrappedValue.dismiss()
-        context.send(viewAction: .timelineItemMenuAction(itemID: item.id, action: action))
+        // Otherwise we might get errors that a sheet is already presented
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            context.send(viewAction: .timelineItemMenuAction(itemID: item.id, action: action))
+        }
     }
     
     private struct MenuLabel: View {
