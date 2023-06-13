@@ -55,8 +55,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = true
-        case .failure:
-            state.bindings.errorAlert = .init()
+        case .failure(let error):
+            state.bindings.errorAlert = .init(error: error)
         }
     }
 
@@ -68,8 +68,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = false
-        case .failure:
-            state.bindings.errorAlert = .init()
+        case .failure(let error):
+            state.bindings.errorAlert = .init(error: error)
         }
     }
 }

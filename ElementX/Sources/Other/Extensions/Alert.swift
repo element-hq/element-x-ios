@@ -51,6 +51,7 @@ struct ErrorAlertItem: AlertItem {
         var action: () -> Void
     }
 
+    var error: Error
     var title = L10n.commonError
     var message = L10n.errorUnknown
     var cancelAction = Action(title: L10n.actionOk, action: { })

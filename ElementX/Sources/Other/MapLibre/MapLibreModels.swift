@@ -32,3 +32,9 @@ enum MapTilerStyle {
     case light
     case dark
 }
+
+enum MapLibreError: Error {
+    case failedLoadingMap
+    case failedLocatingUser
+    case invalidLocationAuthorization
+}

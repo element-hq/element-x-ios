@@ -18,12 +18,6 @@ import Combine
 import Mapbox
 import SwiftUI
 
-enum MapLibreError {
-    case failedLoadingMap
-    case failedLocatingUser
-    case invalidLocationAuthorization
-}
-
 struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Constants
     

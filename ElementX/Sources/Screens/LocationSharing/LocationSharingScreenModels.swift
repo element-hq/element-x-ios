@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum LocationSharingViewError: Hashable {
+enum LocationSharingViewError: Error {
     case failedSharingLocation
     case mapError(MapLibreError)
 }
@@ -31,27 +31,15 @@ struct StaticLocationScreenBindings {
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
         get {
-            alertInfo?.mapError
+            errorAlert?.error as? MapLibreError
         }
         set {
-            alertInfo = newValue.map(AlertInfo.init(mapError:))
+            errorAlert = newValue.map { ErrorAlertItem(error: $0) }
         }
     }
     
     /// Information describing the currently displayed alert.
-    var alertInfo: AlertInfo<LocationSharingViewError>?
+    var errorAlert: ErrorAlertItem?
 }
 
 enum StaticLocationScreenViewAction { }
-
-private extension AlertInfo where T == LocationSharingViewError {
-    var mapError: MapLibreError? {
-        guard case let .mapError(error) = id else { return nil }
-        return error
-    }
-    
-    // we can switch and localize the Map Libre errors
-    init(mapError: MapLibreError) {
-        self = AlertInfo(id: .mapError(mapError))
-    }
-}
