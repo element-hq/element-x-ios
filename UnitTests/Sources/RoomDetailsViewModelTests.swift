@@ -24,14 +24,14 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     var viewModel: RoomDetailsScreenViewModel!
     var roomProxyMock: RoomProxyMock!
     var context: RoomDetailsScreenViewModelType.Context { viewModel.context }
-
+    
     override func setUp() {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         AppSettings.reset()
     }
-
+    
     func testLeaveRoomTappedWhenPublic() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
@@ -41,7 +41,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
-
+    
     func testLeaveRoomTappedWhenRoomNotPublic() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
@@ -51,13 +51,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
-
+    
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
         context.send(viewAction: .processTapLeave)
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertEmptySubtitle)
     }
-
+    
     func testLeaveRoomSuccess() async {
         roomProxyMock.leaveRoomClosure = {
             .success(())
@@ -74,7 +74,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
     }
-
+    
     func testLeaveRoomError() async {
         roomProxyMock.leaveRoomClosure = {
             .failure(.failedLeavingRoom)
@@ -84,16 +84,16 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
         XCTAssertNotNil(context.alertInfo)
     }
-
+    
     func testInitialDMDetailsState() async {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
     }
-
+    
     func testIgnoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         recipient.ignoreUserClosure = {
@@ -101,11 +101,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
-
+        
         context.send(viewAction: .ignoreConfirmed)
         
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
@@ -115,7 +115,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
     }
-
+    
     func testIgnoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         recipient.ignoreUserClosure = {
@@ -123,11 +123,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.ignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
-
+        
         context.send(viewAction: .ignoreConfirmed)
         
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
@@ -138,7 +138,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
     }
-
+    
     func testUnignoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         recipient.unignoreUserClosure = {
@@ -146,11 +146,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .success(())
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
-
+        
         context.send(viewAction: .unignoreConfirmed)
         
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
@@ -160,7 +160,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
     }
-
+    
     func testUnignoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         recipient.unignoreUserClosure = {
@@ -168,16 +168,16 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             return .failure(.unignoreUserFailed)
         }
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
-
+        
         context.send(viewAction: .unignoreConfirmed)
         
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-
+        
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
@@ -190,7 +190,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                   isPublic: true,
                                                   members: mockedMembers,
                                                   memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                  joinedMembersCount: mockedMembers.count))
+                                                  activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
@@ -200,7 +200,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, joinedMembersCount: mockedMembers.count))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
@@ -275,7 +275,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-
+        
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
         XCTAssertFalse(context.viewState.canEditRoomTopic)
@@ -288,7 +288,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com", roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-
+        
         XCTAssertFalse(context.viewState.canEdit)
     }
 }
