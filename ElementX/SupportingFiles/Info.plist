@@ -27,9 +27,9 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-	<string>The camera is used to take and upload photos and videos.</string>
+	<string>To take pictures or videos and send them as a message Element X needs access to the camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The microphone is used to take videos.</string>
+	<string>To take videos with audio and send them as a message Element X needs access to the microphone.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allows saving photos and videos to your library.</string>
 	<key>NSUserActivityTypes</key>
