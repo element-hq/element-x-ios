@@ -1,3 +1,10 @@
+## Changes in 1.1.4 (2023-06-13)
+
+🐛 Bugfixes
+
+- Fixed crashes when trying to save media to the photo library ([#1072](https://github.com/vector-im/element-x-ios/issues/1072))
+
+
 ## Changes in 1.1.3 (2023-06-12)
 
 ✨ Features
