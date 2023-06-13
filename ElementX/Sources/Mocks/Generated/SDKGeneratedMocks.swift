@@ -421,6 +421,27 @@ class SDKClientMock: SDKClientProtocol {
             return roomsReturnValue
         }
     }
+    //MARK: - `roomList`
+
+    public var roomListThrowableError: Error?
+    public var roomListCallsCount = 0
+    public var roomListCalled: Bool {
+        return roomListCallsCount > 0
+    }
+    public var roomListReturnValue: RoomList!
+    public var roomListClosure: (() throws -> RoomList)?
+
+    public func `roomList`() throws -> RoomList {
+        if let error = roomListThrowableError {
+            throw error
+        }
+        roomListCallsCount += 1
+        if let roomListClosure = roomListClosure {
+            return try roomListClosure()
+        } else {
+            return roomListReturnValue
+        }
+    }
     //MARK: - `searchUsers`
 
     public var searchUsersSearchTermLimitThrowableError: Error?
