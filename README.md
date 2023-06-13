@@ -1,4 +1,4 @@
-[![Element iOS Matrix room #element-ios:matrix.org](https://img.shields.io/matrix/element-ios:matrix.org.svg?label=%23element-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-ios:matrix.org)
+ [![Element iOS Matrix room #element-ios:matrix.org](https://img.shields.io/matrix/element-ios:matrix.org.svg?label=%23element-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-ios:matrix.org)
 ![GitHub](https://img.shields.io/github/license/vector-im/element-x-ios)
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/vector-im/element-x-ios/unit_tests.yml?style=flat-square)
