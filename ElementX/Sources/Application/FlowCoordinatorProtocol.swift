@@ -19,4 +19,5 @@ import Foundation
 @MainActor
 protocol FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
+    func clearRoute(animated: Bool)
 }
