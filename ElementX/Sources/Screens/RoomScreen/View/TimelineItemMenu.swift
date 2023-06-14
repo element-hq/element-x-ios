@@ -88,7 +88,6 @@ public struct TimelineItemMenu: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .tint(.element.accent)
     }
     
     private var header: some View {

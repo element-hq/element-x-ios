@@ -47,10 +47,10 @@ public struct ElementCapsuleButtonStyle: ButtonStyle {
     var background: some View {
         if isProminent {
             Capsule()
-                .foregroundColor(Color.element.accent)
+                .foregroundColor(Color.compound.textActionPrimary)
         } else {
             Capsule()
-                .stroke(Color.element.accent)
+                .stroke(Color.compound.textActionPrimary)
         }
     }
     

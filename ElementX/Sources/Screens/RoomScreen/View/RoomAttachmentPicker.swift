@@ -28,7 +28,7 @@ struct RoomAttachmentPicker: View {
         } label: {
             Image(systemName: "plus.circle.fill")
                 .font(.compound.headingLG)
-                .foregroundColor(.element.accent)
+                .foregroundColor(.compound.textActionPrimary)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPicker)
         .popover(isPresented: $showAttachmentPopover) {
@@ -66,7 +66,6 @@ struct RoomAttachmentPicker: View {
             }
             .presentationDetents([.height(sheetContentHeight)])
             .presentationDragIndicator(.visible)
-            .tint(.element.accent)
         }
     }
     

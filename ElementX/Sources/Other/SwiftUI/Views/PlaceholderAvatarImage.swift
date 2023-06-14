@@ -53,7 +53,7 @@ struct PlaceholderAvatarImage: View {
         }
 
         guard let contentID else {
-            return .element.accent
+            return .compound.iconPrimary
         }
 
         return .element.avatarBackground(for: contentID)

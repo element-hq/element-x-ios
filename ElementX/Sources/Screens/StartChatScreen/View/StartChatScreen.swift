@@ -147,7 +147,6 @@ struct StartChatScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             StartChatScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }

@@ -193,7 +193,6 @@ struct SessionVerificationScreen: View {
             Button(L10n.actionCancel) {
                 context.send(viewAction: .close)
             }
-            .foregroundColor(.element.accent)
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.close)
         }
     }
@@ -221,7 +220,7 @@ struct SessionVerificationScreen: View {
                 .resizable()
                 .font(.compound.bodyLG.weight(.light))
                 .scaledToFit()
-                .foregroundColor(.element.accent)
+                .foregroundColor(.compound.iconPrimary)
                 .frame(width: 100, height: 100)
         }
     }

@@ -23,7 +23,7 @@ public extension ButtonStyle where Self == ElementActionButtonStyle {
     /// - Parameter size: The control size to use. Defaults to regular.
     /// - Parameter color: The color of the button's background. Defaults to the accent color.
     static func elementAction(_ size: ElementControlSize = .regular,
-                              color: Color = .element.accent) -> ElementActionButtonStyle {
+                              color: Color = .compound.textActionPrimary) -> ElementActionButtonStyle {
         ElementActionButtonStyle(size: size, color: color)
     }
 }
@@ -45,7 +45,7 @@ public struct ElementActionButtonStyle: ButtonStyle {
             .opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
-    public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
+    public init(size: ElementControlSize = .regular, color: Color = .compound.textActionPrimary) {
         self.size = size
         self.color = color
     }

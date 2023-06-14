@@ -148,7 +148,6 @@ struct InviteUsersScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             InviteUsersScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }
