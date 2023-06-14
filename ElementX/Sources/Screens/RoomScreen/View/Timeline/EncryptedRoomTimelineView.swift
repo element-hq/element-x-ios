@@ -36,7 +36,7 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
                 .foregroundColor(.element.secondaryContent)
             configuration.title
                 .font(.body)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
     }

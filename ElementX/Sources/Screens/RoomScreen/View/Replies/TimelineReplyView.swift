@@ -105,7 +105,7 @@ struct TimelineReplyView: View {
             HStack {
                 iconView
                     .frame(width: imageContainerSize, height: imageContainerSize)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.iconPrimary)
                     .background(Color.compound.bgSubtlePrimary)
                     .cornerRadius(icon?.cornerRadii ?? 0.0, corners: .allCorners)
                 

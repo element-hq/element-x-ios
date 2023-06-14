@@ -47,7 +47,7 @@ struct TemplateScreen: View {
             Text(context.viewState.promptType.title)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier("title")
             
             Image(systemName: context.viewState.promptType.imageSystemName)

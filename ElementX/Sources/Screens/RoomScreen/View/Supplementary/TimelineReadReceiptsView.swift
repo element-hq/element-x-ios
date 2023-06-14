@@ -43,7 +43,7 @@ struct TimelineReadReceiptsView: View {
                 let remaining = timelineItem.properties.orderedReadReceipts.count - displayNumber
                 Text("+\(remaining)")
                     .font(.compound.bodySM)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
             }
         }
     }

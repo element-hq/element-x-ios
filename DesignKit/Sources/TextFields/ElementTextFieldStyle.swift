@@ -73,9 +73,9 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     /// The color of the text inside the text field.
     private var textColor: Color {
         if colorScheme == .dark {
-            return isEnabled ? .element.primaryContent : .element.tertiaryContent
+            return isEnabled ? .compound.textPrimary : .element.tertiaryContent
         } else {
-            return isEnabled ? .element.primaryContent : .element.quaternaryContent
+            return isEnabled ? .compound.textPrimary : .element.quaternaryContent
         }
     }
     
@@ -94,7 +94,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the label above the text field.
     private var labelColor: Color {
-        isEnabled ? .element.primaryContent : .element.quaternaryContent
+        isEnabled ? .compound.textPrimary : .element.quaternaryContent
     }
     
     /// The color of the footer label below the text field.

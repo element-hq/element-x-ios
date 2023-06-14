@@ -86,7 +86,7 @@ struct HomeScreenRoomCell: View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
                 .font(.compound.bodyLGSemibold)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             

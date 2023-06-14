@@ -26,7 +26,7 @@ struct UserIndicatorToastView: View {
             }
             Text(indicator.title)
                 .font(.compound.bodySM)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .id(indicator.id)
         .padding(.horizontal, 12.0)

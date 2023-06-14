@@ -46,7 +46,7 @@ struct ServerSelectionScreen: View {
             Text(L10n.commonSelectYourServer)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
             
             Text(L10n.screenChangeServerSubtitle)
                 .font(.compound.bodyMD)

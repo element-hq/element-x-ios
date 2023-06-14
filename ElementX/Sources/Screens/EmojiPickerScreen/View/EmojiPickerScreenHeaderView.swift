@@ -23,7 +23,7 @@ struct EmojiPickerScreenHeaderView: View {
         HStack {
             Text(title)
                 .font(.compound.bodyMD.bold())
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }

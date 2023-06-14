@@ -122,7 +122,7 @@ struct RoomScreen: View {
         if context.viewState.showLoading {
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(.element.primaryContent)
+                .tint(.compound.iconPrimary)
                 .padding(16)
                 .background(Color.element.quinaryContent)
                 .cornerRadius(8)

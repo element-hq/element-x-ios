@@ -73,7 +73,7 @@ struct FormattedBodyText: View {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
@@ -102,14 +102,14 @@ struct FormattedBodyText: View {
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
                         Text(component.attributedString)
-                            .foregroundColor(.element.primaryContent)
+                            .foregroundColor(.compound.textPrimary)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                 }
             }
         }

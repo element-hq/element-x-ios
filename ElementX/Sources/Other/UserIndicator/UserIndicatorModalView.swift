@@ -36,7 +36,7 @@ struct UserIndicatorModalView: View {
                     }
                     Text(indicator.title)
                         .font(.compound.bodyLG)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                 }
             }
             .padding()

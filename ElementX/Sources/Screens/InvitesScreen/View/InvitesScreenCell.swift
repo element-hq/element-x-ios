@@ -90,7 +90,7 @@ struct InvitesScreenCell: View {
         VStack(alignment: .leading) {
             Text(title)
                 .font(.compound.bodyLGSemibold)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(2)
             
             if let subtitle {

@@ -58,7 +58,7 @@ struct LoginScreen: View {
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, 16)
     }
@@ -68,7 +68,7 @@ struct LoginScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(L10n.screenLoginFormHeader)
                 .font(.compound.bodySM)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
@@ -112,7 +112,7 @@ struct LoginScreen: View {
         Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
-            .foregroundColor(.element.primaryContent)
+            .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
             .accessibilityIdentifier(A11yIdentifiers.loginScreen.unsupportedServer)
     }

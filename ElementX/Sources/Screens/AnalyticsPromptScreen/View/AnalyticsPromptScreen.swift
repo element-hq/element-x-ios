@@ -41,7 +41,7 @@ struct AnalyticsPromptScreen: View {
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 2)
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             

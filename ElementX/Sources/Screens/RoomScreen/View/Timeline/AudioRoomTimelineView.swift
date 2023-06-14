@@ -24,7 +24,7 @@ struct AudioRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             HStack {
                 Image(systemName: "waveform")
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.iconPrimary)
                 FormattedBodyText(text: timelineItem.content.body)
             }
             .padding(.vertical, 12)

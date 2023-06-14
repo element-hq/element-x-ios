@@ -36,7 +36,7 @@ struct RoomMembersListScreenMemberCell: View {
 
                 Text(member.name ?? "")
                     .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
 
                 Spacer()

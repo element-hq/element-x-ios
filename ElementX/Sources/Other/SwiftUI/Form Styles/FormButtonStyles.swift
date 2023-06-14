@@ -51,7 +51,7 @@ struct FormRowAccessory: View {
         case .selection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
-                .foregroundColor(isSelected && isEnabled ? .element.primaryContent : .element.tertiaryContent)
+                .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .element.tertiaryContent)
         }
     }
     
@@ -87,7 +87,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
             HStack {
                 configuration.label
                     .labelStyle(FormRowLabelStyle(role: configuration.role))
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 accessory
@@ -109,7 +109,7 @@ struct FormActionButtonStyle: ButtonStyle {
         VStack {
             configuration.label
                 .buttonStyle(.plain)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .frame(width: menuIconSize, height: menuIconSize)
                 .background {
                     RoundedRectangle(cornerRadius: 16)

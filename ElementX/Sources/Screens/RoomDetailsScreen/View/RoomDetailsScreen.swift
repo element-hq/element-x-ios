@@ -118,7 +118,7 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapAddTopic)
                     } label: {
                         Text(L10n.screenRoomDetailsAddTopicTitle)
-                            .foregroundColor(.element.primaryContent)
+                            .foregroundColor(.compound.textPrimary)
                             .font(.compound.bodyLG)
                     }
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
@@ -157,7 +157,7 @@ struct RoomDetailsScreen: View {
         }
         .listRowSeparatorTint(.element.quinaryContent)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-        .foregroundColor(.element.primaryContent)
+        .foregroundColor(.compound.textPrimary)
     }
 
     @ViewBuilder
