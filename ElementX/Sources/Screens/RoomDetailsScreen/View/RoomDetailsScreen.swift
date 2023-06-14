@@ -110,7 +110,7 @@ struct RoomDetailsScreen: View {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
-                        .foregroundColor(.element.secondaryContent)
+                        .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodySM)
                         .lineLimit(3)
                 } else {
@@ -168,7 +168,7 @@ struct RoomDetailsScreen: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                         Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
                     }
                 } icon: {

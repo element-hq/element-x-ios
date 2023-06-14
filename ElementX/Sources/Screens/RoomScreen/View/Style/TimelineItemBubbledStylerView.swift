@@ -201,7 +201,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
         }
         .font(.compound.bodyXS)
-        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
+        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .compound.textSecondary)
         .padding(.bottom, isMediaType ? 0 : -4)
     }
     

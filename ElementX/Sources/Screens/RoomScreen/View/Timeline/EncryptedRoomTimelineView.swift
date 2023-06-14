@@ -33,7 +33,7 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             configuration.icon
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.iconSecondary)
             configuration.title
                 .font(.body)
                 .foregroundColor(.compound.textPrimary)

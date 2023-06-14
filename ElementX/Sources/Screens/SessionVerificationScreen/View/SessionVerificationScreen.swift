@@ -99,7 +99,7 @@ struct SessionVerificationScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
         case .requestingVerification:
             ProgressView()
-                .tint(.element.secondaryContent)
+                .tint(.compound.textSecondary)
                 .scaleEffect(2)
         default:
             // In All other cases, we just want an empty view
@@ -207,7 +207,7 @@ struct SessionVerificationScreen: View {
                     .font(.compound.headingXLBold)
                 Text(emoji.description)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             .padding(8.0)
         }

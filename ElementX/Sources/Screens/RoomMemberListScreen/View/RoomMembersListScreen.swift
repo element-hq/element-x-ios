@@ -51,7 +51,7 @@ struct RoomMembersListScreen: View {
         } header: {
             if !data.isEmpty {
                 Text(sectionTitle)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
                     .padding(.vertical, 12)
             }

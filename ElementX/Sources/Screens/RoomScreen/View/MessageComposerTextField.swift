@@ -34,7 +34,7 @@ struct MessageComposerTextField: View {
     }
     
     private var placeholderColor: Color {
-        .element.secondaryContent
+        .compound.textSecondary
     }
     
     var body: some View {

@@ -101,7 +101,7 @@ struct RoomScreen: View {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
                 .fontWeight(.semibold)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.iconSecondary)
                 .padding(13)
                 .offset(y: 1)
                 .background {
@@ -122,7 +122,7 @@ struct RoomScreen: View {
         if context.viewState.showLoading {
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(.compound.iconPrimary)
+                .tint(.compound.textPrimary)
                 .padding(16)
                 .background(Color.element.quinaryContent)
                 .cornerRadius(8)

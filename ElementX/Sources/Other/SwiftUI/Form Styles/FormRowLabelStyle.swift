@@ -42,7 +42,7 @@ struct FormRowLabelStyle: LabelStyle {
         if role == .destructive {
             return .element.alert
         } else {
-            return .element.secondaryContent
+            return .compound.iconSecondary
         }
     }
 

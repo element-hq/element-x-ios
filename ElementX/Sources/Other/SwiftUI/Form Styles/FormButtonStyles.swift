@@ -117,7 +117,7 @@ struct FormActionButtonStyle: ButtonStyle {
                 }
             
             Text(title)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.textSecondary)
                 .font(.compound.bodyMD)
         }
     }

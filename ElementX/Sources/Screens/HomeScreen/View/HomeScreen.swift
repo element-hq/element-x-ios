@@ -203,13 +203,13 @@ struct HomeScreen: View {
                         context.send(viewAction: .skipSessionVerification)
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.compound.iconSecondary)
                             .frame(width: 12, height: 12)
                     }
                 }
                 Text(L10n.sessionVerificationBannerMessage)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             
             Button(L10n.actionContinue) {

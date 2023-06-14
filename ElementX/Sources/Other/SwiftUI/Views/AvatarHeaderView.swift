@@ -40,7 +40,7 @@ struct AvatarHeaderView<Footer: View>: View {
 
             if let subtitle {
                 Text(subtitle)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
                     .multilineTextAlignment(.center)
             }

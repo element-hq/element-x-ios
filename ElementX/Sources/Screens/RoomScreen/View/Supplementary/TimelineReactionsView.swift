@@ -46,13 +46,13 @@ struct TimelineReactionButton: View {
                 .font(.compound.bodyMD)
             Text(String(reaction.count))
                 .font(.compound.bodyMD)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.textSecondary)
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
         .background(
             backgroundShape
-                .strokeBorder(reaction.isHighlighted ? Color.element.secondaryContent : .element.background, lineWidth: 2)
+                .strokeBorder(reaction.isHighlighted ? Color.compound.textSecondary : .element.background, lineWidth: 2)
                 .background(reaction.isHighlighted ? Color.element.accent.opacity(0.1) : .element.system, in: backgroundShape)
         )
         .accessibilityElement(children: .combine)

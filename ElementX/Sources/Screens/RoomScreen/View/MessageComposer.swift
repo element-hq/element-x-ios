@@ -166,7 +166,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.title
         }
         .font(.compound.bodySM)
-        .foregroundColor(.element.secondaryContent)
+        .foregroundColor(.compound.textSecondary)
         .lineLimit(1)
     }
 }

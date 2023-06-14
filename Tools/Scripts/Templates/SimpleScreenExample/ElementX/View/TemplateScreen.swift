@@ -20,7 +20,7 @@ struct TemplateScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     
     var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
+        colorScheme == .light ? .compound.textSecondary : .element.tertiaryContent
     }
     
     @ObservedObject var context: TemplateScreenViewModel.Context

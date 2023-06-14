@@ -25,7 +25,7 @@ extension View {
     
     /// Applies a standard style for form header text.
     func formSectionHeader() -> some View {
-        foregroundColor(.element.secondaryContent)
+        foregroundColor(.compound.textSecondary)
             .font(.compound.bodyXS)
     }
     

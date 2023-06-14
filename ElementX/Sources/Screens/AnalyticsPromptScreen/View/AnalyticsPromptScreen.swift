@@ -48,7 +48,7 @@ struct AnalyticsPromptScreen: View {
             Text(context.viewState.strings.optInContent)
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.textSecondary)
                 .tint(.compound.textLinkExternal)
             
             Divider()
@@ -68,7 +68,7 @@ struct AnalyticsPromptScreen: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.compound.bodyLG)
-        .foregroundColor(.element.secondaryContent)
+        .foregroundColor(.compound.textSecondary)
         .frame(maxWidth: .infinity)
     }
     

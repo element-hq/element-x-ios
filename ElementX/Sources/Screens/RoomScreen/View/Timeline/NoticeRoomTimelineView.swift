@@ -30,7 +30,7 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             
             HStack(alignment: .firstTextBaseline, spacing: 6.0) {
                 Image(systemName: "info.bubble").padding(.top, 2.0)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.iconSecondary)
                 
                 if let attributedString = timelineItem.content.formattedBody {
                     FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: additionalWhitespaces)

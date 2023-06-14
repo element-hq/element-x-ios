@@ -105,7 +105,7 @@ struct CreateRoomScreen: View {
     private var cameraImage: some View {
         Image(systemName: "camera")
             .font(.system(size: 28, weight: .semibold))
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.iconSecondary)
             .frame(width: roomIconSize, height: roomIconSize)
             .background(Color.element.quinaryContent)
             .clipShape(Circle())

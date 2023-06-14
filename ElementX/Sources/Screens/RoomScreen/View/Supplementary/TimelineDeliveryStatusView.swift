@@ -35,7 +35,7 @@ struct TimelineDeliveryStatusView: View {
     var body: some View {
         Image(systemName: systemImageName)
             .resizable()
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.iconSecondary)
             .frame(width: 16.0, height: 16.0)
     }
 }

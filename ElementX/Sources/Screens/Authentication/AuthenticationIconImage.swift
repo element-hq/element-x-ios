@@ -27,7 +27,7 @@ struct AuthenticationIconImage: View {
         image
             .resizable()
             .renderingMode(.template)
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.iconSecondary)
             .aspectRatio(contentMode: .fit)
             .accessibilityHidden(true)
             .padding(insets)
