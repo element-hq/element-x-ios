@@ -67,7 +67,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     }
     
     private var accentColor: Color {
-        isError ? .compound.textCriticalPrimary : .element.brand
+        isError ? .compound.textCriticalPrimary : .compound.iconAccentTertiary
     }
     
     /// The color of the text inside the text field.

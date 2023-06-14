@@ -93,7 +93,7 @@ struct HomeScreenRoomCell: View {
             if let timestamp = room.timestamp {
                 Text(timestamp)
                     .font(.compound.bodySM)
-                    .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
+                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .element.tertiaryContent)
             }
         }
     }
@@ -116,7 +116,7 @@ struct HomeScreenRoomCell: View {
             if room.hasUnreads {
                 Circle()
                     .frame(width: 12, height: 12)
-                    .foregroundColor(.element.brand)
+                    .foregroundColor(.compound.iconAccentTertiary)
                     .padding(.leading, 12)
             } else {
                 // Force extra padding between last message text and the right border of the screen if there is no unread dot

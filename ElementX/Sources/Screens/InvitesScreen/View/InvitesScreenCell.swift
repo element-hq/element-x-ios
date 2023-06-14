@@ -156,7 +156,7 @@ struct InvitesScreenCell: View {
     private var badge: some View {
         Circle()
             .frame(width: badgeSize, height: badgeSize)
-            .foregroundColor(.element.brand)
+            .foregroundColor(.compound.iconAccentTertiary)
     }
 }
 

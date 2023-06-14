@@ -42,7 +42,7 @@ struct MessageComposer: View {
                                          maxHeight: 300,
                                          enterKeyHandler: sendAction,
                                          pasteHandler: pasteAction)
-                    .tint(.element.brand)
+                    .tint(.compound.iconAccentTertiary)
                     .padding(.vertical, 10)
                 
                 Button {
@@ -54,7 +54,7 @@ struct MessageComposer: View {
                         .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
                         .background {
                             Circle()
-                                .foregroundColor(sendingDisabled ? .clear : .element.brand)
+                                .foregroundColor(sendingDisabled ? .clear : .compound.iconAccentTertiary)
                         }
                 }
                 .disabled(sendingDisabled)
