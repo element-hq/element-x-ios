@@ -30,7 +30,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.errorAlert)
+        XCTAssertNil(context.alertInfo)
     }
 
     func testIgnoreSuccess() async throws {
@@ -73,7 +73,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertNotNil(context.errorAlert)
+        XCTAssertNotNil(context.alertInfo)
         XCTAssertFalse(context.viewState.details.isIgnored)
     }
 
@@ -119,7 +119,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
-        XCTAssertNotNil(context.errorAlert)
+        XCTAssertNotNil(context.alertInfo)
     }
 
     func testInitialStateAccountOwner() async {
@@ -128,7 +128,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.errorAlert)
+        XCTAssertNil(context.alertInfo)
     }
 
     func testInitialStateIgnoredUser() async {
@@ -137,6 +137,6 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
-        XCTAssertNil(context.errorAlert)
+        XCTAssertNil(context.alertInfo)
     }
 }
