@@ -246,21 +246,22 @@ extension NotificationItemProxyProtocol {
 
         notification.categoryIdentifier = NotificationConstants.Category.invite
 
-        var iconType: NotificationIconType
-        let senderName = senderDisplayName ?? roomDisplayName
-
+        let icon: NotificationIcon
+        let body: String
         if !isDirect {
-            iconType = .group(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: nil)
+            body = L10n.notificationRoomInviteBody(roomDisplayName)
         } else {
-            iconType = .sender(mediaSource: senderAvatarMediaSource)
+            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
+            body = L10n.notificationInviteBody
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
-                                                            senderName: senderName,
-                                                            iconType: iconType)
-
-        notification.body = L10n.notificationInviteBody
+                                                            senderName: senderDisplayName ?? roomDisplayName,
+                                                            icon: icon)
+        notification.body = body
+        
         return notification
     }
 
@@ -300,17 +301,17 @@ extension NotificationItemProxyProtocol {
         notification.categoryIdentifier = NotificationConstants.Category.message
 
         let senderName = senderDisplayName ?? roomDisplayName
-        let iconType: NotificationIconType
+        let icon: NotificationIcon
         if !isDirect {
-            iconType = .group(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
         } else {
-            iconType = .sender(mediaSource: senderAvatarMediaSource)
+            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
                                                             senderName: senderName,
-                                                            iconType: iconType)
+                                                            icon: icon)
         return notification
     }
 
