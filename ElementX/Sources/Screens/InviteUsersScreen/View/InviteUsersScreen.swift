@@ -38,7 +38,7 @@ struct InviteUsersScreen: View {
                 searchViewController.hidesNavigationBarDuringPresentation = false
             }
             .compoundSearchField()
-            .alert(item: $context.alertInfo) { $0.alert }
+            .alert(item: $context.alertInfo)
             .background(ViewFrameReader(frame: $frame))
     }
     
