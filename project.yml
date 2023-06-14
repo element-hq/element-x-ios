@@ -48,6 +48,9 @@ packages:
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
+  Mapbox:
+    url: https://github.com/maplibre/maplibre-gl-native-distribution
+    minorVersion: 5.13.0
   Compound:
     url: https://github.com/vector-im/compound-ios
     revision: aaa43409ca09130cb9e9a0fe02c803c65aa42aed
