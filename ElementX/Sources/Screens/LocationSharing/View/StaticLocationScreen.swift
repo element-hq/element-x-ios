@@ -26,7 +26,7 @@ struct StaticLocationScreen: View {
             mapView
                 .ignoresSafeArea(.all, edges: [.bottom])
                 .navigationBarTitleDisplayMode(.inline)
-                .errorAlert(item: $context.errorAlert)
+                .alert(item: $context.alertInfo)
         }
     }
     

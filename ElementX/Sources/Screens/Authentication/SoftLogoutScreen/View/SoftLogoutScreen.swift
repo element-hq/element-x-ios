@@ -48,7 +48,7 @@ struct SoftLogoutScreen: View {
             .padding(.bottom, 16)
         }
         .background(Color.element.background.ignoresSafeArea())
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
         .introspectViewController { viewController in
             guard let window = viewController.view.window else { return }
             context.send(viewAction: .updateWindow(window))

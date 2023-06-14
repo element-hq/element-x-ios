@@ -33,7 +33,7 @@ struct RoomMembersListScreen: View {
         .compoundSearchField()
         .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 inviteButton

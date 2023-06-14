@@ -16,12 +16,12 @@
 
 import SwiftUI
 
-protocol AlertItem {
+protocol AlertProtocol {
     var title: String { get }
 }
 
 extension View {
-    func alert<Item, Actions, Message>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions, @ViewBuilder message: (Item) -> Message) -> some View where Item: AlertItem, Actions: View, Message: View {
+    func alert<Item, Actions, Message>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions, @ViewBuilder message: (Item) -> Message) -> some View where Item: AlertProtocol, Actions: View, Message: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -32,7 +32,7 @@ extension View {
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions, message: message)
     }
 
-    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertItem, Actions: View {
+    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertProtocol, Actions: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -44,29 +44,69 @@ extension View {
     }
 }
 
-// Only for Alerts that display a simple error message with a message and one or two buttons
-struct ErrorAlertItem: AlertItem {
-    struct Action {
-        var title: String
-        var action: () -> Void
+/// A type that describes an alert to be shown to the user.
+///
+/// The alert info can be added to the view state bindings and used as an alert's `item`:
+/// ```
+/// view
+///     .alert(item: $context.alertInfo)
+/// ```
+struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
+    struct AlertButton {
+        let title: String
+        var role: ButtonRole?
+        let action: (() -> Void)?
     }
 
-    var error: Error
-    var title = L10n.commonError
-    var message = L10n.errorUnknown
-    var cancelAction = Action(title: L10n.actionOk, action: { })
-    var primaryAction: Action?
+    /// An identifier that can be used to distinguish one error from another.
+    let id: T
+    /// The alert's title.
+    let title: String
+    /// The alert's message (optional).
+    var message: String?
+    /// The alert's primary button title and action. Defaults to an Ok button with no action.
+    var primaryButton = AlertButton(title: L10n.actionOk, action: nil)
+    /// The alert's secondary button title and action.
+    var secondaryButton: AlertButton?
+}
+
+extension AlertInfo {
+    /// Initialises the type with a generic title and message for an unknown error along with the default Ok button.
+    /// - Parameters:
+    ///   - id: An ID that identifies the error.
+    ///   - error: The Error that occurred.
+    init(id: T) {
+        self.id = id
+        title = L10n.commonError
+        message = L10n.errorUnknown
+    }
+
+    /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.
+    ///
+    /// Currently this initialiser creates an alert for every error, however in the future it may be updated to filter
+    /// out some specific errors such as cancellation and networking issues that create too much noise or are
+    /// indicated to the user using other mechanisms.
+    init(error: Error) where T == String {
+        self.init(id: error.localizedDescription,
+                  title: error.localizedDescription)
+    }
 }
 
 extension View {
-    func errorAlert(item: Binding<ErrorAlertItem?>) -> some View {
+    func alert<T: Hashable>(item: Binding<AlertInfo<T>?>) -> some View {
         alert(item: item) { item in
-            Button(item.cancelAction.title) { item.cancelAction.action() }
-            if let primaryAction = item.primaryAction {
-                Button(primaryAction.title) { primaryAction.action() }
+            Button(item.primaryButton.title, role: item.primaryButton.role) {
+                item.primaryButton.action?()
+            }
+            if let secondaryButton = item.secondaryButton {
+                Button(secondaryButton.title, role: secondaryButton.role) {
+                    secondaryButton.action?()
+                }
             }
         } message: { item in
-            Text(item.message)
+            if let message = item.message {
+                Text(message)
+            }
         }
     }
 }

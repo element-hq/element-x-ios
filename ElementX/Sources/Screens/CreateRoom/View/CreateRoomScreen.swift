@@ -41,7 +41,7 @@ struct CreateRoomScreen: View {
             }
         }
         .background(ViewFrameReader(frame: $frame))
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
     }
     
     @ScaledMetric private var roomIconSize: CGFloat = 70

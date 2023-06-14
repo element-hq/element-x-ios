@@ -41,7 +41,7 @@ struct StartChatScreen: View {
         .dismissSearchOnDisappear()
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .compoundSearchField()
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
     }
 
     // MARK: - Private
