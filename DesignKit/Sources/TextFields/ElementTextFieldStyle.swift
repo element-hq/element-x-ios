@@ -57,7 +57,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's border.
     private var borderColor: Color {
-        guard !isError else { return .element.alert }
+        guard !isError else { return .compound.textCriticalPrimary }
         return isFocused ? .element.tertiaryContent : .element.quinaryContent
     }
     
@@ -67,7 +67,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     }
     
     private var accentColor: Color {
-        isError ? .element.alert : .element.brand
+        isError ? .compound.textCriticalPrimary : .element.brand
     }
     
     /// The color of the text inside the text field.
@@ -99,7 +99,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the footer label below the text field.
     private var footerColor: Color {
-        isError ? .element.alert : .element.tertiaryContent
+        isError ? .compound.textCriticalPrimary : .element.tertiaryContent
     }
     
     /// Creates the text field style configured as required.

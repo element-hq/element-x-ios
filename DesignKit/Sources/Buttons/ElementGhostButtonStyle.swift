@@ -76,7 +76,7 @@ public struct ElementGhostButtonStyle_Previews: PreviewProvider {
                 .disabled(true)
             
             Button("Red BG") { /* preview */ }
-                .buttonStyle(ElementGhostButtonStyle(color: .element.alert))
+                .buttonStyle(ElementGhostButtonStyle(color: .compound.textCriticalPrimary))
             
             Button { /* preview */ } label: {
                 Text("Custom")

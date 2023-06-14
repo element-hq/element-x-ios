@@ -80,12 +80,12 @@ public struct ElementActionButtonStyle_Previews: PreviewProvider {
             
             Button { /* preview */ } label: {
                 Text("Clear BG")
-                    .foregroundColor(.element.alert)
+                    .foregroundColor(.compound.textCriticalPrimary)
             }
             .buttonStyle(ElementActionButtonStyle(color: .clear))
             
             Button("Red BG") { /* preview */ }
-                .buttonStyle(ElementActionButtonStyle(color: .element.alert))
+                .buttonStyle(ElementActionButtonStyle(color: .compound.textCriticalPrimary))
         }
         .padding()
     }

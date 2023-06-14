@@ -143,7 +143,7 @@ struct SoftLogoutScreen: View {
             Button(action: clearData) {
                 Text(UntranslatedL10n.softLogoutClearDataSubmit)
             }
-            .buttonStyle(.elementAction(.xLarge, color: .element.alert))
+            .buttonStyle(.elementAction(.xLarge, color: .compound.textCriticalPrimary))
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(UntranslatedL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
