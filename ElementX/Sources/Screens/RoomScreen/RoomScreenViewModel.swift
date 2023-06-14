@@ -81,7 +81,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
-            Task { await sendCurrentMessage() }
+            Task {
+                await sendCurrentMessage()
+                promptInviteIfNeeded()
+            }
         case .sendReaction(let emoji, let itemId):
             Task { await timelineController.sendReaction(emoji, to: itemId) }
         case .cancelReply:
@@ -501,6 +504,49 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+
+    // MARK: - Direct chats logics
+
+    private func promptInviteIfNeeded() {
+        // Prompts a new invite alert if the other person left the room
+        guard roomProxy.isDirect, roomProxy.activeMembersCount < 2 else {
+            return
+        }
+
+        #warning("Localise strings")
+        userIndicatorController.alertInfo = .init(id: .init(),
+                                                  title: "You are a bit alone",
+                                                  message: "You are alone in this room, do you want to invite the other person?",
+                                                  primaryButton: .init(title: L10n.actionInvite, action: { [weak self] in self?.invitePerson() }),
+                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+
+    private let loaderID = UUID().uuidString
+
+    private func invitePerson() {
+        Task {
+            guard
+                let members = await roomProxy.members(),
+                let otherPerson = members.first(where: { !$0.isAccountOwner && $0.membership == .leave })
+            else {
+                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+                return
+            }
+
+            userIndicatorController.submitIndicator(.init(id: loaderID, type: .modal, title: L10n.commonLoading))
+            let inviteResult = await roomProxy.invite(userID: otherPerson.userID)
+            userIndicatorController.retractIndicatorWithId(loaderID)
+
+            switch inviteResult {
+            case .success:
+                break
+            case .failure:
+                userIndicatorController.alertInfo = .init(id: .init(),
+                                                          title: L10n.commonUnableToInviteTitle,
+                                                          message: L10n.commonUnableToInviteMessage)
+            }
+        }
     }
 }
 
