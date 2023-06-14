@@ -37,9 +37,9 @@ struct RoomDetailsScreen: View {
 
             if let recipient = context.viewState.dmRecipient {
                 ignoreUserSection(user: recipient)
-            } else {
-                leaveRoomSection
             }
+            
+            leaveRoomSection
         }
         .elementFormStyle()
         .alert(item: $context.alertInfo)

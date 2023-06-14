@@ -290,7 +290,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissRoom(animated: Bool) {
-        navigationStackCoordinator.popToRoot(animated: animated)
+        // The room isn't in the same navigation stack of the home screen.
+        // Animating the popToRoot causes weird animations on when the room is left from room's details
+        navigationStackCoordinator.popToRoot(animated: false)
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         roomProxy = nil
         timelineController = nil
