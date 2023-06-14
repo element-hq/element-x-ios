@@ -37,7 +37,7 @@ struct RoomScreen: View {
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
-            .alert(item: $context.alertInfo) { $0.alert }
+            .alert(item: $context.alertInfo)
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $context.actionMenuInfo) { info in
                 context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in

@@ -116,7 +116,7 @@ struct HomeScreen: View {
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .animation(.none, value: context.viewState.visibleRooms)
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)

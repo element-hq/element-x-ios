@@ -26,7 +26,7 @@ struct RoomMemberDetailsScreenViewState: BindableState {
 }
 
 struct RoomMemberDetailsScreenViewStateBindings {
-    struct IgnoreUserAlertItem: AlertItem, Equatable {
+    struct IgnoreUserAlertItem: AlertProtocol, Equatable {
         enum Action {
             case ignore
             case unignore
@@ -65,7 +65,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     }
     
     var ignoreUserAlert: IgnoreUserAlertItem?
-    var errorAlert: ErrorAlertItem?
+    var alertInfo: AlertInfo<RoomMemberDetailsScreenError>?
 }
 
 enum RoomMemberDetailsScreenViewAction {
@@ -73,4 +73,9 @@ enum RoomMemberDetailsScreenViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
+}
+
+enum RoomMemberDetailsScreenError: Hashable {
+    case alert(String)
+    case unknown
 }

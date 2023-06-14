@@ -46,7 +46,7 @@ struct LoginScreen: View {
             .padding(.bottom, 16)
         }
         .background(Color.element.background.ignoresSafeArea())
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
     }
     
     /// The header containing the title and icon.

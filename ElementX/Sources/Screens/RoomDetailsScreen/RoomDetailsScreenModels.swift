@@ -61,7 +61,7 @@ struct RoomDetailsScreenViewState: BindableState {
 }
 
 struct RoomDetailsScreenViewStateBindings {
-    struct IgnoreUserAlertItem: AlertItem, Equatable {
+    struct IgnoreUserAlertItem: AlertProtocol, Equatable {
         enum Action {
             case ignore
             case unignore
@@ -105,7 +105,7 @@ struct RoomDetailsScreenViewStateBindings {
     var ignoreUserRoomAlertItem: IgnoreUserAlertItem?
 }
 
-struct LeaveRoomAlertItem: AlertItem {
+struct LeaveRoomAlertItem: AlertProtocol {
     enum RoomState {
         case empty
         case `public`

@@ -42,7 +42,7 @@ struct RoomDetailsScreen: View {
             }
         }
         .elementFormStyle()
-        .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
