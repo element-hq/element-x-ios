@@ -19,16 +19,14 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     private let client: ClientProtocol
-    private var notificationSlidingSync: NotificationSync!
+    private var encryptionSync: NotificationSync!
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
-
-    var userID: String? {
-        try? client.userId()
-    }
+    let userID: String
 
     init(credentials: KeychainCredentials) throws {
+        userID = credentials.userID
         let builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
@@ -64,6 +62,6 @@ final class WeakNSEUserSessionWrapper: NotificationSyncListener {
     }
     
     func didTerminate() {
-        MXLog.info("NSE: Notification Sync stopped for user: \(userSession.userID ?? "unknown")")
+        MXLog.info("NSE: Encryption sync terminated for user: \(userSession.userID)")
     }
 }
