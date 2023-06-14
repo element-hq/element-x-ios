@@ -41,7 +41,7 @@ private class WeakClientProxyWrapper: ClientDelegate, NotificationSyncListener {
     // MARK: - NotificationSyncListener
 
     func didTerminate() {
-        MXLog.info("Encryption sync terminated for user: \(clientProxy.userID)")
+        MXLog.info("Encryption sync terminated for user: \(clientProxy?.userID ?? "unknown")")
     }
 }
 

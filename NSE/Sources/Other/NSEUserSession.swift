@@ -35,7 +35,7 @@ final class NSEUserSession {
         try client.restoreSession(session: credentials.restorationToken.session)
 
         let listener = WeakNSEUserSessionWrapper(userSession: self)
-        notificationSlidingSync = try client.notificationSlidingSync(id: "NSE", listener: listener)
+        encryptionSync = try client.notificationSlidingSync(id: "NSE", listener: listener)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
