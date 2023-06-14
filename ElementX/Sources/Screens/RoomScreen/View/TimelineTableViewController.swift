@@ -106,7 +106,7 @@ class TimelineTableViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
-        tableView.backgroundColor = .element.background
+        tableView.backgroundColor = UIColor(.compound.bgCanvasDefault)
         view.addSubview(tableView)
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider

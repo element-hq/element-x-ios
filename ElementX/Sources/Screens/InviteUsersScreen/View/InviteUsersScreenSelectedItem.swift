@@ -48,7 +48,7 @@ struct InviteUsersScreenSelectedItem: View {
                         .resizable()
                         .frame(width: buttonSize, height: buttonSize)
                         .symbolRenderingMode(.palette)
-                        .foregroundStyle(Color.element.systemPrimaryBackground, Color.compound.iconPrimary)
+                        .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
                 }
             }
     }

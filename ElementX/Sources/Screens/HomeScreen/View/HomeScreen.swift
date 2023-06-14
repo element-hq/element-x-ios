@@ -195,7 +195,7 @@ struct HomeScreen: View {
                 HStack(spacing: 16) {
                     Text(L10n.sessionVerificationBannerTitle)
                         .font(.compound.bodyLGSemibold)
-                        .foregroundColor(.element.systemPrimaryLabel)
+                        .foregroundColor(.compound.textPrimary)
                     
                     Spacer()
                     

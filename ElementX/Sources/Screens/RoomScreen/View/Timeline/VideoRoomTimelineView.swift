@@ -56,7 +56,7 @@ struct VideoRoomTimelineView: View {
     var placeholder: some View {
         ZStack {
             Rectangle()
-                .foregroundColor(.element.systemGray6)
+                .foregroundColor(timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou)
                 .opacity(0.3)
             
             ProgressView(L10n.commonLoading)

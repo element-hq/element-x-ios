@@ -55,7 +55,7 @@ public struct ElementCapsuleButtonStyle: ButtonStyle {
     }
     
     var fontColor: Color {
-        isProminent ? .element.systemPrimaryBackground : .element.systemPrimaryLabel
+        isProminent ? .compound.textOnSolidPrimary : .compound.textPrimary
     }
 }
 

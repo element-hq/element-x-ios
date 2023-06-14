@@ -27,22 +27,31 @@ public extension Color {
 public struct ElementColors {
     // MARK: - Legacy Compound
     
-    private let compound = DesignTokens.CompoundColors()
+    private let colors = DesignTokens.CompoundColors()
+    private let uiColors = DesignTokens.CompoundUIColors()
     
-    public var accent: Color { systemPrimaryLabel }
-    public var alert: Color { compound.alert }
-    public var links: Color { compound.links }
-    public var primaryContent: Color { compound.primaryContent }
-    public var secondaryContent: Color { compound.secondaryContent }
-    public var tertiaryContent: Color { compound.tertiaryContent }
-    public var quaternaryContent: Color { compound.quaternaryContent }
-    public var quinaryContent: Color { compound.quinaryContent }
-    public var system: Color { compound.system }
-    public var background: Color { compound.background }
-    // Should be the accent color
-    public var brand: Color { compound.accent }
+    @available(*, deprecated, message: "Use textActionPrimary from Compound.")
+    public var accent: Color { colors.primaryContent }
+    @available(*, deprecated, message: "Use textCriticalPrimary/iconCriticalPrimary from Compound.")
+    public var alert: Color { colors.alert }
+    @available(*, deprecated, message: "Use textLinkExternal from Compound.")
+    public var links: Color { colors.links }
+    @available(*, deprecated, message: "Use textPrimary/iconPrimary from Compound.")
+    public var primaryContent: Color { colors.primaryContent }
+    @available(*, deprecated, message: "Use textSecondary/iconSecondary from Compound.")
+    public var secondaryContent: Color { colors.secondaryContent }
+    @available(*, deprecated, message: "Use bgSubtleSecondary from Compound.")
+    public var system: Color { colors.system }
+    @available(*, deprecated, message: "Use bgCanvasDefault from Compound for backgrounds. For text or icons use textOnSolidPrimary/iconOnSolidPrimary.")
+    public var background: Color { colors.background }
+    @available(*, deprecated, message: "Use textActionAccent/iconAccentTertiary from Compound.")
+    public var brand: Color { colors.accent }
     
-    public var contentAndAvatars: [Color] { compound.contentAndAvatars }
+    public var tertiaryContent: Color { colors.tertiaryContent }
+    public var quaternaryContent: Color { colors.quaternaryContent }
+    public var quinaryContent: Color { colors.quinaryContent }
+    
+    public var contentAndAvatars: [Color] { colors.contentAndAvatars }
     
     public func avatarBackground(for contentId: String) -> Color {
         let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
@@ -50,11 +59,6 @@ public struct ElementColors {
     }
     
     // MARK: - Temp
-    
-    public var systemPrimaryLabel: Color { .primary }
-    public var systemPrimaryBackground: Color { Color(.systemBackground) }
-    public var systemGray4: Color { Color(.systemGray4) }
-    public var systemGray6: Color { Color(.systemGray6) }
     
     public var bubblesYou: Color {
         Color(UIColor { collection in
@@ -66,7 +70,7 @@ public struct ElementColors {
     public var bubblesNotYou: Color {
         Color(UIColor { collection in
             // Note: Light colour doesn't currently match Figma.
-            collection.userInterfaceStyle == .light ? .systemGray6 : .element.system
+            collection.userInterfaceStyle == .light ? .systemGray6 : uiColors.system
         })
     }
     
@@ -75,7 +79,7 @@ public struct ElementColors {
     /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
     public var formBackground: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? .element.system : .element.background
+            collection.userInterfaceStyle == .light ? uiColors.system : uiColors.background
         })
     }
     
@@ -84,39 +88,8 @@ public struct ElementColors {
     /// This colour is a special case as it uses `background` in light mode and `system` in dark mode.
     public var formRowBackground: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? .element.background : .element.system
+            collection.userInterfaceStyle == .light ? uiColors.background : uiColors.system
         })
-    }
-}
-
-// MARK: UIKit
-
-public extension UIColor {
-    /// The colors from Compound, as dynamic colors that automatically update for light and dark mode.
-    static let element = ElementUIColors()
-}
-
-@objcMembers public class ElementUIColors: NSObject {
-    // MARK: - Compound
-    
-    private let compound = DesignTokens.CompoundUIColors()
-    
-    public var accent: UIColor { .label }
-    public var alert: UIColor { compound.alert }
-    public var links: UIColor { compound.links }
-    public var primaryContent: UIColor { compound.primaryContent }
-    public var secondaryContent: UIColor { compound.secondaryContent }
-    public var tertiaryContent: UIColor { compound.tertiaryContent }
-    public var quaternaryContent: UIColor { compound.quaternaryContent }
-    public var quinaryContent: UIColor { compound.quinaryContent }
-    public var system: UIColor { compound.system }
-    public var background: UIColor { compound.background }
-    
-    public var contentAndAvatars: [UIColor] { compound.contentAndAvatars }
-
-    public func avatarBackground(for contentId: String) -> UIColor {
-        let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
-        return contentAndAvatars[colorIndex % contentAndAvatars.count]
     }
 }
 

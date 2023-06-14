@@ -40,8 +40,7 @@ public struct ElementActionButtonStyle: ButtonStyle {
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
     private var fontColor: Color {
-        // Always white unless disabled with a dark theme.
-        Color.element.systemPrimaryBackground
+        Color.compound.textOnSolidPrimary
             .opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
