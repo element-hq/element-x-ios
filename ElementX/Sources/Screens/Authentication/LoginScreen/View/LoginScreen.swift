@@ -45,7 +45,7 @@ struct LoginScreen: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 16)
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
     }
     

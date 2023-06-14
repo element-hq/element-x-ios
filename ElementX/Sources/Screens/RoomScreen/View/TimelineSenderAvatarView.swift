@@ -29,8 +29,8 @@ struct TimelineSenderAvatarView: View {
                             contentID: timelineItem.sender.id,
                             avatarSize: .user(on: .timeline),
                             imageProvider: context.imageProvider)
-            .overlay(
-                Circle().stroke(Color.element.background, lineWidth: 3)
-            )
+            .overlay {
+                Circle().stroke(Color.compound.bgCanvasDefault, lineWidth: 3)
+            }
     }
 }

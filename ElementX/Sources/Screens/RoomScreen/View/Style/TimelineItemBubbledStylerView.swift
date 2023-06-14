@@ -217,7 +217,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.element.background)
+                    .background(Color.compound.bgCanvasDefault)
                     .cornerRadius(8)
                     .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 

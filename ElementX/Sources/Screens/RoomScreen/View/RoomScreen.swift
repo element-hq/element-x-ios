@@ -23,7 +23,7 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
-            .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea()) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(spacing: 4.0) {
                     RoomAttachmentPicker(context: context)
@@ -106,7 +106,7 @@ struct RoomScreen: View {
                 .offset(y: 1)
                 .background {
                     Circle()
-                        .fill(Color.element.background)
+                        .fill(Color.compound.iconOnSolidPrimary)
                         // Intentionally using system primary colour to get white/black.
                         .shadow(color: .primary.opacity(0.33), radius: 2.0)
                 }

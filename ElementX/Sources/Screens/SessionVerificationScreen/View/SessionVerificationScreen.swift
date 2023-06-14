@@ -33,7 +33,7 @@ struct SessionVerificationScreen: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbarContent }
             }
-            .background(Color.element.background.ignoresSafeArea())
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
         .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
@@ -166,7 +166,7 @@ struct SessionVerificationScreen: View {
                 Button { context.send(viewAction: .accept) } label: {
                     HStack(spacing: 16) {
                         ProgressView()
-                            .tint(.element.background)
+                            .tint(.compound.textOnSolidPrimary)
                         Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                     }
                 }

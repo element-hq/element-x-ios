@@ -31,7 +31,7 @@ struct RoomMembersListScreen: View {
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo)
         .toolbar {

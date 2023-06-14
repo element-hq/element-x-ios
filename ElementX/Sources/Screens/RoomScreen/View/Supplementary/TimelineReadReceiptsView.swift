@@ -32,10 +32,10 @@ struct TimelineReadReceiptsView: View {
                                         contentID: receipt.userID,
                                         avatarSize: .user(on: .readReceipt),
                                         imageProvider: context.imageProvider)
-                        .overlay(
+                        .overlay {
                             RoundedRectangle(cornerRadius: .infinity)
-                                .stroke(Color.element.background, lineWidth: 1)
-                        )
+                                .stroke(Color.compound.bgCanvasDefault, lineWidth: 1)
+                        }
                         .zIndex(Double(displayNumber - index))
                 }
             }

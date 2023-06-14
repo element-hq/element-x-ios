@@ -123,7 +123,7 @@ struct HomeScreen: View {
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar(showingBottomToolbar ? .automatic : .hidden, for: .bottomBar)
         .toolbar { toolbar }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
     }
     

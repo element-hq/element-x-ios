@@ -27,7 +27,7 @@ struct AnalyticsPromptScreen: View {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
