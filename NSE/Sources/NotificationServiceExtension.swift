@@ -79,6 +79,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 Self.userSession[credentials.userID] = userSession
             }
 
+            // TODO: The following wait with a timeout should be handled by the SDK
             // We try to decrypt the notification for 10 seconds at most
             var itemProxy: NotificationItemProxyProtocol
             let date = Date()
