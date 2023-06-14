@@ -15,3 +15,15 @@
 //
 
 import Foundation
+
+extension MapTilerStyleBuilder {
+    init(appSettings: AppSettings) {
+        self.init(lightURL: appSettings.lightTileMapStyleURL, darkURL: appSettings.darkTileMapStyleURL, key: appSettings.mapTilerApiKey)
+    }
+}
+
+extension MapTilerGeoCoding {
+    init(session: URLSession = .shared, appSettings: AppSettings) {
+        self.init(session: session, key: appSettings.mapTilerApiKey, geocodingURL: appSettings.geocodingURL)
+    }
+}

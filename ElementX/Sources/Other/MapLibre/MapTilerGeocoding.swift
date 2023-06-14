@@ -17,26 +17,36 @@
 import CoreLocation
 import Foundation
 
-enum MapTilerGeocodingError: Error {
-    case geocodingFailed
+protocol MapTilerGeoCodingProtocol {
+    func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError>
 }
 
-class MapTilerGeoCoding {
-    private let appSettings: AppSettings
-    private let authorization = MapTilerAuthorization()
+struct MapTilerGeoCoding: MapTilerGeoCodingProtocol {
+    private let key: String
     private let session: URLSession
-    
-    init(session: URLSession = .shared) {
+    private let geocodingURL: String
+
+    init(session: URLSession = .shared, key: String, geocodingURL: String) {
         self.session = session
-        appSettings = ServiceLocator.shared.settings
+        self.key = key
+        self.geocodingURL = geocodingURL
     }
     
-    func geoCoding(coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError> {
+    private struct GeocodedPlace: Decodable {
+        struct FeatureCollection: Decodable {
+            let placeName: String
+        }
+        
+        let features: [FeatureCollection]
+    }
+    
+    func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError> {
         let latitude = coordinate.latitude
         let longitude = coordinate.longitude
         
-        let path = String(format: appSettings.geocodingURL, longitude, latitude)
+        let path = String(format: geocodingURL, longitude, latitude)
         guard var url = URL(string: path) else { return .failure(.geocodingFailed) }
+        let authorization = MapTilerAuthorization(key: key)
         url = authorization.authorizateURL(url)
         url.append(queryItems: [.init(name: "limit", value: "1")])
         
@@ -70,12 +80,4 @@ class MapTilerGeoCoding {
             return .failure(.geocodingFailed)
         }
     }
-}
-
-private struct GeocodedPlace: Decodable {
-    struct FeatureCollection: Decodable {
-        let placeName: String
-    }
-    
-    let features: [FeatureCollection]
 }
