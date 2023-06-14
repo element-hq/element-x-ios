@@ -149,7 +149,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(configuration.isPressed || isSelected ? Color.element.system : .clear)
+            .background(configuration.isPressed || isSelected ? Color.compound.bgSubtleSecondary : .clear)
             .contentShape(Rectangle())
     }
 }

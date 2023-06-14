@@ -177,7 +177,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             localizedSendInfo
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
-                .background(Color.element.system)
+                .background(Color.compound.bgSubtleSecondary)
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)

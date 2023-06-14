@@ -67,7 +67,7 @@ struct MessageComposer: View {
         .background {
             ZStack {
                 roundedRectangle
-                    .fill(Color.element.system)
+                    .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
                     .stroke(Color.element.quinaryContent, lineWidth: 1)
                     .opacity(focused ? 1 : 0)

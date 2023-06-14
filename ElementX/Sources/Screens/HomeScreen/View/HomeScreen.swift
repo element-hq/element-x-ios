@@ -220,7 +220,7 @@ struct HomeScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.verificationBannerContinue)
         }
         .padding(16)
-        .background(Color.element.system)
+        .background(Color.compound.bgSubtleSecondary)
         .cornerRadius(14)
         .padding(.horizontal, 16)
     }

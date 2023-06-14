@@ -37,7 +37,7 @@ struct TemplateScreen: View {
                 .padding(.horizontal)
                 .padding(.vertical)
                 .readableFrame()
-                .background(Color.element.system)
+                .background(Color.compound.bgSubtleSecondary)
         }
     }
     

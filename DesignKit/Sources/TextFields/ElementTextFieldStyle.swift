@@ -84,7 +84,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
         if !isEnabled, colorScheme == .dark {
             return .element.quinaryContent
         }
-        return .element.system
+        return .compound.bgSubtleSecondary
     }
     
     /// The color of the placeholder text inside the text field.
