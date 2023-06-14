@@ -42,10 +42,10 @@ struct FormattedBodyText: View {
     var body: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
         } else {
             plainLayout
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
         }
     }
     

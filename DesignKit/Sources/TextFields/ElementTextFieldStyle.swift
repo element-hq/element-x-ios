@@ -147,7 +147,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 }
  
             footerText
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
                 .font(.compound.bodyXS)
                 .foregroundColor(footerColor)
                 .padding(.horizontal, 16)

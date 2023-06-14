@@ -49,7 +49,7 @@ struct AnalyticsPromptScreen: View {
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.secondaryContent)
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
             
             Divider()
                 .background(Color.element.quinaryContent)

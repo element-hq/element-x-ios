@@ -121,7 +121,7 @@ struct TimelineReplyView: View {
                     Text(formattedBody ?? AttributedString(plainBody))
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPlaceholder)
-                        .tint(.element.links)
+                        .tint(.compound.textLinkExternal)
                         .lineLimit(2)
                 }
             }
