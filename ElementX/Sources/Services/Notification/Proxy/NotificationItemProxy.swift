@@ -249,8 +249,8 @@ extension NotificationItemProxyProtocol {
         let icon: NotificationIcon
         let body: String
         if !isDirect {
-            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: nil)
-            body = L10n.notificationRoomInviteBody(roomDisplayName)
+            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+            body = L10n.notificationRoomInviteBody
         } else {
             icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
             body = L10n.notificationInviteBody

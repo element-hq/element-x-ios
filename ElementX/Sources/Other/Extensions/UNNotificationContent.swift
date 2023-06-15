@@ -20,7 +20,7 @@ import UserNotifications
 
 struct NotificationIcon {
     let mediaSource: MediaSourceProxy?
-    // Requrted as the key to set images for groups
+    // Required as the key to set images for groups
     let groupName: String?
 
     var shouldDisplayAsGroup: Bool {
