@@ -39,7 +39,7 @@ struct HomeScreenRoomCell: View {
                     .padding(.vertical, verticalInsets)
                     .overlay(alignment: .bottom) {
                         Rectangle()
-                            .fill(Color.compound.tempBorderRowSeparator)
+                            .fill(Color.compound._borderRowSeparator)
                             .frame(height: 1 / UIScreen.main.scale)
                             .padding(.trailing, -horizontalInsets)
                     }

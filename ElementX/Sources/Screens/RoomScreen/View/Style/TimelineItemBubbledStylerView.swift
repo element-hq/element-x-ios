@@ -138,7 +138,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         } else {
             contentWithTimestamp
                 .bubbleStyle(inset: true,
-                             color: timelineItem.isOutgoing ? .compound.tempBgBubbleOutgoing : .compound.tempBgBubbleIncoming,
+                             color: timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming,
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
         }

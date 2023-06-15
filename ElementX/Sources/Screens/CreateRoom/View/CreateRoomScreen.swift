@@ -87,7 +87,7 @@ struct CreateRoomScreen: View {
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
-                              prompt: Text(L10n.commonRoomNamePlaceholder),
+                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -107,7 +107,7 @@ struct CreateRoomScreen: View {
             .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.compound.iconSecondary)
             .frame(width: roomIconSize, height: roomIconSize)
-            .background(Color.compound.bgSubtleSecondary)
+            .background(Color.compound.bgSubtlePrimary)
             .clipShape(Circle())
     }
     
@@ -115,7 +115,7 @@ struct CreateRoomScreen: View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
-                      prompt: Text(L10n.commonTopicPlaceholder),
+                      prompt: Text(L10n.commonTopicPlaceholder).foregroundColor(.compound.textPlaceholder),
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
@@ -187,7 +187,7 @@ struct CreateRoomScreen: View {
                 .formSectionHeader()
                 .padding(.top, 40)
         }
-        .listRowSeparatorTint(.compound.tempBorderRowSeparator)
+        .listRowSeparatorTint(.compound._borderRowSeparator)
         .listRowBackground(Color.element.formRowBackground)
     }
     

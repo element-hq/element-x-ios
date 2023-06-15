@@ -52,7 +52,7 @@ struct AnalyticsPromptScreen: View {
                 .tint(.compound.textLinkExternal)
             
             Divider()
-                .overlay { Color.compound.tempBorderRowSeparator }
+                .overlay { Color.compound._borderRowSeparator }
                 .padding(.vertical, 20)
             
             checkmarkList

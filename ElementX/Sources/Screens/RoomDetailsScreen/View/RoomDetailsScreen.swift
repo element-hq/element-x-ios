@@ -155,8 +155,9 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .listRowSeparatorTint(.compound.tempBorderRowSeparator)
+        .listRowSeparatorTint(.compound._borderRowSeparator)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+        .formSectionStyle()
         .foregroundColor(.compound.textPrimary)
     }
 

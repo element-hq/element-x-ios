@@ -69,7 +69,7 @@ struct MessageComposer: View {
                 roundedRectangle
                     .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
-                    .stroke(Color.compound.tempBorderTextFieldFocused, lineWidth: 1)
+                    .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
                     .opacity(focused ? 1 : 0)
             }
         }

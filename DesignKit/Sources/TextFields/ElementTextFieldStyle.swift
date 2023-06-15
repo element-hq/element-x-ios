@@ -57,7 +57,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's border.
     private var borderColor: Color {
-        !isError ? .compound.textCriticalPrimary : .compound.tempBorderTextFieldFocused
+        isError ? .compound.textCriticalPrimary : .compound._borderTextFieldFocused
     }
     
     /// The width of the text field's border.
@@ -76,10 +76,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's background.
     private var backgroundColor: Color {
-        if !isEnabled, colorScheme == .dark {
-            return .element.quinaryContent
-        }
-        return .compound.bgSubtleSecondary
+        .compound.bgSubtleSecondary.opacity(isEnabled ? 1 : 0.5)
     }
     
     /// The color of the placeholder text inside the text field.

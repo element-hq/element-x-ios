@@ -28,7 +28,6 @@ public struct ElementColors {
     // MARK: - Legacy Compound
     
     private let colors = DesignTokens.CompoundColors()
-    private let uiColors = DesignTokens.CompoundUIColors()
     
     @available(*, deprecated, message: "Use textActionPrimary from Compound.")
     public var accent: Color { colors.primaryContent }
@@ -68,7 +67,7 @@ public struct ElementColors {
     /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
     public var formBackground: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? uiColors.system : uiColors.background
+            collection.userInterfaceStyle == .light ? UIColor(.compound.bgSubtleSecondary) : UIColor(.compound.bgCanvasDefault)
         })
     }
     
@@ -77,7 +76,7 @@ public struct ElementColors {
     /// This colour is a special case as it uses `background` in light mode and `system` in dark mode.
     public var formRowBackground: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? uiColors.background : uiColors.system
+            collection.userInterfaceStyle == .light ? UIColor(.compound.bgCanvasDefault) : UIColor(.compound.bgSubtleSecondary)
         })
     }
 }

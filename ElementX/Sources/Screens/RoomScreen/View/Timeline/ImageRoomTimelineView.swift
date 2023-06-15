@@ -44,7 +44,7 @@ struct ImageRoomTimelineView: View {
     var placeholder: some View {
         ZStack {
             Rectangle()
-                .foregroundColor(timelineItem.isOutgoing ? .compound.tempBgBubbleOutgoing : .compound.tempBgBubbleIncoming)
+                .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
                 .opacity(0.3)
             
             ProgressView(L10n.commonLoading)

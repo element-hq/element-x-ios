@@ -184,7 +184,7 @@ private struct PreviewBubbleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(timelineStyle == .bubbles ? 8 : 0)
-            .background(timelineStyle == .bubbles ? Color.compound.tempBgBubbleOutgoing : nil)
+            .background(timelineStyle == .bubbles ? Color.compound._bgBubbleOutgoing : nil)
             .cornerRadius(timelineStyle == .bubbles ? 12 : 0)
     }
 }
