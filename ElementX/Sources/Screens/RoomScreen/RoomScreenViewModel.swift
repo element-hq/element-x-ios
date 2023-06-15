@@ -117,6 +117,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Private
 
+    // swiftlint:disable:next function_body_length
     private func setupSubscriptions() {
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -165,12 +166,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
 
-        context.$viewState
+        let shouldShowInviteAlert = context.$viewState
             .map(\.bindings.composerFocused)
-            .removeDuplicates()
-            .filter { $0 }
+            .map { [weak self] isFocused in
+                guard let self else { return false }
+                
+                // Checks if the other person left the room in a direct chat
+                return isFocused && self.roomProxy.isDirect && self.roomProxy.activeMembersCount < 2
+            }
+            .first { $0 }
+        
+        shouldShowInviteAlert
             .sink { [weak self] _ in
-                self?.promptInviteIfNeeded()
+                self?.showInviteAlert()
             }
             .store(in: &cancellables)
     }
@@ -514,12 +522,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     // MARK: - Direct chats logics
 
-    private func promptInviteIfNeeded() {
-        // Prompts a new invite alert if the other person left the room
-        guard roomProxy.isDirect, roomProxy.activeMembersCount < 2 else {
-            return
-        }
-
+    private func showInviteAlert() {
         userIndicatorController.alertInfo = .init(id: .init(),
                                                   title: L10n.screenRoomInviteAgainAlertTitle,
                                                   message: L10n.screenRoomInviteAgainAlertMessage,
