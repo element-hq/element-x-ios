@@ -170,19 +170,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .map(\.bindings.composerFocused)
             .map { [weak self] isFocused in
                 guard let self else { return false }
-                
+
                 // Checks if the other person left the room in a direct chat
                 return isFocused && self.roomProxy.isDirect && self.roomProxy.activeMembersCount < 2
             }
             .first { $0 }
-        
+
         shouldShowInviteAlert
             .sink { [weak self] _ in
                 self?.showInviteAlert()
             }
             .store(in: &cancellables)
     }
-    
+
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
         case .failure:
