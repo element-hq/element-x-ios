@@ -22,6 +22,7 @@
 "action_edit" = "Edit";
 "action_enable" = "Enable";
 "action_forgot_password" = "Forgot password?";
+"action_forward" = "Forward";
 "action_invite" = "Invite";
 "action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invite friends to %1$@";
@@ -52,6 +53,7 @@
 "action_start" = "Start";
 "action_start_chat" = "Start chat";
 "action_start_verification" = "Start verification";
+"action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
 "action_view_source" = "View Source";
 "action_yes" = "Yes";
@@ -71,6 +73,7 @@
 "common_encryption_enabled" = "Encryption enabled";
 "common_error" = "Error";
 "common_file" = "File";
+"common_forward_message" = "Forward message";
 "common_gif" = "GIF";
 "common_image" = "Image";
 "common_invite_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
@@ -81,6 +84,7 @@
 "common_message_layout" = "Message layout";
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
+"common_mute" = "Mute";
 "common_no_results" = "No results";
 "common_offline" = "Offline";
 "common_password" = "Password";
@@ -111,6 +115,7 @@
 "common_unable_to_decrypt" = "Unable to decrypt";
 "common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
+"common_unmute" = "Unmute";
 "common_unsupported_event" = "Unsupported event";
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
@@ -146,9 +151,10 @@
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invitation_action_join" = "Join";
 "notification_invitation_action_reject" = "Reject";
-"notification_invite_body" = "invited you";
+"notification_invite_body" = "Invited you to chat";
 "notification_new_messages" = "New Messages";
 "notification_room_action_mark_as_read" = "Mark as read";
+"notification_room_invite_body" = "Invited you to join the room";
 "notification_sender_me" = "Me";
 "notification_test_push_notification_content" = "You are viewing the notification! Click me!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
@@ -214,7 +220,6 @@
 "screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
 "screen_change_server_subtitle" = "What is the address of your server?";
 "screen_create_room_action_create_room" = "New room";
-"screen_create_room_action_invite_people" = "Invite friends to Element";
 "screen_create_room_add_people_title" = "Invite people";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.";
@@ -265,6 +270,8 @@
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
+"screen_room_invite_again_alert_message" = "Would you like to invite them back?";
+"screen_room_invite_again_alert_title" = "You are alone in this chat";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
 "screen_room_member_details_block_user" = "Block user";

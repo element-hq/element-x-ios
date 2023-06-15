@@ -520,10 +520,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        #warning("Localise strings")
         userIndicatorController.alertInfo = .init(id: .init(),
-                                                  title: "You are a bit alone",
-                                                  message: "You are alone in this room, do you want to invite the other person?",
+                                                  title: L10n.screenRoomInviteAgainAlertTitle,
+                                                  message: L10n.screenRoomInviteAgainAlertMessage,
                                                   primaryButton: .init(title: L10n.actionInvite, action: { [weak self] in self?.invitePerson() }),
                                                   secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
