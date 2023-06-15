@@ -38,8 +38,3 @@ enum MapLibreError: Error {
     case failedLocatingUser
     case invalidLocationAuthorization
 }
-
-enum MapTilerGeocodingError: Error {
-    case wrongGeocodingURL
-    case geocodingFailed
-}

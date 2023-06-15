@@ -17,6 +17,11 @@
 import CoreLocation
 import Foundation
 
+enum MapTilerGeocodingError: Error {
+    case wrongGeocodingURL
+    case geocodingFailed
+}
+
 protocol MapTilerGeoCodingServiceProtocol {
     func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError>
 }
