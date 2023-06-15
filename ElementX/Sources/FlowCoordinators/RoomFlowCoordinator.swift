@@ -299,9 +299,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissRoom(animated: Bool) {
-        // The room isn't in the same navigation stack of the home screen.
-        // Animating the popToRoot causes weird animations on when the room is left from room's details
-        navigationStackCoordinator.popToRoot(animated: false)
+        // Setting the detail coordinator to nil afirst allows the dismiss to work properly
+        // if followed immediately by another navigation on iPhone
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
         navigationStackCoordinator.popToRoot(animated: animated)
         roomProxy = nil
