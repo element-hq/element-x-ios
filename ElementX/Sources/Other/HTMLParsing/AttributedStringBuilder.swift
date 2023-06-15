@@ -112,7 +112,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
-                attributedString.addAttribute(.backgroundColor, value: UIColor(.element.quinaryContent) as Any, range: range)
+                attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
             }
         }
     }
