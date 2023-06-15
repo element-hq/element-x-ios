@@ -184,6 +184,9 @@ final class AppSettings {
     let lightTileStaticMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/{z}/{x}/{y}.png"
     let darkTileStaticMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/{z}/{x}/{y}.png"
     
+    // maptiler geocoding url
+    let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"
+    
     // MARK: - Feature Flags
     
     // MARK: Start Chat

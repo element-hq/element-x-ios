@@ -1,0 +1,1 @@
+Add reverse geocoding request, that for a given coordinate will return the place name.

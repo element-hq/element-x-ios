@@ -16,22 +16,14 @@
 
 import Foundation
 
-struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
-    let lightURL: String
-    let darkURL: String
-    let key: String
-    
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
-        let path: String
-        switch style {
-        case .light:
-            path = lightURL
-        case .dark:
-            path = darkURL
-        }
-        
-        guard let url = URL(string: path) else { return nil }
-        let authorization = MapTilerAuthorization(key: key)
-        return authorization.authorizeURL(url)
+extension MapTilerStyleBuilder {
+    init(appSettings: AppSettings) {
+        self.init(lightURL: appSettings.lightTileMapStyleURL, darkURL: appSettings.darkTileMapStyleURL, key: appSettings.mapTilerApiKey)
+    }
+}
+
+extension MapTilerGeoCodingService {
+    init(session: URLSession = .shared, appSettings: AppSettings) {
+        self.init(session: session, key: appSettings.mapTilerApiKey, geocodingURL: appSettings.geocodingURLFormatString)
     }
 }

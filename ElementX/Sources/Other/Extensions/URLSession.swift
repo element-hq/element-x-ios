@@ -16,22 +16,13 @@
 
 import Foundation
 
-struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
-    let lightURL: String
-    let darkURL: String
-    let key: String
-    
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
-        let path: String
-        switch style {
-        case .light:
-            path = lightURL
-        case .dark:
-            path = darkURL
+extension URLSession {
+    /// The same as `data(for:delegate:)` but with an additional immediate retry if the first attempt fails.
+    func dataWithRetry(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
+        if let firstTryResult = try? await data(for: request, delegate: delegate) {
+            return firstTryResult
         }
         
-        guard let url = URL(string: path) else { return nil }
-        let authorization = MapTilerAuthorization(key: key)
-        return authorization.authorizeURL(url)
+        return try await data(for: request, delegate: delegate)
     }
 }

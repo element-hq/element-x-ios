@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
+import CoreLocation
 import Foundation
 
-extension MapTilerStyleBuilder {
-    init(appSettings: AppSettings) {
-        self.init(lightURL: appSettings.lightTileMapStyleURL, darkURL: appSettings.darkTileMapStyleURL, key: appSettings.mapTilerApiKey)
-    }
+enum MapTilerGeocodingError: Error {
+    case wrongGeocodingURL
+    case geocodingFailed
+}
+
+protocol MapTilerGeoCodingServiceProtocol {
+    func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError>
 }
