@@ -109,6 +109,8 @@ struct RoomScreenViewStateBindings {
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
+
+    var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
 }
 
 struct TimelineItemActionMenuInfo: Identifiable {
@@ -117,6 +119,12 @@ struct TimelineItemActionMenuInfo: Identifiable {
     var id: String {
         item.id
     }
+}
+
+struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
+    let title = L10n.screenRoomRetrySendMenuTitle
+
+    let transactionID: String?
 }
 
 enum RoomScreenErrorType: Hashable {

@@ -52,6 +52,10 @@ struct EventTimelineItemProxy {
     var id: String {
         item.uniqueIdentifier()
     }
+
+    var transactionID: String? {
+        item.transactionId()
+    }
     
     var deliveryStatus: TimelineItemDeliveryStatus? {
         guard let localSendState = item.localSendState() else {

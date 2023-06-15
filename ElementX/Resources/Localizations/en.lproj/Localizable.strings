@@ -273,6 +273,8 @@
 "screen_room_member_details_unblock_user" = "Unblock user";
 "screen_room_member_list_pending_header_title" = "Pending";
 "screen_room_member_list_room_members_header_title" = "Room members";
+"screen_room_retry_send_menu_send_again_action" = "Send again";
+"screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_server_confirmation_change_server" = "Change account provider";
@@ -387,6 +389,7 @@
 "screen_room_details_security_title" = "Security";
 "screen_room_details_topic_title" = "Topic";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
+"screen_room_retry_send_menu_remove_action" = "Remove";
 "screen_session_verification_cancelled_title" = "Verification cancelled";
 "screen_session_verification_positive_button_ready" = "Start";
 "screen_signout_confirmation_dialog_submit" = "Sign out";

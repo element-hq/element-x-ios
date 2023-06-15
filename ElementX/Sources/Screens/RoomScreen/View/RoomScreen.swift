@@ -62,6 +62,9 @@ struct RoomScreen: View {
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
+            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { _ in
+                Button("Test") { }
+            }
     }
     
     private var timeline: some View {

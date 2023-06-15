@@ -133,7 +133,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        blurhash: imageInfo.blurhash,
                                        properties: RoomTimelineItemProperties(reactions: aggregateReactions(eventItemProxy.reactions),
                                                                               deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                              orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                              orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                              transactionID: eventItemProxy.transactionID))
     }
     
     private func buildEncryptedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -184,7 +185,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                    transactionID: eventItemProxy.transactionID))
     }
     
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -201,7 +203,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     transactionID: eventItemProxy.transactionID))
     }
     
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -218,7 +221,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     transactionID: eventItemProxy.transactionID))
     }
     
     private func buildAudioTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -235,7 +239,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     transactionID: eventItemProxy.transactionID))
     }
     
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -252,7 +257,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                    orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                    transactionID: eventItemProxy.transactionID))
     }
     
     private func buildNoticeTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -269,7 +275,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                       reactions: aggregateReactions(eventItemProxy.reactions),
                                                                       deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                      transactionID: eventItemProxy.transactionID))
     }
     
     private func buildEmoteTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -286,7 +293,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     transactionID: eventItemProxy.transactionID))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {

@@ -69,6 +69,9 @@ struct TimelineItemStatusView: View {
                     .resizable()
                     .foregroundColor(.element.alert)
                     .frame(width: 16, height: 16)
+                    .onTapGesture {
+                        context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
+                    }
             }
             // The bubbles handle the failure internally
         }
