@@ -96,7 +96,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .room, .roomDetails, .roomList:
             roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .invites:
-            roomFlowCoordinator.clearRoute(animated: animated)
+            if UIDevice.current.isPhone {
+                roomFlowCoordinator.clearRoute(animated: animated)
+            }
             stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
         }
     }
@@ -148,6 +150,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomList, .showInvitesScreen, .invitesScreen):
                 self.presentInvitesList(animated: animated)
+            case (.invitesScreen, .showInvitesScreen, .invitesScreen):
+                break
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
                 

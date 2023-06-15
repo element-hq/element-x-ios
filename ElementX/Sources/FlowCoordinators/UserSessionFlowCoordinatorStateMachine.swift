@@ -131,6 +131,9 @@ class UserSessionFlowCoordinatorStateMachine {
             
             case (.showInvitesScreen, .roomList(let selectedRoomId)):
                 return .invitesScreen(selectedRoomId: selectedRoomId)
+            case (.showInvitesScreen, .invitesScreen(let selectedRoomId)):
+                return .invitesScreen(selectedRoomId: selectedRoomId)
+
             case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
                 
