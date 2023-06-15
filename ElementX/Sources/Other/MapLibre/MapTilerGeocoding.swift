@@ -17,10 +17,6 @@
 import CoreLocation
 import Foundation
 
-protocol MapTilerGeoCodingServiceProtocol {
-    func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError>
-}
-
 struct MapTilerGeoCodingService: MapTilerGeoCodingServiceProtocol {
     private let key: String
     private let session: URLSession
@@ -45,7 +41,7 @@ struct MapTilerGeoCodingService: MapTilerGeoCodingServiceProtocol {
         let longitude = coordinate.longitude
         
         let path = String(format: geocodingURL, longitude, latitude)
-        guard var url = URL(string: path) else { return .failure(.geocodingFailed) }
+        guard var url = URL(string: path) else { return .failure(.wrongGeocodingURL) }
         let authorization = MapTilerAuthorization(key: key)
         url = authorization.authorizeURL(url)
         url.append(queryItems: [.init(name: "limit", value: "1")])

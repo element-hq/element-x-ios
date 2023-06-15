@@ -40,5 +40,6 @@ enum MapLibreError: Error {
 }
 
 enum MapTilerGeocodingError: Error {
+    case wrongGeocodingURL
     case geocodingFailed
 }

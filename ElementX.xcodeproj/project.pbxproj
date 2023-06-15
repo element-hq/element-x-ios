@@ -553,6 +553,8 @@
 		CD6A72B65D3B6076F4045C30 /* PHGPostHogConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */; };
 		CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2F7194F440375338F8E2487 /* Untranslated.strings */; };
 		CE7148E80F09B7305E026AC6 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1198B925F4A88DA74083662 /* OnboardingViewModel.swift */; };
+		CE9152222A3B4B7000EDC949 /* MapTilerGeoCodingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9152212A3B4B7000EDC949 /* MapTilerGeoCodingServiceProtocol.swift */; };
+		CE9152242A3B4B9200EDC949 /* MapTilerStyleBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9152232A3B4B9200EDC949 /* MapTilerStyleBuilderProtocol.swift */; };
 		CE9530A4CA661E090635C2F2 /* NotificationItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F7FE40EF7490A7E09D7BE6 /* NotificationItemProxy.swift */; };
 		CEB59FDC2A39D1A000E6B2DF /* MapTilerGeocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB59FDB2A39D1A000E6B2DF /* MapTilerGeocoding.swift */; };
 		CEB8FB1269DE20536608B957 /* LoginMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B41FABA2B0AEF4389986495 /* LoginMode.swift */; };
@@ -1224,6 +1226,8 @@
 		CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreen.swift; sourceTree = "<group>"; };
 		CD6B0C4639E066915B5E6463 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
 		CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProvider.swift; sourceTree = "<group>"; };
+		CE9152212A3B4B7000EDC949 /* MapTilerGeoCodingServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeoCodingServiceProtocol.swift; sourceTree = "<group>"; };
+		CE9152232A3B4B9200EDC949 /* MapTilerStyleBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerStyleBuilderProtocol.swift; sourceTree = "<group>"; };
 		CEB59FDB2A39D1A000E6B2DF /* MapTilerGeocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeocoding.swift; sourceTree = "<group>"; };
 		CED722AC2A3B0E7B000F10C8 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		CEE0E6043EFCF6FD2A341861 /* TimelineReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReplyView.swift; sourceTree = "<group>"; };
@@ -2972,7 +2976,9 @@
 				B81B6170DB690013CEB646F4 /* MapLibreModels.swift */,
 				E062C1750EFC8627DE4CAB8E /* MapTilerAuthorization.swift */,
 				B7AE92E7BFF71797BDE1D261 /* MapTilerStyleBuilder.swift */,
+				CE9152232A3B4B9200EDC949 /* MapTilerStyleBuilderProtocol.swift */,
 				CEB59FDB2A39D1A000E6B2DF /* MapTilerGeocoding.swift */,
+				CE9152212A3B4B7000EDC949 /* MapTilerGeoCodingServiceProtocol.swift */,
 			);
 			path = MapLibre;
 			sourceTree = "<group>";
@@ -3870,6 +3876,7 @@
 				3ED2725734568F6B8CC87544 /* AttributedStringBuilder.swift in Sources */,
 				A6DEC1ADEC8FEEC206A0FA37 /* AttributedStringBuilderProtocol.swift in Sources */,
 				F8E725D42023ECA091349245 /* AudioRoomTimelineItem.swift in Sources */,
+				CE9152242A3B4B9200EDC949 /* MapTilerStyleBuilderProtocol.swift in Sources */,
 				88F348E2CB14FF71CBBB665D /* AudioRoomTimelineItemContent.swift in Sources */,
 				E62EC30B39354A391E32A126 /* AudioRoomTimelineView.swift in Sources */,
 				EA65360A0EC026DD83AC0CF5 /* AuthenticationCoordinator.swift in Sources */,
@@ -4267,6 +4274,7 @@
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
 				40B79D20A873620F7F128A2C /* UserPreference.swift in Sources */,
+				CE9152222A3B4B7000EDC949 /* MapTilerGeoCodingServiceProtocol.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
 				F94000E3D91B11C527DA8807 /* UserProfileCell.swift in Sources */,
 				E21FE4C5B614F311C0955859 /* UserProfileProxy.swift in Sources */,
