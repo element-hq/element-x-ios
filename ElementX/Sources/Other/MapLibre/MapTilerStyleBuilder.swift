@@ -36,6 +36,6 @@ struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
         
         guard let url = URL(string: path) else { return nil }
         let authorization = MapTilerAuthorization(key: key)
-        return authorization.authorizateURL(url)
+        return authorization.authorizeURL(url)
     }
 }

@@ -23,7 +23,7 @@ struct MapTilerAuthorization {
         self.key = key
     }
     
-    func authorizateURL(_ url: URL) -> URL {
+    func authorizeURL(_ url: URL) -> URL {
         url.appending(queryItems: [URLQueryItem(name: "key", value: key)])
     }
 }

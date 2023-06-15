@@ -185,7 +185,7 @@ final class AppSettings {
     let darkTileStaticMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/{z}/{x}/{y}.png"
     
     // maptiler geocoding url
-    let geocodingURL = "https://api.maptiler.com/geocoding/%f,%f.json"
+    let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"
     
     // MARK: - Feature Flags
     

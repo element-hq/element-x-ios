@@ -17,11 +17,11 @@
 import CoreLocation
 import Foundation
 
-protocol MapTilerGeoCodingProtocol {
+protocol MapTilerGeoCodingServiceProtocol {
     func reverseGeoCoding(for coordinate: CLLocationCoordinate2D) async -> Result<String, MapTilerGeocodingError>
 }
 
-struct MapTilerGeoCoding: MapTilerGeoCodingProtocol {
+struct MapTilerGeoCodingService: MapTilerGeoCodingServiceProtocol {
     private let key: String
     private let session: URLSession
     private let geocodingURL: String
@@ -47,7 +47,7 @@ struct MapTilerGeoCoding: MapTilerGeoCodingProtocol {
         let path = String(format: geocodingURL, longitude, latitude)
         guard var url = URL(string: path) else { return .failure(.geocodingFailed) }
         let authorization = MapTilerAuthorization(key: key)
-        url = authorization.authorizateURL(url)
+        url = authorization.authorizeURL(url)
         url.append(queryItems: [.init(name: "limit", value: "1")])
         
         var request = URLRequest(url: url)
@@ -56,17 +56,10 @@ struct MapTilerGeoCoding: MapTilerGeoCodingProtocol {
         do {
             let (data, response) = try await session.dataWithRetry(for: request)
             
-            guard let httpResponse = response as? HTTPURLResponse else {
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
                 MXLog.error("Failed to get reverse geocoding: \(errorDescription)")
                 MXLog.error("Response: \(response)")
-                return .failure(.geocodingFailed)
-            }
-            
-            guard httpResponse.statusCode == 200 else {
-                let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
-                MXLog.error("Failed to get reverse geocoding: \(errorDescription) (\(httpResponse.statusCode))")
-                MXLog.error("Response: \(httpResponse)")
                 return .failure(.geocodingFailed)
             }
             
