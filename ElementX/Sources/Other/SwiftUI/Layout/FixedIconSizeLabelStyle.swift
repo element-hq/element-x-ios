@@ -19,8 +19,10 @@ import SwiftUI
 struct FixedIconSizeLabelStyle: LabelStyle {
     @ScaledMetric private var iconSize = 24.0
     
+    var spacing: CGFloat = 16
+    
     func makeBody(configuration: Configuration) -> some View {
-        HStack {
+        HStack(spacing: spacing) {
             configuration
                 .icon
                 .frame(width: iconSize, height: iconSize)

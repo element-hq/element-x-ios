@@ -49,7 +49,6 @@ struct AnalyticsPromptScreen: View {
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
-                .tint(.compound.textLinkExternal)
             
             Divider()
                 .overlay { Color.compound._borderRowSeparator }

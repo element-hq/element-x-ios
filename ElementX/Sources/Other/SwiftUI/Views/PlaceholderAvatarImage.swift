@@ -25,7 +25,7 @@ struct PlaceholderAvatarImage: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
-                bgColor
+                backgroundColor
                 
                 // This text's frame doesn't look right when redacted
                 if redactionReasons != .placeholder {
@@ -47,8 +47,8 @@ struct PlaceholderAvatarImage: View {
         self.contentID = contentID
     }
 
-    private var bgColor: Color {
-        if redactionReasons == .placeholder {
+    private var backgroundColor: Color {
+        if redactionReasons.contains(.placeholder) {
             return Color(.systemGray4) // matches the default text redaction
         }
 

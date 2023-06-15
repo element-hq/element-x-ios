@@ -21,17 +21,22 @@ struct RoomScreen: View {
     @State private var showReactionsMenuForItemId = ""
     @State private var dragOver = false
     
+    private let attachmentButtonPadding = 10.0
+    
     var body: some View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea()) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                HStack(spacing: 4.0) {
+                HStack(alignment: .bottom, spacing: attachmentButtonPadding) {
                     RoomAttachmentPicker(context: context)
+                        .padding(.bottom, 5) // centre align with the send button
                     messageComposer
                         .environmentObject(context)
                 }
-                .padding([.horizontal, .bottom])
+                .padding(.leading, attachmentButtonPadding)
+                .padding(.trailing, 12)
                 .padding(.top, 8)
+                .padding(.bottom)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }

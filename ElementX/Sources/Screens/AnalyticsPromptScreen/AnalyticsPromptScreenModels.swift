@@ -44,12 +44,15 @@ struct AnalyticsPromptScreenStrings {
     
     init(termsURL: URL) {
         let content = AttributedString(L10n.screenAnalyticsPromptHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
-        // Create the opt in content with a placeholder.
+        
+        // Create the 'read terms' with a placeholder.
         let linkPlaceholder = "{link}"
-        var readTerms = AttributedString(L10n.screenAnalyticsPromptReadTerms(linkPlaceholder))
-        readTerms.replace(linkPlaceholder,
-                          with: L10n.screenAnalyticsPromptReadTermsContentLink,
-                          asLinkTo: termsURL)
+        var readTerms = AttributedString(L10n.screenAnalyticsSettingsReadTerms(linkPlaceholder))
+        var linkString = AttributedString(L10n.screenAnalyticsSettingsReadTermsContentLink)
+        linkString.link = termsURL
+        linkString.bold()
+        readTerms.replace(linkPlaceholder, with: linkString)
+        
         optInContent = content + "\n\n" + readTerms
     }
 }

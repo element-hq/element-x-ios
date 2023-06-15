@@ -187,7 +187,7 @@ public struct TimelineItemMenu: View {
                 }
             case .copyPermalink:
                 Button { send(action) } label: {
-                    MenuLabel(title: L10n.commonPermalink, systemImageName: "link")
+                    MenuLabel(title: L10n.actionCopyLinkToMessage, systemImageName: "link")
                 }
             case .reply:
                 Button { send(action) } label: {

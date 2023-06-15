@@ -33,20 +33,29 @@ extension AttributedString {
         }
     }
     
-    /// Replaces the specified placeholder with the a string that links to the specified URL.
+    /// Replaces the specified placeholder with a string that links to the specified URL.
     /// - Parameters:
     ///   - linkPlaceholder: The text in the string that will be replaced. Make sure this is unique within the string.
     ///   - string: The text for the link that will be substituted into the placeholder.
     ///   - url: The URL that the link should open.
     mutating func replace(_ linkPlaceholder: String, with string: String, asLinkTo url: URL) {
-        guard let range = range(of: linkPlaceholder) else {
-            MXLog.failure("Failed to find the link placeholder to be replaced.")
-            return
-        }
-        
         // Replace the placeholder with a link.
         var replacement = AttributedString(string)
         replacement.link = url
+        replace(linkPlaceholder, with: replacement)
+    }
+    
+    /// Replaces the specified placeholder with the supplied attributed string.
+    /// - Parameters:
+    ///   - placeholder: The text in the string that will be replaced. Make sure this is unique within the string.
+    ///   - attributedString: The text for the link that will be substituted into the placeholder.
+    mutating func replace(_ placeholder: String, with replacement: AttributedString) {
+        guard let range = range(of: placeholder) else {
+            MXLog.failure("Failed to find the placeholder to be replaced.")
+            return
+        }
+        
+        // Replace the placeholder.
         replaceSubrange(range, with: replacement)
     }
     
@@ -62,5 +71,13 @@ extension AttributedString {
             newValue[run.range].uiKit.font = nil
         }
         return newValue
+    }
+    
+    /// Makes the entire string bold by setting the presentation intent to strongly emphasized.
+    ///
+    /// In practice, this is rendered as semibold for smaller font sizes and just so happens to nicely
+    /// line up with the semibold → bold font switch used by compound.
+    mutating func bold() {
+        self[startIndex..<endIndex].inlinePresentationIntent = .stronglyEmphasized
     }
 }
