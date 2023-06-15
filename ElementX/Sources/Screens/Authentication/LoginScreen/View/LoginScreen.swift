@@ -75,7 +75,7 @@ struct LoginScreen: View {
             TextField(L10n.commonUsername,
                       text: $context.username,
                       // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                      prompt: Text(L10n.commonUsername).foregroundColor(.element.tertiaryContent))
+                      prompt: Text(L10n.commonUsername).foregroundColor(.compound.textPlaceholder))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
@@ -89,7 +89,7 @@ struct LoginScreen: View {
             SecureField(L10n.commonPassword,
                         text: $context.password,
                         // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                        prompt: Text(L10n.commonPassword).foregroundColor(.element.tertiaryContent))
+                        prompt: Text(L10n.commonPassword).foregroundColor(.compound.textPlaceholder))
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)

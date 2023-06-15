@@ -45,13 +45,13 @@ struct FormRowAccessory: View {
         case .navigationLink:
             Image(systemName: "chevron.forward")
                 .font(.compound.bodyMD.bold())
-                .foregroundColor(.element.quaternaryContent)
+                .foregroundColor(.compound.iconQuaternary)
         case .progressView:
             ProgressView()
         case .selection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
-                .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .element.tertiaryContent)
+                .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
         }
     }
     
@@ -94,7 +94,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
             }
             .contentShape(Rectangle())
             .padding(FormRow.insets) // Re-apply the normal insets using padding.
-            .background(configuration.isPressed ? Color.element.quinaryContent : .clear)
+            .background(configuration.isPressed ? Color.compound.bgSubtlePrimary : .clear)
         }
     }
 }
@@ -113,7 +113,7 @@ struct FormActionButtonStyle: ButtonStyle {
                 .frame(width: menuIconSize, height: menuIconSize)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(configuration.isPressed ? Color.element.quinaryContent : .element.formRowBackground)
+                        .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .element.formRowBackground)
                 }
             
             Text(title)

@@ -34,7 +34,7 @@ struct AuthenticationIconImage: View {
             .frame(width: 70, height: 70)
             .background {
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color.element.quinaryContent)
+                    .fill(Color.compound.bgSubtleSecondary)
             }
     }
 }

@@ -57,8 +57,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's border.
     private var borderColor: Color {
-        guard !isError else { return .compound.textCriticalPrimary }
-        return isFocused ? .element.tertiaryContent : .element.quinaryContent
+        !isError ? .compound.textCriticalPrimary : .compound.tempBorderTextFieldFocused
     }
     
     /// The width of the text field's border.
@@ -72,11 +71,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text inside the text field.
     private var textColor: Color {
-        if colorScheme == .dark {
-            return isEnabled ? .compound.textPrimary : .element.tertiaryContent
-        } else {
-            return isEnabled ? .compound.textPrimary : .element.quaternaryContent
-        }
+        isEnabled ? .compound.textPrimary : .compound.textDisabled
     }
     
     /// The color of the text field's background.
@@ -89,17 +84,17 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the placeholder text inside the text field.
     private var placeholderColor: Color {
-        .element.tertiaryContent
+        .compound.textPlaceholder
     }
     
     /// The color of the label above the text field.
     private var labelColor: Color {
-        isEnabled ? .compound.textPrimary : .element.quaternaryContent
+        isEnabled ? .compound.textPrimary : .compound.textDisabled
     }
     
     /// The color of the footer label below the text field.
     private var footerColor: Color {
-        isError ? .compound.textCriticalPrimary : .element.tertiaryContent
+        isError ? .compound.textCriticalPrimary : .compound.textSecondary
     }
     
     /// Creates the text field style configured as required.

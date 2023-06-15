@@ -47,8 +47,11 @@ public struct ElementColors {
     @available(*, deprecated, message: "Use textActionAccent/iconAccentTertiary from Compound.")
     public var brand: Color { colors.accent }
     
+    @available(*, deprecated, message: "Use iconTertiary form Compound for icons. For text use textSecondary. For borders and backgrounds check with Design.")
     public var tertiaryContent: Color { colors.tertiaryContent }
+    @available(*, deprecated, message: "Use iconQuaternary from Compound for icons. For text, borders and backgrounds check with Design.")
     public var quaternaryContent: Color { colors.quaternaryContent }
+    @available(*, deprecated, message: "Check with Design for the tokens to use from Compound.")
     public var quinaryContent: Color { colors.quinaryContent }
     
     public var contentAndAvatars: [Color] { colors.contentAndAvatars }

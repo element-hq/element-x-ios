@@ -138,7 +138,7 @@ struct RoomDetailsScreen: View {
             } label: {
                 LabeledContent {
                     Text(String(context.viewState.joinedMembersCount))
-                        .foregroundColor(.element.tertiaryContent)
+                        .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodyLG)
                 } label: {
                     Label(L10n.commonPeople, systemImage: "person")
@@ -155,7 +155,7 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowSeparatorTint(.compound.tempBorderRowSeparator)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         .foregroundColor(.compound.textPrimary)
     }

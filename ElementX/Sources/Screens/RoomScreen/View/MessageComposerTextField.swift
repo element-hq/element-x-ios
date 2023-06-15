@@ -29,14 +29,6 @@ struct MessageComposerTextField: View {
     let enterKeyHandler: EnterKeyHandler
     let pasteHandler: PasteHandler
     
-    private var showingPlaceholder: Bool {
-        text.isEmpty
-    }
-    
-    private var placeholderColor: Color {
-        .compound.textSecondary
-    }
-    
     var body: some View {
         UITextViewWrapper(text: $text,
                           focused: $focused,
@@ -50,9 +42,9 @@ struct MessageComposerTextField: View {
     
     @ViewBuilder
     private var placeholderView: some View {
-        if showingPlaceholder {
+        if text.isEmpty {
             Text(placeholder)
-                .foregroundColor(placeholderColor)
+                .foregroundColor(.compound.textPlaceholder)
                 .accessibilityHidden(true)
         }
     }

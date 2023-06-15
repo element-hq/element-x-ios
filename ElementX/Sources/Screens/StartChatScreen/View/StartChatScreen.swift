@@ -111,7 +111,7 @@ struct StartChatScreen: View {
     private var noResultsContent: some View {
         Text(L10n.commonNoResults)
             .font(.compound.bodyLG)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)

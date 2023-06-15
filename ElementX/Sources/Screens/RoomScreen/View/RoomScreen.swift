@@ -124,7 +124,7 @@ struct RoomScreen: View {
                 .progressViewStyle(.circular)
                 .tint(.compound.textPrimary)
                 .padding(16)
-                .background(Color.element.quinaryContent)
+                .background(.ultraThickMaterial)
                 .cornerRadius(8)
         }
     }

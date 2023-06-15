@@ -107,7 +107,7 @@ struct CreateRoomScreen: View {
             .font(.system(size: 28, weight: .semibold))
             .foregroundColor(.compound.iconSecondary)
             .frame(width: roomIconSize, height: roomIconSize)
-            .background(Color.element.quinaryContent)
+            .background(Color.compound.bgSubtleSecondary)
             .clipShape(Circle())
     }
     
@@ -158,7 +158,7 @@ struct CreateRoomScreen: View {
                             .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPrivateOptionDescription)
                             .font(.compound.bodyXS)
-                            .foregroundColor(.element.tertiaryContent)
+                            .foregroundColor(.compound.textSecondary)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
@@ -172,7 +172,7 @@ struct CreateRoomScreen: View {
                             .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPublicOptionDescription)
                             .font(.compound.bodyXS)
-                            .foregroundColor(.element.tertiaryContent)
+                            .foregroundColor(.compound.textSecondary)
                     }
                 } icon: {
                     Image(systemName: "exclamationmark.shield")
@@ -187,7 +187,7 @@ struct CreateRoomScreen: View {
                 .formSectionHeader()
                 .padding(.top, 40)
         }
-        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowSeparatorTint(.compound.tempBorderRowSeparator)
         .listRowBackground(Color.element.formRowBackground)
     }
     

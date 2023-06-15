@@ -84,7 +84,7 @@ struct SessionVerificationScreen: View {
             Text(context.viewState.message)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.tertiaryContent)
+                .foregroundColor(.compound.textSecondary)
         }
     }
     

@@ -80,9 +80,9 @@ public struct ElementGhostButtonStyle_Previews: PreviewProvider {
             
             Button { /* preview */ } label: {
                 Text("Custom")
-                    .foregroundColor(.compound.textActionAccent)
+                    .foregroundColor(.compound.iconInfoPrimary)
             }
-            .buttonStyle(ElementGhostButtonStyle(color: .element.quaternaryContent))
+            .buttonStyle(ElementGhostButtonStyle(color: .compound.borderInfoSubtle))
         }
         .padding()
     }

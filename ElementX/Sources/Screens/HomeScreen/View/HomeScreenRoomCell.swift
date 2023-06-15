@@ -39,7 +39,7 @@ struct HomeScreenRoomCell: View {
                     .padding(.vertical, verticalInsets)
                     .overlay(alignment: .bottom) {
                         Rectangle()
-                            .fill(Color.element.quinaryContent)
+                            .fill(Color.compound.tempBorderRowSeparator)
                             .frame(height: 1 / UIScreen.main.scale)
                             .padding(.trailing, -horizontalInsets)
                     }
@@ -93,7 +93,7 @@ struct HomeScreenRoomCell: View {
             if let timestamp = room.timestamp {
                 Text(timestamp)
                     .font(.compound.bodySM)
-                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .element.tertiaryContent)
+                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .compound.textSecondary)
             }
         }
     }
@@ -157,7 +157,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 private extension View {
     func lastMessageFormatting() -> some View {
         font(.compound.bodyMD)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }

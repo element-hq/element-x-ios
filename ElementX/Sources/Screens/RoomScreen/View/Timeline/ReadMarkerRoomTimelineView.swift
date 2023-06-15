@@ -25,10 +25,10 @@ struct ReadMarkerRoomTimelineView: View {
             Text(L10n.roomTimelineReadMarkerTitle)
                 .textCase(.uppercase)
                 .font(.compound.bodyXSSemibold)
-                .foregroundColor(.element.quaternaryContent)
+                .foregroundColor(.compound.textSecondary)
             Rectangle()
                 .frame(height: 0.5)
-                .foregroundColor(.element.quaternaryContent)
+                .foregroundColor(.compound.borderInteractivePrimary)
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)

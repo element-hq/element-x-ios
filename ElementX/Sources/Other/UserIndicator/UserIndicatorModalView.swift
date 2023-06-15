@@ -42,7 +42,7 @@ struct UserIndicatorModalView: View {
             .padding()
             .frame(minWidth: 150.0)
             .fixedSize(horizontal: true, vertical: false)
-            .background(Color.element.quinaryContent)
+            .background(Color.compound.bgSubtlePrimary)
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
             .onReceive(indicator.progressPublisher) { progress in

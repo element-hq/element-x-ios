@@ -51,7 +51,7 @@ struct MessageComposer: View {
                     submitButtonImage
                         .symbolVariant(.fill)
                         .font(.compound.bodyLG)
-                        .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
+                        .foregroundColor(sendingDisabled ? .compound.iconDisabled : .global.white)
                         .background {
                             Circle()
                                 .foregroundColor(sendingDisabled ? .clear : .compound.iconAccentTertiary)
@@ -69,7 +69,7 @@ struct MessageComposer: View {
                 roundedRectangle
                     .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
-                    .stroke(Color.element.quinaryContent, lineWidth: 1)
+                    .stroke(Color.compound.tempBorderTextFieldFocused, lineWidth: 1)
                     .opacity(focused ? 1 : 0)
             }
         }
@@ -134,7 +134,7 @@ private struct MessageComposerReplyHeader: View {
                 Button(action: action) {
                     Image(systemName: "xmark")
                         .font(.caption2.weight(.medium))
-                        .foregroundColor(.element.tertiaryContent)
+                        .foregroundColor(.compound.iconTertiary)
                         .padding(16.0)
                 }
             }
@@ -152,7 +152,7 @@ private struct MessageComposerEditHeader: View {
             Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.tertiaryContent)
+                    .foregroundColor(.compound.iconTertiary)
                     .padding(12.0)
             }
         }

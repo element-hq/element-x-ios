@@ -44,7 +44,7 @@ struct InvitesScreen: View {
     private var noInvitesContent: some View {
         Text(L10n.screenInvitesEmptyList)
             .font(.compound.bodyLG)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
             .accessibilityIdentifier(A11yIdentifiers.invitesScreen.noInvites)

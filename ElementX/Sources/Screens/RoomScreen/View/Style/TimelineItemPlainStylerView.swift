@@ -98,7 +98,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 }
                 Spacer()
                 Text(timelineItem.timestamp)
-                    .foregroundColor(Color.element.tertiaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyXS)
             }
             .padding(.top, 16)
@@ -111,7 +111,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             if timelineItem.properties.isEdited {
                 Text(L10n.commonEditedSuffix)
                     .font(.compound.bodySM)
-                    .foregroundColor(.element.tertiaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             
             if !timelineItem.properties.reactions.isEmpty {
