@@ -63,20 +63,6 @@ public struct ElementColors {
     
     // MARK: - Temp
     
-    public var bubblesYou: Color {
-        Color(UIColor { collection in
-            // Note: Light colour doesn't currently match Figma.
-            collection.userInterfaceStyle == .light ? .systemGray5 : UIColor(red: 0.16, green: 0.18, blue: 0.21, alpha: 1)
-        })
-    }
-    
-    public var bubblesNotYou: Color {
-        Color(UIColor { collection in
-            // Note: Light colour doesn't currently match Figma.
-            collection.userInterfaceStyle == .light ? .systemGray6 : uiColors.system
-        })
-    }
-    
     /// The colour to use on the background of a Form or grouped List.
     ///
     /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
