@@ -556,6 +556,7 @@
 		CE9530A4CA661E090635C2F2 /* NotificationItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F7FE40EF7490A7E09D7BE6 /* NotificationItemProxy.swift */; };
 		CEB59FDC2A39D1A000E6B2DF /* MapTilerGeocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB59FDB2A39D1A000E6B2DF /* MapTilerGeocoding.swift */; };
 		CEB8FB1269DE20536608B957 /* LoginMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B41FABA2B0AEF4389986495 /* LoginMode.swift */; };
+		CED722AD2A3B0E7B000F10C8 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED722AC2A3B0E7B000F10C8 /* URLSession.swift */; };
 		CF4044A8EED5C41BC0ED6ABE /* SoftLogoutScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D316BB02636AF2174F2580E6 /* SoftLogoutScreenViewModelProtocol.swift */; };
 		CF82143AA4A4F7BD11D22946 /* RoomTimelineViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB6C5E4950B6C9842F35A38 /* RoomTimelineViewProvider.swift */; };
 		D02AA6208C7ACB9BE6332394 /* UNNotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE148A4FFEE853C5A281500C /* UNNotificationContent.swift */; };
@@ -1224,6 +1225,7 @@
 		CD6B0C4639E066915B5E6463 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
 		CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProvider.swift; sourceTree = "<group>"; };
 		CEB59FDB2A39D1A000E6B2DF /* MapTilerGeocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeocoding.swift; sourceTree = "<group>"; };
+		CED722AC2A3B0E7B000F10C8 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		CEE0E6043EFCF6FD2A341861 /* TimelineReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReplyView.swift; sourceTree = "<group>"; };
 		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		CF48AF076424DBC1615C74AD /* AuthenticationServiceProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceProxy.swift; sourceTree = "<group>"; };
@@ -1919,6 +1921,7 @@
 				287FC98AF2664EAD79C0D902 /* UIDevice.swift */,
 				BE148A4FFEE853C5A281500C /* UNNotificationContent.swift */,
 				227AC5D71A4CE43512062243 /* URL.swift */,
+				CED722AC2A3B0E7B000F10C8 /* URLSession.swift */,
 				897DF5E9A70CE05A632FC8AF /* UTType.swift */,
 				E992D7B8BE54B2AB454613AF /* XCUIElement.swift */,
 			);
@@ -3947,6 +3950,7 @@
 				02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */,
 				63E46D18B91D08E15FC04125 /* ExpiringTaskRunner.swift in Sources */,
 				5F06AD3C66884CE793AE6119 /* FileManager.swift in Sources */,
+				CED722AD2A3B0E7B000F10C8 /* URLSession.swift in Sources */,
 				661A664C6EDF856B05519206 /* FilePreviewScreen.swift in Sources */,
 				B5BD05558DC2C3091905E14A /* FilePreviewScreenCoordinator.swift in Sources */,
 				A6F713461DB62AC06293E7B7 /* FilePreviewScreenModels.swift in Sources */,
