@@ -70,6 +70,9 @@ enum RoomScreenViewAction {
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case tappedOnUser(userID: String)
+
+    case retrySend(transactionID: String?)
+    case cancelSend(transactionID: String?)
 }
 
 struct RoomScreenViewState: BindableState {

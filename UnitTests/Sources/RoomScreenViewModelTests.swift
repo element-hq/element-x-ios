@@ -248,6 +248,68 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
     }
+
+    func testRetrySend() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock)
+
+        // Test
+        viewModel.context.send(viewAction: .retrySend(transactionID: "test retry send id"))
+        await Task.yield()
+        XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
+        XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
+    }
+
+    func testRetrySendNoTransactionID() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock)
+
+        // Test
+        viewModel.context.send(viewAction: .retrySend(transactionID: nil))
+        await Task.yield()
+        XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 0)
+    }
+
+    func testCancelSend() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock)
+
+        // Test
+        viewModel.context.send(viewAction: .cancelSend(transactionID: "test cancel send id"))
+        await Task.yield()
+        XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
+        XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
+    }
+
+    func testCancelSendNoTransactionID() async {
+        // Setup
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock)
+
+        // Test
+        viewModel.context.send(viewAction: .cancelSend(transactionID: nil))
+        await Task.yield()
+        XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
+    }
 }
 
 private extension TextRoomTimelineItem {
