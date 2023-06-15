@@ -81,10 +81,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
-            Task {
-                await sendCurrentMessage()
-                promptInviteIfNeeded()
-            }
+            Task { await sendCurrentMessage() }
         case .sendReaction(let emoji, let itemId):
             Task { await timelineController.sendReaction(emoji, to: itemId) }
         case .cancelReply:
@@ -166,6 +163,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
             .weakAssign(to: \.state.members, on: self)
+            .store(in: &cancellables)
+
+        context.$viewState
+            .map(\.bindings.composerFocused)
+            .removeDuplicates()
+            .filter { $0 }
+            .sink { [weak self] _ in
+                self?.promptInviteIfNeeded()
+            }
             .store(in: &cancellables)
     }
     
@@ -526,6 +532,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func invitePerson() {
         Task {
+            userIndicatorController.submitIndicator(.init(id: loaderID, type: .toast, title: L10n.commonLoading))
+            defer {
+                userIndicatorController.retractIndicatorWithId(loaderID)
+            }
+
             guard
                 let members = await roomProxy.members(),
                 let otherPerson = members.first(where: { !$0.isAccountOwner && $0.membership == .leave })
@@ -534,11 +545,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
 
-            userIndicatorController.submitIndicator(.init(id: loaderID, type: .modal, title: L10n.commonLoading))
-            let inviteResult = await roomProxy.invite(userID: otherPerson.userID)
-            userIndicatorController.retractIndicatorWithId(loaderID)
-
-            switch inviteResult {
+            switch await roomProxy.invite(userID: otherPerson.userID) {
             case .success:
                 break
             case .failure:
