@@ -302,7 +302,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // Setting the detail coordinator to nil afirst allows the dismiss to work properly
         // if followed immediately by another navigation on iPhone
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
-        navigationStackCoordinator.popToRoot(animated: animated)
+        navigationStackCoordinator.popToRoot(animated: false)
         roomProxy = nil
         timelineController = nil
         
