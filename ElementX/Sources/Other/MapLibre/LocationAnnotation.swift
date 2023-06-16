@@ -73,7 +73,7 @@ class LocationAnnotationView: MGLUserLocationAnnotationView {
     private func addUserView() {
         guard let pinView = UIHostingController(rootView: Image(systemName: "circle.fill")
             .resizable()
-            .foregroundColor(.element.accent)).view else {
+            .foregroundColor(.compound.iconPrimary)).view else {
             return
         }
         
@@ -83,7 +83,7 @@ class LocationAnnotationView: MGLUserLocationAnnotationView {
     private func addPinView() {
         guard let pinView = UIHostingController(rootView: Image(systemName: "mappin")
             .resizable()
-            .foregroundColor(.element.accent)).view else {
+            .foregroundColor(.compound.iconPrimary)).view else {
             return
         }
         

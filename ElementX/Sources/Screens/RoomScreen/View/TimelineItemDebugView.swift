@@ -90,7 +90,7 @@ struct TimelineItemDebugView: View {
                 
                 Text(text)
                     .font(.compound.bodyXS.monospaced())
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
             }
             .frame(maxWidth: .infinity)
         }

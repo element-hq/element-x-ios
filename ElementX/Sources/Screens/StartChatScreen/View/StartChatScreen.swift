@@ -111,7 +111,7 @@ struct StartChatScreen: View {
     private var noResultsContent: some View {
         Text(L10n.commonNoResults)
             .font(.compound.bodyLG)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
@@ -147,7 +147,6 @@ struct StartChatScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             StartChatScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }

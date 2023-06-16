@@ -89,7 +89,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.subheadline)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                         .fontWeight(.semibold)
                         .lineLimit(1)
                 }
@@ -98,7 +98,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 }
                 Spacer()
                 Text(timelineItem.timestamp)
-                    .foregroundColor(Color.element.tertiaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyXS)
             }
             .padding(.top, 16)
@@ -111,7 +111,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             if timelineItem.properties.isEdited {
                 Text(L10n.commonEditedSuffix)
                     .font(.compound.bodySM)
-                    .foregroundColor(.element.tertiaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             
             if !timelineItem.properties.reactions.isEmpty {

@@ -22,7 +22,7 @@ struct TimelineStartRoomTimelineView: View {
     var body: some View {
         Text(title)
             .font(.compound.bodySM)
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.textSecondary)
             .padding(.vertical, 24)
             .frame(maxWidth: .infinity)
     }

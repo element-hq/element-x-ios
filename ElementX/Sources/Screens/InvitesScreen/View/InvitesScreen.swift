@@ -34,7 +34,7 @@ struct InvitesScreen: View {
                 noInvitesContent
             }
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.actionInvitesList)
         .alert(item: $context.alertInfo)
     }
@@ -44,7 +44,7 @@ struct InvitesScreen: View {
     private var noInvitesContent: some View {
         Text(L10n.screenInvitesEmptyList)
             .font(.compound.bodyLG)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
             .accessibilityIdentifier(A11yIdentifiers.invitesScreen.noInvites)

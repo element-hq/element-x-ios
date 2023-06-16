@@ -39,7 +39,7 @@ struct HomeScreenRoomCell: View {
                     .padding(.vertical, verticalInsets)
                     .overlay(alignment: .bottom) {
                         Rectangle()
-                            .fill(Color.element.quinaryContent)
+                            .fill(Color.compound._borderRowSeparator)
                             .frame(height: 1 / UIScreen.main.scale)
                             .padding(.trailing, -horizontalInsets)
                     }
@@ -86,14 +86,14 @@ struct HomeScreenRoomCell: View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
                 .font(.compound.bodyLGSemibold)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
                     .font(.compound.bodySM)
-                    .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
+                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .compound.textSecondary)
             }
         }
     }
@@ -116,7 +116,7 @@ struct HomeScreenRoomCell: View {
             if room.hasUnreads {
                 Circle()
                     .frame(width: 12, height: 12)
-                    .foregroundColor(.element.brand)
+                    .foregroundColor(.compound.iconAccentTertiary)
                     .padding(.leading, 12)
             } else {
                 // Force extra padding between last message text and the right border of the screen if there is no unread dot
@@ -149,7 +149,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(configuration.isPressed || isSelected ? Color.element.system : .clear)
+            .background(configuration.isPressed || isSelected ? Color.compound.bgSubtleSecondary : .clear)
             .contentShape(Rectangle())
     }
 }
@@ -157,7 +157,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 private extension View {
     func lastMessageFormatting() -> some View {
         font(.compound.bodyMD)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }

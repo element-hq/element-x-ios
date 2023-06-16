@@ -45,7 +45,7 @@ struct LoginScreen: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 16)
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
     }
     
@@ -58,7 +58,7 @@ struct LoginScreen: View {
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, 16)
     }
@@ -68,14 +68,14 @@ struct LoginScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(L10n.screenLoginFormHeader)
                 .font(.compound.bodySM)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
             TextField(L10n.commonUsername,
                       text: $context.username,
                       // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                      prompt: Text(L10n.commonUsername).foregroundColor(.element.tertiaryContent))
+                      prompt: Text(L10n.commonUsername).foregroundColor(.compound.textPlaceholder))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
@@ -89,7 +89,7 @@ struct LoginScreen: View {
             SecureField(L10n.commonPassword,
                         text: $context.password,
                         // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                        prompt: Text(L10n.commonPassword).foregroundColor(.element.tertiaryContent))
+                        prompt: Text(L10n.commonPassword).foregroundColor(.compound.textPlaceholder))
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)
@@ -112,7 +112,7 @@ struct LoginScreen: View {
         Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
-            .foregroundColor(.element.primaryContent)
+            .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
             .accessibilityIdentifier(A11yIdentifiers.loginScreen.unsupportedServer)
     }

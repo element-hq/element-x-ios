@@ -23,7 +23,7 @@ public extension ButtonStyle where Self == ElementActionButtonStyle {
     /// - Parameter size: The control size to use. Defaults to regular.
     /// - Parameter color: The color of the button's background. Defaults to the accent color.
     static func elementAction(_ size: ElementControlSize = .regular,
-                              color: Color = .element.accent) -> ElementActionButtonStyle {
+                              color: Color = .compound.textActionPrimary) -> ElementActionButtonStyle {
         ElementActionButtonStyle(size: size, color: color)
     }
 }
@@ -40,12 +40,11 @@ public struct ElementActionButtonStyle: ButtonStyle {
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
     private var fontColor: Color {
-        // Always white unless disabled with a dark theme.
-        Color.element.systemPrimaryBackground
+        Color.compound.textOnSolidPrimary
             .opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
-    public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
+    public init(size: ElementControlSize = .regular, color: Color = .compound.textActionPrimary) {
         self.size = size
         self.color = color
     }
@@ -80,12 +79,12 @@ public struct ElementActionButtonStyle_Previews: PreviewProvider {
             
             Button { /* preview */ } label: {
                 Text("Clear BG")
-                    .foregroundColor(.element.alert)
+                    .foregroundColor(.compound.textCriticalPrimary)
             }
             .buttonStyle(ElementActionButtonStyle(color: .clear))
             
             Button("Red BG") { /* preview */ }
-                .buttonStyle(ElementActionButtonStyle(color: .element.alert))
+                .buttonStyle(ElementActionButtonStyle(color: .compound.textCriticalPrimary))
         }
         .padding()
     }

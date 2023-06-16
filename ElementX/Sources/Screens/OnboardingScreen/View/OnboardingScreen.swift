@@ -72,11 +72,11 @@ struct OnboardingScreen: View {
                 
                 Text(L10n.screenOnboardingWelcomeTitle)
                     .font(.compound.headingLGBold)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 Text(L10n.screenOnboardingWelcomeSubtitle(InfoPlistReader.main.bundleDisplayName))
                     .font(.compound.bodyLG)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .multilineTextAlignment(.center)
             }
             .padding()

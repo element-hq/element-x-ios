@@ -115,7 +115,7 @@ struct FullscreenDialog_Previews: PreviewProvider {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
     }
     
     private static var content: some View {

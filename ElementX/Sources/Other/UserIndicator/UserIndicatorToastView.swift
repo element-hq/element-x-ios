@@ -26,13 +26,13 @@ struct UserIndicatorToastView: View {
             }
             Text(indicator.title)
                 .font(.compound.bodySM)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .id(indicator.id)
         .padding(.horizontal, 12.0)
         .padding(.vertical, 10.0)
         .frame(minWidth: 150.0)
-        .background(Color.element.background)
+        .background(Color.compound.bgSubtlePrimary)
         .clipShape(RoundedCornerShape(radius: 24.0, corners: .allCorners))
         .shadow(color: .black.opacity(0.25), radius: 10.0, y: 4.0)
         .transition(toastTransition)

@@ -31,7 +31,7 @@ struct ServerSelectionScreen: View {
             .readableFrame()
             .padding(.horizontal, 16)
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .interactiveDismissDisabled()
@@ -46,12 +46,12 @@ struct ServerSelectionScreen: View {
             Text(L10n.commonSelectYourServer)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
             
             Text(L10n.screenChangeServerSubtitle)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.tertiaryContent)
+                .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 16)
     }

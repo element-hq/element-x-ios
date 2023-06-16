@@ -34,13 +34,13 @@ struct AvatarHeaderView<Footer: View>: View {
                                 imageProvider: imageProvider)
 
             Text(name ?? id)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .font(.compound.headingLGBold)
                 .multilineTextAlignment(.center)
 
             if let subtitle {
                 Text(subtitle)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
                     .multilineTextAlignment(.center)
             }

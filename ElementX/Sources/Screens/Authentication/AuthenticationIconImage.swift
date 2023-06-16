@@ -27,14 +27,14 @@ struct AuthenticationIconImage: View {
         image
             .resizable()
             .renderingMode(.template)
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.iconSecondary)
             .aspectRatio(contentMode: .fit)
             .accessibilityHidden(true)
             .padding(insets)
             .frame(width: 70, height: 70)
             .background {
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(Color.element.quinaryContent)
+                    .fill(Color.compound.bgSubtleSecondary)
             }
     }
 }

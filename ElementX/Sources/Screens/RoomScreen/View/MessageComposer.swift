@@ -42,7 +42,7 @@ struct MessageComposer: View {
                                          maxHeight: 300,
                                          enterKeyHandler: sendAction,
                                          pasteHandler: pasteAction)
-                    .tint(.element.brand)
+                    .tint(.compound.iconAccentTertiary)
                     .padding(.vertical, 10)
                 
                 Button {
@@ -51,10 +51,10 @@ struct MessageComposer: View {
                     submitButtonImage
                         .symbolVariant(.fill)
                         .font(.compound.bodyLG)
-                        .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
+                        .foregroundColor(sendingDisabled ? .compound.iconDisabled : .global.white)
                         .background {
                             Circle()
-                                .foregroundColor(sendingDisabled ? .clear : .element.brand)
+                                .foregroundColor(sendingDisabled ? .clear : .compound.iconAccentTertiary)
                         }
                 }
                 .disabled(sendingDisabled)
@@ -67,9 +67,9 @@ struct MessageComposer: View {
         .background {
             ZStack {
                 roundedRectangle
-                    .fill(Color.element.system)
+                    .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
-                    .stroke(Color.element.quinaryContent, lineWidth: 1)
+                    .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
                     .opacity(focused ? 1 : 0)
             }
         }
@@ -126,7 +126,7 @@ private struct MessageComposerReplyHeader: View {
         TimelineReplyView(placement: .composer, timelineItemReplyDetails: replyDetails)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(4.0)
-            .background(Color.element.background)
+            .background(Color.compound.bgCanvasDefault)
             .cornerRadius(13.0)
             .padding([.trailing, .vertical], 8.0)
             .padding([.leading], -4.0)
@@ -134,7 +134,7 @@ private struct MessageComposerReplyHeader: View {
                 Button(action: action) {
                     Image(systemName: "xmark")
                         .font(.caption2.weight(.medium))
-                        .foregroundColor(.element.tertiaryContent)
+                        .foregroundColor(.compound.iconTertiary)
                         .padding(16.0)
                 }
             }
@@ -152,7 +152,7 @@ private struct MessageComposerEditHeader: View {
             Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.caption2.weight(.medium))
-                    .foregroundColor(.element.tertiaryContent)
+                    .foregroundColor(.compound.iconTertiary)
                     .padding(12.0)
             }
         }
@@ -166,7 +166,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.title
         }
         .font(.compound.bodySM)
-        .foregroundColor(.element.secondaryContent)
+        .foregroundColor(.compound.textSecondary)
         .lineLimit(1)
     }
 }

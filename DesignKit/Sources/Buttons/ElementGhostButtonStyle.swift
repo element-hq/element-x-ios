@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import DesignTokens
 import SwiftUI
 
@@ -22,7 +23,7 @@ public extension ButtonStyle where Self == ElementGhostButtonStyle {
     /// - Parameter size: The control size to use. Defaults to `regular`.
     /// - Parameter color: The color of the label and border. Defaults to the accent color.
     static func elementGhost(_ size: ElementControlSize = .regular,
-                             color: Color = .element.primaryContent) -> ElementGhostButtonStyle {
+                             color: Color = .compound.textActionAccent) -> ElementGhostButtonStyle {
         ElementGhostButtonStyle(size: size, color: color)
     }
 }
@@ -36,7 +37,7 @@ public struct ElementGhostButtonStyle: ButtonStyle {
     private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
-    public init(size: ElementControlSize = .regular, color: Color = .element.primaryContent) {
+    public init(size: ElementControlSize = .regular, color: Color = .compound.textActionAccent) {
         self.size = size
         self.color = color
     }
@@ -75,13 +76,13 @@ public struct ElementGhostButtonStyle_Previews: PreviewProvider {
                 .disabled(true)
             
             Button("Red BG") { /* preview */ }
-                .buttonStyle(ElementGhostButtonStyle(color: .element.alert))
+                .buttonStyle(ElementGhostButtonStyle(color: .compound.textCriticalPrimary))
             
             Button { /* preview */ } label: {
                 Text("Custom")
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.iconInfoPrimary)
             }
-            .buttonStyle(ElementGhostButtonStyle(color: .element.quaternaryContent))
+            .buttonStyle(ElementGhostButtonStyle(color: .compound.borderInfoSubtle))
         }
         .padding()
     }

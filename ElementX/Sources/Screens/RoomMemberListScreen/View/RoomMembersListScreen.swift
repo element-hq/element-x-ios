@@ -31,7 +31,7 @@ struct RoomMembersListScreen: View {
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo)
         .toolbar {
@@ -51,7 +51,7 @@ struct RoomMembersListScreen: View {
         } header: {
             if !data.isEmpty {
                 Text(sectionTitle)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
                     .padding(.vertical, 12)
             }

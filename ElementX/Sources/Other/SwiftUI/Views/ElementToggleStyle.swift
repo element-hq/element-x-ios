@@ -23,7 +23,7 @@ struct ElementToggleStyle: ToggleStyle {
             Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
                 .font(.title3.weight(.regular))
                 .imageScale(.large)
-                .foregroundColor(.element.accent)
+                .foregroundColor(.compound.textActionPrimary)
         }
         .buttonStyle(.plain)
     }

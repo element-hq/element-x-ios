@@ -20,7 +20,7 @@ struct TemplateScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     
     var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
+        colorScheme == .light ? .compound.textSecondary : .compound.textInfoPrimary
     }
     
     @ObservedObject var context: TemplateScreenViewModel.Context
@@ -37,7 +37,7 @@ struct TemplateScreen: View {
                 .padding(.horizontal)
                 .padding(.vertical)
                 .readableFrame()
-                .background(Color.element.system)
+                .background(Color.compound.bgSubtleSecondary)
         }
     }
     
@@ -47,7 +47,7 @@ struct TemplateScreen: View {
             Text(context.viewState.promptType.title)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier("title")
             
             Image(systemName: context.viewState.promptType.imageSystemName)

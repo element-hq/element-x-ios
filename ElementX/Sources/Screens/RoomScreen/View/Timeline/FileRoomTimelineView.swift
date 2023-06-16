@@ -24,7 +24,7 @@ struct FileRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             HStack {
                 Image(systemName: "doc.text.fill")
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.iconPrimary)
                 FormattedBodyText(text: timelineItem.content.body)
             }
             .padding(.vertical, 12)

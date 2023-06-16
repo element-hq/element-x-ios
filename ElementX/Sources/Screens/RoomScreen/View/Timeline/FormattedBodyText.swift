@@ -42,10 +42,10 @@ struct FormattedBodyText: View {
     var body: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
         } else {
             plainLayout
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
         }
     }
     
@@ -73,7 +73,7 @@ struct FormattedBodyText: View {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
@@ -102,14 +102,14 @@ struct FormattedBodyText: View {
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
                         Text(component.attributedString)
-                            .foregroundColor(.element.primaryContent)
+                            .foregroundColor(.compound.textPrimary)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                 }
             }
         }
@@ -184,7 +184,7 @@ private struct PreviewBubbleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(timelineStyle == .bubbles ? 8 : 0)
-            .background(timelineStyle == .bubbles ? Color.element.systemGray6 : nil)
+            .background(timelineStyle == .bubbles ? Color.compound._bgBubbleOutgoing : nil)
             .cornerRadius(timelineStyle == .bubbles ? 12 : 0)
     }
 }

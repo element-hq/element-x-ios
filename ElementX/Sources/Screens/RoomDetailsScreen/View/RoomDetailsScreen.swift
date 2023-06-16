@@ -110,7 +110,7 @@ struct RoomDetailsScreen: View {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
-                        .foregroundColor(.element.secondaryContent)
+                        .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodySM)
                         .lineLimit(3)
                 } else {
@@ -118,7 +118,7 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapAddTopic)
                     } label: {
                         Text(L10n.screenRoomDetailsAddTopicTitle)
-                            .foregroundColor(.element.primaryContent)
+                            .foregroundColor(.compound.textPrimary)
                             .font(.compound.bodyLG)
                     }
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
@@ -138,7 +138,7 @@ struct RoomDetailsScreen: View {
             } label: {
                 LabeledContent {
                     Text(String(context.viewState.joinedMembersCount))
-                        .foregroundColor(.element.tertiaryContent)
+                        .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodyLG)
                 } label: {
                     Label(L10n.commonPeople, systemImage: "person")
@@ -155,9 +155,10 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowSeparatorTint(.compound._borderRowSeparator)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-        .foregroundColor(.element.primaryContent)
+        .formSectionStyle()
+        .foregroundColor(.compound.textPrimary)
     }
 
     @ViewBuilder
@@ -168,7 +169,7 @@ struct RoomDetailsScreen: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                         Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
                     }
                 } icon: {

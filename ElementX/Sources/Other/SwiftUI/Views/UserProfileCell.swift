@@ -22,6 +22,16 @@ struct UserProfileCell: View {
     let membership: MembershipState?
     let imageProvider: ImageProviderProtocol?
     
+    private var subtitle: String? {
+        if let membershipText = membership?.localizedDescription {
+            return membershipText
+        } else if user.displayName != nil {
+            return user.userID
+        } else {
+            return nil
+        }
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
             LoadableAvatarImage(url: user.avatarURL,
@@ -34,9 +44,13 @@ struct UserProfileCell: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text(user.displayName ?? user.userID)
                     .font(.compound.headingSM)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
                 
-                subtitleContent
+                if let subtitle {
+                    Text(subtitle)
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                }
                 
                 warningContent
                     .padding(.top, 2)
@@ -48,19 +62,6 @@ struct UserProfileCell: View {
     // MARK: - Private
     
     @ViewBuilder
-    private var subtitleContent: some View {
-        if let membershipText = membership?.localizedDescription {
-            Text(membershipText)
-                .font(.compound.bodyMD)
-                .foregroundColor(.element.tertiaryContent)
-        } else if user.displayName != nil {
-            Text(user.userID)
-                .font(.compound.bodyMD)
-                .foregroundColor(.element.tertiaryContent)
-        }
-    }
-    
-    @ViewBuilder
     private var warningContent: some View {
         if !user.isVerified, membership == nil {
             HStack(alignment: .firstTextBaseline, spacing: 5) {
@@ -68,7 +69,7 @@ struct UserProfileCell: View {
                     .foregroundColor(.compound.textCriticalPrimary)
                 
                 Text(L10n.commonInviteUnknownProfile)
-                    .foregroundColor(.element.tertiaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             .font(.compound.bodyXS)
         }

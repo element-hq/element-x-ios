@@ -87,7 +87,7 @@ struct CreateRoomScreen: View {
                         .formSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
-                              prompt: Text(L10n.commonRoomNamePlaceholder),
+                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -105,9 +105,9 @@ struct CreateRoomScreen: View {
     private var cameraImage: some View {
         Image(systemName: "camera")
             .font(.system(size: 28, weight: .semibold))
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.compound.iconSecondary)
             .frame(width: roomIconSize, height: roomIconSize)
-            .background(Color.element.quinaryContent)
+            .background(Color.compound.bgSubtlePrimary)
             .clipShape(Circle())
     }
     
@@ -115,7 +115,7 @@ struct CreateRoomScreen: View {
         Section {
             TextField(L10n.screenCreateRoomTopicLabel,
                       text: $context.roomTopic,
-                      prompt: Text(L10n.commonTopicPlaceholder),
+                      prompt: Text(L10n.commonTopicPlaceholder).foregroundColor(.compound.textPlaceholder),
                       axis: .vertical)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
@@ -158,7 +158,7 @@ struct CreateRoomScreen: View {
                             .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPrivateOptionDescription)
                             .font(.compound.bodyXS)
-                            .foregroundColor(.element.tertiaryContent)
+                            .foregroundColor(.compound.textSecondary)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
@@ -172,7 +172,7 @@ struct CreateRoomScreen: View {
                             .font(.compound.bodyLG)
                         Text(L10n.screenCreateRoomPublicOptionDescription)
                             .font(.compound.bodyXS)
-                            .foregroundColor(.element.tertiaryContent)
+                            .foregroundColor(.compound.textSecondary)
                     }
                 } icon: {
                     Image(systemName: "exclamationmark.shield")
@@ -187,7 +187,7 @@ struct CreateRoomScreen: View {
                 .formSectionHeader()
                 .padding(.top, 40)
         }
-        .listRowSeparatorTint(.element.quinaryContent)
+        .listRowSeparatorTint(.compound._borderRowSeparator)
         .listRowBackground(Color.element.formRowBackground)
     }
     

@@ -27,7 +27,7 @@ struct AnalyticsPromptScreen: View {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
@@ -41,18 +41,18 @@ struct AnalyticsPromptScreen: View {
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 2)
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(context.viewState.strings.optInContent)
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.secondaryContent)
-                .tint(.element.links)
+                .foregroundColor(.compound.textSecondary)
+                .tint(.compound.textLinkExternal)
             
             Divider()
-                .background(Color.element.quinaryContent)
+                .overlay { Color.compound._borderRowSeparator }
                 .padding(.vertical, 20)
             
             checkmarkList
@@ -68,7 +68,7 @@ struct AnalyticsPromptScreen: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.compound.bodyLG)
-        .foregroundColor(.element.secondaryContent)
+        .foregroundColor(.compound.textSecondary)
         .frame(maxWidth: .infinity)
     }
     

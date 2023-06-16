@@ -26,7 +26,7 @@ struct ServerConfirmationScreen: View {
             buttons
         }
         .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.element.background))
+        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .introspectViewController { viewController in
             guard let window = viewController.view.window else { return }
             context.send(viewAction: .updateWindow(window))
@@ -42,13 +42,13 @@ struct ServerConfirmationScreen: View {
             Text(context.viewState.title)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
             
             Text(context.viewState.message)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.tertiaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, 16)
     }

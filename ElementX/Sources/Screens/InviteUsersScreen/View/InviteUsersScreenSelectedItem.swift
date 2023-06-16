@@ -29,7 +29,7 @@ struct InviteUsersScreenSelectedItem: View {
             
             Text(user.displayName ?? user.userID)
                 .font(.compound.bodyMD)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }
     }
@@ -48,7 +48,7 @@ struct InviteUsersScreenSelectedItem: View {
                         .resizable()
                         .frame(width: buttonSize, height: buttonSize)
                         .symbolRenderingMode(.palette)
-                        .foregroundStyle(Color.element.systemPrimaryBackground, Color.element.primaryContent)
+                        .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
                 }
             }
     }

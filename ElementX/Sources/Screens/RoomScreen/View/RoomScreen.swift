@@ -23,7 +23,7 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
-            .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea()) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(spacing: 4.0) {
                     RoomAttachmentPicker(context: context)
@@ -101,12 +101,12 @@ struct RoomScreen: View {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
                 .fontWeight(.semibold)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.iconSecondary)
                 .padding(13)
                 .offset(y: 1)
                 .background {
                     Circle()
-                        .fill(Color.element.background)
+                        .fill(Color.compound.iconOnSolidPrimary)
                         // Intentionally using system primary colour to get white/black.
                         .shadow(color: .primary.opacity(0.33), radius: 2.0)
                 }
@@ -122,9 +122,9 @@ struct RoomScreen: View {
         if context.viewState.showLoading {
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(.element.primaryContent)
+                .tint(.compound.textPrimary)
                 .padding(16)
-                .background(Color.element.quinaryContent)
+                .background(.ultraThickMaterial)
                 .cornerRadius(8)
         }
     }

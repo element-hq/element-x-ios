@@ -90,7 +90,7 @@ struct InvitesScreenCell: View {
         VStack(alignment: .leading) {
             Text(title)
                 .font(.compound.bodyLGSemibold)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(2)
             
             if let subtitle {
@@ -116,7 +116,7 @@ struct InvitesScreenCell: View {
     
     private var separator: some View {
         Rectangle()
-            .fill(Color.element.quinaryContent)
+            .fill(Color.compound._borderRowSeparator)
             .frame(height: 1 / UIScreen.main.scale)
     }
     
@@ -156,7 +156,7 @@ struct InvitesScreenCell: View {
     private var badge: some View {
         Circle()
             .frame(width: badgeSize, height: badgeSize)
-            .foregroundColor(.element.brand)
+            .foregroundColor(.compound.iconAccentTertiary)
     }
 }
 

@@ -123,7 +123,7 @@ struct HomeScreen: View {
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar(showingBottomToolbar ? .automatic : .hidden, for: .bottomBar)
         .toolbar { toolbar }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
     }
     
@@ -195,7 +195,7 @@ struct HomeScreen: View {
                 HStack(spacing: 16) {
                     Text(L10n.sessionVerificationBannerTitle)
                         .font(.compound.bodyLGSemibold)
-                        .foregroundColor(.element.systemPrimaryLabel)
+                        .foregroundColor(.compound.textPrimary)
                     
                     Spacer()
                     
@@ -203,13 +203,13 @@ struct HomeScreen: View {
                         context.send(viewAction: .skipSessionVerification)
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.compound.iconSecondary)
                             .frame(width: 12, height: 12)
                     }
                 }
                 Text(L10n.sessionVerificationBannerMessage)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             
             Button(L10n.actionContinue) {
@@ -220,7 +220,7 @@ struct HomeScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.verificationBannerContinue)
         }
         .padding(16)
-        .background(Color.element.system)
+        .background(Color.compound.bgSubtleSecondary)
         .cornerRadius(14)
         .padding(.horizontal, 16)
     }

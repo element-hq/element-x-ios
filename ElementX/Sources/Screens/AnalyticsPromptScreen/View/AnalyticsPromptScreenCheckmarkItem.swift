@@ -30,7 +30,7 @@ struct AnalyticsPromptScreenCheckmarkItem: View {
     var body: some View {
         Label { Text(attributedString) } icon: {
             Image(systemName: "checkmark.circle")
-                .foregroundColor(.element.accent)
+                .foregroundColor(.compound.iconPrimary)
         }
     }
 }

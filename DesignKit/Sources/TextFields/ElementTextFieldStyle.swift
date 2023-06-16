@@ -57,8 +57,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's border.
     private var borderColor: Color {
-        guard !isError else { return .element.alert }
-        return isFocused ? .element.tertiaryContent : .element.quinaryContent
+        isError ? .compound.textCriticalPrimary : .compound._borderTextFieldFocused
     }
     
     /// The width of the text field's border.
@@ -67,39 +66,32 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     }
     
     private var accentColor: Color {
-        isError ? .element.alert : .element.brand
+        isError ? .compound.textCriticalPrimary : .compound.iconAccentTertiary
     }
     
     /// The color of the text inside the text field.
     private var textColor: Color {
-        if colorScheme == .dark {
-            return isEnabled ? .element.primaryContent : .element.tertiaryContent
-        } else {
-            return isEnabled ? .element.primaryContent : .element.quaternaryContent
-        }
+        isEnabled ? .compound.textPrimary : .compound.textDisabled
     }
     
     /// The color of the text field's background.
     private var backgroundColor: Color {
-        if !isEnabled, colorScheme == .dark {
-            return .element.quinaryContent
-        }
-        return .element.system
+        .compound.bgSubtleSecondary.opacity(isEnabled ? 1 : 0.5)
     }
     
     /// The color of the placeholder text inside the text field.
     private var placeholderColor: Color {
-        .element.tertiaryContent
+        .compound.textPlaceholder
     }
     
     /// The color of the label above the text field.
     private var labelColor: Color {
-        isEnabled ? .element.primaryContent : .element.quaternaryContent
+        isEnabled ? .compound.textPrimary : .compound.textDisabled
     }
     
     /// The color of the footer label below the text field.
     private var footerColor: Color {
-        isError ? .element.alert : .element.tertiaryContent
+        isError ? .compound.textCriticalPrimary : .compound.textSecondary
     }
     
     /// Creates the text field style configured as required.
@@ -147,7 +139,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 }
  
             footerText
-                .tint(.element.links)
+                .tint(.compound.textLinkExternal)
                 .font(.compound.bodyXS)
                 .foregroundColor(footerColor)
                 .padding(.horizontal, 16)

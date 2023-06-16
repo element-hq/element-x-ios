@@ -47,7 +47,7 @@ struct SoftLogoutScreen: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 16)
         }
-        .background(Color.element.background.ignoresSafeArea())
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
         .introspectViewController { viewController in
             guard let window = viewController.view.window else { return }
@@ -61,20 +61,20 @@ struct SoftLogoutScreen: View {
             Text(UntranslatedL10n.softLogoutSigninTitle)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.leading)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.title)
 
             Text(UntranslatedL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.leading)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.message)
 
             if context.viewState.showRecoverEncryptionKeysMessage {
                 Text(UntranslatedL10n.softLogoutSigninE2eWarningNotice)
                     .font(.compound.bodyLG)
                     .multilineTextAlignment(.leading)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
             }
         }
     }
@@ -120,7 +120,7 @@ struct SoftLogoutScreen: View {
         Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
-            .foregroundColor(.element.primaryContent)
+            .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
     }
 
@@ -130,20 +130,20 @@ struct SoftLogoutScreen: View {
             Text(UntranslatedL10n.softLogoutClearDataTitle)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.leading)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataTitle)
 
             Text(UntranslatedL10n.softLogoutClearDataNotice)
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.leading)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataMessage)
                 .padding(.bottom, 12)
 
             Button(action: clearData) {
                 Text(UntranslatedL10n.softLogoutClearDataSubmit)
             }
-            .buttonStyle(.elementAction(.xLarge, color: .element.alert))
+            .buttonStyle(.elementAction(.xLarge, color: .compound.textCriticalPrimary))
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(UntranslatedL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {

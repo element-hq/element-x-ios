@@ -66,7 +66,7 @@ struct InviteUsersScreen: View {
     private var noResultsContent: some View {
         Text(L10n.commonNoResults)
             .font(.compound.bodyLG)
-            .foregroundColor(.element.tertiaryContent)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
@@ -148,7 +148,6 @@ struct InviteUsersScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             InviteUsersScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }

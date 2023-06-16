@@ -49,11 +49,11 @@ struct PlaceholderAvatarImage: View {
 
     private var bgColor: Color {
         if redactionReasons == .placeholder {
-            return .element.systemGray4
+            return Color(.systemGray4) // matches the default text redaction
         }
 
         guard let contentID else {
-            return .element.accent
+            return .compound.iconPrimary
         }
 
         return .element.avatarBackground(for: contentID)

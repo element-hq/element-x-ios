@@ -67,7 +67,7 @@ struct TimelineItemStatusView: View {
             if style == .plain {
                 Image(systemName: "exclamationmark.circle.fill")
                     .resizable()
-                    .foregroundColor(.element.alert)
+                    .foregroundColor(.compound.iconCriticalPrimary)
                     .frame(width: 16, height: 16)
                     .onTapGesture {
                         context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)

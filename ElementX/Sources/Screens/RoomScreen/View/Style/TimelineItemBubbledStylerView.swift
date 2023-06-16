@@ -79,7 +79,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .accessibilityHidden(true)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.compound.bodySMSemibold)
-                        .foregroundColor(.element.primaryContent)
+                        .foregroundColor(.compound.textPrimary)
                         .lineLimit(1)
                         .padding(.vertical, senderNameVerticalPadding)
                 }
@@ -138,7 +138,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         } else {
             contentWithTimestamp
                 .bubbleStyle(inset: true,
-                             color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
+                             color: timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming,
                              cornerRadius: cornerRadius,
                              corners: roundedCorners)
         }
@@ -177,7 +177,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             localizedSendInfo
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
-                .background(Color.element.system)
+                .background(Color.compound.bgSubtleSecondary)
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
@@ -201,7 +201,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
         }
         .font(.compound.bodyXS)
-        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .element.alert : .element.secondaryContent)
+        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
         .padding(.bottom, isMediaType ? 0 : -4)
     }
     
@@ -217,7 +217,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.element.background)
+                    .background(Color.compound.bgCanvasDefault)
                     .cornerRadius(8)
                     .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 

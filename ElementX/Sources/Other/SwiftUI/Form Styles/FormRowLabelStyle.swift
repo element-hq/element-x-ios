@@ -24,15 +24,15 @@ struct FormRowLabelStyle: LabelStyle {
 
     private var titleColor: Color {
         if role == .destructive {
-            return .element.alert
+            return .compound.textCriticalPrimary
         } else {
-            return .element.primaryContent
+            return .compound.textPrimary
         }
     }
 
     private var iconBackgroundColor: Color {
         if role == .destructive {
-            return .element.alert.opacity(0.1)
+            return .compound.textCriticalPrimary.opacity(0.1)
         } else {
             return .element.formBackground
         }
@@ -40,9 +40,9 @@ struct FormRowLabelStyle: LabelStyle {
 
     private var iconForegroundColor: Color {
         if role == .destructive {
-            return .element.alert
+            return .compound.textCriticalPrimary
         } else {
-            return .element.secondaryContent
+            return .compound.iconSecondary
         }
     }
 

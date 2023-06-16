@@ -33,7 +33,7 @@ struct SessionVerificationScreen: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbarContent }
             }
-            .background(Color.element.background.ignoresSafeArea())
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
         .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
@@ -77,14 +77,14 @@ struct SessionVerificationScreen: View {
             Text(context.viewState.title ?? "")
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
                 .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
             Text(context.viewState.message)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.tertiaryContent)
+                .foregroundColor(.compound.textSecondary)
         }
     }
     
@@ -99,7 +99,7 @@ struct SessionVerificationScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
         case .requestingVerification:
             ProgressView()
-                .tint(.element.secondaryContent)
+                .tint(.compound.textSecondary)
                 .scaleEffect(2)
         default:
             // In All other cases, we just want an empty view
@@ -166,7 +166,7 @@ struct SessionVerificationScreen: View {
                 Button { context.send(viewAction: .accept) } label: {
                     HStack(spacing: 16) {
                         ProgressView()
-                            .tint(.element.background)
+                            .tint(.compound.textOnSolidPrimary)
                         Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                     }
                 }
@@ -193,7 +193,6 @@ struct SessionVerificationScreen: View {
             Button(L10n.actionCancel) {
                 context.send(viewAction: .close)
             }
-            .foregroundColor(.element.accent)
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.close)
         }
     }
@@ -207,7 +206,7 @@ struct SessionVerificationScreen: View {
                     .font(.compound.headingXLBold)
                 Text(emoji.description)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.element.secondaryContent)
+                    .foregroundColor(.compound.textSecondary)
             }
             .padding(8.0)
         }
@@ -221,7 +220,7 @@ struct SessionVerificationScreen: View {
                 .resizable()
                 .font(.compound.bodyLG.weight(.light))
                 .scaledToFit()
-                .foregroundColor(.element.accent)
+                .foregroundColor(.compound.iconPrimary)
                 .frame(width: 100, height: 100)
         }
     }

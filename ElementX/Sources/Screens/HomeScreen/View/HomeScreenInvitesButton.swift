@@ -27,7 +27,7 @@ struct HomeScreenInvitesButton: View {
         Button(action: action) {
             HStack(spacing: 8) {
                 Text(title)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.compound.textPrimary)
                     .font(.compound.bodyMD)
                 
                 if hasBadge {
@@ -43,7 +43,7 @@ struct HomeScreenInvitesButton: View {
     private var badge: some View {
         Circle()
             .frame(width: badgeSize, height: badgeSize)
-            .foregroundColor(.element.brand)
+            .foregroundColor(.compound.iconAccentTertiary)
     }
 }
 

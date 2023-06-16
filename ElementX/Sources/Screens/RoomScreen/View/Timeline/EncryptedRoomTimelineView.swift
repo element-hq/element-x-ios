@@ -33,10 +33,10 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             configuration.icon
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.compound.iconSecondary)
             configuration.title
                 .font(.body)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
     }
