@@ -165,7 +165,7 @@ extension RoomProxyProtocol {
     }
     
     var isEncryptedOneToOneRoom: Bool {
-        isDirect && isEncrypted && activeMembersCount == 2
+        isDirect && isEncrypted && activeMembersCount <= 2
     }
 
     func members() async -> [RoomMemberProxyProtocol]? {
