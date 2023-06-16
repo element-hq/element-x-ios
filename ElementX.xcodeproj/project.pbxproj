@@ -1742,13 +1742,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		3348D14DBDB54E72FC67E2F3 /* MessageForwardingScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MessageForwardingScreen;
-			sourceTree = "<group>";
-		};
 		337015ADFBA3AB96660DB3A6 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -3154,7 +3147,6 @@
 				948DD12A5533BE1BC260E437 /* LocationSharing */,
 				87E2774157D9C4894BCFF3F8 /* MediaPickerScreen */,
 				23605DD08620BE6558242469 /* MediaUploadPreviewScreen */,
-				3348D14DBDB54E72FC67E2F3 /* MessageForwardingScreen */,
 				3F38EAC92E2281990E65DAF2 /* OnboardingScreen */,
 				A448A3A8F764174C60CD0CA1 /* Other */,
 				5970F275D6014548DCED6106 /* ReportContentScreen */,
@@ -4948,7 +4940,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.76-alpha";
+				version = "1.0.77-alpha";
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
