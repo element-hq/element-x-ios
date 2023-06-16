@@ -526,13 +526,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         userIndicatorController.alertInfo = .init(id: .init(),
                                                   title: L10n.screenRoomInviteAgainAlertTitle,
                                                   message: L10n.screenRoomInviteAgainAlertMessage,
-                                                  primaryButton: .init(title: L10n.actionInvite, action: { [weak self] in self?.invitePerson() }),
+                                                  primaryButton: .init(title: L10n.actionInvite, action: { [weak self] in self?.inviteOtherDMUserBack() }),
                                                   secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
 
     private let loaderID = UUID().uuidString
 
-    private func invitePerson() {
+    private func inviteOtherDMUserBack() {
         Task {
             userIndicatorController.submitIndicator(.init(id: loaderID, type: .toast, title: L10n.commonLoading))
             defer {
