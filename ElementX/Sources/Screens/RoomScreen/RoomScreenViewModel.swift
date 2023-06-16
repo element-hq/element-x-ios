@@ -519,7 +519,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func showLoadingIndicator(with delay: Duration) -> Task<Void, Never> {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal(interactiveDismissDisabled: true),
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true),
                                                               title: L10n.commonLoading,
                                                               persistent: true),
                                                 delay: delay)

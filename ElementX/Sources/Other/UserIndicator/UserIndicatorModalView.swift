@@ -24,15 +24,17 @@ struct UserIndicatorModalView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
-                if case .unknownProgress = indicator.loaderType {
+                if case .indeterminate = indicator.progress {
                     ProgressView()
-                } else if case .progress = indicator.loaderType {
+                } else if case .published = indicator.progress {
                     ProgressView(value: progressFraction)
                 }
 
                 HStack {
                     if let iconName = indicator.iconName {
                         Image(systemName: iconName)
+                            .font(.compound.bodyLG)
+                            .foregroundColor(.compound.iconPrimary)
                     }
                     Text(indicator.title)
                         .font(.compound.bodyLG)
@@ -66,17 +68,17 @@ struct UserIndicatorModalView_Previews: PreviewProvider {
                                                             iconName: "checkmark")
             )
             .previewDisplayName("Spinner")
-            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+            
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(ProgressTracker(initialValue: 0.5)),
+                                                                         interactiveDismissDisabled: false),
                                                             title: "Successfully logged in",
-                                                            iconName: "checkmark",
-                                                            loaderType: .progress(ProgressTracker(initialValue: 0.5)))
+                                                            iconName: "checkmark")
             )
             .previewDisplayName("Progress Bar")
             
-            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .none, interactiveDismissDisabled: false),
                                                             title: "Successfully logged in",
-                                                            iconName: "checkmark",
-                                                            loaderType: .none)
+                                                            iconName: "checkmark")
             )
             .previewDisplayName("No progress")
         }
