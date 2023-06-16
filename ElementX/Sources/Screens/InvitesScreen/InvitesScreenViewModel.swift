@@ -52,17 +52,17 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
         userSession.clientProxy
     }
     
-    private var invitesSummaryProvider: RoomSummaryProviderProtocol? {
-        clientProxy.invitesSummaryProvider
+    private var inviteSummaryProvider: RoomSummaryProviderProtocol? {
+        clientProxy.inviteSummaryProvider
     }
     
     private func setupSubscriptions() {
-        guard let invitesSummaryProvider else {
+        guard let inviteSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
-        invitesSummaryProvider.roomListPublisher
+        inviteSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] roomSummaries in
                 guard let self else { return }

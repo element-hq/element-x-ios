@@ -347,7 +347,7 @@ class LoggingTests: XCTestCase {
         let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
         let imageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
         let videoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
-        let fileMessage = FileMessageContent(body: "FileString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let fileMessage = FileMessageContent(body: "FileString", filename: "FileName", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)

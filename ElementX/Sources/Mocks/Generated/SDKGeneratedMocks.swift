@@ -404,23 +404,6 @@ class SDKClientMock: SDKClientProtocol {
         restoreSessionSessionReceivedInvocations.append(`session`)
         try restoreSessionSessionClosure?(`session`)
     }
-    //MARK: - `rooms`
-
-    public var roomsCallsCount = 0
-    public var roomsCalled: Bool {
-        return roomsCallsCount > 0
-    }
-    public var roomsReturnValue: [Room]!
-    public var roomsClosure: (() -> [Room])?
-
-    public func `rooms`() -> [Room] {
-        roomsCallsCount += 1
-        if let roomsClosure = roomsClosure {
-            return roomsClosure()
-        } else {
-            return roomsReturnValue
-        }
-    }
     //MARK: - `roomList`
 
     public var roomListThrowableError: Error?
@@ -440,6 +423,23 @@ class SDKClientMock: SDKClientProtocol {
             return try roomListClosure()
         } else {
             return roomListReturnValue
+        }
+    }
+    //MARK: - `rooms`
+
+    public var roomsCallsCount = 0
+    public var roomsCalled: Bool {
+        return roomsCallsCount > 0
+    }
+    public var roomsReturnValue: [Room]!
+    public var roomsClosure: (() -> [Room])?
+
+    public func `rooms`() -> [Room] {
+        roomsCallsCount += 1
+        if let roomsClosure = roomsClosure {
+            return roomsClosure()
+        } else {
+            return roomsReturnValue
         }
     }
     //MARK: - `searchUsers`

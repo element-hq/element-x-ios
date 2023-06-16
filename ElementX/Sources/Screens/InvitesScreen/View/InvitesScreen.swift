@@ -78,8 +78,8 @@ private extension InvitesScreenViewModel {
     
     static let someInvite: InvitesScreenViewModel = {
         let clientProxy = MockClientProxy(userID: "@userid:example.com")
-        clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
-        clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+        clientProxy.inviteSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+        clientProxy.roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider())
         let regularViewModel = InvitesScreenViewModel(userSession: userSession)

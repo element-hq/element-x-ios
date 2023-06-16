@@ -49,9 +49,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         switch roomProxy.registerTimelineListenerIfNeeded() {
         case let .success(items):
             itemProxies = items.map(TimelineItemProxy.init)
-            MXLog.info("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
+            MXLog.verbose("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
         case .failure(.roomListenerAlreadyRegistered):
-            MXLog.info("Listener already registered for the room: \(roomProxy.id)")
+            MXLog.verbose("Listener already registered for the room: \(roomProxy.id)")
         case .failure:
             let roomID = roomProxy.id
             MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
@@ -67,7 +67,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             span.exit()
         }
         
-        MXLog.info("Received timeline diff")
+        MXLog.verbose("Received timeline diff")
         
         itemProxies = diffs
             .reduce(itemProxies) { currentItems, diff in
@@ -84,7 +84,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.info("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
+        MXLog.verbose("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -95,45 +95,45 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .pushFront:
             guard let item = diff.pushFront() else { fatalError() }
             
-            MXLog.info("Push Front: \(item.debugIdentifier)")
+            MXLog.verbose("Push Front: \(item.debugIdentifier)")
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
         case .pushBack:
             guard let item = diff.pushBack() else { fatalError() }
             
-            MXLog.info("Push Back \(item.debugIdentifier)")
+            MXLog.verbose("Push Back \(item.debugIdentifier)")
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
         case .insert:
             guard let update = diff.insert() else { fatalError() }
             
-            MXLog.info("Insert \(update.item.debugIdentifier) at \(update.index)")
+            MXLog.verbose("Insert \(update.item.debugIdentifier) at \(update.index)")
             let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .append:
             guard let items = diff.append() else { fatalError() }
             
-            MXLog.info("Append \(items.map(\.debugIdentifier))")
+            MXLog.verbose("Append \(items.map(\.debugIdentifier))")
             for (index, item) in items.enumerated() {
                 changes.append(.insert(offset: Int(itemProxies.count) + index, element: TimelineItemProxy(item: item), associatedWith: nil))
             }
         case .set:
             guard let update = diff.set() else { fatalError() }
             
-            MXLog.info("Set \(update.item.debugIdentifier) at index \(update.index)")
+            MXLog.verbose("Set \(update.item.debugIdentifier) at index \(update.index)")
             let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .popFront:
             guard let itemProxy = itemProxies.first else { fatalError() }
             
-            MXLog.info("Pop Front \(itemProxy.debugIdentifier)")
+            MXLog.verbose("Pop Front \(itemProxy.debugIdentifier)")
             
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
         case .popBack:
             guard let itemProxy = itemProxies.last else { fatalError() }
             
-            MXLog.info("Pop Back \(itemProxy.debugIdentifier)")
+            MXLog.verbose("Pop Back \(itemProxy.debugIdentifier)")
             
             changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
         case .remove:
@@ -141,18 +141,18 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             
             let itemProxy = itemProxies[Int(index)]
             
-            MXLog.info("Remove \(itemProxy.debugIdentifier) at: \(index)")
+            MXLog.verbose("Remove \(itemProxy.debugIdentifier) at: \(index)")
             
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .clear:
-            MXLog.info("Clear all items")
+            MXLog.verbose("Clear all items")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
         case .reset:
             guard let items = diff.reset() else { fatalError() }
             
-            MXLog.info("Replace all items with \(items.map(\.debugIdentifier))")
+            MXLog.verbose("Replace all items with \(items.map(\.debugIdentifier))")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }

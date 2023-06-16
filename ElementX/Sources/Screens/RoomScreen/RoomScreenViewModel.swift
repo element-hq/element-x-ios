@@ -31,7 +31,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private var loadingTask: Task<Void, Never>?
-
+    
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,

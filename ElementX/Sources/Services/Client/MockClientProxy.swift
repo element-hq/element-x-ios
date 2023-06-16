@@ -26,11 +26,9 @@ class MockClientProxy: ClientProxyProtocol {
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
     
-    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
-    var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
-    
-    var invitesSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
 
@@ -38,7 +36,7 @@ class MockClientProxy: ClientProxyProtocol {
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
-        visibleRoomsSummaryProvider = roomSummaryProvider
+        self.roomSummaryProvider = roomSummaryProvider
     }
 
     func loadUserAvatarURL() async { }
@@ -72,14 +70,14 @@ class MockClientProxy: ClientProxyProtocol {
             return roomForIdentifierMocks[identifier]
         }
         
-        guard let room = visibleRoomsSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
+        guard let room = roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
             return nil
         }
     
         switch room {
         case .empty:
             return RoomProxyMock(with: .init(displayName: "Empty room"))
-        case .filled(let details), .invalidated(let details):
+        case .filled(let details):
             return RoomProxyMock(with: .init(displayName: details.name))
         }
     }

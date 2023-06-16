@@ -47,9 +47,7 @@ enum ClientProxyError: Error {
 }
 
 enum SlidingSyncConstants {
-    static let initialTimelineLimit: UInt = 0
-    static let lastMessageTimelineLimit: UInt = 1
-    static let timelinePrecachingTimelineLimit: UInt = 20
+    static let defaultTimelineLimit: UInt = 20
 }
 
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
@@ -77,11 +75,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var restorationToken: RestorationToken? { get }
     
-    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
+    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
-    var allRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
-    
-    var invitesSummaryProvider: RoomSummaryProviderProtocol? { get }
+    var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
 
     var isSyncing: Bool { get }
     

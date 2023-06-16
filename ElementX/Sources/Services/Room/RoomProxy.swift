@@ -21,7 +21,7 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
-    private let slidingSyncRoom: SlidingSyncRoomProtocol
+    private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
@@ -47,16 +47,16 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     deinit {
-        Task { @MainActor [roomTimelineObservationToken, slidingSyncRoom] in
+        Task { @MainActor [roomTimelineObservationToken, roomListItem] in
             roomTimelineObservationToken?.cancel()
-            slidingSyncRoom.unsubscribeFromRoom()
+            roomListItem.unsubscribe()
         }
     }
 
-    init(slidingSyncRoom: SlidingSyncRoomProtocol,
+    init(roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.slidingSyncRoom = slidingSyncRoom
+        self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
     }
@@ -64,7 +64,7 @@ class RoomProxy: RoomProxyProtocol {
     lazy var id: String = room.id()
     
     var name: String? {
-        slidingSyncRoom.name()
+        roomListItem.name()
     }
         
     var topic: String? {
@@ -104,7 +104,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var hasUnreadNotifications: Bool {
-        slidingSyncRoom.hasUnreadNotifications()
+        roomListItem.hasUnreadNotifications()
     }
     
     var avatarURL: URL? {
@@ -166,33 +166,30 @@ class RoomProxy: RoomProxyProtocol {
         guard timelineListener == nil else {
             return .failure(.roomListenerAlreadyRegistered)
         }
-        
+
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
                                                         RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.avatar", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: ""),
                                                         RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.timelinePrecachingTimelineLimit))
-        slidingSyncRoom.subscribeToRoom(settings: settings)
-        
+                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
+        roomListItem.subscribe(settings: settings)
+
         let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
             self?.updatesSubject.send(timelineDiff)
         }
-        
+
         self.timelineListener = timelineListener
         
-        if let result = try? slidingSyncRoom.addTimelineListener(listener: timelineListener) {
-            roomTimelineObservationToken = result.taskHandle
-            
-            Task {
-                await fetchMembers()
-                await updateMembers()
-            }
-            return .success(result.items)
-        } else {
-            self.timelineListener = nil
-            return .failure(.failedAddingTimelineListener)
+        let result = room.addTimelineListener(listener: timelineListener)
+        roomTimelineObservationToken = result.itemsStream
+        
+        Task {
+            await fetchMembers()
+            await updateMembers()
         }
+        
+        return .success(result.items)
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
@@ -591,7 +588,7 @@ private class RoomTimelineListener: TimelineListener {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(update: TimelineDiff) {
-        onUpdateClosure(update)
+    func onUpdate(diff: TimelineDiff) {
+        onUpdateClosure(diff)
     }
 }
