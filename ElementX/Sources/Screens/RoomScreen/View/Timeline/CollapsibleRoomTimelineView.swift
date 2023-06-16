@@ -61,7 +61,7 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
             }
             .frame(maxWidth: .infinity)
             .font(.compound.bodySM)
-            .foregroundColor(.compound.textPlaceholder)
+            .foregroundColor(.compound.textSecondary)
             .padding(.horizontal, 36.0)
             .padding(.top, 20.0)
             .padding(.bottom, 12.0)

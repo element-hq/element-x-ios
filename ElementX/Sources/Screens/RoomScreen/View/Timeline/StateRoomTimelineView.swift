@@ -23,7 +23,7 @@ struct StateRoomTimelineView: View {
         Text(timelineItem.body)
             .font(.compound.bodySM)
             .multilineTextAlignment(.center)
-            .foregroundColor(.compound.textPlaceholder)
+            .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.horizontal, 36.0)
             .padding(.vertical, 8.0)
