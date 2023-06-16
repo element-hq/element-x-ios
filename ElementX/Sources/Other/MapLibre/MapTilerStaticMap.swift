@@ -14,20 +14,25 @@
 // limitations under the License.
 //
 
+import CoreLocation
 import Foundation
 
-struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
+protocol MapTilerStaticMapProtocol {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL?
+}
+
+struct MapTilerStaticMap: MapTilerStaticMapProtocol {
     private let lightURL: String
     private let darkURL: String
     private let key: String
-    
-    init(lightURL: String, darkURL: String, key: String) {
+
+    init(key: String, lightURL: String, darkURL: String) {
         self.lightURL = lightURL
         self.darkURL = darkURL
         self.key = key
     }
     
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL? {
         var path: String
         switch style {
         case .light:
@@ -36,7 +41,7 @@ struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
             path = darkURL
         }
         
-        path.append("/style.json")
+        path.append("/\(coordinates.longitude),\(coordinates.latitude),\(zoomLevel)/\(size.width)x\(size.height)@2x.png")
         
         guard let url = URL(string: path) else { return nil }
         let authorization = MapTilerAuthorization(key: key)
