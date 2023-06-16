@@ -41,8 +41,10 @@ protocol NotificationItemProxyProtocol {
 
     var isDirect: Bool { get }
 
+    /// Returns `true` if the event of the notification belongs to an encrypted room
     var isRoomEncrypted: Bool? { get }
 
+    /// Returns `true` if was not possible to decrypt the notification content
     var isEncrypted: Bool { get }
 }
 
