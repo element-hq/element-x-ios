@@ -26,19 +26,11 @@ enum UserIndicatorType: Equatable {
 }
 
 struct UserIndicator: Equatable, Identifiable {
-    static func == (lhs: UserIndicator, rhs: UserIndicator) -> Bool {
-        lhs.id == rhs.id &&
-            lhs.type == rhs.type &&
-            lhs.title == rhs.title &&
-            lhs.iconName == rhs.iconName &&
-            lhs.persistent == rhs.persistent
-    }
-
     enum Progress: Equatable {
         static func == (lhs: UserIndicator.Progress, rhs: UserIndicator.Progress) -> Bool {
             switch (lhs, rhs) {
             case (.indeterminate, .indeterminate): return true
-            case (.published, .published): return true // Not technically correct but close enough for now.
+            case (.published(let lhsPublisher), .published(let rhsPublisher)): return lhsPublisher === rhsPublisher
             default: return false
             }
         }
