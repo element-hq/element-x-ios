@@ -166,14 +166,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
 
+        setupDirectRoomSubscriptionsIfNeeded()
+    }
+
+    private func setupDirectRoomSubscriptionsIfNeeded() {
+        guard roomProxy.isDirect else {
+            return
+        }
+
         let shouldShowInviteAlert = context.$viewState
             .map(\.bindings.composerFocused)
+            .removeDuplicates()
             .map { [weak self] isFocused in
                 guard let self else { return false }
 
-                // Checks if the other person left the room in a direct chat
-                return isFocused && self.roomProxy.isDirect && self.roomProxy.activeMembersCount < 2
+                return isFocused && self.roomProxy.isUserAloneInDirectRoom
             }
+            // We want to show the alert just once, so we are taking the first "true" emitted
             .first { $0 }
 
         shouldShowInviteAlert
@@ -533,6 +542,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let inviteLoadingIndicatorID = UUID().uuidString
 
     private func inviteOtherDMUserBack() {
+        guard roomProxy.isUserAloneInDirectRoom else {
+            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+            return
+        }
+
         Task {
             userIndicatorController.submitIndicator(.init(id: inviteLoadingIndicatorID, type: .toast, title: L10n.commonLoading))
             defer {
@@ -541,6 +555,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
             guard
                 let members = await roomProxy.members(),
+                members.count == 2,
                 let otherPerson = members.first(where: { !$0.isAccountOwner && $0.membership == .leave })
             else {
                 userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
@@ -556,6 +571,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                           message: L10n.commonUnableToInviteMessage)
             }
         }
+    }
+}
+
+private extension RoomProxyProtocol {
+    /// Checks if the other person left the room in a direct chat
+    var isUserAloneInDirectRoom: Bool {
+        isDirect && activeMembersCount == 1
     }
 }
 
