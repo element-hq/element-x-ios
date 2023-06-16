@@ -685,6 +685,38 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendFileUrlFileInfoReturnValue
         }
     }
+    //MARK: - retrySend
+
+    var retrySendTransactionIDCallsCount = 0
+    var retrySendTransactionIDCalled: Bool {
+        return retrySendTransactionIDCallsCount > 0
+    }
+    var retrySendTransactionIDReceivedTransactionID: String?
+    var retrySendTransactionIDReceivedInvocations: [String] = []
+    var retrySendTransactionIDClosure: ((String) async -> Void)?
+
+    func retrySend(transactionID: String) async {
+        retrySendTransactionIDCallsCount += 1
+        retrySendTransactionIDReceivedTransactionID = transactionID
+        retrySendTransactionIDReceivedInvocations.append(transactionID)
+        await retrySendTransactionIDClosure?(transactionID)
+    }
+    //MARK: - cancelSend
+
+    var cancelSendTransactionIDCallsCount = 0
+    var cancelSendTransactionIDCalled: Bool {
+        return cancelSendTransactionIDCallsCount > 0
+    }
+    var cancelSendTransactionIDReceivedTransactionID: String?
+    var cancelSendTransactionIDReceivedInvocations: [String] = []
+    var cancelSendTransactionIDClosure: ((String) async -> Void)?
+
+    func cancelSend(transactionID: String) async {
+        cancelSendTransactionIDCallsCount += 1
+        cancelSendTransactionIDReceivedTransactionID = transactionID
+        cancelSendTransactionIDReceivedInvocations.append(transactionID)
+        await cancelSendTransactionIDClosure?(transactionID)
+    }
     //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0

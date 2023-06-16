@@ -146,27 +146,44 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        if isTextItem {
+        if isTextItem || isMediaType {
             ZStack(alignment: .bottomTrailing) {
                 contentWithReply
-                localizedSendInfo
-            }
-        } else if isMediaType {
-            ZStack(alignment: .bottomTrailing) {
-                contentWithReply
-                localizedSendInfo
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    .background(Color.element.system)
-                    .cornerRadius(10)
-                    .padding(.trailing, 4)
-                    .padding(.bottom, 4)
+                interactiveLocalizedSendInfo
             }
         } else {
             HStack(alignment: .bottom, spacing: 4) {
                 contentWithReply
-                localizedSendInfo
+                interactiveLocalizedSendInfo
             }
+        }
+    }
+
+    @ViewBuilder
+    var interactiveLocalizedSendInfo: some View {
+        if timelineItem.properties.deliveryStatus == .sendingFailed {
+            backgroundedLocalizedSendInfo
+                .onTapGesture {
+                    context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
+                }
+        } else {
+            backgroundedLocalizedSendInfo
+        }
+    }
+
+    @ViewBuilder
+    var backgroundedLocalizedSendInfo: some View {
+        if isMediaType {
+            localizedSendInfo
+                .padding(.horizontal, 4)
+                .padding(.vertical, 2)
+                .background(Color.element.system)
+                .cornerRadius(10)
+                .padding(.trailing, 4)
+                .padding(.bottom, 4)
+
+        } else {
+            localizedSendInfo
         }
     }
 

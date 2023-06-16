@@ -26,4 +26,6 @@ struct RoomTimelineItemProperties: Hashable {
     var deliveryStatus: TimelineItemDeliveryStatus?
     /// The read receipts of the item, ordered from newest to oldest
     var orderedReadReceipts: [ReadReceipt] = []
+    /// The original transaction id transmitted by the client
+    var transactionID: String?
 }

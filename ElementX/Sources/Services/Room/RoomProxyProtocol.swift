@@ -101,6 +101,12 @@ protocol RoomProxyProtocol {
     
     func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError>
 
+    /// Retries sending a failed message given its transaction ID
+    func retrySend(transactionID: String) async
+
+    /// Cancels  a failed message given its transaction ID from the timeline
+    func cancelSend(transactionID: String) async
+
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>

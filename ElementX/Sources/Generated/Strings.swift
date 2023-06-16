@@ -702,6 +702,12 @@ public enum L10n {
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
   /// Room members
   public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
+  /// Remove
+  public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
+  /// Send again
+  public static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
+  /// Your message failed to send
+  public static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats

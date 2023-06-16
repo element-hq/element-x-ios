@@ -105,10 +105,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
-            
         case .displayEmojiPicker(let itemID):
             guard let item = state.items.first(where: { $0.id == itemID }), item.isReactable else { return }
             callback?(.displayEmojiPicker(itemID: itemID))
+        case .retrySend(let transactionID):
+            Task { await handleRetrySend(transactionID: transactionID) }
+        case .cancelSend(let transactionID):
+            Task { await handleCancelSend(transactionID: transactionID) }
         }
     }
     
@@ -468,6 +471,22 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
             MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
         }
+    }
+
+    private func handleRetrySend(transactionID: String?) async {
+        guard let transactionID else {
+            return
+        }
+
+        await roomProxy.retrySend(transactionID: transactionID)
+    }
+
+    private func handleCancelSend(transactionID: String?) async {
+        guard let transactionID else {
+            return
+        }
+
+        await roomProxy.cancelSend(transactionID: transactionID)
     }
 
     private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
