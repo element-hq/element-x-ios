@@ -41,7 +41,9 @@ protocol NotificationItemProxyProtocol {
 
     var isDirect: Bool { get }
 
-    var isEncrypted: Bool? { get }
+    var isRoomEncrypted: Bool? { get }
+
+    var isEncrypted: Bool { get }
 }
 
 extension NotificationItemProxyProtocol {
@@ -87,7 +89,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.isDirect
     }
 
-    var isEncrypted: Bool? {
+    var isRoomEncrypted: Bool? {
         notificationItem.isEncrypted
     }
 
@@ -105,6 +107,20 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
             return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
         }
         return nil
+    }
+
+    var isEncrypted: Bool {
+        switch event.type {
+        case .messageLike(let content):
+            switch content {
+            case .roomEncrypted:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
     }
 }
 
@@ -133,13 +149,15 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isDirect: Bool { false }
 
-    var isEncrypted: Bool? { nil }
+    var isRoomEncrypted: Bool? { nil }
 
     var senderAvatarMediaSource: MediaSourceProxy? { nil }
 
     var roomAvatarMediaSource: MediaSourceProxy? { nil }
 
     var notificationIdentifier: String { "" }
+
+    var isEncrypted: Bool { false }
 }
 
 extension NotificationItemProxyProtocol {
@@ -228,12 +246,20 @@ extension NotificationItemProxyProtocol {
 
         notification.categoryIdentifier = NotificationConstants.Category.invite
 
-        // Sadly as of right now we can't get from the NSE context any information for invited rooms, so we will only display the user name and a simple message
-        let iconType = NotificationIconType.sender(mediaSource: senderAvatarMediaSource)
+        var iconType: NotificationIconType
+        let senderName = senderDisplayName ?? roomDisplayName
+
+        if !isDirect {
+            iconType = .group(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+        } else {
+            iconType = .sender(mediaSource: senderAvatarMediaSource)
+        }
+
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
-                                                            senderName: senderDisplayName ?? event.senderID,
+                                                            senderName: senderName,
                                                             iconType: iconType)
+
         notification.body = L10n.notificationInviteBody
         return notification
     }
