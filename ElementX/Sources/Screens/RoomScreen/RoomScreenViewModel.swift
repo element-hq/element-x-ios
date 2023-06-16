@@ -530,13 +530,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                   secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
 
-    private let loaderID = UUID().uuidString
+    private let inviteLoadingIndicatorID = UUID().uuidString
 
     private func inviteOtherDMUserBack() {
         Task {
-            userIndicatorController.submitIndicator(.init(id: loaderID, type: .toast, title: L10n.commonLoading))
+            userIndicatorController.submitIndicator(.init(id: inviteLoadingIndicatorID, type: .toast, title: L10n.commonLoading))
             defer {
-                userIndicatorController.retractIndicatorWithId(loaderID)
+                userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID)
             }
 
             guard
