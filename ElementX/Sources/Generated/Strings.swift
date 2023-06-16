@@ -40,6 +40,8 @@ public enum L10n {
   public static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
   /// Copy link
   public static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
+  /// Copy link to message
+  public static var actionCopyLinkToMessage: String { return L10n.tr("Localizable", "action_copy_link_to_message") }
   /// Create
   public static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create a room
@@ -240,6 +242,8 @@ public enum L10n {
   public static var commonSuccess: String { return L10n.tr("Localizable", "common_success") }
   /// Suggestions
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
+  /// Syncing
+  public static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
   /// Third-party notices
   public static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
   /// Topic

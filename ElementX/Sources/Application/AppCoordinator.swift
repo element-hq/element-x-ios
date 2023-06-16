@@ -523,7 +523,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         let identifier = "StaleDataIndicator"
         
-        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast, title: L10n.commonLoading, persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
         
         initialSyncObserver = userSession.clientProxy
             .callbacks

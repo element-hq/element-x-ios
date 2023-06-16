@@ -78,7 +78,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 userIndicatorController?.retractIndicatorWithId(userIndicatorID)
             }
             userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                   type: .modal(interactiveDismissDisabled: true),
+                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true),
                                                                    title: L10n.commonLoading,
                                                                    persistent: true))
             
@@ -102,7 +102,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 userIndicatorController?.retractIndicatorWithId(userIndicatorID)
             }
             userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                   type: .modal(interactiveDismissDisabled: true),
+                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true),
                                                                    title: L10n.screenRoomDetailsUpdatingRoom,
                                                                    persistent: true))
             

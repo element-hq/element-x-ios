@@ -14,6 +14,7 @@
 "action_continue" = "Continue";
 "action_copy" = "Copy";
 "action_copy_link" = "Copy link";
+"action_copy_link_to_message" = "Copy link to message";
 "action_create" = "Create";
 "action_create_a_room" = "Create a room";
 "action_decline" = "Decline";
@@ -109,6 +110,7 @@
 "common_sticker" = "Sticker";
 "common_success" = "Success";
 "common_suggestions" = "Suggestions";
+"common_syncing" = "Syncing";
 "common_third_party_notices" = "Third-party notices";
 "common_topic" = "Topic";
 "common_topic_placeholder" = "What is this room about?";

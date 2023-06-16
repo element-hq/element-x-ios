@@ -28,7 +28,7 @@ struct HomeScreenInvitesButton: View {
             HStack(spacing: 8) {
                 Text(title)
                     .foregroundColor(.compound.textPrimary)
-                    .font(.compound.bodyMD)
+                    .font(.compound.bodyMDSemibold)
                 
                 if hasBadge {
                     badge

@@ -92,14 +92,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
-    private func indicateSuccess() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonSuccess))
-    }
-    
-    private func indicateFailure() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonError))
-    }
-    
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
         MXLog.info("Error occurred: \(error)")
@@ -163,7 +155,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     /// Updates the view model with a different homeserver.
     private func updateViewModel() {
         viewModel.update(homeserver: authenticationService.homeserver.value)
-        indicateSuccess()
     }
     
     /// Shows the forgot password screen.

@@ -88,10 +88,9 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     private func startLoading(label: String = L10n.commonLoading, progressPublisher: ProgressPublisher) {
         parameters.userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal,
+                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false),
                           title: label,
-                          persistent: true,
-                          loaderType: .progress(progressPublisher))
+                          persistent: true)
         )
     }
     

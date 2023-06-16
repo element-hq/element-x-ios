@@ -122,7 +122,7 @@ struct SettingsScreen: View {
             
             // Report Bug
             Button { context.send(viewAction: .reportBug) } label: {
-                Label(L10n.actionReportBug, systemImage: "ladybug")
+                Label(L10n.commonReportABug, systemImage: "ladybug")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")

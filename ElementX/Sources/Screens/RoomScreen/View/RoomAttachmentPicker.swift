@@ -54,6 +54,7 @@ struct RoomAttachmentPicker: View {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
             }
+            .padding(.top, 20)
             .background {
                 // This is done in the background otherwise GeometryReader tends to expand to
                 // all the space given to it like color or shape.
@@ -79,7 +80,16 @@ struct RoomAttachmentPicker: View {
                 .labelStyle(FixedIconSizeLabelStyle())
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                .padding(16)
         }
+    }
+}
+
+struct RoomAttachmentPicker_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               roomProxy: RoomProxyMock(with: .init(displayName: "")))
+    static var previews: some View {
+        RoomAttachmentPicker(context: viewModel.context)
     }
 }

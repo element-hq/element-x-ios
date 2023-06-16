@@ -18,41 +18,51 @@ import Combine
 import Foundation
 
 enum UserIndicatorType: Equatable {
-    case toast
-    case modal(interactiveDismissDisabled: Bool)
+    case toast(progress: UserIndicator.Progress?)
+    case modal(progress: UserIndicator.Progress?, interactiveDismissDisabled: Bool)
     
-    static var modal: Self {
-        .modal(interactiveDismissDisabled: false)
-    }
+    static var toast: Self { .toast(progress: .none) }
+    static var modal: Self { .modal(progress: .indeterminate, interactiveDismissDisabled: false) }
 }
 
 struct UserIndicator: Equatable, Identifiable {
-    static func == (lhs: UserIndicator, rhs: UserIndicator) -> Bool {
-        lhs.id == rhs.id &&
-            lhs.type == rhs.type &&
-            lhs.title == rhs.title &&
-            lhs.iconName == rhs.iconName &&
-            lhs.persistent == rhs.persistent
-    }
-
-    enum LoaderType {
-        case unknownProgress
-        case progress(ProgressPublisher)
+    enum Progress: Equatable {
+        static func == (lhs: UserIndicator.Progress, rhs: UserIndicator.Progress) -> Bool {
+            switch (lhs, rhs) {
+            case (.indeterminate, .indeterminate): return true
+            case (.published(let lhsPublisher), .published(let rhsPublisher)): return lhsPublisher === rhsPublisher
+            default: return false
+            }
+        }
+        
+        case indeterminate
+        case published(ProgressPublisher)
     }
     
     var id: String = UUID().uuidString
-    var type = UserIndicatorType.toast
+    var type: UserIndicatorType = .toast
     var title: String
     var iconName: String?
     var persistent = false
-    var loaderType: LoaderType? = .unknownProgress
+    
+    // MARK: - Associated values from the type
+    
+    var progress: Progress? {
+        switch type {
+        case .toast(let progress): return progress
+        case .modal(let progress, _): return progress
+        }
+    }
     
     var progressPublisher: AnyPublisher<Double, Never> {
-        switch loaderType {
-        case .none, .unknownProgress:
-            return Empty().eraseToAnyPublisher()
-        case .some(.progress(let progress)):
-            return progress.publisher.eraseToAnyPublisher()
+        switch type {
+        case .toast(let progress), .modal(let progress, _):
+            switch progress {
+            case .none, .indeterminate:
+                return Empty().eraseToAnyPublisher()
+            case .some(.published(let progress)):
+                return progress.publisher.eraseToAnyPublisher()
+            }
         }
     }
     
@@ -60,7 +70,7 @@ struct UserIndicator: Equatable, Identifiable {
         switch type {
         case .toast:
             return false
-        case .modal(let interactiveDismissDisabled):
+        case .modal(_, let interactiveDismissDisabled):
             return interactiveDismissDisabled
         }
     }

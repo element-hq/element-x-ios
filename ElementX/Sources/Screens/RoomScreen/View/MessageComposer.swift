@@ -133,7 +133,7 @@ private struct MessageComposerReplyHeader: View {
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     Image(systemName: "xmark")
-                        .font(.caption2.weight(.medium))
+                        .font(.compound.bodySM.weight(.medium))
                         .foregroundColor(.compound.iconTertiary)
                         .padding(16.0)
                 }
@@ -151,9 +151,9 @@ private struct MessageComposerEditHeader: View {
             Spacer()
             Button(action: action) {
                 Image(systemName: "xmark")
-                    .font(.caption2.weight(.medium))
+                    .font(.compound.bodySM.weight(.medium))
                     .foregroundColor(.compound.iconTertiary)
-                    .padding(12.0)
+                    .padding(EdgeInsets(top: 10, leading: 12, bottom: 12, trailing: 14))
             }
         }
     }
@@ -216,6 +216,17 @@ struct MessageComposer_Previews: PreviewProvider {
                             focused: .constant(false),
                             sendingDisabled: false,
                             mode: .edit(originalItemId: UUID().uuidString),
+                            sendAction: { },
+                            pasteAction: { _ in },
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
+            
+            MessageComposer(text: .constant(""),
+                            focused: .constant(false),
+                            sendingDisabled: false,
+                            mode: .reply(itemID: UUID().uuidString,
+                                         replyDetails: .loaded(sender: .init(id: "Kirk"),
+                                                               contentType: .text(.init(body: "Text: Where the wild things are")))),
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },

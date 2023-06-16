@@ -35,12 +35,15 @@ struct AnalyticsSettingsScreenStrings {
     
     init(termsURL: URL) {
         let content = AttributedString(L10n.screenAnalyticsSettingsHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
+        
         // Create the 'read terms' with a placeholder.
         let linkPlaceholder = "{link}"
         var readTerms = AttributedString(L10n.screenAnalyticsSettingsReadTerms(linkPlaceholder))
-        readTerms.replace(linkPlaceholder,
-                          with: L10n.screenAnalyticsSettingsReadTermsContentLink,
-                          asLinkTo: termsURL)
+        var linkString = AttributedString(L10n.screenAnalyticsSettingsReadTermsContentLink)
+        linkString.link = termsURL
+        linkString.bold()
+        readTerms.replace(linkPlaceholder, with: linkString)
+        
         sectionFooter = content + "\n\n" + readTerms
     }
 }

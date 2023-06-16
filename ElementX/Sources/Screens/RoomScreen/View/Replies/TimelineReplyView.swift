@@ -113,7 +113,7 @@ struct TimelineReplyView: View {
                     Spacer().frame(width: 4.0)
                 }
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(sender.displayName ?? sender.id)
                         .font(.compound.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)

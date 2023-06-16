@@ -21,7 +21,7 @@ protocol ProgressListener {
     var progressSubject: CurrentValueSubject<Double, Never> { get }
 }
 
-protocol ProgressPublisher {
+protocol ProgressPublisher: AnyObject {
     var publisher: AnyPublisher<Double, Never> { get }
 }
 

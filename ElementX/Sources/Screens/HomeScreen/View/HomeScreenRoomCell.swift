@@ -92,7 +92,7 @@ struct HomeScreenRoomCell: View {
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(.compound.bodySM)
+                    .font(room.hasUnreads ? .compound.bodySMSemibold : .compound.bodySM)
                     .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .compound.textSecondary)
             }
         }

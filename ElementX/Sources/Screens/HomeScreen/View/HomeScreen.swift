@@ -154,7 +154,7 @@ struct HomeScreen: View {
                     Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
                 }
                 Button(action: feedback) {
-                    Label(L10n.commonReportABug, systemImage: "questionmark.circle")
+                    Label(L10n.commonReportABug, systemImage: "ladybug")
                 }
             }
             Section {

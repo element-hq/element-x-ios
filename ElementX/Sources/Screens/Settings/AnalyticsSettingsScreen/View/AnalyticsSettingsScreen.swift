@@ -40,7 +40,6 @@ struct AnalyticsSettingsScreen: View {
         } footer: {
             Text(context.viewState.strings.sectionFooter)
                 .compoundFormSectionFooter()
-                .tint(.compound.textLinkExternal)
         }
         .compoundFormSection()
     }
