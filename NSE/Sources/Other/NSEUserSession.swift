@@ -35,7 +35,7 @@ final class NSEUserSession {
         try client.restoreSession(session: credentials.restorationToken.session)
 
         let listener = WeakNSEUserSessionWrapper(userSession: self)
-        encryptionSync = try client.notificationSlidingSync(id: "NSE", listener: listener)
+        encryptionSync = try client.notificationEncryptionLoop(id: "NSE", listener: listener, numIters: 2)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
@@ -51,6 +51,10 @@ final class NSEUserSession {
                 return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
             }
         }
+    }
+
+    deinit {
+        encryptionSync?.stop()
     }
 }
 
