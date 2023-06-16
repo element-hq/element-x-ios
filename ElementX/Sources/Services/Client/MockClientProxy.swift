@@ -77,7 +77,7 @@ class MockClientProxy: ClientProxyProtocol {
         switch room {
         case .empty:
             return RoomProxyMock(with: .init(displayName: "Empty room"))
-        case .filled(let details), .invalidated(let details):
+        case .filled(let details):
             return RoomProxyMock(with: .init(displayName: details.name))
         }
     }

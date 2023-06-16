@@ -72,8 +72,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         do {
             let listUpdatesSubscriptionResult = try await entriesFunction(RoomListEntriesListenerProxy { [weak self] update in
                 guard let self else { return }
-                MXLog.verbose("\(self.name): Received list update")
-                self.diffPublisher.send(update)
+                MXLog.verbose("\(name): Received list update")
+                diffPublisher.send(update)
             })
             
             listUpdatesTaskHandle = listUpdatesSubscriptionResult.entriesStream
@@ -84,8 +84,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             
             let stateUpdatesSubscriptionResult = try await entriesLoadingStateFunction(RoomListStateObserver { [weak self] state in
                 guard let self else { return }
-                MXLog.info("\(self.name): Received state update: \(state)")
-                self.stateSubject.send(RoomSummaryProviderState(slidingSyncState: state))
+                MXLog.info("\(name): Received state update: \(state)")
+                stateSubject.send(RoomSummaryProviderState(slidingSyncState: state))
             })
             
             stateSubject.send(RoomSummaryProviderState(slidingSyncState: stateUpdatesSubscriptionResult.entriesLoadingState))
@@ -140,7 +140,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummary {
-        guard let room = try? roomListService.room(roomId: identifier) else {
+        guard let roomListItem = try? roomListService.room(roomId: identifier) else {
             MXLog.error("\(name): Failed finding room with id: \(identifier)")
             return .empty
         }
@@ -148,22 +148,22 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var attributedLastMessage: AttributedString?
         var lastMessageFormattedTimestamp: String?
         
-        if let latestRoomMessage = room.latestEvent() {
+        if let latestRoomMessage = roomListItem.latestEvent() {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
         }
         
-        let fullRoom = room.fullRoom()
+        let room = roomListItem.fullRoom()
 
-        let details = RoomSummaryDetails(id: room.id(),
-                                         name: room.name() ?? fullRoom.id(),
-                                         isDirect: fullRoom.isDirect(),
-                                         avatarURL: fullRoom.avatarUrl().flatMap(URL.init(string:)),
+        let details = RoomSummaryDetails(id: roomListItem.id(),
+                                         name: roomListItem.name() ?? room.id(),
+                                         isDirect: room.isDirect(),
+                                         avatarURL: room.avatarUrl().flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()),
-                                         canonicalAlias: fullRoom.canonicalAlias())
+                                         unreadNotificationCount: UInt(roomListItem.unreadNotifications().notificationCount()),
+                                         canonicalAlias: room.canonicalAlias())
 
         return .filled(details: details)
     }

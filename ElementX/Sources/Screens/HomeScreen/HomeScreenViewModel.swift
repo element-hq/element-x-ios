@@ -201,9 +201,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
     }
         
-    /// This method will update all view state rooms by merging the data from both summary providers
-    /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
-    /// This ensures that we show as many room details as possible without loading up timelines
     private func updateRooms() {
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -218,7 +215,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             switch summary {
             case .empty:
                 rooms.append(HomeScreenRoom.placeholder())
-            case .filled(let details), .invalidated(let details):
+            case .filled(let details):
                 let room = buildRoom(with: details)
                 rooms.append(room)
             }

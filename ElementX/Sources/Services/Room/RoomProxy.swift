@@ -181,7 +181,7 @@ class RoomProxy: RoomProxyProtocol {
 
         self.timelineListener = timelineListener
         
-        let result = roomListItem.fullRoom().addTimelineListener(listener: timelineListener)
+        let result = room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
         Task {

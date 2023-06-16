@@ -28,13 +28,12 @@ enum RoomSummaryProviderState {
 enum RoomSummary: CustomStringConvertible {
     case empty
     case filled(details: RoomSummaryDetails)
-    case invalidated(details: RoomSummaryDetails)
     
     var id: String? {
         switch self {
         case .empty:
             return nil
-        case .invalidated(let details), .filled(let details):
+        case .filled(let details):
             return details.id
         }
     }
@@ -43,7 +42,7 @@ enum RoomSummary: CustomStringConvertible {
         switch self {
         case .empty:
             return nil
-        case .invalidated(let details), .filled(let details):
+        case .filled(let details):
             return details.name
         }
     }
@@ -52,8 +51,6 @@ enum RoomSummary: CustomStringConvertible {
         switch self {
         case .empty:
             return "\(String(describing: Self.self)): Empty"
-        case .invalidated(let details):
-            return "\(String(describing: Self.self)): Invalidated(\(details.id))"
         case .filled(let details):
             return "\(String(describing: Self.self)): Filled(\(details.id))"
         }
@@ -67,6 +64,8 @@ protocol RoomSummaryProviderProtocol {
     /// Publishes the current state the summary provider is finding itself in
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
     
+    /// A separate subscription method is needed instead of running this in the constructor because the invites list is added later on the Rust side.
+    /// Wanted to be able to build the InvitesSummaryProvider directly instead of having to inform the HomeScreenViewModel about it later
     func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
                               entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) async
     
