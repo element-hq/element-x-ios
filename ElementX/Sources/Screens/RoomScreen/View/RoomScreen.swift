@@ -62,7 +62,7 @@ struct RoomScreen: View {
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
-            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo) { item in
+            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { item in
                 Button(L10n.screenRoomRetrySendMenuSendAgainAction) {
                     context.send(viewAction: .retrySend(transactionID: item.transactionID))
                 }
