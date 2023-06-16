@@ -308,7 +308,7 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       members: members,
                                                       memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      joinedMembersCount: members.count))
+                                                      activeMembersCount: members.count))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
@@ -327,7 +327,7 @@ class MockScreen: Identifiable {
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
                                                       memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      joinedMembersCount: members.count))
+                                                      activeMembersCount: members.count))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
@@ -348,7 +348,7 @@ class MockScreen: Identifiable {
                                                       canonicalAlias: "#mock:room.org",
                                                       members: members,
                                                       memberForID: owner,
-                                                      joinedMembersCount: members.count))
+                                                      activeMembersCount: members.count))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
@@ -365,7 +365,7 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       members: members,
                                                       memberForID: owner,
-                                                      joinedMembersCount: members.count))
+                                                      activeMembersCount: members.count))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
@@ -383,7 +383,7 @@ class MockScreen: Identifiable {
                                                       isEncrypted: true,
                                                       members: members,
                                                       memberForID: .mockOwner(allowedStateEvents: [], canInviteUsers: false),
-                                                      joinedMembersCount: members.count))
+                                                      activeMembersCount: members.count))
             let coordinator = RoomDetailsScreenCoordinator(parameters: .init(accountUserID: "@owner:somewhere.com",
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,

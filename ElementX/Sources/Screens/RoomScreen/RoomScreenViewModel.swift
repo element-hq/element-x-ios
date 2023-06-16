@@ -117,6 +117,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Private
 
+    // swiftlint:disable:next function_body_length
     private func setupSubscriptions() {
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -164,8 +165,33 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
+
+        setupDirectRoomSubscriptionsIfNeeded()
     }
-    
+
+    private func setupDirectRoomSubscriptionsIfNeeded() {
+        guard roomProxy.isDirect else {
+            return
+        }
+
+        let shouldShowInviteAlert = context.$viewState
+            .map(\.bindings.composerFocused)
+            .removeDuplicates()
+            .map { [weak self] isFocused in
+                guard let self else { return false }
+
+                return isFocused && self.roomProxy.isUserAloneInDirectRoom
+            }
+            // We want to show the alert just once, so we are taking the first "true" emitted
+            .first { $0 }
+
+        shouldShowInviteAlert
+            .sink { [weak self] _ in
+                self?.showInviteAlert()
+            }
+            .store(in: &cancellables)
+    }
+
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
         case .failure:
@@ -501,6 +527,57 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+
+    // MARK: - Direct chats logics
+
+    private func showInviteAlert() {
+        userIndicatorController.alertInfo = .init(id: .init(),
+                                                  title: L10n.screenRoomInviteAgainAlertTitle,
+                                                  message: L10n.screenRoomInviteAgainAlertMessage,
+                                                  primaryButton: .init(title: L10n.actionInvite, action: { [weak self] in self?.inviteOtherDMUserBack() }),
+                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+
+    private let inviteLoadingIndicatorID = UUID().uuidString
+
+    private func inviteOtherDMUserBack() {
+        guard roomProxy.isUserAloneInDirectRoom else {
+            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+            return
+        }
+
+        Task {
+            userIndicatorController.submitIndicator(.init(id: inviteLoadingIndicatorID, type: .toast, title: L10n.commonLoading))
+            defer {
+                userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID)
+            }
+
+            guard
+                let members = await roomProxy.members(),
+                members.count == 2,
+                let otherPerson = members.first(where: { !$0.isAccountOwner && $0.membership == .leave })
+            else {
+                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+                return
+            }
+
+            switch await roomProxy.invite(userID: otherPerson.userID) {
+            case .success:
+                break
+            case .failure:
+                userIndicatorController.alertInfo = .init(id: .init(),
+                                                          title: L10n.commonUnableToInviteTitle,
+                                                          message: L10n.commonUnableToInviteMessage)
+            }
+        }
+    }
+}
+
+private extension RoomProxyProtocol {
+    /// Checks if the other person left the room in a direct chat
+    var isUserAloneInDirectRoom: Bool {
+        isDirect && activeMembersCount == 1
     }
 }
 

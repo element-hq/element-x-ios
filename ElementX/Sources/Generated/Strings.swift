@@ -56,6 +56,8 @@ public enum L10n {
   public static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
   /// Forgot password?
   public static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
+  /// Forward
+  public static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
   /// Invite
   public static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
   /// Invite friends
@@ -118,6 +120,8 @@ public enum L10n {
   public static var actionStartChat: String { return L10n.tr("Localizable", "action_start_chat") }
   /// Start verification
   public static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
+  /// Tap to load map
+  public static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
   /// Take photo
   public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
   /// View Source
@@ -158,6 +162,8 @@ public enum L10n {
   public static var commonError: String { return L10n.tr("Localizable", "common_error") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
+  /// Forward message
+  public static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
   /// GIF
   public static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
@@ -182,6 +188,8 @@ public enum L10n {
   public static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
   /// Modern
   public static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
+  /// Mute
+  public static var commonMute: String { return L10n.tr("Localizable", "common_mute") }
   /// No results
   public static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// Offline
@@ -244,6 +252,8 @@ public enum L10n {
   public static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
   /// Unable to send invite(s)
   public static var commonUnableToInviteTitle: String { return L10n.tr("Localizable", "common_unable_to_invite_title") }
+  /// Unmute
+  public static var commonUnmute: String { return L10n.tr("Localizable", "common_unmute") }
   /// Unsupported event
   public static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
   /// Username
@@ -340,7 +350,7 @@ public enum L10n {
   public static func notificationInvitations(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_invitations", p1)
   }
-  /// invited you
+  /// Invited you to chat
   public static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
   /// New Messages
   public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
@@ -352,6 +362,8 @@ public enum L10n {
   public static var notificationRoomActionMarkAsRead: String { return L10n.tr("Localizable", "notification_room_action_mark_as_read") }
   /// Quick reply
   public static var notificationRoomActionQuickReply: String { return L10n.tr("Localizable", "notification_room_action_quick_reply") }
+  /// Invited you to join the room
+  public static var notificationRoomInviteBody: String { return L10n.tr("Localizable", "notification_room_invite_body") }
   /// Me
   public static var notificationSenderMe: String { return L10n.tr("Localizable", "notification_sender_me") }
   /// You are viewing the notification! Click me!
@@ -538,8 +550,6 @@ public enum L10n {
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite friends to Element
-  public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Invite people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
   /// An error occurred when creating the room
@@ -682,6 +692,10 @@ public enum L10n {
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
   public static var screenRoomErrorFailedRetrievingUserDetails: String { return L10n.tr("Localizable", "screen_room_error_failed_retrieving_user_details") }
+  /// Would you like to invite them back?
+  public static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
+  /// You are alone in this chat
+  public static var screenRoomInviteAgainAlertTitle: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_title") }
   /// Block
   public static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
   /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
