@@ -19,7 +19,19 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, NotificationSyncListener {
+private class EncryptionSyncListener: NotificationSyncListener {
+    private unowned let clientProxy: ClientProxy
+
+    init(clientProxy: ClientProxy) {
+        self.clientProxy = clientProxy
+    }
+
+    func didTerminate() {
+        MXLog.info("Encryption sync terminated for user: \(clientProxy.userID)")
+    }
+}
+
+private class WeakClientProxyWrapper: ClientDelegate {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -36,12 +48,6 @@ private class WeakClientProxyWrapper: ClientDelegate, NotificationSyncListener {
     func didRefreshTokens() {
         MXLog.info("The session has updated tokens.")
         clientProxy?.updateRestorationToken()
-    }
-
-    // MARK: - NotificationSyncListener
-
-    func didTerminate() {
-        MXLog.info("Encryption sync terminated for user: \(clientProxy?.userID ?? "unknown")")
     }
 }
 
@@ -95,7 +101,7 @@ class ClientProxy: ClientProxyProtocol {
             self?.callbacks.send(.updateRestorationToken)
         })
         
-        configureEncryptionSync(listener: delegate)
+        configureEncryptionSync(listener: EncryptionSyncListener(clientProxy: self))
         await configureRoomListService()
 
         loadUserAvatarURLFromCache()
@@ -141,12 +147,15 @@ class ClientProxy: ClientProxyProtocol {
         guard !isSyncing else {
             return
         }
-        
+
+        configureEncryptionSync(listener: EncryptionSyncListener(clientProxy: self))
         roomListService?.sync()
     }
     
     func stopSync() {
         MXLog.info("Stopping sync")
+        encryptionSync?.stop()
+        encryptionSync = nil
         do {
             try roomListService?.stopSync()
         } catch {
@@ -391,8 +400,12 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func configureEncryptionSync(listener: NotificationSyncListener) {
+        guard encryptionSync == nil else {
+            MXLog.info("Encryption sync is already configured")
+            return
+        }
         do {
-            try encryptionSync = client.notificationSlidingSync(id: "MainApp", listener: listener)
+            try encryptionSync = client.mainEncryptionLoop(id: "Main App", listener: listener, withLock: true)
         } catch {
             MXLog.error("Configure encryption sync failed with error: \(error)")
         }
