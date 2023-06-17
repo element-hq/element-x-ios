@@ -156,6 +156,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                             userIDs: state.selectedUsers.map(\.userID),
                                             avatarURL: avatarURL) {
         case .success(let roomId):
+            ServiceLocator.shared.analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)

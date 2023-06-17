@@ -125,4 +125,10 @@ extension Analytics {
         let event = AnalyticsEvent.MobileScreen(durationMs: milliseconds, screenName: screen.screenName)
         client.screen(event)
     }
+
+    /// Track the creation of a room
+    /// - Parameter isDM: true if the created room is a direct message, false otherwise
+    func trackCreatedRoom(isDM: Bool) {
+        capture(event: AnalyticsEvent.CreatedRoom(isDM: isDM))
+    }
 }

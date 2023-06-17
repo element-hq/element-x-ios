@@ -32,6 +32,7 @@ struct CreateRoomScreen: View {
             securitySection
         }
         .elementFormStyle()
+        .track(screen: .createRoom)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenCreateRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
