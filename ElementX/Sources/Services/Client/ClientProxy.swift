@@ -135,11 +135,7 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
 
-        let listener = EncryptionSyncListenerProxy { [weak self] in
-            MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
-        }
-
-        configureEncryptionSync(listener: listener)
+        startEncryptionSyncService()
         roomListService?.sync()
     }
     
