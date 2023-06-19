@@ -19,18 +19,6 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class ConcreteEncryptionSyncListener: EncryptionSyncListener {
-    private unowned let clientProxy: ClientProxy
-
-    init(clientProxy: ClientProxy) {
-        self.clientProxy = clientProxy
-    }
-
-    func didTerminate() {
-        MXLog.info("Encryption sync terminated for user: \(clientProxy.userID)")
-    }
-}
-
 private class WeakClientProxyWrapper: ClientDelegate {
     private weak var clientProxy: ClientProxy?
     
@@ -147,7 +135,11 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
 
-        configureEncryptionSync(listener: EncryptionSyncListener(clientProxy: self))
+        let listener = EncryptionSyncListenerProxy { [weak self] in
+            MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
+        }
+
+        configureEncryptionSync(listener: listener)
         roomListService?.sync()
     }
     

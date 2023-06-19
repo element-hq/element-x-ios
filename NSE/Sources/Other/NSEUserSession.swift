@@ -23,10 +23,8 @@ final class NSEUserSession {
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
-    let userID: String
 
     init(credentials: KeychainCredentials) throws {
-        userID = credentials.userID
         let builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
@@ -34,7 +32,9 @@ final class NSEUserSession {
         client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
 
-        let listener = WeakNSEUserSessionWrapper(userSession: self)
+        let listener = EncryptionSyncListenerProxy {
+            MXLog.info("NSE: Encryption sync terminated for user: \(credentials.userID)")
+        }
         encryptionSync = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
     }
 
@@ -55,17 +55,5 @@ final class NSEUserSession {
 
     deinit {
         encryptionSync?.stop()
-    }
-}
-
-final class WeakNSEUserSessionWrapper: EncryptionSyncListener {
-    private unowned let userSession: NSEUserSession
-
-    init(userSession: NSEUserSession) {
-        self.userSession = userSession
-    }
-    
-    func didTerminate() {
-        MXLog.info("NSE: Encryption sync terminated for user: \(userSession.userID)")
     }
 }
