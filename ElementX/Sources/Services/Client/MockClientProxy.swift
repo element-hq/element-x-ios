@@ -62,7 +62,7 @@ class MockClientProxy: ClientProxyProtocol {
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         .failure(.failedUploadingMedia(.unknown))
     }
-    
+     
     var roomForIdentifierMocks: [String: RoomProxyMock] = .init()
     @MainActor
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
@@ -77,7 +77,7 @@ class MockClientProxy: ClientProxyProtocol {
         switch room {
         case .empty:
             return RoomProxyMock(with: .init(displayName: "Empty room"))
-        case .filled(let details):
+        case .filled(let details), .invalidated(let details):
             return RoomProxyMock(with: .init(displayName: details.name))
         }
     }

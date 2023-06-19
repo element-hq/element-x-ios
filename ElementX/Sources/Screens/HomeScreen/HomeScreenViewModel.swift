@@ -215,8 +215,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             switch summary {
             case .empty:
                 rooms.append(HomeScreenRoom.placeholder())
+            case .invalidated(let details):
+                let room = buildRoom(with: details, invalidated: true)
+                rooms.append(room)
             case .filled(let details):
-                let room = buildRoom(with: details)
+                let room = buildRoom(with: details, invalidated: false)
                 rooms.append(room)
             }
         }
@@ -226,14 +229,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Finished updating rooms")
     }
     
-    private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
-        HomeScreenRoom(id: details.id,
-                       roomId: details.id,
-                       name: details.name,
-                       hasUnreads: details.unreadNotificationCount > 0,
-                       timestamp: details.lastMessageFormattedTimestamp,
-                       lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
-                       avatarURL: details.avatarURL)
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+        let identifier = invalidated ? "invalidated-" + details.id : details.id
+        
+        return HomeScreenRoom(id: identifier,
+                              roomId: details.id,
+                              name: details.name,
+                              hasUnreads: details.unreadNotificationCount > 0,
+                              timestamp: details.lastMessageFormattedTimestamp,
+                              lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
+                              avatarURL: details.avatarURL)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {

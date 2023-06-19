@@ -139,7 +139,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
         
-    private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummary {
+    private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
         guard let roomListItem = try? roomListService.room(roomId: identifier) else {
             MXLog.error("\(name): Failed finding room with id: \(identifier)")
             return .empty
@@ -165,7 +165,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          unreadNotificationCount: UInt(roomListItem.unreadNotifications().notificationCount()),
                                          canonicalAlias: room.canonicalAlias())
 
-        return .filled(details: details)
+        return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
     
     private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummary {
@@ -173,9 +173,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .empty:
             return .empty
         case .filled(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+            return buildRoomSummaryForIdentifier(roomId, invalidated: false)
         case .invalidated(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+            return buildRoomSummaryForIdentifier(roomId, invalidated: true)
         }
     }
     
