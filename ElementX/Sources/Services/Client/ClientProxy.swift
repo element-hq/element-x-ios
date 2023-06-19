@@ -406,7 +406,10 @@ class ClientProxy: ClientProxyProtocol {
                 guard let self, isEncryptionSyncing else {
                     return
                 }
-                startEncryptionSyncService()
+                // To avoid the nested block on error
+                Task {
+                    self.startEncryptionSyncService()
+                }
             }
             try encryptionSyncService = client.mainEncryptionSync(id: "Main App", listener: listener, withLock: true)
             isEncryptionSyncing = true

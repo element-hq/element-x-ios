@@ -33,18 +33,18 @@ final class NSEUserSession {
 
         client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
-        startEncryptionSync(userID: userID)
+        try startEncryptionSync(userID: userID)
     }
 
-    private func startEncryptionSync(userID: String) {
-        do {
-            let listener = EncryptionSyncListenerProxy {
-                MXLog.info("NSE: Encryption sync terminated for user: \(userID)")
+    private func startEncryptionSync(userID: String) throws {
+        let listener = EncryptionSyncListenerProxy {
+            MXLog.info("NSE: Encryption sync terminated for user: \(userID)")
+            // To avoid the nested block on error
+            Task {
+                try self.startEncryptionSync(userID: userID)
             }
-            encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
-        } catch {
-            MXLog.error("NSE: Encyrption sync could not be started for user: \(userID)")
         }
+        encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
