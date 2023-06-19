@@ -19,7 +19,7 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     private let client: ClientProtocol
-    private var encryptionSync: NotificationSync!
+    private var encryptionSync: EncryptionSync!
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
@@ -35,7 +35,7 @@ final class NSEUserSession {
         try client.restoreSession(session: credentials.restorationToken.session)
 
         let listener = WeakNSEUserSessionWrapper(userSession: self)
-        encryptionSync = try client.notificationEncryptionLoop(id: "NSE", listener: listener, numIters: 2)
+        encryptionSync = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
@@ -58,7 +58,7 @@ final class NSEUserSession {
     }
 }
 
-final class WeakNSEUserSessionWrapper: NotificationSyncListener {
+final class WeakNSEUserSessionWrapper: EncryptionSyncListener {
     private unowned let userSession: NSEUserSession
 
     init(userSession: NSEUserSession) {

@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class EncryptionSyncListener: NotificationSyncListener {
+private class ConcreteEncryptionSyncListener: EncryptionSyncListener {
     private unowned let clientProxy: ClientProxy
 
     init(clientProxy: ClientProxy) {
@@ -61,8 +61,7 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
 
-    // The naming is a bit misleading since in this context the NotificationSync does nothing related to notification, it's just a way to sync the encryption keys
-    private var encryptionSync: NotificationSync?
+    private var encryptionSync: EncryptionSync?
 
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
@@ -101,7 +100,7 @@ class ClientProxy: ClientProxyProtocol {
             self?.callbacks.send(.updateRestorationToken)
         })
         
-        configureEncryptionSync(listener: EncryptionSyncListener(clientProxy: self))
+        configureEncryptionSync(listener: ConcreteEncryptionSyncListener(clientProxy: self))
         await configureRoomListService()
 
         loadUserAvatarURLFromCache()
@@ -399,13 +398,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    private func configureEncryptionSync(listener: NotificationSyncListener) {
+    private func configureEncryptionSync(listener: EncryptionSyncListener) {
         guard encryptionSync == nil else {
             MXLog.info("Encryption sync is already configured")
             return
         }
         do {
-            try encryptionSync = client.mainEncryptionLoop(id: "Main App", listener: listener, withLock: true)
+            try encryptionSync = client.mainEncryptionSync(id: "Main App", listener: listener, withLock: true)
         } catch {
             MXLog.error("Configure encryption sync failed with error: \(error)")
         }
