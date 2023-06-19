@@ -384,6 +384,31 @@ class SDKClientMock: SDKClientProtocol {
         logoutCallsCount += 1
         try logoutClosure?()
     }
+    //MARK: - `notificationSlidingSync`
+
+    public var notificationSlidingSyncIdListenerThrowableError: Error?
+    public var notificationSlidingSyncIdListenerCallsCount = 0
+    public var notificationSlidingSyncIdListenerCalled: Bool {
+        return notificationSlidingSyncIdListenerCallsCount > 0
+    }
+    public var notificationSlidingSyncIdListenerReceivedArguments: (`id`: String, `listener`: NotificationSyncListener)?
+    public var notificationSlidingSyncIdListenerReceivedInvocations: [(`id`: String, `listener`: NotificationSyncListener)] = []
+    public var notificationSlidingSyncIdListenerReturnValue: NotificationSync!
+    public var notificationSlidingSyncIdListenerClosure: ((String, NotificationSyncListener) throws -> NotificationSync)?
+
+    public func `notificationSlidingSync`(`id`: String, `listener`: NotificationSyncListener) throws -> NotificationSync {
+        if let error = notificationSlidingSyncIdListenerThrowableError {
+            throw error
+        }
+        notificationSlidingSyncIdListenerCallsCount += 1
+        notificationSlidingSyncIdListenerReceivedArguments = (id: id, listener: listener)
+        notificationSlidingSyncIdListenerReceivedInvocations.append((id: id, listener: listener))
+        if let notificationSlidingSyncIdListenerClosure = notificationSlidingSyncIdListenerClosure {
+            return try notificationSlidingSyncIdListenerClosure(`id`, `listener`)
+        } else {
+            return notificationSlidingSyncIdListenerReturnValue
+        }
+    }
     //MARK: - `restoreSession`
 
     public var restoreSessionSessionThrowableError: Error?
