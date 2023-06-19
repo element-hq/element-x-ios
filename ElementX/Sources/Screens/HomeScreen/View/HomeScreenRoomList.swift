@@ -17,12 +17,19 @@
 import SwiftUI
 
 struct HomeScreenRoomList: View {
-    @Environment(\.isSearching) var isSearching
+    @Environment(\.isSearching) var isSearchFieldFocused
     
     @ObservedObject var context: HomeScreenViewModel.Context
+    @Binding var isSearching: Bool
     
     var body: some View {
-        if isSearching, context.searchQuery.count == 0 {
+        content
+            .onChange(of: isSearchFieldFocused) { isSearching = $0 }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        if isSearchFieldFocused, context.searchQuery.count == 0 {
             EmptyView()
         } else {
             ForEach(context.viewState.visibleRooms) { room in

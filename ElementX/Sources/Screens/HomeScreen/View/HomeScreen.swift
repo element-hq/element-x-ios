@@ -27,6 +27,7 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingBottomToolbar = true
+    @State private var isSearching = false
     
     var body: some View {
         ScrollView {
@@ -34,16 +35,12 @@ struct HomeScreen: View {
                 sessionVerificationBanner
             }
             
-            if context.viewState.hasPendingInvitations {
-                ZStack {
-                    HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                        context.send(viewAction: .selectInvites)
-                    }
-                    .padding(.trailing, 16.0)
-                    .padding(.leading, 64.0)
-                    .padding(.vertical, 4.0)
+            if context.viewState.hasPendingInvitations, !isSearching {
+                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
+                    context.send(viewAction: .selectInvites)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.vertical, -8.0)
             }
             
             if context.viewState.roomListMode == .skeletons {
@@ -57,7 +54,7 @@ struct HomeScreen: View {
                 .disabled(true)
             } else {
                 LazyVStack(spacing: 0) {
-                    HomeScreenRoomList(context: context)
+                    HomeScreenRoomList(context: context, isSearching: $isSearching)
                 }
                 .searchable(text: $context.searchQuery)
                 .compoundSearchField()
