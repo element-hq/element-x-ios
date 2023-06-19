@@ -26,27 +26,25 @@ struct HomeScreenRoomList: View {
             EmptyView()
         } else {
             ForEach(context.viewState.visibleRooms) { room in
-                Group {
-                    if room.isPlaceholder {
-                        HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                            .redacted(reason: .placeholder)
-                    } else {
-                        let isSelected = context.viewState.highlightedRoomID == room.id
-                        HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
-                            .contextMenu {
-                                Button {
-                                    context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
-                                } label: {
-                                    Label(L10n.commonSettings, systemImage: "gearshape")
-                                }
-                                
-                                Button(role: .destructive) {
-                                    context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                                } label: {
-                                    Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
-                                }
+                if room.isPlaceholder {
+                    HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                        .redacted(reason: .placeholder)
+                } else {
+                    let isSelected = context.viewState.selectedRoomID == room.id
+                    HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
+                        .contextMenu {
+                            Button {
+                                context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
+                            } label: {
+                                Label(L10n.commonSettings, systemImage: "gearshape")
                             }
-                    }
+                            
+                            Button(role: .destructive) {
+                                context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+                            } label: {
+                                Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
+                            }
+                        }
                 }
             }
         }

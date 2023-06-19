@@ -62,7 +62,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         selectedRoomPublisher
-            .weakAssign(to: \.state.highlightedRoomID, on: self)
+            .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
         guard let roomSummaryProvider, let inviteSummaryProvider else {
