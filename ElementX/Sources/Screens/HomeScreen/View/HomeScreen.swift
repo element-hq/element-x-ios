@@ -26,7 +26,6 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    @State private var showingLogoutConfirmation = false
     @State private var showingBottomToolbar = true
     
     var body: some View {
@@ -58,30 +57,7 @@ struct HomeScreen: View {
                 .disabled(true)
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(context.viewState.visibleRooms) { room in
-                        Group {
-                            if room.isPlaceholder {
-                                HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                                    .redacted(reason: .placeholder)
-                            } else {
-                                let isSelected = context.viewState.highlightedRoomID == room.id
-                                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
-                                    .contextMenu {
-                                        Button {
-                                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
-                                        } label: {
-                                            Label(L10n.commonSettings, systemImage: "gearshape")
-                                        }
-                                        
-                                        Button(role: .destructive) {
-                                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                                        } label: {
-                                            Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
-                                        }
-                                    }
-                            }
-                        }
-                    }
+                    HomeScreenRoomList(context: context)
                 }
                 .searchable(text: $context.searchQuery)
                 .compoundSearchField()
@@ -138,7 +114,7 @@ struct HomeScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            userMenuButton
+            HomeScreenUserMenuButton(context: context)
         }
         
         ToolbarItemGroup(placement: .bottomBar) {
@@ -146,51 +122,11 @@ struct HomeScreen: View {
             newRoomButton
         }
     }
-
-    @ViewBuilder
-    private var userMenuButton: some View {
-        Menu {
-            Section {
-                Button(action: settings) {
-                    Label(L10n.commonSettings, systemImage: "gearshape")
-                }
-            }
-            Section {
-                MatrixUserShareLink(userID: context.viewState.userID) {
-                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
-                }
-                Button(action: feedback) {
-                    Label(L10n.commonReportABug, systemImage: "ladybug")
-                }
-            }
-            Section {
-                Button(role: .destructive) {
-                    showingLogoutConfirmation = true
-                } label: {
-                    Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
-                }
-            }
-        } label: {
-            LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                name: context.viewState.userDisplayName,
-                                contentID: context.viewState.userID,
-                                avatarSize: .user(on: .home),
-                                imageProvider: context.imageProvider)
-                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-        }
-        .alert(L10n.screenSignoutConfirmationDialogTitle,
-               isPresented: $showingLogoutConfirmation) {
-            Button(L10n.screenSignoutConfirmationDialogSubmit,
-                   role: .destructive,
-                   action: signOut)
-        } message: {
-            Text(L10n.screenSignoutConfirmationDialogContent)
-        }
-        .accessibilityLabel(L10n.a11yUserMenu)
-    }
     
     private var newRoomButton: some View {
-        Button(action: startChat) {
+        Button {
+            context.send(viewAction: .startChat)
+        } label: {
             Image(systemName: "square.and.pencil")
         }
     }
@@ -229,22 +165,6 @@ struct HomeScreen: View {
         .background(Color.compound.bgSubtleSecondary)
         .cornerRadius(14)
         .padding(.horizontal, 16)
-    }
-
-    private func settings() {
-        context.send(viewAction: .userMenu(action: .settings))
-    }
-
-    private func startChat() {
-        context.send(viewAction: .startChat)
-    }
-    
-    private func feedback() {
-        context.send(viewAction: .userMenu(action: .feedback))
-    }
-
-    private func signOut() {
-        context.send(viewAction: .userMenu(action: .signOut))
     }
     
     private func updateVisibleRange() {

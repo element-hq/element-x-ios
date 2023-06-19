@@ -117,7 +117,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Private
 
-    // swiftlint:disable:next function_body_length
     private func setupSubscriptions() {
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
