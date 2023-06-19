@@ -377,6 +377,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func tearDownUserSession() {
+        ServiceLocator.shared.userIndicatorController.retractAllIndicators()
+        
         userSession = nil
         
         userSessionFlowCoordinator = nil
