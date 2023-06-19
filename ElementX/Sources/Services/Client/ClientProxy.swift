@@ -401,8 +401,7 @@ class ClientProxy: ClientProxyProtocol {
                     Task {
                         // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
                         await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
-                                                                               // This state function is wrong but it's not used
-                                                                               entriesLoadingStateFunction: roomListService.entriesLoadingState(listener:))
+                                                                               entriesLoadingStateFunction: nil)
                     }
                 }
             })

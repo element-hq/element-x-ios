@@ -63,8 +63,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
     }
     
-    func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
-                              entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) async {
+    func subscribeIfNecessary(entriesFunction: EntriesFunction,
+                              entriesLoadingStateFunction: LoadingStateFunction?) async {
         guard listUpdatesTaskHandle == nil, stateUpdatesTaskHandle == nil else {
             return
         }
@@ -82,15 +82,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 buildSummaryForRoomListEntry(roomListEntry)
             }
             
-            let stateUpdatesSubscriptionResult = try await entriesLoadingStateFunction(RoomListStateObserver { [weak self] state in
-                guard let self else { return }
-                MXLog.info("\(name): Received state update: \(state)")
-                stateSubject.send(RoomSummaryProviderState(slidingSyncState: state))
-            })
-            
-            stateSubject.send(RoomSummaryProviderState(slidingSyncState: stateUpdatesSubscriptionResult.entriesLoadingState))
-            
-            stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.entriesLoadingStateStream
+            if let entriesLoadingStateFunction {
+                let stateUpdatesSubscriptionResult = try await entriesLoadingStateFunction(RoomListStateObserver { [weak self] state in
+                    guard let self else { return }
+                    MXLog.info("\(name): Received state update: \(state)")
+                    stateSubject.send(RoomSummaryProviderState(slidingSyncState: state))
+                })
+                
+                stateSubject.send(RoomSummaryProviderState(slidingSyncState: stateUpdatesSubscriptionResult.entriesLoadingState))
+                
+                stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.entriesLoadingStateStream
+            }
             
         } catch {
             MXLog.error("Failed setting up room list entry listener with error: \(error)")
