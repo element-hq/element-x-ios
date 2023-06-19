@@ -71,7 +71,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.tryEvent(.presentRoomDetails(roomID: roomID), userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
+        case .invites:
+            break
         }
+    }
+
+    func clearRoute(animated: Bool) {
+        guard stateMachine.state != .initial else {
+            return
+        }
+        stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
     }
     
     // MARK: - Private
@@ -290,10 +299,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissRoom(animated: Bool) {
-        // The room isn't in the same navigation stack of the home screen.
-        // Animating the popToRoot causes weird animations on when the room is left from room's details
-        navigationStackCoordinator.popToRoot(animated: false)
+        // Setting the detail coordinator to nil afirst allows the dismiss to work properly
+        // if followed immediately by another navigation on iPhone
         navigationSplitCoordinator.setDetailCoordinator(nil, animated: animated)
+        navigationStackCoordinator.popToRoot(animated: false)
         roomProxy = nil
         timelineController = nil
         

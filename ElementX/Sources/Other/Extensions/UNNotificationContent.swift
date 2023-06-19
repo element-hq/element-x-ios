@@ -18,24 +18,13 @@ import Foundation
 import Intents
 import UserNotifications
 
-enum NotificationIconType {
-    case sender(mediaSource: MediaSourceProxy?)
-    case group(mediaSource: MediaSourceProxy?, groupName: String)
+struct NotificationIcon {
+    let mediaSource: MediaSourceProxy?
+    // Required as the key to set images for groups
+    let groupName: String?
 
-    var mediaSource: MediaSourceProxy? {
-        switch self {
-        case .group(let mediaSource, _), .sender(let mediaSource):
-            return mediaSource
-        }
-    }
-
-    var isSenderIcon: Bool {
-        switch self {
-        case .sender:
-            return true
-        case .group:
-            return false
-        }
+    var shouldDisplayAsGroup: Bool {
+        groupName != nil
     }
 }
 
@@ -122,9 +111,9 @@ extension UNMutableNotificationContent {
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderID: String,
                        senderName: String,
-                       iconType: NotificationIconType) async throws -> UNMutableNotificationContent {
+                       icon: NotificationIcon) async throws -> UNMutableNotificationContent {
         var image = INImage(named: "")
-        if let mediaSource = iconType.mediaSource {
+        if let mediaSource = icon.mediaSource {
             switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
             case .success(let data):
                 image = INImage(imageData: data)
@@ -139,14 +128,14 @@ extension UNMutableNotificationContent {
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
                               displayName: senderName,
-                              image: iconType.isSenderIcon ? image : nil,
+                              image: !icon.shouldDisplayAsGroup ? image : nil,
                               contactIdentifier: nil,
                               customIdentifier: nil)
 
         // These are required to show the group name as subtitle
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
-        if case let .group(_, groupName) = iconType {
+        if let groupName = icon.groupName {
             let meHandle = INPersonHandle(value: receiverID, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupName)

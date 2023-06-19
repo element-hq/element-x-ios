@@ -22,6 +22,7 @@ enum AppRoute {
     case roomList
     case room(roomID: String)
     case roomDetails(roomID: String)
+    case invites
 }
 
 struct AppRouterManager {

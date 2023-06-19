@@ -41,7 +41,11 @@ protocol NotificationItemProxyProtocol {
 
     var isDirect: Bool { get }
 
-    var isEncrypted: Bool? { get }
+    /// Returns `true` if the event of the notification belongs to an encrypted room
+    var isRoomEncrypted: Bool? { get }
+
+    /// Returns `true` if was not possible to decrypt the notification content
+    var isEncrypted: Bool { get }
 }
 
 extension NotificationItemProxyProtocol {
@@ -87,7 +91,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.isDirect
     }
 
-    var isEncrypted: Bool? {
+    var isRoomEncrypted: Bool? {
         notificationItem.isEncrypted
     }
 
@@ -105,6 +109,20 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
             return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
         }
         return nil
+    }
+
+    var isEncrypted: Bool {
+        switch event.type {
+        case .messageLike(let content):
+            switch content {
+            case .roomEncrypted:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
     }
 }
 
@@ -133,13 +151,15 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isDirect: Bool { false }
 
-    var isEncrypted: Bool? { nil }
+    var isRoomEncrypted: Bool? { nil }
 
     var senderAvatarMediaSource: MediaSourceProxy? { nil }
 
     var roomAvatarMediaSource: MediaSourceProxy? { nil }
 
     var notificationIdentifier: String { "" }
+
+    var isEncrypted: Bool { false }
 }
 
 extension NotificationItemProxyProtocol {
@@ -228,13 +248,22 @@ extension NotificationItemProxyProtocol {
 
         notification.categoryIdentifier = NotificationConstants.Category.invite
 
-        // Sadly as of right now we can't get from the NSE context any information for invited rooms, so we will only display the user name and a simple message
-        let iconType = NotificationIconType.sender(mediaSource: senderAvatarMediaSource)
+        let icon: NotificationIcon
+        let body: String
+        if !isDirect {
+            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+            body = L10n.notificationRoomInviteBody
+        } else {
+            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
+            body = L10n.notificationInviteBody
+        }
+
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
-                                                            senderName: senderDisplayName ?? event.senderID,
-                                                            iconType: iconType)
-        notification.body = L10n.notificationInviteBody
+                                                            senderName: senderDisplayName ?? roomDisplayName,
+                                                            icon: icon)
+        notification.body = body
+        
         return notification
     }
 
@@ -274,17 +303,17 @@ extension NotificationItemProxyProtocol {
         notification.categoryIdentifier = NotificationConstants.Category.message
 
         let senderName = senderDisplayName ?? roomDisplayName
-        let iconType: NotificationIconType
+        let icon: NotificationIcon
         if !isDirect {
-            iconType = .group(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
+            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
         } else {
-            iconType = .sender(mediaSource: senderAvatarMediaSource)
+            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
                                                             senderName: senderName,
-                                                            iconType: iconType)
+                                                            icon: icon)
         return notification
     }
 

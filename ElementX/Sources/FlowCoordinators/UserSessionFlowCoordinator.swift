@@ -91,11 +91,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .roomList, .initial:
             break
         }
-        
+
         switch appRoute {
         case .room, .roomDetails, .roomList:
             roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .invites:
+            if UIDevice.current.isPhone {
+                roomFlowCoordinator.clearRoute(animated: animated)
+            }
+            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
         }
+    }
+
+    func clearRoute(animated: Bool) {
+        fatalError("not necessary as of right now")
     }
 
     // MARK: - Private
@@ -141,6 +150,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomList, .showInvitesScreen, .invitesScreen):
                 self.presentInvitesList(animated: animated)
+            case (.invitesScreen, .showInvitesScreen, .invitesScreen):
+                break
             case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
                 
