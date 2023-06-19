@@ -33,12 +33,16 @@ struct HomeScreen: View {
             if context.viewState.showSessionVerificationBanner {
                 sessionVerificationBanner
             }
-
+            
             if context.viewState.hasPendingInvitations {
-                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                    context.send(viewAction: .selectInvites)
+                ZStack {
+                    HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
+                        context.send(viewAction: .selectInvites)
+                    }
+                    .padding(.trailing, 16.0)
+                    .padding(.leading, 64.0)
+                    .padding(.vertical, 4.0)
                 }
-                .padding(.trailing, 16)
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
