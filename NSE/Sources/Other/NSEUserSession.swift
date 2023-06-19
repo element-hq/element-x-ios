@@ -19,41 +19,50 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     private let client: ClientProtocol
+    private let userID: String
     private var encryptionSyncService: EncryptionSync!
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
     init(credentials: KeychainCredentials) throws {
+        userID = credentials.userID
         let builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
-
-        let listener = EncryptionSyncListenerProxy {
-            MXLog.info("NSE: Encryption sync terminated for user: \(credentials.userID)")
-        }
-        encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
+        startEncryptionSync(userID: userID)
     }
 
-    func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
-        let userID = try client.userId()
-        return await Task.dispatch(on: .global()) {
+    private func startEncryptionSync(userID: String) {
+        do {
+            let listener = EncryptionSyncListenerProxy {
+                MXLog.info("NSE: Encryption sync terminated for user: \(userID)")
+            }
+            encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
+        } catch {
+            MXLog.error("NSE: Encyrption sync could not be started for user: \(userID)")
+        }
+    }
+
+    func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
+        await Task.dispatch(on: .global()) {
             do {
                 guard let notification = try self.client.getNotificationItem(roomId: roomID, eventId: eventID) else {
                     return nil
                 }
-                return NotificationItemProxy(notificationItem: notification, receiverID: userID)
+                return NotificationItemProxy(notificationItem: notification, receiverID: self.userID)
             } catch {
                 MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
-                return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+                return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: self.userID)
             }
         }
     }
 
     deinit {
+        MXLog.info("NSE: NSEUserSession deinit called")
         encryptionSyncService?.stop()
     }
 }

@@ -84,8 +84,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             var itemProxy: NotificationItemProxyProtocol
             let date = Date()
             repeat {
-                itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-            } while itemProxy.isEncrypted && date.timeIntervalSinceNow < 10
+                itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+            } while itemProxy.isEncrypted && date.timeIntervalSinceNow > -10
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)
