@@ -88,7 +88,6 @@ class ClientProxy: ClientProxyProtocol {
             self?.callbacks.send(.updateRestorationToken)
         })
         
-        configureEncryptionSync(listener: ConcreteEncryptionSyncListener(clientProxy: self))
         await configureRoomListService()
 
         loadUserAvatarURLFromCache()
@@ -126,7 +125,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false && encryptionSyncService != nil
+        roomListService?.isSyncing() ?? false && isEncryptionSyncing
     }
     
     func startSync() {
@@ -141,13 +140,24 @@ class ClientProxy: ClientProxyProtocol {
     
     func stopSync() {
         MXLog.info("Stopping sync")
-        encryptionSync?.stop()
-        encryptionSync = nil
+        stopEncryptionSyncService()
+
         do {
             try roomListService?.stopSync()
         } catch {
             MXLog.error("Failed stopping room list service with error: \(error)")
         }
+    }
+
+    private var isEncryptionSyncing = false
+
+    private func stopEncryptionSyncService() {
+        isEncryptionSyncing = false
+        guard let encryptionSyncService else {
+            return
+        }
+        self.encryptionSyncService = nil
+        encryptionSyncService.stop()
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -393,8 +403,13 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let listener = EncryptionSyncListenerProxy { [weak self] in
                 MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
+                guard let self, isEncryptionSyncing else {
+                    return
+                }
+                startEncryptionSyncService()
             }
             try encryptionSyncService = client.mainEncryptionSync(id: "Main App", listener: listener, withLock: true)
+            isEncryptionSyncing = true
         } catch {
             MXLog.error("Configure encryption sync failed with error: \(error)")
         }

@@ -162,10 +162,6 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
-
-    /// A set of all the notification identifiers that have been served so far, it's reset every time the app is launched
-    @UserPreference(key: SharedUserDefaultsKeys.servedNotificationIdentifiers, initialValue: [], storageType: .userDefaults(store))
-    var servedNotificationIdentifiers: Set<String>
         
     // MARK: - Other
     
