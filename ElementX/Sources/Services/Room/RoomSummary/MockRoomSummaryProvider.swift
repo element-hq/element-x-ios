@@ -42,8 +42,8 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
-                              entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) { }
+    func subscribeIfNecessary(entriesFunction: EntriesFunction,
+                              entriesLoadingStateFunction: LoadingStateFunction?) async { }
     
     func updateVisibleRange(_ range: Range<Int>) { }
 }

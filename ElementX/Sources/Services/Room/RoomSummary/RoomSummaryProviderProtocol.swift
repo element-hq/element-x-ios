@@ -58,6 +58,9 @@ enum RoomSummary: CustomStringConvertible {
 }
 
 protocol RoomSummaryProviderProtocol {
+    typealias EntriesFunction = (RoomListEntriesListener) async throws -> RoomListEntriesResult
+    typealias LoadingStateFunction = (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult
+    
     /// Publishes the currently available room summaries
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
     
@@ -66,8 +69,8 @@ protocol RoomSummaryProviderProtocol {
     
     /// A separate subscription method is needed instead of running this in the constructor because the invites list is added later on the Rust side.
     /// Wanted to be able to build the InvitesSummaryProvider directly instead of having to inform the HomeScreenViewModel about it later
-    func subscribeIfNecessary(entriesFunction: (RoomListEntriesListener) async throws -> RoomListEntriesResult,
-                              entriesLoadingStateFunction: (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult) async
+    func subscribeIfNecessary(entriesFunction: EntriesFunction,
+                              entriesLoadingStateFunction: LoadingStateFunction?) async
     
     func updateVisibleRange(_ range: Range<Int>)
 }
