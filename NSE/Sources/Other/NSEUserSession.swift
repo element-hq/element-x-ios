@@ -19,7 +19,7 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     private let client: ClientProtocol
-    private var encryptionSync: EncryptionSync!
+    private var encryptionSyncService: EncryptionSync!
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: client),
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
@@ -35,7 +35,7 @@ final class NSEUserSession {
         let listener = EncryptionSyncListenerProxy {
             MXLog.info("NSE: Encryption sync terminated for user: \(credentials.userID)")
         }
-        encryptionSync = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
+        encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
@@ -54,6 +54,6 @@ final class NSEUserSession {
     }
 
     deinit {
-        encryptionSync?.stop()
+        encryptionSyncService?.stop()
     }
 }

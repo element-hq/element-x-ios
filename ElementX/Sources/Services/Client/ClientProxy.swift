@@ -49,7 +49,7 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
 
-    private var encryptionSync: EncryptionSync?
+    private var encryptionSyncService: EncryptionSync?
 
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
@@ -390,13 +390,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    private func configureEncryptionSync(listener: EncryptionSyncListener) {
-        guard encryptionSync == nil else {
+    private func startEncryptionSyncService() {
+        guard encryptionSyncService == nil else {
             MXLog.info("Encryption sync is already configured")
             return
         }
         do {
-            try encryptionSync = client.mainEncryptionSync(id: "Main App", listener: listener, withLock: true)
+            let listener = EncryptionSyncListenerProxy { [weak self] in
+                MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
+            }
+            try encryptionSyncService = client.mainEncryptionSync(id: "Main App", listener: listener, withLock: true)
         } catch {
             MXLog.error("Configure encryption sync failed with error: \(error)")
         }
