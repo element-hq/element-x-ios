@@ -177,7 +177,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
             switch summary {
             case .empty:
                 return nil
-            case .filled(let details):
+            case .invalidated(let details), .filled(let details):
                 return HomeScreenRoom(id: UUID().uuidString,
                                       roomId: details.id,
                                       name: details.name,
