@@ -20,6 +20,7 @@ import SwiftUI
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.isEncryptedOneToOneRoom) private var isEncryptedOneToOneRoom
     
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
@@ -38,7 +39,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
             VStack(alignment: alignment, spacing: -12) {
-                if !timelineItem.isOutgoing {
+                if !timelineItem.isOutgoing, !isEncryptedOneToOneRoom {
                     header
                         .zIndex(1)
                 }
@@ -213,7 +214,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .foregroundColor(.compound.textPlaceholder)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -235,7 +235,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var messageBubbleTopPadding: CGFloat {
-        guard timelineItem.isOutgoing else { return 0 }
+        guard timelineItem.isOutgoing || isEncryptedOneToOneRoom else { return 0 }
         return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
 
@@ -287,6 +287,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+            .environment(\.isEncryptedOneToOneRoom, false)
         mockTimeline
             .environment(\.readReceiptsEnabled, true)
             .previewDisplayName("Mock Timeline with read receipts")
@@ -298,13 +299,14 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     }
     
     static var mockTimeline: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(viewModel.state.items) { item in
-                item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(viewModel.state.items) { item in
+                    item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
+                }
             }
         }
         .environment(\.timelineStyle, .bubbles)
-        .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
     }
     

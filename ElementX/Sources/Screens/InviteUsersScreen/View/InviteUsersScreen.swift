@@ -26,11 +26,7 @@ struct InviteUsersScreen: View {
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    nextButton
-                }
-            }
+            .toolbar { toolbar }
             .disableInteractiveDismissOnSearch()
             .dismissSearchOnDisappear()
             .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
@@ -123,11 +119,22 @@ struct InviteUsersScreen: View {
         .frame(width: frame.width)
     }
     
-    private var nextButton: some View {
-        Button { context.send(viewAction: .proceed) } label: {
-            Text(context.viewState.actionText)
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if !context.viewState.isCreatingRoom {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
         }
-        .disabled(context.viewState.isActionDisabled)
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(context.viewState.actionText) {
+                context.send(viewAction: .proceed)
+            }
+            .disabled(context.viewState.isActionDisabled)
+        }
     }
     
     private func deselect(_ user: UserProfileProxy) {

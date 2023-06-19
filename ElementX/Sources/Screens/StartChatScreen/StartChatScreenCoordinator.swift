@@ -97,6 +97,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch result {
+            case .cancel:
+                break // Not shown in this flow.
             case .proceed:
                 openCreateRoomScreen()
             case .invite:

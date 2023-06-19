@@ -26,6 +26,7 @@ struct InviteUsersScreenCoordinatorParameters {
 }
 
 enum InviteUsersScreenCoordinatorAction {
+    case cancel
     case proceed
     case invite(users: [String])
     case toggleUser(UserProfileProxy)
@@ -55,12 +56,14 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .cancel:
+                actionsSubject.send(.cancel)
             case .proceed:
-                self.actionsSubject.send(.proceed)
+                actionsSubject.send(.proceed)
             case .invite(let users):
-                self.actionsSubject.send(.invite(users: users))
+                actionsSubject.send(.invite(users: users))
             case .toggleUser(let user):
-                self.actionsSubject.send(.toggleUser(user))
+                actionsSubject.send(.toggleUser(user))
             }
         }
         .store(in: &cancellables)

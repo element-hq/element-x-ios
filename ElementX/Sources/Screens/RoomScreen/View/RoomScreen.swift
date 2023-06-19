@@ -83,6 +83,7 @@ struct RoomScreen: View {
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
             .environment(\.readReceiptsEnabled, context.viewState.readReceiptsEnabled)
+            .environment(\.isEncryptedOneToOneRoom, context.viewState.isEncryptedOneToOneRoom)
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     

@@ -116,7 +116,7 @@ struct InvitesScreenCell: View {
     
     private var separator: some View {
         Rectangle()
-            .fill(Color.compound._borderRowSeparator)
+            .fill(Color.compound.borderDisabled)
             .frame(height: 1 / UIScreen.main.scale)
     }
     

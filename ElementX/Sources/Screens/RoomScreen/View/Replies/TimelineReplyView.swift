@@ -101,29 +101,41 @@ struct TimelineReplyView: View {
         
         var icon: Icon?
         
+        var isTextOnly: Bool {
+            icon?.mediaSource == nil && icon?.systemIconName == nil
+        }
+        
+        /// The string shown as the message preview.
+        ///
+        /// This converts the formatted body to a plain string to remove formatting
+        /// and render with a consistent font size. This conversion is done to avoid
+        /// showing markdown characters in the preview for messages with formatting.
+        var messagePreview: String {
+            guard let formattedBody else { return plainBody }
+            return String(formattedBody.characters)
+        }
+        
         var body: some View {
-            HStack {
+            HStack(spacing: 8) {
                 iconView
                     .frame(width: imageContainerSize, height: imageContainerSize)
                     .foregroundColor(.compound.iconPrimary)
                     .background(Color.compound.bgSubtlePrimary)
                     .cornerRadius(icon?.cornerRadii ?? 0.0, corners: .allCorners)
                 
-                if icon?.mediaSource == nil, icon?.systemIconName == nil {
-                    Spacer().frame(width: 4.0)
-                }
-                
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(sender.displayName ?? sender.id)
                         .font(.compound.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)
                     
-                    Text(formattedBody ?? AttributedString(plainBody))
+                    Text(messagePreview)
                         .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textPlaceholder)
+                        .foregroundColor(.compound.textSecondary)
                         .tint(.compound.textLinkExternal)
                         .lineLimit(2)
                 }
+                .padding(.leading, isTextOnly ? 8 : 0)
+                .padding(.trailing, 8)
             }
         }
         
@@ -154,7 +166,7 @@ struct TimelineReplyView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 20) {
             TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .notLoaded(eventID: ""))
             
             TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .loading(eventID: ""))

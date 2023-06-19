@@ -19,6 +19,8 @@ import SwiftUI
 struct RoomDetailsScreen: View {
     @ObservedObject var context: RoomDetailsScreenViewModel.Context
     
+    @State private var isTopicExpanded = false
+    
     var body: some View {
         Form {
             if let recipient = context.viewState.dmRecipient {
@@ -111,8 +113,9 @@ struct RoomDetailsScreen: View {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodySM)
-                        .lineLimit(3)
+                        .font(.compound.bodyMD)
+                        .lineLimit(isTopicExpanded ? nil : 3)
+                        .onTapGesture { isTopicExpanded.toggle() }
                 } else {
                     Button {
                         context.send(viewAction: .processTapAddTopic)
@@ -155,7 +158,7 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .listRowSeparatorTint(.compound._borderRowSeparator)
+        .listRowSeparatorTint(.compound.borderDisabled)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         .formSectionStyle()
         .foregroundColor(.compound.textPrimary)
@@ -170,7 +173,7 @@ struct RoomDetailsScreen: View {
                         Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                         Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
+                            .font(.compound.bodyMD)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
@@ -247,7 +250,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
             .mockCharlie
         ]
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
-                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  topic: "Bacon ipsum dolor amet short ribs buffalo pork loin cupim frankfurter. Burgdoggen pig shankle biltong flank ham jowl sirloin bacon cow. T-bone alcatra boudin beef spare ribs pig fatback jerky swine short ribs shankle chislic frankfurter pork loin. Chicken tri-tip bresaola t-bone pastrami brisket.",
                                                   isDirect: false,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",

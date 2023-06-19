@@ -86,8 +86,8 @@ public struct TimelineItemMenu: View {
                 }
             }
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .presentationDetents([.medium, .large])
+        .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
     }
     
@@ -164,7 +164,7 @@ public struct TimelineItemMenu: View {
     
     private func reactionBackgroundColor(for emoji: String) -> Color {
         if item.properties.reactions.first(where: { $0.key == emoji }) != nil {
-            return .compound._bgReactionButton
+            return .compound.bgActionPrimaryRest
         } else {
             return .clear
         }

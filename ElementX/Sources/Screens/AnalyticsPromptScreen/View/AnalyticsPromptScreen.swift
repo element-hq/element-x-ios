@@ -51,7 +51,7 @@ struct AnalyticsPromptScreen: View {
                 .foregroundColor(.compound.textSecondary)
             
             Divider()
-                .overlay { Color.compound._borderRowSeparator }
+                .overlay { Color.compound.borderDisabled }
                 .padding(.vertical, 20)
             
             checkmarkList

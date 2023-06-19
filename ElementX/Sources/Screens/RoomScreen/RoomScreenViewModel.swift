@@ -45,6 +45,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
                                                          readReceiptsEnabled: ServiceLocator.shared.settings.readReceiptsEnabled,
+                                                         isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
 
