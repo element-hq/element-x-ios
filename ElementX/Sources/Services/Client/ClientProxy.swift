@@ -126,7 +126,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false
+        roomListService?.isSyncing() ?? false && encryptionSyncService != nil
     }
     
     func startSync() {
@@ -388,8 +388,7 @@ class ClientProxy: ClientProxyProtocol {
 
     private func startEncryptionSyncService() {
         guard encryptionSyncService == nil else {
-            MXLog.info("Encryption sync is already configured")
-            return
+            fatalError("This shouldn't be called more than once")
         }
         do {
             let listener = EncryptionSyncListenerProxy { [weak self] in
