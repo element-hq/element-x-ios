@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Compound
 import SwiftUI
 
@@ -49,7 +50,7 @@ struct HomeScreen: View {
             if context.viewState.roomListMode == .skeletons {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
-                        HomeScreenRoomCell(room: room, context: context)
+                        HomeScreenRoomCell(room: room, context: context, isSelected: false)
                             .redacted(reason: .placeholder)
                     }
                 }
@@ -60,17 +61,18 @@ struct HomeScreen: View {
                     ForEach(context.viewState.visibleRooms) { room in
                         Group {
                             if room.isPlaceholder {
-                                HomeScreenRoomCell(room: room, context: context)
+                                HomeScreenRoomCell(room: room, context: context, isSelected: false)
                                     .redacted(reason: .placeholder)
                             } else {
-                                HomeScreenRoomCell(room: room, context: context)
+                                let isSelected = context.viewState.highlightedRoomID == room.id
+                                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
                                     .contextMenu {
                                         Button {
                                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
                                         } label: {
                                             Label(L10n.commonSettings, systemImage: "gearshape")
                                         }
-                                                
+                                        
                                         Button(role: .destructive) {
                                             context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
                                         } label: {
@@ -296,7 +298,8 @@ struct HomeScreen_Previews: PreviewProvider {
                                           mediaProvider: MockMediaProvider())
         
         let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder())
+                                            attributedStringBuilder: AttributedStringBuilder(),
+                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
         
         return NavigationStack {
             HomeScreen(context: viewModel.context)

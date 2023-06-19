@@ -74,6 +74,8 @@ struct HomeScreenViewState: BindableState {
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
     
+    var highlightedRoomID: String?
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms

@@ -134,7 +134,8 @@ class MockScreen: Identifiable {
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
                                                                       attributedStringBuilder: AttributedStringBuilder(),
                                                                       bugReportService: BugReportServiceMock(),
-                                                                      navigationStackCoordinator: navigationStackCoordinator))
+                                                                      navigationStackCoordinator: navigationStackCoordinator,
+                                                                      selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .settings:
