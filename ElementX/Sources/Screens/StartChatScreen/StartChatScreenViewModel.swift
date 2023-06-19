@@ -133,6 +133,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         showLoadingIndicator()
         switch await clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
+            ServiceLocator.shared.analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)
