@@ -131,4 +131,14 @@ extension Analytics {
     func trackCreatedRoom(isDM: Bool) {
         capture(event: AnalyticsEvent.CreatedRoom(isDM: isDM))
     }
+    
+    /// Track the composer
+    /// - Parameters:
+    ///   - inThread: whether the composer is used in a Thread
+    ///   - isEditing: whether the composer is used to edit a message
+    ///   - isReply: whether the composer is used to reply a message
+    ///   - startsThread: whether the composer is used to start a new thread
+    func trackComposer(inThread: Bool, isEditing: Bool, isReply: Bool, startsThread: Bool?) {
+        capture(event: AnalyticsEvent.Composer(inThread: inThread, isEditing: isEditing, isReply: isReply, startsThread: startsThread))
+    }
 }

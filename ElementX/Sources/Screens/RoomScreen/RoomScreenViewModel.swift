@@ -60,6 +60,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         buildTimelineViews()
+        
+        trackComposerMode()
     }
     
     // MARK: - Public
@@ -86,9 +88,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReaction(let emoji, let itemId):
             Task { await timelineController.sendReaction(emoji, to: itemId) }
         case .cancelReply:
-            state.composerMode = .default
+            setComposerMode(.default)
         case .cancelEdit:
-            state.composerMode = .default
+            setComposerMode(.default)
             state.bindings.composerText = ""
         case .markRoomAsRead:
             Task { await markRoomAsRead() }
@@ -279,7 +281,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let currentComposerState = state.composerMode
 
         state.bindings.composerText = ""
-        state.composerMode = .default
+        setComposerMode(.default)
 
         switch currentComposerState {
         case .reply(let itemId, _):
@@ -289,6 +291,27 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             await timelineController.sendMessage(currentMessage)
         }
+    }
+    
+    private func setComposerMode(_ mode: RoomScreenComposerMode) {
+        guard mode != state.composerMode else { return }
+        state.composerMode = mode
+        trackComposerMode()
+    }
+    
+    private func trackComposerMode() {
+        var isEdit = false
+        var isReply = false
+        switch state.composerMode {
+        case .edit:
+            isEdit = true
+        case .reply:
+            isReply = true
+        default:
+            break
+        }
+
+        ServiceLocator.shared.analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
     }
     
     private func displayError(_ type: RoomScreenErrorType) {
@@ -380,7 +403,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             state.bindings.composerFocused = true
             state.bindings.composerText = messageTimelineItem.body
-            state.composerMode = .edit(originalItemId: messageTimelineItem.id)
+            setComposerMode(.edit(originalItemId: messageTimelineItem.id))
         case .quote:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return
@@ -404,7 +427,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
             
-            state.composerMode = .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)
+            setComposerMode(.reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))
         case .forward(let itemID):
             callback?(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -420,7 +443,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if action.switchToDefaultComposer {
-            state.composerMode = .default
+            setComposerMode(.default)
         }
     }
     
