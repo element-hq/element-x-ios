@@ -51,6 +51,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
+        case .cancel:
+            actionsSubject.send(.cancel)
         case .proceed:
             switch roomType {
             case .draft:

@@ -104,6 +104,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch result {
+            case .cancel:
+                navigationStackCoordinator?.setSheetCoordinator(nil)
             case .proceed:
                 break
             case .invite(let users):
@@ -114,7 +116,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        parameters.navigationStackCoordinator?.setSheetCoordinator(userIndicatorController) { [weak self] in
+        navigationStackCoordinator?.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.selectedUsers.value = []
         }
     }

@@ -68,6 +68,10 @@ public enum L10n {
   public static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))
   }
+  /// Invite people to %1$@
+  public static func actionInvitePeopleToApp(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "action_invite_people_to_app", String(describing: p1))
+  }
   /// Invites
   public static var actionInvitesList: String { return L10n.tr("Localizable", "action_invites_list") }
   /// Learn more

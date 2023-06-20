@@ -53,7 +53,7 @@ struct TimelineReactionButton: View {
         .background(
             backgroundShape
                 .strokeBorder(reaction.isHighlighted ? Color.compound.textSecondary : .compound.bgCanvasDefault, lineWidth: 2)
-                .background(reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound.bgSubtleSecondary, in: backgroundShape)
+                .background(reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound._bgReactionButton, in: backgroundShape)
         )
         .accessibilityElement(children: .combine)
     }

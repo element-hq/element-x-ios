@@ -42,37 +42,40 @@ struct CollapsibleRoomTimelineView: View {
     }
 }
 
-struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
-    static var previews: some View {
-        let item = CollapsibleTimelineItem(items: [SeparatorRoomTimelineItem(id: "First separator", text: "This is a separator"),
-                                                   SeparatorRoomTimelineItem(id: "Second separator", text: "This is another separator")])
-        CollapsibleRoomTimelineView(timelineItem: item)
-    }
-}
-
 private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 0.0) {
-            HStack(alignment: .center) {
-                configuration.label
-                Text(Image(systemName: "chevron.forward"))
-                    .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
-                    .animation(.elementDefault, value: configuration.isExpanded)
+            Button { configuration.isExpanded.toggle() } label: {
+                HStack(alignment: .center) {
+                    configuration.label
+                    Text(Image(systemName: "chevron.forward"))
+                        .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
+                        .animation(.elementDefault, value: configuration.isExpanded)
+                }
+                .font(.compound.bodySM)
+                .foregroundColor(.compound.textSecondary)
+                .padding(.horizontal, 36.0)
+                .padding(.vertical, 12.0)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
             .frame(maxWidth: .infinity)
-            .font(.compound.bodySM)
-            .foregroundColor(.compound.textSecondary)
-            .padding(.horizontal, 36.0)
-            .padding(.top, 20.0)
-            .padding(.bottom, 12.0)
-
-            .onTapGesture {
-                configuration.isExpanded.toggle()
-            }
+            .padding(.top, 8.0)
             
             if configuration.isExpanded {
                 configuration.content
             }
         }
+    }
+}
+
+struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
+    static let item = CollapsibleTimelineItem(items: [
+        SeparatorRoomTimelineItem(id: "First separator", text: "This is a separator"),
+        SeparatorRoomTimelineItem(id: "Second separator", text: "This is another separator")
+    ])
+    
+    static var previews: some View {
+        CollapsibleRoomTimelineView(timelineItem: item)
     }
 }

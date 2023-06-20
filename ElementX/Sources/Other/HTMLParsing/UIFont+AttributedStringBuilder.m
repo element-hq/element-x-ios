@@ -38,15 +38,17 @@
 
     // On iOS 13+ "TimesNewRomanPSMT" will be used instead of "SFUI"
     // In case of "Times New Roman" fallback, use system font and reuse UIFontDescriptorSymbolicTraits.
-    if ([font.familyName.lowercaseString containsString:@"times"])
-    {
+    if ([font.familyName.lowercaseString containsString:@"times"]) {
         UIFontDescriptorSymbolicTraits symbolicTraits = (UIFontDescriptorSymbolicTraits)CTFontGetSymbolicTraits(ctFont);
         
-        UIFontDescriptor *systemFontDescriptor = [UIFont systemFontOfSize:fontSize].fontDescriptor;
+        // Start with the body text style and update it to keep consistent line spacing with plain text messages.
+        UIFontDescriptor *fontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+        fontDescriptor = [fontDescriptor fontDescriptorWithSize:fontSize];
+        fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:symbolicTraits];
         
-        UIFontDescriptor *finalFontDescriptor = [systemFontDescriptor fontDescriptorWithSymbolicTraits:symbolicTraits];
-        font = [UIFont fontWithDescriptor:finalFontDescriptor size:fontSize];
+        font = [UIFont fontWithDescriptor:fontDescriptor size:fontSize];
     }
+    
 
     return font;
 }

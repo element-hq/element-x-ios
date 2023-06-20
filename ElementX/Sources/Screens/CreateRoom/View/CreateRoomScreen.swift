@@ -188,7 +188,7 @@ struct CreateRoomScreen: View {
                 .formSectionHeader()
                 .padding(.top, 40)
         }
-        .listRowSeparatorTint(.compound._borderRowSeparator)
+        .listRowSeparatorTint(.compound.borderDisabled)
         .listRowBackground(Color.element.formRowBackground)
     }
     

@@ -65,8 +65,8 @@ struct RoomAttachmentPicker: View {
                         }
                 }
             }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .presentationDetents([.height(sheetContentHeight)])
+            .presentationBackground(Color.compound.bgCanvasDefault)
             .presentationDragIndicator(.visible)
         }
     }

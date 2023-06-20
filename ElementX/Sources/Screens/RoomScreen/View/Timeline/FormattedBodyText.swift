@@ -57,16 +57,17 @@ struct FormattedBodyText: View {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .foregroundColor(.compound.textPlaceholder)
+                        .foregroundColor(.compound.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 12.0)
                         .overlay(alignment: .leading) {
                             // User an overlay here so that the rectangle's infinite height doesn't take priority
-                            Rectangle()
+                            Capsule()
                                 .frame(width: 2.0)
-                                .padding(.leading, 6.0)
-                                .foregroundColor(.compound.textPlaceholder)
+                                .padding(.leading, 5.0)
+                                .foregroundColor(.compound.textSecondary)
+                                .padding(.vertical, 2)
                         }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
@@ -150,6 +151,12 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
             <blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
             <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+            """,
+            """
+            <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote>
+            <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
+            <blockquote>Short line here.</blockquote>
+            <p>And a simple reply here.</p>
             """,
             """
             <code>Hello world</code>

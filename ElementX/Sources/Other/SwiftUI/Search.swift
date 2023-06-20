@@ -34,11 +34,8 @@ private struct InteractiveDismissSearchModifier: ViewModifier {
     @Environment(\.isSearching) private var isSearching
     
     func body(content: Content) -> some View {
-        if isSearching {
-            content.interactiveDismissDisabled()
-        } else {
-            content
-        }
+        content
+            .interactiveDismissDisabled(isSearching)
     }
 }
 

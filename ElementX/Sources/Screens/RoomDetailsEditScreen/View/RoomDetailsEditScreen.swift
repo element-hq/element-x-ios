@@ -91,10 +91,9 @@ struct RoomDetailsEditScreen: View {
                       prompt: canEditName ? Text(L10n.commonRoomNamePlaceholder) : nil,
                       axis: .horizontal)
                 .focused($focus, equals: .name)
-                .font(.compound.bodyLG)
-                .foregroundColor(.compound.textPrimary)
+                .textFieldStyle(.compoundForm)
                 .disabled(!canEditName)
-                .listRowBackground(canEditName ? nil : Color.clear)
+                .listRowBackground(canEditName ? Color.element.formRowBackground : .clear)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } header: {
             Text(L10n.commonRoomName)
@@ -109,14 +108,13 @@ struct RoomDetailsEditScreen: View {
             
             TextField(L10n.commonTopic,
                       text: $context.topic,
-                      prompt: canEditTopic ? Text(L10n.commonTopicPlaceholder) : nil,
+                      prompt: canEditTopic ? Text(L10n.commonTopicPlaceholder).foregroundColor(.compound.textPlaceholder) : nil,
                       axis: .vertical)
                 .focused($focus, equals: .topic)
-                .font(.compound.bodyLG)
-                .foregroundColor(.compound.textPrimary)
+                .textFieldStyle(.compoundForm)
                 .disabled(!canEditTopic)
-                .listRowBackground(canEditTopic ? nil : Color.clear)
-                .lineLimit(3, reservesSpace: true)
+                .listRowBackground(canEditTopic ? Color.element.formRowBackground : .clear)
+                .lineLimit(3...)
         } header: {
             Text(L10n.commonTopic)
                 .formSectionHeader()

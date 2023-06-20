@@ -86,6 +86,7 @@ struct RoomScreenViewState: BindableState {
     var showLoading = false
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
+    var isEncryptedOneToOneRoom = false
     
     var bindings: RoomScreenViewStateBindings
     
