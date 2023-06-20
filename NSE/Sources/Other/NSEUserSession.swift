@@ -58,8 +58,12 @@ final class NSEUserSession {
         }
     }
 
+    func stopEncryptionSync() {
+        encryptionSyncService?.stop()
+    }
+
     deinit {
         MXLog.info("NSE: NSEUserSession deinit called for user: \(userID)")
-        encryptionSyncService?.stop()
+        stopEncryptionSync()
     }
 }

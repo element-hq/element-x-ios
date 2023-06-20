@@ -50,6 +50,7 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListStateUpdateTaskHandle: TaskHandle?
 
     private var encryptionSyncService: EncryptionSync?
+    private var isEncryptionSyncing = false
 
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
@@ -149,9 +150,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    private var isEncryptionSyncing = false
-
     private func stopEncryptionSyncService() {
+        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+            return
+        }
+        MXLog.info("Stopping Encryption Sync service")
         isEncryptionSyncing = false
         guard let encryptionSyncService else {
             return
@@ -397,19 +400,23 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func startEncryptionSyncService() {
+        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+            return
+        }
         guard encryptionSyncService == nil else {
             fatalError("This shouldn't be called more than once")
         }
+        configureEncryptionSyncService()
+    }
+    
+    private func configureEncryptionSyncService() {
         do {
             let listener = EncryptionSyncListenerProxy { [weak self] in
                 MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
                 guard let self, isEncryptionSyncing else {
                     return
                 }
-                // To avoid the nested block on error
-                Task {
-                    self.startEncryptionSyncService()
-                }
+                self.configureEncryptionSyncService()
             }
             let encryptionSync = try client.mainEncryptionSync(id: "Main App", listener: listener)
             encryptionSync.reloadCaches()

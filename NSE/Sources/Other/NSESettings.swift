@@ -21,4 +21,8 @@ final class NSESettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+
+    /// Tag describing if the app and the NSE should use the encryption sync
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var isEncryptionSyncEnabled
 }

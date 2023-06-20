@@ -19,12 +19,12 @@ import MatrixRustSDK
 import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
-    private static var userSession: [String: NSEUserSession] = [:]
     private let settings = NSESettings()
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     private var handler: ((UNNotificationContent) -> Void)?
     private var modifiedContent: UNMutableNotificationContent?
+    private var userSession: NSEUserSession?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -72,9 +72,11 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         do {
             let userSession = try NSEUserSession(credentials: credentials)
-
+            self.userSession = userSession
             var itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-            if itemProxy.isEncrypted, let _ = try? userSession.startEncryptionSync() {
+            if settings.isEncryptionSyncEnabled,
+               itemProxy.isEncrypted,
+               let _ = try? userSession.startEncryptionSync() {
                 // TODO: The following wait with a timeout should be handled by the SDK
                 // We try to decrypt the notification for 10 seconds at most
                 let date = Date()
@@ -117,23 +119,30 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
 
         handler?(modifiedContent)
-        handler = nil
-        self.modifiedContent = nil
+        cleanUp()
     }
 
     private func discard() {
         MXLog.info("\(tag) discard")
 
         handler?(UNMutableNotificationContent())
-        handler = nil
-        modifiedContent = nil
+        cleanUp()
     }
 
     private var tag: String {
         "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())]"
     }
 
+    private func cleanUp() {
+        handler = nil
+        modifiedContent = nil
+        if settings.isEncryptionSyncEnabled {
+            userSession?.stopEncryptionSync()
+        }
+    }
+
     deinit {
+        cleanUp()
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
     }

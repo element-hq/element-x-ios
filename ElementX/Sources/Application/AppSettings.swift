@@ -162,6 +162,10 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
+
+    /// Tag describing if the app and the NSE should use the encryption sync
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, initialValue: true, storageType: .userDefaults(store))
+    var isEncryptionSyncEnabled
         
     // MARK: - Other
     
