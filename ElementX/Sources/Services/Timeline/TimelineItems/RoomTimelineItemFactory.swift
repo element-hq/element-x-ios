@@ -74,8 +74,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .audio(let content):
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .location:
-                return nil
+            case .location(let content):
+                #warning("AG: fix me")
+                let textContent = TextMessageContent(body: content.body, formatted: nil)
+                return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, textContent, isOutgoing)
             case .none:
                 return nil
             }
@@ -490,8 +492,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .text(buildTextTimelineItemContent(content))
             case .video(let content):
                 replyContent = .video(buildVideoTimelineItemContent(content))
-            case .location:
-                return nil
+            case .location(let content):
+                #warning("AG: fix me")
+                replyContent = .text(buildTextTimelineItemContent(.init(body: content.body, formatted: nil)))
             case .none:
                 return nil
             }
