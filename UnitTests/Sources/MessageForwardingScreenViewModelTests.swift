@@ -14,9 +14,56 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
 
 @MainActor
-class MessageForwardingScreenViewModelTests: XCTestCase { }
+class MessageForwardingScreenViewModelTests: XCTestCase {
+    var viewModel: MessageForwardingScreenViewModelProtocol!
+    var context: MessageForwardingScreenViewModelType.Context!
+    var cancellables = Set<AnyCancellable>()
+    
+    override func setUpWithError() throws {
+        viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)), sourceRoomID: "1")
+        context = viewModel.context
+    }
+    
+    func testInitialState() {
+        XCTAssertNil(context.viewState.rooms.first(where: { $0.id == "1" }))
+    }
+    
+    func testRoomSelection() {
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        XCTAssertEqual(context.viewState.selectedRoomID, "2")
+    }
+    
+    func testSearching() {
+        context.searchQuery = "Second"
+        XCTAssertEqual(context.viewState.visibleRooms.count, 1)
+    }
+    
+    func testForwarding() {
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        XCTAssertEqual(context.viewState.selectedRoomID, "2")
+        
+        let expectation = expectation(description: "Wait for confirmation")
+        
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .send(let roomID):
+                    XCTAssertEqual(roomID, "2")
+                    expectation.fulfill()
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        context.send(viewAction: .send)
+        
+        waitForExpectations(timeout: 5.0)
+    }
+}
