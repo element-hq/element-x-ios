@@ -250,7 +250,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
             .mockCharlie
         ]
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
-                                                  topic: "Bacon ipsum dolor amet short ribs buffalo pork loin cupim frankfurter. Burgdoggen pig shankle biltong flank ham jowl sirloin bacon cow. T-bone alcatra boudin beef spare ribs pig fatback jerky swine short ribs shankle chislic frankfurter pork loin. Chicken tri-tip bresaola t-bone pastrami brisket.",
+                                                  topic: "Bacon ipsum dolor amet short ribs buffalo pork loin cupim frankfurter. Burgdoggen pig shankle biltong flank ham jowl sirloin bacon cow. T-bone alcatra boudin beef spare ribs pig fatback jerky swine short ribs shankle chislic frankfurter pork loin. Chicken tri-tip bresaola t-bone pastrami brisket.", // swiftlint:disable:this line_length
                                                   isDirect: false,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",

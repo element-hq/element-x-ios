@@ -62,10 +62,6 @@ private struct ReadReceiptsEnabledKey: EnvironmentKey {
     static let defaultValue = false
 }
 
-private struct IsEncryptedOneToOneRoomKey: EnvironmentKey {
-    static let defaultValue = false
-}
-
 extension EnvironmentValues {
     var timelineStyle: TimelineStyle {
         get { self[TimelineStyleKey.self] }
@@ -80,10 +76,5 @@ extension EnvironmentValues {
     var readReceiptsEnabled: Bool {
         get { self[ReadReceiptsEnabledKey.self] }
         set { self[ReadReceiptsEnabledKey.self] = newValue }
-    }
-    
-    var isEncryptedOneToOneRoom: Bool {
-        get { self[IsEncryptedOneToOneRoomKey.self] }
-        set { self[IsEncryptedOneToOneRoomKey.self] = newValue }
     }
 }

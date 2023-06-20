@@ -20,7 +20,6 @@ import SwiftUI
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
-    @Environment(\.isEncryptedOneToOneRoom) private var isEncryptedOneToOneRoom
     
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
@@ -32,9 +31,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     @State private var showItemActionMenu = false
 
-    private var isTextItem: Bool {
-        timelineItem is TextBasedRoomTimelineItem
-    }
+    private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
+    private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
 
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
@@ -287,7 +285,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
-            .environment(\.isEncryptedOneToOneRoom, false)
         mockTimeline
             .environment(\.readReceiptsEnabled, true)
             .previewDisplayName("Mock Timeline with read receipts")
