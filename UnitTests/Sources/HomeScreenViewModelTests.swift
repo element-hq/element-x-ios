@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
@@ -31,7 +32,8 @@ class HomeScreenViewModelTests: XCTestCase {
         clientProxy = MockClientProxy(userID: "@mock:client.com")
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider()),
-                                        attributedStringBuilder: AttributedStringBuilder())
+                                        attributedStringBuilder: AttributedStringBuilder(),
+                                        selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
     }
     
     func testSelectRoom() async throws {
