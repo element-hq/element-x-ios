@@ -33,10 +33,9 @@ final class NSEUserSession {
 
         client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
-        try startEncryptionSync()
     }
 
-    private func startEncryptionSync() throws {
+    func startEncryptionSync() throws {
         let listener = EncryptionSyncListenerProxy { [weak self] in
             MXLog.info("NSE: Encryption sync terminated for user: \(self?.userID ?? "unknown")")
             self?.encryptionSyncService = nil

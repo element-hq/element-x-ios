@@ -73,13 +73,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         do {
             let userSession = try NSEUserSession(credentials: credentials)
 
-            // TODO: The following wait with a timeout should be handled by the SDK
-            // We try to decrypt the notification for 10 seconds at most
-            var itemProxy: NotificationItemProxyProtocol
-            let date = Date()
-            repeat {
-                itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-            } while itemProxy.isEncrypted && date.timeIntervalSinceNow > -10
+            var itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+            if itemProxy.isEncrypted, let _ = try? userSession.startEncryptionSync() {
+                // TODO: The following wait with a timeout should be handled by the SDK
+                // We try to decrypt the notification for 10 seconds at most
+                let date = Date()
+                repeat {
+                    itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+                } while itemProxy.isEncrypted && date.timeIntervalSinceNow > -10
+            }
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)
