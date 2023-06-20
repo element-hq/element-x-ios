@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
@@ -22,6 +23,7 @@ struct HomeScreenRoomCell: View {
     
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
+    let isSelected: Bool
     
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
@@ -47,7 +49,7 @@ struct HomeScreenRoomCell: View {
             .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
         }
-        .buttonStyle(HomeScreenRoomCellButtonStyle(isSelected: false))
+        .buttonStyle(HomeScreenRoomCellButtonStyle(isSelected: isSelected))
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
     }
     
@@ -149,8 +151,9 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(configuration.isPressed || isSelected ? Color.compound.bgSubtleSecondary : .clear)
+            .background(isSelected ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
             .contentShape(Rectangle())
+            .animation(.elementDefault, value: isSelected)
     }
 }
 
@@ -171,7 +174,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                           mediaProvider: MockMediaProvider())
 
         let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder())
+                                            attributedStringBuilder: AttributedStringBuilder(),
+                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
         
         let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> HomeScreenRoom? in
             switch summary {
@@ -190,14 +194,14 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
 
         return VStack(spacing: 0) {
             ForEach(rooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModel.context)
+                HomeScreenRoomCell(room: room, context: viewModel.context, isSelected: false)
             }
             
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
         }
     }

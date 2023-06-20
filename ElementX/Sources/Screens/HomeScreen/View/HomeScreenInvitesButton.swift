@@ -25,7 +25,7 @@ struct HomeScreenInvitesButton: View {
     
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
+            HStack(spacing: 8.0) {
                 Text(title)
                     .foregroundColor(.compound.textPrimary)
                     .font(.compound.bodyMDSemibold)
@@ -34,7 +34,9 @@ struct HomeScreenInvitesButton: View {
                     badge
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.trailing, 16.0)
+            .padding(.leading, 64.0)
+            .padding(.vertical, 8.0)
         }
     }
     

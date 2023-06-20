@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 /// A view modifier that applies a shimmering effect to the view.
@@ -72,12 +73,13 @@ extension View {
 struct ShimmerOverlay_Previews: PreviewProvider {
     static let viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: ""),
                                                                             mediaProvider: MockMediaProvider()),
-                                               attributedStringBuilder: AttributedStringBuilder())
+                                               attributedStringBuilder: AttributedStringBuilder(),
+                                               selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
     
     static var previews: some View {
         VStack {
             ForEach(0...8, id: \.self) { _ in
-                HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+                HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
             }
         }
         .redacted(reason: .placeholder)

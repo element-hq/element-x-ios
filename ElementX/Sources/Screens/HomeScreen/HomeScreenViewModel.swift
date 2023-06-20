@@ -31,7 +31,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
-    init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
+    init(userSession: UserSessionProtocol,
+         attributedStringBuilder: AttributedStringBuilderProtocol,
+         selectedRoomPublisher: CurrentValuePublisher<String?, Never>) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
         
@@ -57,6 +59,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
 
         userSession.clientProxy.avatarURLPublisher
             .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
+        selectedRoomPublisher
+            .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
         guard let roomSummaryProvider, let inviteSummaryProvider else {

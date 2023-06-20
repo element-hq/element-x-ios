@@ -22,6 +22,7 @@ struct HomeScreenCoordinatorParameters {
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let bugReportService: BugReportServiceProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
+    let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
 }
 
 enum HomeScreenCoordinatorAction {
@@ -48,7 +49,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
-                                        attributedStringBuilder: parameters.attributedStringBuilder)
+                                        attributedStringBuilder: parameters.attributedStringBuilder,
+                                        selectedRoomPublisher: parameters.selectedRoomPublisher)
         
         viewModel.callback = { [weak self] action in
             guard let self else { return }

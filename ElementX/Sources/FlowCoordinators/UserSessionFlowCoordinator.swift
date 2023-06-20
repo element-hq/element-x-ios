@@ -36,6 +36,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
     
+    private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
+    
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
     init(userSession: UserSessionProtocol,
@@ -109,7 +111,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     // MARK: - Private
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -160,6 +162,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         
+        stateMachine.addTransitionHandler { [weak self] context in
+            switch context.toState {
+            case .roomList(let selectedRoomId):
+                self?.selectedRoomSubject.send(selectedRoomId)
+            default:
+                break
+            }
+        }
+        
         stateMachine.addErrorHandler { context in
             fatalError("Failed transition with context: \(context)")
         }
@@ -170,7 +181,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          attributedStringBuilder: AttributedStringBuilder(),
                                                          bugReportService: bugReportService,
-                                                         navigationStackCoordinator: detailNavigationStackCoordinator)
+                                                         navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                         selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
 
         coordinator.callback = { [weak self] action in
