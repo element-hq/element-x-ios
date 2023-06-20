@@ -95,11 +95,11 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             
             let inviter: RoomMemberProxyProtocol? = await room.inviter()
             
-            guard let inviter, let inviteIndex = state.invites?.firstIndex(where: { $0.roomDetails.id == roomID }) else {
+            guard let inviter, let inviteIndex = state.invites.firstIndex(where: { $0.roomDetails.id == roomID }) else {
                 return
             }
             
-            state.invites?[inviteIndex].inviter = inviter
+            state.invites[inviteIndex].inviter = inviter
         }
     }
     

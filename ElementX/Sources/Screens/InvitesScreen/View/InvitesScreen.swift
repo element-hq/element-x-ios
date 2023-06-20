@@ -21,9 +21,9 @@ struct InvitesScreen: View {
     
     var body: some View {
         ScrollView {
-            if let rooms = context.viewState.invites, !rooms.isEmpty {
+            if !context.viewState.invites.isEmpty {
                 LazyVStack(spacing: 0) {
-                    ForEach(rooms, id: \.roomDetails.id) { invite in
+                    ForEach(context.viewState.invites) { invite in
                         InvitesScreenCell(invite: invite,
                                           imageProvider: context.imageProvider,
                                           acceptAction: { context.send(viewAction: .accept(invite)) },

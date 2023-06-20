@@ -19,7 +19,7 @@ enum InvitesScreenViewModelAction {
 }
 
 struct InvitesScreenViewState: BindableState {
-    var invites: [InvitesScreenRoomDetails]?
+    var invites: [InvitesScreenRoomDetails] = []
     var bindings: InvitesScreenViewStateBindings = .init()
 }
 
@@ -27,13 +27,17 @@ struct InvitesScreenViewStateBindings {
     var alertInfo: AlertInfo<Bool>?
 }
 
-struct InvitesScreenRoomDetails {
+struct InvitesScreenRoomDetails: Identifiable {
     let roomDetails: RoomSummaryDetails
     var inviter: RoomMemberProxyProtocol?
     var isUnread: Bool
     
     var isDirect: Bool {
         roomDetails.isDirect
+    }
+    
+    var id: String {
+        roomDetails.id
     }
 }
 
