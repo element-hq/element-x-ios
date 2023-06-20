@@ -17,30 +17,63 @@
 import CoreLocation
 import SwiftUI
 
-struct MapLibreStaticMapView: View {
-    let coordinates: CLLocationCoordinate2D
-    let zoomLevel: Double
-    let mapTilerStatic: MapTilerStaticMapProtocol
+struct MapLibreStaticMapView<PinAnnotation: View>: View {
+    private let coordinates: CLLocationCoordinate2D
+    private let zoomLevel: Double
+    private let mapTilerStatic: MapTilerStaticMapProtocol
+    private let pinAnnotationView: PinAnnotation
     @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric private var height: CGFloat
+    @ScaledMetric private var width: CGFloat
+    @State private var attempt = 0
     
-    @ScaledMetric var height: CGFloat = 150
-    @ScaledMetric var width: CGFloat = 300
+    init(coordinates: CLLocationCoordinate2D, zoomLevel: Double, mapTilerStatic: MapTilerStaticMapProtocol, height: CGFloat, width: CGFloat, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+        self.coordinates = coordinates
+        self.zoomLevel = zoomLevel
+        self.mapTilerStatic = mapTilerStatic
+        _height = .init(wrappedValue: height)
+        _width = .init(wrappedValue: width)
+        self.pinAnnotationView = pinAnnotationView()
+    }
     
     var body: some View {
         if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: .init(width: width, height: height)) {
             AsyncImage(url: url) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else if phase.error != nil {
-                    Color.red // Indicates an error.
-                } else {
-                    Color.blue // Acts as a placeholder.
+                switch phase {
+                case .empty:
+                    Image("mapBlurred")
+                case .success(let image):
+                    ZStack {
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                        pinAnnotationView
+                    }
+                case .failure:
+                    errorView
+                @unknown default:
+                    EmptyView()
                 }
             }
+            .id(attempt)
             .frame(width: width, height: height)
             .clipped()
+        } else {
+            Image("mapBlurred")
+        }
+    }
+    
+    var errorView: some View {
+        Button {
+            attempt += 1
+        } label: {
+            ZStack {
+                Image("mapBlurred")
+                VStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text(L10n.actionStaticMapLoad)
+                }
+            }
         }
     }
 }
@@ -60,17 +93,23 @@ private extension ColorScheme {
 
 struct MapLibreStaticMapView_Previews: PreviewProvider {
     static var previews: some View {
-        MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(latitude: 45, longitude: 7), zoomLevel: 15, mapTilerStatic: MapTilerStaticMapMock())
+        MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
+                              zoomLevel: 15,
+                              mapTilerStatic: MapTilerStaticMapMock(),
+                              height: 150, width: 300) {
+            Image(systemName: "mappin.circle.fill")
+                .padding(.bottom, 35)
+        }
     }
 }
 
-struct MapTilerStaticMapMock: MapTilerStaticMapProtocol {
+private struct MapTilerStaticMapMock: MapTilerStaticMapProtocol {
     func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL? {
         switch style {
         case .light:
-            return URL(string: "https://www.maptiler.com/img/share/share-default.png")
+            return URL(string: "https://www.maptiler.com/img/cloud/home/map5.webp")
         case .dark:
-            return URL(string: "https://www.maptiler.com/media/2023-02-08-map-the-ocean-with-maptiler-1.jpg")
+            return URL(string: "https://www.maptiler.com/img/cloud/home/map6.webp")
         }
     }
 }

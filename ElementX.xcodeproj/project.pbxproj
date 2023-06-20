@@ -555,6 +555,8 @@
 		CD0088B763CD970CF1CBF8CB /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5E97E9615A158C76B2AB77 /* DateTests.swift */; };
 		CD6A72B65D3B6076F4045C30 /* PHGPostHogConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */; };
 		CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2F7194F440375338F8E2487 /* Untranslated.strings */; };
+		CE25B6E32A419C9B004036DE /* MapTilerStaticMapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE25B6E22A419C9B004036DE /* MapTilerStaticMapProtocol.swift */; };
+		CE50A32A2A408F8B00215582 /* MapAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE50A3292A408F8B00215582 /* MapAssets.xcassets */; };
 		CE7148E80F09B7305E026AC6 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1198B925F4A88DA74083662 /* OnboardingViewModel.swift */; };
 		CE9530A4CA661E090635C2F2 /* NotificationItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F7FE40EF7490A7E09D7BE6 /* NotificationItemProxy.swift */; };
 		CEB8FB1269DE20536608B957 /* LoginMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B41FABA2B0AEF4389986495 /* LoginMode.swift */; };
@@ -1237,6 +1239,8 @@
 		CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreen.swift; sourceTree = "<group>"; };
 		CD6B0C4639E066915B5E6463 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
 		CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProvider.swift; sourceTree = "<group>"; };
+		CE25B6E22A419C9B004036DE /* MapTilerStaticMapProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerStaticMapProtocol.swift; sourceTree = "<group>"; };
+		CE50A3292A408F8B00215582 /* MapAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MapAssets.xcassets; sourceTree = "<group>"; };
 		CEE0E6043EFCF6FD2A341861 /* TimelineReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReplyView.swift; sourceTree = "<group>"; };
 		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		CF48AF076424DBC1615C74AD /* AuthenticationServiceProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceProxy.swift; sourceTree = "<group>"; };
@@ -2989,8 +2993,10 @@
 				33720F7AD25E85E4A84669E8 /* MapTilerGeocoding.swift */,
 				C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */,
 				1A4D29F2683F5772AC72406F /* MapTilerStaticMap.swift */,
+				CE25B6E22A419C9B004036DE /* MapTilerStaticMapProtocol.swift */,
 				B7AE92E7BFF71797BDE1D261 /* MapTilerStyleBuilder.swift */,
 				225EFCA26877E75CDFE7F48D /* MapTilerStyleBuilderProtocol.swift */,
+				CE50A3292A408F8B00215582 /* MapAssets.xcassets */,
 			);
 			path = MapLibre;
 			sourceTree = "<group>";
@@ -3581,6 +3587,7 @@
 				CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */,
 				2797C9D9BA642370F1C85D78 /* Untranslated.stringsdict in Resources */,
 				CCAA0671B46EAFD0BB528E2C /* apple_emojis_data.json in Resources */,
+				CE50A32A2A408F8B00215582 /* MapAssets.xcassets in Resources */,
 				E67418DACEDBC29E988E6ACD /* message.caf in Resources */,
 				DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */,
 			);
@@ -3872,6 +3879,7 @@
 				95690DDD9D547D3D842ACBE3 /* AnalyticsSettingsScreenCoordinator.swift in Sources */,
 				7C6376192F578E0BA801BFEC /* AnalyticsSettingsScreenModels.swift in Sources */,
 				A74438ED16F8683A4B793E6A /* AnalyticsSettingsScreenViewModel.swift in Sources */,
+				CE25B6E32A419C9B004036DE /* MapTilerStaticMapProtocol.swift in Sources */,
 				654E802C127B84554042903E /* AnalyticsSettingsScreenViewModelProtocol.swift in Sources */,
 				095C0ACFC234E0550A6404C5 /* AppCoordinator.swift in Sources */,
 				A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */,

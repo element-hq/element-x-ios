@@ -15,11 +15,6 @@
 //
 
 import CoreLocation
-import Foundation
-
-protocol MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL?
-}
 
 struct MapTilerStaticMap: MapTilerStaticMapProtocol {
     private let lightURL: String
@@ -41,7 +36,7 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
             path = darkURL
         }
         
-        path.append("/\(coordinates.longitude),\(coordinates.latitude),\(zoomLevel)/\(size.width)x\(size.height)@2x.png")
+        path.append(String(format: "/static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)))
         
         guard let url = URL(string: path) else { return nil }
         let authorization = MapTilerAuthorization(key: key)
