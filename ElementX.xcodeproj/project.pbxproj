@@ -167,6 +167,7 @@
 		42A5A42ACF063EEE6B1980D2 /* ReportContentScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B17B1F29448D1B9049B11C /* ReportContentScreenViewModel.swift */; };
 		42B084FDE621FBEE433AF444 /* LegalInformationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4176C3E20C772DE8D182863C /* LegalInformationScreen.swift */; };
 		42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A307A44F952CD73E63AE31 /* RoomEventStringBuilder.swift */; };
+		4362C770C7E05ADC750E5070 /* LongPressWithFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DC6A9917A7123E7E9A3F81 /* LongPressWithFeedback.swift */; };
 		43EF6D8E694F54C5471BF5F3 /* TimelineBubbleLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DCA495ED42D2463DDAA94D /* TimelineBubbleLayout.swift */; };
 		43F35A7E5703D64DB0519C59 /* ServerSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */; };
 		440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D505843AB66822EB91F0DF0 /* TimelineItemProxy.swift */; };
@@ -829,6 +830,7 @@
 		2141693488CE5446BB391964 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRoomTimelineItemContent.swift; sourceTree = "<group>"; };
 		218AB05B4E3889731959C5F1 /* EventBasedTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBasedTimelineItemProtocol.swift; sourceTree = "<group>"; };
+		21DC6A9917A7123E7E9A3F81 /* LongPressWithFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressWithFeedback.swift; sourceTree = "<group>"; };
 		225EFCA26877E75CDFE7F48D /* MapTilerStyleBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerStyleBuilderProtocol.swift; sourceTree = "<group>"; };
 		22730A30C50AC2E3D5BA8642 /* InviteUsersScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		227AC5D71A4CE43512062243 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
@@ -2755,6 +2757,7 @@
 		A312471EA62EFB0FD94E60DC /* Style */ = {
 			isa = PBXGroup;
 			children = (
+				21DC6A9917A7123E7E9A3F81 /* LongPressWithFeedback.swift */,
 				E2DCA495ED42D2463DDAA94D /* TimelineBubbleLayout.swift */,
 				98A2932515EA11D3DD8A3506 /* TimelineItemBubbledStylerView.swift */,
 				94BCC8A9C73C1F838122C645 /* TimelineItemPlainStylerView.swift */,
@@ -4077,6 +4080,7 @@
 				C5A07E2D88BE7D51DCECD166 /* LoginScreenModels.swift in Sources */,
 				BDA68E8D95B2B24B28825B8B /* LoginScreenViewModel.swift in Sources */,
 				A5B9EF45C7B8ACEB4954AE36 /* LoginScreenViewModelProtocol.swift in Sources */,
+				4362C770C7E05ADC750E5070 /* LongPressWithFeedback.swift in Sources */,
 				B94368839BDB69172E28E245 /* MXLog.swift in Sources */,
 				B66757D0254843162595B25D /* MXLogger.swift in Sources */,
 				C1D0AB8222D7BAFC9AF9C8C0 /* MapLibreMapView.swift in Sources */,

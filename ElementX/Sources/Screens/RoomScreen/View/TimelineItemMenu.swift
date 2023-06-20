@@ -33,7 +33,6 @@ struct TimelineItemMenuActions {
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
     case edit
-    case quote
     case copyPermalink
     case redact
     case reply
@@ -181,10 +180,6 @@ public struct TimelineItemMenu: View {
             case .edit:
                 Button { send(action) } label: {
                     MenuLabel(title: L10n.actionEdit, systemImageName: "pencil.line")
-                }
-            case .quote:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionQuote, systemImageName: "quote.bubble")
                 }
             case .copyPermalink:
                 Button { send(action) } label: {
