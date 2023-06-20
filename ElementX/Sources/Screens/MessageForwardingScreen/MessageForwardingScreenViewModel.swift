@@ -21,6 +21,7 @@ typealias MessageForwardingScreenViewModelType = StateStoreViewModel<MessageForw
 
 class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, MessageForwardingScreenViewModelProtocol {
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    private let sourceRoomID: String
     
     private var actionsSubject: PassthroughSubject<MessageForwardingScreenViewModelAction, Never> = .init()
     
@@ -28,8 +29,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomSummaryProvider: RoomSummaryProviderProtocol) {
+    init(roomSummaryProvider: RoomSummaryProviderProtocol,
+         sourceRoomID: String) {
         self.roomSummaryProvider = roomSummaryProvider
+        self.sourceRoomID = sourceRoomID
         
         super.init(initialViewState: MessageForwardingScreenViewState())
         
@@ -73,8 +76,12 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         for summary in roomSummaryProvider.roomListPublisher.value {
             switch summary {
             case .empty, .invalidated:
-                break
+                continue
             case .filled(let details):
+                if details.id == sourceRoomID {
+                    continue
+                }
+                
                 let room = MessageForwardingRoom(id: details.id, name: details.name, alias: details.canonicalAlias, avatarURL: details.avatarURL)
                 rooms.append(room)
             }

@@ -24,6 +24,20 @@ enum MessageForwardingScreenViewModelAction {
 struct MessageForwardingScreenViewState: BindableState {
     var rooms: [MessageForwardingRoom] = []
     var selectedRoomID: String?
+    
+    var visibleRooms: [MessageForwardingRoom] {
+        if bindings.searchQuery.isEmpty {
+            return rooms
+        }
+        
+        return rooms.filter { $0.name.localizedStandardContains(bindings.searchQuery) }
+    }
+    
+    var bindings = MessageForwardingScreenViewStateBindings()
+}
+
+struct MessageForwardingScreenViewStateBindings {
+    var searchQuery = ""
 }
 
 enum MessageForwardingScreenViewAction {

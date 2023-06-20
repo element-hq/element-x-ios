@@ -520,13 +520,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMessageForwarding(for eventID: String) {
-        guard let roomSummaryProvider = userSession.clientProxy.roomSummaryProvider else {
+        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.roomSummaryProvider else {
             fatalError()
         }
         
         let messageForwardingNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider)
+        let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider,
+                                                                      sourceRoomID: roomProxy.id)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in

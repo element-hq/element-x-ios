@@ -22,7 +22,7 @@ struct MessageForwardingScreen: View {
     var body: some View {
         Form {
             Section {
-                ForEach(context.viewState.rooms) { room in
+                ForEach(context.viewState.visibleRooms) { room in
                     MessageForwardingRoomCell(room: room, context: context)
                         .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
                 }
@@ -45,6 +45,9 @@ struct MessageForwardingScreen: View {
                 .disabled(context.viewState.selectedRoomID == nil)
             }
         }
+        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+        .compoundSearchField()
+        .disableAutocorrection(true)
     }
 }
 
@@ -95,7 +98,7 @@ private struct MessageForwardingRoomCell: View {
 struct MessageForwardingScreen_Previews: PreviewProvider {
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
-        let viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: summaryProvider)
+        let viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: summaryProvider, sourceRoomID: "")
         
         NavigationStack {
             MessageForwardingScreen(context: viewModel.context)
