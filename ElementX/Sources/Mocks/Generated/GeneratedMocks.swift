@@ -457,6 +457,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingUpdatesPublisher = value }
     }
     var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
+    var timelineProvider: RoomTimelineProviderProtocol {
+        get { return underlyingTimelineProvider }
+        set(value) { underlyingTimelineProvider = value }
+    }
+    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
 
     //MARK: - loadAvatarURLForUserId
 
@@ -498,23 +503,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return await loadDisplayNameForUserIdClosure(userId)
         } else {
             return loadDisplayNameForUserIdReturnValue
-        }
-    }
-    //MARK: - registerTimelineListenerIfNeeded
-
-    var registerTimelineListenerIfNeededCallsCount = 0
-    var registerTimelineListenerIfNeededCalled: Bool {
-        return registerTimelineListenerIfNeededCallsCount > 0
-    }
-    var registerTimelineListenerIfNeededReturnValue: Result<[TimelineItem], RoomProxyError>!
-    var registerTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem], RoomProxyError>)?
-
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
-        registerTimelineListenerIfNeededCallsCount += 1
-        if let registerTimelineListenerIfNeededClosure = registerTimelineListenerIfNeededClosure {
-            return registerTimelineListenerIfNeededClosure()
-        } else {
-            return registerTimelineListenerIfNeededReturnValue
         }
     }
     //MARK: - paginateBackwards

@@ -19,7 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
-    private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
     
@@ -35,27 +34,15 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
-    init(roomProxy: RoomProxyProtocol) {
-        self.roomProxy = roomProxy
+    init(currentItems: [TimelineItem], updatePublisher: AnyPublisher<TimelineDiff, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
-        itemProxies = []
+
+        itemProxies = currentItems.map(TimelineItemProxy.init)
         
-        roomProxy
-            .updatesPublisher
+        updatePublisher
             .collect(.byTime(serialDispatchQueue, 0.1))
             .sink { [weak self] in self?.updateItemsWithDiffs($0) }
             .store(in: &cancellables)
-        
-        switch roomProxy.registerTimelineListenerIfNeeded() {
-        case let .success(items):
-            itemProxies = items.map(TimelineItemProxy.init)
-            MXLog.verbose("Added timeline listener, current items (\(items.count)) : \(items.map(\.debugIdentifier))")
-        case .failure(.roomListenerAlreadyRegistered):
-            MXLog.verbose("Listener already registered for the room: \(roomProxy.id)")
-        case .failure:
-            let roomID = roomProxy.id
-            MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
-        }
     }
     
     // MARK: - Private

@@ -221,11 +221,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssertTrue(callbackCorrectlyCalled)
     }
-    
-    func testRoomSubscription() async {
-        XCTAssertEqual(roomProxyMock.registerTimelineListenerIfNeededCallsCount, 1)
-    }
-    
+        
     func testCanEditAvatar() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomAvatar])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]

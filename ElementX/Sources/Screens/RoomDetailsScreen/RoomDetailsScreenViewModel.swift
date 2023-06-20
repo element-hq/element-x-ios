@@ -89,13 +89,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     // MARK: - Private
 
     private func setupRoomSubscription() {
-        switch roomProxy.registerTimelineListenerIfNeeded() {
-        case .success, .failure(.roomListenerAlreadyRegistered):
-            break
-        case .failure:
-            MXLog.error("Failed to register a room listener in room's details for the room \(roomProxy.id)")
-        }
-        
         roomProxy.updatesPublisher
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in

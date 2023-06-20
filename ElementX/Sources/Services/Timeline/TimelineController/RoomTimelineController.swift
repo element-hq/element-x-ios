@@ -43,17 +43,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     init(userId: String,
          roomProxy: RoomProxyProtocol,
-         timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.userId = userId
-        self.timelineProvider = timelineProvider
+        self.roomProxy = roomProxy
+        timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.roomProxy = roomProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
-        self.timelineProvider
+        timelineProvider
             .itemsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] _ in

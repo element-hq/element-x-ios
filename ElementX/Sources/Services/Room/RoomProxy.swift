@@ -46,6 +46,11 @@ class RoomProxy: RoomProxyProtocol {
         updatesSubject.eraseToAnyPublisher()
     }
     
+    var innerTimelineProvider: RoomTimelineProviderProtocol!
+    var timelineProvider: RoomTimelineProviderProtocol {
+        innerTimelineProvider
+    }
+    
     deinit {
         Task { @MainActor [roomTimelineObservationToken, roomListItem] in
             roomTimelineObservationToken?.cancel()
@@ -59,6 +64,30 @@ class RoomProxy: RoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
+        
+        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
+                                                        RequiredState(key: "m.room.topic", value: ""),
+                                                        RequiredState(key: "m.room.avatar", value: ""),
+                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
+                                                        RequiredState(key: "m.room.join_rules", value: "")],
+                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
+        roomListItem.subscribe(settings: settings)
+
+        let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
+            self?.updatesSubject.send(timelineDiff)
+        }
+
+        self.timelineListener = timelineListener
+        
+        let result = room.addTimelineListener(listener: timelineListener)
+        roomTimelineObservationToken = result.itemsStream
+        
+        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items, updatePublisher: updatesPublisher)
+        
+        Task {
+            await fetchMembers()
+            await updateMembers()
+        }
     }
 
     lazy var id: String = room.id()
@@ -162,36 +191,6 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
-        guard timelineListener == nil else {
-            return .failure(.roomListenerAlreadyRegistered)
-        }
-
-        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
-                                                        RequiredState(key: "m.room.topic", value: ""),
-                                                        RequiredState(key: "m.room.avatar", value: ""),
-                                                        RequiredState(key: "m.room.canonical_alias", value: ""),
-                                                        RequiredState(key: "m.room.join_rules", value: "")],
-                                        timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
-        roomListItem.subscribe(settings: settings)
-
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
-            self?.updatesSubject.send(timelineDiff)
-        }
-
-        self.timelineListener = timelineListener
-        
-        let result = room.addTimelineListener(listener: timelineListener)
-        roomTimelineObservationToken = result.itemsStream
-        
-        Task {
-            await fetchMembers()
-            await updateMembers()
-        }
-        
-        return .success(result.items)
-    }
-    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         do {
             try await Task.dispatch(on: .global()) {

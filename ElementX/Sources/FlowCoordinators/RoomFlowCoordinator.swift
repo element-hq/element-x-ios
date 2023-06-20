@@ -246,7 +246,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let roomProxy: RoomProxyProtocol
         
-        // This destinationRoomProxy is used when forwarding messages
+        // This destinationRoomProxy is used when forwarding messages so that we can take advantage
+        // of the local echo and have the message already there when presenting the room
         if let destinationRoomProxy {
             roomProxy = destinationRoomProxy
         } else {
@@ -566,14 +567,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return
-        }
-        
-        if case .failure(let error) = targetRoomProxy.registerTimelineListenerIfNeeded() {
-            if error != .roomListenerAlreadyRegistered {
-                MXLog.error("Failed registering timeline listener with error: \(error)")
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                return
-            }
         }
         
         if case .failure(let error) = await targetRoomProxy.sendMessageEventContent(messageEventContent) {
