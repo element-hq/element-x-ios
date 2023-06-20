@@ -173,7 +173,7 @@ struct RoomDetailsScreen: View {
                         Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                         Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodyMD)
+                            .font(.compound.bodySM)
                     }
                 } icon: {
                     Image(systemName: "lock.shield")
