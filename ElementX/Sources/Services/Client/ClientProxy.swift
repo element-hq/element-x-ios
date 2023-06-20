@@ -411,8 +411,11 @@ class ClientProxy: ClientProxyProtocol {
                     self.startEncryptionSyncService()
                 }
             }
-            try encryptionSyncService = client.mainEncryptionSync(id: "Main App", listener: listener)
+            let encryptionSync = try client.mainEncryptionSync(id: "Main App", listener: listener)
+            encryptionSync.reloadCaches()
             isEncryptionSyncing = true
+            encryptionSyncService = encryptionSync
+            MXLog.info("Encryption sync started for user: \(userID)")
         } catch {
             MXLog.error("Configure encryption sync failed with error: \(error)")
         }

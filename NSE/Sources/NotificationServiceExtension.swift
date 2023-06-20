@@ -71,13 +71,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession: NSEUserSession
-            if let existingUserSession = Self.userSession[credentials.userID] {
-                userSession = existingUserSession
-            } else {
-                userSession = try NSEUserSession(credentials: credentials)
-                Self.userSession[credentials.userID] = userSession
-            }
+            let userSession = try NSEUserSession(credentials: credentials)
 
             // TODO: The following wait with a timeout should be handled by the SDK
             // We try to decrypt the notification for 10 seconds at most
