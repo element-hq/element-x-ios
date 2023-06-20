@@ -24,7 +24,7 @@ struct MessageForwardingScreen: View {
             Section {
                 ForEach(context.viewState.rooms) { room in
                     MessageForwardingRoomCell(room: room, context: context)
-                        .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.selectedRoomID == room.id)))
+                        .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
                 }
             }
         }

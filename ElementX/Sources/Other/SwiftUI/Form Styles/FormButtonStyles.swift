@@ -23,7 +23,8 @@ struct FormRowAccessory: View {
     enum Kind {
         case navigationLink
         case progressView
-        case selection(isSelected: Bool)
+        case singleSelection(isSelected: Bool)
+        case multipleSelection(isSelected: Bool)
     }
     
     let kind: Kind
@@ -36,8 +37,12 @@ struct FormRowAccessory: View {
         .init(kind: .progressView)
     }
     
-    static func selection(isSelected: Bool) -> Self {
-        .init(kind: .selection(isSelected: isSelected))
+    static func singleSelection(isSelected: Bool) -> Self {
+        .init(kind: .singleSelection(isSelected: isSelected))
+    }
+    
+    static func multipleSelection(isSelected: Bool) -> Self {
+        .init(kind: .multipleSelection(isSelected: isSelected))
     }
     
     var body: some View {
@@ -48,7 +53,13 @@ struct FormRowAccessory: View {
                 .foregroundColor(.compound.iconQuaternary)
         case .progressView:
             ProgressView()
-        case .selection(let isSelected):
+        case .singleSelection(let isSelected):
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.compound.bodyLG)
+                    .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
+            }
+        case .multipleSelection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
                 .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
@@ -94,7 +105,16 @@ struct FormButtonStyle: PrimitiveButtonStyle {
             }
             .contentShape(Rectangle())
             .padding(FormRow.insets) // Re-apply the normal insets using padding.
-            .background(configuration.isPressed ? Color.compound.bgSubtlePrimary : .clear)
+            .background(backgroundColor(for: configuration))
+        }
+        
+        private func backgroundColor(for configuration: Configuration) -> Color {
+            switch accessory?.kind {
+            case .none, .navigationLink, .progressView:
+                return configuration.isPressed ? .compound.bgSubtlePrimary : .element.formRowBackground
+            default:
+                return .element.formRowBackground
+            }
         }
     }
 }
@@ -147,7 +167,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
             }
             .formSectionStyle()
             
-            Section {
+            Section("Single selection") {
                 Button { } label: {
                     Text("Hello world")
                 }
@@ -156,18 +176,42 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 Button { } label: {
                     Text("Selected")
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+                .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: true)))
                 
                 Button { } label: {
                     Text("Selected (disabled)")
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+                .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: true)))
                 .disabled(true)
                
                 Button { } label: {
                     Text("Unselected")
                 }
-                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
+                .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: false)))
+            }
+            .formSectionStyle()
+            
+            Section("Multiple selection") {
+                Button { } label: {
+                    Text("Hello world")
+                }
+                .buttonStyle(FormButtonStyle())
+               
+                Button { } label: {
+                    Text("Selected")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: true)))
+                
+                Button { } label: {
+                    Text("Selected (disabled)")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: true)))
+                .disabled(true)
+               
+                Button { } label: {
+                    Text("Unselected")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: false)))
             }
             .formSectionStyle()
 

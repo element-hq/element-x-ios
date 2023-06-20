@@ -97,33 +97,33 @@ struct UserProfileCell_Previews: PreviewProvider {
             Button(action: action) {
                 UserProfileCell(user: .mockAlice, membership: nil, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+            .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: true)))
             .previewDisplayName("Selected user")
 
             Button(action: action) {
                 UserProfileCell(user: .mockBob, membership: nil, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
+            .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: false)))
             .previewDisplayName("Unselected user")
             
             Button(action: action) {
                 UserProfileCell(user: .mockCharlie, membership: .join, imageProvider: MockMediaProvider())
             }
             .disabled(true)
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+            .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: true)))
             .previewDisplayName("Selected disabled user")
             
             Button(action: action) {
                 UserProfileCell(user: .init(userID: "@someone:matrix.org"), membership: .join, imageProvider: MockMediaProvider())
             }
             .disabled(true)
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: true)))
+            .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: true)))
             .previewDisplayName("Unverified joined user")
             
             Button(action: action) {
                 UserProfileCell(user: .init(userID: "@someone:matrix.org"), membership: nil, imageProvider: MockMediaProvider())
             }
-            .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: false)))
+            .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: false)))
             .previewDisplayName("Unverified user")
         }
     }
