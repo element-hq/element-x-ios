@@ -284,7 +284,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo)
+                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: nil)
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -300,7 +300,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo)
+                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: nil)
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -316,7 +316,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo)
+                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: nil)
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -332,7 +332,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendFile(url: url.path(), fileInfo: fileInfo)
+                try self.room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: nil)
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
