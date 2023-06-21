@@ -49,6 +49,13 @@
       function(d) { return { x: d.Date, y: Math.max(d.Data1, d.Data2, d.Data3, d.Data4, d.Data5) } });
     var minData = perfdata.map(
       function(d) { return { x: d.Date, y: Math.min(d.Data1, d.Data2, d.Data3, d.Data4, d.Data5) } });
+    var medianData = perfdata.map(
+      function(d) {
+        let values = [d.Data1, d.Data2, d.Data3, d.Data4, d.Data5];
+        values.sort(function(a,b) { return a - b });
+        return { x: d.Date, y: values[2] };
+      }
+    );
 
     var avgData = perfdata.map(
       function(d) {
@@ -69,8 +76,8 @@
             borderColor: "#CCFFCC"
           },
           {
-            label: "avg",
-            data: avgData,
+            label: "median",
+            data: medianData,
             borderColor: "#CCCCFF"
           },
           {
