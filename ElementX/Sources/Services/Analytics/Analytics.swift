@@ -143,20 +143,23 @@ extension Analytics {
     }
     
     /// Track the presentation of a room
-    func trackViewRoom(_ roomProxy: RoomProxyProtocol) {
-        Task {
-            await capture(event: AnalyticsEvent.ViewRoom(activeSpace: nil, isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, trigger: nil, viaKeyboard: nil))
-        }
+    /// - Parameters:
+    ///   - isDM: whether the room is a direct message
+    ///   - isSpace: whether the room is a space
+    func trackViewRoom(isDM: Bool, isSpace: Bool) {
+        capture(event: AnalyticsEvent.ViewRoom(activeSpace: nil, isDM: isDM, isSpace: isSpace, trigger: nil, viaKeyboard: nil))
     }
     
     /// Track the action of joining a room
-    func trackJoinedRoom(_ roomProxy: RoomProxyProtocol) {
-        Task {
-            guard let roomSize = await AnalyticsEvent.JoinedRoom.RoomSize(memberCount: UInt(roomProxy.activeMembersCount)) else {
-                MXLog.error("invalid room size")
-                return
-            }
-            await capture(event: AnalyticsEvent.JoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, roomSize: roomSize, trigger: nil))
+    /// - Parameters:
+    ///   - isDM: whether the room is a direct message
+    ///   - isSpace: whether the room is a space
+    ///   - activeMemberCount: the number of active members in the room
+    func trackJoinedRoom(isDM: Bool, isSpace: Bool, activeMemberCount: UInt) {
+        guard let roomSize = AnalyticsEvent.JoinedRoom.RoomSize(memberCount: activeMemberCount) else {
+            MXLog.error("invalid room size")
+            return
         }
+        capture(event: AnalyticsEvent.JoinedRoom(isDM: isDM, isSpace: isSpace, roomSize: roomSize, trigger: nil))
     }
 }

@@ -282,7 +282,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
-        ServiceLocator.shared.analytics.trackViewRoom(roomProxy)
+        ServiceLocator.shared.analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
