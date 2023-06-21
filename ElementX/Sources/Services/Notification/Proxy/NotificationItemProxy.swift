@@ -378,7 +378,8 @@ extension NotificationItemProxyProtocol {
     }
 
     private func processLocation(content: LocationContent, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(mediaProvider: mediaProvider)
+        let notification = try await processCommon(mediaProvider: mediaProvider)
+        #warning("AG: How a location notification should appear here?")
         notification.body = "📍 " + content.body
         return notification
     }
