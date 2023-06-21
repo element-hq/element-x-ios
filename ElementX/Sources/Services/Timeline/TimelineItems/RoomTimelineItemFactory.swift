@@ -36,7 +36,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
         
@@ -75,9 +75,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .audio(let content):
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .location(let content):
-                #warning("AG: fix me")
-                let textContent = TextMessageContent(body: content.body, formatted: nil)
-                return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, textContent, isOutgoing)
+                #warning("AG: add feature flag")
+                return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .none:
                 return nil
             }
@@ -300,6 +299,19 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
                                                                      transactionID: eventItemProxy.transactionID))
     }
+
+    private func buildLocationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                           _ messageTimelineItem: Message,
+                                           _ messageContent: LocationContent,
+                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        LocationRoomTimelineItem(id: eventItemProxy.id,
+                                 timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                                 isOutgoing: isOutgoing,
+                                 isEditable: eventItemProxy.isEditable,
+                                 sender: eventItemProxy.sender,
+                                 content: .init(body: messageContent.body),
+                                 replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()))
+    }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
@@ -493,7 +505,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .video(let content):
                 replyContent = .video(buildVideoTimelineItemContent(content))
             case .location(let content):
-                #warning("AG: fix me")
+                #warning("AG: fix me?")
                 replyContent = .text(buildTextTimelineItemContent(.init(body: content.body, formatted: nil)))
             case .none:
                 return nil

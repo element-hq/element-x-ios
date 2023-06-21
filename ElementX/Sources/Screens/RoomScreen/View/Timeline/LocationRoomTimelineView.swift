@@ -14,26 +14,24 @@
 // limitations under the License.
 //
 
-struct LocationRoomTimelineItem: EventBasedTimelineItemProtocol, Hashable {
-    let id: String
+import SwiftUI
 
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
+struct LocationRoomTimelineView: View {
+    let timelineItem: LocationRoomTimelineItem
+    @Environment(\.timelineStyle) var timelineStyle
 
-    let sender: TimelineItemSender
-
-    let content: LocationRoomTimelineItemContent
-
-    var body: String {
-        content.body
+    var body: some View {
+        TimelineStyler(timelineItem: timelineItem) {
+            Text(timelineItem.body)
+                .background(Color.red)
+        }
     }
+}
 
-    var properties = RoomTimelineItemProperties()
-
-    var replyDetails: TimelineItemReplyDetails?
-
-    var contentType: EventBasedMessageTimelineItemContentType {
-        .location(content)
+struct LocationRoomTimelineView_Previews: PreviewProvider {
+    static var previews: some View {
+        #warning("AG: fix me")
+        return EmptyView()
+        // LocationRoomTimelineView(timelineItem: )
     }
 }
