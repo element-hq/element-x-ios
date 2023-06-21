@@ -23,20 +23,11 @@ struct LocationRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
-                MapLibreStaticMapView(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
-                                      zoomLevel: 15,
-                                      mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey, lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL, darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
-                                      height: 200,
-                                      width: 300) {
-                    Image(systemName: "mappin.circle.fill")
-                        .font(.system(size: 30))
-                        .alignmentGuide(VerticalAlignment.center) { dimensions in
-                            dimensions[.bottom]
-                        }
+                MapLibreStaticMapView(geoURI: geoURI, size: .init(width: 292, height: 188)) {
+                    Image(uiImage: Asset.Images.locationPin.image)
                 }
             } else {
-                #warning("AG: fix me")
-                Text(timelineItem.body)
+                FormattedBodyText(text: timelineItem.body)
             }
         }
     }
@@ -68,5 +59,16 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description", geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
+    }
+}
+
+private extension MapLibreStaticMapView {
+    init(geoURI: GeoURI, size: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+        self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
+                  zoomLevel: 15,
+                  mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
+                                                    lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,
+                                                    darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
+                  size: size, pinAnnotationView: pinAnnotationView)
     }
 }

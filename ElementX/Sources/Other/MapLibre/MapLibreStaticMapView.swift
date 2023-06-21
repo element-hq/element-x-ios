@@ -23,16 +23,20 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let mapTilerStatic: MapTilerStaticMapProtocol
     private let pinAnnotationView: PinAnnotation
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric private var height: CGFloat
     @ScaledMetric private var width: CGFloat
-    @State private var attempt = 0
+    @ScaledMetric private var height: CGFloat
+    @State private var fetchAttempt = 0
     
-    init(coordinates: CLLocationCoordinate2D, zoomLevel: Double, mapTilerStatic: MapTilerStaticMapProtocol, height: CGFloat, width: CGFloat, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+    init(coordinates: CLLocationCoordinate2D,
+         zoomLevel: Double,
+         mapTilerStatic: MapTilerStaticMapProtocol,
+         size: CGSize,
+         @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.coordinates = coordinates
         self.zoomLevel = zoomLevel
         self.mapTilerStatic = mapTilerStatic
-        _height = .init(wrappedValue: height)
-        _width = .init(wrappedValue: width)
+        _width = .init(wrappedValue: size.width)
+        _height = .init(wrappedValue: size.height)
         self.pinAnnotationView = pinAnnotationView()
     }
     
@@ -55,7 +59,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                     EmptyView()
                 }
             }
-            .id(attempt)
+            .id(fetchAttempt)
             .frame(width: width, height: height)
             .clipped()
         } else {
@@ -63,9 +67,9 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
         }
     }
     
-    var errorView: some View {
+    private var errorView: some View {
         Button {
-            attempt += 1
+            fetchAttempt += 1
         } label: {
             ZStack {
                 Image("mapBlurred")
@@ -96,7 +100,7 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,
                               mapTilerStatic: MapTilerStaticMapMock(),
-                              height: 150, width: 300) {
+                              size: .init(width: 300, height: 200)) {
             Image(systemName: "mappin.circle.fill")
                 .padding(.bottom, 35)
         }
