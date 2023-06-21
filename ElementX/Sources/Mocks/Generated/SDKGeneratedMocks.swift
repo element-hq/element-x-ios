@@ -249,10 +249,10 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var getNotificationItemRoomIdEventIdReceivedArguments: (`roomId`: String, `eventId`: String)?
     public var getNotificationItemRoomIdEventIdReceivedInvocations: [(`roomId`: String, `eventId`: String)] = []
-    public var getNotificationItemRoomIdEventIdReturnValue: NotificationItem!
-    public var getNotificationItemRoomIdEventIdClosure: ((String, String) throws -> NotificationItem)?
+    public var getNotificationItemRoomIdEventIdReturnValue: NotificationItem?
+    public var getNotificationItemRoomIdEventIdClosure: ((String, String) throws -> NotificationItem?)?
 
-    public func `getNotificationItem`(`roomId`: String, `eventId`: String) throws -> NotificationItem {
+    public func `getNotificationItem`(`roomId`: String, `eventId`: String) throws -> NotificationItem? {
         if let error = getNotificationItemRoomIdEventIdThrowableError {
             throw error
         }
