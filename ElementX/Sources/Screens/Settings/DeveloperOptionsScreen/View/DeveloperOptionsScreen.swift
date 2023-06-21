@@ -52,6 +52,14 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.isEncryptionSyncEnabled) { _ in
                     context.send(viewAction: .changedIsEncryptionSyncEnabled)
                 }
+
+
+                Toggle(isOn: $context.locationEventsEnabled) {
+                    Text("Location events in timeline")
+                }
+                .onChange(of: context.locationEventsEnabled) { _ in
+                    context.send(viewAction: .changedLocationEventsEnabled)
+                }
             }
             
             Section {
