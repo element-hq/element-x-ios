@@ -31,7 +31,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
     }
     
     func testInitialState() {
-        XCTAssertNil(context.viewState.rooms.first(where: { $0.id == "1" }))
+        XCTAssertNil(context.viewState.rooms.first(where: { $0.id == "1" }), "The source room ID shouldn't be shown")
     }
     
     func testRoomSelection() {

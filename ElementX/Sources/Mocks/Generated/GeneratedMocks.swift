@@ -547,25 +547,25 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReadReceiptForReturnValue
         }
     }
-    //MARK: - getMessageEventContent
+    //MARK: - messageEventContent
 
-    var getMessageEventContentForCallsCount = 0
-    var getMessageEventContentForCalled: Bool {
-        return getMessageEventContentForCallsCount > 0
+    var messageEventContentForCallsCount = 0
+    var messageEventContentForCalled: Bool {
+        return messageEventContentForCallsCount > 0
     }
-    var getMessageEventContentForReceivedEventID: String?
-    var getMessageEventContentForReceivedInvocations: [String] = []
-    var getMessageEventContentForReturnValue: RoomMessageEventContent?
-    var getMessageEventContentForClosure: ((String) -> RoomMessageEventContent?)?
+    var messageEventContentForReceivedEventID: String?
+    var messageEventContentForReceivedInvocations: [String] = []
+    var messageEventContentForReturnValue: RoomMessageEventContent?
+    var messageEventContentForClosure: ((String) -> RoomMessageEventContent?)?
 
-    func getMessageEventContent(for eventID: String) -> RoomMessageEventContent? {
-        getMessageEventContentForCallsCount += 1
-        getMessageEventContentForReceivedEventID = eventID
-        getMessageEventContentForReceivedInvocations.append(eventID)
-        if let getMessageEventContentForClosure = getMessageEventContentForClosure {
-            return getMessageEventContentForClosure(eventID)
+    func messageEventContent(for eventID: String) -> RoomMessageEventContent? {
+        messageEventContentForCallsCount += 1
+        messageEventContentForReceivedEventID = eventID
+        messageEventContentForReceivedInvocations.append(eventID)
+        if let messageEventContentForClosure = messageEventContentForClosure {
+            return messageEventContentForClosure(eventID)
         } else {
-            return getMessageEventContentForReturnValue
+            return messageEventContentForReturnValue
         }
     }
     //MARK: - sendMessageEventContent

@@ -18,26 +18,4 @@ import ElementX
 import XCTest
 
 @MainActor
-class MessageForwardingScreenUITests: XCTestCase {
-    func testRegularScreen() async throws {
-        let app = Application.launch(.simpleRegular)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Make this chat public?")
-
-        try await app.assertScreenshot(.simpleRegular)
-    }
-    
-    func testUpgradeScreen() async throws {
-        let app = Application.launch(.simpleUpgrade)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Privacy warning")
-
-        try await app.assertScreenshot(.simpleUpgrade)
-    }
-}
+class MessageForwardingScreenUITests: XCTestCase { }

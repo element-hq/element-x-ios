@@ -85,7 +85,7 @@ protocol RoomProxyProtocol {
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
     
-    func getMessageEventContent(for eventID: String) -> RoomMessageEventContent?
+    func messageEventContent(for eventID: String) -> RoomMessageEventContent?
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError>
     

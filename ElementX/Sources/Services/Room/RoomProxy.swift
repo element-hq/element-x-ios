@@ -219,7 +219,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func getMessageEventContent(for eventID: String) -> RoomMessageEventContent? {
+    func messageEventContent(for eventID: String) -> RoomMessageEventContent? {
         try? room.getTimelineEventContentByEventId(eventId: eventID)
     }
     

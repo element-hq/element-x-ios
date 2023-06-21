@@ -231,6 +231,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    
+    /// Updates the navigation stack so it displays the timeline for the given room
+    /// - Parameters:
+    ///   - roomID: the identifier of the room that is to be presented
+    ///   - animated: whether it should animate the transition
+    ///   - destinationRoomProxy: an optional already build roomProxy for the target room. It is currently used when
+    ///   forwarding messages so that we can take advantage of the local echo
+    ///   and have the message already there when presenting the room
     private func presentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) {
         Task {
             await asyncPresentRoom(roomID, animated: animated, destinationRoomProxy: destinationRoomProxy)
@@ -246,8 +254,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let roomProxy: RoomProxyProtocol
         
-        // This destinationRoomProxy is used when forwarding messages so that we can take advantage
-        // of the local echo and have the message already there when presenting the room
         if let destinationRoomProxy {
             roomProxy = destinationRoomProxy
         } else {
@@ -558,7 +564,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard let messageEventContent = roomProxy.getMessageEventContent(for: eventID) else {
+        guard let messageEventContent = roomProxy.messageEventContent(for: eventID) else {
             MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return
