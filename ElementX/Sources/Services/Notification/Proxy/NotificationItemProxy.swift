@@ -283,6 +283,8 @@ extension NotificationItemProxyProtocol {
             return try await processNotice(content: content, mediaProvider: mediaProvider)
         case .text(content: let content):
             return try await processText(content: content, mediaProvider: mediaProvider)
+        case .location:
+            return processEmpty()
         }
     }
 

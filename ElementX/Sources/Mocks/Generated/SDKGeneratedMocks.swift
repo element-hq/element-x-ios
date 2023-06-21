@@ -652,27 +652,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - `uploadMedia`
 
-    public var uploadMediaMimeTypeDataThrowableError: Error?
-    public var uploadMediaMimeTypeDataCallsCount = 0
-    public var uploadMediaMimeTypeDataCalled: Bool {
-        return uploadMediaMimeTypeDataCallsCount > 0
+    public var uploadMediaMimeTypeDataProgressWatcherThrowableError: Error?
+    public var uploadMediaMimeTypeDataProgressWatcherCallsCount = 0
+    public var uploadMediaMimeTypeDataProgressWatcherCalled: Bool {
+        return uploadMediaMimeTypeDataProgressWatcherCallsCount > 0
     }
-    public var uploadMediaMimeTypeDataReceivedArguments: (`mimeType`: String, `data`: [UInt8])?
-    public var uploadMediaMimeTypeDataReceivedInvocations: [(`mimeType`: String, `data`: [UInt8])] = []
-    public var uploadMediaMimeTypeDataReturnValue: String!
-    public var uploadMediaMimeTypeDataClosure: ((String, [UInt8]) throws -> String)?
+    public var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (`mimeType`: String, `data`: [UInt8], `progressWatcher`: ProgressWatcher?)?
+    public var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(`mimeType`: String, `data`: [UInt8], `progressWatcher`: ProgressWatcher?)] = []
+    public var uploadMediaMimeTypeDataProgressWatcherReturnValue: String!
+    public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, [UInt8], ProgressWatcher?) throws -> String)?
 
-    public func `uploadMedia`(`mimeType`: String, `data`: [UInt8]) throws -> String {
-        if let error = uploadMediaMimeTypeDataThrowableError {
+    public func `uploadMedia`(`mimeType`: String, `data`: [UInt8], `progressWatcher`: ProgressWatcher?) throws -> String {
+        if let error = uploadMediaMimeTypeDataProgressWatcherThrowableError {
             throw error
         }
-        uploadMediaMimeTypeDataCallsCount += 1
-        uploadMediaMimeTypeDataReceivedArguments = (mimeType: mimeType, data: data)
-        uploadMediaMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
-        if let uploadMediaMimeTypeDataClosure = uploadMediaMimeTypeDataClosure {
-            return try uploadMediaMimeTypeDataClosure(`mimeType`, `data`)
+        uploadMediaMimeTypeDataProgressWatcherCallsCount += 1
+        uploadMediaMimeTypeDataProgressWatcherReceivedArguments = (mimeType: mimeType, data: data, progressWatcher: progressWatcher)
+        uploadMediaMimeTypeDataProgressWatcherReceivedInvocations.append((mimeType: mimeType, data: data, progressWatcher: progressWatcher))
+        if let uploadMediaMimeTypeDataProgressWatcherClosure = uploadMediaMimeTypeDataProgressWatcherClosure {
+            return try uploadMediaMimeTypeDataProgressWatcherClosure(`mimeType`, `data`, `progressWatcher`)
         } else {
-            return uploadMediaMimeTypeDataReturnValue
+            return uploadMediaMimeTypeDataProgressWatcherReturnValue
         }
     }
     //MARK: - `userId`

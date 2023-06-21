@@ -47,7 +47,6 @@ class ClientProxy: ClientProxyProtocol {
     private let clientQueue: DispatchQueue
         
     private var roomListService: RoomList?
-    private var roomListSyncTaskHandle: TaskHandle?
     private var roomListStateUpdateTaskHandle: TaskHandle?
     
     var roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -71,7 +70,7 @@ class ClientProxy: ClientProxyProtocol {
         // These need to be inlined instead of using stopSync()
         // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
-        roomListSyncTaskHandle?.cancel()
+        try? roomListService?.stopSync()
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -123,7 +122,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListSyncTaskHandle != nil
+        roomListService?.isSyncing() ?? false
     }
     
     func startSync() {
@@ -132,13 +131,16 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        roomListSyncTaskHandle = roomListService?.sync()
+        roomListService?.sync()
     }
-
+    
     func stopSync() {
         MXLog.info("Stopping sync")
-        roomListSyncTaskHandle?.cancel()
-        roomListSyncTaskHandle = nil
+        do {
+            try roomListService?.stopSync()
+        } catch {
+            MXLog.error("Failed stopping room list service with error: \(error)")
+        }
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -192,7 +194,7 @@ class ClientProxy: ClientProxyProtocol {
         return await Task.dispatch(on: clientQueue) {
             do {
                 let data = try Data(contentsOf: media.url)
-                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: [UInt8](data))
+                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: [UInt8](data), progressWatcher: nil)
                 return .success(matrixUrl)
             } catch let error as ClientError {
                 return .failure(ClientProxyError.failedUploadingMedia(error.code))
@@ -388,16 +390,14 @@ class ClientProxy: ClientProxyProtocol {
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")
                 
-                if state == .allRooms || state == .carryOn {
-                    self.callbacks.send(.receivedSyncUpdate)
-                }
-                
-                #warning("Not great, not terrible (ツ)")
+                // Restart the room list sync on every error for now
                 if state == .terminated {
                     self.restartSync()
                 }
                 
-                if state == .allRooms {
+                if state == .running {
+                    self.callbacks.send(.receivedSyncUpdate)
+                    
                     Task {
                         // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
                         await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
