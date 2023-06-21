@@ -148,4 +148,15 @@ extension Analytics {
             await capture(event: AnalyticsEvent.ViewRoom(activeSpace: nil, isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, trigger: nil, viaKeyboard: nil))
         }
     }
+    
+    /// Track the action of joining a room
+    func trackJoinedRoom(_ roomProxy: RoomProxyProtocol) {
+        Task {
+            guard let roomSize = await AnalyticsEvent.JoinedRoom.RoomSize(memberCount: UInt(roomProxy.activeMembersCount)) else {
+                MXLog.error("invalid room size")
+                return
+            }
+            await capture(event: AnalyticsEvent.JoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, roomSize: roomSize, trigger: nil))
+        }
+    }
 }

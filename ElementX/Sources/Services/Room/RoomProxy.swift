@@ -506,7 +506,9 @@ class RoomProxy: RoomProxyProtocol {
     func acceptInvitation() async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.acceptInvitation())
+                try self.room.acceptInvitation()
+                ServiceLocator.shared.analytics.trackJoinedRoom(self)
+                return .success(())
             } catch {
                 return .failure(.failedAcceptingInvite)
             }
