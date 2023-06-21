@@ -46,6 +46,8 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                 switch phase {
                 case .empty:
                     Image("mapBlurred")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                 case .success(let image):
                     ZStack {
                         image
