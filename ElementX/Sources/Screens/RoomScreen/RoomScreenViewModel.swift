@@ -330,12 +330,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         var actions: [TimelineItemMenuAction] = [
-            .reply, .copyPermalink
+            .reply
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
-            actions.append(contentsOf: [.copy, .quote])
+            actions.append(contentsOf: [.forward(itemID: itemId), .copy, .quote])
         }
+        
+        actions.append(.copyPermalink)
 
         if item.isEditable {
             actions.append(.edit)
@@ -403,6 +405,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
             
             state.composerMode = .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)
+        case .forward(let itemID):
+            callback?(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
             let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
             MXLog.info(debugInfo)

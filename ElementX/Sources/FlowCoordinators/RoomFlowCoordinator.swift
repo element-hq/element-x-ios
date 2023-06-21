@@ -29,6 +29,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let emojiProvider: EmojiProviderProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
@@ -46,12 +47,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          navigationSplitCoordinator: NavigationSplitCoordinator,
-         emojiProvider: EmojiProviderProtocol) {
+         emojiProvider: EmojiProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.emojiProvider = emojiProvider
+        self.userIndicatorController = userIndicatorController
         
         setupStateMachine()
     }
@@ -137,6 +140,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.dismissEmojiPicker, .emojiPicker(let roomID, _)):
                 return .room(roomID: roomID)
 
+            case (.presentMessageForwarding(let itemID), .room(let roomID)):
+                return .messageForwarding(roomID: roomID, itemID: itemID)
+            case (.dismissMessageForwarding, .messageForwarding(let roomID, _)):
+                return .room(roomID: roomID)
+                
             default:
                 return nil
             }
@@ -152,7 +160,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 dismissRoom(animated: animated)
                 presentRoom(roomID, animated: animated)
             case (_, .presentRoom(let roomID), .room):
-                presentRoom(roomID, animated: animated)
+                let destinationRoomProxy = (context.userInfo as? EventUserInfo)?.destinationRoomProxy
+                presentRoom(roomID, animated: animated, destinationRoomProxy: destinationRoomProxy)
             case (.room, .dismissRoom, .initial):
                 dismissRoom(animated: animated)
             
@@ -199,6 +208,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
                 break
                 
+            case (.room, .presentMessageForwarding(let eventID), .messageForwarding):
+                presentMessageForwarding(for: eventID)
+            case (.messageForwarding, .dismissMessageForwarding, .room):
+                break
+                
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -217,23 +231,39 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRoom(_ roomID: String, animated: Bool) {
+    
+    /// Updates the navigation stack so it displays the timeline for the given room
+    /// - Parameters:
+    ///   - roomID: the identifier of the room that is to be presented
+    ///   - animated: whether it should animate the transition
+    ///   - destinationRoomProxy: an optional already build roomProxy for the target room. It is currently used when
+    ///   forwarding messages so that we can take advantage of the local echo
+    ///   and have the message already there when presenting the room
+    private func presentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) {
         Task {
-            await asyncPresentRoom(roomID, animated: animated)
+            await asyncPresentRoom(roomID, animated: animated, destinationRoomProxy: destinationRoomProxy)
         }
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func asyncPresentRoom(_ roomID: String, animated: Bool) async {
+    private func asyncPresentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) async {
         if let roomProxy, roomProxy.id == roomID {
             navigationStackCoordinator.popToRoot()
             return
         }
         
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Invalid room identifier: \(roomID)")
-            stateMachine.tryEvent(.dismissRoom)
-            return
+        let roomProxy: RoomProxyProtocol
+        
+        if let destinationRoomProxy {
+            roomProxy = destinationRoomProxy
+        } else {
+            guard let proxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+                MXLog.error("Invalid room identifier: \(roomID)")
+                stateMachine.tryEvent(.dismissRoom)
+                return
+            }
+            
+            roomProxy = proxy
         }
         
         actionsSubject.send(.presentedRoom(roomID))
@@ -277,6 +307,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
+                case .presentMessageForwarding(let itemID):
+                    stateMachine.tryEvent(.presentMessageForwarding(itemID: itemID))
                 }
             }
             .store(in: &cancellables)
@@ -398,7 +430,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .cancel:
                 break
             case .finish:
-                self?.showSuccess(label: L10n.commonReportSubmitted)
+                userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
             }
         }
         navigationCoordinator.setRootCoordinator(coordinator)
@@ -492,9 +524,65 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.tryEvent(.dismissRoomMemberDetails)
         }
     }
+    
+    private func presentMessageForwarding(for eventID: String) {
+        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.roomSummaryProvider else {
+            fatalError()
+        }
+        
+        let messageForwardingNavigationStackCoordinator = NavigationStackCoordinator()
+        
+        let parameters = MessageForwardingScreenCoordinatorParameters(roomSummaryProvider: roomSummaryProvider,
+                                                                      sourceRoomID: roomProxy.id)
+        let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .send(let roomID):
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                
+                Task {
+                    await self.forward(eventID: eventID, toRoomID: roomID)
+                }
+            }
+        }.store(in: &cancellables)
+        
+        messageForwardingNavigationStackCoordinator.setRootCoordinator(coordinator)
 
-    private func showSuccess(label: String) {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
+        navigationStackCoordinator.setSheetCoordinator(messageForwardingNavigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMessageForwarding)
+        }
+    }
+    
+    private func forward(eventID: String, toRoomID roomID: String) async {
+        guard let roomProxy else {
+            MXLog.error("Failed retrieving current room with id: \(roomID)")
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            return
+        }
+        
+        guard let messageEventContent = roomProxy.messageEventContent(for: eventID) else {
+            MXLog.error("Failed retrieving forwarded message event content for eventID: \(eventID)")
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            return
+        }
+        
+        guard let targetRoomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            return
+        }
+        
+        if case .failure(let error) = await targetRoomProxy.sendMessageEventContent(messageEventContent) {
+            MXLog.error("Failed forwarding message with error: \(error)")
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            return
+        }
+        
+        stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: true, destinationRoomProxy: targetRoomProxy))
     }
 }
 
@@ -521,10 +609,12 @@ private extension RoomFlowCoordinator {
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
+        case messageForwarding(roomID: String, itemID: String)
     }
     
     struct EventUserInfo {
         let animated: Bool
+        var destinationRoomProxy: RoomProxyProtocol?
     }
 
     enum Event: EventType {
@@ -551,5 +641,8 @@ private extension RoomFlowCoordinator {
 
         case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
         case dismissRoomMemberDetails
+        
+        case presentMessageForwarding(itemID: String)
+        case dismissMessageForwarding
     }
 }

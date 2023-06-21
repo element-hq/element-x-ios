@@ -32,6 +32,7 @@ enum RoomScreenCoordinatorAction {
     case presentRoomDetails
     case presentEmojiPicker(itemID: String)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)
+    case presentMessageForwarding(itemID: String)
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -54,6 +55,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
@@ -77,6 +79,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.presentMediaUploadPreviewScreen(url))
             case .displayRoomMemberDetails(let member):
                 actionsSubject.send(.presentRoomMemberDetails(member: member))
+            case .displayMessageForwarding(let itemID):
+                actionsSubject.send(.presentMessageForwarding(itemID: itemID))
             }
         }
     }

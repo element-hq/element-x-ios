@@ -20,7 +20,6 @@ import MatrixRustSDK
 
 enum RoomProxyError: Error {
     case noMoreMessagesToBackPaginate
-    case roomListenerAlreadyRegistered
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
@@ -73,21 +72,22 @@ protocol RoomProxyProtocol {
     var activeMembersCount: Int { get }
     
     /// Publishes the room's updates.
-    /// The publisher starts publishing after the first call to `registerTimelineListenerIfNeeded()`
     /// The thread on which this publisher sends the output isn't defined.
     var updatesPublisher: AnyPublisher<TimelineDiff, Never> { get }
+    
+    var timelineProvider: RoomTimelineProviderProtocol { get }
 
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    /// Registers a timeline listener if not registered already.
-    /// Updates for this object will be published on the `updatesPublisher` publisher.
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError>
-    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
+    
+    func messageEventContent(for eventID: String) -> RoomMessageEventContent?
+    
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError>
     
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     

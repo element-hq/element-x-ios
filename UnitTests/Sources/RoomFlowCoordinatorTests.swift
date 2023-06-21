@@ -38,7 +38,8 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                   roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                   navigationStackCoordinator: navigationStackCoordinator,
                                                   navigationSplitCoordinator: navigationSplitCoordinator,
-                                                  emojiProvider: EmojiProvider())
+                                                  emojiProvider: EmojiProvider(),
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     func testRoomPresentation() async {

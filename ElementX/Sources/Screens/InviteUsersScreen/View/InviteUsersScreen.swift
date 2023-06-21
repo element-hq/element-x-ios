@@ -79,7 +79,7 @@ struct InviteUsersScreen: View {
                                         imageProvider: context.imageProvider)
                     }
                     .disabled(context.viewState.isUserDisabled(user))
-                    .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
+                    .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: context.viewState.isUserSelected(user))))
                 }
             } header: {
                 if let title = context.viewState.usersSection.title {

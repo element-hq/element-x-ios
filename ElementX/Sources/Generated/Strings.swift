@@ -466,6 +466,8 @@ public enum L10n {
   public static var screenAccountProviderFormSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_form_subtitle") }
   /// Find an account provider
   public static var screenAccountProviderFormTitle: String { return L10n.tr("Localizable", "screen_account_provider_form_title") }
+  /// This is where you conversations will live — just like you would use an email provider to keep your emails.
+  public static var screenAccountProviderSigninSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signin_subtitle") }
   /// You’re about to sign in to %@
   public static func screenAccountProviderSigninTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signin_title", String(describing: p1))
@@ -476,30 +478,26 @@ public enum L10n {
   public static func screenAccountProviderSignupTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signup_title", String(describing: p1))
   }
-  /// We <b>don't</b> record or profile any account data
+  /// We won't record or profile any personal data
   public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
-  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
-  public static func screenAnalyticsPromptHelpUsImprove(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_analytics_prompt_help_us_improve", String(describing: p1))
-  }
+  /// Share anonymous usage data to help us identify issues.
+  public static var screenAnalyticsPromptHelpUsImprove: String { return L10n.tr("Localizable", "screen_analytics_prompt_help_us_improve") }
   /// You can read all our terms %1$@.
   public static func screenAnalyticsPromptReadTerms(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_prompt_read_terms", String(describing: p1))
   }
   /// here
   public static var screenAnalyticsPromptReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_prompt_read_terms_content_link") }
-  /// You can turn this off anytime in settings
+  /// You can turn this off anytime
   public static var screenAnalyticsPromptSettings: String { return L10n.tr("Localizable", "screen_analytics_prompt_settings") }
-  /// We <b>don't</b> share information with third parties
+  /// We won't share your data with third parties
   public static var screenAnalyticsPromptThirdPartySharing: String { return L10n.tr("Localizable", "screen_analytics_prompt_third_party_sharing") }
   /// Help improve %1$@
   public static func screenAnalyticsPromptTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_prompt_title", String(describing: p1))
   }
-  /// Help us identify issues and improve %1$@ by sharing anonymous usage data.
-  public static func screenAnalyticsSettingsHelpUsImprove(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_analytics_settings_help_us_improve", String(describing: p1))
-  }
+  /// Share anonymous usage data to help us identify issues.
+  public static var screenAnalyticsSettingsHelpUsImprove: String { return L10n.tr("Localizable", "screen_analytics_settings_help_us_improve") }
   /// You can read all our terms %1$@.
   public static func screenAnalyticsSettingsReadTerms(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_settings_read_terms", String(describing: p1))
@@ -558,6 +556,8 @@ public enum L10n {
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
+  /// Invite friends to Element
+  public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Invite people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
   /// An error occurred when creating the room
@@ -684,6 +684,8 @@ public enum L10n {
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
+  /// Notification
+  public static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
   /// Room name
@@ -724,6 +726,8 @@ public enum L10n {
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
   /// Room members
   public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
+  /// You do not have permission to post to this room
+  public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
   /// Remove
   public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again

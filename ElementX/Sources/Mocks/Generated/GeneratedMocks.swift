@@ -457,6 +457,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingUpdatesPublisher = value }
     }
     var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
+    var timelineProvider: RoomTimelineProviderProtocol {
+        get { return underlyingTimelineProvider }
+        set(value) { underlyingTimelineProvider = value }
+    }
+    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
 
     //MARK: - loadAvatarURLForUserId
 
@@ -500,23 +505,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    //MARK: - registerTimelineListenerIfNeeded
-
-    var registerTimelineListenerIfNeededCallsCount = 0
-    var registerTimelineListenerIfNeededCalled: Bool {
-        return registerTimelineListenerIfNeededCallsCount > 0
-    }
-    var registerTimelineListenerIfNeededReturnValue: Result<[TimelineItem], RoomProxyError>!
-    var registerTimelineListenerIfNeededClosure: (() -> Result<[TimelineItem], RoomProxyError>)?
-
-    func registerTimelineListenerIfNeeded() -> Result<[TimelineItem], RoomProxyError> {
-        registerTimelineListenerIfNeededCallsCount += 1
-        if let registerTimelineListenerIfNeededClosure = registerTimelineListenerIfNeededClosure {
-            return registerTimelineListenerIfNeededClosure()
-        } else {
-            return registerTimelineListenerIfNeededReturnValue
-        }
-    }
     //MARK: - paginateBackwards
 
     var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
@@ -557,6 +545,48 @@ class RoomProxyMock: RoomProxyProtocol {
             return await sendReadReceiptForClosure(eventID)
         } else {
             return sendReadReceiptForReturnValue
+        }
+    }
+    //MARK: - messageEventContent
+
+    var messageEventContentForCallsCount = 0
+    var messageEventContentForCalled: Bool {
+        return messageEventContentForCallsCount > 0
+    }
+    var messageEventContentForReceivedEventID: String?
+    var messageEventContentForReceivedInvocations: [String] = []
+    var messageEventContentForReturnValue: RoomMessageEventContent?
+    var messageEventContentForClosure: ((String) -> RoomMessageEventContent?)?
+
+    func messageEventContent(for eventID: String) -> RoomMessageEventContent? {
+        messageEventContentForCallsCount += 1
+        messageEventContentForReceivedEventID = eventID
+        messageEventContentForReceivedInvocations.append(eventID)
+        if let messageEventContentForClosure = messageEventContentForClosure {
+            return messageEventContentForClosure(eventID)
+        } else {
+            return messageEventContentForReturnValue
+        }
+    }
+    //MARK: - sendMessageEventContent
+
+    var sendMessageEventContentCallsCount = 0
+    var sendMessageEventContentCalled: Bool {
+        return sendMessageEventContentCallsCount > 0
+    }
+    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContent?
+    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContent] = []
+    var sendMessageEventContentReturnValue: Result<Void, RoomProxyError>!
+    var sendMessageEventContentClosure: ((RoomMessageEventContent) async -> Result<Void, RoomProxyError>)?
+
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
+        sendMessageEventContentCallsCount += 1
+        sendMessageEventContentReceivedMessageContent = messageContent
+        sendMessageEventContentReceivedInvocations.append(messageContent)
+        if let sendMessageEventContentClosure = sendMessageEventContentClosure {
+            return await sendMessageEventContentClosure(messageContent)
+        } else {
+            return sendMessageEventContentReturnValue
         }
     }
     //MARK: - sendMessage

@@ -45,7 +45,7 @@ struct EmojiPickerScreen: View {
         .navigationTitle(L10n.commonReactions)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .searchable(text: $searchString)
+        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))

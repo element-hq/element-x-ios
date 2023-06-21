@@ -23,7 +23,6 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                      mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(userId: userId,
                                roomProxy: roomProxy,
-                               timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                timelineItemFactory: timelineItemFactory,
                                mediaProvider: mediaProvider)
     }

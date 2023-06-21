@@ -28,6 +28,7 @@ enum RoomScreenViewModelAction {
     case displayDocumentPicker
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
+    case displayMessageForwarding(itemID: String)
 }
 
 enum RoomScreenComposerMode: Equatable {
