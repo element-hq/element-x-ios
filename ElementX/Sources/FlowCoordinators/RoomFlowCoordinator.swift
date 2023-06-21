@@ -231,7 +231,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    
     /// Updates the navigation stack so it displays the timeline for the given room
     /// - Parameters:
     ///   - roomID: the identifier of the room that is to be presented
@@ -282,6 +281,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
+        
+        ServiceLocator.shared.analytics.trackViewRoom(roomProxy)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,

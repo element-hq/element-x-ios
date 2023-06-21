@@ -141,4 +141,11 @@ extension Analytics {
     func trackComposer(inThread: Bool, isEditing: Bool, isReply: Bool, startsThread: Bool?) {
         capture(event: AnalyticsEvent.Composer(inThread: inThread, isEditing: isEditing, isReply: isReply, startsThread: startsThread))
     }
+    
+    /// Track the presentation of a room
+    func trackViewRoom(_ roomProxy: RoomProxyProtocol) {
+        Task {
+            await capture(event: AnalyticsEvent.ViewRoom(activeSpace: nil, isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, trigger: nil, viaKeyboard: nil))
+        }
+    }
 }
