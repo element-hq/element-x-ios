@@ -231,7 +231,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 
     private var isMediaType: Bool {
-        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem || timelineItem is StickerRoomTimelineItem
+        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem || timelineItem is StickerRoomTimelineItem || timelineItem is LocationRoomTimelineItem
     }
     
     private var alignment: HorizontalAlignment {

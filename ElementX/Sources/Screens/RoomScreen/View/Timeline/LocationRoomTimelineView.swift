@@ -24,10 +24,10 @@ struct LocationRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
                 MapLibreStaticMapView(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
-                                      zoomLevel: 1,
+                                      zoomLevel: 15,
                                       mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey, lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL, darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
-                                      height: 300,
-                                      width: 200) {
+                                      height: 200,
+                                      width: 300) {
                     Circle()
                         .frame(width: 10, height: 10)
                         .foregroundColor(.red)

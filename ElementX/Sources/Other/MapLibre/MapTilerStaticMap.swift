@@ -38,7 +38,9 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
         
         path.append(String(format: "/static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)))
         
-        guard let url = URL(string: path) else { return nil }
+        guard var url = URL(string: path) else { return nil }
+        #warning("AG: fix me")
+        url.append(queryItems: [.init(name: "attribution", value: "bottomleft")])
         let authorization = MapTilerAuthorization(key: key)
         return authorization.authorizeURL(url)
     }
