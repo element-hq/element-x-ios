@@ -19,7 +19,7 @@ import SwiftUI
 
 struct UserIndicatorModalView: View {
     let indicator: UserIndicator
-    @State private var progressFraction: Double?
+    @State private var progressFraction = 0.0
 
     var body: some View {
         ZStack {
