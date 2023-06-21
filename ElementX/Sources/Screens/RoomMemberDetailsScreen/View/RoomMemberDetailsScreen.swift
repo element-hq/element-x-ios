@@ -30,6 +30,7 @@ struct RoomMemberDetailsScreen: View {
         .elementFormStyle()
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
+        .track(screen: .user)
     }
     
     // MARK: - Private

@@ -60,6 +60,7 @@ struct RoomDetailsScreen: View {
                 }
             }
         }
+        .track(screen: .roomDetails)
     }
     
     // MARK: - Private
