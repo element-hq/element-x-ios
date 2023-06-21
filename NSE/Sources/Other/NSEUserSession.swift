@@ -25,6 +25,10 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
+    var isSyncing: Bool {
+        encryptionSyncService != nil
+    }
+
     init(credentials: KeychainCredentials) throws {
         userID = credentials.userID
         let builder = ClientBuilder()

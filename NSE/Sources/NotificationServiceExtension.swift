@@ -81,6 +81,11 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 // We try to decrypt the notification for 10 seconds at most
                 let date = Date()
                 repeat {
+                    // if the sync terminated we try one last time then we break from the loop
+                    guard userSession.isSyncing else {
+                        itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+                        break
+                    }
                     itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
                 } while itemProxy.isEncrypted && date.timeIntervalSinceNow > -10
             }
