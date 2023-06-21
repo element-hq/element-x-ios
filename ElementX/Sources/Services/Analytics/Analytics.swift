@@ -131,4 +131,35 @@ extension Analytics {
     func trackCreatedRoom(isDM: Bool) {
         capture(event: AnalyticsEvent.CreatedRoom(isDM: isDM))
     }
+    
+    /// Track the composer
+    /// - Parameters:
+    ///   - inThread: whether the composer is used in a Thread
+    ///   - isEditing: whether the composer is used to edit a message
+    ///   - isReply: whether the composer is used to reply a message
+    ///   - startsThread: whether the composer is used to start a new thread
+    func trackComposer(inThread: Bool, isEditing: Bool, isReply: Bool, startsThread: Bool?) {
+        capture(event: AnalyticsEvent.Composer(inThread: inThread, isEditing: isEditing, isReply: isReply, startsThread: startsThread))
+    }
+    
+    /// Track the presentation of a room
+    /// - Parameters:
+    ///   - isDM: whether the room is a direct message
+    ///   - isSpace: whether the room is a space
+    func trackViewRoom(isDM: Bool, isSpace: Bool) {
+        capture(event: AnalyticsEvent.ViewRoom(activeSpace: nil, isDM: isDM, isSpace: isSpace, trigger: nil, viaKeyboard: nil))
+    }
+    
+    /// Track the action of joining a room
+    /// - Parameters:
+    ///   - isDM: whether the room is a direct message
+    ///   - isSpace: whether the room is a space
+    ///   - activeMemberCount: the number of active members in the room
+    func trackJoinedRoom(isDM: Bool, isSpace: Bool, activeMemberCount: UInt) {
+        guard let roomSize = AnalyticsEvent.JoinedRoom.RoomSize(memberCount: activeMemberCount) else {
+            MXLog.error("invalid room size")
+            return
+        }
+        capture(event: AnalyticsEvent.JoinedRoom(isDM: isDM, isSpace: isSpace, roomSize: roomSize, trigger: nil))
+    }
 }

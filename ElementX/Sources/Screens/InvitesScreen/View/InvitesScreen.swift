@@ -37,6 +37,7 @@ struct InvitesScreen: View {
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.actionInvitesList)
         .alert(item: $context.alertInfo)
+        .track(screen: .invites)
     }
     
     // MARK: - Private
