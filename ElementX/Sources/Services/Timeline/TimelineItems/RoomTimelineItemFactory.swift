@@ -506,7 +506,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .video(buildVideoTimelineItemContent(content))
             case .location(let content):
                 #warning("AG: fix me?")
-                replyContent = .text(buildTextTimelineItemContent(.init(body: content.body, formatted: nil)))
+                replyContent = .text(buildTextTimelineItemContent(.init(body: "Location 📍", formatted: nil)))
             case .none:
                 return nil
             }
