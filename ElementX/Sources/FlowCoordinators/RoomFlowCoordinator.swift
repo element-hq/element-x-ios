@@ -231,7 +231,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    
     /// Updates the navigation stack so it displays the timeline for the given room
     /// - Parameters:
     ///   - roomID: the identifier of the room that is to be presented
