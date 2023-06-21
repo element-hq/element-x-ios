@@ -60,8 +60,8 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
                 switch result {
                 case .cancel:
                     self.completion?(.cancel)
-                case let .submitStarted(progressTracker):
-                    self.startLoading(label: L10n.commonSending, progressPublisher: progressTracker)
+                case let .submitStarted(progressPublisher):
+                    self.startLoading(label: L10n.commonSending, progressPublisher: progressPublisher)
                 case .submitFinished:
                     self.stopLoading()
                     self.completion?(.finish)
@@ -85,7 +85,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     
     private static let loadingIndicatorIdentifier = "BugReportLoading"
     
-    private func startLoading(label: String = L10n.commonLoading, progressPublisher: ProgressPublisher) {
+    private func startLoading(label: String = L10n.commonLoading, progressPublisher: CurrentValuePublisher<Double, Never>) {
         parameters.userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
                           type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false),

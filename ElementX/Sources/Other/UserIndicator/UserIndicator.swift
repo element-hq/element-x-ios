@@ -30,13 +30,13 @@ struct UserIndicator: Equatable, Identifiable {
         static func == (lhs: UserIndicator.Progress, rhs: UserIndicator.Progress) -> Bool {
             switch (lhs, rhs) {
             case (.indeterminate, .indeterminate): return true
-            case (.published(let lhsPublisher), .published(let rhsPublisher)): return lhsPublisher === rhsPublisher
+            case (.published(let lhsPublisher), .published(let rhsPublisher)): return lhsPublisher.value == rhsPublisher.value
             default: return false
             }
         }
         
         case indeterminate
-        case published(ProgressPublisher)
+        case published(CurrentValuePublisher<Double, Never>)
     }
     
     var id: String = UUID().uuidString
@@ -54,14 +54,14 @@ struct UserIndicator: Equatable, Identifiable {
         }
     }
     
-    var progressPublisher: AnyPublisher<Double, Never> {
+    var progressPublisher: CurrentValuePublisher<Double, Never> {
         switch type {
         case .toast(let progress), .modal(let progress, _):
             switch progress {
             case .none, .indeterminate:
-                return Empty().eraseToAnyPublisher()
-            case .some(.published(let progress)):
-                return progress.publisher.eraseToAnyPublisher()
+                return CurrentValueSubject<Double, Never>(0.0).asCurrentValuePublisher()
+            case .some(.published(let publisher)):
+                return publisher
             }
         }
     }

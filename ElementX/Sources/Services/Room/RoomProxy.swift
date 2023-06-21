@@ -276,7 +276,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError> {
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -284,7 +284,9 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: nil)
+                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
+                    progressSubject?.send(progress)
+                })
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -292,7 +294,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo) async -> Result<Void, RoomProxyError> {
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -300,7 +302,9 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: nil)
+                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
+                    progressSubject?.send(progress)
+                })
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -308,7 +312,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendAudio(url: URL, audioInfo: AudioInfo) async -> Result<Void, RoomProxyError> {
+    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -316,7 +320,9 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: nil)
+                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
+                    progressSubject?.send(progress)
+                })
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -324,7 +330,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError> {
+    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -332,7 +338,9 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: nil)
+                try self.room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+                    progressSubject?.send(progress)
+                })
                 return .success(())
             } catch {
                 return .failure(.failedSendingMedia)
@@ -609,5 +617,19 @@ private class RoomTimelineListener: TimelineListener {
     
     func onUpdate(diff: TimelineDiff) {
         onUpdateClosure(diff)
+    }
+}
+
+private class UploadProgressListener: ProgressWatcher {
+    private let onUpdateClosure: (Double) -> Void
+   
+    init(_ onUpdateClosure: @escaping (Double) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func transmissionProgress(progress: TransmissionProgress) {
+        DispatchQueue.main.async { [weak self] in
+            self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
+        }
     }
 }
