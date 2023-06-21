@@ -136,9 +136,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private func cleanUp() {
         handler = nil
         modifiedContent = nil
-        if settings.isEncryptionSyncEnabled {
-            userSession?.stopEncryptionSync()
-        }
+        userSession = nil
     }
 
     deinit {

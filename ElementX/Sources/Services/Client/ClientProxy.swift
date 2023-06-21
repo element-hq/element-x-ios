@@ -154,13 +154,9 @@ class ClientProxy: ClientProxyProtocol {
         guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
             return
         }
-        MXLog.info("Stopping Encryption Sync service")
         isEncryptionSyncing = false
-        guard let encryptionSyncService else {
-            return
-        }
-        self.encryptionSyncService = nil
-        encryptionSyncService.stop()
+        encryptionSyncService?.stop()
+        MXLog.info("Stopping Encryption Sync service")
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -402,9 +398,6 @@ class ClientProxy: ClientProxyProtocol {
     private func startEncryptionSyncService() {
         guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
             return
-        }
-        guard encryptionSyncService == nil else {
-            fatalError("This shouldn't be called more than once")
         }
         configureEncryptionSyncService()
     }
