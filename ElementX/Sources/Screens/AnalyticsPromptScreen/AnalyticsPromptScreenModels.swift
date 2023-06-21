@@ -43,7 +43,7 @@ struct AnalyticsPromptScreenStrings {
     let point3 = L10n.screenAnalyticsPromptSettings
     
     init(termsURL: URL) {
-        let content = AttributedString(L10n.screenAnalyticsPromptHelpUsImprove(InfoPlistReader.main.bundleDisplayName))
+        let content = AttributedString(L10n.screenAnalyticsPromptHelpUsImprove)
         
         // Create the 'read terms' with a placeholder.
         let linkPlaceholder = "{link}"

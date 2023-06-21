@@ -25,6 +25,7 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invite";
+"action_invite_friends" = "Invite friends";
 "action_invite_friends_to_app" = "Invite friends to %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";
@@ -191,15 +192,16 @@
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
 "screen_account_provider_form_subtitle" = "Search for a company, community, or private server.";
 "screen_account_provider_form_title" = "Find an account provider";
+"screen_account_provider_signin_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signin_title" = "You’re about to sign in to %@";
 "screen_account_provider_signup_subtitle" = "This is where you conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_title" = "You’re about to create an account on %@";
-"screen_analytics_prompt_data_usage" = "We <b>don't</b> record or profile any account data";
-"screen_analytics_prompt_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_prompt_data_usage" = "We won't record or profile any personal data";
+"screen_analytics_prompt_help_us_improve" = "Share anonymous usage data to help us identify issues.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";
 "screen_analytics_prompt_read_terms_content_link" = "here";
-"screen_analytics_prompt_settings" = "You can turn this off anytime in settings";
-"screen_analytics_prompt_third_party_sharing" = "We <b>don't</b> share information with third parties";
+"screen_analytics_prompt_settings" = "You can turn this off anytime";
+"screen_analytics_prompt_third_party_sharing" = "We won't share your data with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
 "screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Attach screenshot";
@@ -222,6 +224,7 @@
 "screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
 "screen_change_server_subtitle" = "What is the address of your server?";
 "screen_create_room_action_create_room" = "New room";
+"screen_create_room_action_invite_people" = "Invite friends to Element";
 "screen_create_room_add_people_title" = "Invite people";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.";
@@ -268,6 +271,7 @@
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_notification_title" = "Notification";
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
@@ -282,6 +286,7 @@
 "screen_room_member_details_unblock_user" = "Unblock user";
 "screen_room_member_list_pending_header_title" = "Pending";
 "screen_room_member_list_room_members_header_title" = "Room members";
+"screen_room_no_permission_to_post" = "You do not have permission to post to this room";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
@@ -376,7 +381,7 @@
 "dialog_title_success" = "Success";
 "notification_room_action_quick_reply" = "Quick reply";
 "rageshake_detection_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
-"screen_analytics_settings_help_us_improve" = "Help us identify issues and improve %1$@ by sharing anonymous usage data.";
+"screen_analytics_settings_help_us_improve" = "Share anonymous usage data to help us identify issues.";
 "screen_analytics_settings_read_terms" = "You can read all our terms %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "here";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
