@@ -19,7 +19,7 @@ import SwiftUI
 struct LocationRoomTimelineView: View {
     let timelineItem: LocationRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
-
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
@@ -28,22 +28,45 @@ struct LocationRoomTimelineView: View {
                                       mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey, lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL, darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
                                       height: 200,
                                       width: 300) {
-                    Circle()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(.red)
+                    Image(systemName: "mappin.circle.fill")
+                        .font(.system(size: 30))
+                        .alignmentGuide(VerticalAlignment.center) { dimensions in
+                            dimensions[.bottom]
+                        }
                 }
             } else {
+                #warning("AG: fix me")
                 Text(timelineItem.body)
-                    .background(Color.red)
             }
         }
     }
 }
 
 struct LocationRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+
     static var previews: some View {
-        #warning("AG: fix me")
-        return EmptyView()
-        // LocationRoomTimelineView(timelineItem: )
+        body
+            .environmentObject(viewModel.context)
+        body
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+    }
+
+    @ViewBuilder
+    static var body: some View {
+        LocationRoomTimelineView(timelineItem: .init(id: UUID().uuidString,
+                                                     timestamp: "Now",
+                                                     isOutgoing: false,
+                                                     isEditable: false,
+                                                     sender: .init(id: "Bob"),
+                                                     content: .init(body: "Fallback geo uri description", geoURI: nil)))
+
+        LocationRoomTimelineView(timelineItem: .init(id: UUID().uuidString,
+                                                     timestamp: "Now",
+                                                     isOutgoing: false,
+                                                     isEditable: false,
+                                                     sender: .init(id: "Bob"),
+                                                     content: .init(body: "Fallback geo uri description", geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
     }
 }

@@ -231,7 +231,16 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 
     private var isMediaType: Bool {
-        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem || timelineItem is StickerRoomTimelineItem || timelineItem is LocationRoomTimelineItem
+        switch timelineItem {
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return true
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI != nil
+        default:
+            return false
+        }
     }
     
     private var alignment: HorizontalAlignment {

@@ -33,7 +33,7 @@ struct GeoURI: Hashable {
         self = parsedURI
     }
 
-    init(latitude: Double, longitude: Double, uncertainty: Double?) {
+    init(latitude: Double, longitude: Double, uncertainty: Double? = nil) {
         self.latitude = latitude
         self.longitude = longitude
         self.uncertainty = uncertainty
