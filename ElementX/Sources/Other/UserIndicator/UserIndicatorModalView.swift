@@ -69,7 +69,7 @@ struct UserIndicatorModalView_Previews: PreviewProvider {
             )
             .previewDisplayName("Spinner")
             
-            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(ProgressTracker(initialValue: 0.5)),
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(CurrentValueSubject<Double, Never>(0.5).asCurrentValuePublisher()),
                                                                          interactiveDismissDisabled: false),
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")

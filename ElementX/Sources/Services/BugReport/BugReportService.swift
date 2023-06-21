@@ -100,7 +100,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+                         progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
             MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
             MultipartFormData(key: "text", type: .text(value: bugReport.text))
@@ -148,17 +148,13 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        var delegate: URLSessionTaskDelegate?
-        if let progressListener {
-            progressSubject
-                .receive(on: DispatchQueue.main)
-                .weakAssign(to: \.value, on: progressListener.progressSubject)
-                .store(in: &cancellables)
-            delegate = self
-        }
+        progressSubject
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.value, on: progressListener)
+            .store(in: &cancellables)
         
         do {
-            let (data, response) = try await session.dataWithRetry(for: request, delegate: delegate)
+            let (data, response) = try await session.dataWithRetry(for: request, delegate: self)
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 let errorDescription = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"

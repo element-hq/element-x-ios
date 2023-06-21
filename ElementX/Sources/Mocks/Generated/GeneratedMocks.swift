@@ -177,12 +177,12 @@ class BugReportServiceMock: BugReportServiceProtocol {
     var submitBugReportProgressListenerCalled: Bool {
         return submitBugReportProgressListenerCallsCount > 0
     }
-    var submitBugReportProgressListenerReceivedArguments: (bugReport: BugReport, progressListener: ProgressListener?)?
-    var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: ProgressListener?)] = []
+    var submitBugReportProgressListenerReceivedArguments: (bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)?
+    var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)] = []
     var submitBugReportProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
-    var submitBugReportProgressListenerClosure: ((BugReport, ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
+    var submitBugReportProgressListenerClosure: ((BugReport, CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
 
-    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+    func submitBugReport(_ bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         submitBugReportProgressListenerCallsCount += 1
         submitBugReportProgressListenerReceivedArguments = (bugReport: bugReport, progressListener: progressListener)
         submitBugReportProgressListenerReceivedInvocations.append((bugReport: bugReport, progressListener: progressListener))
@@ -633,86 +633,86 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendImage
 
-    var sendImageUrlThumbnailURLImageInfoCallsCount = 0
-    var sendImageUrlThumbnailURLImageInfoCalled: Bool {
-        return sendImageUrlThumbnailURLImageInfoCallsCount > 0
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoProgressSubjectCallsCount > 0
     }
-    var sendImageUrlThumbnailURLImageInfoReceivedArguments: (url: URL, thumbnailURL: URL, imageInfo: ImageInfo)?
-    var sendImageUrlThumbnailURLImageInfoReceivedInvocations: [(url: URL, thumbnailURL: URL, imageInfo: ImageInfo)] = []
-    var sendImageUrlThumbnailURLImageInfoReturnValue: Result<Void, RoomProxyError>!
-    var sendImageUrlThumbnailURLImageInfoClosure: ((URL, URL, ImageInfo) async -> Result<Void, RoomProxyError>)?
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectReceivedArguments: (url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?)?
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectReceivedInvocations: [(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?)] = []
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectReturnValue: Result<Void, RoomProxyError>!
+    var sendImageUrlThumbnailURLImageInfoProgressSubjectClosure: ((URL, URL, ImageInfo, CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>)?
 
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo) async -> Result<Void, RoomProxyError> {
-        sendImageUrlThumbnailURLImageInfoCallsCount += 1
-        sendImageUrlThumbnailURLImageInfoReceivedArguments = (url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
-        sendImageUrlThumbnailURLImageInfoReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo))
-        if let sendImageUrlThumbnailURLImageInfoClosure = sendImageUrlThumbnailURLImageInfoClosure {
-            return await sendImageUrlThumbnailURLImageInfoClosure(url, thumbnailURL, imageInfo)
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+        sendImageUrlThumbnailURLImageInfoProgressSubjectCallsCount += 1
+        sendImageUrlThumbnailURLImageInfoProgressSubjectReceivedArguments = (url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject)
+        sendImageUrlThumbnailURLImageInfoProgressSubjectReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject))
+        if let sendImageUrlThumbnailURLImageInfoProgressSubjectClosure = sendImageUrlThumbnailURLImageInfoProgressSubjectClosure {
+            return await sendImageUrlThumbnailURLImageInfoProgressSubjectClosure(url, thumbnailURL, imageInfo, progressSubject)
         } else {
-            return sendImageUrlThumbnailURLImageInfoReturnValue
+            return sendImageUrlThumbnailURLImageInfoProgressSubjectReturnValue
         }
     }
     //MARK: - sendVideo
 
-    var sendVideoUrlThumbnailURLVideoInfoCallsCount = 0
-    var sendVideoUrlThumbnailURLVideoInfoCalled: Bool {
-        return sendVideoUrlThumbnailURLVideoInfoCallsCount > 0
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoProgressSubjectCallsCount > 0
     }
-    var sendVideoUrlThumbnailURLVideoInfoReceivedArguments: (url: URL, thumbnailURL: URL, videoInfo: VideoInfo)?
-    var sendVideoUrlThumbnailURLVideoInfoReceivedInvocations: [(url: URL, thumbnailURL: URL, videoInfo: VideoInfo)] = []
-    var sendVideoUrlThumbnailURLVideoInfoReturnValue: Result<Void, RoomProxyError>!
-    var sendVideoUrlThumbnailURLVideoInfoClosure: ((URL, URL, VideoInfo) async -> Result<Void, RoomProxyError>)?
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectReceivedArguments: (url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?)?
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectReceivedInvocations: [(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?)] = []
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectReturnValue: Result<Void, RoomProxyError>!
+    var sendVideoUrlThumbnailURLVideoInfoProgressSubjectClosure: ((URL, URL, VideoInfo, CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>)?
 
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo) async -> Result<Void, RoomProxyError> {
-        sendVideoUrlThumbnailURLVideoInfoCallsCount += 1
-        sendVideoUrlThumbnailURLVideoInfoReceivedArguments = (url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo)
-        sendVideoUrlThumbnailURLVideoInfoReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo))
-        if let sendVideoUrlThumbnailURLVideoInfoClosure = sendVideoUrlThumbnailURLVideoInfoClosure {
-            return await sendVideoUrlThumbnailURLVideoInfoClosure(url, thumbnailURL, videoInfo)
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+        sendVideoUrlThumbnailURLVideoInfoProgressSubjectCallsCount += 1
+        sendVideoUrlThumbnailURLVideoInfoProgressSubjectReceivedArguments = (url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject)
+        sendVideoUrlThumbnailURLVideoInfoProgressSubjectReceivedInvocations.append((url: url, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject))
+        if let sendVideoUrlThumbnailURLVideoInfoProgressSubjectClosure = sendVideoUrlThumbnailURLVideoInfoProgressSubjectClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoProgressSubjectClosure(url, thumbnailURL, videoInfo, progressSubject)
         } else {
-            return sendVideoUrlThumbnailURLVideoInfoReturnValue
+            return sendVideoUrlThumbnailURLVideoInfoProgressSubjectReturnValue
         }
     }
     //MARK: - sendAudio
 
-    var sendAudioUrlAudioInfoCallsCount = 0
-    var sendAudioUrlAudioInfoCalled: Bool {
-        return sendAudioUrlAudioInfoCallsCount > 0
+    var sendAudioUrlAudioInfoProgressSubjectCallsCount = 0
+    var sendAudioUrlAudioInfoProgressSubjectCalled: Bool {
+        return sendAudioUrlAudioInfoProgressSubjectCallsCount > 0
     }
-    var sendAudioUrlAudioInfoReceivedArguments: (url: URL, audioInfo: AudioInfo)?
-    var sendAudioUrlAudioInfoReceivedInvocations: [(url: URL, audioInfo: AudioInfo)] = []
-    var sendAudioUrlAudioInfoReturnValue: Result<Void, RoomProxyError>!
-    var sendAudioUrlAudioInfoClosure: ((URL, AudioInfo) async -> Result<Void, RoomProxyError>)?
+    var sendAudioUrlAudioInfoProgressSubjectReceivedArguments: (url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?)?
+    var sendAudioUrlAudioInfoProgressSubjectReceivedInvocations: [(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?)] = []
+    var sendAudioUrlAudioInfoProgressSubjectReturnValue: Result<Void, RoomProxyError>!
+    var sendAudioUrlAudioInfoProgressSubjectClosure: ((URL, AudioInfo, CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>)?
 
-    func sendAudio(url: URL, audioInfo: AudioInfo) async -> Result<Void, RoomProxyError> {
-        sendAudioUrlAudioInfoCallsCount += 1
-        sendAudioUrlAudioInfoReceivedArguments = (url: url, audioInfo: audioInfo)
-        sendAudioUrlAudioInfoReceivedInvocations.append((url: url, audioInfo: audioInfo))
-        if let sendAudioUrlAudioInfoClosure = sendAudioUrlAudioInfoClosure {
-            return await sendAudioUrlAudioInfoClosure(url, audioInfo)
+    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+        sendAudioUrlAudioInfoProgressSubjectCallsCount += 1
+        sendAudioUrlAudioInfoProgressSubjectReceivedArguments = (url: url, audioInfo: audioInfo, progressSubject: progressSubject)
+        sendAudioUrlAudioInfoProgressSubjectReceivedInvocations.append((url: url, audioInfo: audioInfo, progressSubject: progressSubject))
+        if let sendAudioUrlAudioInfoProgressSubjectClosure = sendAudioUrlAudioInfoProgressSubjectClosure {
+            return await sendAudioUrlAudioInfoProgressSubjectClosure(url, audioInfo, progressSubject)
         } else {
-            return sendAudioUrlAudioInfoReturnValue
+            return sendAudioUrlAudioInfoProgressSubjectReturnValue
         }
     }
     //MARK: - sendFile
 
-    var sendFileUrlFileInfoCallsCount = 0
-    var sendFileUrlFileInfoCalled: Bool {
-        return sendFileUrlFileInfoCallsCount > 0
+    var sendFileUrlFileInfoProgressSubjectCallsCount = 0
+    var sendFileUrlFileInfoProgressSubjectCalled: Bool {
+        return sendFileUrlFileInfoProgressSubjectCallsCount > 0
     }
-    var sendFileUrlFileInfoReceivedArguments: (url: URL, fileInfo: FileInfo)?
-    var sendFileUrlFileInfoReceivedInvocations: [(url: URL, fileInfo: FileInfo)] = []
-    var sendFileUrlFileInfoReturnValue: Result<Void, RoomProxyError>!
-    var sendFileUrlFileInfoClosure: ((URL, FileInfo) async -> Result<Void, RoomProxyError>)?
+    var sendFileUrlFileInfoProgressSubjectReceivedArguments: (url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?)?
+    var sendFileUrlFileInfoProgressSubjectReceivedInvocations: [(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?)] = []
+    var sendFileUrlFileInfoProgressSubjectReturnValue: Result<Void, RoomProxyError>!
+    var sendFileUrlFileInfoProgressSubjectClosure: ((URL, FileInfo, CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>)?
 
-    func sendFile(url: URL, fileInfo: FileInfo) async -> Result<Void, RoomProxyError> {
-        sendFileUrlFileInfoCallsCount += 1
-        sendFileUrlFileInfoReceivedArguments = (url: url, fileInfo: fileInfo)
-        sendFileUrlFileInfoReceivedInvocations.append((url: url, fileInfo: fileInfo))
-        if let sendFileUrlFileInfoClosure = sendFileUrlFileInfoClosure {
-            return await sendFileUrlFileInfoClosure(url, fileInfo)
+    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+        sendFileUrlFileInfoProgressSubjectCallsCount += 1
+        sendFileUrlFileInfoProgressSubjectReceivedArguments = (url: url, fileInfo: fileInfo, progressSubject: progressSubject)
+        sendFileUrlFileInfoProgressSubjectReceivedInvocations.append((url: url, fileInfo: fileInfo, progressSubject: progressSubject))
+        if let sendFileUrlFileInfoProgressSubjectClosure = sendFileUrlFileInfoProgressSubjectClosure {
+            return await sendFileUrlFileInfoProgressSubjectClosure(url, fileInfo, progressSubject)
         } else {
-            return sendFileUrlFileInfoReturnValue
+            return sendFileUrlFileInfoProgressSubjectReturnValue
         }
     }
     //MARK: - retrySend

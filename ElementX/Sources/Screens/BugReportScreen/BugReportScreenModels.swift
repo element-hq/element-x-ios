@@ -19,7 +19,7 @@ import UIKit
 
 enum BugReportScreenViewModelAction {
     case cancel
-    case submitStarted(progressTracker: ProgressTracker)
+    case submitStarted(progressPublisher: CurrentValuePublisher<Double, Never>)
     case submitFinished
     case submitFailed(error: Error)
 }

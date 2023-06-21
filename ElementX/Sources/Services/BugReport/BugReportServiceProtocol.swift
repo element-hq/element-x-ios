@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -63,5 +64,5 @@ protocol BugReportServiceProtocol {
     func crash()
     
     func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async -> Result<SubmitBugReportResponse, BugReportServiceError>
+                         progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>
 }
