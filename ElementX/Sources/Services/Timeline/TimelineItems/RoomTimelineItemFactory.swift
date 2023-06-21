@@ -309,7 +309,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
                                  sender: eventItemProxy.sender,
-                                 content: .init(body: messageContent.body),
+                                 content: .init(body: messageContent.body, geoURI: .init(geoURI: messageContent.geoUri)),
                                  replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()))
     }
     

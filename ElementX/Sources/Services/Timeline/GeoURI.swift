@@ -17,7 +17,7 @@
 import Foundation
 
 /// A structure that parses a geo URI (i.e. geo:53.99803101552848,-8.25347900390625;u=10) and constructs their constituent parts.
-struct GeoURI {
+struct GeoURI: Hashable {
     // MARK: - Properties
 
     let latitude: Double

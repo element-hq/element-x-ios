@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#warning("AG: fix me")
 struct LocationRoomTimelineItemContent: Hashable {
     let body: String
+    let geoURI: GeoURI?
 }

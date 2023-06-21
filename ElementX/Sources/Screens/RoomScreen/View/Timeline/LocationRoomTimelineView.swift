@@ -22,8 +22,20 @@ struct LocationRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Text(timelineItem.body)
-                .background(Color.red)
+            if let geoURI = timelineItem.content.geoURI {
+                MapLibreStaticMapView(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
+                                      zoomLevel: 1,
+                                      mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey, lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL, darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
+                                      height: 300,
+                                      width: 200) {
+                    Circle()
+                        .frame(width: 10, height: 10)
+                        .foregroundColor(.red)
+                }
+            } else {
+                Text(timelineItem.body)
+                    .background(Color.red)
+            }
         }
     }
 }
