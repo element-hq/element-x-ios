@@ -21,6 +21,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let coordinates: CLLocationCoordinate2D
     private let zoomLevel: Double
     private let mapTilerStatic: MapTilerStaticMapProtocol
+    private let mapTilerAttribution: MapTilerAttribution
     private let pinAnnotationView: PinAnnotation
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var width: CGFloat
@@ -29,19 +30,21 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     
     init(coordinates: CLLocationCoordinate2D,
          zoomLevel: Double,
-         mapTilerStatic: MapTilerStaticMapProtocol,
          size: CGSize,
+         attribution: MapTilerAttribution,
+         mapTilerStatic: MapTilerStaticMapProtocol,
          @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.coordinates = coordinates
         self.zoomLevel = zoomLevel
         self.mapTilerStatic = mapTilerStatic
         _width = .init(wrappedValue: size.width)
         _height = .init(wrappedValue: size.height)
+        mapTilerAttribution = attribution
         self.pinAnnotationView = pinAnnotationView()
     }
     
     var body: some View {
-        if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: .init(width: width, height: height)) {
+        if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: .init(width: width, height: height), attribution: mapTilerAttribution) {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .empty:
@@ -101,8 +104,9 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
     static var previews: some View {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,
-                              mapTilerStatic: MapTilerStaticMapMock(),
-                              size: .init(width: 300, height: 200)) {
+                              size: .init(width: 300, height: 200),
+                              attribution: .bottomleft,
+                              mapTilerStatic: MapTilerStaticMapMock()) {
             Image(systemName: "mappin.circle.fill")
                 .padding(.bottom, 35)
         }
@@ -110,7 +114,7 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
 }
 
 private struct MapTilerStaticMapMock: MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttribution) -> URL? {
         switch style {
         case .light:
             return URL(string: "https://www.maptiler.com/img/cloud/home/map5.webp")

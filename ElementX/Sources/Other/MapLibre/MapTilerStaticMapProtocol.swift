@@ -17,5 +17,9 @@
 import CoreLocation
 
 protocol MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL?
+    func staticMapURL(for style: MapTilerStyle,
+                      coordinates: CLLocationCoordinate2D,
+                      zoomLevel: Double,
+                      size: CGSize,
+                      attribution: MapTilerAttribution) -> URL?
 }

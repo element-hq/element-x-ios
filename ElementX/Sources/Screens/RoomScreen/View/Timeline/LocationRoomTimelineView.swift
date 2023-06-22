@@ -33,6 +33,19 @@ struct LocationRoomTimelineView: View {
     }
 }
 
+private extension MapLibreStaticMapView {
+    init(geoURI: GeoURI, size: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+        self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
+                  zoomLevel: 15,
+                  size: size,
+                  attribution: .bottomleft,
+                  mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
+                                                    lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,
+                                                    darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
+                  pinAnnotationView: pinAnnotationView)
+    }
+}
+
 struct LocationRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
@@ -59,16 +72,5 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description", geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
-    }
-}
-
-private extension MapLibreStaticMapView {
-    init(geoURI: GeoURI, size: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
-        self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
-                  zoomLevel: 15,
-                  mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
-                                                    lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,
-                                                    darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
-                  size: size, pinAnnotationView: pinAnnotationView)
     }
 }

@@ -27,7 +27,7 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
         self.key = key
     }
     
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttribution) -> URL? {
         var path: String
         switch style {
         case .light:
@@ -39,8 +39,7 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
         path.append(String(format: "/static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)))
         
         guard var url = URL(string: path) else { return nil }
-        #warning("AG: fix me")
-        url.append(queryItems: [.init(name: "attribution", value: "bottomleft")])
+        url.append(queryItems: [.init(name: "attribution", value: attribution.rawValue)])
         let authorization = MapTilerAuthorization(key: key)
         return authorization.authorizeURL(url)
     }
