@@ -46,20 +46,37 @@ struct TimelineReactionButton: View {
                 .font(.compound.bodyMD)
             Text(String(reaction.count))
                 .font(.compound.bodyMD)
-                .foregroundColor(.compound.textSecondary)
+                .foregroundColor(textColor)
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
         .background(
             backgroundShape
-                .strokeBorder(reaction.isHighlighted ? Color.compound.textSecondary : .compound.bgCanvasDefault, lineWidth: 2)
-                .background(reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound._bgReactionButton, in: backgroundShape)
+                .fill(Color.compound.bgCanvasDefault)
+                .overlay(
+                    backgroundShape
+                        .strokeBorder(overlayBorderColor)
+                        .background(overlayBackgroundColor, in: backgroundShape)
+                        .padding(1)
+                )
         )
         .accessibilityElement(children: .combine)
     }
     
     var backgroundShape: some InsettableShape {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
+    }
+    
+    var textColor: Color {
+        reaction.isHighlighted ? Color.compound.textPrimary : .compound.textSecondary
+    }
+    
+    var overlayBackgroundColor: Color {
+        reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound._bgReactionButton
+    }
+    
+    var overlayBorderColor: Color {
+        reaction.isHighlighted ? Color.compound.textSecondary : .compound.bgCanvasDefault
     }
 }
 
@@ -82,6 +99,6 @@ struct TimelineReactionView_Previews: PreviewProvider {
                 AggregatedReaction(key: "🤭", count: 9, isHighlighted: true),
                 AggregatedReaction(key: "🫤", count: 10, isHighlighted: false)
             ], alignment: .leading) { _ in }
-        }
+        }.background(Color.red)
     }
 }
