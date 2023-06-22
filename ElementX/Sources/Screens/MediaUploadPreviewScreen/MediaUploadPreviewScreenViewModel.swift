@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModel<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
@@ -43,11 +44,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         switch viewAction {
         case .send:
             Task {
-                startLoading()
+                let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+                
+                startLoading(progressPublisher: progressSubject.asCurrentValuePublisher())
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo) {
+                    switch await sendAttachment(mediaInfo: mediaInfo, progressSubject: progressSubject) {
                     case .success:
                         callback?(.dismiss)
                     case .failure(let error):
@@ -70,26 +73,26 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo) async -> Result<Void, RoomProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>) async -> Result<Void, RoomProxyError> {
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
+            return await roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo)
+            return await roomProxy.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.sendAudio(url: audioURL, audioInfo: audioInfo)
+            return await roomProxy.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: progressSubject)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.sendFile(url: fileURL, fileInfo: fileInfo)
+            return await roomProxy.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: progressSubject)
         }
     }
     
     private static let loadingIndicatorIdentifier = "MediaUploadPreviewLoading"
     
-    private func startLoading() {
+    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
         userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal,
-                          title: L10n.commonLoading,
+                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false),
+                          title: L10n.commonSending,
                           persistent: true)
         )
     }

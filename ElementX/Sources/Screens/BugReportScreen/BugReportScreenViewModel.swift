@@ -62,8 +62,9 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     // MARK: Private
 
     private func submitBugReport() async {
-        let progressTracker = ProgressTracker()
-        actionsSubject.send(.submitStarted(progressTracker: progressTracker))
+        let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+        
+        actionsSubject.send(.submitStarted(progressPublisher: progressSubject.asCurrentValuePublisher()))
         
         var files: [URL] = []
         if let screenshot = context.viewState.screenshot,
@@ -87,7 +88,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                                   files: files)
         
         switch await bugReportService.submitBugReport(bugReport,
-                                                      progressListener: progressTracker) {
+                                                      progressListener: progressSubject) {
         case .success(let response):
             MXLog.info("Submission uploaded to: \(response.reportUrl)")
             actionsSubject.send(.submitFinished)

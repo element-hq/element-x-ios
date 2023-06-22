@@ -19,7 +19,7 @@ import SwiftUI
 
 struct UserIndicatorModalView: View {
     let indicator: UserIndicator
-    @State private var progressFraction: Double?
+    @State private var progressFraction = 0.0
 
     var body: some View {
         ZStack {
@@ -69,7 +69,7 @@ struct UserIndicatorModalView_Previews: PreviewProvider {
             )
             .previewDisplayName("Spinner")
             
-            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(ProgressTracker(initialValue: 0.5)),
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(CurrentValueSubject<Double, Never>(0.5).asCurrentValuePublisher()),
                                                                          interactiveDismissDisabled: false),
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
