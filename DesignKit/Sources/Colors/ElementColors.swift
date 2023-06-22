@@ -61,23 +61,10 @@ public struct ElementColors {
     
     // MARK: - Temp
     
-    /// The colour to use on the background of a Form or grouped List.
-    ///
-    /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
-    public var formBackground: Color {
-        Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? UIColor(.compound.bgSubtleSecondary) : UIColor(.compound.bgCanvasDefault)
-        })
-    }
-    
     /// The background colour of a row in a Form or grouped List.
     ///
-    /// This colour is a special case as it uses `background` in light mode and `system` in dark mode.
-    public var formRowBackground: Color {
-        Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? UIColor(.compound.bgCanvasDefault) : UIColor(.compound.bgSubtleSecondary)
-        })
-    }
+    /// This colour will be removed once Compound form styles are used everywhere.
+    public var formRowBackground = Color.compound.bgCanvasDefaultLevel1
 }
 
 private extension String {

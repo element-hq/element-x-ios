@@ -28,7 +28,7 @@ struct StartChatScreen: View {
                 searchContent
             }
         }
-        .elementFormStyle()
+        .compoundForm()
         .track(screen: .startChat)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.actionStartChat)
@@ -73,7 +73,7 @@ struct StartChatScreen: View {
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var inviteFriendsSection: some View {
@@ -84,7 +84,7 @@ struct StartChatScreen: View {
             .buttonStyle(FormButtonStyle())
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     @ViewBuilder
@@ -102,8 +102,7 @@ struct StartChatScreen: View {
                     Text(title)
                 }
             }
-            .listRowSeparator(.automatic)
-            .formSectionStyle()
+            .compoundFormSection()
         } else {
             Section.empty
         }

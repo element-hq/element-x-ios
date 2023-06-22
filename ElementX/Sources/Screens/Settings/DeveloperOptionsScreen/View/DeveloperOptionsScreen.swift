@@ -65,7 +65,7 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .overlay(effectsView)
-        .elementFormStyle()
+        .compoundForm()
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
     }

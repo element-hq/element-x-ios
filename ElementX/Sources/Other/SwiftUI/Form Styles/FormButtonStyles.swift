@@ -49,8 +49,8 @@ struct FormRowAccessory: View {
         switch kind {
         case .navigationLink:
             Image(systemName: "chevron.forward")
-                .font(.compound.bodyMD.bold())
-                .foregroundColor(.compound.iconQuaternary)
+                .font(.compound.bodyMDSemibold)
+                .foregroundColor(.compound.iconTertiaryAlpha)
         case .progressView:
             ProgressView()
         case .singleSelection(let isSelected):
@@ -111,9 +111,9 @@ struct FormButtonStyle: PrimitiveButtonStyle {
         private func backgroundColor(for configuration: Configuration) -> Color {
             switch accessory?.kind {
             case .none, .navigationLink, .progressView:
-                return configuration.isPressed ? .compound.bgSubtlePrimary : .element.formRowBackground
+                return configuration.isPressed ? .compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1
             default:
-                return .element.formRowBackground
+                return .compound.bgCanvasDefaultLevel1
             }
         }
     }
@@ -133,7 +133,7 @@ struct FormActionButtonStyle: ButtonStyle {
                 .frame(width: menuIconSize, height: menuIconSize)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .element.formRowBackground)
+                        .fill(configuration.isPressed ? Color.compound.bgSubtlePrimary : .compound.bgCanvasDefaultLevel1)
                 }
             
             Text(title)
@@ -165,7 +165,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 ShareLink(item: "test")
                     .buttonStyle(FormButtonStyle())
             }
-            .formSectionStyle()
+            .compoundFormSection()
             
             Section("Single selection") {
                 Button { } label: {
@@ -189,7 +189,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 }
                 .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: false)))
             }
-            .formSectionStyle()
+            .compoundFormSection()
             
             Section("Multiple selection") {
                 Button { } label: {
@@ -213,7 +213,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 }
                 .buttonStyle(FormButtonStyle(accessory: .multipleSelection(isSelected: false)))
             }
-            .formSectionStyle()
+            .compoundFormSection()
 
             Section {
                 Button(role: .destructive) { } label: {
@@ -221,7 +221,7 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 }
                 .buttonStyle(FormButtonStyle())
             }
-            .formSectionStyle()
+            .compoundFormSection()
         }
     }
 }

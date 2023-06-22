@@ -32,9 +32,9 @@ struct FormRowLabelStyle: LabelStyle {
 
     private var iconBackgroundColor: Color {
         if role == .destructive {
-            return .compound.textCriticalPrimary.opacity(0.1)
+            return .compound._bgCriticalSubtleAlpha
         } else {
-            return .element.formBackground
+            return .compound._bgSubtleSecondaryAlpha
         }
     }
 
@@ -42,7 +42,7 @@ struct FormRowLabelStyle: LabelStyle {
         if role == .destructive {
             return .compound.textCriticalPrimary
         } else {
-            return .compound.iconSecondary
+            return .compound.iconTertiaryAlpha
         }
     }
 

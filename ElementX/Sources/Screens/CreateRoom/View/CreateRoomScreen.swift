@@ -31,7 +31,7 @@ struct CreateRoomScreen: View {
             topicSection
             securitySection
         }
-        .elementFormStyle()
+        .compoundForm()
         .track(screen: .createRoom)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenCreateRoomTitle)
@@ -83,9 +83,8 @@ struct CreateRoomScreen: View {
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-                        .font(.compound.bodyXS)
-                        .padding(.leading, 16)
-                        .formSectionHeader()
+                        .padding(.leading, FormRow.insets.leading)
+                        .compoundFormSectionHeader()
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
@@ -100,7 +99,7 @@ struct CreateRoomScreen: View {
             .listRowInsets(.init())
             .listRowBackground(Color.clear)
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var cameraImage: some View {
@@ -123,13 +122,13 @@ struct CreateRoomScreen: View {
                 .lineLimit(3, reservesSpace: false)
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
-                .formSectionHeader()
+                .compoundFormSectionHeader()
         } footer: {
             if !context.viewState.selectedUsers.isEmpty {
                 selectedUsersSection
             }
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     @State private var frame: CGRect = .zero
@@ -185,7 +184,7 @@ struct CreateRoomScreen: View {
             .pickerStyle(.inline)
         } header: {
             Text(L10n.commonSecurity.uppercased())
-                .formSectionHeader()
+                .compoundFormSectionHeader()
                 .padding(.top, 40)
         }
         .listRowSeparatorTint(.compound.borderDisabled)
