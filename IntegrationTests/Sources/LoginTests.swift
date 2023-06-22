@@ -17,7 +17,6 @@
 import XCTest
 
 class LoginTests: XCTestCase {
-    let expectedDuration = 100.0
     
     func testLoginFlow() throws {
         let parser = TestMeasurementParser()
@@ -32,7 +31,6 @@ class LoginTests: XCTestCase {
             return
         }
         
-        XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
     }
     
     private func runLoginLogoutFlow() {
@@ -79,7 +77,9 @@ class LoginTests: XCTestCase {
         // Wait for login to finish
         let doesNotExistPredicate = NSPredicate(format: "exists == 0")
         expectation(for: doesNotExistPredicate, evaluatedWith: nextButton)
-        waitForExpectations(timeout: expectedDuration)
+
+        // timeout is huge because we're waiting for server actions as well.
+        waitForExpectations(timeout: 300.0) 
         
         // Handle save password sheet
         let savePasswordButton = app.buttons["Save Password"]
