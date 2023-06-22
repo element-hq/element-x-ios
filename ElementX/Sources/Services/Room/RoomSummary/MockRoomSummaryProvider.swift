@@ -38,12 +38,11 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
             statePublisher = .init(.notLoaded)
         case .loaded(let rooms):
             roomListPublisher = .init(rooms)
-            statePublisher = .init(.fullyLoaded)
+            statePublisher = .init(.loaded(totalNumberOfRooms: UInt(rooms.count)))
         }
     }
     
-    func subscribeIfNecessary(entriesFunction: EntriesFunction,
-                              entriesLoadingStateFunction: LoadingStateFunction?) async { }
+    func setRoomList(_ roomList: RoomList) { }
     
     func updateVisibleRange(_ range: Range<Int>) { }
 }

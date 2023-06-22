@@ -454,46 +454,46 @@ class SDKClientMock: SDKClientProtocol {
         restoreSessionSessionReceivedInvocations.append(`session`)
         try restoreSessionSessionClosure?(`session`)
     }
-    //MARK: - `roomList`
+    //MARK: - `roomListService`
 
-    public var roomListThrowableError: Error?
-    public var roomListCallsCount = 0
-    public var roomListCalled: Bool {
-        return roomListCallsCount > 0
+    public var roomListServiceThrowableError: Error?
+    public var roomListServiceCallsCount = 0
+    public var roomListServiceCalled: Bool {
+        return roomListServiceCallsCount > 0
     }
-    public var roomListReturnValue: RoomList!
-    public var roomListClosure: (() throws -> RoomList)?
+    public var roomListServiceReturnValue: RoomListService!
+    public var roomListServiceClosure: (() throws -> RoomListService)?
 
-    public func `roomList`() throws -> RoomList {
-        if let error = roomListThrowableError {
+    public func `roomListService`() throws -> RoomListService {
+        if let error = roomListServiceThrowableError {
             throw error
         }
-        roomListCallsCount += 1
-        if let roomListClosure = roomListClosure {
-            return try roomListClosure()
+        roomListServiceCallsCount += 1
+        if let roomListServiceClosure = roomListServiceClosure {
+            return try roomListServiceClosure()
         } else {
-            return roomListReturnValue
+            return roomListServiceReturnValue
         }
     }
-    //MARK: - `roomListWithEncryption`
+    //MARK: - `roomListServiceWithEncryption`
 
-    public var roomListWithEncryptionThrowableError: Error?
-    public var roomListWithEncryptionCallsCount = 0
-    public var roomListWithEncryptionCalled: Bool {
-        return roomListWithEncryptionCallsCount > 0
+    public var roomListServiceWithEncryptionThrowableError: Error?
+    public var roomListServiceWithEncryptionCallsCount = 0
+    public var roomListServiceWithEncryptionCalled: Bool {
+        return roomListServiceWithEncryptionCallsCount > 0
     }
-    public var roomListWithEncryptionReturnValue: RoomList!
-    public var roomListWithEncryptionClosure: (() throws -> RoomList)?
+    public var roomListServiceWithEncryptionReturnValue: RoomListService!
+    public var roomListServiceWithEncryptionClosure: (() throws -> RoomListService)?
 
-    public func `roomListWithEncryption`() throws -> RoomList {
-        if let error = roomListWithEncryptionThrowableError {
+    public func `roomListServiceWithEncryption`() throws -> RoomListService {
+        if let error = roomListServiceWithEncryptionThrowableError {
             throw error
         }
-        roomListWithEncryptionCallsCount += 1
-        if let roomListWithEncryptionClosure = roomListWithEncryptionClosure {
-            return try roomListWithEncryptionClosure()
+        roomListServiceWithEncryptionCallsCount += 1
+        if let roomListServiceWithEncryptionClosure = roomListServiceWithEncryptionClosure {
+            return try roomListServiceWithEncryptionClosure()
         } else {
-            return roomListWithEncryptionReturnValue
+            return roomListServiceWithEncryptionReturnValue
         }
     }
     //MARK: - `rooms`

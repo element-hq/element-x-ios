@@ -26,7 +26,7 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
         
-    private var roomListService: RoomList?
+    private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
     
     var roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -227,8 +227,8 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
         
-        if roomSummaryProvider.statePublisher.value != .fullyLoaded {
-            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0 == .fullyLoaded })
+        if !roomSummaryProvider.statePublisher.value.isLoaded {
+            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
         }
         
         (roomListItem, room) = await Task.dispatch(on: clientQueue) {
@@ -380,8 +380,7 @@ class ClientProxy: ClientProxyProtocol {
                 if state == .running {
                     Task {
                         // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                        await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
-                                                                               entriesLoadingStateFunction: nil)
+                        try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
                     }
                 }
                 
@@ -397,8 +396,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
                                                       name: "AllRooms")
             
-            await roomSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.entries(listener:),
-                                                            entriesLoadingStateFunction: roomListService.entriesLoadingState(listener:))
+            try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
@@ -437,14 +435,14 @@ extension ClientProxy: MediaLoaderProtocol {
     }
 }
 
-private class RoomListStateListenerProxy: RoomListStateListener {
-    private let onUpdateClosure: (RoomListState) -> Void
+private class RoomListStateListenerProxy: RoomListServiceStateListener {
+    private let onUpdateClosure: (RoomListServiceState) -> Void
    
-    init(_ onUpdateClosure: @escaping (RoomListState) -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomListServiceState) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(state: RoomListState) {
+    func onUpdate(state: RoomListServiceState) {
         onUpdateClosure(state)
     }
 }
