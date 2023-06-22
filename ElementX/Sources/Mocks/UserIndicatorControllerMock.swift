@@ -20,7 +20,7 @@ import Foundation
 extension UserIndicatorControllerMock {
     static var `default`: UserIndicatorControllerMock {
         let mock = UserIndicatorControllerMock()
-        mock.submitIndicatorClosure = { _ in }
+        mock.submitIndicatorDelayClosure = { _, _ in }
         mock.retractIndicatorWithIdClosure = { _ in }
         mock.retractAllIndicatorsClosure = { }
         return mock

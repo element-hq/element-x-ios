@@ -30,7 +30,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
-    private var loadingTask: Task<Void, Never>?
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -512,9 +511,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func handleTappedUser(userID: String) async {
         // This is generally fast but it could take some time for rooms with thousands of users on first load
         // Show a loader only if it takes more than 0.1 seconds
-        loadingTask = showLoadingIndicator(with: .milliseconds(100))
+        showLoadingIndicator(with: .milliseconds(100))
         let result = await roomProxy.getMember(userID: userID)
-        loadingTask?.cancel()
         hideLoadingIndicator()
         
         switch result {
@@ -544,7 +542,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private static let loadingIndicatorIdentifier = "RoomScreenLoadingIndicator"
 
-    private func showLoadingIndicator(with delay: Duration) -> Task<Void, Never> {
+    private func showLoadingIndicator(with delay: Duration) {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true),
                                                               title: L10n.commonLoading,
