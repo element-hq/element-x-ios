@@ -89,7 +89,7 @@ struct GeoURI: Hashable {
 
 private extension NSRegularExpression {
     // swiftlint:disable:next force_try
-    static let geoURI = try! NSRegularExpression(pattern: #"^geo:(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)(?:;u=(-?\d+(?:\.\d+)?))?$"#, options: .anchorsMatchLines)
+    static let geoURI = try! NSRegularExpression(pattern: #"^geo:(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)(?:;u=(\d+(?:\.\d+)?))?$"#, options: .anchorsMatchLines)
 }
 
 private extension String {

@@ -64,17 +64,22 @@ final class GeoURITests: XCTestCase {
     }
 
     func testInvalidURI1() {
-        let string = "geo:53.99803101552848,-8.25347900390625;"
+        let string = "geo:53.99803101552848,-8.25347900390625;" // final ; without a u=number
         XCTAssertNil(GeoURI(geoURI: string))
     }
 
     func testInvalidURI2() {
-        let string = "geo:53.99803101552848, -8.25347900390625;"
+        let string = "geo:53.99803101552848, -8.25347900390625;" // spaces in the middle
         XCTAssertNil(GeoURI(geoURI: string))
     }
 
     func testInvalidURI3() {
-        let string = "geo:+53.99803101552848,-8.25347900390625"
+        let string = "geo:+53.99803101552848,-8.25347900390625" // '+' before a number
+        XCTAssertNil(GeoURI(geoURI: string))
+    }
+
+    func testInvalidURI4() {
+        let string = "geo:53.99803101552848,-8.25347900390625;u=-20" // u is negative
         XCTAssertNil(GeoURI(geoURI: string))
     }
 }
