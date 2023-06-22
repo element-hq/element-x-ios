@@ -15,6 +15,5 @@
 //
 
 enum SharedUserDefaultsKeys: String {
-    // not used yet
     case isEncryptionSyncEnabled
 }

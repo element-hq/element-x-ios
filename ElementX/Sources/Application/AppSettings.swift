@@ -164,7 +164,7 @@ final class AppSettings {
     var pusherProfileTag: String?
 
     /// Tag describing if the app and the NSE should use the encryption sync
-    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, initialValue: true, storageType: .userDefaults(store))
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
     var isEncryptionSyncEnabled
         
     // MARK: - Other

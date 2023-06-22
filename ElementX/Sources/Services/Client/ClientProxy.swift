@@ -131,7 +131,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func stopEncryptionSyncService() {
-        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+        guard isEncryptionSyncing else {
             return
         }
         isEncryptionSyncing = false
