@@ -366,7 +366,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let roomListService = try client.roomListWithEncryption()
+            let roomListService = try client.roomListServiceWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")
