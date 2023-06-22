@@ -24,57 +24,50 @@ struct OnboardingScreen: View {
     @ObservedObject var context: OnboardingViewModel.Context
     
     var body: some View {
-        ZStack {
-            OnboardingBackgroundView(isAnimated: !Tests.isRunningUITests)
-                .accessibilityHidden(true)
-            
-            GeometryReader { geometry in
-                VStack(alignment: .leading) {
-                    Spacer()
-                        .frame(height: UIConstants.spacerHeight(in: geometry))
-                    
-                    content
-                        .frame(width: geometry.size.width)
-                        .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.hidden)
-                    
-                    Spacer()
-                    
-                    buttons
-                        .frame(width: geometry.size.width)
-                        .padding(.bottom, UIConstants.actionButtonBottomPadding)
-                        .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-                    
-                    Spacer()
-                        .frame(height: UIConstants.spacerHeight(in: geometry))
-                }
-                .frame(maxHeight: .infinity)
+        GeometryReader { geometry in
+            VStack(alignment: .leading) {
+                Spacer()
+                    .frame(height: UIConstants.spacerHeight(in: geometry))
+                
+                content
+                    .frame(width: geometry.size.width)
+                    .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.hidden)
+                
+                buttons
+                    .frame(width: geometry.size.width)
+                    .padding(.bottom, UIConstants.actionButtonBottomPadding)
+                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                
+                Spacer()
+                    .frame(height: UIConstants.spacerHeight(in: geometry))
             }
-            .navigationBarHidden(true)
+            .frame(maxHeight: .infinity)
+        }
+        .navigationBarHidden(true)
+        .background {
+            OnboardingBackgroundImage()
         }
     }
     
     var content: some View {
         VStack {
+            Spacer()
+            
             if verticalSizeClass == .regular {
                 Spacer()
                 
-                Image(Asset.Images.onboardingAppLogo.name)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(60)
+                Image(asset: Asset.Images.launchLogo)
                     .accessibilityHidden(true)
             }
             
             Spacer()
             
             VStack(spacing: 8) {
-                Spacer()
-                
                 Text(L10n.screenOnboardingWelcomeTitle)
                     .font(.compound.headingLGBold)
                     .foregroundColor(.compound.textPrimary)
                     .multilineTextAlignment(.center)
-                Text(L10n.screenOnboardingWelcomeSubtitle(InfoPlistReader.main.bundleDisplayName))
+                Text(L10n.screenOnboardingWelcomeMessage)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textSecondary)
                     .multilineTextAlignment(.center)

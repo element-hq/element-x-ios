@@ -644,11 +644,13 @@ public enum L10n {
   public static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
   /// Communicate and collaborate securely
   public static var screenOnboardingSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_subtitle") }
+  /// Welcome to the fastest Element ever. Supercharged for speed and simplicity.
+  public static var screenOnboardingWelcomeMessage: String { return L10n.tr("Localizable", "screen_onboarding_welcome_message") }
   /// Welcome to %1$@. Supercharged, for speed and simplicity.
   public static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
   }
-  /// Be in your Element
+  /// Be in your element
   public static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
   /// Block user
   public static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }

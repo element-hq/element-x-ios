@@ -30,18 +30,18 @@ internal enum Asset {
   internal enum Images {
     internal static let analyticsCheckmark = ImageAsset(name: "Images/AnalyticsCheckmark")
     internal static let analyticsLogo = ImageAsset(name: "Images/AnalyticsLogo")
-    internal static let onboardingAppLogo = ImageAsset(name: "Images/Onboarding App Logo")
-    internal static let onboardingBackgroundPart1 = ImageAsset(name: "Images/Onboarding Background Part 1")
-    internal static let onboardingBackgroundPart2 = ImageAsset(name: "Images/Onboarding Background Part 2")
-    internal static let onboardingBackgroundPart3 = ImageAsset(name: "Images/Onboarding Background Part 3")
     internal static let serverSelectionIcon = ImageAsset(name: "Images/Server Selection Icon")
     internal static let encryptionNormal = ImageAsset(name: "Images/encryption_normal")
     internal static let encryptionTrusted = ImageAsset(name: "Images/encryption_trusted")
     internal static let encryptionWarning = ImageAsset(name: "Images/encryption_warning")
+    internal static let launchBackground = ImageAsset(name: "Images/LaunchBackground")
+    internal static let launchLogo = ImageAsset(name: "Images/LaunchLogo")
     internal static let appLogo = ImageAsset(name: "Images/app-logo")
     internal static let closeCircle = ImageAsset(name: "Images/close_circle")
     internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
   }
+  internal static let launchLogo = ImageAsset(name: "LaunchLogo")
+  internal static let onboardingBackground = ImageAsset(name: "OnboardingBackground")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

@@ -43,7 +43,7 @@ struct RoomDetailsScreen: View {
             
             leaveRoomSection
         }
-        .elementFormStyle()
+        .compoundForm()
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -129,9 +129,9 @@ struct RoomDetailsScreen: View {
                 }
             } header: {
                 Text(L10n.commonTopic)
-                    .formSectionHeader()
+                    .compoundFormSectionHeader()
             }
-            .formSectionStyle()
+            .compoundFormSection()
         }
     }
 
@@ -159,9 +159,8 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .listRowSeparatorTint(.compound.borderDisabled)
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-        .formSectionStyle()
+        .compoundFormSection()
         .foregroundColor(.compound.textPrimary)
     }
 
@@ -182,9 +181,9 @@ struct RoomDetailsScreen: View {
                 .labelStyle(FormRowLabelStyle(alignment: .top))
             } header: {
                 Text(L10n.commonSecurity)
-                    .formSectionHeader()
+                    .compoundFormSectionHeader()
             }
-            .formSectionStyle()
+            .compoundFormSection()
         }
     }
 
@@ -197,7 +196,7 @@ struct RoomDetailsScreen: View {
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
 
     @ViewBuilder
@@ -212,7 +211,7 @@ struct RoomDetailsScreen: View {
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
             .disabled(context.viewState.isProcessingIgnoreRequest)
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
 
     @ViewBuilder

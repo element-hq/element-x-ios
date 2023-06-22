@@ -27,10 +27,9 @@ struct MessageForwardingScreen: View {
                         .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
                 }
             }
-            .formSectionStyle()
+            .compoundFormSection()
         }
-        .listRowSeparator(.automatic)
-        .elementFormStyle()
+        .compoundForm()
         .navigationTitle(L10n.commonForwardMessage)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

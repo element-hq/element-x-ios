@@ -356,7 +356,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
-            actions.append(contentsOf: [.forward(itemID: itemId), .copy, .quote])
+            actions.append(contentsOf: [.forward(itemID: itemId), .copy])
         }
         
         actions.append(.copyPermalink)
@@ -403,13 +403,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerFocused = true
             state.bindings.composerText = messageTimelineItem.body
             setComposerMode(.edit(originalItemId: messageTimelineItem.id))
-        case .quote:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-            
-            state.bindings.composerFocused = true
-            state.bindings.composerText = "> \(messageTimelineItem.body)\n\n"
         case .copyPermalink:
             do {
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID)

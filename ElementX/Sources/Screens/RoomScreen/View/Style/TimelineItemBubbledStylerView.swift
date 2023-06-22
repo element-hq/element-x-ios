@@ -21,8 +21,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
@@ -116,13 +114,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             // We need a tap gesture before this long one so that it doesn't
             // steal away the gestures from the scroll view
-            .onLongPressGesture(minimumDuration: 0.25) {
+            .longPressWithFeedback {
                 context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
-                feedbackGenerator.impactOccurred()
-            } onPressingChanged: { pressing in
-                if pressing {
-                    feedbackGenerator.prepare()
-                }
             }
             .padding(.top, messageBubbleTopPadding)
     }

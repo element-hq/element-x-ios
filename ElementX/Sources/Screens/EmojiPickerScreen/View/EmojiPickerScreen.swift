@@ -19,34 +19,44 @@ import SwiftUI
 
 struct EmojiPickerScreen: View {
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
+    
     @State var searchString = ""
-    @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 50
+    @State private var isSearching = false
+    
+    @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 64
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
-                ForEach(context.viewState.categories) { category in
-                    Section(header: EmojiPickerScreenHeaderView(title: category.name)
-                        .padding(.horizontal, 13)
-                        .padding(.top, 10)) {
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
+                    ForEach(context.viewState.categories) { category in
+                        Section {
                             ForEach(category.emojis) { emoji in
                                 Button {
                                     context.send(viewAction: .emojiTapped(emoji: emoji))
                                 } label: {
                                     Text(emoji.value)
-                                        .font(.compound.headingLG)
+                                        .font(.compound.headingXL)
                                 }
                             }
+                        } header: {
+                            EmojiPickerScreenHeaderView(title: category.name)
+                                .padding(.horizontal, 13)
+                                .padding(.top, 10)
                         }
+                    }
                 }
+                .padding(.horizontal, 6)
             }
-            .padding(.horizontal, 6)
+            .navigationTitle(L10n.commonReactions)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
+            .modifier(IsSearching(isSearching: $isSearching))
+            .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+            .compoundSearchField()
         }
-        .navigationTitle(L10n.commonReactions)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
-        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
-        .compoundSearchField()
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(isSearching ? .hidden : .visible)
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))
         }
@@ -62,12 +72,30 @@ struct EmojiPickerScreen: View {
     }
 }
 
+/// A view modifier to extract whether the search field is focussed from a subview.
+private struct IsSearching: ViewModifier {
+    @Environment(\.isSearching) private var isSearchFieldFocused
+    @Binding var isSearching: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: isSearchFieldFocused) { isSearching = $0 }
+    }
+}
+
 // MARK: - Previews
 
 struct EmojiPickerScreen_Previews: PreviewProvider {
+    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
+    
     static var previews: some View {
-        NavigationStack {
-            EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
-        }
+        EmojiPickerScreen(context: viewModel.context)
+            .previewDisplayName("Screen")
+        
+        Text("Timeline view")
+            .sheet(isPresented: .constant(true)) {
+                EmojiPickerScreen(context: viewModel.context)
+            }
+            .previewDisplayName("Sheet")
     }
 }
