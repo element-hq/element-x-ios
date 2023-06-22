@@ -391,7 +391,7 @@ class ClientProxy: ClientProxyProtocol {
                 MXLog.info("Received room list update: \(state)")
                 
                 // Restart the room list sync on every error for now
-                if state == .terminated {
+                if state == .error {
                     self.restartSync()
                 }
                 
