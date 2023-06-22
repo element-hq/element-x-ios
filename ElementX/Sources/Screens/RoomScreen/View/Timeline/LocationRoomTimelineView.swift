@@ -24,7 +24,7 @@ struct LocationRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
                 MapLibreStaticMapView(geoURI: geoURI, size: .init(width: 292, height: 188)) {
-                    Image(uiImage: Asset.Images.locationPin.image)
+                    LocationPinView()
                 }
             } else {
                 FormattedBodyText(text: timelineItem.body)

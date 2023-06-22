@@ -574,6 +574,7 @@
 		CF4044A8EED5C41BC0ED6ABE /* SoftLogoutScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D316BB02636AF2174F2580E6 /* SoftLogoutScreenViewModelProtocol.swift */; };
 		CF82143AA4A4F7BD11D22946 /* RoomTimelineViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB6C5E4950B6C9842F35A38 /* RoomTimelineViewProvider.swift */; };
 		D02AA6208C7ACB9BE6332394 /* UNNotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE148A4FFEE853C5A281500C /* UNNotificationContent.swift */; };
+		D04B93C644A0BE4A4C5D0A1B /* LocationPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA10BE264552E23946FF0499 /* LocationPinView.swift */; };
 		D181AC8FF236B7F91C0A8C28 /* MapTiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA3F4B285570805CB0CCDD /* MapTiler.swift */; };
 		D2A15D03F81342A09340BD56 /* AnalyticsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFEEE93B82937B2E86F92EB /* AnalyticsScreen.swift */; };
 		D2D70B5DB1A5E4AF0CD88330 /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = 033DB41C51865A2E83174E87 /* target.yml */; };
@@ -1292,6 +1293,7 @@
 		D8E057FB1F07A5C201C89061 /* MockServerSelectionScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockServerSelectionScreenState.swift; sourceTree = "<group>"; };
 		D8E60332509665C00179ACF6 /* MessageForwardingScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageForwardingScreenViewModel.swift; sourceTree = "<group>"; };
 		D8F5F9E02B1AB5350B1815E7 /* TimelineStartRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStartRoomTimelineItem.swift; sourceTree = "<group>"; };
+		DA10BE264552E23946FF0499 /* LocationPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPinView.swift; sourceTree = "<group>"; };
 		DA2AEC1AB349A341FE13DEC1 /* StartChatScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatScreenUITests.swift; sourceTree = "<group>"; };
 		DB06F22CFA34885B40976061 /* RoomDetailsEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreen.swift; sourceTree = "<group>"; };
 		DBA8DC95C079805B0B56E8A9 /* SharedUserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUserDefaultsKeys.swift; sourceTree = "<group>"; };
@@ -1771,6 +1773,7 @@
 				0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */,
 				B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */,
 				C352359663A0E52BA20761EE /* LoadableImage.swift */,
+				DA10BE264552E23946FF0499 /* LocationPinView.swift */,
 				50E31AB0E77BB70E2BC77463 /* MatrixUserShareLink.swift */,
 				648DD1C10E4957CB791FE0B8 /* OverridableAvatarImage.swift */,
 				C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */,
@@ -4094,6 +4097,7 @@
 				6E47D126DD7585E8F8237CE7 /* LoadableAvatarImage.swift in Sources */,
 				D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */,
 				256D76972BA3254F7CB7F88B /* LocationAnnotation.swift in Sources */,
+				D04B93C644A0BE4A4C5D0A1B /* LocationPinView.swift in Sources */,
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
 				854E82E064BA53CD0BC45600 /* LocationRoomTimelineItemContent.swift in Sources */,
 				D9473FC9B077A6EDB7A12001 /* LocationRoomTimelineView.swift in Sources */,

@@ -3,6 +3,16 @@
     {
       "filename" : "location-pin.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "location-pin-dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
