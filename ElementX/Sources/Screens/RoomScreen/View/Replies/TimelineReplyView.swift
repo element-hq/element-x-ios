@@ -34,7 +34,7 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(systemIconName: "waveform", cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
                 case .emote(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,
@@ -43,12 +43,12 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(systemIconName: "doc.text.fill", cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
                 case .image(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(mediaSource: content.thumbnailSource ?? content.source, cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .mediaSource(content.thumbnailSource ?? content.source), cornerRadii: iconCornerRadii))
                 case .notice(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,
@@ -61,12 +61,13 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(mediaSource: content.thumbnailSource, cornerRadii: iconCornerRadii))
-                case .location(let content):
-                    #warning("AG: fix me")
+                              icon: content.thumbnailSource.map { .init(kind: .mediaSource($0), cornerRadii: iconCornerRadii) })
+                case .location:
+                    #warning("AG: localise me")
                     ReplyView(sender: sender,
                               plainBody: "Shared location",
-                              formattedBody: nil)
+                              formattedBody: nil,
+                              icon: .init(kind: .icon(Asset.Images.locationPin.name), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()
@@ -92,8 +93,13 @@ struct TimelineReplyView: View {
     
     private struct ReplyView: View {
         struct Icon {
-            var mediaSource: MediaSourceProxy?
-            var systemIconName: String?
+            enum Kind {
+                case mediaSource(MediaSourceProxy)
+                case systemIcon(String)
+                case icon(String)
+            }
+
+            let kind: Kind
             let cornerRadii: Double
         }
         
@@ -107,7 +113,7 @@ struct TimelineReplyView: View {
         var icon: Icon?
         
         var isTextOnly: Bool {
-            icon?.mediaSource == nil && icon?.systemIconName == nil
+            icon == nil
         }
         
         /// The string shown as the message preview.
@@ -146,22 +152,28 @@ struct TimelineReplyView: View {
         
         @ViewBuilder
         private var iconView: some View {
-            if let mediaSource = icon?.mediaSource {
-                LoadableImage(mediaSource: mediaSource,
-                              size: .init(width: imageContainerSize,
-                                          height: imageContainerSize),
-                              imageProvider: context.imageProvider) {
-                    Image(systemName: "photo")
-                        .padding(4.0)
+            if let icon {
+                switch icon.kind {
+                case .mediaSource(let mediaSource):
+                    LoadableImage(mediaSource: mediaSource,
+                                  size: .init(width: imageContainerSize,
+                                              height: imageContainerSize),
+                                  imageProvider: context.imageProvider) {
+                        Image(systemName: "photo")
+                            .padding(4.0)
+                    }
+                    .aspectRatio(contentMode: .fill)
+                case .systemIcon(let systemIconName):
+                    Image(systemName: systemIconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(8.0)
+                case .icon(let iconName):
+                    Image(iconName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(8.0)
                 }
-                .aspectRatio(contentMode: .fill)
-            }
-            
-            if let systemIconName = icon?.systemIconName {
-                Image(systemName: systemIconName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(8.0)
             }
         }
     }
@@ -216,6 +228,9 @@ struct TimelineReplyView_Previews: PreviewProvider {
                                                                                           duration: 0,
                                                                                           source: nil,
                                                                                           thumbnailSource: imageSource))))
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                contentType: .location(.init(body: "", geoURI: nil))))
         }
         .environmentObject(viewModel.context)
     }
