@@ -28,11 +28,13 @@ struct DeveloperOptionsScreenViewStateBindings {
     var shouldCollapseRoomStateEvents: Bool
     var userSuggestionsEnabled: Bool
     var readReceiptsEnabled: Bool
+    var isEncryptionSyncEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
     case changedShouldCollapseRoomStateEvents
     case changedUserSuggestionsEnabled
     case changedReadReceiptsEnabled
+    case changedIsEncryptionSyncEnabled
     case clearCache
 }

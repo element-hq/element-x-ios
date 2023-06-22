@@ -1,0 +1,16 @@
+{
+  "images" : [
+    {
+      "filename" : "LaunchBackgroundTablet-squashed.png",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "LaunchBackgroundPhone-squashed.png",
+      "idiom" : "iphone"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

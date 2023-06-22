@@ -73,7 +73,7 @@ targets:
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
-    - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationItemProxy.swift
+    - path: ../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
     - path: ../../ElementX/Sources/Services/Media/Provider
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift

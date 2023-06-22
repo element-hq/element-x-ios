@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "DesignKit", targets: ["DesignKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/vector-im/compound-ios.git", revision: "e8b35fdd8c4008079dfce203e63bf7a05582d7b9"),
+        .package(url: "https://github.com/vector-im/compound-ios.git", revision: "d1a28b8a311e33ddb517d10391037f1547a3c7b6"),
         .package(url: "https://github.com/vector-im/element-design-tokens.git", exact: "0.0.3"),
         .package(url: "https://github.com/siteline/SwiftUI-Introspect.git", from: "0.1.4")
     ],

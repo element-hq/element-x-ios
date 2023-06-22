@@ -27,7 +27,7 @@ struct RoomMemberDetailsScreen: View {
                 blockUserSection
             }
         }
-        .elementFormStyle()
+        .compoundForm()
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
         .track(screen: .user)
@@ -66,7 +66,7 @@ struct RoomMemberDetailsScreen: View {
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
             .disabled(context.viewState.isProcessingIgnoreRequest)
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
 
     private var blockUserButtonAction: RoomMemberDetailsScreenViewAction {

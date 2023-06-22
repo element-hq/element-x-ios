@@ -48,17 +48,6 @@ protocol NotificationItemProxyProtocol {
     var isEncrypted: Bool { get }
 }
 
-extension NotificationItemProxyProtocol {
-    var id: String? {
-        let identifiers = receiverID + roomID + event.eventID
-        guard let data = identifiers.data(using: .utf8) else {
-            return nil
-        }
-        let digest = SHA256.hash(data: data)
-        return digest.compactMap { String(format: "%02x", $0) }.joined()
-    }
-}
-
 struct NotificationItemProxy: NotificationItemProxyProtocol {
     let notificationItem: NotificationItem
     let receiverID: String
@@ -168,7 +157,6 @@ extension NotificationItemProxyProtocol {
         notification.receiverID = receiverID
         notification.roomID = roomID
         notification.eventID = event.eventID
-        notification.notificationID = id
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         // So that the UI groups notification that are received for the same room but also for the same user
         notification.threadIdentifier = "\(receiverID)\(roomID)"

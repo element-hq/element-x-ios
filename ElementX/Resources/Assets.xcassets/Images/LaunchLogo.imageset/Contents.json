@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "OnboardingBackgroundPart2.pdf",
+      "filename" : "LaunchLogo.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "OnboardingBackgroundPart2-Dark.pdf",
+      "filename" : "LaunchLogo-dark.pdf",
       "idiom" : "universal"
     }
   ],

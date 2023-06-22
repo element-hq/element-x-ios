@@ -26,9 +26,12 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
         
-    private var roomListService: RoomList?
+    private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
-    
+
+    private var encryptionSyncService: EncryptionSync?
+    private var isEncryptionSyncing = false
+
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
 
@@ -103,7 +106,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false
+        roomListService?.isSyncing() ?? false && isEncryptionSyncing
     }
     
     func startSync() {
@@ -111,17 +114,29 @@ class ClientProxy: ClientProxyProtocol {
         guard !isSyncing else {
             return
         }
-        
+
+        startEncryptionSyncService()
         roomListService?.sync()
     }
     
     func stopSync() {
         MXLog.info("Stopping sync")
+        stopEncryptionSyncService()
+
         do {
             try roomListService?.stopSync()
         } catch {
             MXLog.error("Failed stopping room list service with error: \(error)")
         }
+    }
+
+    private func stopEncryptionSyncService() {
+        guard isEncryptionSyncing else {
+            return
+        }
+        isEncryptionSyncing = false
+        encryptionSyncService?.stop()
+        MXLog.info("Stopping Encryption Sync service")
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -227,8 +242,8 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
         
-        if roomSummaryProvider.statePublisher.value != .fullyLoaded {
-            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0 == .fullyLoaded })
+        if !roomSummaryProvider.statePublisher.value.isLoaded {
+            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
         }
         
         (roomListItem, room) = await Task.dispatch(on: clientQueue) {
@@ -359,14 +374,47 @@ class ClientProxy: ClientProxyProtocol {
             self.avatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-        
+
+    private func startEncryptionSyncService() {
+        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+            return
+        }
+        configureEncryptionSyncService()
+    }
+    
+    private func configureEncryptionSyncService() {
+        do {
+            let listener = EncryptionSyncListenerProxy { [weak self] reason in
+                switch reason {
+                case .done:
+                    MXLog.info("Encryption Sync has finished for user: \(self?.userID ?? "unknown")")
+                case .error(let msg):
+                    MXLog.error("Encryption Sync has terminated for user: \(self?.userID ?? "unknown") for reason: \(msg)")
+                    guard let self else {
+                        return
+                    }
+                    Task {
+                        self.configureEncryptionSyncService()
+                    }
+                }
+            }
+            let encryptionSync = try client.mainEncryptionSync(id: "Main App", listener: listener)
+            encryptionSync.reloadCaches()
+            isEncryptionSyncing = true
+            encryptionSyncService = encryptionSync
+            MXLog.info("Encryption sync started for user: \(userID)")
+        } catch {
+            MXLog.error("Configure encryption sync failed with error: \(error)")
+        }
+    }
+
     private func configureRoomListService() async {
         guard roomListService == nil else {
             fatalError("This shouldn't be called more than once")
         }
         
         do {
-            let roomListService = try client.roomList()
+            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomListService() : client.roomListServiceWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")
@@ -379,9 +427,12 @@ class ClientProxy: ClientProxyProtocol {
                 // The invites are available only when entering `running`
                 if state == .running {
                     Task {
-                        // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                        await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
-                                                                               entriesLoadingStateFunction: nil)
+                        do {
+                            // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
+                            try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
+                        } catch {
+                            MXLog.error("Failed configuring invites room list with error: \(error)")
+                        }
                     }
                 }
                 
@@ -397,8 +448,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
                                                       name: "AllRooms")
             
-            await roomSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.entries(listener:),
-                                                            entriesLoadingStateFunction: roomListService.entriesLoadingState(listener:))
+            try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
@@ -437,14 +487,14 @@ extension ClientProxy: MediaLoaderProtocol {
     }
 }
 
-private class RoomListStateListenerProxy: RoomListStateListener {
-    private let onUpdateClosure: (RoomListState) -> Void
+private class RoomListStateListenerProxy: RoomListServiceStateListener {
+    private let onUpdateClosure: (RoomListServiceState) -> Void
    
-    init(_ onUpdateClosure: @escaping (RoomListState) -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomListServiceState) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(state: RoomListState) {
+    func onUpdate(state: RoomListServiceState) {
         onUpdateClosure(state)
     }
 }

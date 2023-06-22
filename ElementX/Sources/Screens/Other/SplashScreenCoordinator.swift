@@ -18,12 +18,24 @@ import SwiftUI
 
 class SplashScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
-        AnyView(
-            ZStack {
-                Image(asset: Asset.Images.onboardingAppLogo)
-                    .renderingMode(.original)
-            }
+        AnyView(SplashScreen())
+    }
+}
+
+/// The app's splash screen. This screen is shown after the LaunchScreen
+/// until the app is ready to show the relevant coordinator. The design of
+/// these 2 screens are matched.
+struct SplashScreen: View {
+    var body: some View {
+        Image(asset: Asset.Images.launchLogo)
+            .accessibilityHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        )
+            .background { OnboardingBackgroundImage() }
+    }
+}
+
+struct SplashScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        SplashScreen()
     }
 }

@@ -44,6 +44,14 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.readReceiptsEnabled) { _ in
                     context.send(viewAction: .changedReadReceiptsEnabled)
                 }
+
+                Toggle(isOn: $context.isEncryptionSyncEnabled) {
+                    Text("Use notification encryption sync")
+                    Text("requires app reboot")
+                }
+                .onChange(of: context.isEncryptionSyncEnabled) { _ in
+                    context.send(viewAction: .changedIsEncryptionSyncEnabled)
+                }
             }
             
             Section {
@@ -65,7 +73,7 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .overlay(effectsView)
-        .elementFormStyle()
+        .compoundForm()
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
     }

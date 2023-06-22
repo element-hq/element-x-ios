@@ -22,7 +22,7 @@ struct InviteUsersScreen: View {
     
     var body: some View {
         mainContent
-            .elementFormStyle()
+            .compoundForm()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -86,8 +86,7 @@ struct InviteUsersScreen: View {
                     Text(title)
                 }
             }
-            .listRowSeparator(.automatic)
-            .formSectionStyle()
+            .compoundFormSection()
         } else {
             Section.empty
         }

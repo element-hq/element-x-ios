@@ -14,6 +14,18 @@
 // limitations under the License.
 //
 
-enum SharedUserDefaultsKeys: String {
-    case isEncryptionSyncEnabled
+import Foundation
+
+import MatrixRustSDK
+
+final class EncryptionSyncListenerProxy: EncryptionSyncListener {
+    private let didTerminateClosure: (EncryptionSyncTerminationReason) -> Void
+
+    init(_ didTerminateClosure: @escaping (EncryptionSyncTerminationReason) -> Void) {
+        self.didTerminateClosure = didTerminateClosure
+    }
+
+    func didTerminate(reason: EncryptionSyncTerminationReason) {
+        didTerminateClosure(reason)
+    }
 }

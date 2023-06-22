@@ -31,7 +31,7 @@ struct RoomDetailsEditScreen: View {
             nameSection
             topicSection
         }
-        .elementFormStyle()
+        .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
@@ -98,9 +98,9 @@ struct RoomDetailsEditScreen: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } header: {
             Text(L10n.commonRoomName)
-                .formSectionHeader()
+                .compoundFormSectionHeader()
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var topicSection: some View {
@@ -118,9 +118,9 @@ struct RoomDetailsEditScreen: View {
                 .lineLimit(3...)
         } header: {
             Text(L10n.commonTopic)
-                .formSectionHeader()
+                .compoundFormSectionHeader()
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var avatarOverlayIcon: some View {

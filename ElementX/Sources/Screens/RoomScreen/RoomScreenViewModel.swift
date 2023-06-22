@@ -356,7 +356,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
-            actions.append(contentsOf: [.forward(itemID: itemId), .copy, .quote])
+            actions.append(contentsOf: [.forward(itemID: itemId), .copy])
         }
         
         actions.append(.copyPermalink)
@@ -381,7 +381,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions, debugActions: debugActions)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -403,13 +403,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerFocused = true
             state.bindings.composerText = messageTimelineItem.body
             setComposerMode(.edit(originalItemId: messageTimelineItem.id))
-        case .quote:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-            
-            state.bindings.composerFocused = true
-            state.bindings.composerText = "> \(messageTimelineItem.body)\n\n"
         case .copyPermalink:
             do {
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID)

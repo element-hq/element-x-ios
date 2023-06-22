@@ -491,8 +491,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentEmojiPicker(for itemId: String) {
-        let emojiPickerNavigationStackCoordinator = NavigationStackCoordinator()
-
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
                                                             itemId: itemId)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
@@ -508,11 +506,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
-
-        emojiPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
-        emojiPickerNavigationStackCoordinator.presentationDetents = [.medium, .large]
-
-        navigationStackCoordinator.setSheetCoordinator(emojiPickerNavigationStackCoordinator) { [weak self] in
+        
+        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissEmojiPicker)
         }
     }
