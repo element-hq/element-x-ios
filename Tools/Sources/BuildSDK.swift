@@ -25,7 +25,7 @@ struct BuildSDK: ParsableCommand {
     var target: Target?
     
     @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
-    var profile: Profile = .debug
+    var profile: Profile = .reldbg
 
     enum Error: LocalizedError {
         case rustupOutputFailure
