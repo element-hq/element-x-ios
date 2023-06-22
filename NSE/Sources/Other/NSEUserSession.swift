@@ -32,11 +32,13 @@ final class NSEUserSession {
         try client.restoreSession(session: credentials.restorationToken.session)
     }
 
-    func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol {
+    func notificationItemProxy(roomID: String, eventID: String) async throws -> NotificationItemProxyProtocol? {
         let userID = try client.userId()
         return await Task.dispatch(on: .global()) {
             do {
-                let notification = try self.client.getNotificationItem(roomId: roomID, eventId: eventID)
+                guard let notification = try self.client.getNotificationItem(roomId: roomID, eventId: eventID) else {
+                    return nil
+                }
                 return NotificationItemProxy(notificationItem: notification, receiverID: userID)
             } catch {
                 MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")

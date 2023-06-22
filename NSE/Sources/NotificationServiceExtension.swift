@@ -72,7 +72,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         do {
             let userSession = try NSEUserSession(credentials: credentials)
             
-            let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+            guard let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
+                MXLog.info("\(tag) no notification for this event")
+                return discard()
+            }
 
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)
