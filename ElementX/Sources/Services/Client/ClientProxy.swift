@@ -28,7 +28,10 @@ class ClientProxy: ClientProxyProtocol {
         
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
-    
+
+    private var encryptionSyncService: EncryptionSync?
+    private var isEncryptionSyncing = false
+
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
 
@@ -103,7 +106,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false
+        roomListService?.isSyncing() ?? false && isEncryptionSyncing
     }
     
     func startSync() {
@@ -111,17 +114,29 @@ class ClientProxy: ClientProxyProtocol {
         guard !isSyncing else {
             return
         }
-        
+
+        startEncryptionSyncService()
         roomListService?.sync()
     }
     
     func stopSync() {
         MXLog.info("Stopping sync")
+        stopEncryptionSyncService()
+
         do {
             try roomListService?.stopSync()
         } catch {
             MXLog.error("Failed stopping room list service with error: \(error)")
         }
+    }
+
+    private func stopEncryptionSyncService() {
+        guard isEncryptionSyncing else {
+            return
+        }
+        isEncryptionSyncing = false
+        encryptionSyncService?.stop()
+        MXLog.info("Stopping Encryption Sync service")
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
@@ -359,14 +374,47 @@ class ClientProxy: ClientProxyProtocol {
             self.avatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-        
+
+    private func startEncryptionSyncService() {
+        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+            return
+        }
+        configureEncryptionSyncService()
+    }
+    
+    private func configureEncryptionSyncService() {
+        do {
+            let listener = EncryptionSyncListenerProxy { [weak self] reason in
+                switch reason {
+                case .done:
+                    MXLog.info("Encryption Sync has finished for user: \(self?.userID ?? "unknown")")
+                case .error(let msg):
+                    MXLog.error("Encryption Sync has terminated for user: \(self?.userID ?? "unknown") for reason: \(msg)")
+                    guard let self else {
+                        return
+                    }
+                    Task {
+                        self.configureEncryptionSyncService()
+                    }
+                }
+            }
+            let encryptionSync = try client.mainEncryptionSync(id: "Main App", listener: listener)
+            encryptionSync.reloadCaches()
+            isEncryptionSyncing = true
+            encryptionSyncService = encryptionSync
+            MXLog.info("Encryption sync started for user: \(userID)")
+        } catch {
+            MXLog.error("Configure encryption sync failed with error: \(error)")
+        }
+    }
+
     private func configureRoomListService() async {
         guard roomListService == nil else {
             fatalError("This shouldn't be called more than once")
         }
         
         do {
-            let roomListService = try client.roomListServiceWithEncryption()
+            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomListService() : client.roomListServiceWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")

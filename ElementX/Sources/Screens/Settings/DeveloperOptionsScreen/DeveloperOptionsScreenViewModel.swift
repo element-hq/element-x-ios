@@ -27,7 +27,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         appSettings = ServiceLocator.shared.settings
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
-                                                               readReceiptsEnabled: appSettings.readReceiptsEnabled)
+                                                               readReceiptsEnabled: appSettings.readReceiptsEnabled,
+                                                               isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -45,6 +46,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.userSuggestionsEnabled = state.bindings.userSuggestionsEnabled
         case .changedReadReceiptsEnabled:
             appSettings.readReceiptsEnabled = state.bindings.readReceiptsEnabled
+        case .changedIsEncryptionSyncEnabled:
+            appSettings.isEncryptionSyncEnabled = state.bindings.isEncryptionSyncEnabled
         case .clearCache:
             callback?(.clearCache)
         }

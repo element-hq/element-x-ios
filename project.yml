@@ -11,7 +11,7 @@ options:
   deploymentTarget:
     iOS: "16.4"
     macOS: "13.3"
-  groupOrdering: 
+  groupOrdering:
     - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
     - pattern: ElementX
       order: [Sources, Resources, SupportingFiles]

@@ -163,9 +163,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
 
-    /// A set of all the notification identifiers that have been served so far, it's reset every time the app is launched
-    @UserPreference(key: SharedUserDefaultsKeys.servedNotificationIdentifiers, initialValue: [], storageType: .userDefaults(store))
-    var servedNotificationIdentifiers: Set<String>
+    /// Tag describing if the app and the NSE should use the encryption sync
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var isEncryptionSyncEnabled
         
     // MARK: - Other
     
