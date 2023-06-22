@@ -1,0 +1,1 @@
+Filtering out push notifications for encrypted rooms based on the room push context.
