@@ -311,7 +311,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
                                  sender: eventItemProxy.sender,
-                                 content: .init(body: messageContent.body, geoURI: .init(geoURI: messageContent.geoUri)),
+                                 content: buildLocationTimelineItemContent(messageContent),
                                  replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()))
     }
     
@@ -350,7 +350,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
@@ -370,7 +370,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
@@ -391,7 +391,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
+    private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
+        LocationRoomTimelineItemContent(body: locationContent.body, geoURI: .init(geoURI: locationContent.geoUri))
+    }
+
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         
@@ -507,8 +511,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .video(let content):
                 replyContent = .video(buildVideoTimelineItemContent(content))
             case .location(let content):
-                #warning("AG: fix me?")
-                replyContent = .text(buildTextTimelineItemContent(.init(body: "Location 📍", formatted: nil)))
+                replyContent = .location(buildLocationTimelineItemContent(content))
             case .none:
                 return nil
             }

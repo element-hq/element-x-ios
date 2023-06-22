@@ -64,7 +64,9 @@ struct TimelineReplyView: View {
                               icon: .init(mediaSource: content.thumbnailSource, cornerRadii: iconCornerRadii))
                 case .location(let content):
                     #warning("AG: fix me")
-                    Text("TODO: Fix me")
+                    ReplyView(sender: sender,
+                              plainBody: "Shared location",
+                              formattedBody: nil)
                 }
             default:
                 LoadingReplyView()
