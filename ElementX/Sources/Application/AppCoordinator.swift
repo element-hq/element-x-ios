@@ -533,13 +533,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         let identifier = "StaleDataIndicator"
         
+        func showLoadingIndicator() {
+            ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+        }
+        
+        showLoadingIndicator()
+        
         clientProxyObserver = userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
             .sink { action in
                 switch action {
                 case .startedUpdating:
-                    ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                    showLoadingIndicator()
                 case .receivedSyncUpdate:
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
                 default:

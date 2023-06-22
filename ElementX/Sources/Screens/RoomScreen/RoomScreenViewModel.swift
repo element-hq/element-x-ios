@@ -381,7 +381,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions, debugActions: debugActions)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {

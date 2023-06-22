@@ -379,8 +379,12 @@ class ClientProxy: ClientProxyProtocol {
                 // The invites are available only when entering `running`
                 if state == .running {
                     Task {
-                        // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                        try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
+                        do {
+                            // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
+                            try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
+                        } catch {
+                            MXLog.error("Failed configuring invites room list with error: \(error)")
+                        }
                     }
                 }
                 

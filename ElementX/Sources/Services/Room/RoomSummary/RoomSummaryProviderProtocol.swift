@@ -31,12 +31,12 @@ enum RoomSummaryProviderState {
         }
     }
     
-    var totalNumberOfRooms: UInt {
+    var totalNumberOfRooms: UInt? {
         switch self {
         case .loaded(let totalNumberOfRooms):
             return totalNumberOfRooms
         default:
-            return 0
+            return nil
         }
     }
 }
