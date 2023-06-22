@@ -67,10 +67,8 @@ class ClientProxy: ClientProxyProtocol {
     private var visibleRoomsListProxyStateObservationToken: AnyCancellable?
     
     deinit {
-        // These need to be inlined instead of using stopSync()
-        // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
-        try? roomListService?.stopSync()
+        stopSync()
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
