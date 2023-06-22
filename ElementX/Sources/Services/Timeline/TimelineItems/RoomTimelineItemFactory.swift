@@ -312,7 +312,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isEditable: eventItemProxy.isEditable,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(messageContent),
-                                 replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()))
+                                 replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                                 properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                        reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                        deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                        orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                        transactionID: eventItemProxy.transactionID))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {

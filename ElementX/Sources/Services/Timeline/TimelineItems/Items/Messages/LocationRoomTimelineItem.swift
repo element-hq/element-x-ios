@@ -29,9 +29,9 @@ struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Hashable
         content.body
     }
 
-    var properties = RoomTimelineItemProperties()
-
     var replyDetails: TimelineItemReplyDetails?
+
+    var properties = RoomTimelineItemProperties()
 
     var contentType: EventBasedMessageTimelineItemContentType {
         .location(content)
