@@ -26,7 +26,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let roomType: InviteUsersScreenRoomType
     private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
-    @CancellableTask private var showLoaderTask: Task<Void, Never>?
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -165,11 +164,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        showLoaderTask = userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        userIndicatorController?.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
     private func hideLoader() {
-        showLoaderTask = nil
         userIndicatorController?.retractIndicatorWithId(userIndicatorID)
     }
 }

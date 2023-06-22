@@ -21,6 +21,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     private var dismisalTimer: Timer?
     private var displayTimes = [String: Date]()
+    private var delayedIndicators = Set<String>()
     
     var nonPersistentDisplayDuration = 2.5
     var minimumDisplayDuration = 0.5
@@ -51,12 +52,27 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         )
     }
     
-    func submitIndicator(_ indicator: UserIndicator) {
+    func submitIndicator(_ indicator: UserIndicator, delay: Duration?) {
         if let index = indicatorQueue.firstIndex(where: { $0.id == indicator.id }) {
             indicatorQueue[index] = indicator
         } else {
-            retractIndicatorWithId(indicator.id)
-            indicatorQueue.append(indicator)
+            if let delay {
+                delayedIndicators.insert(indicator.id)
+                Timer.scheduledTimer(withTimeInterval: Double(delay.components.seconds), repeats: false) { [weak self] _ in
+                    guard let self else { return }
+                    
+                    guard delayedIndicators.contains(indicator.id) else {
+                        return
+                    }
+                    
+                    retractIndicatorWithId(indicator.id)
+                    indicatorQueue.append(indicator)
+                    delayedIndicators.remove(indicator.id)
+                }
+            } else {
+                retractIndicatorWithId(indicator.id)
+                indicatorQueue.append(indicator)
+            }
         }
         
         displayTimes[indicator.id] = .now
@@ -69,6 +85,8 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     }
     
     func retractIndicatorWithId(_ id: String) {
+        delayedIndicators.remove(id)
+        
         guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) <= minimumDisplayDuration else {
             indicatorQueue.removeAll { $0.id == id }
             return
