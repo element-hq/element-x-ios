@@ -18,19 +18,14 @@ import Foundation
 
 // sourcery: AutoMockable
 protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
-    func submitIndicator(_ indicator: UserIndicator)
+    func submitIndicator(_ indicator: UserIndicator, delay: Duration?)
     func retractIndicatorWithId(_ id: String)
     func retractAllIndicators()
     var alertInfo: AlertInfo<UUID>? { get set }
 }
 
 extension UserIndicatorControllerProtocol {
-    /// Allows to submit a delayed indicator, this returns a Task so that it's also possible to cancel the action
-    func submitIndicator(_ indicator: UserIndicator, delay: Duration) -> Task<Void, Never> {
-        Task { @MainActor in
-            try? await Task.sleep(for: delay)
-            guard !Task.isCancelled else { return }
-            submitIndicator(indicator)
-        }
+    func submitIndicator(_ indicator: UserIndicator) {
+        submitIndicator(indicator, delay: nil)
     }
 }

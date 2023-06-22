@@ -19,6 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 enum ClientProxyCallback {
+    case startedUpdating
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
     case updateRestorationToken

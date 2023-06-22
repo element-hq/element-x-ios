@@ -185,7 +185,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
         await Task.yield()
-        XCTAssertFalse(userIndicatorControllerMock.submitIndicatorCalled)
+        XCTAssertFalse(userIndicatorControllerMock.submitIndicatorDelayCalled)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
     }
@@ -217,7 +217,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
         try? await Task.sleep(for: .milliseconds(300))
-        XCTAssert(userIndicatorControllerMock.submitIndicatorCallsCount == 1)
+        XCTAssert(userIndicatorControllerMock.submitIndicatorDelayCallsCount == 1)
         XCTAssert(userIndicatorControllerMock.retractIndicatorWithIdCallsCount == 1)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")

@@ -19,7 +19,7 @@ import SwiftUI
 struct HomeScreenUserMenuButton: View {
     @State private var showingLogoutConfirmation = false
     
-    let context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeScreenViewModel.Context
     
     var body: some View {
         Menu {

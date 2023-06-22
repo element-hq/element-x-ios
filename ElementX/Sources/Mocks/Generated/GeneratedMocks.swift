@@ -1210,19 +1210,19 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
 
     //MARK: - submitIndicator
 
-    var submitIndicatorCallsCount = 0
-    var submitIndicatorCalled: Bool {
-        return submitIndicatorCallsCount > 0
+    var submitIndicatorDelayCallsCount = 0
+    var submitIndicatorDelayCalled: Bool {
+        return submitIndicatorDelayCallsCount > 0
     }
-    var submitIndicatorReceivedIndicator: UserIndicator?
-    var submitIndicatorReceivedInvocations: [UserIndicator] = []
-    var submitIndicatorClosure: ((UserIndicator) -> Void)?
+    var submitIndicatorDelayReceivedArguments: (indicator: UserIndicator, delay: Duration?)?
+    var submitIndicatorDelayReceivedInvocations: [(indicator: UserIndicator, delay: Duration?)] = []
+    var submitIndicatorDelayClosure: ((UserIndicator, Duration?) -> Void)?
 
-    func submitIndicator(_ indicator: UserIndicator) {
-        submitIndicatorCallsCount += 1
-        submitIndicatorReceivedIndicator = indicator
-        submitIndicatorReceivedInvocations.append(indicator)
-        submitIndicatorClosure?(indicator)
+    func submitIndicator(_ indicator: UserIndicator, delay: Duration?) {
+        submitIndicatorDelayCallsCount += 1
+        submitIndicatorDelayReceivedArguments = (indicator: indicator, delay: delay)
+        submitIndicatorDelayReceivedInvocations.append((indicator: indicator, delay: delay))
+        submitIndicatorDelayClosure?(indicator, delay)
     }
     //MARK: - retractIndicatorWithId
 

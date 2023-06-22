@@ -52,8 +52,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
+    private var clientProxyObserver: AnyCancellable?
     private var networkMonitorObserver: AnyCancellable?
-    private var initialSyncObserver: AnyCancellable?
     private var backgroundRefreshSyncObserver: AnyCancellable?
     
     let notificationManager: NotificationManagerProtocol
@@ -355,15 +355,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         showLoadingIndicator()
         
-        defer {
-            hideLoadingIndicator()
-        }
-        
         stopSync()
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            hideLoadingIndicator()
             return
         }
         
@@ -380,6 +377,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.analytics.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            
+            hideLoadingIndicator()
         }
     }
     
@@ -519,6 +518,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         backgroundAppRefreshTask?.setTaskCompleted(success: true)
         backgroundAppRefreshTask = nil
+        
+        clientProxyObserver = nil
     }
 
     private func startSync() {
@@ -532,15 +533,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         let identifier = "StaleDataIndicator"
         
-        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
-        
-        initialSyncObserver = userSession.clientProxy
+        clientProxyObserver = userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
-            .filter(\.isSyncUpdate)
-            .sink { [weak self] _ in
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
-                self?.initialSyncObserver?.cancel()
+            .sink { action in
+                switch action {
+                case .startedUpdating:
+                    ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                case .receivedSyncUpdate:
+                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
+                default:
+                    break
+                }
             }
     }
 

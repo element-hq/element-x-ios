@@ -19,26 +19,6 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate {
-    private weak var clientProxy: ClientProxy?
-    
-    init(clientProxy: ClientProxy) {
-        self.clientProxy = clientProxy
-    }
-    
-    // MARK: - ClientDelegate
-
-    func didReceiveAuthError(isSoftLogout: Bool) {
-        MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
-        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
-    }
-    
-    func didRefreshTokens() {
-        MXLog.info("The session has updated tokens.")
-        clientProxy?.updateRestorationToken()
-    }
-}
-
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -67,10 +47,8 @@ class ClientProxy: ClientProxyProtocol {
     private var visibleRoomsListProxyStateObservationToken: AnyCancellable?
     
     deinit {
-        // These need to be inlined instead of using stopSync()
-        // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
-        try? roomListService?.stopSync()
+        stopSync()
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -82,8 +60,11 @@ class ClientProxy: ClientProxyProtocol {
         
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
 
-        let delegate = WeakClientProxyWrapper(clientProxy: self)
-        client.setDelegate(delegate: delegate)
+        client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
+            self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+        } tokenRefreshCallback: { [weak self] in
+            self?.callbacks.send(.updateRestorationToken)
+        })
         
         await configureRoomListService()
 
@@ -391,18 +372,24 @@ class ClientProxy: ClientProxyProtocol {
                 MXLog.info("Received room list update: \(state)")
                 
                 // Restart the room list sync on every error for now
-                if state == .terminated {
+                if state == .error {
                     self.restartSync()
                 }
                 
+                // The invites are available only when entering `running`
                 if state == .running {
-                    self.callbacks.send(.receivedSyncUpdate)
-                    
                     Task {
                         // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
                         await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
                                                                                entriesLoadingStateFunction: nil)
                     }
+                }
+                
+                // Anything that's not `running` is interpreted as "Loading data"
+                if state == .running {
+                    self.callbacks.send(.receivedSyncUpdate)
+                } else {
+                    self.callbacks.send(.startedUpdating)
                 }
             })
             
@@ -434,14 +421,6 @@ class ClientProxy: ClientProxyProtocol {
             return (nil, nil)
         }
     }
-    
-    fileprivate func updateRestorationToken() {
-        callbacks.send(.updateRestorationToken)
-    }
-    
-    fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
-        callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
-    }
 }
 
 extension ClientProxy: MediaLoaderProtocol {
@@ -467,5 +446,28 @@ private class RoomListStateListenerProxy: RoomListStateListener {
     
     func onUpdate(state: RoomListState) {
         onUpdateClosure(state)
+    }
+}
+
+private class ClientDelegateWrapper: ClientDelegate {
+    private let authErrorCallback: (Bool) -> Void
+    private let tokenRefreshCallback: () -> Void
+    
+    init(authErrorCallback: @escaping (Bool) -> Void,
+         tokenRefreshCallback: @escaping () -> Void) {
+        self.authErrorCallback = authErrorCallback
+        self.tokenRefreshCallback = tokenRefreshCallback
+    }
+    
+    // MARK: - ClientDelegate
+
+    func didReceiveAuthError(isSoftLogout: Bool) {
+        MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
+        authErrorCallback(isSoftLogout)
+    }
+    
+    func didRefreshTokens() {
+        MXLog.info("The session has updated tokens.")
+        tokenRefreshCallback()
     }
 }
