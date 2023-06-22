@@ -414,7 +414,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomList() : client.roomListWithEncryption()
+            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomListService() : client.roomListServiceWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")
