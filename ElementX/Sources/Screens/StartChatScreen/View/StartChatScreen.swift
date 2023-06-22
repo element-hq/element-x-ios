@@ -34,7 +34,7 @@ struct StartChatScreen: View {
         .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .cancellationAction) {
                 closeButton
             }
         }
