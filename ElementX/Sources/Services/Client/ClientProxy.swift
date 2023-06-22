@@ -385,11 +385,18 @@ class ClientProxy: ClientProxyProtocol {
     private func configureEncryptionSyncService() {
         do {
             let listener = EncryptionSyncListenerProxy { [weak self] reason in
-                MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown") with reason: \(reason)")
-                guard let self, isEncryptionSyncing else {
-                    return
+                switch reason {
+                case .done:
+                    MXLog.info("Encryption Sync has finished for user: \(self?.userID ?? "unknown")")
+                case .error(let msg):
+                    MXLog.error("Encryption Sync has terminated for user: \(self?.userID ?? "unknown") for reason: \(msg)")
+                    guard let self else {
+                        return
+                    }
+                    Task {
+                        self.configureEncryptionSyncService()
+                    }
                 }
-                self.configureEncryptionSyncService()
             }
             let encryptionSync = try client.mainEncryptionSync(id: "Main App", listener: listener)
             encryptionSync.reloadCaches()

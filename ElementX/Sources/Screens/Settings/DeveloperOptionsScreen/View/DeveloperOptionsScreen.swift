@@ -49,7 +49,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Use notification encryption sync")
                     Text("requires app reboot")
                 }
-                .onChange(of: context.readReceiptsEnabled) { _ in
+                .onChange(of: context.isEncryptionSyncEnabled) { _ in
                     context.send(viewAction: .changedIsEncryptionSyncEnabled)
                 }
             }
