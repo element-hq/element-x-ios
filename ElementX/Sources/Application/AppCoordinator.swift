@@ -355,15 +355,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         showLoadingIndicator()
         
-        defer {
-            hideLoadingIndicator()
-        }
-        
         stopSync()
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            hideLoadingIndicator()
             return
         }
         
@@ -380,6 +377,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.analytics.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            
+            hideLoadingIndicator()
         }
     }
     
