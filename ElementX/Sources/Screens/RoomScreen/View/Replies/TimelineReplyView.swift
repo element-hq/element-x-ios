@@ -63,9 +63,8 @@ struct TimelineReplyView: View {
                               formattedBody: nil,
                               icon: content.thumbnailSource.map { .init(kind: .mediaSource($0), cornerRadii: iconCornerRadii) })
                 case .location:
-                    #warning("AG: localise me")
                     ReplyView(sender: sender,
-                              plainBody: "Shared location",
+                              plainBody: L10n.commonSharedLocation,
                               formattedBody: nil,
                               icon: .init(kind: .icon(Asset.Images.locationPin.name), cornerRadii: iconCornerRadii))
                 }

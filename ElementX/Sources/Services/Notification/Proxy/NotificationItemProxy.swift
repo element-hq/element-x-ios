@@ -271,8 +271,8 @@ extension NotificationItemProxyProtocol {
             return try await processNotice(content: content, mediaProvider: mediaProvider)
         case .text(content: let content):
             return try await processText(content: content, mediaProvider: mediaProvider)
-        case .location(content: let content):
-            return try await processLocation(content: content, mediaProvider: mediaProvider)
+        case .location:
+            return processEmpty()
         }
     }
 
@@ -374,13 +374,6 @@ extension NotificationItemProxyProtocol {
                                                              mediaSource: .init(source: content.source,
                                                                                 mimeType: content.info?.mimetype))
 
-        return notification
-    }
-
-    private func processLocation(content: LocationContent, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(mediaProvider: mediaProvider)
-        #warning("AG: How a location notification should appear here?")
-        notification.body = "📍 " + content.body
         return notification
     }
 }
