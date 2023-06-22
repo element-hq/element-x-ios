@@ -19,13 +19,13 @@ import Foundation
 import MatrixRustSDK
 
 final class EncryptionSyncListenerProxy: EncryptionSyncListener {
-    private let didTerminateClosure: () -> Void
+    private let didTerminateClosure: (EncryptionSyncTerminationReason) -> Void
 
-    init(_ didTerminateClosure: @escaping () -> Void) {
+    init(_ didTerminateClosure: @escaping (EncryptionSyncTerminationReason) -> Void) {
         self.didTerminateClosure = didTerminateClosure
     }
 
-    func didTerminate() {
-        didTerminateClosure()
+    func didTerminate(reason: EncryptionSyncTerminationReason) {
+        didTerminateClosure(reason)
     }
 }

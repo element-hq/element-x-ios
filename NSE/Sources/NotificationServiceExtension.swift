@@ -75,7 +75,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             self.userSession = userSession
             var itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
             if settings.isEncryptionSyncEnabled,
-               itemProxy.isEncrypted,
+               itemProxy?.isEncrypted == true,
                let _ = try? userSession.startEncryptionSync() {
                 // TODO: The following wait with a timeout should be handled by the SDK
                 // We try to decrypt the notification for 10 seconds at most
@@ -87,7 +87,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                         break
                     }
                     itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-                } while itemProxy.isEncrypted && date.timeIntervalSinceNow > -10
+                } while itemProxy?.isEncrypted == true && date.timeIntervalSinceNow > -10
+            }
+
+            guard let itemProxy else {
+                MXLog.info("\(tag) no notification for the event, discard")
+                return discard()
             }
 
             // After the first processing, update the modified content

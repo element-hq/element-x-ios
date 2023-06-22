@@ -19,26 +19,6 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate {
-    private weak var clientProxy: ClientProxy?
-    
-    init(clientProxy: ClientProxy) {
-        self.clientProxy = clientProxy
-    }
-    
-    // MARK: - ClientDelegate
-
-    func didReceiveAuthError(isSoftLogout: Bool) {
-        MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
-        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
-    }
-    
-    func didRefreshTokens() {
-        MXLog.info("The session has updated tokens.")
-        clientProxy?.updateRestorationToken()
-    }
-}
-
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -404,8 +384,8 @@ class ClientProxy: ClientProxyProtocol {
     
     private func configureEncryptionSyncService() {
         do {
-            let listener = EncryptionSyncListenerProxy { [weak self] in
-                MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown")")
+            let listener = EncryptionSyncListenerProxy { [weak self] reason in
+                MXLog.info("Encryption Sync did terminate for user: \(self?.userID ?? "unknown") with reason: \(reason)")
                 guard let self, isEncryptionSyncing else {
                     return
                 }
@@ -427,7 +407,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let roomListService = try client.roomListServiceWithEncryption()
+            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomList() : client.roomListWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")

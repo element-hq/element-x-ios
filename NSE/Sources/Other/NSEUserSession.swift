@@ -40,8 +40,8 @@ final class NSEUserSession {
     }
 
     func startEncryptionSync() throws {
-        let listener = EncryptionSyncListenerProxy { [weak self] in
-            MXLog.info("NSE: Encryption sync terminated for user: \(self?.userID ?? "unknown")")
+        let listener = EncryptionSyncListenerProxy { [weak self] reason in
+            MXLog.info("NSE: Encryption sync terminated for user: \(self?.userID ?? "unknown") with reason: \(reason)")
             self?.encryptionSyncService = nil
         }
         encryptionSyncService = try client.notificationEncryptionSync(id: "NSE", listener: listener, numIters: 2)
