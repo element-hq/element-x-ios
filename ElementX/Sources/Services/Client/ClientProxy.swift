@@ -376,14 +376,20 @@ class ClientProxy: ClientProxyProtocol {
                     self.restartSync()
                 }
                 
+                // The invites are available only when entering `running`
                 if state == .running {
-                    self.callbacks.send(.receivedSyncUpdate)
-                    
                     Task {
                         // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
                         await self.inviteSummaryProvider?.subscribeIfNecessary(entriesFunction: roomListService.invites(listener:),
                                                                                entriesLoadingStateFunction: nil)
                     }
+                }
+                
+                // Anything that's not `running` is interpreted as "Loading data"
+                if state == .running {
+                    self.callbacks.send(.receivedSyncUpdate)
+                } else {
+                    self.callbacks.send(.startedUpdating)
                 }
             })
             
