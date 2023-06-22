@@ -15,6 +15,8 @@
 //
 
 @testable import ElementX
+
+import Combine
 import Foundation
 import XCTest
 
@@ -39,7 +41,8 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let response = try await bugReportService.submitBugReport(bugReport, progressListener: nil).get()
+        let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+        let response = try await bugReportService.submitBugReport(bugReport, progressListener: progressSubject).get()
         XCTAssertFalse(response.reportUrl.isEmpty)
     }
     
@@ -64,7 +67,8 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let response = try await service.submitBugReport(bugReport, progressListener: nil).get()
+        let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+        let response = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
         XCTAssertEqual(response.reportUrl, "https://example.com/123")
     }
