@@ -40,8 +40,6 @@ internal enum Asset {
     internal static let closeCircle = ImageAsset(name: "Images/close_circle")
     internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
   }
-  internal static let launchLogo = ImageAsset(name: "LaunchLogo")
-  internal static let onboardingBackground = ImageAsset(name: "OnboardingBackground")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
