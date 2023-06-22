@@ -83,6 +83,8 @@ protocol RoomSummaryProviderProtocol {
     /// Publishes the current state the summary provider is finding itself in
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
     
+    /// This is outside of the constructor because the invites list is added later on the Rust side.
+    /// Wanted to be able to build the InvitesSummaryProvider directly instead of having to inform the HomeScreenViewModel about it later
     func setRoomList(_ roomList: RoomList)
     
     func updateVisibleRange(_ range: Range<Int>)
