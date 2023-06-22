@@ -25,6 +25,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private let serialDispatchQueue: DispatchQueue
     
+    private var roomList: RoomListProtocol?
+    
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesTaskHandle: TaskHandle?
     private var stateUpdatesTaskHandle: TaskHandle?
@@ -67,6 +69,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         guard listUpdatesTaskHandle == nil, stateUpdatesTaskHandle == nil else {
             return
         }
+        
+        self.roomList = roomList
 
         do {
             let listUpdatesSubscriptionResult = try roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] update in
