@@ -64,6 +64,7 @@ struct TimelineItemStatusView: View {
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
+            // The bubbles handle the failure internally
             if style == .plain {
                 Image(systemName: "exclamationmark.circle.fill")
                     .resizable()
@@ -73,7 +74,8 @@ struct TimelineItemStatusView: View {
                         context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
                     }
             }
-            // The bubbles handle the failure internally
+        case .cancelled:
+            EmptyView()
         }
     }
 
