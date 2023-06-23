@@ -57,6 +57,14 @@ Git LFS is used to store UI test snapshots. `swift run tools setup-project` will
 git lfs install
 ```
 
+### Snapshot Tests
+
+If you make changes to the UI you may cause existing UI Snapshot tests to fail. You can run the snapshot tests using `UITests` target. To update the reference snapshots, delete them from `element-x-ios/UITests/Sources/__Snapshots__/Application` and run the tests again. 
+These are the devices we store snapshots for that you will need to run against:
+- iPhone 14
+- iPad (9th generation)
+
+
 ### Githooks
 
 The project uses its own shared githooks stored in the .githooks folder, you will need to configure git to use such folder, this is already done if you have run the setup tool with `swift run tools setup-project` otherwise you would need to run:
