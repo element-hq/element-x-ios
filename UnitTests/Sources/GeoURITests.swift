@@ -20,66 +20,66 @@ import XCTest
 final class GeoURITests: XCTestCase {
     func testValidPositiveCoordinates() throws {
         let string = "geo:53.99803101552848,8.25347900390625;u=10.0"
-        let uri = try XCTUnwrap(GeoURI(geoURI: string))
+        let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, 53.99803101552848)
         XCTAssertEqual(uri.longitude, 8.25347900390625)
         XCTAssertEqual(uri.uncertainty, 10)
-        XCTAssertEqual(uri.geoURI, string)
+        XCTAssertEqual(uri.string, string)
     }
 
     func testValidNegativeCoordinates() throws {
         let string = "geo:-53.99803101552848,-8.25347900390625;u=10.0"
-        let uri = try XCTUnwrap(GeoURI(geoURI: string))
+        let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, -53.99803101552848)
         XCTAssertEqual(uri.longitude, -8.25347900390625)
         XCTAssertEqual(uri.uncertainty, 10)
-        XCTAssertEqual(uri.geoURI, string)
+        XCTAssertEqual(uri.string, string)
     }
 
     func testValidMixedCoordinates() throws {
         let string = "geo:53.99803101552848,-8.25347900390625;u=10.0"
-        let uri = try XCTUnwrap(GeoURI(geoURI: string))
+        let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, 53.99803101552848)
         XCTAssertEqual(uri.longitude, -8.25347900390625)
         XCTAssertEqual(uri.uncertainty, 10)
-        XCTAssertEqual(uri.geoURI, string)
+        XCTAssertEqual(uri.string, string)
     }
 
     func testValidCoordinatesNoUncertainty() throws {
         let string = "geo:53.99803101552848,-8.25347900390625"
-        let uri = try XCTUnwrap(GeoURI(geoURI: string))
+        let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, 53.99803101552848)
         XCTAssertEqual(uri.longitude, -8.25347900390625)
         XCTAssertNil(uri.uncertainty)
-        XCTAssertEqual(uri.geoURI, string)
+        XCTAssertEqual(uri.string, string)
     }
 
     func testValidIntegerCoordinates() throws {
         let string = "geo:53,-8;u=35"
-        let uri = try XCTUnwrap(GeoURI(geoURI: string))
+        let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, 53)
         XCTAssertEqual(uri.longitude, -8)
         XCTAssertEqual(uri.uncertainty, 35)
-        XCTAssertEqual(uri.geoURI, "geo:53.0,-8.0;u=35.0")
+        XCTAssertEqual(uri.string, "geo:53.0,-8.0;u=35.0")
     }
 
     func testInvalidURI1() {
         let string = "geo:53.99803101552848,-8.25347900390625;" // final ; without a u=number
-        XCTAssertNil(GeoURI(geoURI: string))
+        XCTAssertNil(GeoURI(string: string))
     }
 
     func testInvalidURI2() {
         let string = "geo:53.99803101552848, -8.25347900390625;" // spaces in the middle
-        XCTAssertNil(GeoURI(geoURI: string))
+        XCTAssertNil(GeoURI(string: string))
     }
 
     func testInvalidURI3() {
         let string = "geo:+53.99803101552848,-8.25347900390625" // '+' before a number
-        XCTAssertNil(GeoURI(geoURI: string))
+        XCTAssertNil(GeoURI(string: string))
     }
 
     func testInvalidURI4() {
         let string = "geo:53.99803101552848,-8.25347900390625;u=-20" // u is negative
-        XCTAssertNil(GeoURI(geoURI: string))
+        XCTAssertNil(GeoURI(string: string))
     }
 }

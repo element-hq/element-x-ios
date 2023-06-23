@@ -26,9 +26,9 @@ struct GeoURI: Hashable {
 
     // MARK: - Setup
 
-    init?(geoURI: String) {
-        guard let parsedURI = Self.parseGeoURI(from: geoURI) else {
-            MXLog.warning("\(Self.self) failed to parse ur: \(geoURI)")
+    init?(string: String) {
+        guard let parsedURI = Self.parseGeoURI(from: string) else {
+            MXLog.warning("\(Self.self) failed to parse the string: \(string)")
             return nil
         }
         self = parsedURI
@@ -40,7 +40,7 @@ struct GeoURI: Hashable {
         self.uncertainty = uncertainty
     }
 
-    var geoURI: String {
+    var string: String {
         if let uncertainty {
             return "geo:\(latitude),\(longitude);u=\(uncertainty)"
         } else {

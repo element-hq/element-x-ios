@@ -18,7 +18,7 @@ import SwiftUI
 
 struct LocationPinView: View {
     var body: some View {
-        Image(uiImage: Asset.Images.locationPin.image)
+        Image(Asset.Images.locationPin.name)
             .alignmentGuide(VerticalAlignment.center) { dimensions in
                 dimensions[.bottom]
             }

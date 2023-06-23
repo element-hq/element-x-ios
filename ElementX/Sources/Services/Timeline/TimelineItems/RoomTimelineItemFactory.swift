@@ -398,7 +398,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
-        LocationRoomTimelineItemContent(body: locationContent.body, geoURI: .init(geoURI: locationContent.geoUri))
+        LocationRoomTimelineItemContent(body: locationContent.body, geoURI: .init(string: locationContent.geoUri))
     }
 
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
