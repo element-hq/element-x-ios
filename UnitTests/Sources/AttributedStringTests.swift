@@ -21,7 +21,8 @@ class AttributedStringTests: XCTestCase {
     func testReplacingFontWithPresentationIntent() {
         // Given a string parsed from HTML that contains specific fixed size fonts.
         let boldString = "Bold"
-        guard let originalString = AttributedStringBuilder().fromHTML("Normal <b>\(boldString)</b> Normal.") else {
+        guard let originalString = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+            .fromHTML("Normal <b>\(boldString)</b> Normal.") else {
             XCTFail("The attributed string should be built from the HTML.")
             return
         }

@@ -20,6 +20,8 @@ import SwiftUI
 struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
+    
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum LoginScreenCoordinatorAction {
@@ -46,7 +48,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     init(parameters: LoginScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver.value)
+        viewModel = LoginScreenViewModel(homeserver: parameters.authenticationService.homeserver.value,
+                                         slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
     }
     
     // MARK: - Public
@@ -80,10 +83,10 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     private func startLoading(isInteractionBlocking: Bool) {
         if isInteractionBlocking {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                        type: .modal,
-                                                                                        title: L10n.commonLoading,
-                                                                                        persistent: true))
+            parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                             type: .modal,
+                                                                             title: L10n.commonLoading,
+                                                                             persistent: true))
         } else {
             viewModel.update(isLoading: true)
         }
@@ -91,7 +94,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     private func stopLoading() {
         viewModel.update(isLoading: false)
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     /// Processes an error to either update the flow or display it to the user.

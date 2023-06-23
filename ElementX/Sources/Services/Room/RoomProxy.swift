@@ -528,7 +528,6 @@ class RoomProxy: RoomProxyProtocol {
         await Task.dispatch(on: .global()) {
             do {
                 try self.room.acceptInvitation()
-                ServiceLocator.shared.analytics.trackJoinedRoom(isDM: self.room.isDirect(), isSpace: self.room.isSpace(), activeMemberCount: UInt(self.room.activeMembersCount()))
                 return .success(())
             } catch {
                 return .failure(.failedAcceptingInvite)

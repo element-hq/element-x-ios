@@ -17,12 +17,14 @@
 import SwiftUI
 
 final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
+    private let analytics: AnalyticsService
     private var viewModel: AnalyticsPromptScreenViewModel
 
     var callback: (@MainActor () -> Void)?
     
-    init() {
-        viewModel = AnalyticsPromptScreenViewModel()
+    init(analytics: AnalyticsService, termsURL: URL) {
+        self.analytics = analytics
+        viewModel = AnalyticsPromptScreenViewModel(termsURL: termsURL)
     }
     
     // MARK: - Public
@@ -34,11 +36,11 @@ final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
             switch result {
             case .enable:
                 MXLog.info("Enable Analytics")
-                ServiceLocator.shared.analytics.optIn()
+                analytics.optIn()
                 self.callback?()
             case .disable:
                 MXLog.info("Disable Analytics")
-                ServiceLocator.shared.analytics.optOut()
+                analytics.optOut()
                 self.callback?()
             }
         }

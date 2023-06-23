@@ -136,20 +136,20 @@ struct LoginScreen: View {
 
 struct LoginScreen_Previews: PreviewProvider {
     static let credentialsViewModel: LoginScreenViewModel = {
-        let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg)
+        let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
         viewModel.context.username = "alice"
         viewModel.context.password = "password"
         return viewModel
     }()
     
     static var previews: some View {
-        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg))
+        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
             .previewDisplayName("matrix.org")
         screen(for: credentialsViewModel)
             .previewDisplayName("Credentials Entered")
-        screen(for: LoginScreenViewModel(homeserver: .mockUnsupported))
+        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
             .previewDisplayName("Unsupported")
-        screen(for: LoginScreenViewModel(homeserver: .mockOIDC))
+        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
             .previewDisplayName("OIDC Fallback")
     }
     

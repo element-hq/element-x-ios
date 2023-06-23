@@ -34,7 +34,7 @@ final class NotificationManagerTests: XCTestCase {
     override func setUp() {
         AppSettings.reset()
 
-        notificationManager = NotificationManager(notificationCenter: notificationCenter)
+        notificationManager = NotificationManager(notificationCenter: notificationCenter, appSettings: appSettings)
         notificationManager.start()
         notificationManager.setUserSession(mockUserSession)
     }

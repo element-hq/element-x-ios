@@ -34,7 +34,11 @@ class StartChatScreenViewModelTests: XCTestCase {
         userDiscoveryService.fetchSuggestionsReturnValue = .success([])
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        viewModel = StartChatScreenViewModel(userSession: userSession,
+                                             appSettings: ServiceLocator.shared.settings,
+                                             analytics: ServiceLocator.shared.analytics,
+                                             userIndicatorController: nil,
+                                             userDiscoveryService: userDiscoveryService)
         
         AppSettings.reset()
         ServiceLocator.shared.settings.userSuggestionsEnabled = true

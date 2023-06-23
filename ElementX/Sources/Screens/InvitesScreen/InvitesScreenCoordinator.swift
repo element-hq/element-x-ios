@@ -37,7 +37,10 @@ final class InvitesScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: InvitesScreenCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = InvitesScreenViewModel(userSession: parameters.userSession)
+        viewModel = InvitesScreenViewModel(userSession: parameters.userSession,
+                                           appSettings: ServiceLocator.shared.settings,
+                                           analytics: ServiceLocator.shared.analytics,
+                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     func start() {

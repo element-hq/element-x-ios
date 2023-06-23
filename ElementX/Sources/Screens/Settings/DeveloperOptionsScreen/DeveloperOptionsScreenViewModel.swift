@@ -19,12 +19,13 @@ import SwiftUI
 typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
 
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
-    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
-    
     private let appSettings: AppSettings
     
-    init() {
-        appSettings = ServiceLocator.shared.settings
+    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
+    
+    init(appSettings: AppSettings) {
+        self.appSettings = appSettings
+        
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,

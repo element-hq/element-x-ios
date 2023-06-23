@@ -32,8 +32,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
-         applicationId: String = ServiceLocator.shared.settings.bugReportApplicationId,
-         maxUploadSize: Int = ServiceLocator.shared.settings.bugReportMaxUploadSize,
+         applicationId: String,
+         maxUploadSize: Int,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryURL = sentryURL

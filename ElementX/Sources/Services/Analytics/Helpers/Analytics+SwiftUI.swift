@@ -1,5 +1,5 @@
 //
-// Copyright 2021 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
 // limitations under the License.
 //
 
-import PostHog
+import SwiftUI
 
-extension PHGPostHogConfiguration {
-    static func standard(analyticsConfiguration: AnalyticsConfiguration) -> PHGPostHogConfiguration? {
-        guard analyticsConfiguration.isEnabled else { return nil }
-        
-        let postHogConfiguration = PHGPostHogConfiguration(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
-        postHogConfiguration.shouldSendDeviceID = false
-        
-        return postHogConfiguration
+private struct AnalyticsServiceKey: EnvironmentKey {
+    static let defaultValue: AnalyticsService = ServiceLocator.shared.analytics
+}
+
+extension EnvironmentValues {
+    var analyticsService: AnalyticsService {
+        get { self[AnalyticsServiceKey.self] }
+        set { self[AnalyticsServiceKey.self] = newValue }
     }
 }

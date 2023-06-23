@@ -45,9 +45,10 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     init(parameters: CreateRoomCoordinatorParameters) {
         self.parameters = parameters
         viewModel = CreateRoomViewModel(userSession: parameters.userSession,
-                                        userIndicatorController: parameters.userIndicatorController,
                                         createRoomParameters: parameters.createRoomParameters,
-                                        selectedUsers: parameters.selectedUsers)
+                                        selectedUsers: parameters.selectedUsers,
+                                        analytics: ServiceLocator.shared.analytics,
+                                        userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

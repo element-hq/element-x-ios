@@ -29,6 +29,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let emojiProvider: EmojiProviderProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
@@ -48,12 +50,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          navigationStackCoordinator: NavigationStackCoordinator,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          emojiProvider: EmojiProviderProtocol,
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.emojiProvider = emojiProvider
+        self.appSettings = appSettings
+        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         setupStateMachine()
@@ -273,7 +279,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
                                                           mediaProvider: userSession.mediaProvider,
-                                                          attributedStringBuilder: AttributedStringBuilder(),
+                                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userId))
         
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
@@ -282,7 +288,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
-        ServiceLocator.shared.analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
+        analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
@@ -365,7 +371,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
-                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy))
+                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                            userIndicatorController: userIndicatorController)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {

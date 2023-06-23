@@ -140,7 +140,11 @@ struct StartChatScreen_Previews: PreviewProvider {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-        let viewModel = StartChatScreenViewModel(userSession: userSession, userIndicatorController: nil, userDiscoveryService: userDiscoveryService)
+        let viewModel = StartChatScreenViewModel(userSession: userSession,
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 analytics: ServiceLocator.shared.analytics,
+                                                 userIndicatorController: nil,
+                                                 userDiscoveryService: userDiscoveryService)
         return viewModel
     }()
     

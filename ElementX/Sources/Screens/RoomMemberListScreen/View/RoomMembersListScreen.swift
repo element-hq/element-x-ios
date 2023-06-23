@@ -82,7 +82,8 @@ struct RoomMembersListScreen_Previews: PreviewProvider {
             .mockCharlie
         ]
         return RoomMembersListScreenViewModel(roomProxy: RoomProxyMock(with: .init(displayName: "Some room", members: members)),
-                                              mediaProvider: MockMediaProvider())
+                                              mediaProvider: MockMediaProvider(),
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
     static var previews: some View {

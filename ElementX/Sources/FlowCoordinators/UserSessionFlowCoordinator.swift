@@ -60,6 +60,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   navigationStackCoordinator: detailNavigationStackCoordinator,
                                                   navigationSplitCoordinator: navigationSplitCoordinator,
                                                   emojiProvider: EmojiProvider(),
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         setupStateMachine()
@@ -180,7 +182,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder(),
+                                                         attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
                                                          bugReportService: bugReportService,
                                                          navigationStackCoordinator: detailNavigationStackCoordinator,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())

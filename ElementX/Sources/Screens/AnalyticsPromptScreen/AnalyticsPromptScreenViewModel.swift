@@ -23,8 +23,8 @@ class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, Analyt
     var callback: (@MainActor (AnalyticsPromptScreenViewModelAction) -> Void)?
     
     /// Initialize a view model with the specified prompt type and app display name.
-    init() {
-        let promptStrings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+    init(termsURL: URL) {
+        let promptStrings = AnalyticsPromptScreenStrings(termsURL: termsURL)
         super.init(initialViewState: AnalyticsPromptScreenViewState(strings: promptStrings))
     }
 

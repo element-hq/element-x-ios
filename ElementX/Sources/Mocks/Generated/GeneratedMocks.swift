@@ -16,15 +16,19 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
 
     //MARK: - start
 
-    var startCallsCount = 0
-    var startCalled: Bool {
-        return startCallsCount > 0
+    var startAnalyticsConfigurationCallsCount = 0
+    var startAnalyticsConfigurationCalled: Bool {
+        return startAnalyticsConfigurationCallsCount > 0
     }
-    var startClosure: (() -> Void)?
+    var startAnalyticsConfigurationReceivedAnalyticsConfiguration: AnalyticsConfiguration?
+    var startAnalyticsConfigurationReceivedInvocations: [AnalyticsConfiguration] = []
+    var startAnalyticsConfigurationClosure: ((AnalyticsConfiguration) -> Void)?
 
-    func start() {
-        startCallsCount += 1
-        startClosure?()
+    func start(analyticsConfiguration: AnalyticsConfiguration) {
+        startAnalyticsConfigurationCallsCount += 1
+        startAnalyticsConfigurationReceivedAnalyticsConfiguration = analyticsConfiguration
+        startAnalyticsConfigurationReceivedInvocations.append(analyticsConfiguration)
+        startAnalyticsConfigurationClosure?(analyticsConfiguration)
     }
     //MARK: - reset
 

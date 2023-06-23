@@ -20,10 +20,12 @@ import AuthenticationServices
 @MainActor
 class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProxyProtocol
+    private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
     
-    init(authenticationService: AuthenticationServiceProxyProtocol, presentationAnchor: UIWindow) {
+    init(authenticationService: AuthenticationServiceProxyProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
         self.authenticationService = authenticationService
+        self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor
         super.init()
     }
@@ -32,7 +34,7 @@ class OIDCAuthenticationPresenter: NSObject {
     func authenticate(using oidcData: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: oidcData.url,
-                                                     callbackURLScheme: ServiceLocator.shared.settings.oidcRedirectURL.scheme) { [weak self] url, error in
+                                                     callbackURLScheme: oidcRedirectURL.scheme) { [weak self] url, error in
                 guard let self else { return }
                 
                 guard let url else {

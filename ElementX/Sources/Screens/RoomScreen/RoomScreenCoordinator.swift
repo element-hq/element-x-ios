@@ -50,7 +50,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
-                                        roomProxy: parameters.roomProxy)
+                                        roomProxy: parameters.roomProxy,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        analytics: ServiceLocator.shared.analytics,
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     // MARK: - Public

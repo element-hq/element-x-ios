@@ -24,6 +24,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
         RoomTimelineController(userId: userId,
                                roomProxy: roomProxy,
                                timelineItemFactory: timelineItemFactory,
-                               mediaProvider: mediaProvider)
+                               mediaProvider: mediaProvider,
+                               appSettings: ServiceLocator.shared.settings)
     }
 }

@@ -39,7 +39,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomMembersListScreenViewModel(roomProxy: parameters.roomProxy,
-                                                   mediaProvider: parameters.mediaProvider)
+                                                   mediaProvider: parameters.mediaProvider,
+                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     func start() {

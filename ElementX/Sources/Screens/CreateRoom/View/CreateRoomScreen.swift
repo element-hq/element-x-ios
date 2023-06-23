@@ -211,14 +211,22 @@ struct CreateRoom_Previews: PreviewProvider {
         let parameters = CreateRoomFlowParameters()
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         
-        return CreateRoomViewModel(userSession: userSession, userIndicatorController: nil, createRoomParameters: .init(parameters), selectedUsers: .init(selectedUsers))
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init(selectedUsers),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: nil)
     }()
     
     static let emtpyViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let parameters = CreateRoomFlowParameters()
-        return CreateRoomViewModel(userSession: userSession, userIndicatorController: nil, createRoomParameters: .init(parameters), selectedUsers: .init([]))
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: nil)
     }()
     
     static var previews: some View {

@@ -21,12 +21,15 @@ typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewSt
 
 class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let appSettings: AppSettings
 
     var callback: ((SettingsScreenViewModelAction) -> Void)?
     
-    init(withUserSession userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings) {
         self.userSession = userSession
-        let bindings = SettingsScreenViewStateBindings(timelineStyle: ServiceLocator.shared.settings.timelineStyle)
+        self.appSettings = appSettings
+        
+        let bindings = SettingsScreenViewStateBindings(timelineStyle: appSettings.timelineStyle)
         
         var showSessionVerificationSection = false
         if let sessionVerificationController = userSession.sessionVerificationController {
@@ -37,10 +40,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            showSessionVerificationSection: showSessionVerificationSection,
-                                           showDeveloperOptions: ServiceLocator.shared.settings.canShowDeveloperOptions),
+                                           showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
-        ServiceLocator.shared.settings.$timelineStyle
+        appSettings.$timelineStyle
             .weakAssign(to: \.state.bindings.timelineStyle, on: self)
             .store(in: &cancellables)
 
@@ -88,7 +91,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .sessionVerification:
             callback?(.sessionVerification)
         case .changedTimelineStyle:
-            ServiceLocator.shared.settings.timelineStyle = state.bindings.timelineStyle
+            appSettings.timelineStyle = state.bindings.timelineStyle
         case .developerOptions:
             callback?(.developerOptions)
         }

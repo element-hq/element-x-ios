@@ -20,17 +20,28 @@ import SwiftUI
 typealias InvitesScreenViewModelType = StateStoreViewModel<InvitesScreenViewState, InvitesScreenViewAction>
 
 class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<InvitesScreenViewModelAction, Never> = .init()
     private let userSession: UserSessionProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let previouslySeenInvites: Set<String>
+    private let actionsSubject: PassthroughSubject<InvitesScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InvitesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol,
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
-        previouslySeenInvites = ServiceLocator.shared.settings.seenInvites
+        self.appSettings = appSettings
+        self.analytics = analytics
+        self.userIndicatorController = userIndicatorController
+        
+        previouslySeenInvites = appSettings.seenInvites
         super.init(initialViewState: InvitesScreenViewState(), imageProvider: userSession.mediaProvider)
         setupSubscriptions()
     }
@@ -68,7 +79,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
                 guard let self else { return }
                 
                 let invites = self.buildInvites(from: roomSummaries)
-                ServiceLocator.shared.settings.seenInvites = Set(invites.map(\.roomDetails.id))
+                appSettings.seenInvites = Set(invites.map(\.roomDetails.id))
                 self.state.invites = invites
                 
                 for invite in invites {
@@ -119,10 +130,10 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
         Task {
             let roomID = invite.roomDetails.id
             defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+                userIndicatorController.retractIndicatorWithId(roomID)
             }
             
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
                 displayError(.failedAcceptingInvite)
@@ -132,6 +143,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             switch await roomProxy.acceptInvitation() {
             case .success:
                 actionsSubject.send(.openRoom(withIdentifier: roomID))
+                analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
             case .failure(let error):
                 displayError(error)
             }
@@ -142,10 +154,10 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
         Task {
             let roomID = invite.roomDetails.id
             defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+                userIndicatorController.retractIndicatorWithId(roomID)
             }
             
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
                 displayError(.failedRejectingInvite)

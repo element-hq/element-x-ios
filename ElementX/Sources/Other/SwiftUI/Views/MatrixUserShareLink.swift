@@ -22,7 +22,8 @@ struct MatrixUserShareLink<Label: View>: View {
     
     init(userID: String, @ViewBuilder label: () -> Label) {
         self.label = label()
-        permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userID)
+        permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
+                                                      baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
     }
     
     var body: some View {

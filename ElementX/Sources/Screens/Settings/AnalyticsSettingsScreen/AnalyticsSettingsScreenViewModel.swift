@@ -20,14 +20,20 @@ import SwiftUI
 typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModel<AnalyticsSettingsScreenViewState, AnalyticsSettingsScreenViewAction>
 
 class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, AnalyticsSettingsScreenViewModelProtocol {
-    init() {
-        let strings = AnalyticsSettingsScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
-        let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: ServiceLocator.shared.analytics.isEnabled)
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    
+    init(appSettings: AppSettings, analytics: AnalyticsService) {
+        self.appSettings = appSettings
+        self.analytics = analytics
+        
+        let strings = AnalyticsSettingsScreenStrings(termsURL: appSettings.analyticsConfiguration.termsURL)
+        let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: analytics.isEnabled)
         let state = AnalyticsSettingsScreenViewState(strings: strings, bindings: bindings)
         
         super.init(initialViewState: state)
         
-        ServiceLocator.shared.settings.$analyticsConsentState
+        appSettings.$analyticsConsentState
             .map { $0 == .optedIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)
@@ -36,10 +42,10 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
     override func process(viewAction: AnalyticsSettingsScreenViewAction) {
         switch viewAction {
         case .toggleAnalytics:
-            if ServiceLocator.shared.analytics.isEnabled {
-                ServiceLocator.shared.analytics.optOut()
+            if analytics.isEnabled {
+                analytics.optOut()
             } else {
-                ServiceLocator.shared.analytics.optIn()
+                analytics.optIn()
             }
         }
     }

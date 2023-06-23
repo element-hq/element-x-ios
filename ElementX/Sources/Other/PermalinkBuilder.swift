@@ -39,8 +39,8 @@ enum PermalinkBuilder {
         return charset
     }()
     
-    static func detectPermalink(in url: URL) -> PermalinkType? {
-        guard url.absoluteString.hasPrefix(ServiceLocator.shared.settings.permalinkBaseURL.absoluteString) else {
+    static func detectPermalink(in url: URL, baseURL: URL) -> PermalinkType? {
+        guard url.absoluteString.hasPrefix(baseURL.absoluteString) else {
             return nil
         }
         
@@ -78,12 +78,12 @@ enum PermalinkBuilder {
         return nil
     }
     
-    static func permalinkTo(userIdentifier: String) throws -> URL {
+    static func permalinkTo(userIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixUserIdentifier(userIdentifier) else {
             throw PermalinkBuilderError.invalidUserIdentifier
         }
         
-        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(userIdentifier)"
+        let urlString = "\(baseURL)/#/\(userIdentifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -92,23 +92,23 @@ enum PermalinkBuilder {
         return url
     }
     
-    static func permalinkTo(roomIdentifier: String) throws -> URL {
+    static func permalinkTo(roomIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixRoomIdentifier(roomIdentifier) else {
             throw PermalinkBuilderError.invalidRoomIdentifier
         }
         
-        return try permalinkTo(roomIdentifierOrAlias: roomIdentifier)
+        return try permalinkTo(roomIdentifierOrAlias: roomIdentifier, baseURL: baseURL)
     }
     
-    static func permalinkTo(roomAlias: String) throws -> URL {
+    static func permalinkTo(roomAlias: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixRoomAlias(roomAlias) else {
             throw PermalinkBuilderError.invalidRoomAlias
         }
         
-        return try permalinkTo(roomIdentifierOrAlias: roomAlias)
+        return try permalinkTo(roomIdentifierOrAlias: roomAlias, baseURL: baseURL)
     }
     
-    static func permalinkTo(eventIdentifier: String, roomIdentifier: String) throws -> URL {
+    static func permalinkTo(eventIdentifier: String, roomIdentifier: String, baseURL: URL) throws -> URL {
         guard MatrixEntityRegex.isMatrixEventIdentifier(eventIdentifier) else {
             throw PermalinkBuilderError.invalidEventIdentifier
         }
@@ -121,7 +121,7 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(roomId)/\(eventId)"
+        let urlString = "\(baseURL)/#/\(roomId)/\(eventId)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -132,12 +132,12 @@ enum PermalinkBuilder {
     
     // MARK: - Private
     
-    private static func permalinkTo(roomIdentifierOrAlias: String) throws -> URL {
+    private static func permalinkTo(roomIdentifierOrAlias: String, baseURL: URL) throws -> URL {
         guard let identifier = roomIdentifierOrAlias.addingPercentEncoding(withAllowedCharacters: uriComponentCharacterSet) else {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(identifier)"
+        let urlString = "\(baseURL)/#/\(identifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
