@@ -29,6 +29,7 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case readReceiptsEnabled
+        case locationEventsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -185,13 +186,12 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    // MARK: Start Chat
-    
     @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var userSuggestionsEnabled
 
-    // MARK: Receipts
-
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
+
+    @UserPreference(key: UserDefaultsKeys.locationEventsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var locationEventsEnabled
 }

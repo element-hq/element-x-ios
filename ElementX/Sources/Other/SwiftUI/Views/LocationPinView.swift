@@ -14,12 +14,25 @@
 // limitations under the License.
 //
 
-import CoreLocation
+import SwiftUI
 
-protocol MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle,
-                      coordinates: CLLocationCoordinate2D,
-                      zoomLevel: Double,
-                      size: CGSize,
-                      attribution: MapTilerAttributionPlacement) -> URL?
+struct LocationPinView: View {
+    var body: some View {
+        Image(Asset.Images.locationPin.name)
+            .alignmentGuide(VerticalAlignment.center) { dimensions in
+                dimensions[.bottom]
+            }
+            .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 5)
+    }
+}
+
+struct LocationPinView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 30) {
+            LocationPinView()
+
+            LocationPinView()
+                .colorScheme(.dark)
+        }
+    }
 }

@@ -38,3 +38,11 @@ enum MapLibreError: Error {
     case failedLocatingUser
     case invalidLocationAuthorization
 }
+
+enum MapTilerAttributionPlacement: String {
+    case bottomRight = "bottomright"
+    case bottomLeft = "bottomleft"
+    case topLeft = "topleft"
+    case topRight = "topright"
+    case hidden = "false"
+}

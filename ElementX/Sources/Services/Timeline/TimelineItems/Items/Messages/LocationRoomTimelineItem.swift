@@ -14,12 +14,26 @@
 // limitations under the License.
 //
 
-import CoreLocation
+struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Hashable {
+    let id: String
 
-protocol MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle,
-                      coordinates: CLLocationCoordinate2D,
-                      zoomLevel: Double,
-                      size: CGSize,
-                      attribution: MapTilerAttributionPlacement) -> URL?
+    let timestamp: String
+    let isOutgoing: Bool
+    let isEditable: Bool
+
+    let sender: TimelineItemSender
+
+    let content: LocationRoomTimelineItemContent
+
+    var body: String {
+        content.body
+    }
+
+    var replyDetails: TimelineItemReplyDetails?
+
+    var properties = RoomTimelineItemProperties()
+
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .location(content)
+    }
 }
