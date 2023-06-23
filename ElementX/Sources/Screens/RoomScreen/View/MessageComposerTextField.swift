@@ -110,6 +110,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 }
             }
         }
+
+        if !focused {
+            textView.resignFirstResponder()
+        }
         
         DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
             if focused, textView.window != nil, !textView.isFirstResponder {
