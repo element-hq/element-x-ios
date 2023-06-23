@@ -99,6 +99,6 @@ struct TimelineReactionView_Previews: PreviewProvider {
                 AggregatedReaction(key: "🤭", count: 9, isHighlighted: true),
                 AggregatedReaction(key: "🫤", count: 10, isHighlighted: false)
             ], alignment: .leading) { _ in }
-        }.background(Color.red)
+        }
     }
 }
