@@ -72,7 +72,7 @@ struct TimelineReactionButton: View {
     }
     
     var overlayBackgroundColor: Color {
-        reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound._bgReactionButton
+        reaction.isHighlighted ? Color.compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
     }
     
     var overlayBorderColor: Color {
