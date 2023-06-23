@@ -18,6 +18,7 @@ import SwiftUI
 
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: RoomScreenViewModel.Context
+    @Environment(\.isPresented) var isPresented
     
     @State private var sheetContentHeight = CGFloat(0)
     
@@ -53,7 +54,7 @@ struct RoomAttachmentPicker: View {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
             }
-            .padding(.top, 20)
+            .padding(.top, isPresented ? 20 : 0)
             .background {
                 // This is done in the background otherwise GeometryReader tends to expand to
                 // all the space given to it like color or shape.
