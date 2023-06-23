@@ -2,14 +2,14 @@ name: Integration tests
 
 on:
   schedule:
-    - cron:  '0 2 * * 1-5'
+    - cron:  '0 * * * *'
     
   workflow_dispatch:
 
 jobs:
   integration_tests:
     name: Integration Tests
-    runs-on: macos-13
+    runs-on: perf-only
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
@@ -54,7 +54,6 @@ jobs:
           path: ~/Library/Logs/scan/IntegrationTests-IntegrationTests.log
           retention-days: 2
           if-no-files-found: ignore
-  
      
       - name: Checkout gh-pages branch (for perf stats)
         if: always()
