@@ -122,7 +122,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContent: some View {
-        if isMediaType {
+        if shouldFillBubble {
             contentWithTimestamp
                 .bubbleStyle(inset: false,
                              cornerRadius: cornerRadius,
@@ -138,7 +138,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        if isTextItem || isMediaType {
+        if isTextItem || shouldFillBubble {
             ZStack(alignment: .bottomTrailing) {
                 contentWithReply
                 interactiveLocalizedSendInfo
@@ -165,7 +165,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var backgroundedLocalizedSendInfo: some View {
-        if isMediaType {
+        if shouldFillBubble {
             localizedSendInfo
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
@@ -194,7 +194,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .font(.compound.bodyXS)
         .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
-        .padding(.bottom, isMediaType ? 0 : -4)
+        .padding(.bottom, shouldFillBubble ? 0 : -4)
     }
     
     @ViewBuilder
@@ -230,7 +230,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
 
-    private var isMediaType: Bool {
+    private var shouldFillBubble: Bool {
         switch timelineItem {
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem,
