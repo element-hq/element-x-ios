@@ -301,8 +301,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
-            let isHighlighted = false // reaction.details.contains(where: { $0.sender.id == userID })
-            return AggregatedReaction(key: reaction.key, count: Int(reaction.count), isHighlighted: isHighlighted)
+            AggregatedReaction(currentUserId: userID, key: reaction.key, senders: reaction.senders)
         }
     }
 

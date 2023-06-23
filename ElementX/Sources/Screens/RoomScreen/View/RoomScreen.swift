@@ -18,7 +18,6 @@ import SwiftUI
 
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
-    @State private var showReactionsMenuForItemId = ""
     @State private var dragOver = false
     
     private let attachmentButtonPadding = 10.0
@@ -49,6 +48,9 @@ struct RoomScreen: View {
                     TimelineItemMenu(item: info.item, actions: actions)
                         .environmentObject(context)
                 }
+            }
+            .sheet(item: $context.reactionSummaryInfo) {
+                ReactionsSummaryView(reactions: $0.reactions, imageProvider: MockMediaProvider(), selectedKey: $0.key)
             }
             .track(screen: .room)
             .task(id: context.viewState.roomId) {

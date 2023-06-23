@@ -66,22 +66,10 @@ struct TimelineReactionButton: View {
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            TimelineReactionButton(reaction: AggregatedReaction(key: "👍", count: 5, isHighlighted: true)) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction(key: "👏", count: 1, isHighlighted: false)) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction(key: "🎉", count: 20, isHighlighted: false)) { _ in }
-            
-            TimelineReactionsView(reactions: [
-                AggregatedReaction(key: "😅", count: 1, isHighlighted: true),
-                AggregatedReaction(key: "🤷‍♂️", count: 1, isHighlighted: false),
-                AggregatedReaction(key: "🎨", count: 6, isHighlighted: true),
-                AggregatedReaction(key: "🎉", count: 8, isHighlighted: false),
-                AggregatedReaction(key: "🤯", count: 15, isHighlighted: true),
-                AggregatedReaction(key: "🫣", count: 1, isHighlighted: false),
-                AggregatedReaction(key: "🚀", count: 3, isHighlighted: true),
-                AggregatedReaction(key: "😇", count: 2, isHighlighted: false),
-                AggregatedReaction(key: "🤭", count: 9, isHighlighted: true),
-                AggregatedReaction(key: "🫤", count: 10, isHighlighted: false)
-            ], alignment: .leading) { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, alignment: .leading) { _ in }
         }
     }
 }
