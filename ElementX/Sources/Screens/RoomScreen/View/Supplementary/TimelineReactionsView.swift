@@ -44,9 +44,11 @@ struct TimelineReactionButton: View {
         HStack(spacing: 4) {
             Text(reaction.key)
                 .font(.compound.bodyMD)
-            Text(String(reaction.count))
-                .font(.compound.bodyMD)
-                .foregroundColor(textColor)
+            if reaction.count > 1 {
+                Text(String(reaction.count))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(textColor)
+            }
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
@@ -57,7 +59,7 @@ struct TimelineReactionButton: View {
                     backgroundShape
                         .strokeBorder(overlayBorderColor)
                         .background(overlayBackgroundColor, in: backgroundShape)
-                        .padding(1)
+                        .padding(2)
                 )
         )
         .accessibilityElement(children: .combine)

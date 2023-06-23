@@ -89,9 +89,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var messageBubbleWithReactions: some View {
-        // Figma has a spacing of -4 but it doesn't take into account
-        // the centre aligned stroke width so we use -5 here
-        VStack(alignment: alignment, spacing: -5) {
+        // Figma overlaps reactions by 3
+        VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .accessibilityElement(children: .combine)
             

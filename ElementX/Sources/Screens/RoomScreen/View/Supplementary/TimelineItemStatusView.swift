@@ -58,11 +58,13 @@ struct TimelineItemStatusView: View {
             TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent:
             TimelineDeliveryStatusView(deliveryStatus: .sent)
-        case .none, .cancelled:
+        case .none:
             if isLastOutgoingMessage {
                 // We always display the sent icon for the latest echoed outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
+        case .cancelled:
+            EmptyView()
         case .sendingFailed:
             if style == .plain {
                 Image(systemName: "exclamationmark.circle.fill")
