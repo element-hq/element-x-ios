@@ -2682,8 +2682,8 @@
 		948DD12A5533BE1BC260E437 /* LocationSharing */ = {
 			isa = PBXGroup;
 			children = (
-				8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */,
 				C15E0017717EAE3A1D02D005 /* StaticLocationScreenCoordinator.swift */,
+				8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */,
 				F5311C989EC15B4C2D699025 /* StaticLocationScreenViewModel.swift */,
 				C616D90B1E2F033CAA325439 /* StaticLocationScreenViewModelProtocol.swift */,
 				9FD8D798D879069243A7E7F7 /* View */,

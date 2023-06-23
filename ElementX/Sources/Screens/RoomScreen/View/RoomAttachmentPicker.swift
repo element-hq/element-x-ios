@@ -53,6 +53,17 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
+                
+                Button {
+                    showAttachmentPopover = false
+                    context.send(viewAction: .displayLocationPicker)
+                } label: {
+                    Label(L10n.screenRoomAttachmentSourceLocation, image: "Images/location-pin")
+                        .labelStyle(FixedIconSizeLabelStyle())
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
+                }
             }
             .padding(.top, isPresented ? 20 : 0)
             .background {

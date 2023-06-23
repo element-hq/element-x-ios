@@ -22,18 +22,47 @@ struct StaticLocationScreen: View {
     private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
     
     var body: some View {
-        NavigationView {
-            mapView
-                .ignoresSafeArea(.all, edges: [.bottom])
-                .navigationBarTitleDisplayMode(.inline)
-                .alert(item: $context.alertInfo)
-        }
+        mapView
+            .ignoresSafeArea(.all, edges: .horizontal)
+            .navigationTitle(L10n.screenShareLocationTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
+            .alert(item: $context.alertInfo)
     }
     
     var mapView: MapLibreMapView {
         MapLibreMapView(builder: builder,
-                        showsUserLocationMode: .follow,
+                        showsUserLocationMode: .hide,
                         error: $context.mapError)
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            closeButton
+        }
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            shareLocationButton
+            Spacer()
+        }
+    }
+    
+    private var shareLocationButton: some View {
+        Button {
+            context.send(viewAction: .shareLocation)
+        } label: {
+            Label(L10n.screenShareLocationAction, image: "Images/location-pin")
+                .labelStyle(FixedIconSizeLabelStyle())
+        }
+    }
+    
+    private var closeButton: some View {
+        Button(L10n.actionCancel, action: close)
+    }
+    
+    private func close() {
+        context.send(viewAction: .close)
     }
 }
 

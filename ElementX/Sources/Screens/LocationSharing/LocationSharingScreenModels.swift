@@ -21,7 +21,9 @@ enum LocationSharingViewError: Error, Hashable {
     case mapError(MapLibreError)
 }
 
-enum StaticLocationScreenViewModelAction { }
+enum StaticLocationScreenViewModelAction {
+    case close
+}
 
 struct StaticLocationScreenViewState: BindableState {
     var bindings = StaticLocationScreenBindings()
@@ -45,4 +47,7 @@ struct StaticLocationScreenBindings {
     var alertInfo: AlertInfo<LocationSharingViewError>?
 }
 
-enum StaticLocationScreenViewAction { }
+enum StaticLocationScreenViewAction {
+    case close
+    case shareLocation
+}

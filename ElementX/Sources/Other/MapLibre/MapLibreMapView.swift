@@ -23,6 +23,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     private enum Constants {
         static let mapZoomLevel = 15.0
+        static let mapZoomLevelWithoutPermission = 5.0
     }
     
     // MARK: - Properties
@@ -68,7 +69,6 @@ struct MapLibreMapView: UIViewRepresentable {
 
         mapView.logoView.isHidden = true
         mapView.attributionButton.isHidden = true
-        mapView.zoomLevel = Constants.mapZoomLevel
         
         showUserLocation(in: mapView)
         
@@ -80,12 +80,15 @@ struct MapLibreMapView: UIViewRepresentable {
         case .follow:
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
+            mapView.zoomLevel = Constants.mapZoomLevel
         case .show:
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .none
+            mapView.zoomLevel = Constants.mapZoomLevel
         case .hide:
             mapView.showsUserLocation = false
             mapView.userTrackingMode = .none
+            mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
         }
     }
 }

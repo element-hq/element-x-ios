@@ -317,9 +317,8 @@
 "screen_session_verification_they_match" = "They match";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
+"screen_share_location_action" = "Share my location";
 "screen_share_location_title" = "Share location";
-"screen_share_my_location_action" = "Share my location";
-"screen_share_this_location_action" = "Share this location";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to sign out?";
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
