@@ -46,7 +46,7 @@ extension View {
     }
 }
 
-struct FakeContextMenu_Previews: PreviewProvider {
+struct LongPressWithFeedback_Previews: PreviewProvider {
     static var previews: some View { Preview() }
     
     struct Preview: View {
