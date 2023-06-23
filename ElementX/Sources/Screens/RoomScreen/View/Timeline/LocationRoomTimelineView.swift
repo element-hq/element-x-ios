@@ -40,7 +40,7 @@ private extension MapLibreStaticMapView {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
                   imageSize: size,
-                  attribution: .bottomleft,
+                  attributionPlacement: .bottomLeft,
                   mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
                                                     lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,
                                                     darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),

@@ -28,7 +28,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,
-                                                               isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled, 
+                                                               isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
                                                                locationEventsEnabled: appSettings.locationEventsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         

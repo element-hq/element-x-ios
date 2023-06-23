@@ -27,7 +27,7 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
         self.key = key
     }
     
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttribution) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
         var path: String
         switch style {
         case .light:

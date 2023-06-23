@@ -21,5 +21,5 @@ protocol MapTilerStaticMapProtocol {
                       coordinates: CLLocationCoordinate2D,
                       zoomLevel: Double,
                       size: CGSize,
-                      attribution: MapTilerAttribution) -> URL?
+                      attribution: MapTilerAttributionPlacement) -> URL?
 }
