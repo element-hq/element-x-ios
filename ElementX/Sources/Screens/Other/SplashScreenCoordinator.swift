@@ -27,10 +27,7 @@ class SplashScreenCoordinator: CoordinatorProtocol {
 /// these 2 screens are matched.
 struct SplashScreen: View {
     var body: some View {
-        Image(asset: Asset.Images.launchLogo)
-            .accessibilityHidden(true)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background { OnboardingBackgroundImage() }
+        Color.compound.bgCanvasDefault.ignoresSafeArea()
     }
 }
 
