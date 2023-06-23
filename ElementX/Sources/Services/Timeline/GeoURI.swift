@@ -51,16 +51,16 @@ struct GeoURI: Hashable {
     // MARK: - Private
 
     // Parse a geo URI string like "geo:53.99803101552848,-8.25347900390625;u=10"
-    private static func parseGeoURI(from geoURIString: String) -> GeoURI? {
+    private static func parseGeoURI(from string: String) -> GeoURI? {
         guard
-            let match = try? RegexGeoURI.standard.wholeMatch(in: geoURIString),
-            let latitude = Double(match.output.latitude),
-            let longitude = Double(match.output.longitude)
+            let matchOutput = try? RegexGeoURI.standard.wholeMatch(in: string)?.output,
+            let latitude = Double(matchOutput.latitude),
+            let longitude = Double(matchOutput.longitude)
         else {
             return nil
         }
 
-        let uncertainty = match.output.uncertainty.flatMap(Double.init)
+        let uncertainty = matchOutput.uncertainty.flatMap(Double.init)
         return .init(latitude: latitude, longitude: longitude, uncertainty: uncertainty)
     }
 }
