@@ -167,7 +167,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
             """
         ]
         
-        let attributedStringBuilder = AttributedStringBuilder()
+        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
         
         VStack(alignment: .leading, spacing: 24.0) {
             ForEach(htmlStrings, id: \.self) { htmlString in

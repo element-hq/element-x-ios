@@ -174,8 +174,10 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                           mediaProvider: MockMediaProvider())
 
         let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder(),
-                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
+                                            attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
+                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> HomeScreenRoom? in
             switch summary {

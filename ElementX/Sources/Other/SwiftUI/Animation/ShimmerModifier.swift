@@ -73,8 +73,10 @@ extension View {
 struct ShimmerOverlay_Previews: PreviewProvider {
     static let viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: ""),
                                                                             mediaProvider: MockMediaProvider()),
-                                               attributedStringBuilder: AttributedStringBuilder(),
-                                               selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher())
+                                               attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
+                                               selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                               appSettings: ServiceLocator.shared.settings,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
     
     static var previews: some View {
         VStack {

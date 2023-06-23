@@ -88,7 +88,10 @@ struct RoomAttachmentPicker: View {
 struct RoomAttachmentPicker_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                               roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analytics: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
     }

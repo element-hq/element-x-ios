@@ -27,17 +27,22 @@ enum MockServerSelectionScreenState: CaseIterable {
         switch self {
         case .matrix:
             return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
+                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                   isModallyPresented: true)
+                                                  
         case .emptyAddress:
             return ServerSelectionScreenViewModel(homeserverAddress: "",
+                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                   isModallyPresented: true)
         case .invalidAddress:
             let viewModel = ServerSelectionScreenViewModel(homeserverAddress: "thisisbad",
+                                                           slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                            isModallyPresented: true)
             viewModel.displayError(.footerMessage(L10n.errorUnknown))
             return viewModel
         case .nonModal:
             return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
+                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                   isModallyPresented: false)
         }
     }

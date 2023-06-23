@@ -27,23 +27,29 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         static let toastErrorID = "RoomScreenToastError"
     }
 
-    private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
+    private let roomProxy: RoomProxyProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol = ServiceLocator.shared.userIndicatorController) {
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.appSettings = appSettings
+        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatarURL: roomProxy.avatarURL,
-                                                         timelineStyle: ServiceLocator.shared.settings.timelineStyle,
-                                                         readReceiptsEnabled: ServiceLocator.shared.settings.readReceiptsEnabled,
+                                                         timelineStyle: appSettings.timelineStyle,
+                                                         readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
@@ -150,11 +156,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
 
-        ServiceLocator.shared.settings.$timelineStyle
+        appSettings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
             .store(in: &cancellables)
 
-        ServiceLocator.shared.settings.$readReceiptsEnabled
+        appSettings.$readReceiptsEnabled
             .weakAssign(to: \.state.readReceiptsEnabled, on: self)
             .store(in: &cancellables)
 
@@ -310,7 +316,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             break
         }
 
-        ServiceLocator.shared.analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
+        analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
     }
     
     private func displayError(_ type: RoomScreenErrorType) {
@@ -375,7 +381,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.report)
         }
         
-        var debugActions: [TimelineItemMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
+        var debugActions: [TimelineItemMenuAction] = appSettings.canShowDeveloperOptions ? [.viewSource] : []
         
         if let item = timelineItem as? EncryptedRoomTimelineItem,
            case let .megolmV1AesSha2(sessionID) = item.encryptionType {
@@ -393,7 +399,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions, debugActions: debugActions)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -417,7 +423,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             setComposerMode(.edit(originalItemId: messageTimelineItem.id))
         case .copyPermalink:
             do {
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID)
+                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID,
+                                                                 baseURL: appSettings.permalinkBaseURL)
                 UIPasteboard.general.url = permalink
             } catch {
                 displayError(.alert(L10n.errorFailedCreatingThePermalink))
@@ -621,5 +628,8 @@ private extension RoomProxyProtocol {
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
-                                          roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")))
+                                          roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analytics: ServiceLocator.shared.analytics,
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
 }

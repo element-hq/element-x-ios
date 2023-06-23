@@ -31,7 +31,9 @@ class AnalyticsTests: XCTestCase {
         ServiceLocator.shared.register(bugReportService: bugReportService)
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        ServiceLocator.shared.register(analytics: Analytics(client: analyticsClient))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
+                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   bugReportService: ServiceLocator.shared.bugReportService))
     }
     
     func testAnalyticsPromptNewUser() {
@@ -70,7 +72,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(ServiceLocator.shared.settings.analyticsConsentState, .unknown)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
-        XCTAssertFalse(analyticsClient.startCalled)
+        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertFalse(bugReportService.startCalled)
     }
 
@@ -97,7 +99,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(appSettings.analyticsConsentState, .optedIn)
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         // Analytics client and the bug report service should have been started
-        XCTAssertTrue(analyticsClient.startCalled)
+        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertTrue(bugReportService.startCalled)
     }
 
@@ -107,7 +109,7 @@ class AnalyticsTests: XCTestCase {
         // Analytics should not start
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertFalse(analyticsClient.startCalled)
+        XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertFalse(bugReportService.startCalled)
     }
     
@@ -117,7 +119,7 @@ class AnalyticsTests: XCTestCase {
         // Analytics should start
         XCTAssertTrue(ServiceLocator.shared.analytics.isEnabled)
         ServiceLocator.shared.analytics.startIfEnabled()
-        XCTAssertTrue(analyticsClient.startCalled)
+        XCTAssertTrue(analyticsClient.startAnalyticsConfigurationCalled)
         XCTAssertTrue(bugReportService.startCalled)
     }
     
@@ -172,7 +174,7 @@ class AnalyticsTests: XCTestCase {
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil,
                                                                   allChatsActiveFilter: nil))
-        client.start()
+        client.start(analyticsConfiguration: ServiceLocator.shared.settings.analyticsConfiguration)
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
         XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")

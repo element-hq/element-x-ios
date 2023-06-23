@@ -21,22 +21,28 @@ typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, Cre
 
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     private var createRoomParameters: CreateRoomFlowParameters
+    private let analytics: AnalyticsService
     private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    
+    private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(userSession: UserSessionProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol?,
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
-         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>) {
+         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
+         analytics: AnalyticsService,
+         userIndicatorController: UserIndicatorControllerProtocol?) {
         let parameters = createRoomParameters.value
+        
         self.userSession = userSession
-        self.userIndicatorController = userIndicatorController
         self.createRoomParameters = parameters
+        self.analytics = analytics
+        self.userIndicatorController = userIndicatorController
+        
         let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
         super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), imageProvider: userSession.mediaProvider)
@@ -156,7 +162,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                             userIDs: state.selectedUsers.map(\.userID),
                                             avatarURL: avatarURL) {
         case .success(let roomId):
-            ServiceLocator.shared.analytics.trackCreatedRoom(isDM: false)
+            analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)

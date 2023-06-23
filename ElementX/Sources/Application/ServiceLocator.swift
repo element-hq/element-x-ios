@@ -39,9 +39,9 @@ class ServiceLocator {
         self.networkMonitor = networkMonitor
     }
     
-    private(set) var analytics: Analytics!
+    private(set) var analytics: AnalyticsService!
     
-    func register(analytics: Analytics) {
+    func register(analytics: AnalyticsService) {
         self.analytics = analytics
     }
     

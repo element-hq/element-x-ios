@@ -28,7 +28,9 @@ class ServerSelectionViewModelTests: XCTestCase {
     var context: ServerSelectionScreenViewModelType.Context!
     
     @MainActor override func setUp() {
-        viewModel = ServerSelectionScreenViewModel(homeserverAddress: "", isModallyPresented: true)
+        viewModel = ServerSelectionScreenViewModel(homeserverAddress: "",
+                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
+                                                   isModallyPresented: true)
         context = viewModel.context
     }
 

@@ -50,7 +50,9 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
         
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
                                         attributedStringBuilder: parameters.attributedStringBuilder,
-                                        selectedRoomPublisher: parameters.selectedRoomPublisher)
+                                        selectedRoomPublisher: parameters.selectedRoomPublisher,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         viewModel.callback = { [weak self] action in
             guard let self else { return }

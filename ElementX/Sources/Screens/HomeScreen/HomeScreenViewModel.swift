@@ -21,9 +21,12 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private let appSettings: AppSettings
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     private let inviteSummaryProvider: RoomSummaryProviderProtocol?
-    private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var visibleItemRangeObservationToken: AnyCancellable?
     private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
@@ -33,9 +36,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     init(userSession: UserSessionProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         selectedRoomPublisher: CurrentValuePublisher<String?, Never>) {
+         selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
+         appSettings: AppSettings,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
+        self.appSettings = appSettings
+        self.userIndicatorController = userIndicatorController
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
@@ -123,7 +130,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         inviteSummaryProvider.roomListPublisher
-            .combineLatest(ServiceLocator.shared.settings.$seenInvites)
+            .combineLatest(appSettings.$seenInvites)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] summaries, readInvites in
                 self?.state.hasPendingInvitations = !summaries.isEmpty
@@ -264,9 +271,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func startLeaveRoomProcess(roomId: String) {
         Task {
             defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+                userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
             }
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
             
             let room = await userSession.clientProxy.roomForIdentifier(roomId)
             
@@ -286,9 +293,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func leaveRoom(roomId: String) {
         Task {
             defer {
-                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+                userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
             }
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
+            userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
             
             let room = await userSession.clientProxy.roomForIdentifier(roomId)
             let result = await room?.leaveRoom()
@@ -297,10 +304,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .none, .some(.failure):
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
             case .some(.success):
-                ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
-                                                                                            type: .modal(progress: .none, interactiveDismissDisabled: false),
-                                                                                            title: L10n.commonCurrentUserLeftRoom,
-                                                                                            iconName: "checkmark"))
+                userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
+                                                                      type: .modal(progress: .none, interactiveDismissDisabled: false),
+                                                                      title: L10n.commonCurrentUserLeftRoom,
+                                                                      iconName: "checkmark"))
                 callback?(.roomLeft(roomIdentifier: roomId))
             }
         }

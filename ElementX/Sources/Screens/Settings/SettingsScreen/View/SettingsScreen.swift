@@ -194,7 +194,8 @@ struct SettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        return SettingsScreenViewModel(withUserSession: userSession)
+        return SettingsScreenViewModel(userSession: userSession,
+                                       appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {

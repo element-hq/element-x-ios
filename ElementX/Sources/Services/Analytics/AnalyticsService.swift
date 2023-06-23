@@ -30,12 +30,16 @@ import PostHog
 /// To add a new event create a PR to that repo with the new/updated schema. Once merged
 /// into `main`, update the AnalyticsEvents Swift package in `project.yml`.
 ///
-class Analytics {
+class AnalyticsService {
     /// The analytics client to send events with.
     private let client: AnalyticsClientProtocol
+    private let appSettings: AppSettings
+    private let bugReportService: BugReportServiceProtocol
 
-    init(client: AnalyticsClientProtocol) {
+    init(client: AnalyticsClientProtocol, appSettings: AppSettings, bugReportService: BugReportServiceProtocol) {
         self.client = client
+        self.appSettings = appSettings
+        self.bugReportService = bugReportService
     }
         
     /// Whether or not the object is enabled and sending events to the server.
@@ -44,27 +48,27 @@ class Analytics {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        ServiceLocator.shared.settings.analyticsConsentState == .unknown && ServiceLocator.shared.settings.analyticsConfiguration.isEnabled
+        appSettings.analyticsConsentState == .unknown && appSettings.analyticsConfiguration.isEnabled
     }
     
     var isEnabled: Bool {
-        ServiceLocator.shared.settings.analyticsConsentState == .optedIn
+        appSettings.analyticsConsentState == .optedIn
     }
     
     /// Opts in to analytics tracking with the supplied user session.
     func optIn() {
-        ServiceLocator.shared.settings.analyticsConsentState = .optedIn
+        appSettings.analyticsConsentState = .optedIn
         startIfEnabled()
     }
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
     func optOut() {
-        ServiceLocator.shared.settings.analyticsConsentState = .optedOut
+        appSettings.analyticsConsentState = .optedOut
         
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
         client.stop()
-        ServiceLocator.shared.bugReportService.stop()
+        bugReportService.stop()
         MXLog.info("Stopped.")
     }
     
@@ -72,8 +76,8 @@ class Analytics {
     func startIfEnabled() {
         guard isEnabled, !isRunning else { return }
         
-        client.start()
-        ServiceLocator.shared.bugReportService.start()
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        bugReportService.start()
 
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }
@@ -87,14 +91,14 @@ class Analytics {
     /// Note: **MUST** be called before stopping PostHog or the reset is ignored.
     func reset() {
         client.reset()
-        ServiceLocator.shared.bugReportService.reset()
+        bugReportService.reset()
         MXLog.info("Reset.")
     }
     
     /// Reset the consent state for analytics
     func resetConsentState() {
         MXLog.warning("Resetting consent state for analytics.")
-        ServiceLocator.shared.settings.analyticsConsentState = .unknown
+        appSettings.analyticsConsentState = .unknown
     }
     
     /// Flushes the event queue in the analytics client, uploading all pending events.
@@ -116,7 +120,7 @@ class Analytics {
 
 // MARK: - Public tracking methods
 
-extension Analytics {
+extension AnalyticsService {
     /// Track the presentation of a screen
     /// - Parameter screen: The screen that was shown
     /// - Parameter duration: An optional value representing how long the screen was shown for in milliseconds.

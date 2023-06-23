@@ -42,6 +42,7 @@ protocol RoomMemberProxyProtocol: AnyObject {
 
 extension RoomMemberProxyProtocol {
     var permalink: URL? {
-        try? PermalinkBuilder.permalinkTo(userIdentifier: userID)
+        try? PermalinkBuilder.permalinkTo(userIdentifier: userID,
+                                          baseURL: ServiceLocator.shared.settings.permalinkBaseURL)
     }
 }

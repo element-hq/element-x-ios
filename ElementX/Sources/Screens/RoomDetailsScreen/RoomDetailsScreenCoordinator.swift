@@ -23,6 +23,7 @@ struct RoomDetailsScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -45,7 +46,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomDetailsScreenViewModel(accountUserID: parameters.accountUserID,
                                                roomProxy: parameters.roomProxy,
-                                               mediaProvider: parameters.mediaProvider)
+                                               mediaProvider: parameters.mediaProvider,
+                                               userIndicatorController: parameters.userIndicatorController)
     }
     
     // MARK: - Public
@@ -175,9 +177,9 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 return
             }
             
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.commonUnableToInviteTitle,
-                                                                            message: L10n.commonUnableToInviteMessage)
+            parameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                 title: L10n.commonUnableToInviteTitle,
+                                                                 message: L10n.commonUnableToInviteMessage)
         }
     }
 }

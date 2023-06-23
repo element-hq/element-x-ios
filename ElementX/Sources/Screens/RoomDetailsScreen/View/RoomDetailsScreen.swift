@@ -258,7 +258,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
         
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
     static let dmRoomViewModel = {
@@ -276,7 +277,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
         
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
     static var previews: some View {

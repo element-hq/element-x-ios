@@ -20,12 +20,18 @@ typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersLi
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private var members: [RoomMemberProxyProtocol] = []
     
     var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
 
-    init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(roomProxy: RoomProxyProtocol,
+         mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
+        
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount),
                    imageProvider: mediaProvider)
         
@@ -108,11 +114,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private let userIndicatorID = UUID().uuidString
     
     private func showLoader() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
     }
     
     private func hideLoader() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(userIndicatorID)
+        userIndicatorController.retractIndicatorWithId(userIndicatorID)
     }
 }
 

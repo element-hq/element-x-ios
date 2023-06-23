@@ -21,19 +21,28 @@ typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenView
 
 class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private weak var userIndicatorController: UserIndicatorControllerProtocol?
     private let userDiscoveryService: UserDiscoveryServiceProtocol
+    
+    private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<StartChatScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
-    
-    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?, userDiscoveryService: UserDiscoveryServiceProtocol) {
+    init(userSession: UserSessionProtocol,
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
+         userIndicatorController: UserIndicatorControllerProtocol?,
+         userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
+        self.appSettings = appSettings
+        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
+        
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.userID), imageProvider: userSession.mediaProvider)
         
         setupBindings()
@@ -106,7 +115,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     }
     
     private func fetchSuggestions() {
-        guard ServiceLocator.shared.settings.userSuggestionsEnabled else {
+        guard appSettings.userSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }
@@ -133,7 +142,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         showLoadingIndicator()
         switch await clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
-            ServiceLocator.shared.analytics.trackCreatedRoom(isDM: true)
+            analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)

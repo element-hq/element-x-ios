@@ -24,6 +24,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
+    private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
@@ -44,12 +45,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(userId: String,
          roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         appSettings: AppSettings) {
         self.userId = userId
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
+        self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         timelineProvider
@@ -304,7 +307,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
-        if !ServiceLocator.shared.settings.shouldCollapseRoomStateEvents {
+        if !appSettings.shouldCollapseRoomStateEvents {
             return false
         }
         

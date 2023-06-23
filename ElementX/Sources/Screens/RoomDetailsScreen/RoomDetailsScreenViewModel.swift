@@ -22,6 +22,7 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreen
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
 
     private var accountOwner: RoomMemberProxyProtocol? {
         didSet { updatePowerLevelPermissions() }
@@ -33,9 +34,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
+        
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
@@ -145,9 +149,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
     private func leaveRoom() async {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
         let result = await roomProxy.leaveRoom()
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+        userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
         switch result {
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .unknown)

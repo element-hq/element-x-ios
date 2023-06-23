@@ -19,12 +19,16 @@ import SwiftUI
 typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelectionScreenViewState, ServerSelectionScreenViewAction>
 
 class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, ServerSelectionScreenViewModelProtocol {
+    private let slidingSyncLearnMoreURL: URL
+    
     var callback: (@MainActor (ServerSelectionScreenViewModelAction) -> Void)?
 
-    init(homeserverAddress: String, isModallyPresented: Bool) {
+    init(homeserverAddress: String, slidingSyncLearnMoreURL: URL, isModallyPresented: Bool) {
+        self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         
-        super.init(initialViewState: ServerSelectionScreenViewState(bindings: bindings,
+        super.init(initialViewState: ServerSelectionScreenViewState(slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
+                                                                    bindings: bindings,
                                                                     isModallyPresented: isModallyPresented))
     }
     
@@ -46,7 +50,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
                 state.footerErrorMessage = message
             }
         case .slidingSyncAlert:
-            let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
+            let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage,

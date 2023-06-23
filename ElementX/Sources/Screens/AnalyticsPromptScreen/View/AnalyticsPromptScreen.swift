@@ -93,7 +93,7 @@ struct AnalyticsPromptScreen: View {
 // MARK: - Previews
 
 struct AnalyticsPromptScreen_Previews: PreviewProvider {
-    static let viewModel = AnalyticsPromptScreenViewModel()
+    static let viewModel = AnalyticsPromptScreenViewModel(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     static var previews: some View {
         AnalyticsPromptScreen(context: viewModel.context)
     }

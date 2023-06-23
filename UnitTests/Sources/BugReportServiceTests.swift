@@ -50,6 +50,7 @@ class BugReportServiceTests: XCTestCase {
         let service = BugReportService(withBaseURL: URL(staticString: "https://www.example.com"),
                                        sentryURL: URL(staticString: "https://1234@sentry.com/1234"),
                                        applicationId: "mock_app_id",
+                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock)
         XCTAssertFalse(service.crashedLastRun)
     }
@@ -58,6 +59,7 @@ class BugReportServiceTests: XCTestCase {
         let service = BugReportService(withBaseURL: URL(staticString: "https://www.example.com"),
                                        sentryURL: URL(staticString: "https://1234@sentry.com/1234"),
                                        applicationId: "mock_app_id",
+                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock)
 
         let bugReport = BugReport(userID: "@mock:client.com",
