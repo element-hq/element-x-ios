@@ -58,12 +58,13 @@ struct TimelineItemStatusView: View {
             TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent:
             TimelineDeliveryStatusView(deliveryStatus: .sent)
-        case .none, .cancelled:
+        case .none:
             if isLastOutgoingMessage {
                 // We always display the sent icon for the latest echoed outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
+            // The bubbles handle the failure internally
             if style == .plain {
                 Image(systemName: "exclamationmark.circle.fill")
                     .resizable()
@@ -73,7 +74,8 @@ struct TimelineItemStatusView: View {
                         context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
                     }
             }
-            // The bubbles handle the failure internally
+        case .cancelled:
+            EmptyView()
         }
     }
 
