@@ -52,16 +52,10 @@ struct TimelineReactionButton: View {
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
-        .background(
-            backgroundShape
-                .fill(Color.compound.bgCanvasDefault)
-                .overlay(
-                    backgroundShape
-                        .strokeBorder(overlayBorderColor)
-                        .background(overlayBackgroundColor, in: backgroundShape)
-                        .padding(2)
-                )
-        )
+        .background(backgroundShape.fill(overlayBackgroundColor))
+        .overlay(backgroundShape.strokeBorder(overlayBorderColor))
+        .padding(2)
+        .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
         .accessibilityElement(children: .combine)
     }
     
@@ -74,11 +68,11 @@ struct TimelineReactionButton: View {
     }
     
     var overlayBackgroundColor: Color {
-        reaction.isHighlighted ? Color.compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
+        reaction.isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
     }
     
     var overlayBorderColor: Color {
-        reaction.isHighlighted ? Color.compound.textSecondary : .compound.bgCanvasDefault
+        reaction.isHighlighted ? Color.compound.borderInteractivePrimary : .clear
     }
 }
 

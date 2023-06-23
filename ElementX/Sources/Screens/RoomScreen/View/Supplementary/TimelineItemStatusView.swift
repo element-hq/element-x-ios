@@ -63,8 +63,6 @@ struct TimelineItemStatusView: View {
                 // We always display the sent icon for the latest echoed outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
-        case .cancelled:
-            EmptyView()
         case .sendingFailed:
             // The bubbles handle the failure internally
             if style == .plain {
