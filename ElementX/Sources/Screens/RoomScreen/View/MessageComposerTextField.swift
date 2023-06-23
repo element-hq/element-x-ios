@@ -81,7 +81,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-                
+
         return textView
     }
     
@@ -111,14 +111,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
             }
         }
 
-        if !focused {
+        if !focused, textView.isFirstResponder {
             textView.resignFirstResponder()
-        }
-        
-        DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
-            if focused, textView.window != nil, !textView.isFirstResponder {
-                textView.becomeFirstResponder()
-            }
+        } else if focused, textView.window != nil, !textView.isFirstResponder {
+            textView.becomeFirstResponder()
         }
     }
 
