@@ -19,11 +19,11 @@ import XCTest
 
 final class GeoURITests: XCTestCase {
     func testValidPositiveCoordinates() throws {
-        let string = "geo:53.99803101552848,8.25347900390625;u=10.0"
+        let string = "geo:53.99803101552848,8.25347900390625;u=10.123"
         let uri = try XCTUnwrap(GeoURI(string: string))
         XCTAssertEqual(uri.latitude, 53.99803101552848)
         XCTAssertEqual(uri.longitude, 8.25347900390625)
-        XCTAssertEqual(uri.uncertainty, 10)
+        XCTAssertEqual(uri.uncertainty, 10.123)
         XCTAssertEqual(uri.string, string)
     }
 
