@@ -52,49 +52,22 @@ struct GeoURI: Hashable {
 
     // Parse a geo URI string like "geo:53.99803101552848,-8.25347900390625;u=10"
     private static func parseGeoURI(from geoURIString: String) -> GeoURI? {
-        let matches = NSRegularExpression.geoURI.matches(in: geoURIString, range: geoURIString.nsRange)
-
-        guard let match = matches.first else {
-            return nil
-        }
-
-        var groups: [String] = []
-        for rangeIndex in 1..<match.numberOfRanges {
-            let range = match.range(at: rangeIndex)
-            guard range.location != NSNotFound else {
-                continue
-            }
-            let string = (geoURIString as NSString).substring(with: range)
-            groups.append(string)
-        }
-
-        // index 0: latitude
-        // index 1: longitude
-        // index 2: uncertainty (if any)
-        guard groups.count >= 2 else {
-            return nil
-        }
-
         guard
-            let latitude = groups[safe: 0].flatMap(Double.init),
-            let longitude = groups[safe: 1].flatMap(Double.init)
+            let match = try? RegexGeoURI.standard.wholeMatch(in: geoURIString),
+            let latitude = Double(match.output.latitude),
+            let longitude = Double(match.output.longitude)
         else {
             return nil
         }
 
-        let uncertainty = groups[safe: 2].flatMap(Double.init)
-
-        return GeoURI(latitude: latitude, longitude: longitude, uncertainty: uncertainty)
+        let uncertainty = match.output.uncertainty.flatMap(Double.init)
+        return .init(latitude: latitude, longitude: longitude, uncertainty: uncertainty)
     }
 }
 
-private extension NSRegularExpression {
-    // swiftlint:disable:next force_try
-    static let geoURI = try! NSRegularExpression(pattern: #"^geo:(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)(?:;u=(\d+(?:\.\d+)?))?$"#, options: .anchorsMatchLines)
-}
+// swiftlint:disable:next large_tuple
+private typealias RegexGeoURI = Regex<(Substring, latitude: Substring, longitude: Substring, uncertainty: Substring?)>
 
-private extension String {
-    var nsRange: NSRange {
-        NSRange(location: 0, length: utf16.count)
-    }
+private extension RegexGeoURI {
+    static let standard: Self = /geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?/
 }
