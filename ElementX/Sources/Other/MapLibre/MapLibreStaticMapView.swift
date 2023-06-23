@@ -21,27 +21,34 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let coordinates: CLLocationCoordinate2D
     private let zoomLevel: Double
     private let mapTilerStatic: MapTilerStaticMapProtocol
+    private let mapTilerAttributionPlacement: MapTilerAttributionPlacement
     private let pinAnnotationView: PinAnnotation
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric private var height: CGFloat
-    @ScaledMetric private var width: CGFloat
-    @State private var attempt = 0
+    private let imageSize: CGSize
+    @State private var fetchAttempt = 0
     
-    init(coordinates: CLLocationCoordinate2D, zoomLevel: Double, mapTilerStatic: MapTilerStaticMapProtocol, height: CGFloat, width: CGFloat, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+    init(coordinates: CLLocationCoordinate2D,
+         zoomLevel: Double,
+         imageSize: CGSize,
+         attributionPlacement: MapTilerAttributionPlacement,
+         mapTilerStatic: MapTilerStaticMapProtocol,
+         @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.coordinates = coordinates
         self.zoomLevel = zoomLevel
         self.mapTilerStatic = mapTilerStatic
-        _height = .init(wrappedValue: height)
-        _width = .init(wrappedValue: width)
+        self.imageSize = imageSize
+        mapTilerAttributionPlacement = attributionPlacement
         self.pinAnnotationView = pinAnnotationView()
     }
     
     var body: some View {
-        if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: .init(width: width, height: height)) {
+        if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: imageSize, attribution: mapTilerAttributionPlacement) {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .empty:
                     Image("mapBlurred")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                 case .success(let image):
                     ZStack {
                         image
@@ -55,17 +62,16 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                     EmptyView()
                 }
             }
-            .id(attempt)
-            .frame(width: width, height: height)
+            .id(fetchAttempt)
             .clipped()
         } else {
             Image("mapBlurred")
         }
     }
     
-    var errorView: some View {
+    private var errorView: some View {
         Button {
-            attempt += 1
+            fetchAttempt += 1
         } label: {
             ZStack {
                 Image("mapBlurred")
@@ -95,8 +101,9 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
     static var previews: some View {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,
-                              mapTilerStatic: MapTilerStaticMapMock(),
-                              height: 150, width: 300) {
+                              imageSize: .init(width: 300, height: 200),
+                              attributionPlacement: .bottomLeft,
+                              mapTilerStatic: MapTilerStaticMapMock()) {
             Image(systemName: "mappin.circle.fill")
                 .padding(.bottom, 35)
         }
@@ -104,7 +111,7 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
 }
 
 private struct MapTilerStaticMapMock: MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
         switch style {
         case .light:
             return URL(string: "https://www.maptiler.com/img/cloud/home/map5.webp")

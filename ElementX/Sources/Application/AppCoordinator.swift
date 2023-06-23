@@ -322,7 +322,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             fatalError("User session not setup")
         }
         
-        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
@@ -533,13 +533,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         let identifier = "StaleDataIndicator"
         
+        func showLoadingIndicator() {
+            ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+        }
+        
+        showLoadingIndicator()
+        
         clientProxyObserver = userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
             .sink { action in
                 switch action {
                 case .startedUpdating:
-                    ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                    showLoadingIndicator()
                 case .receivedSyncUpdate:
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
                 default:
@@ -557,6 +563,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                selector: #selector(applicationDidBecomeActive),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillTerminate),
+                                               name: UIApplication.willTerminateNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillTerminate() {
+        userSession?.clientProxy.stopSync()
     }
 
     @objc

@@ -20,9 +20,25 @@ import MatrixRustSDK
 
 enum RoomSummaryProviderState {
     case notLoaded
-    case preloaded
-    case partiallyLoaded
-    case fullyLoaded
+    case loaded(totalNumberOfRooms: UInt)
+    
+    var isLoaded: Bool {
+        switch self {
+        case .loaded:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var totalNumberOfRooms: UInt? {
+        switch self {
+        case .loaded(let totalNumberOfRooms):
+            return totalNumberOfRooms
+        default:
+            return nil
+        }
+    }
 }
 
 enum RoomSummary: CustomStringConvertible {
@@ -61,19 +77,15 @@ enum RoomSummary: CustomStringConvertible {
 }
 
 protocol RoomSummaryProviderProtocol {
-    typealias EntriesFunction = (RoomListEntriesListener) async throws -> RoomListEntriesResult
-    typealias LoadingStateFunction = (SlidingSyncListStateObserver) async throws -> RoomListEntriesLoadingStateResult
-    
     /// Publishes the currently available room summaries
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
     
     /// Publishes the current state the summary provider is finding itself in
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> { get }
     
-    /// A separate subscription method is needed instead of running this in the constructor because the invites list is added later on the Rust side.
+    /// This is outside of the constructor because the invites list is added later on the Rust side.
     /// Wanted to be able to build the InvitesSummaryProvider directly instead of having to inform the HomeScreenViewModel about it later
-    func subscribeIfNecessary(entriesFunction: EntriesFunction,
-                              entriesLoadingStateFunction: LoadingStateFunction?) async
+    func setRoomList(_ roomList: RoomList)
     
     func updateVisibleRange(_ range: Range<Int>)
 }

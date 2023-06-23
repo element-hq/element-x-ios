@@ -29,6 +29,7 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case readReceiptsEnabled
+        case locationEventsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -163,9 +164,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
 
-    /// A set of all the notification identifiers that have been served so far, it's reset every time the app is launched
-    @UserPreference(key: SharedUserDefaultsKeys.servedNotificationIdentifiers, initialValue: [], storageType: .userDefaults(store))
-    var servedNotificationIdentifiers: Set<String>
+    /// Tag describing if the app and the NSE should use the encryption sync
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var isEncryptionSyncEnabled
         
     // MARK: - Other
     
@@ -185,13 +186,12 @@ final class AppSettings {
     
     // MARK: - Feature Flags
     
-    // MARK: Start Chat
-    
     @UserPreference(key: UserDefaultsKeys.userSuggestionsEnabled, defaultValue: false, storageType: .volatile)
     var userSuggestionsEnabled
 
-    // MARK: Receipts
-
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
+
+    @UserPreference(key: UserDefaultsKeys.locationEventsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var locationEventsEnabled
 }

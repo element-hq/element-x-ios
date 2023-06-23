@@ -81,7 +81,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-                
+
         return textView
     }
     
@@ -110,11 +110,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 }
             }
         }
-        
-        DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
-            if focused, textView.window != nil, !textView.isFirstResponder {
-                textView.becomeFirstResponder()
-            }
+
+        if !focused, textView.isFirstResponder {
+            textView.resignFirstResponder()
+        } else if focused, textView.window != nil, !textView.isFirstResponder {
+            textView.becomeFirstResponder()
         }
     }
 
@@ -152,11 +152,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            focused.wrappedValue = true
+            DispatchQueue.main.async {
+                self.focused.wrappedValue = true
+            }
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
-            focused.wrappedValue = false
+            DispatchQueue.main.async {
+                self.focused.wrappedValue = false
+            }
         }
         
         func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {

@@ -35,6 +35,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case timelineStart(TimelineStartRoomTimelineItem, TimelineGroupStyle)
     case state(StateRoomTimelineItem, TimelineGroupStyle)
     case group(CollapsibleTimelineItem, TimelineGroupStyle)
+    case location(LocationRoomTimelineItem, TimelineGroupStyle)
     
     // swiftlint:disable:next cyclomatic_complexity
     init(timelineItem: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
@@ -73,6 +74,8 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
             self = .state(item, groupStyle)
         case let item as CollapsibleTimelineItem:
             self = .group(item, groupStyle)
+        case let item as LocationRoomTimelineItem:
+            self = .location(item, groupStyle)
         default:
             fatalError("Unknown timeline item")
         }
@@ -96,7 +99,8 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
              .unsupported(let item as RoomTimelineItemProtocol, _),
              .timelineStart(let item as RoomTimelineItemProtocol, _),
              .state(let item as RoomTimelineItemProtocol, _),
-             .group(let item as RoomTimelineItemProtocol, _):
+             .group(let item as RoomTimelineItemProtocol, _),
+             .location(let item as RoomTimelineItemProtocol, _):
             return item.id
         }
     }
@@ -114,9 +118,14 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
              .encrypted(let item as EventBasedTimelineItemProtocol, _),
              .sticker(let item as EventBasedTimelineItemProtocol, _),
              .unsupported(let item as EventBasedTimelineItemProtocol, _),
-             .state(let item as EventBasedTimelineItemProtocol, _):
+             .state(let item as EventBasedTimelineItemProtocol, _),
+             .location(let item as EventBasedTimelineItemProtocol, _):
             return item.properties.deliveryStatus == .sending || item.properties.deliveryStatus == .sendingFailed
-        default:
+        case .separator,
+             .readMarker,
+             .paginationIndicator,
+             .timelineStart,
+             .group:
             return false
         }
     }
@@ -124,7 +133,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     /// Whether or not it is possible to send a reaction to this timeline item.
     var isReactable: Bool {
         switch self {
-        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker:
+        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location:
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false
@@ -178,6 +187,8 @@ extension RoomTimelineViewProvider: View {
             StateRoomTimelineView(timelineItem: item)
         case .group(let item, _):
             CollapsibleRoomTimelineView(timelineItem: item)
+        case .location(let item, _):
+            LocationRoomTimelineView(timelineItem: item)
         }
     }
     
@@ -199,7 +210,8 @@ extension RoomTimelineViewProvider: View {
              .unsupported(_, let groupStyle),
              .timelineStart(_, let groupStyle),
              .state(_, let groupStyle),
-             .group(_, let groupStyle):
+             .group(_, let groupStyle),
+             .location(_, let groupStyle):
             return groupStyle
         }
     }

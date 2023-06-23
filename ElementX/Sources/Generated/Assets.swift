@@ -38,6 +38,7 @@ internal enum Asset {
     internal static let launchLogo = ImageAsset(name: "Images/LaunchLogo")
     internal static let appLogo = ImageAsset(name: "Images/app-logo")
     internal static let closeCircle = ImageAsset(name: "Images/close_circle")
+    internal static let locationPin = ImageAsset(name: "Images/location-pin")
     internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
   }
 }

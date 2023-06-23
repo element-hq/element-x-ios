@@ -15,5 +15,5 @@
 //
 
 enum SharedUserDefaultsKeys: String {
-    case servedNotificationIdentifiers
+    case isEncryptionSyncEnabled
 }

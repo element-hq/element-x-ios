@@ -44,6 +44,21 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.readReceiptsEnabled) { _ in
                     context.send(viewAction: .changedReadReceiptsEnabled)
                 }
+
+                Toggle(isOn: $context.isEncryptionSyncEnabled) {
+                    Text("Use notification encryption sync")
+                    Text("requires app reboot")
+                }
+                .onChange(of: context.isEncryptionSyncEnabled) { _ in
+                    context.send(viewAction: .changedIsEncryptionSyncEnabled)
+                }
+
+                Toggle(isOn: $context.locationEventsEnabled) {
+                    Text("Location events in timeline")
+                }
+                .onChange(of: context.locationEventsEnabled) { _ in
+                    context.send(viewAction: .changedLocationEventsEnabled)
+                }
             }
             
             Section {

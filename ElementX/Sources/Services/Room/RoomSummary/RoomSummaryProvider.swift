@@ -19,11 +19,13 @@ import Foundation
 import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
-    private let roomListService: RoomListProtocol
+    private let roomListService: RoomListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
     
     private let serialDispatchQueue: DispatchQueue
+    
+    private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesTaskHandle: TaskHandle?
@@ -49,7 +51,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(roomListService: RoomListProtocol,
+    init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String) {
         self.roomListService = roomListService
@@ -63,37 +65,35 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
     }
     
-    func subscribeIfNecessary(entriesFunction: EntriesFunction,
-                              entriesLoadingStateFunction: LoadingStateFunction?) async {
+    func setRoomList(_ roomList: RoomList) {
         guard listUpdatesTaskHandle == nil, stateUpdatesTaskHandle == nil else {
             return
         }
         
+        self.roomList = roomList
+
         do {
-            let listUpdatesSubscriptionResult = try await entriesFunction(RoomListEntriesListenerProxy { [weak self] update in
+            let listUpdatesSubscriptionResult = try roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] update in
                 guard let self else { return }
                 MXLog.verbose("\(name): Received list update")
                 diffPublisher.send(update)
             })
-            
+
             listUpdatesTaskHandle = listUpdatesSubscriptionResult.entriesStream
-            
+
             rooms = listUpdatesSubscriptionResult.entries.map { roomListEntry in
                 buildSummaryForRoomListEntry(roomListEntry)
             }
             
-            if let entriesLoadingStateFunction {
-                let stateUpdatesSubscriptionResult = try await entriesLoadingStateFunction(RoomListStateObserver { [weak self] state in
-                    guard let self else { return }
-                    MXLog.info("\(name): Received state update: \(state)")
-                    stateSubject.send(RoomSummaryProviderState(slidingSyncState: state))
-                })
-                
-                stateSubject.send(RoomSummaryProviderState(slidingSyncState: stateUpdatesSubscriptionResult.entriesLoadingState))
-                
-                stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.entriesLoadingStateStream
-            }
+            let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
+                guard let self else { return }
+                MXLog.info("\(name): Received state update: \(state)")
+                stateSubject.send(RoomSummaryProviderState(roomListState: state))
+            })
             
+            stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.stateStream
+            
+            stateSubject.send(RoomSummaryProviderState(roomListState: stateUpdatesSubscriptionResult.state))
         } catch {
             MXLog.error("Failed setting up room list entry listener with error: \(error)")
         }
@@ -266,16 +266,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 }
 
 extension RoomSummaryProviderState {
-    init(slidingSyncState: SlidingSyncListLoadingState) {
-        switch slidingSyncState {
+    init(roomListState: RoomListLoadingState) {
+        switch roomListState {
         case .notLoaded:
             self = .notLoaded
-        case .preloaded:
-            self = .preloaded
-        case .partiallyLoaded:
-            self = .partiallyLoaded
-        case .fullyLoaded:
-            self = .fullyLoaded
+        case .loaded(let maximumNumberOfRooms):
+            self = .loaded(totalNumberOfRooms: UInt(maximumNumberOfRooms ?? 0))
         }
     }
 }
@@ -314,14 +310,14 @@ private class RoomListEntriesListenerProxy: RoomListEntriesListener {
     }
 }
 
-private class RoomListStateObserver: SlidingSyncListStateObserver {
-    private let onUpdateClosure: (SlidingSyncListLoadingState) -> Void
+private class RoomListStateObserver: RoomListLoadingStateListener {
+    private let onUpdateClosure: (RoomListLoadingState) -> Void
    
-    init(_ onUpdateClosure: @escaping (SlidingSyncListLoadingState) -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomListLoadingState) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func didReceiveUpdate(newState: SlidingSyncListLoadingState) {
-        onUpdateClosure(newState)
+    func onUpdate(state: RoomListLoadingState) {
+        onUpdateClosure(state)
     }
 }

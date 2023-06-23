@@ -70,14 +70,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
-                                 roomSummaryProvider.roomListPublisher)
+        roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state, rooms in
+            .sink { [weak self] state in
                 guard let self else { return }
                 
-                let isLoadingData = state == .notLoaded
-                let hasNoRooms = (state == .fullyLoaded && rooms.count == 0)
+                let isLoadingData = !state.isLoaded
+                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0)
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {
@@ -94,7 +93,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 self.state.roomListMode = roomListMode
                 
-                MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                MXLog.info("Received room summary provider update, setting view room list mode to \"\(self.state.roomListMode)\"")
                 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {

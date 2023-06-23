@@ -24,6 +24,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     private var handler: ((UNNotificationContent) -> Void)?
     private var modifiedContent: UNMutableNotificationContent?
+    private var userSession: NSEUserSession?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -71,9 +72,26 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         do {
             let userSession = try NSEUserSession(credentials: credentials)
-            
-            guard let itemProxy = try await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
-                MXLog.info("\(tag) no notification for this event")
+            self.userSession = userSession
+            var itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+            if settings.isEncryptionSyncEnabled,
+               itemProxy?.isEncrypted == true,
+               let _ = try? userSession.startEncryptionSync() {
+                // TODO: The following wait with a timeout should be handled by the SDK
+                // We try to decrypt the notification for 10 seconds at most
+                let date = Date()
+                repeat {
+                    // if the sync terminated we try one last time then we break from the loop
+                    guard userSession.isSyncing else {
+                        itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+                        break
+                    }
+                    itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
+                } while itemProxy?.isEncrypted == true && date.timeIntervalSinceNow > -10
+            }
+
+            guard let itemProxy else {
+                MXLog.info("\(tag) no notification for the event, discard")
                 return discard()
             }
 
@@ -110,31 +128,29 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return discard()
         }
 
-        guard let identifier = modifiedContent.notificationID,
-              !settings.servedNotificationIdentifiers.contains(identifier) else {
-            MXLog.info("\(tag) notify: notification already served")
-            return discard()
-        }
-
-        settings.servedNotificationIdentifiers.insert(identifier)
         handler?(modifiedContent)
-        handler = nil
-        self.modifiedContent = nil
+        cleanUp()
     }
 
     private func discard() {
         MXLog.info("\(tag) discard")
 
         handler?(UNMutableNotificationContent())
-        handler = nil
-        modifiedContent = nil
+        cleanUp()
     }
 
     private var tag: String {
         "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())]"
     }
 
+    private func cleanUp() {
+        handler = nil
+        modifiedContent = nil
+        userSession?.stopEncryptionSync()
+    }
+
     deinit {
+        cleanUp()
         NSELogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
     }
