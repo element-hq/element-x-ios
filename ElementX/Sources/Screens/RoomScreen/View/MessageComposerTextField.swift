@@ -152,11 +152,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            focused.wrappedValue = true
+            DispatchQueue.main.async {
+                self.focused.wrappedValue = true
+            }
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
-            focused.wrappedValue = false
+            DispatchQueue.main.async {
+                self.focused.wrappedValue = false
+            }
         }
         
         func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
