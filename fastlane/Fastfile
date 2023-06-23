@@ -151,7 +151,8 @@ lane :integration_tests do
     scheme: "IntegrationTests",
     devices: ["iPhone 13 Pro"],
     ensure_devices_found: true,
-    result_bundle: true
+    result_bundle: true,
+    include_simulator_logs: true
   )
 
   slather(

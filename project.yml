@@ -21,7 +21,7 @@ options:
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
-  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "Colors/AccentColor"
+  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   ENABLE_BITCODE: NO
   BASE_APP_GROUP_IDENTIFIER: io.element
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
@@ -44,7 +44,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.82-alpha
+    exactVersion: 1.0.84-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit

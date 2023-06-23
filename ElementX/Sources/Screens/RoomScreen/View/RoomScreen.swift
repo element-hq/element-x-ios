@@ -101,6 +101,9 @@ struct RoomScreen: View {
         } editCancellationAction: {
             context.send(viewAction: .cancelEdit)
         }
+        .onChange(of: context.actionMenuInfo) { _ in
+            context.composerFocused = false
+        }
     }
     
     private var scrollToBottomButton: some View {

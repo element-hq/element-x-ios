@@ -18,43 +18,43 @@ import SwiftUI
 
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: RoomScreenViewModel.Context
+    @Environment(\.isPresented) var isPresented
     
-    @State private var showAttachmentPopover = false
     @State private var sheetContentHeight = CGFloat(0)
     
     var body: some View {
         Button {
-            showAttachmentPopover = true
+            context.showAttachmentPopover = true
         } label: {
             Image(systemName: "plus.circle.fill")
                 .font(.compound.headingLG)
                 .foregroundColor(.compound.textActionPrimary)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPicker)
-        .popover(isPresented: $showAttachmentPopover) {
+        .popover(isPresented: $context.showAttachmentPopover) {
             VStack(alignment: .leading, spacing: 0.0) {
                 Button {
-                    showAttachmentPopover = false
+                    context.showAttachmentPopover = false
                     context.send(viewAction: .displayMediaPicker)
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, systemImageName: "photo.fill")
                 }
                 
                 Button {
-                    showAttachmentPopover = false
+                    context.showAttachmentPopover = false
                     context.send(viewAction: .displayDocumentPicker)
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, systemImageName: "paperclip")
                 }
                 
                 Button {
-                    showAttachmentPopover = false
+                    context.showAttachmentPopover = false
                     context.send(viewAction: .displayCameraPicker)
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
             }
-            .padding(.top, 20)
+            .padding(.top, isPresented ? 20 : 0)
             .background {
                 // This is done in the background otherwise GeometryReader tends to expand to
                 // all the space given to it like color or shape.

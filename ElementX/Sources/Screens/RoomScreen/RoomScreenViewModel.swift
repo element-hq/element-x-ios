@@ -358,14 +358,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ]
         
         if timelineItem is EventBasedMessageTimelineItemProtocol {
-            actions.append(contentsOf: [.forward(itemID: itemId), .copy])
+            actions.append(.forward(itemID: itemId))
         }
         
-        actions.append(.copyPermalink)
-
         if item.isEditable {
             actions.append(.edit)
         }
+        
+        if timelineItem is EventBasedMessageTimelineItemProtocol {
+            actions.append(.copy)
+        }
+        
+        actions.append(.copyPermalink)
         
         if item.isOutgoing {
             actions.append(.redact)

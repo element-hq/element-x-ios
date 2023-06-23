@@ -238,6 +238,8 @@ public enum L10n {
   public static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
   /// Settings
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
+  /// Shared location
+  public static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Starting chat…
   public static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker

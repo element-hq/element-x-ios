@@ -36,7 +36,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
         
@@ -74,8 +74,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .audio(let content):
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .location:
-                return nil
+            case .location(let content):
+                guard ServiceLocator.shared.settings.locationEventsEnabled else {
+                    return nil
+                }
+                return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .none:
                 return nil
             }
@@ -298,6 +301,24 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
                                                                      transactionID: eventItemProxy.transactionID))
     }
+
+    private func buildLocationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                           _ messageTimelineItem: Message,
+                                           _ messageContent: LocationContent,
+                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        LocationRoomTimelineItem(id: eventItemProxy.id,
+                                 timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                                 isOutgoing: isOutgoing,
+                                 isEditable: eventItemProxy.isEditable,
+                                 sender: eventItemProxy.sender,
+                                 content: buildLocationTimelineItemContent(messageContent),
+                                 replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                                 properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                        reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                        deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                        orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                        transactionID: eventItemProxy.transactionID))
+    }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
@@ -333,7 +354,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
@@ -353,7 +374,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
@@ -374,7 +395,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
-    
+
+    private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
+        LocationRoomTimelineItemContent(body: locationContent.body, geoURI: .init(string: locationContent.geoUri))
+    }
+
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         
@@ -489,8 +514,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 replyContent = .text(buildTextTimelineItemContent(content))
             case .video(let content):
                 replyContent = .video(buildVideoTimelineItemContent(content))
-            case .location:
-                return nil
+            case .location(let content):
+                replyContent = .location(buildLocationTimelineItemContent(content))
             case .none:
                 return nil
             }

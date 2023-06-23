@@ -109,6 +109,11 @@ struct RoomScreenViewStateBindings {
     var composerFocused: Bool
     
     var scrollToBottomButtonVisible = false
+    var showAttachmentPopover = false {
+        didSet {
+            composerFocused = false
+        }
+    }
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
@@ -122,7 +127,11 @@ struct RoomScreenViewStateBindings {
     var reactionSummaryInfo: ReactionSummaryInfo?
 }
 
-struct TimelineItemActionMenuInfo: Identifiable {
+struct TimelineItemActionMenuInfo: Identifiable, Equatable {
+    static func == (lhs: TimelineItemActionMenuInfo, rhs: TimelineItemActionMenuInfo) -> Bool {
+        lhs.id == rhs.id
+    }
+
     let item: EventBasedTimelineItemProtocol
     
     var id: String {

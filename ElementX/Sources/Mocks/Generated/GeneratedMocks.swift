@@ -715,6 +715,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendFileUrlFileInfoProgressSubjectReturnValue
         }
     }
+    //MARK: - sendLocation
+
+    var sendLocationBodyGeoURICallsCount = 0
+    var sendLocationBodyGeoURICalled: Bool {
+        return sendLocationBodyGeoURICallsCount > 0
+    }
+    var sendLocationBodyGeoURIReceivedArguments: (body: String, geoURI: GeoURI)?
+    var sendLocationBodyGeoURIReceivedInvocations: [(body: String, geoURI: GeoURI)] = []
+    var sendLocationBodyGeoURIReturnValue: Result<Void, RoomProxyError>!
+    var sendLocationBodyGeoURIClosure: ((String, GeoURI) async -> Result<Void, RoomProxyError>)?
+
+    func sendLocation(body: String, geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
+        sendLocationBodyGeoURICallsCount += 1
+        sendLocationBodyGeoURIReceivedArguments = (body: body, geoURI: geoURI)
+        sendLocationBodyGeoURIReceivedInvocations.append((body: body, geoURI: geoURI))
+        if let sendLocationBodyGeoURIClosure = sendLocationBodyGeoURIClosure {
+            return await sendLocationBodyGeoURIClosure(body, geoURI)
+        } else {
+            return sendLocationBodyGeoURIReturnValue
+        }
+    }
     //MARK: - retrySend
 
     var retrySendTransactionIDCallsCount = 0
