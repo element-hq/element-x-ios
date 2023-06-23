@@ -41,6 +41,7 @@ enum RoomProxyError: Error {
     case failedSettingRoomTopic
     case failedRemovingAvatar
     case failedUploadingAvatar
+    case failedSendingLocation
 }
 
 @MainActor
@@ -100,6 +101,8 @@ protocol RoomProxyProtocol {
     func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>
     
     func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>
+
+    func sendLocation(body: String, geoURI: GeoURI) async -> Result<Void, RoomProxyError>
 
     /// Retries sending a failed message given its transaction ID
     func retrySend(transactionID: String) async

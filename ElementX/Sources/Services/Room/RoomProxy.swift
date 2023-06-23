@@ -348,6 +348,19 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
+    func sendLocation(body: String, geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        let transactionId = genTransactionId()
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            .success(self.room.sendLocation(body: body, geoUri: geoURI.string, txnId: transactionId))
+        }
+    }
+
     func retrySend(transactionID: String) async {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
