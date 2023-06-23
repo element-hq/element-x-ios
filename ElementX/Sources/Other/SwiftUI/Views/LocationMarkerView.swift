@@ -16,9 +16,9 @@
 
 import SwiftUI
 
-struct LocationPinView: View {
+struct LocationMarkerView: View {
     var body: some View {
-        Image(Asset.Images.locationPin.name)
+        Image(Asset.Images.locationMarker.name)
             .alignmentGuide(VerticalAlignment.center) { dimensions in
                 dimensions[.bottom]
             }
@@ -26,12 +26,12 @@ struct LocationPinView: View {
     }
 }
 
-struct LocationPinView_Previews: PreviewProvider {
+struct LocationMarkerView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 30) {
-            LocationPinView()
+            LocationMarkerView()
 
-            LocationPinView()
+            LocationMarkerView()
                 .colorScheme(.dark)
         }
     }

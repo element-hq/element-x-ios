@@ -52,7 +52,7 @@ struct StaticLocationScreen: View {
         Button {
             context.send(viewAction: .shareLocation)
         } label: {
-            Label(L10n.screenShareLocationAction, image: "Images/location-pin")
+            Label(L10n.screenShareThisLocationAction, image: "Images/location-marker")
                 .labelStyle(FixedIconSizeLabelStyle())
         }
     }

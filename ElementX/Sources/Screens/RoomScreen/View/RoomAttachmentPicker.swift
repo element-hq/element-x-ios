@@ -55,7 +55,7 @@ struct RoomAttachmentPicker: View {
                 }
                 
                 Button {
-                    showAttachmentPopover = false
+                    context.showAttachmentPopover = false
                     context.send(viewAction: .displayLocationPicker)
                 } label: {
                     Label(L10n.screenRoomAttachmentSourceLocation, image: "Images/location-pin")

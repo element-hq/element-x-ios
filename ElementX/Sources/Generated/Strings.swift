@@ -800,10 +800,12 @@ public enum L10n {
   public static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   public static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
-  /// Share my location
-  public static var screenShareLocationAction: String { return L10n.tr("Localizable", "screen_share_location_action") }
   /// Share location
   public static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
+  /// Share my location
+  public static var screenShareMyLocationAction: String { return L10n.tr("Localizable", "screen_share_my_location_action") }
+  /// Share this location
+  public static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
   /// Are you sure you want to sign out?
   public static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
   /// Sign out
