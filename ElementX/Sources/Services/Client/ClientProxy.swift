@@ -106,7 +106,13 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false && isEncryptionSyncing
+        let isRoomListServiceSyncing = roomListService?.isSyncing() ?? false
+        
+        if ServiceLocator.shared.settings.isEncryptionSyncEnabled {
+            return isRoomListServiceSyncing && isEncryptionSyncing
+        } else {
+            return isRoomListServiceSyncing
+        }
     }
     
     func startSync() {
