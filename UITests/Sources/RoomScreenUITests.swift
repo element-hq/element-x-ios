@@ -161,6 +161,12 @@ class RoomScreenUITests: XCTestCase {
         try await app.assertScreenshot(.roomSmallTimelineWithReadReceipts)
     }
     
+    func testTimelineReactions() async throws {
+        let app = Application.launch(.roomSmallTimelineWithReactions)
+
+        try await app.assertScreenshot(.roomSmallTimelineWithReactions)
+    }
+    
     // MARK: - Helper Methods
     
     private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {

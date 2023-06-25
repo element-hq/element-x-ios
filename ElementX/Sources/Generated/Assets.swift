@@ -29,12 +29,12 @@ internal enum Asset {
     internal static let backgroundColor = ColorAsset(name: "colors/background-color")
   }
   internal enum Images {
-    internal static let encryptionNormal = ImageAsset(name: "images/encryption-normal")
-    internal static let encryptionTrusted = ImageAsset(name: "images/encryption-trusted")
-    internal static let encryptionWarning = ImageAsset(name: "images/encryption-warning")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
     internal static let closeCircle = ImageAsset(name: "images/close-circle")
+    internal static let encryptionNormal = ImageAsset(name: "images/encryption-normal")
+    internal static let encryptionTrusted = ImageAsset(name: "images/encryption-trusted")
+    internal static let encryptionWarning = ImageAsset(name: "images/encryption-warning")
     internal static let launchBackground = ImageAsset(name: "images/launch-background")
     internal static let launchLogo = ImageAsset(name: "images/launch-logo")
     internal static let locationPin = ImageAsset(name: "images/location-pin")
