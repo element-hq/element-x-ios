@@ -34,40 +34,39 @@ struct AnalyticsPromptScreen: View {
     
     /// The main content of the screen that is shown inside the scroll view.
     private var mainContent: some View {
-        VStack {
-            Image(uiImage: Asset.Images.analyticsLogo.image)
-                .padding(.bottom, 24)
+        VStack(spacing: 40) {
+            header
+            checkmarkList
+        }
+    }
+    
+    private var header: some View {
+        VStack(spacing: 8) {
+            AuthenticationIconImage(image: Image(systemName: "chart.bar"))
+                .symbolVariant(.fill)
+                .padding(.bottom, 8)
             
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
-                .padding(.bottom, 2)
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(context.viewState.strings.optInContent)
-                .font(.compound.bodyLG)
+                .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
-            
-            Divider()
-                .overlay { Color.compound.borderDisabled }
-                .padding(.vertical, 20)
-            
-            checkmarkList
         }
     }
     
     /// The list of re-assurances about analytics.
     private var checkmarkList: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            AnalyticsPromptScreenCheckmarkItem(attributedString: context.viewState.strings.point1)
-            AnalyticsPromptScreenCheckmarkItem(attributedString: context.viewState.strings.point2)
-            AnalyticsPromptScreenCheckmarkItem(string: context.viewState.strings.point3)
+        VStack(alignment: .leading, spacing: 4) {
+            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point1, listPosition: .top)
+            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point2, listPosition: .middle)
+            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point3, listPosition: .bottom)
         }
         .fixedSize(horizontal: false, vertical: true)
-        .font(.compound.bodyLG)
-        .foregroundColor(.compound.textSecondary)
         .frame(maxWidth: .infinity)
     }
     
@@ -75,7 +74,7 @@ struct AnalyticsPromptScreen: View {
     private var buttons: some View {
         VStack(spacing: 16) {
             Button { context.send(viewAction: .enable) } label: {
-                Text(L10n.actionEnable)
+                Text(L10n.actionOk)
                     .font(.compound.bodyLGSemibold)
             }
             .buttonStyle(.elementAction(.xLarge))

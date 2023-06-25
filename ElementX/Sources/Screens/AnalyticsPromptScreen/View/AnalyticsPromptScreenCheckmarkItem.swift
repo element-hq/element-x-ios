@@ -17,21 +17,50 @@
 import SwiftUI
 
 struct AnalyticsPromptScreenCheckmarkItem: View {
-    private let attributedString: AttributedString
-    
-    init(attributedString: AttributedString) {
-        self.attributedString = attributedString
+    /// Represents the position of a checkmark item in a list.
+    enum ListPosition {
+        case top, middle, bottom
+        
+        /// The corners that should be rounded for this position.
+        var roundedCorners: UIRectCorner {
+            switch self {
+            case .top:
+                return [.topLeft, .topRight]
+            case .middle:
+                return []
+            case .bottom:
+                return [.bottomLeft, .bottomRight]
+            }
+        }
     }
     
-    init(string: String) {
-        attributedString = AttributedString(string)
-    }
+    let title: String
+    let listPosition: ListPosition
     
     var body: some View {
-        Label { Text(attributedString) } icon: {
+        Label { Text(title) } icon: {
             Image(systemName: "checkmark.circle")
-                .foregroundColor(.compound.iconPrimary)
+                .symbolVariant(.fill)
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(Color.compound.iconAccentTertiary, Color.compound.textOnSolidPrimary)
         }
+        .labelStyle(CheckmarkLabelStyle())
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.compound.bgSubtleSecondary, in: RoundedCornerShape(radius: 16, corners: listPosition.roundedCorners))
+    }
+}
+
+private struct CheckmarkLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 16) {
+            configuration.icon
+                .font(.compound.bodyLGSemibold)
+            configuration.title
+                .font(.compound.bodyMDSemibold)
+        }
+        .foregroundColor(.compound.textPrimary)
     }
 }
 
@@ -41,11 +70,12 @@ struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     
     static var previews: some View {
-        VStack(alignment: .leading) {
-            AnalyticsPromptScreenCheckmarkItem(attributedString: strings.point1)
-            AnalyticsPromptScreenCheckmarkItem(attributedString: strings.point2)
-            AnalyticsPromptScreenCheckmarkItem(attributedString: AttributedString("This is a short string."))
-            AnalyticsPromptScreenCheckmarkItem(attributedString: AttributedString("This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct."))
+        VStack(alignment: .leading, spacing: 4) {
+            AnalyticsPromptScreenCheckmarkItem(title: strings.point1, listPosition: .top)
+            AnalyticsPromptScreenCheckmarkItem(title: strings.point2, listPosition: .middle)
+            AnalyticsPromptScreenCheckmarkItem(title: "This is a short string.", listPosition: .middle)
+            AnalyticsPromptScreenCheckmarkItem(title: "This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct.",
+                                               listPosition: .bottom)
         }
         .padding()
     }

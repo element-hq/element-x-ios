@@ -34,7 +34,7 @@ actor ExpiringTaskRunner<T> {
             continuation = $0
             
             Task {
-                try await Task.sleep(for: timeout)
+                try? await Task.sleep(for: timeout)
                 continuation?.resume(with: .failure(ExpiringTaskRunnerError.timeout))
                 continuation = nil
             }

@@ -68,23 +68,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     private var header: some View {
         if shouldShowSenderDetails {
-            VStack {
-                Spacer()
-                    .frame(height: 8)
-                HStack(alignment: .top, spacing: 4) {
-                    TimelineSenderAvatarView(timelineItem: timelineItem)
-                        .accessibilityHidden(true)
-                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                        .font(.compound.bodySMSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                        .padding(.vertical, senderNameVerticalPadding)
-                }
-                .accessibilityElement(children: .combine)
-                .onTapGesture {
-                    context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
-                }
+            HStack(alignment: .top, spacing: 4) {
+                TimelineSenderAvatarView(timelineItem: timelineItem)
+                    .accessibilityHidden(true)
+                Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundColor(.compound.textPrimary)
+                    .lineLimit(1)
+                    .padding(.vertical, senderNameVerticalPadding)
             }
+            .accessibilityElement(children: .combine)
+            .onTapGesture {
+                context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
+            }
+            .padding(.top, 8)
         }
     }
     

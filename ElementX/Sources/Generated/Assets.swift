@@ -25,21 +25,20 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
   internal enum Colors {
-    internal static let accentColor = ColorAsset(name: "Colors/AccentColor")
+    internal static let accentColor = ColorAsset(name: "colors/accent-color")
+    internal static let backgroundColor = ColorAsset(name: "colors/background-color")
   }
   internal enum Images {
-    internal static let analyticsCheckmark = ImageAsset(name: "Images/AnalyticsCheckmark")
-    internal static let analyticsLogo = ImageAsset(name: "Images/AnalyticsLogo")
-    internal static let serverSelectionIcon = ImageAsset(name: "Images/Server Selection Icon")
-    internal static let encryptionNormal = ImageAsset(name: "Images/encryption_normal")
-    internal static let encryptionTrusted = ImageAsset(name: "Images/encryption_trusted")
-    internal static let encryptionWarning = ImageAsset(name: "Images/encryption_warning")
-    internal static let launchBackground = ImageAsset(name: "Images/LaunchBackground")
-    internal static let launchLogo = ImageAsset(name: "Images/LaunchLogo")
-    internal static let appLogo = ImageAsset(name: "Images/app-logo")
-    internal static let closeCircle = ImageAsset(name: "Images/close_circle")
-    internal static let locationPin = ImageAsset(name: "Images/location-pin")
-    internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
+    internal static let appLogo = ImageAsset(name: "images/app-logo")
+    internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
+    internal static let closeCircle = ImageAsset(name: "images/close-circle")
+    internal static let encryptionNormal = ImageAsset(name: "images/encryption-normal")
+    internal static let encryptionTrusted = ImageAsset(name: "images/encryption-trusted")
+    internal static let encryptionWarning = ImageAsset(name: "images/encryption-warning")
+    internal static let launchBackground = ImageAsset(name: "images/launch-background")
+    internal static let launchLogo = ImageAsset(name: "images/launch-logo")
+    internal static let locationPin = ImageAsset(name: "images/location-pin")
+    internal static let timelineComposerSendMessage = ImageAsset(name: "images/timeline-composer-send-message")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
