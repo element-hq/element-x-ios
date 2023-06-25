@@ -26,11 +26,12 @@ struct AggregatedReaction: Hashable {
     let senders: [String]
 }
 
-extension AggregatedReaction{
+extension AggregatedReaction {
     /// The number of times this reactions was sent.
     var count: Int {
         senders.count
     }
+    
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
         senders.contains(where: { $0 == currentUserId })

@@ -34,7 +34,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me"])
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "10:11 AM",
@@ -43,8 +43,8 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena"])
                              ])),
         SeparatorRoomTimelineItem(id: "Today", text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
@@ -67,8 +67,8 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "New home office set up!"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["helena","jacob", "bob"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["helena", "jacob", "bob"])
                              ],
                              orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil),
                                                    ReadReceipt(userID: "bob", formattedTimestamp: nil),

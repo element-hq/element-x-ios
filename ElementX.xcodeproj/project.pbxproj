@@ -258,6 +258,9 @@
 		65EDA77363BEDC40CDE43B43 /* InvitesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ADEA322D2089391E049535 /* InvitesScreen.swift */; };
 		661A664C6EDF856B05519206 /* FilePreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562E2CBA002E8E1B6545C38 /* FilePreviewScreen.swift */; };
 		663E198678778F7426A9B27D /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FAFE1C2149E6AC8156ED2B /* Collection.swift */; };
+		66BFBAF12A482DC1009C3BE3 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BFBAF02A482DC1009C3BE3 /* FlowLayout.swift */; };
+		66D92E5F2A46232700747453 /* ReactionsSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D92E5E2A46232700747453 /* ReactionsSummaryView.swift */; };
+		66D92E632A4623B000747453 /* AggregatedReactionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D92E622A4623B000747453 /* AggregatedReactionMock.swift */; };
 		6713835120D94BAA8ED7E3E5 /* MessageForwardingScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59846FA04E1DBBFDD8829C2A /* MessageForwardingScreenUITests.swift */; };
 		67160204A8D362BB7D4AD259 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693E16574C6F7F9FA1015A8C /* Search.swift */; };
 		67C05C50AD734283374605E3 /* MatrixEntityRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */; };
@@ -1002,6 +1005,9 @@
 		65C2B80DD0BF6F10BB5FA922 /* MockAuthenticationServiceProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationServiceProxy.swift; sourceTree = "<group>"; };
 		6654859746B0BE9611459391 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		669F35C505ACE1110589F875 /* MediaUploadingPreprocessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaUploadingPreprocessor.swift; sourceTree = "<group>"; };
+		66BFBAF02A482DC1009C3BE3 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		66D92E5E2A46232700747453 /* ReactionsSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactionsSummaryView.swift; sourceTree = "<group>"; };
+		66D92E622A4623B000747453 /* AggregatedReactionMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggregatedReactionMock.swift; sourceTree = "<group>"; };
 		66F2402D738694F98729A441 /* RoomTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProvider.swift; sourceTree = "<group>"; };
 		68356CB936A8814A3FEA66A8 /* EncryptionSyncListenerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionSyncListenerProxy.swift; sourceTree = "<group>"; };
 		6861FE915C7B5466E6962BBA /* StartChatScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatScreen.swift; sourceTree = "<group>"; };
@@ -1743,6 +1749,7 @@
 		31CE4DA53232AA534057F912 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				66D92E622A4623B000747453 /* AggregatedReactionMock.swift */,
 				36FD673E24FBFCFDF398716A /* RoomMemberProxyMock.swift */,
 				1ABDE6F66532CBEB0E016F94 /* RoomProxyMock.swift */,
 				248649EBA5BC33DB93698734 /* SessionVerificationControllerProxyMock.swift */,
@@ -2998,6 +3005,7 @@
 				127A57D053CE8C87B5EFB089 /* Consumable.swift */,
 				127C8472672A5BA09EF1ACF8 /* CurrentValuePublisher.swift */,
 				7B25F959A434BB9923A3223F /* ExpiringTaskRunner.swift */,
+				66BFBAF02A482DC1009C3BE3 /* FlowLayout.swift */,
 				6A580295A56B55A856CC4084 /* InfoPlistReader.swift */,
 				6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */,
 				C789E7BFC066CF39B8AE0974 /* NetworkMonitor.swift */,
@@ -3097,6 +3105,7 @@
 			isa = PBXGroup;
 			children = (
 				D5AC06FC11B6638F7BF1670E /* TimelineDeliveryStatusView.swift */,
+				66D92E5E2A46232700747453 /* ReactionsSummaryView.swift */,
 				6A4C9547BBFEEF30AA11329B /* TimelineItemStatusView.swift */,
 				351E89CE2ED9B73C5CC47955 /* TimelineReactionsView.swift */,
 				1877038D1AD3D5A029F8AE2C /* TimelineReadReceiptsView.swift */,
@@ -4037,6 +4046,7 @@
 				661A664C6EDF856B05519206 /* FilePreviewScreen.swift in Sources */,
 				B5BD05558DC2C3091905E14A /* FilePreviewScreenCoordinator.swift in Sources */,
 				A6F713461DB62AC06293E7B7 /* FilePreviewScreenModels.swift in Sources */,
+				66D92E632A4623B000747453 /* AggregatedReactionMock.swift in Sources */,
 				94BEFD4EC49644AD06A748D4 /* FilePreviewScreenViewModel.swift in Sources */,
 				1EEF3580CC62E86CB04C9021 /* FilePreviewScreenViewModelProtocol.swift in Sources */,
 				D33AC79A50DFC26D2498DD28 /* FileRoomTimelineItem.swift in Sources */,
@@ -4145,6 +4155,7 @@
 				EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */,
 				B659E3A49889E749E3239EA7 /* MockMediaProvider.swift in Sources */,
 				2352C541AF857241489756FF /* MockRoomSummaryProvider.swift in Sources */,
+				66BFBAF12A482DC1009C3BE3 /* FlowLayout.swift in Sources */,
 				09C83DDDB07C28364F325209 /* MockRoomTimelineController.swift in Sources */,
 				158A2D528CC78C4E7A8ED608 /* MockRoomTimelineControllerFactory.swift in Sources */,
 				447E8580A0A2569E32529E17 /* MockRoomTimelineProvider.swift in Sources */,
@@ -4233,6 +4244,7 @@
 				6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */,
 				A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
+				66D92E5F2A46232700747453 /* ReactionsSummaryView.swift in Sources */,
 				AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */,
 				2ABF11717C64054CEF2819A3 /* RoomTimelineController.swift in Sources */,
 				38896D54D6D675534E606195 /* RoomTimelineControllerFactory.swift in Sources */,

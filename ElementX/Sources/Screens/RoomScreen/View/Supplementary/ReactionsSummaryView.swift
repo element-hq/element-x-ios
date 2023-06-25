@@ -18,6 +18,7 @@ import SwiftUI
 
 struct ReactionsSummaryView: View {
     let reactions: [AggregatedReaction]
+    let members: [String: RoomMemberState]
     let imageProvider: ImageProviderProtocol?
     
     @State var selectedKey: String
@@ -31,23 +32,35 @@ struct ReactionsSummaryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(reactions, id: \.self) { reaction in
-                        ReactionSummaryButton(reaction: reaction, highlighted: selectedKey == reaction.key) { _ in }
+                        ReactionSummaryButton(reaction: reaction, highlighted: selectedKey == reaction.key) { key in
+                            withAnimation {
+                                selectedKey = key
+                            }
+                        }
                     }
                 }
             }
-            TabView {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        ForEach(reactions[selectedReactionIndex].senders, id: \.self) { sender in
-                            ReactionSummarySenderView(sender: sender, imageProvider: imageProvider)
+            TabView(selection: $selectedKey) {
+                ForEach(reactions, id: \.self) { reaction in
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            ForEach(reaction.senders, id: \.self) { sender in
+                                ReactionSummarySenderView(sender: sender, member: members[sender], imageProvider: imageProvider)
+                            }
                         }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
+                    .tag(reaction.key)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
         }
         .padding(.leading)
+        .padding(.top, 32.0)
+        .padding(.bottom, 4.0)
+        .presentationDetents([.medium])
+        .presentationBackground(Color.compound.bgCanvasDefault)
+        .presentationDragIndicator(.visible)
     }
 }
 
@@ -64,37 +77,41 @@ struct ReactionSummaryButton: View {
         HStack(spacing: 4) {
             Text(reaction.key)
                 .font(.compound.headingSM)
-            Text(String(reaction.count))
-                .font(.compound.headingSM)
-                .foregroundColor(highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary)
+            if reaction.count > 1 {
+                Text(String(reaction.count))
+                    .font(.compound.headingSM)
+                    .foregroundColor(highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary)
+            }
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
-        .background(highlighted ? Color.compound.bgActionPrimaryRest : .clear, in: backgroundShape)
+        .background(highlighted ? Color.compound.bgActionPrimaryRest : .clear, in: Capsule())
         .accessibilityElement(children: .combine)
-    }
-    
-    var backgroundShape: some InsettableShape {
-        Capsule()
     }
 }
 
 struct ReactionSummarySenderView: View {
     var sender: String
+    var member: RoomMemberState?
     let imageProvider: ImageProviderProtocol?
+    
+    var displayName: String {
+        member?.displayName ?? sender
+    }
     
     var body: some View {
         HStack {
-            LoadableAvatarImage(url: nil,
-                                name: sender,
+            LoadableAvatarImage(url: member?.avatarURL,
+                                name: displayName,
                                 contentID: sender,
                                 avatarSize: .user(on: .timeline),
                                 imageProvider: imageProvider)
-            VStack {
+            VStack(alignment: .leading) {
+                Text(displayName)
+                    .font(.compound.bodyMDSemibold)
                 Text(sender)
-                    .font(.compound.bodyMD)
-                Text(sender)
-                    .font(.compound.bodyMD)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
             }
             Spacer()
         }
@@ -103,11 +120,9 @@ struct ReactionSummarySenderView: View {
 }
 
 struct ReactionsSummaryView_Previews: PreviewProvider {
-    static let me = RoomMemberProxyMock.mockMe.userID
-    static let alice = RoomMemberProxyMock.mockAlice.userID
-    static let bob = RoomMemberProxyMock.mockBob.userID
     static var previews: some View {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
+                             members: [:],
                              imageProvider: MockMediaProvider(),
                              selectedKey: AggregatedReaction.mockReactions[0].key)
     }

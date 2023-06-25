@@ -18,7 +18,9 @@ import Foundation
 
 extension AggregatedReaction {
     fileprivate static func mockIds(_ count: Int) -> [String] {
-        Array(1...count).map({ "@user\($0):matrix.org" })
+        Array(1...count).map {
+            "@user\($0):matrix.org"
+        }
     }
     
     fileprivate static var alice: String {

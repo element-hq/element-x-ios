@@ -18,15 +18,16 @@ import SwiftUI
 
 struct TimelineReactionsView: View {
     let reactions: [AggregatedReaction]
-    let alignment: HorizontalAlignment
-    let action: (String) -> Void
+    let isOutgoing: Bool
+    let toggleReaction: (String) -> Void
+    let showReactionSummary: (String) -> Void
     
     var body: some View {
-        AlignedScrollView(alignment: alignment, showsIndicators: false) {
-            HStack {
-                ForEach(reactions, id: \.self) { reaction in
-                    TimelineReactionButton(reaction: reaction, action: action)
-                }
+        FlowLayout(alignment: isOutgoing ? .trailing : .leading) {
+            ForEach(reactions, id: \.self) { reaction in
+                TimelineReactionButton(reaction: reaction,
+                                       toggleReaction: toggleReaction,
+                                       showReactionSummary: showReactionSummary).padding(4)
             }
         }
     }
@@ -34,10 +35,20 @@ struct TimelineReactionsView: View {
 
 struct TimelineReactionButton: View {
     let reaction: AggregatedReaction
-    let action: (String) -> Void
+    let toggleReaction: (String) -> Void
+    let showReactionSummary: (String) -> Void
     
     var body: some View {
-        Button { action(reaction.key) } label: { label }
+        Button {
+            toggleReaction(reaction.key)
+        } label: {
+            label
+        }
+        .simultaneousGesture(LongPressGesture()
+            .onEnded { _ in
+                showReactionSummary(reaction.key)
+            }
+        )
     }
     
     var label: some View {
@@ -66,10 +77,11 @@ struct TimelineReactionButton: View {
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in }
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, alignment: .leading) { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in } showReactionSummary: { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in } showReactionSummary: { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in } showReactionSummary: { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, isOutgoing: false) { _ in } showReactionSummary: { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, isOutgoing: true) { _ in } showReactionSummary: { _ in }
         }
     }
 }
