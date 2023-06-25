@@ -44,22 +44,35 @@ struct TimelineReactionButton: View {
         HStack(spacing: 4) {
             Text(reaction.key)
                 .font(.compound.bodyMD)
-            Text(String(reaction.count))
-                .font(.compound.bodyMD)
-                .foregroundColor(.compound.textSecondary)
+            if reaction.count > 1 {
+                Text(String(reaction.count))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(textColor)
+            }
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
-        .background(
-            backgroundShape
-                .strokeBorder(reaction.isHighlighted ? Color.compound.textSecondary : .compound.bgCanvasDefault, lineWidth: 2)
-                .background(reaction.isHighlighted ? Color.compound.textPrimary.opacity(0.1) : .compound._bgReactionButton, in: backgroundShape)
-        )
+        .background(backgroundShape.fill(overlayBackgroundColor))
+        .overlay(backgroundShape.strokeBorder(overlayBorderColor))
+        .padding(2)
+        .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
         .accessibilityElement(children: .combine)
     }
     
     var backgroundShape: some InsettableShape {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
+    }
+    
+    var textColor: Color {
+        reaction.isHighlighted ? Color.compound.textPrimary : .compound.textSecondary
+    }
+    
+    var overlayBackgroundColor: Color {
+        reaction.isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
+    }
+    
+    var overlayBorderColor: Color {
+        reaction.isHighlighted ? Color.compound.borderInteractivePrimary : .clear
     }
 }
 

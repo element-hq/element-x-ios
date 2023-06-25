@@ -163,7 +163,8 @@ public struct TimelineItemMenu: View {
     }
     
     private func reactionBackgroundColor(for emoji: String) -> Color {
-        if item.properties.reactions.first(where: { $0.key == emoji }) != nil {
+        if let reaction = item.properties.reactions.first(where: { $0.key == emoji }),
+           reaction.isHighlighted {
             return .compound.bgActionPrimaryRest
         } else {
             return .clear
