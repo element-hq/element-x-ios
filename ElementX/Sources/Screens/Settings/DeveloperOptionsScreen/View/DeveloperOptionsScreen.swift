@@ -61,7 +61,7 @@ struct DeveloperOptionsScreen: View {
                 }
                 
                 Toggle(isOn: $context.shareLocationEnabled) {
-                    Text("Share location")
+                    Text("Show share location action")
                 }
                 .onChange(of: context.shareLocationEnabled) { _ in
                     context.send(viewAction: .changedShareLocationEnabled)
