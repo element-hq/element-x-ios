@@ -37,12 +37,21 @@ struct MapLibreMapView: UIViewRepresentable {
     
     /// Bind view errors if any
     let error: Binding<MapLibreError?>
+    
+    /// Coordinate of the center of the map
+    @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
+    /// Called when the user pan on the map
+    var userDidPan: (() -> Void)?
+    
     // MARK: - UIViewRepresentable
     
     func makeUIView(context: Context) -> MGLMapView {
         let mapView = makeMapView()
         mapView.delegate = context.coordinator
+        let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
+        panGesture.delegate = context.coordinator
+        mapView.addGestureRecognizer(panGesture)
         return mapView
     }
     
@@ -137,7 +146,9 @@ extension MapLibreMapView {
             }
         }
         
-        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) { }
+        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
+            mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
+        }
         
         // MARK: Callout
                 
@@ -149,6 +160,11 @@ extension MapLibreMapView {
         
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             gestureRecognizer is UIPanGestureRecognizer
+        }
+        
+        @objc
+        func didPan() {
+            mapLibreView.userDidPan?()
         }
     }
 }

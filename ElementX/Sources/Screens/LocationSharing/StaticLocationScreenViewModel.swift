@@ -36,6 +36,9 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             actionsSubject.send(.close)
         case .shareLocation:
             break // TODO: share location
+        case .userDidPan:
+            state.showsUserLocationMode = .hide
+            state.isPinDropSharing = true
         }
     }
 }

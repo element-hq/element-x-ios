@@ -30,10 +30,19 @@ struct StaticLocationScreen: View {
             .alert(item: $context.alertInfo)
     }
     
-    var mapView: MapLibreMapView {
-        MapLibreMapView(builder: builder,
-                        showsUserLocationMode: .hide,
-                        error: $context.mapError)
+    var mapView: some View {
+        ZStack(alignment: .center) {
+            MapLibreMapView(builder: builder,
+                            showsUserLocationMode: .hide,
+                            error: $context.mapError,
+                            mapCenterCoordinate: $context.pinLocation,
+                            userDidPan: {
+                                context.send(viewAction: .userDidPan)
+                            })
+            if context.viewState.isPinDropSharing {
+                LocationMarkerView()
+            }
+        }
     }
     
     @ToolbarContentBuilder
