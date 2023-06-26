@@ -53,20 +53,21 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
                 }
-                
-                Button {
-                    context.showAttachmentPopover = false
-                    context.send(viewAction: .displayLocationPicker)
-                } label: {
-                    Label {
-                        Text(L10n.screenRoomAttachmentSourceLocation)
-                    } icon: {
-                        Image(asset: Asset.Images.locationPin)
+                if ServiceLocator.shared.settings.shareLocationEnabled {
+                    Button {
+                        context.showAttachmentPopover = false
+                        context.send(viewAction: .displayLocationPicker)
+                    } label: {
+                        Label {
+                            Text(L10n.screenRoomAttachmentSourceLocation)
+                        } icon: {
+                            Image(asset: Asset.Images.locationPin)
+                        }
+                        .labelStyle(FixedIconSizeLabelStyle())
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
                     }
-                    .labelStyle(FixedIconSizeLabelStyle())
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
                 }
             }
             .padding(.top, isPresented ? 20 : 0)

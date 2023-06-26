@@ -59,6 +59,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.locationEventsEnabled) { _ in
                     context.send(viewAction: .changedLocationEventsEnabled)
                 }
+                
+                Toggle(isOn: $context.shareLocationEnabled) {
+                    Text("Share location")
+                }
+                .onChange(of: context.shareLocationEnabled) { _ in
+                    context.send(viewAction: .changedShareLocationEnabled)
+                }
             }
             
             Section {
