@@ -39,7 +39,6 @@ enum TimelineItemDeliveryStatus: Hashable {
     case sending
     case sent
     case sendingFailed
-    case cancelled
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -66,12 +65,11 @@ struct EventTimelineItemProxy {
         switch localSendState {
         case .notSentYet:
             return .sending
-        case .sendingFailed:
+        // cancelled is exactly like sendingFailed but does not contain an error
+        case .sendingFailed, .cancelled:
             return .sendingFailed
         case .sent:
             return .sent
-        case .cancelled:
-            return .cancelled
         }
     }
         
