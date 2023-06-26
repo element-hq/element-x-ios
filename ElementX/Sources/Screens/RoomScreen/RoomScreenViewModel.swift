@@ -84,8 +84,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
             Task { await sendCurrentMessage() }
-        case .sendReaction(let emoji, let itemId):
-            Task { await timelineController.sendReaction(emoji, to: itemId) }
+        case .toggleReaction(let emoji, let itemId):
+            Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .cancelReply:
             setComposerMode(.default)
         case .cancelEdit:

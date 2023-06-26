@@ -150,7 +150,7 @@ public struct TimelineItemMenu: View {
     private func reactionButton(for emoji: String) -> some View {
         Button {
             presentationMode.wrappedValue.dismiss()
-            context.send(viewAction: .sendReaction(key: emoji, eventID: item.id))
+            context.send(viewAction: .toggleReaction(key: emoji, eventID: item.id))
         } label: {
             Text(emoji)
                 .padding(8.0)

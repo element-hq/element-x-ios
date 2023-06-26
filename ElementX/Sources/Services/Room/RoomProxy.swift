@@ -260,7 +260,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -268,7 +268,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.sendReaction(eventId: eventID, key: reaction)
+                try self.room.toggleReaction(eventId: eventID, key: reaction)
                 return .success(())
             } catch {
                 return .failure(.failedSendingReaction)
