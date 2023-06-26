@@ -103,6 +103,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
-  SwiftUI-Flow:
+  Flow:
     url: https://github.com/tevelee/SwiftUI-Flow
     minorVersion: 1.2.0
