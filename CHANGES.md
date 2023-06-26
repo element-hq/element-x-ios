@@ -1,3 +1,32 @@
+## Changes in 1.1.5 (2023-06-26)
+
+✨ Features
+
+- Add analytics tracking for room creation ([#1100](https://github.com/vector-im/element-x-ios/pull/1100))
+- Added support for message forwarding ([#978](https://github.com/vector-im/element-x-ios/issues/978))
+- Failed to send messages can now be either retried or removed by tapping on the error icon/timestamp. ([#979](https://github.com/vector-im/element-x-ios/issues/979))
+- Add MapLibre SDK and the Map View component ([#1062](https://github.com/vector-im/element-x-ios/issues/1062))
+- Two sync loop implementation to allow to fetch and update decryption keys also from the NSE. ([#1083](https://github.com/vector-im/element-x-ios/issues/1083))
+- Add reverse geocoding request, that for a given coordinate will return the place name. ([#1085](https://github.com/vector-im/element-x-ios/issues/1085))
+- Add analytics events. ([#1097](https://github.com/vector-im/element-x-ios/issues/1097))
+- Filtering out push notifications for encrypted rooms based on the room push context. ([#1114](https://github.com/vector-im/element-x-ios/issues/1114))
+- Add static map url builder and static map UI component with placeholder and reload logic ([#1115](https://github.com/vector-im/element-x-ios/issues/1115))
+- Render emote notifications like in the timeline ([#1117](https://github.com/vector-im/element-x-ios/issues/1117))
+
+🙌 Improvements
+
+- Migrate all colour tokens to use Compound and deprecate DesignKit tokens. ([#732](https://github.com/vector-im/element-x-ios/issues/732))
+- General app polish. ([#1036](https://github.com/vector-im/element-x-ios/issues/1036))
+- Refactored AlertInfo to not use the soon to be deprecated API for alerts anymore. ([#1067](https://github.com/vector-im/element-x-ios/issues/1067))
+- Add a screen to be shown when new users are on the waiting list. ([#1154](https://github.com/vector-im/element-x-ios/issues/1154))
+
+🐛 Bugfixes
+
+- Fixed crashes when opening the invites screen ([#1102](https://github.com/vector-im/element-x-ios/issues/1102))
+- Disabled push rules filtering temporarily to fix a bug that prevented push notifications from being received. ([#1155](https://github.com/vector-im/element-x-ios/issues/1155))
+- Handled the cancelled state of a message properly as a failure state. ([#1160](https://github.com/vector-im/element-x-ios/issues/1160))
+
+
 ## Changes in 1.1.4 (2023-06-13)
 
 🐛 Bugfixes

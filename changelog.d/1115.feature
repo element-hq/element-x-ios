@@ -1,1 +1,0 @@
-Add static map url builder and static map UI component with placeholder and reload logic

@@ -1,1 +1,0 @@
-Failed to send messages can now be either retried or removed by tapping on the error icon/timestamp.

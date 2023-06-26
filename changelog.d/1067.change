@@ -1,1 +1,0 @@
-Refactored AlertInfo to not use the soon to be deprecated API for alerts anymore.
