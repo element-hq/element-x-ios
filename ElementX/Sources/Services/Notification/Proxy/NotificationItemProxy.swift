@@ -360,7 +360,7 @@ extension NotificationItemProxyProtocol {
     private func processEmote(content: EmoteMessageContent,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "🫥 " + content.body
+        notification.body = L10n.commonEmote(senderDisplayName ?? roomDisplayName, content.body)
 
         return notification
     }
