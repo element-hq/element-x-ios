@@ -94,7 +94,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
                                       alignment: alignment) { key in
-                    context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
+                    context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 }
             }
         }

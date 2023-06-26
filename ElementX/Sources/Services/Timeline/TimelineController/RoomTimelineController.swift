@@ -156,13 +156,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendReaction(_ reaction: String, to itemID: String) async {
-        MXLog.info("Send reaction in \(roomID)")
-        switch await roomProxy.sendReaction(reaction, to: itemID) {
+    func toggleReaction(_ reaction: String, to itemID: String) async {
+        MXLog.info("Toggle reaction in \(roomID)")
+        switch await roomProxy.toggleReaction(reaction, to: itemID) {
         case .success:
-            MXLog.info("Finished sending reaction")
+            MXLog.info("Finished toggling reaction")
         case .failure(let error):
-            MXLog.error("Failed sending reaction with error: \(error)")
+            MXLog.error("Failed toggling reaction with error: \(error)")
         }
     }
     

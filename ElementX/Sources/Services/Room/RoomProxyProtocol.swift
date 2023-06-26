@@ -92,7 +92,7 @@ protocol RoomProxyProtocol {
     
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
-    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
     
     func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>
     

@@ -500,7 +500,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemId)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await self?.timelineController?.sendReaction(emoji, to: itemId)
+                    await self?.timelineController?.toggleReaction(emoji, to: itemId)
                 }
             case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
