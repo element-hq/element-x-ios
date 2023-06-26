@@ -24,6 +24,7 @@ enum UITestsScreenIdentifier: String {
     case serverSelectionNonModal
     case authenticationFlow
     case softLogout
+    case waitlist
     case analyticsPrompt
     case analyticsSettingsScreen
     case simpleRegular

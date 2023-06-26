@@ -46,4 +46,12 @@ extension AuthenticationError {
 
         return first
     }
+    
+    /// Whether or not the error is related to the sliding sync proxy being full.
+    ///
+    /// This is a temporary error whilst we scale the backend infrastructure.
+    var isElementWaitlist: Bool {
+        guard case let .Generic(message) = self else { return false }
+        return message.contains("IO_ELEMENT_X_WAIT_LIST")
+    }
 }

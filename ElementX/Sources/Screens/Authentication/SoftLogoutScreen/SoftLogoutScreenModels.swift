@@ -17,10 +17,10 @@
 import SwiftUI
 
 struct SoftLogoutScreenCredentials {
-    let userId: String
+    let userID: String
     let homeserverName: String
     let userDisplayName: String
-    let deviceId: String?
+    let deviceID: String?
 }
 
 enum SoftLogoutScreenViewModelAction: CustomStringConvertible {
