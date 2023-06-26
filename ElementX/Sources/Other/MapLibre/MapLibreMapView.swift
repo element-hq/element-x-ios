@@ -52,6 +52,7 @@ struct MapLibreMapView: UIViewRepresentable {
         let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
         panGesture.delegate = context.coordinator
         mapView.addGestureRecognizer(panGesture)
+        mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
         return mapView
     }
     
@@ -89,15 +90,12 @@ struct MapLibreMapView: UIViewRepresentable {
         case .follow:
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
-            mapView.zoomLevel = Constants.mapZoomLevel
         case .show:
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .none
-            mapView.zoomLevel = Constants.mapZoomLevel
         case .hide:
             mapView.showsUserLocation = false
             mapView.userTrackingMode = .none
-            mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
         }
     }
 }

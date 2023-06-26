@@ -57,12 +57,18 @@ struct StaticLocationScreen: View {
         }
     }
     
+    @ScaledMetric private var shareMarkerSize: CGFloat = 28
     private var shareLocationButton: some View {
         Button {
             context.send(viewAction: .shareLocation)
         } label: {
-            Label(L10n.screenShareThisLocationAction, image: "images/location-marker")
-                .labelStyle(FixedIconSizeLabelStyle())
+            HStack(spacing: 8) {
+                Image(asset: Asset.Images.locationMarker)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: shareMarkerSize, height: shareMarkerSize)
+                Text(context.viewState.isPinDropSharing ? L10n.screenShareThisLocationAction : L10n.screenShareMyLocationAction)
+            }
         }
     }
     
