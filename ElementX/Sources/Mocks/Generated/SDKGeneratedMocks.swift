@@ -242,27 +242,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - `getNotificationItem`
 
-    public var getNotificationItemRoomIdEventIdThrowableError: Error?
-    public var getNotificationItemRoomIdEventIdCallsCount = 0
-    public var getNotificationItemRoomIdEventIdCalled: Bool {
-        return getNotificationItemRoomIdEventIdCallsCount > 0
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesThrowableError: Error?
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount = 0
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesCalled: Bool {
+        return getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount > 0
     }
-    public var getNotificationItemRoomIdEventIdReceivedArguments: (`roomId`: String, `eventId`: String)?
-    public var getNotificationItemRoomIdEventIdReceivedInvocations: [(`roomId`: String, `eventId`: String)] = []
-    public var getNotificationItemRoomIdEventIdReturnValue: NotificationItem?
-    public var getNotificationItemRoomIdEventIdClosure: ((String, String) throws -> NotificationItem?)?
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesReceivedArguments: (`roomId`: String, `eventId`: String, `filterByPushRules`: Bool)?
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesReceivedInvocations: [(`roomId`: String, `eventId`: String, `filterByPushRules`: Bool)] = []
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesReturnValue: NotificationItem?
+    public var getNotificationItemRoomIdEventIdFilterByPushRulesClosure: ((String, String, Bool) throws -> NotificationItem?)?
 
-    public func `getNotificationItem`(`roomId`: String, `eventId`: String) throws -> NotificationItem? {
-        if let error = getNotificationItemRoomIdEventIdThrowableError {
+    public func `getNotificationItem`(`roomId`: String, `eventId`: String, `filterByPushRules`: Bool) throws -> NotificationItem? {
+        if let error = getNotificationItemRoomIdEventIdFilterByPushRulesThrowableError {
             throw error
         }
-        getNotificationItemRoomIdEventIdCallsCount += 1
-        getNotificationItemRoomIdEventIdReceivedArguments = (roomId: roomId, eventId: eventId)
-        getNotificationItemRoomIdEventIdReceivedInvocations.append((roomId: roomId, eventId: eventId))
-        if let getNotificationItemRoomIdEventIdClosure = getNotificationItemRoomIdEventIdClosure {
-            return try getNotificationItemRoomIdEventIdClosure(`roomId`, `eventId`)
+        getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount += 1
+        getNotificationItemRoomIdEventIdFilterByPushRulesReceivedArguments = (roomId: roomId, eventId: eventId, filterByPushRules: filterByPushRules)
+        getNotificationItemRoomIdEventIdFilterByPushRulesReceivedInvocations.append((roomId: roomId, eventId: eventId, filterByPushRules: filterByPushRules))
+        if let getNotificationItemRoomIdEventIdFilterByPushRulesClosure = getNotificationItemRoomIdEventIdFilterByPushRulesClosure {
+            return try getNotificationItemRoomIdEventIdFilterByPushRulesClosure(`roomId`, `eventId`, `filterByPushRules`)
         } else {
-            return getNotificationItemRoomIdEventIdReturnValue
+            return getNotificationItemRoomIdEventIdFilterByPushRulesReturnValue
         }
     }
     //MARK: - `getProfile`
