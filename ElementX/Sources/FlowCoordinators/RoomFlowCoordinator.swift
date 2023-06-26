@@ -534,9 +534,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
 
         coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
+            case .sendLocation(let uri):
+                let locationBody = String(format: "Location was shared at %@ as of %@", uri.string, Date().description)
+                Task {
+                    _ = await self.roomProxy?.sendLocation(body: locationBody, geoURI: uri)
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
             case .close:
-                self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)

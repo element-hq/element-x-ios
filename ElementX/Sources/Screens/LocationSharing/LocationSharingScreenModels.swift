@@ -24,6 +24,7 @@ enum LocationSharingViewError: Error, Hashable {
 
 enum StaticLocationScreenViewModelAction {
     case close
+    case sendLocation(GeoURI)
 }
 
 struct StaticLocationScreenViewState: BindableState {

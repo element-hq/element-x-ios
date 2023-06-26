@@ -58,7 +58,7 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayLocationPicker)
                 } label: {
-                    Label(L10n.screenRoomAttachmentSourceLocation, image: "Images/location-pin")
+                    Label(L10n.screenRoomAttachmentSourceLocation, image: "images/location-pin")
                         .labelStyle(FixedIconSizeLabelStyle())
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)

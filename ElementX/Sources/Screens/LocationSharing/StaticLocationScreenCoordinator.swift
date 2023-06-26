@@ -21,6 +21,7 @@ struct StaticLocationScreenCoordinatorParameters { }
 
 enum StaticLocationScreenCoordinatorAction {
     case close
+    case sendLocation(GeoURI)
 }
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
@@ -48,6 +49,8 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 actionsSubject.send(.close)
+            case .sendLocation(let uri):
+                actionsSubject.send(.sendLocation(uri))
             }
         }
         .store(in: &cancellables)
