@@ -177,7 +177,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .filled(let roomId):
             return buildRoomSummaryForIdentifier(roomId, invalidated: false)
         case .invalidated(let roomId):
-            return buildRoomSummaryForIdentifier(roomId, invalidated: true)
+            guard let cachedRoom = rooms.first(where: { $0.id == roomId }) else {
+                return buildRoomSummaryForIdentifier(roomId, invalidated: true)
+            }
+            
+            switch cachedRoom {
+            case .empty:
+                return .empty
+            case .filled(let details):
+                return .invalidated(details: details)
+            case .invalidated:
+                return cachedRoom
+            }
         }
     }
     
