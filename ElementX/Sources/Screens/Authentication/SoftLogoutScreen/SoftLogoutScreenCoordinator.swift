@@ -108,7 +108,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
 
     /// Login with the supplied username and password.
     @MainActor private func login(withPassword password: String) {
-        let username = parameters.credentials.userId
+        let username = parameters.credentials.userID
 
         startLoading()
 
@@ -116,7 +116,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             switch await authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
-                                                     deviceId: parameters.credentials.deviceId) {
+                                                     deviceID: parameters.credentials.deviceID) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
                 stopLoading()

@@ -19,10 +19,10 @@ import XCTest
 @testable import ElementX
 
 class SoftLogoutViewModelTests: XCTestCase {
-    let credentials = SoftLogoutScreenCredentials(userId: "mock_user_id",
+    let credentials = SoftLogoutScreenCredentials(userID: "mock_user_id",
                                                   homeserverName: "https://matrix.org",
                                                   userDisplayName: "mock_username",
-                                                  deviceId: "ABCDEFGH")
+                                                  deviceID: "ABCDEFGH")
     
     @MainActor func testInitialStateForMatrixOrg() {
         let viewModel = SoftLogoutScreenViewModel(credentials: credentials,

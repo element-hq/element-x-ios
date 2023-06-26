@@ -102,19 +102,23 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
 //        }
     }
     
-    func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
             let client = try await Task.dispatch(on: .global()) {
                 try self.authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: initialDeviceName,
-                                                     deviceId: deviceId)
+                                                     deviceId: deviceID)
             }
             
             return await userSession(for: client)
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
             guard let error = error as? AuthenticationError else { return .failure(.failedLoggingIn) }
+            
+            if error.isElementWaitlist {
+                return .failure(.isOnWaitlist)
+            }
             
             switch error.code {
             case .forbidden:

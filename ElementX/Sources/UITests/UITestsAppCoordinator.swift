@@ -116,13 +116,22 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .softLogout:
-            let credentials = SoftLogoutScreenCredentials(userId: "@mock:matrix.org",
+            let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",
                                                           homeserverName: "matrix.org",
                                                           userDisplayName: "mock",
-                                                          deviceId: "ABCDEFGH")
+                                                          deviceID: "ABCDEFGH")
             return SoftLogoutScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                  credentials: credentials,
                                                                  keyBackupNeeded: false))
+        case .waitlist:
+            let credentials = WaitlistScreenCredentials(username: "alice",
+                                                        password: "password",
+                                                        initialDeviceName: nil,
+                                                        deviceID: nil,
+                                                        homeserver: .mockMatrixDotOrg)
+            return WaitlistScreenCoordinator(parameters: .init(credentials: credentials,
+                                                               authenticationService: MockAuthenticationServiceProxy(),
+                                                               userIndicatorController: UserIndicatorControllerMock.default))
         case .simpleRegular:
             return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
