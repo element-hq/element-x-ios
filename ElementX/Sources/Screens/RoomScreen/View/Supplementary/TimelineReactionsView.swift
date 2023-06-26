@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Flow
 import SwiftUI
 
 struct TimelineReactionsView: View {
@@ -23,13 +24,14 @@ struct TimelineReactionsView: View {
     let showReactionSummary: (String) -> Void
     
     var body: some View {
-        FlowLayout(alignment: isOutgoing ? .trailing : .leading) {
+        HFlow(itemSpacing: 4, rowSpacing: 4) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(reaction: reaction,
                                        toggleReaction: toggleReaction,
-                                       showReactionSummary: showReactionSummary).padding(4)
+                                       showReactionSummary: showReactionSummary)
             }
         }
+        .environment(\.layoutDirection, isOutgoing ? .rightToLeft : .leftToRight)
     }
 }
 
