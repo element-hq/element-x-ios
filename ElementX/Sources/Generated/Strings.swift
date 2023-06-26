@@ -668,6 +668,8 @@ public enum L10n {
   public static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
   /// Photo & Video Library
   public static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
+  /// Location
+  public static var screenRoomAttachmentSourceLocation: String { return L10n.tr("Localizable", "screen_room_attachment_source_location") }
   /// Add topic
   public static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Already a member
@@ -730,6 +732,8 @@ public enum L10n {
   public static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
   /// Room members
   public static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
+  /// Message copied
+  public static var screenRoomMessageCopied: String { return L10n.tr("Localizable", "screen_room_message_copied") }
   /// You do not have permission to post to this room
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
   /// Remove
@@ -790,6 +794,12 @@ public enum L10n {
   public static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   public static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Share location
+  public static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
+  /// Share my location
+  public static var screenShareMyLocationAction: String { return L10n.tr("Localizable", "screen_share_my_location_action") }
+  /// Share this location
+  public static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
   /// Are you sure you want to sign out?
   public static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
   /// Sign out
