@@ -120,9 +120,8 @@ extension UNMutableNotificationContent {
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await PlaceholderAvatarImage(name: icon.groupInfo?.name ?? senderName,
-                                                          contentID: icon.groupInfo?.id ?? senderID)
-            .getImageData() {
+        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+                                                                 id: icon.groupInfo?.name ?? senderName) {
             image = INImage(imageData: data)
         } else {
             image = INImage(named: "")
@@ -174,13 +173,13 @@ extension UNMutableNotificationContent {
         // swiftlint:disable:next force_cast
         return updatedContent.mutableCopy() as! UNMutableNotificationContent
     }
-}
 
-private extension PlaceholderAvatarImage {
-    func getImageData() async -> Data? {
-        let circlePlaceholder = clipShape(Circle())
+    private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
+        let image = PlaceholderAvatarImage(name: name,
+                                           contentID: id)
+            .clipShape(Circle())
             .frame(width: 100, height: 100)
-        let renderer = await ImageRenderer(content: circlePlaceholder)
+        let renderer = await ImageRenderer(content: image)
         return await renderer.uiImage?.jpegData(compressionQuality: 0.8)
     }
 }
