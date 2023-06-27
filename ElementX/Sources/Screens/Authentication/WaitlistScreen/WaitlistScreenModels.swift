@@ -53,17 +53,17 @@ struct WaitlistScreenViewState: BindableState {
     
     var title: String {
         if isWaiting {
-            return UntranslatedL10n.screenWaitlistTitle
+            return L10n.screenWaitlistTitle
         } else {
-            return UntranslatedL10n.screenWaitlistTitleSuccess
+            return L10n.screenWaitlistTitleSuccess
         }
     }
     
     var message: String {
         if isWaiting {
-            return UntranslatedL10n.screenWaitlistMessage(InfoPlistReader.main.bundleDisplayName, homeserver.address)
+            return L10n.screenWaitlistMessage(InfoPlistReader.main.bundleDisplayName, homeserver.address)
         } else {
-            return UntranslatedL10n.screenWaitlistMessageSuccess(InfoPlistReader.main.bundleDisplayName)
+            return L10n.screenWaitlistMessageSuccess(InfoPlistReader.main.bundleDisplayName)
         }
     }
 }

@@ -111,7 +111,7 @@ final class WaitlistScreenCoordinator: CoordinatorProtocol {
     private func showRefreshIndicator() {
         parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.refreshIndicatorID,
                                                                          type: .modal,
-                                                                         title: UntranslatedL10n.commonRefreshing,
+                                                                         title: L10n.commonRefreshing,
                                                                          persistent: true))
     }
     

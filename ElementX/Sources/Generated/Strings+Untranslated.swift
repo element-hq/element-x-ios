@@ -10,22 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
-  /// Refreshing…
-  public static var commonRefreshing: String { return UntranslatedL10n.tr("Untranslated", "common_refreshing") }
-  /// There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.
-  /// 
-  /// Thanks for your patience!
-  public static func screenWaitlistMessage(_ p1: Any, _ p2: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_waitlist_message", String(describing: p1), String(describing: p2))
-  }
-  /// Welcome to %1$@
-  public static func screenWaitlistMessageSuccess(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_waitlist_message_success", String(describing: p1))
-  }
-  /// You're on the waitlist!
-  public static var screenWaitlistTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_waitlist_title") }
-  /// You're in!
-  public static var screenWaitlistTitleSuccess: String { return UntranslatedL10n.tr("Untranslated", "screen_waitlist_title_success") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
