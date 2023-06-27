@@ -90,12 +90,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
                 .accessibilityElement(children: .combine)
-            
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
                                       alignment: alignment) { key in
                     context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 }
+                // Workaround to stop the message long press stealing the touch from the reaction buttons
+                .onTapGesture { }
             }
         }
     }
