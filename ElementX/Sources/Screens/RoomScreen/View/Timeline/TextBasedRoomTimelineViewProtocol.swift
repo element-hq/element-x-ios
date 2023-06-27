@@ -32,7 +32,7 @@ extension TextBasedRoomTimelineViewProtocol {
         }
 
         // To account for the extra spacing created by the alert icon
-        if timelineItem.properties.deliveryStatus == .sendingFailed {
+        if timelineItem.hasFailedToSend {
             whiteSpaces += 3
         }
 

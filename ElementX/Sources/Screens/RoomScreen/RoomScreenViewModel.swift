@@ -354,16 +354,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         var actions: [TimelineItemMenuAction] = [
             .reply
         ]
-        
-        if timelineItem is EventBasedMessageTimelineItemProtocol {
+
+        if item.isMessage {
             actions.append(.forward(itemID: itemId))
         }
-        
+
         if item.isEditable {
             actions.append(.edit)
         }
-        
-        if timelineItem is EventBasedMessageTimelineItemProtocol {
+
+        if item.isMessage {
             actions.append(.copy)
         }
         
@@ -381,7 +381,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
            case let .megolmV1AesSha2(sessionID) = item.encryptionType {
             debugActions.append(.retryDecryption(sessionID: sessionID))
         }
-        
+
+        if item.hasFailedToSend {
+            actions = actions.filter(\.canAppearInFailedEcho)
+        }
+
+        if item.isRedacted {
+            actions = actions.filter(\.canAppearInRedacted)
+        }
+
         return .init(actions: actions, debugActions: debugActions)
     }
     
@@ -416,7 +424,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .redact:
             Task {
-                await timelineController.redact(itemID)
+                if eventTimelineItem.hasFailedToSend,
+                   let transactionID = eventTimelineItem.properties.transactionID {
+                    await timelineController.cancelSend(transactionID)
+                } else {
+                    await timelineController.redact(itemID)
+                }
             }
         case .reply:
             state.bindings.composerFocused = true

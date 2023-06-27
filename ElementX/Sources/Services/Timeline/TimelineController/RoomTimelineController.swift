@@ -185,6 +185,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.error("Failed redacting message with error: \(error)")
         }
     }
+
+    func cancelSend(_ transactionID: String) async {
+        MXLog.info("Cancelling send in \(roomID)")
+        await roomProxy.cancelSend(transactionID: transactionID)
+    }
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
