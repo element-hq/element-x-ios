@@ -24,9 +24,13 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
-                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: additionalWhitespaces)
+                FormattedBodyText(attributedString: attributedString,
+                                  additionalWhitespacesCount: additionalWhitespaces,
+                                  boostEmojiSize: true)
             } else {
-                FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: additionalWhitespaces)
+                FormattedBodyText(text: timelineItem.body,
+                                  additionalWhitespacesCount: additionalWhitespaces,
+                                  boostEmojiSize: true)
             }
         }
     }
