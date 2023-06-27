@@ -212,7 +212,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch action {
         case .displayMediaFile(let file, let title):
-            callback?(.displayMediaViewer(file: file, title: title))
+            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
         case .none:
             break
         }

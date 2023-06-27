@@ -113,11 +113,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.dismissRoomMemberDetails, .roomMemberDetails(let roomID, _)):
                 return .room(roomID: roomID)
                 
-            case (.presentMediaViewer(let file, let title), .room(let roomID)):
-                return .mediaViewer(roomID: roomID, file: file, title: title)
-            case (.dismissMediaViewer, .mediaViewer(let roomID, _, _)):
-                return .room(roomID: roomID)
-                
             case (.presentReportContent(let itemID, let senderID), .room(let roomID)):
                 return .reportContent(roomID: roomID, itemID: itemID, senderID: senderID)
             case (.dismissReportContent, .reportContent(let roomID, _, _)):
@@ -175,11 +170,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
             case (.roomDetails, .dismissRoom, .initial):
                 dismissRoom(animated: animated)
-                
-            case (.room, .presentMediaViewer, .mediaViewer(_, let file, let title)):
-                presentMediaViewer(file, title: title)
-            case (.mediaViewer, .dismissMediaViewer, .room):
-                break
                 
             case (.room, .presentReportContent, .reportContent(_, let itemID, let senderID)):
                 presentReportContent(for: itemID, from: senderID)
@@ -296,8 +286,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .presentRoomDetails:
                     stateMachine.tryEvent(.presentRoomDetails(roomID: roomID))
-                case .presentMediaViewer(let file, let title):
-                    stateMachine.tryEvent(.presentMediaViewer(file: file, title: title))
                 case .presentReportContent(let itemID, let senderID):
                     stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .presentMediaUploadPicker(let source):
@@ -394,21 +382,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.dismissRoomDetails)
                 }
             }
-        }
-    }
-    
-    private func presentMediaViewer(_ file: MediaFileHandleProxy, title: String?) {
-        let params = FilePreviewScreenCoordinatorParameters(mediaFile: file, title: title)
-        let coordinator = FilePreviewScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] action in
-            switch action {
-            case .cancel:
-                self?.navigationStackCoordinator.pop()
-            }
-        }
-        
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissMediaViewer)
         }
     }
     
@@ -598,7 +571,6 @@ private extension RoomFlowCoordinator {
     enum State: StateType {
         case initial
         case room(roomID: String)
-        case mediaViewer(roomID: String, file: MediaFileHandleProxy, title: String?)
         case reportContent(roomID: String, itemID: String, senderID: String)
         case roomDetails(roomID: String, isRoot: Bool)
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
@@ -616,9 +588,6 @@ private extension RoomFlowCoordinator {
     enum Event: EventType {
         case presentRoom(roomID: String)
         case dismissRoom
-        
-        case presentMediaViewer(file: MediaFileHandleProxy, title: String?)
-        case dismissMediaViewer
         
         case presentReportContent(itemID: String, senderID: String)
         case dismissReportContent

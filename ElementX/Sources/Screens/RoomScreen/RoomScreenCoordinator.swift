@@ -25,7 +25,6 @@ struct RoomScreenCoordinatorParameters {
 }
 
 enum RoomScreenCoordinatorAction {
-    case presentMediaViewer(file: MediaFileHandleProxy, title: String?)
     case presentReportContent(itemID: String, senderID: String)
     case presentMediaUploadPicker(MediaPickerScreenSource)
     case presentMediaUploadPreviewScreen(URL)
@@ -63,8 +62,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .displayRoomDetails:
                 actionsSubject.send(.presentRoomDetails)
-            case .displayMediaViewer(let file, let title):
-                actionsSubject.send(.presentMediaViewer(file: file, title: title))
             case .displayEmojiPicker(let itemID):
                 actionsSubject.send(.presentEmojiPicker(itemID: itemID))
             case .displayReportContent(let itemID, let senderID):
