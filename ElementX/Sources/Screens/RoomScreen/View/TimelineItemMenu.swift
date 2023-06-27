@@ -51,6 +51,24 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             return true
         }
     }
+
+    var canAppearInFailedEcho: Bool {
+        switch self {
+        case .copy, .redact, .viewSource:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var canAppearInRedacted: Bool {
+        switch self {
+        case .viewSource:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public struct TimelineItemMenu: View {
@@ -59,6 +77,10 @@ public struct TimelineItemMenu: View {
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
+
+    private var isRedacted: Bool {
+        item is RedactedRoomTimelineItem
+    }
     
     public var body: some View {
         VStack {
@@ -70,17 +92,21 @@ public struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    reactionsSection
-                        .padding(.top, 4.0)
-                        .padding(.bottom, 8.0)
-                    
-                    Divider()
-                        .background(Color.compound.bgSubtlePrimary)
-                    
-                    viewsForActions(actions.actions)
-                    
-                    Divider()
-                        .background(Color.compound.bgSubtlePrimary)
+                    if !isRedacted, !item.hasFailedToSend {
+                        reactionsSection
+                            .padding(.top, 4.0)
+                            .padding(.bottom, 8.0)
+
+                        Divider()
+                            .background(Color.compound.bgSubtlePrimary)
+                    }
+
+                    if !actions.actions.isEmpty {
+                        viewsForActions(actions.actions)
+
+                        Divider()
+                            .background(Color.compound.bgSubtlePrimary)
+                    }
                     
                     viewsForActions(actions.debugActions)
                 }
