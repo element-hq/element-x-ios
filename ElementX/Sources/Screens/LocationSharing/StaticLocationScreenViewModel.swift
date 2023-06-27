@@ -34,9 +34,9 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
-        case .shareLocation:
-            guard let coordinates = state.bindings.pinLocation else { return }
-            actionsSubject.send(.sendLocation(.init(latitude: coordinates.latitude, longitude: coordinates.longitude)))
+        case .selectLocation:
+            guard let coordinate = state.bindings.mapCenterLocation else { return }
+            actionsSubject.send(.sendLocation(.init(coordinate: coordinate)))
         case .userDidPan:
             state.showsUserLocationMode = .hide
             state.isPinDropSharing = true

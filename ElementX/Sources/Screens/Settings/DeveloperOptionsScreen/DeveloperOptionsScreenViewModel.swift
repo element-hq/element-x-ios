@@ -30,7 +30,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                                isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
-                                                               locationEventsEnabled: appSettings.locationEventsEnabled, shareLocationEnabled: appSettings.shareLocationEnabled)
+                                                               locationEventsEnabled: appSettings.locationEventsEnabled,
+                                                               shareLocationEnabled: appSettings.shareLocationEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)

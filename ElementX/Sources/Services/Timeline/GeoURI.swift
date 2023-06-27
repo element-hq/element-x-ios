@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import CoreLocation
 import Foundation
 
 /// A structure that parses a geo URI (i.e. geo:53.99803101552848,-8.25347900390625;u=10) and constructs their constituent parts.
@@ -70,4 +71,10 @@ private typealias RegexGeoURI = Regex<(Substring, latitude: Substring, longitude
 
 private extension RegexGeoURI {
     static let standard: Self = /geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?/
+}
+
+extension GeoURI {
+    init(coordinate: CLLocationCoordinate2D) {
+        self.init(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    }
 }

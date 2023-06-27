@@ -30,12 +30,12 @@ struct StaticLocationScreen: View {
             .alert(item: $context.alertInfo)
     }
     
-    var mapView: some View {
+    private var mapView: some View {
         ZStack(alignment: .center) {
             MapLibreMapView(builder: builder,
                             showsUserLocationMode: .hide,
                             error: $context.mapError,
-                            mapCenterCoordinate: $context.pinLocation,
+                            mapCenterCoordinate: $context.mapCenterLocation,
                             userDidPan: {
                                 context.send(viewAction: .userDidPan)
                             })
@@ -60,7 +60,7 @@ struct StaticLocationScreen: View {
     @ScaledMetric private var shareMarkerSize: CGFloat = 28
     private var shareLocationButton: some View {
         Button {
-            context.send(viewAction: .shareLocation)
+            context.send(viewAction: .selectLocation)
         } label: {
             HStack(spacing: 8) {
                 Image(asset: Asset.Images.locationMarker)

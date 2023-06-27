@@ -37,7 +37,7 @@ struct StaticLocationScreenViewState: BindableState {
 }
 
 struct StaticLocationScreenBindings {
-    var pinLocation: CLLocationCoordinate2D?
+    var mapCenterLocation: CLLocationCoordinate2D?
     
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
@@ -58,6 +58,6 @@ struct StaticLocationScreenBindings {
 
 enum StaticLocationScreenViewAction {
     case close
-    case shareLocation
+    case selectLocation
     case userDidPan
 }

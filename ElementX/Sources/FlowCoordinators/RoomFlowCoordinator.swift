@@ -536,10 +536,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .sendLocation(let uri):
-                let locationBody = String(format: "Location was shared at %@ as of %@", uri.string, Date().description)
+            case .selectedLocation(let geoURI):
                 Task {
-                    _ = await self.roomProxy?.sendLocation(body: locationBody, geoURI: uri)
+                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage, geoURI: geoURI)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             case .close:
@@ -687,5 +686,11 @@ private extension RoomFlowCoordinator {
         
         case presentMessageForwarding(itemID: String)
         case dismissMessageForwarding
+    }
+}
+
+private extension GeoURI {
+    var bodyMessage: String {
+        String(format: "Location was shared at %@ as of %@", string, Date().description)
     }
 }
