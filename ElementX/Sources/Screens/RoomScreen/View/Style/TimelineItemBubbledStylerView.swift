@@ -96,6 +96,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                       alignment: alignment) { key in
                     context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 }
+                // Workaround to stop the message long press stealing the touch from the reaction buttons
+                .onTapGesture { }
             }
         }
     }
