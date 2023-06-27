@@ -19,7 +19,7 @@ import SwiftUI
 
 struct TimelineReactionsView: View {
     let reactions: [AggregatedReaction]
-    let isOutgoing: Bool
+    let layoutDirection: LayoutDirection
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
     
@@ -31,7 +31,7 @@ struct TimelineReactionsView: View {
                                        showReactionSummary: showReactionSummary)
             }
         }
-        .environment(\.layoutDirection, isOutgoing ? .rightToLeft : .leftToRight)
+        .environment(\.layoutDirection, layoutDirection)
     }
 }
 
@@ -95,8 +95,8 @@ struct TimelineReactionView_Previews: PreviewProvider {
             TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in } showReactionSummary: { _ in }
             TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in } showReactionSummary: { _ in }
             TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in } showReactionSummary: { _ in }
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, isOutgoing: false) { _ in } showReactionSummary: { _ in }
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, isOutgoing: true) { _ in } showReactionSummary: { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, layoutDirection: .leftToRight) { _ in } showReactionSummary: { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions, layoutDirection: .rightToLeft) { _ in } showReactionSummary: { _ in }
         }
     }
 }

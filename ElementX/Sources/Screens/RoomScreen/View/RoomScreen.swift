@@ -50,7 +50,7 @@ struct RoomScreen: View {
                 }
             }
             .sheet(item: $context.reactionSummaryInfo) {
-                ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedKey: $0.key)
+                ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.key)
             }
             .track(screen: .room)
             .task(id: context.viewState.roomId) {

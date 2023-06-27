@@ -21,10 +21,10 @@ struct ReactionsSummaryView: View {
     let members: [String: RoomMemberState]
     let imageProvider: ImageProviderProtocol?
     
-    @State var selectedKey: String
+    @State var selectedReactionKey: String
     
     var selectedReactionIndex: Int {
-        reactions.firstIndex(where: { $0.key == selectedKey }) ?? 0
+        reactions.firstIndex(where: { $0.key == selectedReactionKey }) ?? 0
     }
     
     var body: some View {
@@ -32,20 +32,24 @@ struct ReactionsSummaryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(reactions, id: \.self) { reaction in
-                        ReactionSummaryButton(reaction: reaction, highlighted: selectedKey == reaction.key) { key in
+                        ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
                             withAnimation {
-                                selectedKey = key
+                                selectedReactionKey = key
                             }
                         }
                     }
                 }
             }
-            TabView(selection: $selectedKey) {
+            .padding(.top, 24)
+            .padding(.bottom, 12)
+            .padding(.leading, 20)
+            TabView(selection: $selectedReactionKey) {
                 ForEach(reactions, id: \.self) { reaction in
                     ScrollView {
                         VStack(alignment: .leading) {
                             ForEach(reaction.senders, id: \.self) { sender in
                                 ReactionSummarySenderView(sender: sender, member: members[sender], imageProvider: imageProvider)
+                                    .padding(.horizontal, 16)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -55,9 +59,6 @@ struct ReactionsSummaryView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
         }
-        .padding(.leading)
-        .padding(.top, 32.0)
-        .padding(.bottom, 4.0)
         .presentationDetents([.medium])
         .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
@@ -124,6 +125,6 @@ struct ReactionsSummaryView_Previews: PreviewProvider {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],
                              imageProvider: MockMediaProvider(),
-                             selectedKey: AggregatedReaction.mockReactions[0].key)
+                             selectedReactionKey: AggregatedReaction.mockReactions[0].key)
     }
 }

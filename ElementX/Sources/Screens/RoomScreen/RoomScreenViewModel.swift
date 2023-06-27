@@ -602,7 +602,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func showReactionSummary(for itemID: String, key: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
-            // Don't show a menu for non-event based items.
             return
         }
         

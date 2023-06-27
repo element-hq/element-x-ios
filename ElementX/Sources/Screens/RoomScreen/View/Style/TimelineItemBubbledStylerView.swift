@@ -93,7 +93,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
-                                      isOutgoing: timelineItem.isOutgoing) { key in
+                                      layoutDirection: timelineItem.isOutgoing ? .rightToLeft : .leftToRight) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: timelineItem.id, key: key))
