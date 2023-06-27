@@ -39,6 +39,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: nil,
+                                                      userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       // oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
     }
