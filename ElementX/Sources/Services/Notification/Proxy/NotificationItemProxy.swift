@@ -186,9 +186,12 @@ extension NotificationItemProxyProtocol {
     }
 
     var icon: NotificationIcon {
-        !isDirect ? NotificationIcon(mediaSource: roomAvatarMediaSource,
-                                     groupInfo: .init(name: roomDisplayName, id: roomID)) :
-            NotificationIcon(mediaSource: senderAvatarMediaSource, groupInfo: nil)
+        if isDirect {
+            return NotificationIcon(mediaSource: senderAvatarMediaSource, groupInfo: nil)
+        } else {
+            return NotificationIcon(mediaSource: roomAvatarMediaSource,
+                                    groupInfo: .init(name: roomDisplayName, id: roomID))
+        }
     }
 
     /// Process the receiver item proxy
