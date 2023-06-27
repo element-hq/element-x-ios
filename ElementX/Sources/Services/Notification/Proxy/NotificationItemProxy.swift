@@ -185,6 +185,12 @@ extension NotificationItemProxyProtocol {
         }
     }
 
+    var icon: NotificationIcon {
+        !isDirect ? NotificationIcon(mediaSource: roomAvatarMediaSource,
+                                     groupInfo: .init(name: roomDisplayName, id: roomID)) :
+            NotificationIcon(mediaSource: senderAvatarMediaSource, groupInfo: nil)
+    }
+
     /// Process the receiver item proxy
     /// - Parameters:
     ///   - receiverId: identifier of the user that has received the notification
@@ -236,13 +242,10 @@ extension NotificationItemProxyProtocol {
 
         notification.categoryIdentifier = NotificationConstants.Category.invite
 
-        let icon: NotificationIcon
         let body: String
         if !isDirect {
-            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
             body = L10n.notificationRoomInviteBody
         } else {
-            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
             body = L10n.notificationInviteBody
         }
 
@@ -292,17 +295,9 @@ extension NotificationItemProxyProtocol {
         }
         notification.categoryIdentifier = NotificationConstants.Category.message
 
-        let senderName = senderDisplayName ?? roomDisplayName
-        let icon: NotificationIcon
-        if !isDirect {
-            icon = NotificationIcon(mediaSource: roomAvatarMediaSource, groupName: roomDisplayName)
-        } else {
-            icon = NotificationIcon(mediaSource: senderAvatarMediaSource, groupName: nil)
-        }
-
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
-                                                            senderName: senderName,
+                                                            senderName: senderDisplayName ?? roomDisplayName,
                                                             icon: icon)
         return notification
     }

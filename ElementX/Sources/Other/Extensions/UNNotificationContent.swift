@@ -16,15 +16,21 @@
 
 import Foundation
 import Intents
+import SwiftUI
 import UserNotifications
 
 struct NotificationIcon {
+    struct GroupInfo {
+        let name: String
+        let id: String
+    }
+
     let mediaSource: MediaSourceProxy?
     // Required as the key to set images for groups
-    let groupName: String?
+    let groupInfo: GroupInfo?
 
     var shouldDisplayAsGroup: Bool {
-        groupName != nil
+        groupInfo != nil
     }
 }
 
@@ -99,16 +105,27 @@ extension UNMutableNotificationContent {
                        senderID: String,
                        senderName: String,
                        icon: NotificationIcon) async throws -> UNMutableNotificationContent {
-        var image = INImage(named: "")
+        var fetchedImage: INImage?
+        let image: INImage
         if let mediaSource = icon.mediaSource {
             switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
             case .success(let data):
-                image = INImage(imageData: data)
+                fetchedImage = INImage(imageData: data)
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
             case .none:
                 break
             }
+        }
+
+        if let fetchedImage {
+            image = fetchedImage
+        } else if let data = await PlaceholderAvatarImage(name: icon.groupInfo?.name ?? senderName,
+                                                          contentID: icon.groupInfo?.id ?? senderID)
+            .getImageData() {
+            image = INImage(imageData: data)
+        } else {
+            image = INImage(named: "")
         }
 
         let senderHandle = INPersonHandle(value: senderID, type: .unknown)
@@ -122,10 +139,10 @@ extension UNMutableNotificationContent {
         // These are required to show the group name as subtitle
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
-        if let groupName = icon.groupName {
+        if let groupInfo = icon.groupInfo {
             let meHandle = INPersonHandle(value: receiverID, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
-            speakableGroupName = INSpeakableString(spokenPhrase: groupName)
+            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.name)
             recipients = [sender, me]
         }
 
@@ -156,5 +173,14 @@ extension UNMutableNotificationContent {
 
         // swiftlint:disable:next force_cast
         return updatedContent.mutableCopy() as! UNMutableNotificationContent
+    }
+}
+
+private extension PlaceholderAvatarImage {
+    func getImageData() async -> Data? {
+        let circlePlaceholder = clipShape(Circle())
+            .frame(width: 100, height: 100)
+        let renderer = await ImageRenderer(content: circlePlaceholder)
+        return await renderer.uiImage?.jpegData(compressionQuality: 0.8)
     }
 }

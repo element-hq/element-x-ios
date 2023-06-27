@@ -36,6 +36,8 @@ targets:
       - package: KeychainAccess
       - package: Kingfisher
       - package: Collections
+      - package: Compound
+      - package: DesignKit
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -91,3 +93,4 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/Other/SharedUserDefaultsKeys.swift
+    - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
