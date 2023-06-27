@@ -16,8 +16,11 @@
 
 import SwiftUI
 
+import Compound
+import DesignKit
+
 struct PlaceholderAvatarImage: View {
-    @Environment(\.redactionReasons) var redactionReasons
+    @Environment(\.redactionReasons) private var redactionReasons
 
     private let textForImage: String
     private let contentID: String?
