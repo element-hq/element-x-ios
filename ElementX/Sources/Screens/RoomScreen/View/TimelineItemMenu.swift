@@ -77,10 +77,6 @@ public struct TimelineItemMenu: View {
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
-
-    private var isRedacted: Bool {
-        item is RedactedRoomTimelineItem
-    }
     
     public var body: some View {
         VStack {
@@ -92,7 +88,7 @@ public struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if !isRedacted, !item.hasFailedToSend {
+                    if !item.isRedacted, !item.hasFailedToSend {
                         reactionsSection
                             .padding(.top, 4.0)
                             .padding(.bottom, 8.0)
@@ -264,7 +260,7 @@ public struct TimelineItemMenu: View {
 
 struct TimelineItemMenu_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
-    
+
     static var previews: some View {
         VStack {
             if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,

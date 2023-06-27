@@ -354,14 +354,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         var actions: [TimelineItemMenuAction] = [
             .reply
         ]
-        
-        actions.append(.forward(itemID: itemId))
+
+        if item.isMessage {
+            actions.append(.forward(itemID: itemId))
+        }
 
         if item.isEditable {
             actions.append(.edit)
         }
+
+        if item.isMessage {
+            actions.append(.copy)
+        }
         
-        actions.append(.copy)
         actions.append(.copyPermalink)
         
         if item.isOutgoing {
@@ -381,7 +386,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions = actions.filter(\.canAppearInFailedEcho)
         }
 
-        if item is RedactedRoomTimelineItem {
+        if item.isRedacted {
             actions = actions.filter(\.canAppearInRedacted)
         }
 

@@ -37,4 +37,12 @@ extension EventBasedTimelineItemProtocol {
     var hasFailedToSend: Bool {
         properties.deliveryStatus == .sendingFailed
     }
+
+    var isMessage: Bool {
+        self is EventBasedMessageTimelineItemProtocol
+    }
+
+    var isRedacted: Bool {
+        self is RedactedRoomTimelineItem
+    }
 }
