@@ -54,7 +54,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
 
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .redact, .viewSource:
+        case .copy, .edit, .redact, .viewSource:
             return true
         default:
             return false

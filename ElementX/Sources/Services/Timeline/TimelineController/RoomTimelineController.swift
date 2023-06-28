@@ -171,11 +171,20 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func editMessage(_ newMessage: String, original itemID: String) async {
         MXLog.info("Edit message in \(roomID)")
-        switch await roomProxy.editMessage(newMessage, original: itemID) {
-        case .success:
-            MXLog.info("Finished editing message")
-        case .failure(let error):
-            MXLog.error("Failed editing message with error: \(error)")
+        if let timelineItem = timelineItems.first(where: { $0.id == itemID }),
+           let item = timelineItem as? EventBasedTimelineItemProtocol,
+           item.hasFailedToSend,
+           let transactionID = item.properties.transactionID {
+            MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
+            await cancelSend(transactionID)
+            await sendMessage(newMessage)
+        } else {
+            switch await roomProxy.editMessage(newMessage, original: itemID) {
+            case .success:
+                MXLog.info("Finished editing message")
+            case .failure(let error):
+                MXLog.error("Failed editing message with error: \(error)")
+            }
         }
     }
     
