@@ -17,6 +17,6 @@
 import Foundation
 
 struct TimelineStartRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id = "timelineStartTimelineItemIdentifier"
+    let id: String = UUID().uuidString
     let name: String?
 }
