@@ -23,6 +23,7 @@ enum MediaUploadPreviewScreenViewModelAction {
 struct MediaUploadPreviewScreenViewState: BindableState {
     let url: URL
     let title: String?
+    var shouldDisableInteraction = false
 }
 
 enum MediaUploadPreviewScreenViewAction {

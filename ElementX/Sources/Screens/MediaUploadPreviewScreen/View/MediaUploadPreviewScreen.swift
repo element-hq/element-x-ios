@@ -25,6 +25,7 @@ struct MediaUploadPreviewScreen: View {
                     fileURL: context.viewState.url,
                     title: context.viewState.title)
             .id(UUID())
+            .disabled(context.viewState.shouldDisableInteraction)
             .ignoresSafeArea(edges: .bottom)
             .toolbar { toolbar }
             .interactiveDismissDisabled()
@@ -41,6 +42,7 @@ struct MediaUploadPreviewScreen: View {
             Button { context.send(viewAction: .send) } label: {
                 Text(L10n.actionSend)
             }
+            .disabled(context.viewState.shouldDisableInteraction)
         }
     }
 }

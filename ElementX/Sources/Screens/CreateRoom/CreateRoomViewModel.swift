@@ -175,7 +175,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     private func showLoadingIndicator() {
         userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true),
+                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                title: L10n.commonLoading,
                                                                persistent: true))
     }
