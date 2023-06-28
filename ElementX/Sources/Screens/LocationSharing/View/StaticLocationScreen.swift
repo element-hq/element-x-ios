@@ -37,7 +37,6 @@ struct StaticLocationScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .sheet(isPresented: $context.showShareSheet) { shareSheet }
     }
     
     private var mapView: some View {
@@ -68,6 +67,7 @@ struct StaticLocationScreen: View {
         if context.viewState.showShareAction {
             ToolbarItem(placement: .navigationBarTrailing) {
                 shareButton
+                    .popover(isPresented: $context.showShareSheet) { shareSheet }
             }
         }
 
