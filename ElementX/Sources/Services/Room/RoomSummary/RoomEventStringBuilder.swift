@@ -81,9 +81,9 @@ struct RoomEventStringBuilder {
         if let senderDisplayName = sender.displayName,
            let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
             // Don't include the message body in the markdown otherwise it makes tappable links.
-            return attributedSenderDisplayName + ": " + AttributedString(eventSummary)
+            return attributedSenderDisplayName + ": " + AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         } else {
-            return AttributedString(eventSummary)
+            return AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         }
     }
 }
