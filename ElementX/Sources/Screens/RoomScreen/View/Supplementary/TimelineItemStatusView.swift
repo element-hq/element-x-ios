@@ -22,11 +22,6 @@ struct TimelineItemStatusView: View {
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
-    private var isLastOutgoingLocalEchoMessage: Bool {
-        context.viewState.items.last(where: { !$0.isLocalEcho })?.id == timelineItem.id &&
-            timelineItem.isOutgoing
-    }
-
     private var isLastOutgoingMessage: Bool {
         context.viewState.items.last?.id == timelineItem.id &&
             timelineItem.isOutgoing
@@ -48,15 +43,13 @@ struct TimelineItemStatusView: View {
     var deliveryStatus: some View {
         switch timelineItem.properties.deliveryStatus {
         case .sending:
-            TimelineDeliveryStatusView(deliveryStatus: .sending)
-        case .sent:
-            if isLastOutgoingLocalEchoMessage {
-                // We always display the sent icon for the latest echoed outgoing message
-                TimelineDeliveryStatusView(deliveryStatus: .sent)
-            }
-        case .none:
             if isLastOutgoingMessage {
-                // We always display the sent icon for the latest echoed outgoing message
+                // We only display the sending icon for the latest outgoing message
+                TimelineDeliveryStatusView(deliveryStatus: .sending)
+            }
+        case .sent, .none:
+            if isLastOutgoingMessage {
+                // We only display the sent icon for the latest outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
