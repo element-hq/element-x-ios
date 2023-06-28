@@ -361,8 +361,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         var debugActions: [TimelineItemMenuAction] = appSettings.canShowDeveloperOptions ? [.viewSource] : []
 
-        if let unencryptedItem = timelineItem as? EncryptedRoomTimelineItem,
-           case let .megolmV1AesSha2(sessionID) = unencryptedItem.encryptionType {
+        if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem,
+           case let .megolmV1AesSha2(sessionID) = encryptedItem.encryptionType {
             debugActions.append(.retryDecryption(sessionID: sessionID))
             return .init(actions: [], debugActions: debugActions)
         }
