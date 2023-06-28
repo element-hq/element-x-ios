@@ -15,6 +15,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModel<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
@@ -24,6 +25,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let roomProxy: RoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
+    private var requestHandle: SendAttachmentJoinHandleProtocol? {
+        didSet {
+            state.shouldDisableInteraction = requestHandle != nil
+        }
+    }
     
     var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)?
 
@@ -67,6 +73,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             }
             
         case .cancel:
+            requestHandle?.cancel()
             callback?(.dismiss)
         }
     }
@@ -74,15 +81,20 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     // MARK: - Private
     
     private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>) async -> Result<Void, RoomProxyError> {
+        let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
+            self?.requestHandle?.cancel()
+            self?.requestHandle = handle
+        }
+        
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject)
+            return await roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject)
+            return await roomProxy.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: progressSubject)
+            return await roomProxy.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: progressSubject)
+            return await roomProxy.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         }
     }
     
@@ -91,7 +103,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
         userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false),
+                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
                           persistent: true)
         )
@@ -99,6 +111,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     private func stopLoading() {
         userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        requestHandle = nil
     }
     
     private func showError(label: String) {

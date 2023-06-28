@@ -276,76 +276,102 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+    func sendImage(url: URL,
+                   thumbnailURL: URL,
+                   imageInfo: ImageInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
-                    progressSubject?.send(progress)
-                })
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMedia)
-            }
+        
+        let handle = room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
         }
+        
+        return .success(())
     }
     
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+    func sendVideo(url: URL,
+                   thumbnailURL: URL,
+                   videoInfo: VideoInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
-                    progressSubject?.send(progress)
-                })
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMedia)
-            }
+        
+        let handle = room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
         }
+        
+        return .success(())
     }
     
-    func sendAudio(url: URL, audioInfo: AudioInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+    func sendAudio(url: URL,
+                   audioInfo: AudioInfo,
+                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
-                    progressSubject?.send(progress)
-                })
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMedia)
-            }
+        
+        let handle = room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
         }
+        
+        return .success(())
     }
     
-    func sendFile(url: URL, fileInfo: FileInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError> {
+    func sendFile(url: URL,
+                  fileInfo: FileInfo,
+                  progressSubject: CurrentValueSubject<Double, Never>?,
+                  requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                try self.room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
-                    progressSubject?.send(progress)
-                })
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMedia)
-            }
+        
+        let handle = room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
         }
+        
+        return .success(())
     }
 
     func sendLocation(body: String, geoURI: GeoURI) async -> Result<Void, RoomProxyError> {

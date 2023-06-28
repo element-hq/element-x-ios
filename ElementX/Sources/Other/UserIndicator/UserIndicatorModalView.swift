@@ -54,7 +54,11 @@ struct UserIndicatorModalView: View {
         }
         .id(indicator.id)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.black.opacity(0.1))
+        .background {
+            if !indicator.allowsInteraction {
+                Color.black.opacity(0.1)
+            }
+        }
         .ignoresSafeArea()
         .interactiveDismissDisabled(indicator.interactiveDismissDisabled)
     }
@@ -70,13 +74,16 @@ struct UserIndicatorModalView_Previews: PreviewProvider {
             .previewDisplayName("Spinner")
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(CurrentValueSubject<Double, Never>(0.5).asCurrentValuePublisher()),
-                                                                         interactiveDismissDisabled: false),
+                                                                         interactiveDismissDisabled: false,
+                                                                         allowsInteraction: false),
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
             )
             .previewDisplayName("Progress Bar")
             
-            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .none, interactiveDismissDisabled: false),
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .none,
+                                                                         interactiveDismissDisabled: false,
+                                                                         allowsInteraction: false),
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
             )

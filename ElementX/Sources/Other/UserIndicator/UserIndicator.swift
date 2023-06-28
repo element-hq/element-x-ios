@@ -19,10 +19,10 @@ import Foundation
 
 enum UserIndicatorType: Equatable {
     case toast(progress: UserIndicator.Progress?)
-    case modal(progress: UserIndicator.Progress?, interactiveDismissDisabled: Bool)
+    case modal(progress: UserIndicator.Progress?, interactiveDismissDisabled: Bool, allowsInteraction: Bool)
     
     static var toast: Self { .toast(progress: .none) }
-    static var modal: Self { .modal(progress: .indeterminate, interactiveDismissDisabled: false) }
+    static var modal: Self { .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false) }
 }
 
 struct UserIndicator: Equatable, Identifiable {
@@ -50,13 +50,13 @@ struct UserIndicator: Equatable, Identifiable {
     var progress: Progress? {
         switch type {
         case .toast(let progress): return progress
-        case .modal(let progress, _): return progress
+        case .modal(let progress, _, _): return progress
         }
     }
     
     var progressPublisher: CurrentValuePublisher<Double, Never> {
         switch type {
-        case .toast(let progress), .modal(let progress, _):
+        case .toast(let progress), .modal(let progress, _, _):
             switch progress {
             case .none, .indeterminate:
                 return CurrentValueSubject<Double, Never>(0.0).asCurrentValuePublisher()
@@ -70,8 +70,17 @@ struct UserIndicator: Equatable, Identifiable {
         switch type {
         case .toast:
             return false
-        case .modal(_, let interactiveDismissDisabled):
+        case .modal(_, let interactiveDismissDisabled, _):
             return interactiveDismissDisabled
+        }
+    }
+    
+    var allowsInteraction: Bool {
+        switch type {
+        case .toast:
+            return true
+        case .modal(_, _, let allowsInteraction):
+            return allowsInteraction
         }
     }
 }
