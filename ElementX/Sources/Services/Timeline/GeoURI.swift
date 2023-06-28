@@ -43,9 +43,9 @@ struct GeoURI: Hashable {
 
     var string: String {
         if let uncertainty {
-            return "geo:\(latitude),\(longitude);u=\(uncertainty)"
+            return "geo:\(string(for: latitude)),\(string(for: longitude));u=\(string(for: uncertainty))"
         } else {
-            return "geo:\(latitude),\(longitude)"
+            return "geo:\(string(for: latitude)),\(string(for: longitude))"
         }
     }
 
@@ -64,6 +64,10 @@ struct GeoURI: Hashable {
         let uncertainty = matchOutput.uncertainty.flatMap(Double.init)
         return .init(latitude: latitude, longitude: longitude, uncertainty: uncertainty)
     }
+
+    private func string(for number: Double) -> String {
+        NumberFormatter.decimal.string(from: .init(floatLiteral: number)) ?? "\(number)"
+    }
 }
 
 // swiftlint:disable:next large_tuple
@@ -77,4 +81,14 @@ extension GeoURI {
     init(coordinate: CLLocationCoordinate2D) {
         self.init(latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
+}
+
+private extension NumberFormatter {
+    static let decimal: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = Locale(identifier: "en_US_POSIX")
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 30
+        return numberFormatter
+    }()
 }

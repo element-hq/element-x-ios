@@ -324,6 +324,7 @@
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
+"screen_view_location_title" = "Location";
 "screen_waitlist_message" = "There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.\n\nThanks for your patience!";
 "screen_waitlist_message_success" = "Welcome to %1$@";
 "screen_waitlist_title" = "You're on the waitlist!";

@@ -27,13 +27,72 @@ enum StaticLocationScreenViewModelAction {
     case sendLocation(GeoURI)
 }
 
+enum StaticLocationInteractionMode: Hashable {
+    case picker
+    case viewOnly(GeoURI)
+}
+
 struct StaticLocationScreenViewState: BindableState {
+    init(interactionMode: StaticLocationInteractionMode, isPinDropSharing: Bool = true, showsUserLocationMode: ShowUserLocationMode = .hide) {
+        self.interactionMode = interactionMode
+        self.isPinDropSharing = isPinDropSharing
+        self.showsUserLocationMode = showsUserLocationMode
+
+        switch interactionMode {
+        case .picker:
+            bindings = .init()
+        case .viewOnly(let geoURI):
+            bindings = .init(mapCenterLocation: .init(latitude: geoURI.latitude, longitude: geoURI.longitude))
+        }
+    }
+
+    let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user has moved around the map to drop a pin somewhere other than their current location
     var isPinDropSharing = true
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
     
     var bindings = StaticLocationScreenBindings()
+
+    var showBottomToolbar: Bool {
+        interactionMode == .picker
+    }
+
+    var mapAnnotationCoordinate: CLLocationCoordinate2D? {
+        switch interactionMode {
+        case .picker:
+            return nil
+        case .viewOnly(let geoURI):
+            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
+        }
+    }
+
+    var showPinInTheCenter: Bool {
+        switch interactionMode {
+        case .picker:
+            return isPinDropSharing
+        case .viewOnly:
+            return false
+        }
+    }
+
+    var navigationTitle: String {
+        switch interactionMode {
+        case .picker:
+            return L10n.screenShareLocationTitle
+        case .viewOnly:
+            return L10n.screenViewLocationTitle
+        }
+    }
+
+    var showShareAction: Bool {
+        switch interactionMode {
+        case .picker:
+            return false
+        case .viewOnly:
+            return true
+        }
+    }
 }
 
 struct StaticLocationScreenBindings {

@@ -18,49 +18,36 @@ import Foundation
 import Mapbox
 import SwiftUI
 
-/// Base class to handle a map annotation
-class LocationAnnotation: NSObject, MGLAnnotation {
-    // MARK: - Properties
-    
-    // Title property is needed to enable annotation selection and callout view showing
-    var title: String?
-    
+final class LocationAnnotation: NSObject, MGLAnnotation {
     let coordinate: CLLocationCoordinate2D
+    let anchorPoint: CGPoint
+    let view: AnyView
     
     // MARK: - Setup
     
-    init(coordinate: CLLocationCoordinate2D) {
+    init(coordinate: CLLocationCoordinate2D,
+         anchorPoint: CGPoint = .init(x: 0.5, y: 0.5),
+         @ViewBuilder label: () -> some View) {
         self.coordinate = coordinate
+        self.anchorPoint = anchorPoint
+        view = AnyView(label())
         super.init()
     }
 }
 
-/// POI map annotation
-class PinLocationAnnotation: LocationAnnotation { }
-
-class LocationAnnotationView: MGLUserLocationAnnotationView {
-    private enum Constants {
-        static let defaultFrame = CGRect(x: 0, y: 0, width: 46, height: 46)
-    }
-    
+final class LocationAnnotationView: MGLUserLocationAnnotationView {
     // MARK: - Setup
     
     override init(annotation: MGLAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier:
             reuseIdentifier)
-        frame = Constants.defaultFrame
     }
     
-    convenience init(userPinLocationAnnotation: MGLAnnotation) {
-        self.init(annotation: userPinLocationAnnotation, reuseIdentifier: "userPinLocation")
-        
-        addUserView()
-    }
-    
-    convenience init(pinLocationAnnotation: PinLocationAnnotation) {
-        self.init(annotation: pinLocationAnnotation, reuseIdentifier: nil)
-        
-        addPinView()
+    convenience init(annotation: LocationAnnotation) {
+        self.init(annotation: annotation, reuseIdentifier: "\(Self.self)")
+        let view: UIView = UIHostingController(rootView: annotation.view).view
+        view.anchorPoint = annotation.anchorPoint
+        addMarkerView(view)
     }
     
     @available(*, unavailable)
@@ -70,31 +57,9 @@ class LocationAnnotationView: MGLUserLocationAnnotationView {
     
     // MARK: - Private
     
-    private func addUserView() {
-        guard let pinView = UIHostingController(rootView: Image(systemName: "circle.fill")
-            .resizable()
-            .foregroundColor(.compound.iconPrimary)).view else {
-            return
-        }
-        
-        addMarkerView(pinView)
-    }
-    
-    private func addPinView() {
-        guard let pinView = UIHostingController(rootView: Image(systemName: "mappin")
-            .resizable()
-            .foregroundColor(.compound.iconPrimary)).view else {
-            return
-        }
-        
-        addMarkerView(pinView)
-    }
-    
     private func addMarkerView(_ markerView: UIView) {
         markerView.backgroundColor = .clear
-        
         addSubview(markerView)
-        
-        markerView.frame = bounds
+        markerView.bounds.size = markerView.intrinsicContentSize
     }
 }

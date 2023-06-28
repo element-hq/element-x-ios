@@ -26,8 +26,8 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init() {
-        super.init(initialViewState: StaticLocationScreenViewState())
+    init(interactionMode: StaticLocationInteractionMode) {
+        super.init(initialViewState: .init(interactionMode: interactionMode))
     }
     
     override func process(viewAction: StaticLocationScreenViewAction) {

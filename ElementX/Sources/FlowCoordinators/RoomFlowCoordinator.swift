@@ -211,8 +211,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMessageForwarding(for: eventID)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
-            case (.room, .presentLocationPicker, .locationPicker):
-                presentLocationPicker()
+            case (.room, .presentLocationPicker(let mode), .locationPicker):
+                presentLocationPicker(interactionMode: mode)
             case (.locationPicker, .dismissLocationPicker, .room):
                 break
             default:
@@ -307,7 +307,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentEmojiPicker(let itemID):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
                 case .presentLocationPicker:
-                    stateMachine.tryEvent(.presentLocationPicker)
+                    stateMachine.tryEvent(.presentLocationPicker(interactionMode: .picker))
+                case .presentLocationViewer(_, let geoURI):
+                    stateMachine.tryEvent(.presentLocationPicker(interactionMode: .viewOnly(geoURI)))
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):
@@ -500,10 +502,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentLocationPicker() {
+    private func presentLocationPicker(interactionMode: StaticLocationInteractionMode) {
         let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
 
-        let params = StaticLocationScreenCoordinatorParameters()
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
 
         coordinator.actions.sink { [weak self] action in
@@ -647,7 +649,7 @@ private extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: String)
         case dismissEmojiPicker
 
-        case presentLocationPicker
+        case presentLocationPicker(interactionMode: StaticLocationInteractionMode)
         case dismissLocationPicker
         
         case presentRoomMemberDetails(member: HashableRoomMemberWrapper)

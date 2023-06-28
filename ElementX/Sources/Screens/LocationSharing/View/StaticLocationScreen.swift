@@ -23,8 +23,8 @@ struct StaticLocationScreen: View {
     
     var body: some View {
         mapView
-            .ignoresSafeArea(.all, edges: .horizontal)
-            .navigationTitle(L10n.screenShareLocationTitle)
+            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+            .navigationTitle(context.viewState.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .alert(item: $context.alertInfo)
@@ -33,32 +33,56 @@ struct StaticLocationScreen: View {
     private var mapView: some View {
         ZStack(alignment: .center) {
             MapLibreMapView(builder: builder,
+                            annotations: mapAnnotations,
                             showsUserLocationMode: .hide,
                             error: $context.mapError,
                             mapCenterCoordinate: $context.mapCenterLocation,
                             userDidPan: {
                                 context.send(viewAction: .userDidPan)
                             })
-            if context.viewState.isPinDropSharing {
+            if context.viewState.showPinInTheCenter {
                 LocationMarkerView()
             }
         }
     }
+
+    // MARK: - Private
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             closeButton
         }
-        
-        ToolbarItemGroup(placement: .bottomBar) {
-            shareLocationButton
-            Spacer()
+
+        if context.viewState.showShareAction {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                shareButton
+            }
         }
+
+        if context.viewState.showBottomToolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                selectLocationButton
+                Spacer()
+            }
+        }
+    }
+
+    private var mapAnnotations: [LocationAnnotation] {
+        guard let coordinate = context.viewState.mapAnnotationCoordinate else {
+            return []
+        }
+        return [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
+            LocationMarkerView()
+        }]
+    }
+
+    private var mapSafeAreaEdges: Edge.Set {
+        context.viewState.showBottomToolbar ? .horizontal : [.horizontal, .bottom]
     }
     
     @ScaledMetric private var shareMarkerSize: CGFloat = 28
-    private var shareLocationButton: some View {
+    private var selectLocationButton: some View {
         Button {
             context.send(viewAction: .selectLocation)
         } label: {
@@ -73,25 +97,35 @@ struct StaticLocationScreen: View {
     }
     
     private var closeButton: some View {
-        Button(L10n.actionCancel, action: close)
+        Button(L10n.actionCancel) {
+            context.send(viewAction: .close)
+        }
     }
-    
-    private func close() {
-        context.send(viewAction: .close)
+
+    #warning("AG: fix me")
+    private var shareButton: some View {
+        ShareLink(item: "foo") {
+            Image(systemName: "square.and.arrow.up")
+        }
     }
 }
 
 // MARK: - Previews
 
 struct StaticLocationScreenViewer_Previews: PreviewProvider {
-    static let viewModel = {
-        let viewModel = StaticLocationScreenViewModel()
-        return viewModel
-    }()
-    
     static var previews: some View {
-        NavigationView {
-            StaticLocationScreen(context: viewModel.context)
+        NavigationStack {
+            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .picker).context)
         }
+        .previewDisplayName("Picker")
+
+        NavigationStack {
+            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(.init(latitude: 41.9027835, longitude: 12.4963655))).context)
+        }
+        .previewDisplayName("View Only")
     }
+}
+
+private extension CGPoint {
+    static let bottomCenter: Self = .init(x: 0.5, y: 1)
 }

@@ -818,6 +818,8 @@ public enum L10n {
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// An error occurred when trying to start a chat
   public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// Location
+  public static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
   /// There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.
   /// 
   /// Thanks for your patience!
