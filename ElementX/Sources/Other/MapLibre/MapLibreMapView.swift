@@ -78,6 +78,7 @@ struct MapLibreMapView: UIViewRepresentable {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
         
         showUserLocation(in: mapView)
+        mapView.attributionButton.isHidden = true
         
         return mapView
     }
