@@ -24,9 +24,12 @@ struct LongPressWithFeedback: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .scaleEffect(x: isLongPressing ? 0.93 : 1,
-                         y: isLongPressing ? 0.93 : 1)
-            .animation(isLongPressing ? .spring(response: 0.8).delay(0.2) : .spring(response: 0.2),
+            .compositingGroup() // Apply the shadow to the view as a whole.
+            .shadow(color: .black.opacity(0.2), radius: isLongPressing ? 12 : 0)
+            .shadow(color: .black.opacity(0.1), radius: isLongPressing ? 3 : 0)
+            .scaleEffect(x: isLongPressing ? 1.05 : 1,
+                         y: isLongPressing ? 1.05 : 1)
+            .animation(isLongPressing ? .spring(response: 1.5).delay(0.2) : .spring(response: 0.5),
                        value: isLongPressing)
             .onLongPressGesture(minimumDuration: 0.25) {
                 action()
@@ -90,6 +93,7 @@ struct FakeContextMenu_Previews: PreviewProvider {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
                 .background(Color.compound._bgBubbleOutgoing, in: RoundedRectangle(cornerRadius: 12))
+                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 12))
                 .onTapGesture { /* Fix long press gesture blocking the scroll view */ }
         }
     }
