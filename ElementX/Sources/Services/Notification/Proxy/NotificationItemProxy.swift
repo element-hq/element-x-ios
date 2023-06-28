@@ -310,7 +310,7 @@ extension NotificationItemProxyProtocol {
     private func processText(content: TextMessageContent,
                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "\(ProcessInfo.processInfo.isiOSAppOnMac)"
+        notification.body = content.body
 
         return notification
     }
