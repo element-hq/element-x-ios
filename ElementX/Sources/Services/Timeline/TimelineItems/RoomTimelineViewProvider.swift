@@ -105,7 +105,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
         }
     }
 
-    var isUnsent: Bool {
+    var isLocalEcho: Bool {
         switch self {
         case .text(let item as EventBasedTimelineItemProtocol, _),
              .image(let item as EventBasedTimelineItemProtocol, _),
@@ -120,7 +120,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
              .unsupported(let item as EventBasedTimelineItemProtocol, _),
              .state(let item as EventBasedTimelineItemProtocol, _),
              .location(let item as EventBasedTimelineItemProtocol, _):
-            return item.properties.deliveryStatus == .sending || item.properties.deliveryStatus == .sendingFailed
+            return item.properties.deliveryStatus != nil
         case .separator,
              .readMarker,
              .paginationIndicator,
