@@ -33,7 +33,7 @@ struct StaticLocationScreen: View {
     private var mapView: some View {
         ZStack(alignment: .center) {
             MapLibreMapView(builder: builder,
-                            annotations: mapAnnotations,
+                            options: mapOptions,
                             showsUserLocationMode: .hide,
                             error: $context.mapError,
                             mapCenterCoordinate: $context.mapCenterLocation,
@@ -68,13 +68,16 @@ struct StaticLocationScreen: View {
         }
     }
 
-    private var mapAnnotations: [LocationAnnotation] {
+    private var mapOptions: MapLibreMapView.Options {
         guard let coordinate = context.viewState.mapAnnotationCoordinate else {
-            return []
+            return .init(zoomLevel: context.viewState.zoomLevel)
         }
-        return [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
-            LocationMarkerView()
-        }]
+
+        return .init(zoomLevel: context.viewState.zoomLevel,
+                     mapCenter: coordinate,
+                     annotations: [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
+                         LocationMarkerView()
+                     }])
     }
 
     private var mapSafeAreaEdges: Edge.Set {

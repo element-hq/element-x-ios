@@ -19,11 +19,19 @@ import Mapbox
 import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let mapZoomLevel = 15.0
-        static let mapZoomLevelWithoutPermission = 5.0
+    struct Options {
+        /// The initial zoom level
+        let zoomLevel: Double
+        /// The initial map center
+        let mapCenter: CLLocationCoordinate2D?
+        /// Map annotations
+        let annotations: [LocationAnnotation]
+
+        init(zoomLevel: Double, mapCenter: CLLocationCoordinate2D? = nil, annotations: [LocationAnnotation] = []) {
+            self.zoomLevel = zoomLevel
+            self.mapCenter = mapCenter
+            self.annotations = annotations
+        }
     }
     
     // MARK: - Properties
@@ -32,7 +40,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     let builder: MapTilerStyleBuilderProtocol
 
-    let annotations: [LocationAnnotation]
+    let options: Options
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
@@ -54,20 +62,13 @@ struct MapLibreMapView: UIViewRepresentable {
         let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
         panGesture.delegate = context.coordinator
         mapView.addGestureRecognizer(panGesture)
-
-        #warning("AG: fix me")
-        if let annotation = annotations.first {
-            mapView.centerCoordinate = annotation.coordinate
-            mapView.zoomLevel = Constants.mapZoomLevel
-        } else {
-            mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
-        }
+        setupMap(mapView: mapView, with: options)
         return mapView
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
         mapView.removeAllAnnotations()
-        mapView.addAnnotations(annotations)
+        mapView.addAnnotations(options.annotations)
         
         if colorScheme == .dark {
             mapView.styleURL = builder.dynamicMapURL(for: .dark)
@@ -83,6 +84,13 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     // MARK: - Private
+
+    private func setupMap(mapView: MGLMapView, with options: Options) {
+        mapView.zoomLevel = options.zoomLevel
+        if let mapCenter = options.mapCenter {
+            mapView.centerCoordinate = mapCenter
+        }
+    }
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))

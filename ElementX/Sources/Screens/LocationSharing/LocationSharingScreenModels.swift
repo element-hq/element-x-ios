@@ -93,6 +93,15 @@ struct StaticLocationScreenViewState: BindableState {
             return true
         }
     }
+
+    var zoomLevel: Double {
+        switch interactionMode {
+        case .picker:
+            return 5.0
+        case .viewOnly:
+            return 15.0
+        }
+    }
 }
 
 struct StaticLocationScreenBindings {
