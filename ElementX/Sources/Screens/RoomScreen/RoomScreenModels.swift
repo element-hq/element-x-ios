@@ -20,7 +20,6 @@ import UIKit
 
 enum RoomScreenViewModelAction {
     case displayRoomDetails
-    case displayMediaViewer(file: MediaFileHandleProxy, title: String?)
     case displayEmojiPicker(itemID: String)
     case displayReportContent(itemID: String, senderID: String)
     case displayCameraPicker
@@ -116,6 +115,9 @@ struct RoomScreenViewStateBindings {
             composerFocused = false
         }
     }
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: MediaPreviewItem?
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?

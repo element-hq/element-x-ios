@@ -53,6 +53,7 @@ struct RoomScreen: View {
                 ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
+            .interactiveQuickLook(item: $context.mediaPreviewItem)
             .track(screen: .room)
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.

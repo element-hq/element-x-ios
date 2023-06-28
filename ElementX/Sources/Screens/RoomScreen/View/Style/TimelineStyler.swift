@@ -21,10 +21,10 @@ import SwiftUI
 
 struct TimelineStyler<Content: View>: View {
     @Environment(\.timelineStyle) private var style
-    
+
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-    
+
     var body: some View {
         switch style {
         case .plain:
@@ -40,14 +40,21 @@ struct TimelineItemStyler_Previews: PreviewProvider {
 
     static let base = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
 
-    static let sent: TextRoomTimelineItem = {
+    static let sentNonLast: TextRoomTimelineItem = {
         var result = base
         result.properties.deliveryStatus = .sent
         return result
     }()
 
-    static let sending: TextRoomTimelineItem = {
+    static let sendingNonLast: TextRoomTimelineItem = {
         var result = base
+        result.properties.deliveryStatus = .sending
+        return result
+    }()
+
+    static let sendingLast: TextRoomTimelineItem = {
+        let id = viewModel.state.items.last?.id ?? UUID().uuidString
+        var result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         result.properties.deliveryStatus = .sending
         return result
     }()
@@ -58,7 +65,7 @@ struct TimelineItemStyler_Previews: PreviewProvider {
         return result
     }()
 
-    static let last: TextRoomTimelineItem = {
+    static let sentLast: TextRoomTimelineItem = {
         let id = viewModel.state.items.last?.id ?? UUID().uuidString
         let result = TextRoomTimelineItem(id: id, timestamp: "Now", isOutgoing: true, isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         return result
@@ -78,10 +85,11 @@ struct TimelineItemStyler_Previews: PreviewProvider {
 
     static var testView: some View {
         VStack {
-            TextRoomTimelineView(timelineItem: sent)
-            TextRoomTimelineView(timelineItem: sending)
             TextRoomTimelineView(timelineItem: base)
-            TextRoomTimelineView(timelineItem: last)
+            TextRoomTimelineView(timelineItem: sentNonLast)
+            TextRoomTimelineView(timelineItem: sentLast)
+            TextRoomTimelineView(timelineItem: sendingNonLast)
+            TextRoomTimelineView(timelineItem: sendingLast)
             TextRoomTimelineView(timelineItem: failed)
         }
     }
