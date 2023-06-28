@@ -503,7 +503,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
-        let navigationStackCoordinator = NavigationStackCoordinator()
+        let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
 
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
@@ -521,10 +521,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-        
-        navigationStackCoordinator.setRootCoordinator(coordinator)
 
-        navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+        locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+
+        navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
     }
