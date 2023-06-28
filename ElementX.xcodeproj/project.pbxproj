@@ -432,6 +432,7 @@
 		9FAF6DA7E8E85C9699757764 /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2656184491C505700D2405 /* CollapsibleRoomTimelineView.swift */; };
 		A009BDFB0A6816D4C392ADCB /* SettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF715D4FD4710EBB637D661 /* SettingsScreenViewModelProtocol.swift */; };
 		A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC776F301D374A3298C69DA /* AppCoordinatorProtocol.swift */; };
+		A026BF5C2A4C5E7D008D7DBC /* ShareToMapsAppActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026BF5B2A4C5E7D008D7DBC /* ShareToMapsAppActivity.swift */; };
 		A0A0D2A9564BDA3FDE2E360F /* FormattedBodyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73FF1A33198F5FAE9D34B1F /* FormattedBodyText.swift */; };
 		A10D6CCDE2010C09EEA1A593 /* HomeScreenRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */; };
 		A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43005941B3A2C9671E23C85 /* UserIndicatorModalView.swift */; };
@@ -1150,6 +1151,7 @@
 		9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		9F85164F9475FF2867F71AAA /* RoomTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineController.swift; sourceTree = "<group>"; };
 		A00C7A331B72C0F05C00392F /* RoomScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		A026BF5B2A4C5E7D008D7DBC /* ShareToMapsAppActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToMapsAppActivity.swift; sourceTree = "<group>"; };
 		A05707BF550D770168A406DB /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		A057F2FDC14866C3026A89A4 /* NotificationManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerProtocol.swift; sourceTree = "<group>"; };
 		A12D3B1BCF920880CA8BBB6B /* UserIndicatorControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerProtocol.swift; sourceTree = "<group>"; };
@@ -1787,6 +1789,7 @@
 		328DD5DA1281F758B72006C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CFD425CC70E782F167180DBA /* AppActivityView.swift */,
 				CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */,
 				0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */,
 				B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */,
@@ -1797,7 +1800,6 @@
 				C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */,
 				839E2C35DF3F9C7B54C3CE49 /* RoundedCornerShape.swift */,
 				923485F85E1D765EF9D20E88 /* UserProfileCell.swift */,
-				742C752C848AFB7CFA7D8357 /* Activity */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2399,14 +2401,6 @@
 				1C62F5382CC9D9F7DCEC344A /* UserDiscoveryService */,
 			);
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		742C752C848AFB7CFA7D8357 /* Activity */ = {
-			isa = PBXGroup;
-			children = (
-				CFD425CC70E782F167180DBA /* AppActivityView.swift */,
-			);
-			path = Activity;
 			sourceTree = "<group>";
 		};
 		7431C962E314ADAE38B6D708 /* Analytics */ = {
@@ -3033,6 +3027,7 @@
 			isa = PBXGroup;
 			children = (
 				04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */,
+				A026BF5B2A4C5E7D008D7DBC /* ShareToMapsAppActivity.swift */,
 				E24B88AD3D1599E8CB1376E0 /* AvatarSize.swift */,
 				E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */,
 				9332DFE9642F0A46ECA0497B /* BlurHashEncode.swift */,
@@ -4126,6 +4121,7 @@
 				65EDA77363BEDC40CDE43B43 /* InvitesScreen.swift in Sources */,
 				76BA28216FBAF83B2D86A027 /* InvitesScreenCell.swift in Sources */,
 				78A3392047E9D1C6FEA659B6 /* InvitesScreenCoordinator.swift in Sources */,
+				A026BF5C2A4C5E7D008D7DBC /* ShareToMapsAppActivity.swift in Sources */,
 				2AD59AD5B09498EF8B3B04EC /* InvitesScreenModels.swift in Sources */,
 				C287BE1802AD432F3D848D8E /* InvitesScreenViewModel.swift in Sources */,
 				BD6D98676111DA8FC2BE4908 /* InvitesScreenViewModelProtocol.swift in Sources */,
