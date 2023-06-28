@@ -189,12 +189,13 @@ extension UNMutableNotificationContent {
         // But on other devices is rendered upside down so we need to flip it
         #if targetEnvironment(simulator)
         return image.pngData()
-        #endif
+        #else
         if ProcessInfo.processInfo.isiOSAppOnMac {
             return image.pngData()
         } else {
             return image.flippedVertically().pngData()
         }
+        #endif
     }
 }
 
