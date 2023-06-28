@@ -79,7 +79,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
 
-        notificationManager = NotificationManager()
+        notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
+                                                  appSettings: ServiceLocator.shared.settings)
         notificationManager.delegate = self
         notificationManager.start()
         
@@ -117,7 +118,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     func toPresentable() -> AnyView {
-        ServiceLocator.shared.userIndicatorController.toPresentable()
+        AnyView(
+            ServiceLocator.shared.userIndicatorController.toPresentable()
+                .environment(\.analyticsService, ServiceLocator.shared.analytics)
+        )
     }
     
     // MARK: - AuthenticationCoordinatorDelegate
@@ -194,8 +198,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
-                                                                          sentryURL: ServiceLocator.shared.settings.bugReportSentryURL))
-        ServiceLocator.shared.register(analytics: Analytics(client: PostHogAnalyticsClient()))
+                                                                          sentryURL: ServiceLocator.shared.settings.bugReportSentryURL,
+                                                                          applicationId: ServiceLocator.shared.settings.bugReportApplicationId,
+                                                                          maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: PostHogAnalyticsClient(),
+                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   bugReportService: ServiceLocator.shared.bugReportService))
     }
     
     /// Perform any required migrations for the app to function correctly.
@@ -270,9 +278,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private func startAuthentication() {
         let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
-        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
+        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: ServiceLocator.shared.settings)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
-                                                              navigationStackCoordinator: authenticationNavigationStackCoordinator)
+                                                              navigationStackCoordinator: authenticationNavigationStackCoordinator,
+                                                              appSettings: ServiceLocator.shared.settings,
+                                                              analytics: ServiceLocator.shared.analytics,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()
@@ -291,17 +302,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 displayName = name
             }
             
-            let credentials = SoftLogoutScreenCredentials(userId: userSession.userID,
+            let credentials = SoftLogoutScreenCredentials(userID: userSession.userID,
                                                           homeserverName: userSession.homeserver,
                                                           userDisplayName: displayName,
-                                                          deviceId: userSession.deviceID)
+                                                          deviceID: userSession.deviceID)
             
-            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
+            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: ServiceLocator.shared.settings)
             _ = await authenticationService.configure(for: userSession.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
-                                                                   keyBackupNeeded: false)
+                                                                   keyBackupNeeded: false,
+                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             coordinator.callback = { result in
                 switch result {

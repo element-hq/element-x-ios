@@ -16,15 +16,19 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
 
     //MARK: - start
 
-    var startCallsCount = 0
-    var startCalled: Bool {
-        return startCallsCount > 0
+    var startAnalyticsConfigurationCallsCount = 0
+    var startAnalyticsConfigurationCalled: Bool {
+        return startAnalyticsConfigurationCallsCount > 0
     }
-    var startClosure: (() -> Void)?
+    var startAnalyticsConfigurationReceivedAnalyticsConfiguration: AnalyticsConfiguration?
+    var startAnalyticsConfigurationReceivedInvocations: [AnalyticsConfiguration] = []
+    var startAnalyticsConfigurationClosure: ((AnalyticsConfiguration) -> Void)?
 
-    func start() {
-        startCallsCount += 1
-        startClosure?()
+    func start(analyticsConfiguration: AnalyticsConfiguration) {
+        startAnalyticsConfigurationCallsCount += 1
+        startAnalyticsConfigurationReceivedAnalyticsConfiguration = analyticsConfiguration
+        startAnalyticsConfigurationReceivedInvocations.append(analyticsConfiguration)
+        startAnalyticsConfigurationClosure?(analyticsConfiguration)
     }
     //MARK: - reset
 
@@ -610,25 +614,25 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendMessageInReplyToReturnValue
         }
     }
-    //MARK: - sendReaction
+    //MARK: - toggleReaction
 
-    var sendReactionToCallsCount = 0
-    var sendReactionToCalled: Bool {
-        return sendReactionToCallsCount > 0
+    var toggleReactionToCallsCount = 0
+    var toggleReactionToCalled: Bool {
+        return toggleReactionToCallsCount > 0
     }
-    var sendReactionToReceivedArguments: (reaction: String, eventID: String)?
-    var sendReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
-    var sendReactionToReturnValue: Result<Void, RoomProxyError>!
-    var sendReactionToClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
+    var toggleReactionToReceivedArguments: (reaction: String, eventID: String)?
+    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
+    var toggleReactionToReturnValue: Result<Void, RoomProxyError>!
+    var toggleReactionToClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
 
-    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        sendReactionToCallsCount += 1
-        sendReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
-        sendReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
-        if let sendReactionToClosure = sendReactionToClosure {
-            return await sendReactionToClosure(reaction, eventID)
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
+        toggleReactionToCallsCount += 1
+        toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
+        toggleReactionToReceivedInvocations.append((reaction: reaction, eventID: eventID))
+        if let toggleReactionToClosure = toggleReactionToClosure {
+            return await toggleReactionToClosure(reaction, eventID)
         } else {
-            return sendReactionToReturnValue
+            return toggleReactionToReturnValue
         }
     }
     //MARK: - sendImage

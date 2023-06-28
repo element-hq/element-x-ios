@@ -20,7 +20,6 @@ import XCTest
 
 @MainActor
 class AnalyticsSettingsScreenViewModelTests: XCTestCase {
-    private var appSettings: AppSettings { ServiceLocator.shared.settings }
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
@@ -28,9 +27,12 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
         AppSettings.reset()
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        ServiceLocator.shared.register(analytics: Analytics(client: analyticsClient))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
+                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   bugReportService: ServiceLocator.shared.bugReportService))
         
-        viewModel = AnalyticsSettingsScreenViewModel()
+        viewModel = AnalyticsSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
+                                                     analytics: ServiceLocator.shared.analytics)
         context = viewModel.context
     }
 
@@ -39,13 +41,13 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     }
 
     func testOptIn() {
-        appSettings.analyticsConsentState = .optedOut
+        ServiceLocator.shared.settings.analyticsConsentState = .optedOut
         context.send(viewAction: .toggleAnalytics)
         XCTAssertTrue(context.enableAnalytics)
     }
     
     func testOptOut() {
-        appSettings.analyticsConsentState = .optedIn
+        ServiceLocator.shared.settings.analyticsConsentState = .optedIn
         context.send(viewAction: .toggleAnalytics)
         XCTAssertFalse(context.enableAnalytics)
     }

@@ -29,6 +29,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let emojiProvider: EmojiProviderProtocol
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
@@ -48,12 +50,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          navigationStackCoordinator: NavigationStackCoordinator,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          emojiProvider: EmojiProviderProtocol,
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.emojiProvider = emojiProvider
+        self.appSettings = appSettings
+        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         setupStateMachine()
@@ -144,7 +150,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .messageForwarding(roomID: roomID, itemID: itemID)
             case (.dismissMessageForwarding, .messageForwarding(let roomID, _)):
                 return .room(roomID: roomID)
-                
+            case (.presentLocationPicker, .room(let roomID)):
+                return .locationPicker(roomID: roomID)
+            case (.dismissLocationPicker, .locationPicker(let roomID)):
+                return .room(roomID: roomID)
             default:
                 return nil
             }
@@ -212,7 +221,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMessageForwarding(for: eventID)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
-                
+            case (.room, .presentLocationPicker, .locationPicker):
+                presentLocationPicker()
+            case (.locationPicker, .dismissLocationPicker, .room):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -273,7 +285,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
                                                           mediaProvider: userSession.mediaProvider,
-                                                          attributedStringBuilder: AttributedStringBuilder(),
+                                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userId))
         
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
@@ -282,7 +294,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
-        ServiceLocator.shared.analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
+        analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
@@ -306,6 +318,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
                 case .presentEmojiPicker(let itemID):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
+                case .presentLocationPicker:
+                    stateMachine.tryEvent(.presentLocationPicker)
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):
@@ -365,7 +379,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             navigationStackCoordinator: navigationStackCoordinator,
                                                             roomProxy: roomProxy,
                                                             mediaProvider: userSession.mediaProvider,
-                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy))
+                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                            userIndicatorController: userIndicatorController)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
@@ -500,7 +515,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemId)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await self?.timelineController?.sendReaction(emoji, to: itemId)
+                    await self?.timelineController?.toggleReaction(emoji, to: itemId)
                 }
             case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
@@ -512,6 +527,33 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
+    private func presentLocationPicker() {
+        let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
+
+        let params = StaticLocationScreenCoordinatorParameters()
+        let coordinator = StaticLocationScreenCoordinator(parameters: params)
+
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .selectedLocation(let geoURI):
+                Task {
+                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage, geoURI: geoURI)
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            case .close:
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+
+        navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissLocationPicker)
+        }
+    }
+    
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
         let params = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: userSession.mediaProvider)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
@@ -604,6 +646,7 @@ private extension RoomFlowCoordinator {
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: String)
+        case locationPicker(roomID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: String)
     }
@@ -635,10 +678,19 @@ private extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: String)
         case dismissEmojiPicker
 
+        case presentLocationPicker
+        case dismissLocationPicker
+        
         case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
         case dismissRoomMemberDetails
         
         case presentMessageForwarding(itemID: String)
         case dismissMessageForwarding
+    }
+}
+
+private extension GeoURI {
+    var bodyMessage: String {
+        String(format: "Location was shared at %@ as of %@", string, Date().description)
     }
 }

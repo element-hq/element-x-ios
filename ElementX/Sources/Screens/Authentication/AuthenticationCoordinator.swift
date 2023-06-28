@@ -26,7 +26,9 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let serviceLocator: ServiceLocator
+    private let appSettings: AppSettings
+    private let analytics: AnalyticsService
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -34,10 +36,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         serviceLocator: ServiceLocator = .shared) {
+         appSettings: AppSettings,
+         analytics: AnalyticsService,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.serviceLocator = serviceLocator
+        self.appSettings = appSettings
+        self.analytics = analytics
+        self.userIndicatorController = userIndicatorController
     }
     
     func start() {
@@ -67,7 +73,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private func startAuthentication() async {
         startLoading()
         
-        switch await authenticationService.configure(for: serviceLocator.settings.defaultHomeserverAddress) {
+        switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress) {
         case .success:
             stopLoading()
             showServerConfirmationScreen()
@@ -79,7 +85,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showServerSelectionScreen(isModallyPresented: Bool) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController: UserIndicatorControllerProtocol! = isModallyPresented ? UserIndicatorController(rootCoordinator: navigationCoordinator) : serviceLocator.userIndicatorController
+        let userIndicatorController: UserIndicatorControllerProtocol! = isModallyPresented ? UserIndicatorController(rootCoordinator: navigationCoordinator) : userIndicatorController
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     userIndicatorController: userIndicatorController,
@@ -144,7 +150,9 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             case .success(let oidcData):
                 stopLoading()
                 
-                let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService, presentationAnchor: presentationAnchor)
+                let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService,
+                                                            oidcRedirectURL: appSettings.oidcRedirectURL,
+                                                            presentationAnchor: presentationAnchor)
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
                     userHasSignedIn(userSession: userSession)
@@ -156,7 +164,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func showLoginScreen() {
-        let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService)
+        let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                          userIndicatorController: userIndicatorController)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
@@ -168,9 +177,30 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             case .configuredForOIDC:
                 // Pop back to the confirmation screen for OIDC login to continue.
                 navigationStackCoordinator.pop(animated: false)
+            case .isOnWaitlist(let credentials):
+                showWaitlistScreen(for: credentials)
             }
         }
 
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showWaitlistScreen(for credentials: WaitlistScreenCredentials) {
+        let parameters = WaitlistScreenCoordinatorParameters(credentials: credentials,
+                                                             authenticationService: authenticationService)
+        let coordinator = WaitlistScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .signedIn(let userSession):
+                userHasSignedIn(userSession: userSession)
+            case .cancel:
+                navigationStackCoordinator.pop()
+            }
+        }
+        .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     
@@ -182,11 +212,11 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
 
     private func showAnalyticsPromptIfNeeded(completion: @escaping () -> Void) {
-        guard serviceLocator.analytics.shouldShowAnalyticsPrompt else {
+        guard analytics.shouldShowAnalyticsPrompt else {
             completion()
             return
         }
-        let coordinator = AnalyticsPromptScreenCoordinator()
+        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analytics, termsURL: appSettings.analyticsConfiguration.termsURL)
         coordinator.callback = {
             completion()
         }
@@ -196,14 +226,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
     
     private func startLoading() {
-        serviceLocator.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                             type: .modal,
-                                                                             title: L10n.commonLoading,
-                                                                             persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
     
     private func stopLoading() {
-        serviceLocator.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     /// Processes an error to either update the flow or display it to the user.
@@ -213,14 +243,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         switch error {
         case .oidcError(.notSupported):
             // Temporary alert hijacking the use of .notSupported, can be removed when OIDC support is in the SDK.
-            serviceLocator.userIndicatorController.alertInfo = AlertInfo(id: UUID(),
-                                                                         title: L10n.commonError,
-                                                                         message: L10n.commonServerNotSupported)
+            userIndicatorController.alertInfo = AlertInfo(id: UUID(),
+                                                          title: L10n.commonError,
+                                                          message: L10n.commonServerNotSupported)
         case .oidcError(.userCancellation):
             // No need to show an error, the user cancelled authentication.
             break
         default:
-            serviceLocator.userIndicatorController.alertInfo = AlertInfo(id: UUID())
+            userIndicatorController.alertInfo = AlertInfo(id: UUID())
         }
     }
 }

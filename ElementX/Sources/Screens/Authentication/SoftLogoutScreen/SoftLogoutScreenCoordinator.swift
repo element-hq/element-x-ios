@@ -20,6 +20,7 @@ struct SoftLogoutScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProxyProtocol
     let credentials: SoftLogoutScreenCredentials
     let keyBackupNeeded: Bool
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
@@ -90,15 +91,15 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     
     /// Show an activity indicator whilst loading.
     @MainActor private func startLoading() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true))
+        parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                         type: .modal,
+                                                                         title: L10n.commonLoading,
+                                                                         persistent: true))
     }
     
     /// Hide the currently displayed activity indicator.
     @MainActor private func stopLoading() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 
     /// Shows the forgot password screen.
@@ -108,7 +109,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
 
     /// Login with the supplied username and password.
     @MainActor private func login(withPassword password: String) {
-        let username = parameters.credentials.userId
+        let username = parameters.credentials.userID
 
         startLoading()
 
@@ -116,7 +117,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             switch await authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
-                                                     deviceId: parameters.credentials.deviceId) {
+                                                     deviceID: parameters.credentials.deviceID) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
                 stopLoading()
@@ -140,7 +141,9 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
             case .success(let oidcData):
                 stopLoading()
                 
-                let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService, presentationAnchor: presentationAnchor)
+                let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
+                                                            oidcRedirectURL: ServiceLocator.shared.settings.oidcRedirectURL,
+                                                            presentationAnchor: presentationAnchor)
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
                     callback?(.signedIn(userSession))

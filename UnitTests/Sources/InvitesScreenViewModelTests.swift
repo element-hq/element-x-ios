@@ -82,6 +82,9 @@ class InvitesScreenViewModelTests: XCTestCase {
             clientProxy.roomSummaryProvider = summaryProvider
         }
         
-        viewModel = InvitesScreenViewModel(userSession: userSession)
+        viewModel = InvitesScreenViewModel(userSession: userSession,
+                                           appSettings: ServiceLocator.shared.settings,
+                                           analytics: ServiceLocator.shared.analytics,
+                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

@@ -17,8 +17,7 @@
 import PostHog
 
 extension PHGPostHogConfiguration {
-    static var standard: PHGPostHogConfiguration? {
-        let analyticsConfiguration = ServiceLocator.shared.settings.analyticsConfiguration
+    static func standard(analyticsConfiguration: AnalyticsConfiguration) -> PHGPostHogConfiguration? {
         guard analyticsConfiguration.isEnabled else { return nil }
         
         let postHogConfiguration = PHGPostHogConfiguration(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)

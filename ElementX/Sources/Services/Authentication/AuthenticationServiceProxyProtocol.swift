@@ -34,6 +34,8 @@ enum AuthenticationServiceError: Error {
     case slidingSyncNotAvailable
     case accountDeactivated
     case failedLoggingIn
+    
+    case isOnWaitlist
 }
 
 protocol AuthenticationServiceProxyProtocol {
@@ -47,7 +49,7 @@ protocol AuthenticationServiceProxyProtocol {
     /// Add docs.
     func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
-    func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
 
 // MARK: - OIDC

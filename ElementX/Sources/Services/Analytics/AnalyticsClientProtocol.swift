@@ -22,7 +22,7 @@ protocol AnalyticsClientProtocol {
     var isRunning: Bool { get }
     
     /// Starts the analytics client reporting data.
-    func start()
+    func start(analyticsConfiguration: AnalyticsConfiguration)
        
     /// Reset all stored properties and any event queues on the client. Note that
     /// the client will remain active, but in a fresh unidentified state.

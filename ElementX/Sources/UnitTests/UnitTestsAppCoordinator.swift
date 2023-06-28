@@ -26,7 +26,9 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         AppSettings.reset()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
-        ServiceLocator.shared.register(analytics: Analytics(client: AnalyticsClientMock()))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
+                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   bugReportService: ServiceLocator.shared.bugReportService))
     }
     
     func start() { }

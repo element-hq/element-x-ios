@@ -21,11 +21,14 @@ import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
+    private let appSettings: AppSettings
+    
     private var userSession: UserSessionProtocol?
 
-    init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
+    init(notificationCenter: UserNotificationCenterProtocol,
+         appSettings: AppSettings) {
         self.notificationCenter = notificationCenter
-        super.init()
+        self.appSettings = appSettings
     }
 
     // MARK: NotificationManagerProtocol
@@ -103,8 +106,8 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                              pusherNotificationClientIdentifier: clientProxy.restorationToken?.pusherNotificationClientIdentifier)
 
             let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
-                                                                                 appId: ServiceLocator.shared.settings.pusherAppId),
-                                                              kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                                                                 appId: appSettings.pusherAppId),
+                                                              kind: .http(data: .init(url: appSettings.pushGatewayBaseURL.absoluteString,
                                                                                       format: .eventIdOnly,
                                                                                       defaultPayload: defaultPayload.toJsonString())),
                                                               appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
@@ -121,7 +124,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     private func pusherProfileTag() -> String {
-        if let currentTag = ServiceLocator.shared.settings.pusherProfileTag {
+        if let currentTag = appSettings.pusherProfileTag {
             return currentTag
         }
         let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -130,7 +133,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             return String(chars[chars.index(chars.startIndex, offsetBy: offset)])
         }.joined()
 
-        ServiceLocator.shared.settings.pusherProfileTag = newTag
+        appSettings.pusherProfileTag = newTag
         return newTag
     }
 }
@@ -140,7 +143,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        guard ServiceLocator.shared.settings.enableInAppNotifications else {
+        guard appSettings.enableInAppNotifications else {
             return []
         }
         guard let delegate else {

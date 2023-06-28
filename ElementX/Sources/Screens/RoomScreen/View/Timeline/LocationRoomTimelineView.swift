@@ -25,7 +25,7 @@ struct LocationRoomTimelineView: View {
             if let geoURI = timelineItem.content.geoURI {
                 let mapSize: CGSize = .init(width: 292, height: 188)
                 MapLibreStaticMapView(geoURI: geoURI, size: mapSize) {
-                    LocationPinView()
+                    LocationMarkerView()
                 }
                 .frame(width: mapSize.width, height: mapSize.height)
             } else {

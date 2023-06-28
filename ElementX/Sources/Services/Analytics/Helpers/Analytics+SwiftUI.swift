@@ -16,23 +16,13 @@
 
 import SwiftUI
 
-struct LocationPinView: View {
-    var body: some View {
-        Image(Asset.Images.locationPin.name)
-            .alignmentGuide(VerticalAlignment.center) { dimensions in
-                dimensions[.bottom]
-            }
-            .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 5)
-    }
+private struct AnalyticsServiceKey: EnvironmentKey {
+    static let defaultValue: AnalyticsService = ServiceLocator.shared.analytics
 }
 
-struct LocationPinView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(spacing: 30) {
-            LocationPinView()
-
-            LocationPinView()
-                .colorScheme(.dark)
-        }
+extension EnvironmentValues {
+    var analyticsService: AnalyticsService {
+        get { self[AnalyticsServiceKey.self] }
+        set { self[AnalyticsServiceKey.self] = newValue }
     }
 }

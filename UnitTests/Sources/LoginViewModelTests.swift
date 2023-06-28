@@ -25,7 +25,7 @@ class LoginViewModelTests: XCTestCase {
     var context: LoginScreenViewModelType.Context!
     
     @MainActor override func setUp() async throws {
-        viewModel = LoginScreenViewModel(homeserver: defaultHomeserver)
+        viewModel = LoginScreenViewModel(homeserver: defaultHomeserver, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
         context = viewModel.context
     }
     

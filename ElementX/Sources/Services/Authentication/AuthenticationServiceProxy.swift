@@ -22,25 +22,27 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
     
-    private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never> = .init(LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress,
-                                                                                                       loginMode: .unknown))
+    private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
-    init(userSessionStore: UserSessionStoreProtocol) {
+    init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
         self.userSessionStore = userSessionStore
         
-        // guard let settings = ServiceLocator.shared.settings else { fatalError("The settings must be set.") }
+        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
+                                                  loginMode: .unknown))
+        
         // let oidcConfiguration = OidcConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
         //                                           redirectUri: settings.oidcRedirectURL.absoluteString,
-        //                                           clientUri: settings.oidcClientURL.absoluteString,
-        //                                           tosUri: settings.oidcTermsURL.absoluteString,
-        //                                           policyUri: settings.oidcPolicyURL.absoluteString,
-        //                                           staticRegistrations: settings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
+        //                                           clientUri: appSettings.oidcClientURL.absoluteString,
+        //                                           tosUri: appSettings.oidcTermsURL.absoluteString,
+        //                                           policyUri: appSettings.oidcPolicyURL.absoluteString,
+        //                                           staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: nil,
+                                                      userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       // oidcConfiguration: oidcConfiguration,
-                                                      customSlidingSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
+                                                      customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString)
     }
     
     // MARK: - Public
@@ -102,19 +104,23 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
 //        }
     }
     
-    func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
             let client = try await Task.dispatch(on: .global()) {
                 try self.authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: initialDeviceName,
-                                                     deviceId: deviceId)
+                                                     deviceId: deviceID)
             }
             
             return await userSession(for: client)
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
             guard let error = error as? AuthenticationError else { return .failure(.failedLoggingIn) }
+            
+            if error.isElementWaitlist {
+                return .failure(.isOnWaitlist)
+            }
             
             switch error.code {
             case .forbidden:

@@ -92,7 +92,7 @@ protocol RoomProxyProtocol {
     
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
-    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
+    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
     
     func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, RoomProxyError>
     
@@ -147,9 +147,11 @@ protocol RoomProxyProtocol {
 
 extension RoomProxyProtocol {
     var permalink: URL? {
-        if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias) {
+        if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias,
+                                                                            baseURL: ServiceLocator.shared.settings.permalinkBaseURL) {
             return link
-        } else if let link = try? PermalinkBuilder.permalinkTo(roomIdentifier: id) {
+        } else if let link = try? PermalinkBuilder.permalinkTo(roomIdentifier: id,
+                                                               baseURL: ServiceLocator.shared.settings.permalinkBaseURL) {
             return link
         } else {
             MXLog.error("Failed to build permalink for Room: \(id)")

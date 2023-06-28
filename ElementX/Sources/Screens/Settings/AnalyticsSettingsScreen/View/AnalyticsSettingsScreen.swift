@@ -49,7 +49,11 @@ struct AnalyticsSettingsScreen: View {
 
 struct AnalyticsSettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = AnalyticsSettingsScreenViewModel()
+        let appSettings = AppSettings()
+        let viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
+                                                         analytics: AnalyticsService(client: AnalyticsClientMock(),
+                                                                                     appSettings: appSettings,
+                                                                                     bugReportService: BugReportServiceMock()))
         AnalyticsSettingsScreen(context: viewModel.context)
     }
 }

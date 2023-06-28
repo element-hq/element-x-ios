@@ -73,7 +73,10 @@ private extension InvitesScreenViewModel {
     static let noInvites: InvitesScreenViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesScreenViewModel(userSession: userSession)
+        let regularViewModel = InvitesScreenViewModel(userSession: userSession,
+                                                      appSettings: ServiceLocator.shared.settings,
+                                                      analytics: ServiceLocator.shared.analytics,
+                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         return regularViewModel
     }()
     
@@ -83,7 +86,10 @@ private extension InvitesScreenViewModel {
         clientProxy.roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesScreenViewModel(userSession: userSession)
+        let regularViewModel = InvitesScreenViewModel(userSession: userSession,
+                                                      appSettings: ServiceLocator.shared.settings,
+                                                      analytics: ServiceLocator.shared.analytics,
+                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         return regularViewModel
     }()
 }

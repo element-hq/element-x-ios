@@ -117,10 +117,12 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
                                       layoutDirection: .leftToRight) { key in
-                    context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
+                    context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: timelineItem.id, key: key))
                 }
+                // Workaround to stop the message long press stealing the touch from the reaction buttons
+                .onTapGesture { }
             }
         }
     }

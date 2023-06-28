@@ -45,7 +45,10 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.items[0].timelineGroupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -75,7 +78,10 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped by sender.
         XCTAssertEqual(viewModel.state.items[0].timelineGroupStyle, .single, "A message should not be grouped when the sender changes.")
@@ -103,7 +109,10 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
         
         // Then the first message should not be grouped but the other two should.
         XCTAssertEqual(viewModel.state.items[0].timelineGroupStyle, .single, "When the first message has reactions it should not be grouped.")
@@ -128,7 +137,10 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
         
         // Then the first and second messages should be grouped and the last one should not.
         XCTAssertEqual(viewModel.state.items[0].timelineGroupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -153,7 +165,10 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.items[0].timelineGroupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -172,6 +187,8 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
         viewModel.callback = { action in
             switch action {
@@ -204,7 +221,10 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
+                                            
         viewModel.callback = { action in
             switch action {
             case .displayRoomMemberDetails(let member):
@@ -236,6 +256,8 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
                                             roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
         viewModel.callback = { _ in
             XCTFail("Should not receive any action")
@@ -256,7 +278,10 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: roomProxyMock)
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
 
         // Test
         viewModel.context.send(viewAction: .retrySend(transactionID: "test retry send id"))
@@ -272,7 +297,10 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: roomProxyMock)
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
 
         // Test
         viewModel.context.send(viewAction: .retrySend(transactionID: nil))
@@ -287,7 +315,10 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: roomProxyMock)
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
 
         // Test
         viewModel.context.send(viewAction: .cancelSend(transactionID: "test cancel send id"))
@@ -303,7 +334,10 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: roomProxyMock)
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock)
 
         // Test
         viewModel.context.send(viewAction: .cancelSend(transactionID: nil))

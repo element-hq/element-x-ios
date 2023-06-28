@@ -21,10 +21,12 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
+    private let roomType: InviteUsersScreenRoomType
     private let mediaProvider: MediaProviderProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
-    private let roomType: InviteUsersScreenRoomType
+    private let appSettings: AppSettings
     private weak var userIndicatorController: UserIndicatorControllerProtocol?
+    
     private let actionsSubject: PassthroughSubject<InviteUsersScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<InviteUsersScreenViewModelAction, Never> {
@@ -35,10 +37,12 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          roomType: InviteUsersScreenRoomType,
          mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
+         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol?) {
         self.roomType = roomType
         self.mediaProvider = mediaProvider
         self.userDiscoveryService = userDiscoveryService
+        self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
                 
@@ -137,7 +141,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func fetchSuggestions() {
-        guard ServiceLocator.shared.settings.userSuggestionsEnabled else {
+        guard appSettings.userSuggestionsEnabled else {
             state.usersSection = .init(type: .suggestions, users: [])
             return
         }

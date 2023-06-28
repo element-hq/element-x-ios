@@ -24,6 +24,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
+    private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
@@ -44,12 +45,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(userId: String,
          roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         appSettings: AppSettings) {
         self.userId = userId
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
+        self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         timelineProvider
@@ -156,13 +159,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendReaction(_ reaction: String, to itemID: String) async {
-        MXLog.info("Send reaction in \(roomID)")
-        switch await roomProxy.sendReaction(reaction, to: itemID) {
+    func toggleReaction(_ reaction: String, to itemID: String) async {
+        MXLog.info("Toggle reaction in \(roomID)")
+        switch await roomProxy.toggleReaction(reaction, to: itemID) {
         case .success:
-            MXLog.info("Finished sending reaction")
+            MXLog.info("Finished toggling reaction")
         case .failure(let error):
-            MXLog.error("Failed sending reaction with error: \(error)")
+            MXLog.error("Failed toggling reaction with error: \(error)")
         }
     }
     
@@ -184,6 +187,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .failure(let error):
             MXLog.error("Failed redacting message with error: \(error)")
         }
+    }
+
+    func cancelSend(_ transactionID: String) async {
+        MXLog.info("Cancelling send in \(roomID)")
+        await roomProxy.cancelSend(transactionID: transactionID)
     }
     
     // Handle this parallel to the timeline items so we're not forced
@@ -299,7 +307,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
-        if !ServiceLocator.shared.settings.shouldCollapseRoomStateEvents {
+        if !appSettings.shouldCollapseRoomStateEvents {
             return false
         }
         

@@ -37,21 +37,30 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayMediaPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, systemImageName: "photo.fill")
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, icon: Image(systemName: "photo.fill"))
                 }
                 
                 Button {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayDocumentPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, systemImageName: "paperclip")
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, icon: Image(systemName: "paperclip"))
                 }
                 
                 Button {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayCameraPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, systemImageName: "camera.fill")
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, icon: Image(systemName: "camera.fill"))
+                }
+                
+                if ServiceLocator.shared.settings.shareLocationEnabled {
+                    Button {
+                        context.showAttachmentPopover = false
+                        context.send(viewAction: .displayLocationPicker)
+                    } label: {
+                        PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
+                    }
                 }
             }
             .padding(.top, isPresented ? 20 : 0)
@@ -73,14 +82,23 @@ struct RoomAttachmentPicker: View {
     
     private struct PickerLabel: View {
         let title: String
-        let systemImageName: String
+        let icon: Image
+
+        init(title: String, icon: Image) {
+            self.title = title
+            self.icon = icon
+        }
         
         var body: some View {
-            Label(title, systemImage: systemImageName)
-                .labelStyle(FixedIconSizeLabelStyle())
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(16)
+            Label {
+                Text(title)
+            } icon: {
+                icon
+            }
+            .labelStyle(FixedIconSizeLabelStyle())
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
         }
     }
 }
@@ -88,7 +106,10 @@ struct RoomAttachmentPicker: View {
 struct RoomAttachmentPicker_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "")))
+                                               roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analytics: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
     }

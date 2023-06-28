@@ -27,9 +27,9 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     
     var isRunning: Bool { postHog?.enabled ?? false }
     
-    func start() {
+    func start(analyticsConfiguration: AnalyticsConfiguration) {
         // Only start if analytics have been configured in BuildSettings
-        guard let configuration = PHGPostHogConfiguration.standard else { return }
+        guard let configuration = PHGPostHogConfiguration.standard(analyticsConfiguration: analyticsConfiguration) else { return }
         
         if postHog == nil {
             postHog = PHGPostHog(configuration: configuration)

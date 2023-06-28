@@ -74,8 +74,6 @@ struct TimelineItemStatusView: View {
                         context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
                     }
             }
-        case .cancelled:
-            EmptyView()
         }
     }
 

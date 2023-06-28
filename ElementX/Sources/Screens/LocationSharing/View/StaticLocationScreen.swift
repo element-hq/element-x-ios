@@ -22,18 +22,62 @@ struct StaticLocationScreen: View {
     private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
     
     var body: some View {
-        NavigationView {
-            mapView
-                .ignoresSafeArea(.all, edges: [.bottom])
-                .navigationBarTitleDisplayMode(.inline)
-                .alert(item: $context.alertInfo)
+        mapView
+            .ignoresSafeArea(.all, edges: .horizontal)
+            .navigationTitle(L10n.screenShareLocationTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
+            .alert(item: $context.alertInfo)
+    }
+    
+    private var mapView: some View {
+        ZStack(alignment: .center) {
+            MapLibreMapView(builder: builder,
+                            showsUserLocationMode: .hide,
+                            error: $context.mapError,
+                            mapCenterCoordinate: $context.mapCenterLocation,
+                            userDidPan: {
+                                context.send(viewAction: .userDidPan)
+                            })
+            if context.viewState.isPinDropSharing {
+                LocationMarkerView()
+            }
         }
     }
     
-    var mapView: MapLibreMapView {
-        MapLibreMapView(builder: builder,
-                        showsUserLocationMode: .follow,
-                        error: $context.mapError)
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            closeButton
+        }
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            shareLocationButton
+            Spacer()
+        }
+    }
+    
+    @ScaledMetric private var shareMarkerSize: CGFloat = 28
+    private var shareLocationButton: some View {
+        Button {
+            context.send(viewAction: .selectLocation)
+        } label: {
+            HStack(spacing: 8) {
+                Image(asset: Asset.Images.locationMarker)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: shareMarkerSize, height: shareMarkerSize)
+                Text(context.viewState.isPinDropSharing ? L10n.screenShareThisLocationAction : L10n.screenShareMyLocationAction)
+            }
+        }
+    }
+    
+    private var closeButton: some View {
+        Button(L10n.actionCancel, action: close)
+    }
+    
+    private func close() {
+        context.send(viewAction: .close)
     }
 }
 

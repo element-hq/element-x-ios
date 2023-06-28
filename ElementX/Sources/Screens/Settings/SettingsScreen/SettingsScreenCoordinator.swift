@@ -40,7 +40,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SettingsScreenViewModel(withUserSession: parameters.userSession)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession, appSettings: ServiceLocator.shared.settings)
         viewModel.callback = { [weak self] action in
             guard let self else { return }
             
@@ -72,7 +72,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentAnalyticsScreen() {
-        let coordinator = AnalyticsSettingsScreenCoordinator()
+        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,
+                                                                               analytics: ServiceLocator.shared.analytics))
         parameters.navigationStackCoordinator?.push(coordinator)
     }
     

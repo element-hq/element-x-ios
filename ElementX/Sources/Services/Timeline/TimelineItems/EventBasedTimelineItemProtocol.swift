@@ -33,4 +33,16 @@ extension EventBasedTimelineItemProtocol {
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
+
+    var hasFailedToSend: Bool {
+        properties.deliveryStatus == .sendingFailed
+    }
+
+    var isMessage: Bool {
+        self is EventBasedMessageTimelineItemProtocol
+    }
+
+    var isRedacted: Bool {
+        self is RedactedRoomTimelineItem
+    }
 }

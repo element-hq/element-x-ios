@@ -18,13 +18,15 @@ import SwiftUI
 
 /// `ScreenTrackerViewModifier` is a helper class used to track PostHog screen from SwiftUI screens.
 struct ScreenTrackerViewModifier: ViewModifier {
+    @Environment(\.analyticsService) private var analyticsService
+    
     let screen: AnalyticsScreen
     
     @ViewBuilder
     func body(content: Content) -> some View {
         content
             .onAppear {
-                ServiceLocator.shared.analytics.track(screen: screen)
+                analyticsService.track(screen: screen)
             }
     }
 }

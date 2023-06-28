@@ -59,7 +59,10 @@ struct RoomHeaderView_Previews: PreviewProvider {
     static var bodyPlain: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -70,7 +73,10 @@ struct RoomHeaderView_Previews: PreviewProvider {
     static var bodyEncrypted: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")))
+                                            roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

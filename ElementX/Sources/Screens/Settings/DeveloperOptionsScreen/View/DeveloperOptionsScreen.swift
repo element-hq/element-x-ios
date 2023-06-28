@@ -59,6 +59,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.locationEventsEnabled) { _ in
                     context.send(viewAction: .changedLocationEventsEnabled)
                 }
+                
+                Toggle(isOn: $context.shareLocationEnabled) {
+                    Text("Show share location action")
+                }
+                .onChange(of: context.shareLocationEnabled) { _ in
+                    context.send(viewAction: .changedShareLocationEnabled)
+                }
             }
             
             Section {
@@ -105,7 +112,7 @@ struct DeveloperOptionsScreen: View {
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = DeveloperOptionsScreenViewModel()
+        let viewModel = DeveloperOptionsScreenViewModel(appSettings: ServiceLocator.shared.settings)
         DeveloperOptionsScreen(context: viewModel.context)
     }
 }

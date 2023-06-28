@@ -94,6 +94,7 @@
 "common_permalink" = "Permalink";
 "common_privacy_policy" = "Privacy policy";
 "common_reactions" = "Reactions";
+"common_refreshing" = "Refreshing…";
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
@@ -157,6 +158,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Invited you to chat";
 "notification_new_messages" = "New Messages";
+"notification_reaction_body" = "Reacted with %1$@";
 "notification_room_action_mark_as_read" = "Mark as read";
 "notification_room_invite_body" = "Invited you to join the room";
 "notification_sender_me" = "Me";
@@ -264,6 +266,7 @@
 "screen_room_attachment_source_camera_video" = "Record a video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
+"screen_room_attachment_source_location" = "Location";
 "screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
@@ -288,6 +291,7 @@
 "screen_room_member_details_unblock_user" = "Unblock user";
 "screen_room_member_list_pending_header_title" = "Pending";
 "screen_room_member_list_room_members_header_title" = "Room members";
+"screen_room_message_copied" = "Message copied";
 "screen_room_no_permission_to_post" = "You do not have permission to post to this room";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
@@ -313,10 +317,17 @@
 "screen_session_verification_they_match" = "They match";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
+"screen_share_location_title" = "Share location";
+"screen_share_my_location_action" = "Share my location";
+"screen_share_this_location_action" = "Share this location";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to sign out?";
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
+"screen_waitlist_message" = "There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.\n\nThanks for your patience!";
+"screen_waitlist_message_success" = "Welcome to %1$@";
+"screen_waitlist_title" = "You're on the waitlist!";
+"screen_waitlist_title_success" = "You're in!";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
 "session_verification_banner_title" = "Access your message history";
 "settings_rageshake" = "Rageshake";

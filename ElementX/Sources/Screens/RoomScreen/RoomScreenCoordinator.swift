@@ -30,6 +30,7 @@ enum RoomScreenCoordinatorAction {
     case presentMediaUploadPicker(MediaPickerScreenSource)
     case presentMediaUploadPreviewScreen(URL)
     case presentRoomDetails
+    case presentLocationPicker
     case presentEmojiPicker(itemID: String)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)
     case presentMessageForwarding(itemID: String)
@@ -50,7 +51,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
-                                        roomProxy: parameters.roomProxy)
+                                        roomProxy: parameters.roomProxy,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        analytics: ServiceLocator.shared.analytics,
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     // MARK: - Public
@@ -75,6 +79,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
             case .displayDocumentPicker:
                 actionsSubject.send(.presentMediaUploadPicker(.documents))
+            case .displayLocationPicker:
+                actionsSubject.send(.presentLocationPicker)
             case .displayMediaUploadPreviewScreen(let url):
                 actionsSubject.send(.presentMediaUploadPreviewScreen(url))
             case .displayRoomMemberDetails(let member):

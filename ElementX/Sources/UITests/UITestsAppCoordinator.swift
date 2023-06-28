@@ -36,7 +36,9 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
         AppSettings.reset()
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
-        ServiceLocator.shared.register(analytics: Analytics(client: AnalyticsClientMock()))
+        ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
+                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   bugReportService: ServiceLocator.shared.bugReportService))
     }
     
     func start() {
@@ -75,7 +77,8 @@ class MockScreen: Identifiable {
         switch id {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy()))
+            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverConfirmationLogin:
@@ -93,36 +96,54 @@ class MockScreen: Identifiable {
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                                 userIndicatorController: UserIndicatorControllerMock.default,
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelectionNonModal:
             return ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                      userIndicatorController: UserIndicatorControllerMock.default,
+                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                       isModallyPresented: false))
         case .analyticsPrompt:
-            return AnalyticsPromptScreenCoordinator()
+            return AnalyticsPromptScreenCoordinator(analytics: ServiceLocator.shared.analytics,
+                                                    termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
         case .analyticsSettingsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = AnalyticsSettingsScreenCoordinator()
+            let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,
+                                                                                   analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                                        navigationStackCoordinator: navigationStackCoordinator)
+                                                        navigationStackCoordinator: navigationStackCoordinator,
+                                                        appSettings: ServiceLocator.shared.settings,
+                                                        analytics: ServiceLocator.shared.analytics,
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
             retainedState.append(coordinator)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .softLogout:
-            let credentials = SoftLogoutScreenCredentials(userId: "@mock:matrix.org",
+            let credentials = SoftLogoutScreenCredentials(userID: "@mock:matrix.org",
                                                           homeserverName: "matrix.org",
                                                           userDisplayName: "mock",
-                                                          deviceId: "ABCDEFGH")
+                                                          deviceID: "ABCDEFGH")
             return SoftLogoutScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                  credentials: credentials,
-                                                                 keyBackupNeeded: false))
+                                                                 keyBackupNeeded: false,
+                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
+        case .waitlist:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let credentials = WaitlistScreenCredentials(username: "alice",
+                                                        password: "password",
+                                                        initialDeviceName: nil,
+                                                        deviceID: nil,
+                                                        homeserver: .mockMatrixDotOrg)
+            let coordinator = WaitlistScreenCoordinator(parameters: .init(credentials: credentials,
+                                                                          authenticationService: MockAuthenticationServiceProxy(),
+                                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .simpleRegular:
             return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
@@ -132,7 +153,7 @@ class MockScreen: Identifiable {
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                                      attributedStringBuilder: AttributedStringBuilder(),
+                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
                                                                       bugReportService: BugReportServiceMock(),
                                                                       navigationStackCoordinator: navigationStackCoordinator,
                                                                       selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))
@@ -325,7 +346,8 @@ class MockScreen: Identifiable {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
-                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+                                                                             userDiscoveryService: UserDiscoveryServiceMock(),
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithRoomAvatar:
@@ -344,7 +366,8 @@ class MockScreen: Identifiable {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
-                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+                                                                             userDiscoveryService: UserDiscoveryServiceMock(),
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithEmptyTopic:
@@ -365,7 +388,8 @@ class MockScreen: Identifiable {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
-                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+                                                                             userDiscoveryService: UserDiscoveryServiceMock(),
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithInvite:
@@ -382,7 +406,8 @@ class MockScreen: Identifiable {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
-                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+                                                                             userDiscoveryService: UserDiscoveryServiceMock(),
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenDmDetails:
@@ -400,7 +425,8 @@ class MockScreen: Identifiable {
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              roomProxy: roomProxy,
                                                                              mediaProvider: MockMediaProvider(),
-                                                                             userDiscoveryService: UserDiscoveryServiceMock()))
+                                                                             userDiscoveryService: UserDiscoveryServiceMock(),
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomEditDetails, .roomEditDetailsReadOnly:
@@ -415,7 +441,7 @@ class MockScreen: Identifiable {
                                                                                  mediaProvider: MockMediaProvider(),
                                                                                  navigationStackCoordinator: navigationStackCoordinator,
                                                                                  roomProxy: roomProxy,
-                                                                                 userIndicatorController: UserIndicatorControllerMock.default))
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMembersListScreen:

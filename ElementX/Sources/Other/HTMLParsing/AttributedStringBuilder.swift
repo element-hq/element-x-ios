@@ -21,6 +21,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
+    private let permalinkBaseURL: URL
+    
+    init(permalinkBaseURL: URL) {
+        self.permalinkBaseURL = permalinkBaseURL
+    }
         
     func fromPlain(_ string: String?) -> AttributedString? {
         guard let string else {
@@ -169,7 +174,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 if let url = value as? URL {
-                    switch PermalinkBuilder.detectPermalink(in: url) {
+                    switch PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) {
                     case .userIdentifier(let identifier):
                         attributedString.addAttributes([.MatrixUserID: identifier], range: range)
                     case .roomIdentifier(let identifier):

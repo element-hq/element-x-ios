@@ -19,9 +19,12 @@ import SwiftUI
 typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
 
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
+    private let slidingSyncLearnMoreURL: URL
+    
     var callback: (@MainActor (LoginScreenViewModelAction) -> Void)?
 
-    init(homeserver: LoginHomeserver) {
+    init(homeserver: LoginHomeserver, slidingSyncLearnMoreURL: URL) {
+        self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         let bindings = LoginScreenBindings()
         let viewState = LoginScreenViewState(homeserver: homeserver, bindings: bindings)
         
@@ -59,7 +62,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
                                                  title: L10n.commonError,
                                                  message: L10n.screenLoginErrorInvalidUserId)
         case .slidingSyncAlert:
-            let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
+            let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage,

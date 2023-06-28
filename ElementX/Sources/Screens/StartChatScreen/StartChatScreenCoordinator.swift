@@ -60,7 +60,11 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     init(parameters: StartChatScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatScreenViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, userDiscoveryService: parameters.userDiscoveryService)
+        viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
+                                             appSettings: ServiceLocator.shared.settings,
+                                             analytics: ServiceLocator.shared.analytics,
+                                             userIndicatorController: parameters.userIndicatorController,
+                                             userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {

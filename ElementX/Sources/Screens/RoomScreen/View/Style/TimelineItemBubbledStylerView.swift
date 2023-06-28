@@ -94,10 +94,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
                                       layoutDirection: timelineItem.isOutgoing ? .rightToLeft : .leftToRight) { key in
-                    context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
+                    context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: timelineItem.id, key: key))
                 }
+                // Workaround to stop the message long press stealing the touch from the reaction buttons
+                .onTapGesture { }
             }
         }
     }
@@ -151,7 +153,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var interactiveLocalizedSendInfo: some View {
-        if timelineItem.properties.deliveryStatus == .sendingFailed {
+        if timelineItem.hasFailedToSend {
             backgroundedLocalizedSendInfo
                 .onTapGesture {
                     context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
@@ -186,12 +188,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 Text(timelineItem.timestamp)
             }
 
-            if timelineItem.properties.deliveryStatus == .sendingFailed {
+            if timelineItem.hasFailedToSend {
                 Image(systemName: "exclamationmark.circle.fill")
             }
         }
         .font(.compound.bodyXS)
-        .foregroundColor(timelineItem.properties.deliveryStatus == .sendingFailed ? .compound.textCriticalPrimary : .compound.textSecondary)
+        .foregroundColor(timelineItem.hasFailedToSend ? .compound.textCriticalPrimary : .compound.textSecondary)
         .padding(.bottom, shouldFillBubble ? 0 : -4)
     }
     

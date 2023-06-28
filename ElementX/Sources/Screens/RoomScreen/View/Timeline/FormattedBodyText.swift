@@ -22,16 +22,35 @@ struct FormattedBodyText: View {
 
     private let attributedString: AttributedString
     private let additionalWhitespacesCount: Int
+    private let boostEmojiSize: Bool
 
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var attributedString = attributedString
-        attributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
-        return attributedString.formattedComponents
+        var adjustedAttributedString = attributedString
+        adjustedAttributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
+        
+        let string = String(attributedString.characters)
+        
+        if boostEmojiSize,
+           string.containsOnlyEmoji,
+           let range = adjustedAttributedString.range(of: string) {
+            adjustedAttributedString[range].font = .system(size: 48.0)
+        }
+        
+        return adjustedAttributedString.formattedComponents
     }
     
-    init(attributedString: AttributedString, additionalWhitespacesCount: Int = 0) {
+    init(attributedString: AttributedString,
+         additionalWhitespacesCount: Int = 0,
+         boostEmojiSize: Bool = false) {
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
+        self.boostEmojiSize = boostEmojiSize
+    }
+    
+    init(text: String, additionalWhitespacesCount: Int = 0, boostEmojiSize: Bool = false) {
+        self.init(attributedString: AttributedString(text),
+                  additionalWhitespacesCount: additionalWhitespacesCount,
+                  boostEmojiSize: boostEmojiSize)
     }
 
     // These is needed to create the slightly off inlined timestamp effect
@@ -123,12 +142,6 @@ struct FormattedBodyText: View {
     }
 }
 
-extension FormattedBodyText {
-    init(text: String, additionalWhitespacesCount: Int = 0) {
-        self.init(attributedString: AttributedString(text), additionalWhitespacesCount: additionalWhitespacesCount)
-    }
-}
-
 // MARK: - Previews
 
 struct FormattedBodyText_Previews: PreviewProvider {
@@ -167,7 +180,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
             """
         ]
         
-        let attributedStringBuilder = AttributedStringBuilder()
+        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
         
         VStack(alignment: .leading, spacing: 24.0) {
             ForEach(htmlStrings, id: \.self) { htmlString in

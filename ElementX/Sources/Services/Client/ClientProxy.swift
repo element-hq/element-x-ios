@@ -22,6 +22,8 @@ import UIKit
 class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
+    private let appSettings: AppSettings
+    
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
@@ -56,9 +58,11 @@ class ClientProxy: ClientProxyProtocol {
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
-    init(client: ClientProtocol, backgroundTaskService: BackgroundTaskServiceProtocol) async {
+    init(client: ClientProtocol, backgroundTaskService: BackgroundTaskServiceProtocol, appSettings: AppSettings) async {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
+        self.appSettings = appSettings
+        
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
@@ -382,7 +386,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func startEncryptionSyncService() {
-        guard ServiceLocator.shared.settings.isEncryptionSyncEnabled else {
+        guard appSettings.isEncryptionSyncEnabled else {
             return
         }
         configureEncryptionSyncService()
@@ -420,7 +424,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let roomListService = try ServiceLocator.shared.settings.isEncryptionSyncEnabled ? client.roomListService() : client.roomListServiceWithEncryption()
+            let roomListService = try appSettings.isEncryptionSyncEnabled ? client.roomListService() : client.roomListServiceWithEncryption()
             roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
                 guard let self else { return }
                 MXLog.info("Received room list update: \(state)")

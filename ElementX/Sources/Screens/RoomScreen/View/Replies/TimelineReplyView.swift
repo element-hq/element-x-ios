@@ -66,7 +66,7 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: L10n.commonSharedLocation,
                               formattedBody: nil,
-                              icon: .init(kind: .icon(Asset.Images.locationPin.name), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .icon(Asset.Images.locationMarker.name), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()

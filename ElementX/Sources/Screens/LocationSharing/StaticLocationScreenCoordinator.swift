@@ -19,11 +19,21 @@ import SwiftUI
 
 struct StaticLocationScreenCoordinatorParameters { }
 
-enum StaticLocationScreenCoordinatorAction { }
+enum StaticLocationScreenCoordinatorAction {
+    case close
+    case selectedLocation(GeoURI)
+}
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     let parameters: StaticLocationScreenCoordinatorParameters
     let viewModel: StaticLocationScreenViewModelProtocol
+    
+    private let actionsSubject: PassthroughSubject<StaticLocationScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    var actions: AnyPublisher<StaticLocationScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: StaticLocationScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -32,6 +42,19 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Public
+    
+    func start() {
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .close:
+                actionsSubject.send(.close)
+            case .sendLocation(let geoURI):
+                actionsSubject.send(.selectedLocation(geoURI))
+            }
+        }
+        .store(in: &cancellables)
+    }
     
     func toPresentable() -> AnyView {
         AnyView(StaticLocationScreen(context: viewModel.context))

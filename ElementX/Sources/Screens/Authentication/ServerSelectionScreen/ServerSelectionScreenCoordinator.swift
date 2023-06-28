@@ -40,6 +40,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
         viewModel = ServerSelectionScreenViewModel(homeserverAddress: parameters.authenticationService.homeserver.value.address,
+                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                    isModallyPresented: parameters.isModallyPresented)
         userIndicatorController = parameters.userIndicatorController
     }
