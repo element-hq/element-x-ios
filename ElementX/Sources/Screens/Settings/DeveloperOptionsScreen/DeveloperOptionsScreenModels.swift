@@ -30,6 +30,7 @@ struct DeveloperOptionsScreenViewStateBindings {
     var readReceiptsEnabled: Bool
     var isEncryptionSyncEnabled: Bool
     var locationEventsEnabled: Bool
+    var shareLocationEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -38,5 +39,6 @@ enum DeveloperOptionsScreenViewAction {
     case changedReadReceiptsEnabled
     case changedIsEncryptionSyncEnabled
     case changedLocationEventsEnabled
+    case changedShareLocationEnabled
     case clearCache
 }

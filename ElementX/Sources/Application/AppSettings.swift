@@ -30,6 +30,7 @@ final class AppSettings {
         case userSuggestionsEnabled
         case readReceiptsEnabled
         case locationEventsEnabled
+        case shareLocationEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -194,4 +195,7 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.locationEventsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var locationEventsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.shareLocationEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var shareLocationEnabled
 }

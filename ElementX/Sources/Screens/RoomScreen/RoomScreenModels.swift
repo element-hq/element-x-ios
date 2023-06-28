@@ -26,6 +26,7 @@ enum RoomScreenViewModelAction {
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
+    case displayLocationPicker
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: String)
@@ -68,6 +69,7 @@ enum RoomScreenViewAction {
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
+    case displayLocationPicker
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case tappedOnUser(userID: String)

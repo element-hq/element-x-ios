@@ -30,6 +30,7 @@ enum RoomScreenCoordinatorAction {
     case presentMediaUploadPicker(MediaPickerScreenSource)
     case presentMediaUploadPreviewScreen(URL)
     case presentRoomDetails
+    case presentLocationPicker
     case presentEmojiPicker(itemID: String)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)
     case presentMessageForwarding(itemID: String)
@@ -78,6 +79,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
             case .displayDocumentPicker:
                 actionsSubject.send(.presentMediaUploadPicker(.documents))
+            case .displayLocationPicker:
+                actionsSubject.send(.presentLocationPicker)
             case .displayMediaUploadPreviewScreen(let url):
                 actionsSubject.send(.presentMediaUploadPreviewScreen(url))
             case .displayRoomMemberDetails(let member):

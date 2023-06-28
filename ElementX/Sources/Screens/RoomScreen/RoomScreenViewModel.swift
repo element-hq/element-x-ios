@@ -109,6 +109,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             callback?(.displayMediaPicker)
         case .displayDocumentPicker:
             callback?(.displayDocumentPicker)
+        case .displayLocationPicker:
+            callback?(.displayLocationPicker)
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):

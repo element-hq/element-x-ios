@@ -17,7 +17,7 @@
 import Combine
 import Foundation
 
-typealias StaticLocationScreenViewModelType = StateStoreViewModel<StaticLocationScreenViewState, StaticLocationScreenViewModelAction>
+typealias StaticLocationScreenViewModelType = StateStoreViewModel<StaticLocationScreenViewState, StaticLocationScreenViewAction>
 
 class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLocationScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<StaticLocationScreenViewModelAction, Never> = .init()
@@ -28,5 +28,18 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
     
     init() {
         super.init(initialViewState: StaticLocationScreenViewState())
+    }
+    
+    override func process(viewAction: StaticLocationScreenViewAction) {
+        switch viewAction {
+        case .close:
+            actionsSubject.send(.close)
+        case .selectLocation:
+            guard let coordinate = state.bindings.mapCenterLocation else { return }
+            actionsSubject.send(.sendLocation(.init(coordinate: coordinate)))
+        case .userDidPan:
+            state.showsUserLocationMode = .hide
+            state.isPinDropSharing = true
+        }
     }
 }

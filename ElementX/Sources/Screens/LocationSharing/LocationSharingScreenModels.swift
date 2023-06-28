@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import CoreLocation
 import Foundation
 
 enum LocationSharingViewError: Error, Hashable {
@@ -21,13 +22,23 @@ enum LocationSharingViewError: Error, Hashable {
     case mapError(MapLibreError)
 }
 
-enum StaticLocationScreenViewModelAction { }
+enum StaticLocationScreenViewModelAction {
+    case close
+    case sendLocation(GeoURI)
+}
 
 struct StaticLocationScreenViewState: BindableState {
+    /// Indicates whether the user has moved around the map to drop a pin somewhere other than their current location
+    var isPinDropSharing = true
+    /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
+    var showsUserLocationMode: ShowUserLocationMode = .hide
+    
     var bindings = StaticLocationScreenBindings()
 }
 
 struct StaticLocationScreenBindings {
+    var mapCenterLocation: CLLocationCoordinate2D?
+    
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
         get {
@@ -45,4 +56,8 @@ struct StaticLocationScreenBindings {
     var alertInfo: AlertInfo<LocationSharingViewError>?
 }
 
-enum StaticLocationScreenViewAction { }
+enum StaticLocationScreenViewAction {
+    case close
+    case selectLocation
+    case userDidPan
+}

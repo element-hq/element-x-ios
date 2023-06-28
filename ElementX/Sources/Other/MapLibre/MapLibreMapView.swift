@@ -23,6 +23,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     private enum Constants {
         static let mapZoomLevel = 15.0
+        static let mapZoomLevelWithoutPermission = 5.0
     }
     
     // MARK: - Properties
@@ -36,12 +37,22 @@ struct MapLibreMapView: UIViewRepresentable {
     
     /// Bind view errors if any
     let error: Binding<MapLibreError?>
+    
+    /// Coordinate of the center of the map
+    @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
+    /// Called when the user pan on the map
+    var userDidPan: (() -> Void)?
+    
     // MARK: - UIViewRepresentable
     
     func makeUIView(context: Context) -> MGLMapView {
         let mapView = makeMapView()
         mapView.delegate = context.coordinator
+        let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
+        panGesture.delegate = context.coordinator
+        mapView.addGestureRecognizer(panGesture)
+        mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
         return mapView
     }
     
@@ -65,12 +76,9 @@ struct MapLibreMapView: UIViewRepresentable {
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
-
-        mapView.logoView.isHidden = true
-        mapView.attributionButton.isHidden = true
-        mapView.zoomLevel = Constants.mapZoomLevel
         
         showUserLocation(in: mapView)
+        mapView.attributionButton.isHidden = true
         
         return mapView
     }
@@ -134,7 +142,9 @@ extension MapLibreMapView {
             }
         }
         
-        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) { }
+        func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
+            mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
+        }
         
         // MARK: Callout
                 
@@ -146,6 +156,11 @@ extension MapLibreMapView {
         
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             gestureRecognizer is UIPanGestureRecognizer
+        }
+        
+        @objc
+        func didPan() {
+            mapLibreView.userDidPan?()
         }
     }
 }
