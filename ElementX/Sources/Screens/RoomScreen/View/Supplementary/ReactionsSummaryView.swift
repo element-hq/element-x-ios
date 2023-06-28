@@ -29,49 +29,57 @@ struct ReactionsSummaryView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                ScrollViewReader { scrollView in
-                    HStack {
-                        ForEach(reactions, id: \.self) { reaction in
-                            ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
-                                withAnimation(.easeInOut) {
-                                    selectedReactionKey = key
-                                }
-                            }
-                            .id(reaction.key)
-                        }
-                    }
-                    .onAppear {
-                        scrollView.scrollTo(selectedReactionKey, anchor: .leading)
-                    }
-                }
-            }
-            .padding(.top, 24)
-            .padding(.bottom, 12)
-            .padding(.leading, 20)
-            TabView(selection: $selectedReactionKey) {
-                ForEach(reactions, id: \.self) { reaction in
-                    ScrollView {
-                        VStack(alignment: .leading) {
-                            ForEach(reaction.senders, id: \.self) { sender in
-                                ReactionSummarySenderView(sender: sender, member: members[sender], imageProvider: imageProvider)
-                                    .padding(.horizontal, 16)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                    .tag(reaction.key)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            reactionButtons
+            sendersList
         }
         .presentationDetents([.medium])
         .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
     }
+    
+    private var reactionButtons: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            ScrollViewReader { scrollView in
+                HStack {
+                    ForEach(reactions, id: \.self) { reaction in
+                        ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
+                            withAnimation(.easeInOut) {
+                                selectedReactionKey = key
+                            }
+                        }
+                        .id(reaction.key)
+                    }
+                }
+                .padding(.leading, 20)
+                .onAppear {
+                    scrollView.scrollTo(selectedReactionKey, anchor: .leading)
+                }
+            }
+        }
+        .padding(.top, 24)
+        .padding(.bottom, 12)
+    }
+    
+    private var sendersList: some View {
+        TabView(selection: $selectedReactionKey) {
+            ForEach(reactions, id: \.self) { reaction in
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(reaction.senders, id: \.self) { sender in
+                            ReactionSummarySenderView(sender: sender, member: members[sender], imageProvider: imageProvider)
+                                .padding(.horizontal, 16)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .tag(reaction.key)
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+    }
 }
 
-struct ReactionSummaryButton: View {
+private struct ReactionSummaryButton: View {
     let reaction: AggregatedReaction
     let highlighted: Bool
     let action: (String) -> Void
@@ -97,7 +105,7 @@ struct ReactionSummaryButton: View {
     }
 }
 
-struct ReactionSummarySenderView: View {
+private struct ReactionSummarySenderView: View {
     var sender: String
     var member: RoomMemberState?
     let imageProvider: ImageProviderProtocol?
@@ -120,8 +128,8 @@ struct ReactionSummarySenderView: View {
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }
-            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 8)
     }
 }

@@ -17,40 +17,40 @@
 import Foundation
 
 extension AggregatedReaction {
-    fileprivate static func mockIds(_ count: Int) -> [String] {
+    private static func mockIds(_ count: Int) -> [String] {
         Array(1...count).map {
             "@user\($0):matrix.org"
         }
     }
     
-    fileprivate static var alice: String {
+    private static var alice: String {
         RoomMemberProxyMock.mockAlice.userID
     }
     
     static var mockThumbsUpHighlighted: AggregatedReaction {
-        AggregatedReaction(currentUserId: alice, key: "👍", senders: [alice] + mockIds(4))
+        AggregatedReaction(accountOwnerID: alice, key: "👍", senders: [alice] + mockIds(4))
     }
     
     static var mockClap: AggregatedReaction {
-        AggregatedReaction(currentUserId: alice, key: "👏", senders: mockIds(1))
+        AggregatedReaction(accountOwnerID: alice, key: "👏", senders: mockIds(1))
     }
     
     static var mockParty: AggregatedReaction {
-        AggregatedReaction(currentUserId: alice, key: "🎉", senders: mockIds(20))
+        AggregatedReaction(accountOwnerID: alice, key: "🎉", senders: mockIds(20))
     }
 
     static var mockReactions: [AggregatedReaction] {
         [
-            AggregatedReaction(currentUserId: alice, key: "😅", senders: [alice]),
-            AggregatedReaction(currentUserId: alice, key: "🤷‍♂️", senders: mockIds(1)),
-            AggregatedReaction(currentUserId: alice, key: "🎨", senders: [alice] + mockIds(5)),
-            AggregatedReaction(currentUserId: alice, key: "🎉", senders: mockIds(8)),
-            AggregatedReaction(currentUserId: alice, key: "🤯", senders: [alice] + mockIds(14)),
-            AggregatedReaction(currentUserId: alice, key: "🫣", senders: mockIds(1)),
-            AggregatedReaction(currentUserId: alice, key: "🚀", senders: [alice] + mockIds(3)),
-            AggregatedReaction(currentUserId: alice, key: "😇", senders: mockIds(2)),
-            AggregatedReaction(currentUserId: alice, key: "🤭", senders: [alice] + mockIds(8)),
-            AggregatedReaction(currentUserId: alice, key: "🫤", senders: mockIds(10))
+            AggregatedReaction(accountOwnerID: alice, key: "😅", senders: [alice]),
+            AggregatedReaction(accountOwnerID: alice, key: "🤷‍♂️", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🎨", senders: [alice] + mockIds(5)),
+            AggregatedReaction(accountOwnerID: alice, key: "🎉", senders: mockIds(8)),
+            AggregatedReaction(accountOwnerID: alice, key: "🤯", senders: [alice] + mockIds(14)),
+            AggregatedReaction(accountOwnerID: alice, key: "🫣", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🚀", senders: [alice] + mockIds(3)),
+            AggregatedReaction(accountOwnerID: alice, key: "😇", senders: mockIds(2)),
+            AggregatedReaction(accountOwnerID: alice, key: "🤭", senders: [alice] + mockIds(8)),
+            AggregatedReaction(accountOwnerID: alice, key: "🫤", senders: mockIds(10))
         ]
     }
 }

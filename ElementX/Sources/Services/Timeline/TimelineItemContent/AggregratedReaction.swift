@@ -18,8 +18,8 @@ import Foundation
 
 /// Represents all reactions of the same type for a single event.
 struct AggregatedReaction: Hashable {
-    /// The user id of the current user.
-    let currentUserId: String
+    /// The id of the account owner
+    let accountOwnerID: String
     /// The reaction that was sent.
     let key: String
     /// The user ids of those who sent the reactions
@@ -34,6 +34,6 @@ extension AggregatedReaction {
     
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
-        senders.contains(where: { $0 == currentUserId })
+        senders.contains(where: { $0 == accountOwnerID })
     }
 }

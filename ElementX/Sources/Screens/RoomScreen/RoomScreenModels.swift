@@ -148,9 +148,12 @@ struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
 }
 
 struct ReactionSummaryInfo: Identifiable {
-    let id = UUID()
     let reactions: [AggregatedReaction]
-    let key: String
+    let selectedKey: String
+    
+    var id: String {
+        selectedKey
+    }
 }
 
 enum RoomScreenErrorType: Hashable {

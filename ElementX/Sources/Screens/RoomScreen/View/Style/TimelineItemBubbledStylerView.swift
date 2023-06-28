@@ -92,12 +92,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
-                TimelineReactionsView(reactions: timelineItem.properties.reactions,
-                                      layoutDirection: timelineItem.isOutgoing ? .rightToLeft : .leftToRight) { key in
+                TimelineReactionsView(reactions: timelineItem.properties.reactions) { key in
                     context.send(viewAction: .toggleReaction(key: key, eventID: timelineItem.id))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: timelineItem.id, key: key))
                 }
+                .environment(\.layoutDirection, timelineItem.isOutgoing ? .rightToLeft : .leftToRight)
                 // Workaround to stop the message long press stealing the touch from the reaction buttons
                 .onTapGesture { }
             }

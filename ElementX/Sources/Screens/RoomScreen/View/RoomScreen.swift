@@ -50,7 +50,7 @@ struct RoomScreen: View {
                 }
             }
             .sheet(item: $context.reactionSummaryInfo) {
-                ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.key)
+                ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
             .track(screen: .room)

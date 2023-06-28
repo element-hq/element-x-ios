@@ -34,7 +34,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me"])
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me"])
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              timestamp: "10:11 AM",
@@ -43,8 +43,8 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob"])
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙏", senders: ["helena"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me", "helena", "jacob"])
                              ])),
         SeparatorRoomTimelineItem(id: "Today", text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
@@ -67,14 +67,14 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "New home office set up!"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob", "bob", "alice", "charlie", "dan", "erin"]),
-                                 AggregatedReaction(currentUserId: "me", key: "👌", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🥳", senders: ["bob"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🍾", senders: ["charlie"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🎈", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "👏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🎉", senders: ["helena"])
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙏", senders: ["helena"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me", "helena", "jacob", "bob", "alice", "charlie", "dan", "erin"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "👌", senders: ["helena"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🥳", senders: ["bob"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🍾", senders: ["charlie"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🎈", senders: ["helena"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "👏", senders: ["helena"]),
+                                 AggregatedReaction(accountOwnerID: "me", key: "🎉", senders: ["helena"])
                                  
                              ],
                              orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil),
