@@ -309,7 +309,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
                 case .presentLocationViewer(_, let geoURI):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI)))
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI)))
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):

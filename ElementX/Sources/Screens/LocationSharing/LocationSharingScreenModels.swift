@@ -29,7 +29,7 @@ enum StaticLocationScreenViewModelAction {
 
 enum StaticLocationInteractionMode: Hashable {
     case picker
-    case viewOnly(GeoURI)
+    case viewOnly(geoURI: GeoURI, description: String? = nil)
 }
 
 struct StaticLocationScreenViewState: BindableState {
@@ -41,7 +41,7 @@ struct StaticLocationScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             bindings = .init()
-        case .viewOnly(let geoURI):
+        case .viewOnly(let geoURI, _):
             bindings = .init(mapCenterLocation: .init(latitude: geoURI.latitude, longitude: geoURI.longitude))
         }
     }
@@ -62,7 +62,7 @@ struct StaticLocationScreenViewState: BindableState {
         switch interactionMode {
         case .picker:
             return nil
-        case .viewOnly(let geoURI):
+        case .viewOnly(let geoURI, _):
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
     }
@@ -100,6 +100,15 @@ struct StaticLocationScreenViewState: BindableState {
             return 5.0
         case .viewOnly:
             return 15.0
+        }
+    }
+
+    var locationDescription: String? {
+        switch interactionMode {
+        case .picker:
+            return nil
+        case .viewOnly(_, let description):
+            return description
         }
     }
 }

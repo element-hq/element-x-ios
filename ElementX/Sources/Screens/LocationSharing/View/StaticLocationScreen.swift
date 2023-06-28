@@ -22,12 +22,22 @@ struct StaticLocationScreen: View {
     private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
     
     var body: some View {
-        mapView
-            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
-            .navigationTitle(context.viewState.navigationTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar { toolbar }
-            .alert(item: $context.alertInfo)
+        VStack(spacing: 0) {
+            if let locationDescription = context.viewState.locationDescription {
+                Text(locationDescription)
+                    .lineLimit(2)
+                    .foregroundColor(Color.compound.textPrimary)
+                    .font(.compound.bodyMD)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+            }
+            mapView
+        }
+        .navigationTitle(context.viewState.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+        .alert(item: $context.alertInfo)
+        .sheet(isPresented: $context.showShareSheet) { shareSheet }
     }
     
     private var mapView: some View {
@@ -44,7 +54,7 @@ struct StaticLocationScreen: View {
                 LocationMarkerView()
             }
         }
-        .sheet(isPresented: $context.showShareSheet) { shareSheet }
+        .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
     }
 
     // MARK: - Private
@@ -135,9 +145,14 @@ struct StaticLocationScreenViewer_Previews: PreviewProvider {
         .previewDisplayName("Picker")
 
         NavigationStack {
-            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(.init(latitude: 41.9027835, longitude: 12.4963655))).context)
+            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835, longitude: 12.4963655))).context)
         }
         .previewDisplayName("View Only")
+
+        NavigationStack {
+            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835, longitude: 12.4963655), description: "Cool position")).context)
+        }
+        .previewDisplayName("View Only (with description)")
     }
 }
 
