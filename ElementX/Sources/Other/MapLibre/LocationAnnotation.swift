@@ -46,6 +46,7 @@ final class LocationAnnotationView: MGLUserLocationAnnotationView {
     convenience init(annotation: LocationAnnotation) {
         self.init(annotation: annotation, reuseIdentifier: "\(Self.self)")
         let view: UIView = UIHostingController(rootView: annotation.view).view
+        view.backgroundColor = .clear
         view.anchorPoint = annotation.anchorPoint
         addSubview(view)
         view.bounds.size = view.intrinsicContentSize
