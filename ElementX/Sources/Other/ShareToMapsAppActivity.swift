@@ -65,7 +65,7 @@ extension ShareToMapsAppActivity.MapsAppType {
         switch self {
         case .apple:
             // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://maps.apple.com?ll=\(location.latitude),\(location.longitude)&q=Location")!
+            return URL(string: "https://maps.apple.com?ll=\(location.latitude),\(location.longitude)&q=Pin")!
         case .google:
             // swiftlint:disable:next force_unwrapping
             return URL(string: "https://www.google.com/maps/search/?api=1&query=\(location.latitude),\(location.longitude)")!
@@ -76,14 +76,13 @@ extension ShareToMapsAppActivity.MapsAppType {
     }
 
     var activityTitle: String {
-        #warning("AG: localize me")
         switch self {
         case .apple:
-            return "Apple"
+            return L10n.screenShareOpenAppleMaps
         case .google:
-            return "Google"
+            return L10n.screenShareOpenGoogleMaps
         case .osm:
-            return "OSM"
+            return L10n.screenShareOpenOsmMaps
         }
     }
 }
