@@ -50,6 +50,7 @@ struct RoomScreen: View {
                         .environmentObject(context)
                 }
             }
+            .interactiveQuickLook(item: $context.mediaPreviewItem)
             .track(screen: .room)
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
