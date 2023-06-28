@@ -353,10 +353,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             // Don't show a context menu for non-event based items.
             return nil
         }
-        
+
         if timelineItem is StateRoomTimelineItem {
             // Don't show a context menu for state events.
             return nil
+        }
+
+        var debugActions: [TimelineItemMenuAction] = appSettings.canShowDeveloperOptions ? [.viewSource] : []
+
+        if let item = timelineItem as? EncryptedRoomTimelineItem,
+           case let .megolmV1AesSha2(sessionID) = item.encryptionType {
+            debugActions.append(.retryDecryption(sessionID: sessionID))
+            return .init(actions: [], debugActions: debugActions)
         }
         
         var actions: [TimelineItemMenuAction] = [
@@ -381,13 +389,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         } else {
             actions.append(.report)
-        }
-        
-        var debugActions: [TimelineItemMenuAction] = appSettings.canShowDeveloperOptions ? [.viewSource] : []
-        
-        if let item = timelineItem as? EncryptedRoomTimelineItem,
-           case let .megolmV1AesSha2(sessionID) = item.encryptionType {
-            debugActions.append(.retryDecryption(sessionID: sessionID))
         }
 
         if item.hasFailedToSend {
