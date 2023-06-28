@@ -40,17 +40,15 @@ struct TimelineReactionButton: View {
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
     
+    @State private var didLongPress = false
+    
     var body: some View {
-        Button {
+        label.onTapGesture {
             toggleReaction(reaction.key)
-        } label: {
-            label
         }
-        .simultaneousGesture(LongPressGesture()
-            .onEnded { _ in
-                showReactionSummary(reaction.key)
-            }
-        )
+        .longPressWithFeedback {
+            showReactionSummary(reaction.key)
+        }
     }
     
     var label: some View {
