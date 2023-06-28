@@ -51,6 +51,7 @@ struct RoomScreen: View {
             }
             .sheet(item: $context.reactionSummaryInfo) {
                 ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.key)
+                    .edgesIgnoringSafeArea([.bottom])
             }
             .track(screen: .room)
             .task(id: context.viewState.roomId) {

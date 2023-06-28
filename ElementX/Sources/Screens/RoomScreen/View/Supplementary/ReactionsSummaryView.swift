@@ -28,7 +28,7 @@ struct ReactionsSummaryView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(reactions, id: \.self) { reaction in

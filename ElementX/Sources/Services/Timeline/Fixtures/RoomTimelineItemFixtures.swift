@@ -44,7 +44,7 @@ enum RoomTimelineItemFixtures {
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob", "bob", "alice", "charlie", "dan", "erin"])
                              ])),
         SeparatorRoomTimelineItem(id: "Today", text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
