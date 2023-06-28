@@ -22,10 +22,8 @@ struct TimelineItemStatusView: View {
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
-    @State private var shouldShowDeliveryStatus = true
-
     private var isLastOutgoingMessage: Bool {
-        context.viewState.items.last(where: { !$0.isUnsent })?.id == timelineItem.id &&
+        context.viewState.items.last?.id == timelineItem.id &&
             timelineItem.isOutgoing
     }
 
@@ -36,18 +34,8 @@ struct TimelineItemStatusView: View {
     var body: some View {
         if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts
-        } else if shouldShowDeliveryStatus {
+        } else {
             deliveryStatus
-                .onChange(of: timelineItem.properties.deliveryStatus) { newValue in
-                    if newValue == .sent, !isLast {
-                        Task {
-                            try? await Task.sleep(for: .milliseconds(1500))
-                            withAnimation {
-                                shouldShowDeliveryStatus = false
-                            }
-                        }
-                    }
-                }
         }
     }
 
@@ -55,12 +43,13 @@ struct TimelineItemStatusView: View {
     var deliveryStatus: some View {
         switch timelineItem.properties.deliveryStatus {
         case .sending:
-            TimelineDeliveryStatusView(deliveryStatus: .sending)
-        case .sent:
-            TimelineDeliveryStatusView(deliveryStatus: .sent)
-        case .none:
             if isLastOutgoingMessage {
-                // We always display the sent icon for the latest echoed outgoing message
+                // We only display the sending icon for the latest outgoing message
+                TimelineDeliveryStatusView(deliveryStatus: .sending)
+            }
+        case .sent, .none:
+            if isLastOutgoingMessage {
+                // We only display the sent icon for the latest outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
