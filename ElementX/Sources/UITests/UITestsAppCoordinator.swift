@@ -124,14 +124,17 @@ class MockScreen: Identifiable {
                                                                  credentials: credentials,
                                                                  keyBackupNeeded: false))
         case .waitlist:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let credentials = WaitlistScreenCredentials(username: "alice",
                                                         password: "password",
                                                         initialDeviceName: nil,
                                                         deviceID: nil,
                                                         homeserver: .mockMatrixDotOrg)
-            return WaitlistScreenCoordinator(parameters: .init(credentials: credentials,
-                                                               authenticationService: MockAuthenticationServiceProxy(),
-                                                               userIndicatorController: UserIndicatorControllerMock.default))
+            let coordinator = WaitlistScreenCoordinator(parameters: .init(credentials: credentials,
+                                                                          authenticationService: MockAuthenticationServiceProxy(),
+                                                                          userIndicatorController: UserIndicatorControllerMock.default))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .simpleRegular:
             return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
