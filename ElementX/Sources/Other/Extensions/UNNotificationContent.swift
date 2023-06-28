@@ -122,7 +122,7 @@ extension UNMutableNotificationContent {
         if let fetchedImage {
             image = fetchedImage
         } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
-                                                                 id: icon.groupInfo?.name ?? senderName) {
+                                                                 id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
             image = INImage(named: "")
@@ -181,6 +181,30 @@ extension UNMutableNotificationContent {
             .clipShape(Circle())
             .frame(width: 100, height: 100)
         let renderer = await ImageRenderer(content: image)
-        return await renderer.uiImage?.jpegData(compressionQuality: 0.8)
+        guard let image = await renderer.uiImage else {
+            return nil
+        }
+
+        // On simulator and macOS the image is rendered correctly
+        // But on other devices is rendered upside down so we need to flip it
+        #if targetEnvironment(simulator)
+        return image.pngData()
+        #endif
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return image.pngData()
+        } else {
+            return image.flippedVertically().pngData()
+        }
+    }
+}
+
+private extension UIImage {
+    func flippedVertically() -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        return UIGraphicsImageRenderer(size: size, format: format).image { context in
+            context.cgContext.concatenate(CGAffineTransform(scaleX: 1, y: -1))
+            self.draw(at: CGPoint(x: 0, y: -size.height))
+        }
     }
 }
