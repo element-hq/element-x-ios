@@ -30,13 +30,19 @@ struct ReactionsSummaryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(reactions, id: \.self) { reaction in
-                        ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
-                            withAnimation {
-                                selectedReactionKey = key
+                ScrollViewReader { scrollView in
+                    HStack {
+                        ForEach(reactions, id: \.self) { reaction in
+                            ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
+                                withAnimation(.easeInOut) {
+                                    selectedReactionKey = key
+                                }
                             }
+                            .id(reaction.key)
                         }
+                    }
+                    .onAppear {
+                        scrollView.scrollTo(selectedReactionKey, anchor: .leading)
                     }
                 }
             }
