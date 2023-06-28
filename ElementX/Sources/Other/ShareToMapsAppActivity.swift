@@ -18,7 +18,7 @@ import CoreLocation
 import UIKit
 
 final class ShareToMapsAppActivity: UIActivity {
-    enum MapsAppType {
+    enum MapsAppType: CaseIterable {
         case apple
         case google
         case osm
@@ -60,12 +60,12 @@ final class ShareToMapsAppActivity: UIActivity {
     }
 }
 
-private extension ShareToMapsAppActivity.MapsAppType {
+extension ShareToMapsAppActivity.MapsAppType {
     func activityURL(for location: CLLocationCoordinate2D) -> URL {
         switch self {
         case .apple:
             // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://maps.apple.com?ll=\(location.latitude),\(location.longitude)&q=Pin")!
+            return URL(string: "https://maps.apple.com?ll=\(location.latitude),\(location.longitude)&q=Location")!
         case .google:
             // swiftlint:disable:next force_unwrapping
             return URL(string: "https://www.google.com/maps/search/?api=1&query=\(location.latitude),\(location.longitude)")!

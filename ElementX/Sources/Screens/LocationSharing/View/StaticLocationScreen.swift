@@ -44,6 +44,7 @@ struct StaticLocationScreen: View {
                 LocationMarkerView()
             }
         }
+        .sheet(isPresented: $context.showShareSheet) { shareSheet }
     }
 
     // MARK: - Private
@@ -105,10 +106,21 @@ struct StaticLocationScreen: View {
         }
     }
 
-    #warning("AG: fix me")
     private var shareButton: some View {
-        ShareLink(item: "foo") {
+        Button {
+            context.showShareSheet = true
+        } label: {
             Image(systemName: "square.and.arrow.up")
+        }
+    }
+
+    @ViewBuilder
+    private var shareSheet: some View {
+        if let location = context.viewState.mapAnnotationCoordinate {
+            AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location)],
+                            applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location) })
+                .ignoresSafeArea()
+                .presentationDetents([.medium, .large])
         }
     }
 }

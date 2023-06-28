@@ -122,6 +122,8 @@ struct StaticLocationScreenBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<LocationSharingViewError>?
+
+    var showShareSheet = false
 }
 
 enum StaticLocationScreenViewAction {
