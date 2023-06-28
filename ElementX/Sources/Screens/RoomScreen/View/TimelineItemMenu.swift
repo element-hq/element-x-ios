@@ -77,6 +77,12 @@ public struct TimelineItemMenu: View {
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
+
+    private var canShowReactions: Bool {
+        !item.isRedacted &&
+            !item.hasFailedToSend &&
+            !item.hasFailedDecryption
+    }
     
     public var body: some View {
         VStack {
@@ -88,7 +94,7 @@ public struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if !item.isRedacted, !item.hasFailedToSend {
+                    if canShowReactions {
                         reactionsSection
                             .padding(.top, 4.0)
                             .padding(.bottom, 8.0)

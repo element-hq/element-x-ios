@@ -45,4 +45,8 @@ extension EventBasedTimelineItemProtocol {
     var isRedacted: Bool {
         self is RedactedRoomTimelineItem
     }
+
+    var hasFailedDecryption: Bool {
+        self is EncryptedRoomTimelineItem
+    }
 }
