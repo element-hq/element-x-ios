@@ -44,7 +44,7 @@ enum RoomTimelineItemFixtures {
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob", "bob", "alice", "charlie", "dan", "erin"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob"])
                              ])),
         SeparatorRoomTimelineItem(id: "Today", text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
@@ -68,7 +68,14 @@ enum RoomTimelineItemFixtures {
                              content: .init(body: "New home office set up!"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(currentUserId: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["helena", "jacob", "bob"])
+                                 AggregatedReaction(currentUserId: "me", key: "🙌", senders: ["me", "helena", "jacob", "bob", "alice", "charlie", "dan", "erin"]),
+                                 AggregatedReaction(currentUserId: "me", key: "👌", senders: ["helena"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🥳", senders: ["bob"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🍾", senders: ["charlie"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🎈", senders: ["helena"]),
+                                 AggregatedReaction(currentUserId: "me", key: "👏", senders: ["helena"]),
+                                 AggregatedReaction(currentUserId: "me", key: "🎉", senders: ["helena"])
+                                 
                              ],
                              orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil),
                                                    ReadReceipt(userID: "bob", formattedTimestamp: nil),
