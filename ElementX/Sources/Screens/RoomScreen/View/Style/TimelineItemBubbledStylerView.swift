@@ -20,6 +20,7 @@ import SwiftUI
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
+    @Environment(\.layoutDirection) var layoutDirection: LayoutDirection
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
@@ -31,7 +32,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
-
+    
+    var reactionsLayoutDirection: LayoutDirection {
+        guard timelineItem.isOutgoing else { return layoutDirection }
+        return layoutDirection == .leftToRight ? .rightToLeft : .leftToRight
+    }
+    
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
             VStack(alignment: alignment, spacing: -12) {
@@ -97,7 +103,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: timelineItem.id, key: key))
                 }
-                .environment(\.layoutDirection, timelineItem.isOutgoing ? .rightToLeft : .leftToRight)
+                .environment(\.layoutDirection, reactionsLayoutDirection)
                 // Workaround to stop the message long press stealing the touch from the reaction buttons
                 .onTapGesture { }
             }
