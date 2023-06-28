@@ -145,9 +145,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .messageForwarding(roomID: roomID, itemID: itemID)
             case (.dismissMessageForwarding, .messageForwarding(let roomID, _)):
                 return .room(roomID: roomID)
-            case (.presentLocationPicker, .room(let roomID)):
-                return .locationPicker(roomID: roomID)
-            case (.dismissLocationPicker, .locationPicker(let roomID)):
+            case (.presentMapNavigator, .room(let roomID)):
+                return .mapNavigator(roomID: roomID)
+            case (.dismissMapNavigator, .mapNavigator(let roomID)):
                 return .room(roomID: roomID)
             default:
                 return nil
@@ -211,9 +211,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMessageForwarding(for: eventID)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
-            case (.room, .presentLocationPicker(let mode), .locationPicker):
-                presentLocationPicker(interactionMode: mode)
-            case (.locationPicker, .dismissLocationPicker, .room):
+            case (.room, .presentMapNavigator(let mode), .mapNavigator):
+                presentMapNavigator(interactionMode: mode)
+            case (.mapNavigator, .dismissMapNavigator, .room):
                 break
             default:
                 fatalError("Unknown transition: \(context)")
@@ -307,9 +307,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentEmojiPicker(let itemID):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
                 case .presentLocationPicker:
-                    stateMachine.tryEvent(.presentLocationPicker(interactionMode: .picker))
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
                 case .presentLocationViewer(_, let geoURI):
-                    stateMachine.tryEvent(.presentLocationPicker(interactionMode: .viewOnly(geoURI)))
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI)))
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):
@@ -502,8 +502,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentLocationPicker(interactionMode: StaticLocationInteractionMode) {
-        let locationPickerNavigationStackCoordinator = NavigationStackCoordinator()
+    private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
+        let navigationStackCoordinator = NavigationStackCoordinator()
 
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
@@ -522,10 +522,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        locationPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
 
-        navigationStackCoordinator.setSheetCoordinator(locationPickerNavigationStackCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissLocationPicker)
+        navigationStackCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
     }
     
@@ -620,7 +620,7 @@ private extension RoomFlowCoordinator {
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
         case emojiPicker(roomID: String, itemID: String)
-        case locationPicker(roomID: String)
+        case mapNavigator(roomID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: String)
     }
@@ -649,8 +649,8 @@ private extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: String)
         case dismissEmojiPicker
 
-        case presentLocationPicker(interactionMode: StaticLocationInteractionMode)
-        case dismissLocationPicker
+        case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
+        case dismissMapNavigator
         
         case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
         case dismissRoomMemberDetails

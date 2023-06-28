@@ -47,19 +47,12 @@ final class LocationAnnotationView: MGLUserLocationAnnotationView {
         self.init(annotation: annotation, reuseIdentifier: "\(Self.self)")
         let view: UIView = UIHostingController(rootView: annotation.view).view
         view.anchorPoint = annotation.anchorPoint
-        addMarkerView(view)
+        addSubview(view)
+        view.bounds.size = view.intrinsicContentSize
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
-    }
-    
-    // MARK: - Private
-    
-    private func addMarkerView(_ markerView: UIView) {
-        markerView.backgroundColor = .clear
-        addSubview(markerView)
-        markerView.bounds.size = markerView.intrinsicContentSize
     }
 }
