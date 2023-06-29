@@ -26,8 +26,16 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    @State private var showingBottomToolbar = true
+    @State private var lastScrollDirection: ScrollViewAdapter.ScrollDirection = .up
     @State private var isSearching = false
+    
+    var bottomBarVisibility: Visibility {
+        if lastScrollDirection == .up, context.viewState.roomListMode == .rooms {
+            return .automatic
+        } else {
+            return .hidden
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -81,7 +89,7 @@ struct HomeScreen: View {
         }
         .onReceive(scrollViewAdapter.scrollDirection) { direction in
             withAnimation(.elementDefault) {
-                showingBottomToolbar = (direction == .down)
+                lastScrollDirection = direction
             }
         }
         .onChange(of: context.viewState.visibleRooms) { _ in
@@ -100,7 +108,7 @@ struct HomeScreen: View {
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar(showingBottomToolbar ? .automatic : .hidden, for: .bottomBar)
+        .toolbar(bottomBarVisibility, for: .bottomBar)
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
@@ -117,6 +125,8 @@ struct HomeScreen: View {
         ToolbarItemGroup(placement: .bottomBar) {
             Spacer()
             newRoomButton
+                // Fix position animating on loop by getting caught up in the shimmer effect somehow.
+                .animation(.noAnimation, value: context.viewState.roomListMode)
         }
     }
     

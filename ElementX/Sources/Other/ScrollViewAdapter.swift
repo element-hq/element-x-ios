@@ -84,9 +84,9 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         let velocity = scrollView.panGestureRecognizer.velocity(in: nil)
 
         if velocity.y > Constant.scrollDirectionThreshold {
-            scrollDirectionSubject.send(.down)
-        } else if velocity.y < -Constant.scrollDirectionThreshold {
             scrollDirectionSubject.send(.up)
+        } else if velocity.y < -Constant.scrollDirectionThreshold {
+            scrollDirectionSubject.send(.down)
         }
     }
     
