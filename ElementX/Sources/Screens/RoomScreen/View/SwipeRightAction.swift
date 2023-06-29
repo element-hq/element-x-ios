@@ -16,9 +16,9 @@
 
 import SwiftUI
 
-struct SwipeRightActionMenu: ViewModifier {
+struct SwipeRightAction<Label: View>: ViewModifier {
     private let actionThreshold = 50.0
-    private let translationThreshold = 100.0
+    private let xOffsetThreshold = 100.0
     private let swipeThreshold = 1000.0
     
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
@@ -27,21 +27,19 @@ struct SwipeRightActionMenu: ViewModifier {
     @GestureState private var dragGestureActive = false
     
     @State private var hasReachedActionThreshold = false
-    @State private var iconOpacity = 0.0
-    @State private var xAxisTranslation = 0.0 {
-        didSet {
-            iconOpacity = xAxisTranslation / 50
-        }
-    }
+    @State private var xOffset = 0.0
     
-    let actionIconSystemName: String
+    /// The view to be shown on the left side of the content
+    let label: () -> Label
+    /// Defer computing whether an action is available until the gesture is started
     let shouldStartAction: () -> Bool
+    /// Callback for when the dragged past the action threshold
     let action: () -> Void
     
     func body(content: Content) -> some View {
         content
-            .offset(x: xAxisTranslation, y: 0.0)
-            .animation(.interactiveSpring().speed(0.5), value: xAxisTranslation)
+            .offset(x: xOffset, y: 0.0)
+            .animation(.interactiveSpring().speed(0.5), value: xOffset)
             .gesture(DragGesture()
                 .updating($dragGestureActive) { _, state, _ in
                     // Available actions should be computed on the fly so we use a gesture state change
@@ -59,10 +57,10 @@ struct SwipeRightActionMenu: ViewModifier {
                     // The final translation will be between 0 and `swipeThreshold` with the action being enabled from
                     // `actionThreshold` onwards
                     let screenWidthNormalisedTranslation = max(0.0, min(value.translation.width, swipeThreshold)) / swipeThreshold
-                    let easedTranslation = circularEaseOut(p: screenWidthNormalisedTranslation)
-                    xAxisTranslation = easedTranslation * translationThreshold
+                    let easedTranslation = circularEaseOut(screenWidthNormalisedTranslation)
+                    xOffset = easedTranslation * xOffsetThreshold
                     
-                    if xAxisTranslation > actionThreshold {
+                    if xOffset > actionThreshold {
                         if !hasReachedActionThreshold {
                             feedbackGenerator.impactOccurred()
                             hasReachedActionThreshold = true
@@ -72,11 +70,11 @@ struct SwipeRightActionMenu: ViewModifier {
                     }
                 }
                 .onEnded { _ in
-                    if xAxisTranslation > actionThreshold {
+                    if xOffset > actionThreshold {
                         action()
                     }
                     
-                    xAxisTranslation = 0.0
+                    xOffset = 0.0
                 }
             )
             .onChange(of: dragGestureActive, perform: { value in
@@ -89,33 +87,32 @@ struct SwipeRightActionMenu: ViewModifier {
             })
             .overlay(alignment: .leading) {
                 // We want the action icon to follow the view translation and gradually fade in
-                Image(systemName: actionIconSystemName)
-                    .opacity(iconOpacity)
-                    .animation(.interactiveSpring().speed(0.5), value: xAxisTranslation)
-                    .offset(x: -actionThreshold + min(xAxisTranslation, actionThreshold), y: 0.0)
+                label()
+                    .opacity(xOffset / 50)
+                    .animation(.interactiveSpring().speed(0.5), value: xOffset)
+                    .offset(x: -actionThreshold + min(xOffset, actionThreshold), y: 0.0)
             }
     }
     
     /// Used to compute the horizontal translation amount.
     /// The more it's dragged the less it moves on a circular ease out curve
-    private func circularEaseOut(p: Double) -> Double {
-        sqrt((2 - p) * p)
+    private func circularEaseOut(_ value: Double) -> Double {
+        sqrt((2 - value) * value)
     }
 }
 
 extension View {
-    func swipeRightActionMenu(actionIconSystemName: String,
-                              shouldStartAction: @escaping () -> Bool,
-                              action: @escaping () -> Void) -> some View {
-        modifier(SwipeRightActionMenu(actionIconSystemName: actionIconSystemName, shouldStartAction: shouldStartAction, action: action))
+    func swipeRightAction(label: @escaping () -> some View,
+                          shouldStartAction: @escaping () -> Bool,
+                          action: @escaping () -> Void) -> some View {
+        modifier(SwipeRightAction(label: label, shouldStartAction: shouldStartAction, action: action))
     }
 }
 
-struct SwipeRightActionMenu_Previews: PreviewProvider {
+struct SwipeRightAction_Previews: PreviewProvider {
     static var previews: some View { Preview() }
     
     struct Preview: View {
-        private let viewModel = RoomScreenViewModel.mock
         @State private var isPresentingSheet = false
         
         var body: some View {
@@ -123,31 +120,12 @@ struct SwipeRightActionMenu_Previews: PreviewProvider {
                 ScrollView {
                     VStack(alignment: .leading) {
                         mockBubble("This is a message from somebody with a couple of lines of text.")
-                            .swipeRightActionMenu(actionIconSystemName: "flame") {
+                            .swipeRightAction {
+                                Image(systemName: "flame")
+                            } shouldStartAction: {
                                 true
                             } action: {
                                 isPresentingSheet = true
-                            }
-                        
-                        mockBubble("Short message")
-                            .swipeRightActionMenu(actionIconSystemName: "flame") {
-                                true
-                            } action: {
-                                isPresentingSheet = true
-                            }
-                        
-                        mockBubble("How are you today? The sun is shining here and its very hot ☀️☀️☀️")
-                            .swipeRightActionMenu(actionIconSystemName: "flame") {
-                                true
-                            } action: {
-                                isPresentingSheet = true
-                            }
-                        
-                        mockBubble("I'm a fake!")
-                            .contextMenu {
-                                Button("Copy") { }
-                                Button("Reply") { }
-                                Button("Remove") { }
                             }
                     }
                     .padding()
@@ -156,10 +134,9 @@ struct SwipeRightActionMenu_Previews: PreviewProvider {
                 .navigationBarTitleDisplayMode(.inline)
             }
             .sheet(isPresented: $isPresentingSheet) {
-                Text("Long pressed!")
+                Text("Action triggered!")
                     .presentationDetents([.medium])
             }
-            .environmentObject(viewModel.context)
         }
         
         func mockBubble(_ body: String) -> some View {
@@ -167,7 +144,6 @@ struct SwipeRightActionMenu_Previews: PreviewProvider {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
                 .background(Color.compound._bgBubbleOutgoing, in: RoundedRectangle(cornerRadius: 12))
-                .onTapGesture { /* Fix long press gesture blocking the scroll view */ }
         }
     }
 }

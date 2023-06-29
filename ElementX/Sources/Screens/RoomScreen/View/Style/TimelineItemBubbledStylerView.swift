@@ -115,7 +115,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .longPressWithFeedback {
                 context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
             }
-            .swipeRightActionMenu(actionIconSystemName: "arrowshape.turn.up.left") {
+            .swipeRightAction {
+                Image(systemName: "arrowshape.turn.up.left")
+            } shouldStartAction: {
                 context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
             } action: {
                 context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
