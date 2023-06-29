@@ -71,13 +71,15 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         }
         // We need a tap gesture before this long one so that it doesn't
         // steal away the gestures from the scroll view
-        .onLongPressGesture(minimumDuration: 0.25) {
+        .longPressWithFeedback {
             context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
-            feedbackGenerator.impactOccurred()
-        } onPressingChanged: { pressing in
-            if pressing {
-                feedbackGenerator.prepare()
-            }
+        }
+        .swipeRightAction {
+            Image(systemName: "arrowshape.turn.up.left")
+        } shouldStartAction: {
+            context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
+        } action: {
+            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
         }
     }
     

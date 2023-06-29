@@ -28,6 +28,16 @@ struct TimelineItemMenuActions {
         self.actions = actions
         self.debugActions = debugActions
     }
+    
+    var canReply: Bool {
+        for action in actions {
+            if case .reply = action {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
