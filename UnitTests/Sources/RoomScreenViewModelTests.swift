@@ -348,14 +348,13 @@ class RoomScreenViewModelTests: XCTestCase {
 
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false) {
+        let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [sender])] : []
         self.init(id: UUID().uuidString,
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
                   sender: .init(id: "@\(sender):server.com", displayName: sender),
                   content: .init(body: text),
-                  properties: RoomTimelineItemProperties(reactions: addReactions ? [
-                      AggregatedReaction(key: "🦄", count: 1, isHighlighted: false)
-                  ] : []))
+                  properties: RoomTimelineItemProperties(reactions: reactions))
     }
 }

@@ -14,30 +14,41 @@
 // limitations under the License.
 //
 
+import Flow
 import SwiftUI
 
 struct TimelineReactionsView: View {
+    @Environment(\.layoutDirection) var layoutDirection: LayoutDirection
     let reactions: [AggregatedReaction]
-    let alignment: HorizontalAlignment
-    let action: (String) -> Void
+    let toggleReaction: (String) -> Void
+    let showReactionSummary: (String) -> Void
     
     var body: some View {
-        AlignedScrollView(alignment: alignment, showsIndicators: false) {
-            HStack {
-                ForEach(reactions, id: \.self) { reaction in
-                    TimelineReactionButton(reaction: reaction, action: action)
-                }
+        HFlow(itemSpacing: 4, rowSpacing: 4) {
+            ForEach(reactions, id: \.self) { reaction in
+                TimelineReactionButton(reaction: reaction,
+                                       toggleReaction: toggleReaction,
+                                       showReactionSummary: showReactionSummary)
             }
         }
+        .environment(\.layoutDirection, layoutDirection)
     }
 }
 
 struct TimelineReactionButton: View {
     let reaction: AggregatedReaction
-    let action: (String) -> Void
+    let toggleReaction: (String) -> Void
+    let showReactionSummary: (String) -> Void
+    
+    @State private var didLongPress = false
     
     var body: some View {
-        Button { action(reaction.key) } label: { label }
+        label.onTapGesture {
+            toggleReaction(reaction.key)
+        }
+        .longPressWithFeedback {
+            showReactionSummary(reaction.key)
+        }
     }
     
     var label: some View {
@@ -79,22 +90,13 @@ struct TimelineReactionButton: View {
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            TimelineReactionButton(reaction: AggregatedReaction(key: "👍", count: 5, isHighlighted: true)) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction(key: "👏", count: 1, isHighlighted: false)) { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction(key: "🎉", count: 20, isHighlighted: false)) { _ in }
-            
-            TimelineReactionsView(reactions: [
-                AggregatedReaction(key: "😅", count: 1, isHighlighted: true),
-                AggregatedReaction(key: "🤷‍♂️", count: 1, isHighlighted: false),
-                AggregatedReaction(key: "🎨", count: 6, isHighlighted: true),
-                AggregatedReaction(key: "🎉", count: 8, isHighlighted: false),
-                AggregatedReaction(key: "🤯", count: 15, isHighlighted: true),
-                AggregatedReaction(key: "🫣", count: 1, isHighlighted: false),
-                AggregatedReaction(key: "🚀", count: 3, isHighlighted: true),
-                AggregatedReaction(key: "😇", count: 2, isHighlighted: false),
-                AggregatedReaction(key: "🤭", count: 9, isHighlighted: true),
-                AggregatedReaction(key: "🫤", count: 10, isHighlighted: false)
-            ], alignment: .leading) { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in } showReactionSummary: { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in } showReactionSummary: { _ in }
+            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in } showReactionSummary: { _ in }
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
+                .environment(\.layoutDirection, .leftToRight)
+            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
+                .environment(\.layoutDirection, .rightToLeft)
         }
     }
 }
