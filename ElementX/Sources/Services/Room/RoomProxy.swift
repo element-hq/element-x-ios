@@ -58,7 +58,7 @@ class RoomProxy: RoomProxyProtocol {
 
     init(roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
+         backgroundTaskService: BackgroundTaskServiceProtocol) async {
         self.roomListItem = roomListItem
         self.room = room
         self.backgroundTaskService = backgroundTaskService
@@ -77,7 +77,7 @@ class RoomProxy: RoomProxyProtocol {
 
         self.timelineListener = timelineListener
         
-        let result = room.addTimelineListener(listener: timelineListener)
+        let result = await room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
         
         innerTimelineProvider = RoomTimelineProvider(currentItems: result.items, updatePublisher: updatesPublisher)
