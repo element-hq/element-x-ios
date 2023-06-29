@@ -155,17 +155,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
         }
-        
-        let room = roomListItem.fullRoom()
 
         let details = RoomSummaryDetails(id: roomListItem.id(),
-                                         name: roomListItem.name() ?? room.id(),
-                                         isDirect: room.isDirect(),
-                                         avatarURL: room.avatarUrl().flatMap(URL.init(string:)),
+                                         name: roomListItem.name() ?? roomListItem.id(),
+                                         isDirect: roomListItem.isDirect(),
+                                         avatarURL: roomListItem.avatarUrl().flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadNotificationCount: UInt(roomListItem.unreadNotifications().notificationCount()),
-                                         canonicalAlias: room.canonicalAlias())
+                                         canonicalAlias: roomListItem.canonicalAlias())
 
         return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
