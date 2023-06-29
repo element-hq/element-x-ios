@@ -129,8 +129,9 @@ struct StaticLocationScreen: View {
         if let location = context.viewState.mapAnnotationCoordinate {
             AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location)],
                             applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location) })
-                .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.bottom)
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.hidden)
         }
     }
 }
