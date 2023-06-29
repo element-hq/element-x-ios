@@ -26,7 +26,7 @@ struct LocationRoomTimelineView: View {
                 MapLibreStaticMapView(geoURI: geoURI) {
                     LocationMarkerView()
                 }
-                .frame(maxWidth: .infinity, maxHeight: 300)
+                .frame(maxHeight: 300)
                 .aspectRatio(3 / 2, contentMode: .fit)
             } else {
                 FormattedBodyText(text: timelineItem.body)

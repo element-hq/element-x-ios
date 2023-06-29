@@ -46,7 +46,6 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                                                      size: geometry.size,
                                                      attribution: mapTilerAttributionPlacement) {
                 AsyncImage(url: url) { phase in
-
                     switch phase {
                     case .empty:
                         Image("mapBlurred")
