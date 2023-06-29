@@ -27,13 +27,90 @@ enum StaticLocationScreenViewModelAction {
     case sendLocation(GeoURI)
 }
 
+enum StaticLocationInteractionMode: Hashable {
+    case picker
+    case viewOnly(geoURI: GeoURI, description: String? = nil)
+}
+
 struct StaticLocationScreenViewState: BindableState {
+    init(interactionMode: StaticLocationInteractionMode, isPinDropSharing: Bool = true, showsUserLocationMode: ShowUserLocationMode = .hide) {
+        self.interactionMode = interactionMode
+        self.isPinDropSharing = isPinDropSharing
+        self.showsUserLocationMode = showsUserLocationMode
+
+        switch interactionMode {
+        case .picker:
+            bindings = .init()
+        case .viewOnly(let geoURI, _):
+            bindings = .init(mapCenterLocation: .init(latitude: geoURI.latitude, longitude: geoURI.longitude))
+        }
+    }
+
+    let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user has moved around the map to drop a pin somewhere other than their current location
     var isPinDropSharing = true
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
     
     var bindings = StaticLocationScreenBindings()
+
+    var showBottomToolbar: Bool {
+        interactionMode == .picker
+    }
+
+    var mapAnnotationCoordinate: CLLocationCoordinate2D? {
+        switch interactionMode {
+        case .picker:
+            return nil
+        case .viewOnly(let geoURI, _):
+            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
+        }
+    }
+
+    var showPinInTheCenter: Bool {
+        switch interactionMode {
+        case .picker:
+            return isPinDropSharing
+        case .viewOnly:
+            return false
+        }
+    }
+
+    var navigationTitle: String {
+        switch interactionMode {
+        case .picker:
+            return L10n.screenShareLocationTitle
+        case .viewOnly:
+            return L10n.screenViewLocationTitle
+        }
+    }
+
+    var showShareAction: Bool {
+        switch interactionMode {
+        case .picker:
+            return false
+        case .viewOnly:
+            return true
+        }
+    }
+
+    var zoomLevel: Double {
+        switch interactionMode {
+        case .picker:
+            return 5.0
+        case .viewOnly:
+            return 15.0
+        }
+    }
+
+    var locationDescription: String? {
+        switch interactionMode {
+        case .picker:
+            return nil
+        case .viewOnly(_, let description):
+            return description
+        }
+    }
 }
 
 struct StaticLocationScreenBindings {
@@ -54,6 +131,8 @@ struct StaticLocationScreenBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<LocationSharingViewError>?
+
+    var showShareSheet = false
 }
 
 enum StaticLocationScreenViewAction {
