@@ -118,6 +118,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayEmojiPicker(let itemID):
             guard let item = state.items.first(where: { $0.id == itemID }), item.isReactable else { return }
             callback?(.displayEmojiPicker(itemID: itemID))
+        case .reactionSummary(let itemId, let key):
+            showReactionSummary(for: itemId, selectedKey: key)
         case .retrySend(let transactionID):
             Task { await handleRetrySend(transactionID: transactionID) }
         case .cancelSend(let transactionID):
@@ -618,6 +620,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                           message: L10n.commonUnableToInviteMessage)
             }
         }
+    }
+    
+    // MARK: - Reaction summary
+    
+    private func showReactionSummary(for itemID: String, selectedKey: String) {
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            return
+        }
+        
+        state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
     }
 }
 

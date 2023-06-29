@@ -73,6 +73,8 @@ enum RoomScreenViewAction {
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case tappedOnUser(userID: String)
+    
+    case reactionSummary(itemID: String, key: String)
 
     case retrySend(transactionID: String?)
     case cancelSend(transactionID: String?)
@@ -126,6 +128,8 @@ struct RoomScreenViewStateBindings {
     var actionMenuInfo: TimelineItemActionMenuInfo?
 
     var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
+    
+    var reactionSummaryInfo: ReactionSummaryInfo?
 }
 
 struct TimelineItemActionMenuInfo: Identifiable, Equatable {
@@ -144,6 +148,15 @@ struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
     let title = L10n.screenRoomRetrySendMenuTitle
 
     let transactionID: String?
+}
+
+struct ReactionSummaryInfo: Identifiable {
+    let reactions: [AggregatedReaction]
+    let selectedKey: String
+    
+    var id: String {
+        selectedKey
+    }
 }
 
 enum RoomScreenErrorType: Hashable {
