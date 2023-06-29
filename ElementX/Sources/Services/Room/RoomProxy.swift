@@ -52,10 +52,8 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     deinit {
-        Task { @MainActor [roomTimelineObservationToken, roomListItem] in
-            roomTimelineObservationToken?.cancel()
-            roomListItem.unsubscribe()
-        }
+        roomTimelineObservationToken?.cancel()
+        roomListItem.unsubscribe()
     }
 
     init(roomListItem: RoomListItemProtocol,
