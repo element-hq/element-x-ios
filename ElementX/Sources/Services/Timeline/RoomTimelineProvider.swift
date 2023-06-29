@@ -39,6 +39,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
         itemProxies = currentItems.map(TimelineItemProxy.init)
         
+        // Manually call it here as the didSet doesn't work from constructors
+        itemsSubject.send(itemProxies)
+        
         updatePublisher
             .collect(.byTime(serialDispatchQueue, 0.1))
             .sink { [weak self] in self?.updateItemsWithDiffs($0) }
