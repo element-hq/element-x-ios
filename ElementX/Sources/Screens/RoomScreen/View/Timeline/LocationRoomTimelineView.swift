@@ -23,11 +23,11 @@ struct LocationRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
-                let mapSize: CGSize = .init(width: 292, height: 188)
-                MapLibreStaticMapView(geoURI: geoURI, size: mapSize) {
+                MapLibreStaticMapView(geoURI: geoURI) {
                     LocationMarkerView()
                 }
-                .frame(width: mapSize.width, height: mapSize.height)
+                .frame(maxHeight: 300)
+                .aspectRatio(3 / 2, contentMode: .fit)
             } else {
                 FormattedBodyText(text: timelineItem.body)
             }
@@ -36,10 +36,9 @@ struct LocationRoomTimelineView: View {
 }
 
 private extension MapLibreStaticMapView {
-    init(geoURI: GeoURI, size: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+    init(geoURI: GeoURI, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
-                  imageSize: size,
                   attributionPlacement: .bottomLeft,
                   mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
                                                     lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,

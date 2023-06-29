@@ -24,48 +24,51 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let mapTilerAttributionPlacement: MapTilerAttributionPlacement
     private let pinAnnotationView: PinAnnotation
     @Environment(\.colorScheme) private var colorScheme
-    private let imageSize: CGSize
     @State private var fetchAttempt = 0
     
     init(coordinates: CLLocationCoordinate2D,
          zoomLevel: Double,
-         imageSize: CGSize,
          attributionPlacement: MapTilerAttributionPlacement,
          mapTilerStatic: MapTilerStaticMapProtocol,
          @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.coordinates = coordinates
         self.zoomLevel = zoomLevel
         self.mapTilerStatic = mapTilerStatic
-        self.imageSize = imageSize
         mapTilerAttributionPlacement = attributionPlacement
         self.pinAnnotationView = pinAnnotationView()
     }
     
     var body: some View {
-        if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle, coordinates: coordinates, zoomLevel: zoomLevel, size: imageSize, attribution: mapTilerAttributionPlacement) {
-            AsyncImage(url: url) { phase in
-                switch phase {
-                case .empty:
-                    Image("mapBlurred")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                case .success(let image):
-                    ZStack {
-                        image
+        GeometryReader { geometry in
+            if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle,
+                                                     coordinates: coordinates,
+                                                     zoomLevel: zoomLevel,
+                                                     size: geometry.size,
+                                                     attribution: mapTilerAttributionPlacement) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        Image("mapBlurred")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                        pinAnnotationView
+                    case .success(let image):
+                        ZStack {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                            pinAnnotationView
+                        }
+                    case .failure:
+                        errorView
+                    @unknown default:
+                        EmptyView()
                     }
-                case .failure:
-                    errorView
-                @unknown default:
-                    EmptyView()
                 }
+                .id(fetchAttempt)
+                .clipped()
+            } else {
+                Image("mapBlurred")
             }
-            .id(fetchAttempt)
-            .clipped()
-        } else {
-            Image("mapBlurred")
         }
     }
     
@@ -101,7 +104,6 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
     static var previews: some View {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,
-                              imageSize: .init(width: 300, height: 200),
                               attributionPlacement: .bottomLeft,
                               mapTilerStatic: MapTilerStaticMapMock()) {
             Image(systemName: "mappin.circle.fill")
