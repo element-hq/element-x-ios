@@ -804,6 +804,12 @@ public enum L10n {
   public static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
   /// Share my location
   public static var screenShareMyLocationAction: String { return L10n.tr("Localizable", "screen_share_my_location_action") }
+  /// Open in Apple Maps
+  public static var screenShareOpenAppleMaps: String { return L10n.tr("Localizable", "screen_share_open_apple_maps") }
+  /// Open in Google Maps
+  public static var screenShareOpenGoogleMaps: String { return L10n.tr("Localizable", "screen_share_open_google_maps") }
+  /// Open in OpenStreetMap
+  public static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
   /// Share this location
   public static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
   /// Are you sure you want to sign out?
@@ -818,6 +824,8 @@ public enum L10n {
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// An error occurred when trying to start a chat
   public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// Location
+  public static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
   /// There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.
   /// 
   /// Thanks for your patience!

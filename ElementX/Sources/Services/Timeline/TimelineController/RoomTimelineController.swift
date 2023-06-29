@@ -115,32 +115,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .none
         }
         
-        var source: MediaSourceProxy?
-        var body: String
         switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as VideoRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            body = item.content.body
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            body = item.content.body
+        case let item as LocationRoomTimelineItem:
+            guard let geoURI = item.content.geoURI else { return .none }
+            return .displayLocation(body: item.content.body, geoURI: geoURI)
         default:
-            return .none
-        }
-        
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: body)
-        case .failure:
-            return .none
+            return await displayMediaActionIfPossible(timelineItem: timelineItem)
         }
     }
     
@@ -220,6 +200,37 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     @objc private func contentSizeCategoryDidChange() {
         // Recompute all attributed strings on content size changes -> DynamicType support
         updateTimelineItems()
+    }
+
+    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
+        var source: MediaSourceProxy?
+        var body: String
+
+        switch timelineItem {
+        case let item as ImageRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as VideoRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as FileRoomTimelineItem:
+            source = item.content.source
+            body = item.content.body
+        case let item as AudioRoomTimelineItem:
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            source = item.content.source
+            body = item.content.body
+        default:
+            return .none
+        }
+
+        guard let source else { return .none }
+        switch await mediaProvider.loadFileFromSource(source, body: body) {
+        case .success(let file):
+            return .displayMediaFile(file: file, title: body)
+        case .failure:
+            return .none
+        }
     }
     
     private func updateTimelineItems() {

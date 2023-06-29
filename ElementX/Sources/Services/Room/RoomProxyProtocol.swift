@@ -41,7 +41,6 @@ enum RoomProxyError: Error {
     case failedSettingRoomTopic
     case failedRemovingAvatar
     case failedUploadingAvatar
-    case failedSendingLocation
 }
 
 @MainActor

@@ -17,7 +17,9 @@
 import Combine
 import SwiftUI
 
-struct StaticLocationScreenCoordinatorParameters { }
+struct StaticLocationScreenCoordinatorParameters {
+    let interactionMode: StaticLocationInteractionMode
+}
 
 enum StaticLocationScreenCoordinatorAction {
     case close
@@ -38,7 +40,7 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     init(parameters: StaticLocationScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StaticLocationScreenViewModel()
+        viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode)
     }
     
     // MARK: - Public

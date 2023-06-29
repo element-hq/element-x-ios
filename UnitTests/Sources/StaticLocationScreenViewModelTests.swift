@@ -31,7 +31,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        let viewModel = StaticLocationScreenViewModel()
+        let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
         viewModel.state.isPinDropSharing = false
         self.viewModel = viewModel
     }

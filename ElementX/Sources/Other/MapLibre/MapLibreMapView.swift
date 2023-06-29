@@ -19,11 +19,19 @@ import Mapbox
 import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let mapZoomLevel = 15.0
-        static let mapZoomLevelWithoutPermission = 5.0
+    struct Options {
+        /// The initial zoom level
+        let zoomLevel: Double
+        /// The initial map center
+        let mapCenter: CLLocationCoordinate2D?
+        /// Map annotations
+        let annotations: [LocationAnnotation]
+
+        init(zoomLevel: Double, mapCenter: CLLocationCoordinate2D? = nil, annotations: [LocationAnnotation] = []) {
+            self.zoomLevel = zoomLevel
+            self.mapCenter = mapCenter
+            self.annotations = annotations
+        }
     }
     
     // MARK: - Properties
@@ -31,6 +39,8 @@ struct MapLibreMapView: UIViewRepresentable {
     @Environment(\.colorScheme) private var colorScheme
     
     let builder: MapTilerStyleBuilderProtocol
+
+    let options: Options
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode = .hide
@@ -52,12 +62,13 @@ struct MapLibreMapView: UIViewRepresentable {
         let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
         panGesture.delegate = context.coordinator
         mapView.addGestureRecognizer(panGesture)
-        mapView.zoomLevel = Constants.mapZoomLevelWithoutPermission
+        setupMap(mapView: mapView, with: options)
         return mapView
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
         mapView.removeAllAnnotations()
+        mapView.addAnnotations(options.annotations)
         
         if colorScheme == .dark {
             mapView.styleURL = builder.dynamicMapURL(for: .dark)
@@ -73,6 +84,13 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     // MARK: - Private
+
+    private func setupMap(mapView: MGLMapView, with options: Options) {
+        mapView.zoomLevel = options.zoomLevel
+        if let mapCenter = options.mapCenter {
+            mapView.centerCoordinate = mapCenter
+        }
+    }
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
@@ -85,7 +103,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     private func showUserLocation(in mapView: MGLMapView) {
         switch showsUserLocationMode {
-        case .follow:
+        case .showAndFollow:
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
         case .show:
@@ -115,12 +133,10 @@ extension MapLibreMapView {
         // MARK: - MGLMapViewDelegate
         
         func mapView(_ mapView: MGLMapView, viewFor annotation: MGLAnnotation) -> MGLAnnotationView? {
-            if let pinLocationAnnotation = annotation as? PinLocationAnnotation {
-                return LocationAnnotationView(pinLocationAnnotation: pinLocationAnnotation)
-            } else if annotation is MGLUserLocation {
-                return LocationAnnotationView(userPinLocationAnnotation: annotation)
+            guard let annotation = annotation as? LocationAnnotation else {
+                return nil
             }
-            return nil
+            return LocationAnnotationView(annotation: annotation)
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
@@ -143,7 +159,10 @@ extension MapLibreMapView {
         }
         
         func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
-            mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
+            // Fixes: "Publishing changes from within view updates is not allowed, this will cause undefined behavior."
+            DispatchQueue.main.async { [mapLibreView] in
+                mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
+            }
         }
         
         // MARK: Callout
