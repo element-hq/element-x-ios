@@ -24,13 +24,13 @@ struct LegalInformationScreen: View {
         Form {
             Section {
                 Button(L10n.commonCopyright) {
-                    openURL(URL(staticString: "https://element.io/copyright"))
+                    openURL("https://element.io/copyright")
                 }
                 Button(L10n.commonAcceptableUsePolicy) {
-                    openURL(URL(staticString: "https://element.io/acceptable-use-policy-terms"))
+                    openURL("https://element.io/acceptable-use-policy-terms")
                 }
                 Button(L10n.commonPrivacyPolicy) {
-                    openURL(URL(staticString: "https://element.io/privacy"))
+                    openURL("https://element.io/privacy")
                 }
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))

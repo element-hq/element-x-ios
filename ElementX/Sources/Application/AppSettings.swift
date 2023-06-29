@@ -91,19 +91,19 @@ final class AppSettings {
     // MARK: - Authentication
     
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
-    let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md")
+    let slidingSyncLearnMoreURL: URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
     
     /// The redirect URL used for OIDC.
-    let oidcRedirectURL = URL(staticString: "io.element:/callback")
+    let oidcRedirectURL: URL = "io.element:/callback"
     /// The app's main URL shown when using OIDC.
-    let oidcClientURL = URL(staticString: "https://element.io")
+    let oidcClientURL: URL = "https://element.io"
     /// The app's Terms of Service URL shown when using OIDC.
-    let oidcTermsURL = URL(staticString: "https://element.io/user-terms-of-service")
+    let oidcTermsURL: URL = "https://element.io/user-terms-of-service"
     /// The app's Privacy Policy URL shown when using OIDC.
-    let oidcPolicyURL = URL(staticString: "https://element.io/privacy")
+    let oidcPolicyURL: URL = "https://element.io/privacy"
     /// Any pre-defined static client registrations for OIDC issuers.
-    let oidcStaticRegistrations = [URL(staticString: "https://id.thirdroom.io/realms/thirdroom"): "elementx"]
-    
+    let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
+
     // MARK: - Notifications
     
     var pusherAppId: String {
@@ -114,12 +114,12 @@ final class AppSettings {
         #endif
     }
     
-    let pushGatewayBaseURL = URL(staticString: "https://matrix.org/_matrix/push/v1/notify")
+    let pushGatewayBaseURL: URL = "https://matrix.org/_matrix/push/v1/notify"
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
-    let bugReportSentryURL = URL(staticString: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
+    let bugReportServiceBaseURL: URL = "https://riot.im/bugreports"
+    let bugReportSentryURL: URL = "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44"
     // Use the name allocated by the bug report server
     let bugReportApplicationId = "element-x-ios"
     let bugReportUISIId = "element-auto-uisi"
@@ -134,7 +134,7 @@ final class AppSettings {
     let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
-                                                        termsURL: URL(staticString: "https://element.io/cookie-policy"))
+                                                        termsURL: "https://element.io/cookie-policy")
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
@@ -171,7 +171,7 @@ final class AppSettings {
         
     // MARK: - Other
     
-    let permalinkBaseURL = URL(staticString: "https://matrix.to")
+    let permalinkBaseURL: URL = "https://matrix.to"
     
     // MARK: - Maps
     

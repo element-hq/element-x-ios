@@ -108,19 +108,19 @@ class PermalinkBuilderTests: XCTestCase {
     }
     
     func testPermalinkDetection() {
-        var url = URL(staticString: "https://www.matrix.org")
+        var url: URL = "https://www.matrix.org"
         XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL), nil)
 
-        url = URL(staticString: "https://matrix.to/#/@bob:matrix.org?via=matrix.org")
+        url = "https://matrix.to/#/@bob:matrix.org?via=matrix.org"
         XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL), PermalinkType.userIdentifier("@bob:matrix.org"))
 
-        url = URL(staticString: "https://matrix.to/#/!roomidentifier:matrix.org?via=matrix.org")
+        url = "https://matrix.to/#/!roomidentifier:matrix.org?via=matrix.org"
         XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL), PermalinkType.roomIdentifier("!roomidentifier:matrix.org"))
 
-        url = URL(staticString: "https://matrix.to/#/%23roomalias:matrix.org?via=matrix.org")
+        url = "https://matrix.to/#/%23roomalias:matrix.org?via=matrix.org"
         XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL), PermalinkType.roomAlias("#roomalias:matrix.org"))
         
-        url = URL(staticString: "https://matrix.to/#/!roomidentifier:matrix.org/$eventidentifier?via=matrix.org")
+        url = "https://matrix.to/#/!roomidentifier:matrix.org/$eventidentifier?via=matrix.org"
         XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL), PermalinkType.event(roomIdentifier: "!roomidentifier:matrix.org", eventIdentifier: "$eventidentifier"))
     }
 }

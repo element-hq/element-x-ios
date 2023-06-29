@@ -19,7 +19,7 @@ import Foundation
 extension UserProfileProxy {
     // Mocks
     static var mockAlice: UserProfileProxy {
-        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
+        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA")
     }
 
     static var mockBob: UserProfileProxy {
