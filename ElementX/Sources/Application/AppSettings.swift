@@ -141,7 +141,7 @@ final class AppSettings {
     let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.hss.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-                                                        termsURL: URL(staticString: "https://element.io/cookie-policy"))
+                                                        termsURL: URL("https://element.io/cookie-policy"))
     #endif
         
     /// Whether the user has opted in to send analytics.
