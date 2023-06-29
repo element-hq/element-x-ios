@@ -213,7 +213,7 @@ struct TimelineReplyView_Previews: PreviewProvider {
                                                                                          thumbnailSource: nil,
                                                                                          contentType: nil))))
             
-            let imageSource = MediaSourceProxy(url: .init(staticString: "https://mock.com"), mimeType: "image/png")
+            let imageSource = MediaSourceProxy(url: "https://mock.com", mimeType: "image/png")
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),

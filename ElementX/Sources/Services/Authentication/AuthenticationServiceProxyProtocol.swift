@@ -71,7 +71,7 @@ struct OIDCAuthenticationDataProxy: Equatable {
 //    var url: URL {
 //        URL(string: underlyingData.loginUrl())!
 //    }
-    let url = URL(staticString: "https://theroadtonowhere")
+    let url: URL = "https://theroadtonowhere"
 }
 
 // extension OidcAuthenticationData: Equatable {
