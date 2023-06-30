@@ -27,6 +27,7 @@ enum UITestsScreenIdentifier: String {
     case waitlist
     case analyticsPrompt
     case analyticsSettingsScreen
+    case migration
     case simpleRegular
     case simpleUpgrade
     case home

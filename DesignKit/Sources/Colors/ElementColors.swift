@@ -49,7 +49,7 @@ public struct ElementColors {
     public var system: Color { colors.system }
     @available(swift, obsoleted: 5.0, message: "Use bgCanvasDefault from Compound for backgrounds. For text or icons use textOnSolidPrimary/iconOnSolidPrimary.")
     public var background: Color { colors.background }
-    @available(swift, obsoleted: 5.0, message: "Use textActionAccent/iconAccentTertiary from Compound.")
+    @available(swift, deprecated: 5.0, message: "Use textActionAccent/iconAccentTertiary from Compound.")
     public var brand: Color { colors.accent }
     
     public var contentAndAvatars: [Color] { colors.contentAndAvatars }

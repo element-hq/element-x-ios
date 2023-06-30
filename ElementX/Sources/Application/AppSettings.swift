@@ -22,6 +22,7 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case migratedAccounts
         case timelineStyle
         case analyticsConsentState
         case enableInAppNotifications
@@ -104,6 +105,13 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
 
+    /// A dictionary of accounts that have performed an initial sync through their proxy.
+    ///
+    /// This is a temporary workaround. In the future we should be able to receive a signal from the
+    /// proxy that it is the first sync (or that an upgrade on the backend will involve a slower sync).
+    @UserPreference(key: UserDefaultsKeys.migratedAccounts, defaultValue: [:], storageType: .userDefaults(store))
+    var migratedAccounts: [String: Bool]
+    
     // MARK: - Notifications
     
     var pusherAppId: String {

@@ -20,16 +20,13 @@ struct WaitlistScreen: View {
     @ObservedObject var context: WaitlistScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {
-            header
+        WaitingDialog {
+            content
         } bottomContent: {
             buttons
         }
-        .background()
-        .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
         .navigationBarBackButtonHidden()
         .toolbar { toolbar }
-        .toolbar(.visible, for: .navigationBar) // Layout consistency in all states.
         .overlay {
             EffectsView(effect: context.viewState.isWaiting ? .none : .confetti)
                 .ignoresSafeArea()
@@ -38,24 +35,19 @@ struct WaitlistScreen: View {
     }
     
     /// The main content of the view to be shown in a scroll view.
-    var header: some View {
-        VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(systemName: context.viewState.iconSymbolName))
-                .fontWeight(.semibold)
-                .padding(.bottom, 8)
-            
-            Text(context.viewState.title)
-                .font(.compound.headingMDBold)
+    var content: some View {
+        VStack(spacing: 16) {
+            Text(context.viewState.title.tinting(".", color: .element.brand))
+                .font(.compound.headingXLBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
             
             Text(context.viewState.message)
-                .font(.compound.bodyMD)
+                .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textSecondary)
+                .foregroundColor(.compound.textPrimary)
         }
-        .padding(.horizontal, 16)
     }
     
     /// The action buttons shown at the bottom of the view.

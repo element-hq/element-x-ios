@@ -28,6 +28,9 @@ schemes:
         - variable: UI_TESTS_SCREEN
           value: ""
           isEnabled: false
+        - variable: RESET_APP_SETTINGS
+          value: "true"
+          isEnabled: false
     test:
       config: Debug
       gatherCoverageData: true

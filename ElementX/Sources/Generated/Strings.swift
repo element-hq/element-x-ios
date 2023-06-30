@@ -644,6 +644,10 @@ public enum L10n {
   public static var screenMediaUploadPreviewErrorFailedProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_processing") }
   /// Failed uploading media, please try again.
   public static var screenMediaUploadPreviewErrorFailedSending: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_sending") }
+  /// This is a one time process, thanks for waiting.
+  public static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
+  /// Setting up your account.
+  public static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
   /// Sign in manually
   public static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in with QR code
@@ -832,13 +836,13 @@ public enum L10n {
   public static func screenWaitlistMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_waitlist_message", String(describing: p1), String(describing: p2))
   }
-  /// Welcome to %1$@
+  /// Welcome to %1$@!
   public static func screenWaitlistMessageSuccess(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_waitlist_message_success", String(describing: p1))
   }
-  /// You're on the waitlist!
+  /// You’re almost there.
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
-  /// You're in!
+  /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }

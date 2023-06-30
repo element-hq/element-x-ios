@@ -27,11 +27,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let appSettings: AppSettings
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
     
     private var cancellables: Set<AnyCancellable> = .init()
+    private var migrationCancellable: AnyCancellable?
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
@@ -43,12 +45,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          bugReportService: BugReportServiceProtocol,
-         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
+         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         appSettings: AppSettings) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.appSettings = appSettings
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -78,7 +82,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        stateMachine.processEvent(.start)
+        if appSettings.migratedAccounts[userSession.userID] != true {
+            // Show the migration screen for a new account.
+            stateMachine.processEvent(.startWithMigration)
+        } else {
+            // Otherwise go straight to the home screen.
+            stateMachine.processEvent(.start)
+        }
     }
     
     func stop() { }
@@ -90,13 +100,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - FlowCoordinatorProtocol
 
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        // Tidy up any state before applying the new route.
         switch stateMachine.state {
+        case .initial, .migration:
+            return // Not ready to handle a route.
+        case .roomList:
+            break // Nothing to tidy up on the home screen.
         case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
             navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
-        case .roomList, .initial:
-            break
         }
-
+        
+        // Apply the route.
         switch appRoute {
         case .room, .roomDetails, .roomList:
             roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
@@ -122,6 +136,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 self.presentHomeScreen()
+            
+            case (.initial, .startWithMigration, .migration):
+                self.presentMigrationScreen() // Full screen cover
+                self.presentHomeScreen() // Have the home screen ready to show underneath
+            case (.migration, .completeMigration, .roomList):
+                self.dismissMigrationScreen()
                 
             case(.roomList, .selectRoom, .roomList):
                 break
@@ -177,6 +197,25 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addErrorHandler { context in
             fatalError("Failed transition with context: \(context)")
         }
+    }
+    
+    private func presentMigrationScreen() {
+        // Listen for the first sync to finish.
+        migrationCancellable = userSession.clientProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                guard let self, stateMachine.state == .migration, case .receivedSyncUpdate = callback else { return }
+                migrationCancellable = nil
+                appSettings.migratedAccounts[userSession.userID] = true
+                stateMachine.processEvent(.completeMigration)
+            }
+        
+        let coordinator = MigrationScreenCoordinator()
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator)
+    }
+    
+    private func dismissMigrationScreen() {
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
     }
     
     // swiftlint:disable:next cyclomatic_complexity
