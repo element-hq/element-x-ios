@@ -60,7 +60,7 @@ struct WaitingDialog<Content: View, BottomContent: View>: View {
         .environment(\.colorScheme, .dark)
         .toolbar(.visible, for: .navigationBar) // Layout consistency in all states.
         .toolbarBackground(.hidden, for: .navigationBar)
-        .preferredColorScheme(.light) // FIXME: Doesn't do the nav bar?
+        .preferredColorScheme(.light) // Has no effect on Previews, works fine in-app.
     }
     
     var background: some View {

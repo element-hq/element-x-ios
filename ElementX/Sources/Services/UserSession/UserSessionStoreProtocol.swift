@@ -31,6 +31,9 @@ protocol UserSessionStoreProtocol {
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { get }
     
+    /// All the user IDs managed by the store.
+    var userIDs: [String] { get }
+    
     /// Returns the location to store user data for a particular username.
     var baseDirectory: URL { get }
     

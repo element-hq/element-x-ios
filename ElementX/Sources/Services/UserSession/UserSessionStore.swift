@@ -25,6 +25,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { !keychainController.restorationTokens().isEmpty }
+    /// All the user IDs managed by the store.
+    var userIDs: [String] { keychainController.restorationTokens().map(\.userID) }
     
     /// The base directory where all session data is stored.
     let baseDirectory: URL

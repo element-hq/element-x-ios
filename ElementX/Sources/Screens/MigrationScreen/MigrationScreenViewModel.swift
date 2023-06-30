@@ -29,10 +29,4 @@ class MigrationScreenViewModel: MigrationScreenViewModelType, MigrationScreenVie
     init() {
         super.init(initialViewState: MigrationScreenViewState())
     }
-    
-    // MARK: - Public
-    
-    override func process(viewAction: MigrationScreenViewAction) {
-        MXLog.warning("No view actions.")
-    }
 }

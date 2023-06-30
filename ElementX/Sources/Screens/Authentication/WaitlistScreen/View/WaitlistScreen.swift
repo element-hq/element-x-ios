@@ -27,11 +27,6 @@ struct WaitlistScreen: View {
         }
         .navigationBarBackButtonHidden()
         .toolbar { toolbar }
-        .overlay {
-            EffectsView(effect: context.viewState.isWaiting ? .none : .confetti)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-        }
     }
     
     /// The main content of the view to be shown in a scroll view.

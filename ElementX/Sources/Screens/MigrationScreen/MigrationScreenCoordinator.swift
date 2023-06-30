@@ -25,12 +25,7 @@ final class MigrationScreenCoordinator: CoordinatorProtocol {
         viewModel = MigrationScreenViewModel()
     }
     
-    func start() {
-        viewModel.actions.sink { [weak self] _ in
-            MXLog.warning("No view model actions.")
-        }
-        .store(in: &cancellables)
-    }
+    func start() { }
         
     func toPresentable() -> AnyView {
         AnyView(MigrationScreen(context: viewModel.context))
