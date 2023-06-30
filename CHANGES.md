@@ -1,3 +1,25 @@
+## Changes in 1.1.7 (2023-06-30)
+
+✨ Features
+
+- Push Notifications of rooms/dm without avatars will now display the default placeholder used in app. ([#1168](https://github.com/vector-im/element-x-ios/issues/1168))
+- Send pin-drop location ([#1179](https://github.com/vector-im/element-x-ios/issues/1179))
+
+🙌 Improvements
+
+- Improve media preview presentation and interaction in the timeline. ([#1187](https://github.com/vector-im/element-x-ios/pull/1187))
+- Update long press gesture animation ([#1195](https://github.com/vector-im/element-x-ios/pull/1195))
+- Failed local echoes can be edited, they will just get cancelled and resent with the new content. ([#1207](https://github.com/vector-im/element-x-ios/pull/1207))
+- Show a migration screen on the first use of the app whilst the proxy does an initial sync. ([#983](https://github.com/vector-im/element-x-ios/issues/983))
+- Delivery status is now displayed only for the last outgoing message. ([#1101](https://github.com/vector-im/element-x-ios/issues/1101))
+- Filter out some message actions and reactions for failed local echoes and redacted messages. ([#1151](https://github.com/vector-im/element-x-ios/issues/1151))
+
+🐛 Bugfixes
+
+- Messages that have failed to be decrypted are show only view source and retry decryptions as possible actions. ([#1185](https://github.com/vector-im/element-x-ios/issues/1185))
+- Fix for the flipped notification image placeholder on iOS. ([#1194](https://github.com/vector-im/element-x-ios/issues/1194))
+
+
 ## Changes in 1.1.5 (2023-06-26)
 
 ✨ Features
