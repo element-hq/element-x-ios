@@ -44,7 +44,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.93-alpha
+    exactVersion: 0.0.1-stop-all-room-reset
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit

@@ -5147,7 +5147,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.93-alpha";
+				version = "0.0.1-stop-all-room-reset";
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
