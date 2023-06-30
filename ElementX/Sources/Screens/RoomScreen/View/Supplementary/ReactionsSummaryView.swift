@@ -43,9 +43,7 @@ struct ReactionsSummaryView: View {
                 HStack {
                     ForEach(reactions, id: \.self) { reaction in
                         ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
-                            withAnimation(.easeInOut) {
-                                selectedReactionKey = key
-                            }
+                            selectedReactionKey = key
                         }
                         .id(reaction.key)
                     }
@@ -53,6 +51,9 @@ struct ReactionsSummaryView: View {
                 .padding(.horizontal, 20)
                 .onAppear {
                     scrollView.scrollTo(selectedReactionKey, anchor: .leading)
+                }
+                .onChange(of: selectedReactionKey) { _ in
+                    scrollView.scrollTo(selectedReactionKey)
                 }
             }
         }
