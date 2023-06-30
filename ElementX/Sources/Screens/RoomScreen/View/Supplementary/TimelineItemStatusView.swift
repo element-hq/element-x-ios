@@ -43,10 +43,7 @@ struct TimelineItemStatusView: View {
     var deliveryStatus: some View {
         switch timelineItem.properties.deliveryStatus {
         case .sending:
-            if isLastOutgoingMessage {
-                // We only display the sending icon for the latest outgoing message
-                TimelineDeliveryStatusView(deliveryStatus: .sending)
-            }
+            TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent, .none:
             if isLastOutgoingMessage {
                 // We only display the sent icon for the latest outgoing message
