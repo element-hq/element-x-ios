@@ -25,8 +25,8 @@ struct LongPressWithFeedback: ViewModifier {
     func body(content: Content) -> some View {
         content
             .compositingGroup() // Apply the shadow to the view as a whole.
-            .shadow(color: .black.opacity(0.2), radius: isLongPressing ? 12 : 0)
-            .shadow(color: .black.opacity(0.1), radius: isLongPressing ? 3 : 0)
+            .shadow(color: .black.opacity(isLongPressing ? 0.2 : 0.0), radius: isLongPressing ? 12 : 0)
+            .shadow(color: .black.opacity(isLongPressing ? 0.1 : 0.0), radius: isLongPressing ? 3 : 0)
             .scaleEffect(x: isLongPressing ? 1.05 : 1,
                          y: isLongPressing ? 1.05 : 1)
             .animation(isLongPressing ? .spring(response: 1.5).delay(0.2) : .spring(response: 0.5),
