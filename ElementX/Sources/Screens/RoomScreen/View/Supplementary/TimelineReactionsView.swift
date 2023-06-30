@@ -43,12 +43,13 @@ struct TimelineReactionButton: View {
     @State private var didLongPress = false
     
     var body: some View {
-        label.onTapGesture {
-            toggleReaction(reaction.key)
-        }
-        .longPressWithFeedback {
-            showReactionSummary(reaction.key)
-        }
+        label
+            .onTapGesture {
+                toggleReaction(reaction.key)
+            }
+            .longPressWithFeedback {
+                showReactionSummary(reaction.key)
+            }
     }
     
     var label: some View {
@@ -64,8 +65,7 @@ struct TimelineReactionButton: View {
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
         .background(backgroundShape.fill(overlayBackgroundColor))
-        .overlay(backgroundShape.strokeBorder(overlayBorderColor))
-        .padding(2)
+        .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
         .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
         .accessibilityElement(children: .combine)
     }
