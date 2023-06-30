@@ -64,7 +64,7 @@ struct TimelineReactionButton: View {
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
-        .background(backgroundShape.fill(overlayBackgroundColor))
+        .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
         .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
         .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
         .accessibilityElement(children: .combine)
