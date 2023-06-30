@@ -194,6 +194,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     // MARK: - Private
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
+        if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
+            AppSettings.reset()
+        }
+        
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
@@ -211,9 +215,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         guard oldVersion != newVersion else { return }
         
         if oldVersion < Version(1, 1, 0) {
+            MXLog.info("Migrating to v1.1.0, signing out the user.")
             // Version 1.1.0 switched the Rust crypto store to SQLite
             // There are no migrations in place so we need to reset everything
             wipeUserData()
+        }
+        
+        if oldVersion < Version(1, 1, 7) {
+            MXLog.info("Migrating to v1.1.0, marking accounts as migrated.")
+            for userID in userSessionStore.userIDs {
+                ServiceLocator.shared.settings.migratedAccounts[userID] = true
+            }
         }
     }
     
@@ -338,7 +350,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
-                                                                    roomTimelineControllerFactory: RoomTimelineControllerFactory())
+                                                                    roomTimelineControllerFactory: RoomTimelineControllerFactory(),
+                                                                    appSettings: ServiceLocator.shared.settings)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {

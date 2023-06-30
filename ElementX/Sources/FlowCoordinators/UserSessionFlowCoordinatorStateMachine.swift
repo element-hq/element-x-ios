@@ -23,6 +23,9 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The initial state, used before the coordinator starts
         case initial
         
+        /// Showing the migration screen whilst the proxy performs an initial sync.
+        case migration
+        
         /// Showing the home screen. The `selectedRoomId` represents the timeline shown on the detail panel (if any)
         case roomList(selectedRoomId: String?)
                 
@@ -50,6 +53,11 @@ class UserSessionFlowCoordinatorStateMachine {
     enum Event: EventType {
         /// Start the user session flows
         case start
+        
+        /// Start the user session flows with a migration screen.
+        case startWithMigration
+        /// Request to transition from the migration state to the home screen.
+        case completeMigration
         
         /// Request presentation for a particular room
         /// - Parameter roomId:the room identifier
@@ -97,7 +105,9 @@ class UserSessionFlowCoordinatorStateMachine {
     // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomId: nil)])
-
+        stateMachine.addRoutes(event: .startWithMigration, transitions: [.initial => .migration])
+        stateMachine.addRoutes(event: .completeMigration, transitions: [.migration => .roomList(selectedRoomId: nil)])
+        
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
             case (.selectRoom(let roomId), .roomList):
