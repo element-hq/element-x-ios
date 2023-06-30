@@ -50,7 +50,7 @@ struct ReactionsSummaryView: View {
                         .id(reaction.key)
                     }
                 }
-                .padding(.leading, 20)
+                .padding(.horizontal, 20)
                 .onAppear {
                     scrollView.scrollTo(selectedReactionKey, anchor: .leading)
                 }
