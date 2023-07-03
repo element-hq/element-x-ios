@@ -219,6 +219,8 @@ class TimelineTableViewController: UIViewController {
             
             return cell
         }
+
+        dataSource?.defaultRowAnimation = .bottom
         
         tableView.delegate = self
     }
@@ -235,14 +237,17 @@ class TimelineTableViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineIDs)
-        dataSource.apply(snapshot, animatingDifferences: true)
-        
-        updateTopPadding()
-        
-        if previousLayout.isBottomVisible {
-            scrollToBottom(animated: false)
-        } else if let pinnedItem = previousLayout.pinnedItem {
-            restoreScrollPosition(using: pinnedItem, and: snapshot)
+        dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
+            guard let self else {
+                return
+            }
+            updateTopPadding()
+
+            if previousLayout.isBottomVisible {
+                scrollToBottom(animated: false)
+            } else if let pinnedItem = previousLayout.pinnedItem {
+                restoreScrollPosition(using: pinnedItem, and: snapshot)
+            }
         }
     }
     
