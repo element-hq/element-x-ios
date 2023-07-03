@@ -78,7 +78,7 @@
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
 "common_image" = "Immagine";
-"common_invite_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
+"common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
 "common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Collegamento copiato negli appunti";
 "common_loading" = "Caricamento…";
@@ -94,6 +94,7 @@
 "common_permalink" = "Collegamento permanente";
 "common_privacy_policy" = "Privacy policy";
 "common_reactions" = "Reazioni";
+"common_refreshing" = "Refreshing…";
 "common_replying_to" = "Risposta a %1$@";
 "common_report_a_bug" = "Segnala un problema";
 "common_report_submitted" = "Segnalazione inviata";
@@ -117,7 +118,7 @@
 "common_topic" = "Oggetto";
 "common_topic_placeholder" = "What is this room about?";
 "common_unable_to_decrypt" = "Impossibile decrittografare";
-"common_unable_to_invite_message" = "We were unable to successfully send invites to one or more users.";
+"common_unable_to_invite_message" = "Invites couldn't be sent to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
 "common_unmute" = "Unmute";
 "common_unsupported_event" = "Evento non supportato";
@@ -157,6 +158,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Invited you to chat";
 "notification_new_messages" = "New Messages";
+"notification_reaction_body" = "Reacted with %1$@";
 "notification_room_action_mark_as_read" = "Mark as read";
 "notification_room_invite_body" = "Invited you to join the room";
 "notification_sender_me" = "Me";
@@ -207,6 +209,7 @@
 "screen_analytics_settings_share_data" = "Share analytics data";
 "screen_bug_report_attach_screenshot" = "Allega istantanea schermo";
 "screen_bug_report_contact_me" = "Potete contattarmi per qualsiasi altra domanda";
+"screen_bug_report_contact_me_title" = "Contact me";
 "screen_bug_report_edit_screenshot" = "Modifica istantanea schermo";
 "screen_bug_report_editor_description" = "Descrivi il bug. Che cosa hai fatto? Cosa ti aspettavi che accadesse? Cosa è effettivamente accaduto. Si prega di inserire il maggior numero di dettagli possibile.";
 "screen_bug_report_editor_placeholder" = "Descrivi il problema…";
@@ -234,9 +237,9 @@
 "screen_create_room_public_option_title" = "Public room (anyone)";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_topic_label" = "Topic (optional)";
-"screen_invites_decline_chat_message" = "Are you sure you want to decline joining %1$@?";
+"screen_invites_decline_chat_message" = "Are you sure you want to decline the invitation to join %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
-"screen_invites_decline_direct_chat_message" = "Are you sure you want to decline to chat with %1$@?";
+"screen_invites_decline_direct_chat_message" = "Are you sure you want to decline this private chat with %1$@?";
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ (%2$@) ti ha invitato";
@@ -251,6 +254,8 @@
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
+"screen_migration_message" = "This is a one time process, thanks for waiting.";
+"screen_migration_title" = "Setting up your account.";
 "screen_onboarding_sign_in_manually" = "Sign in manually";
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
 "screen_onboarding_sign_up" = "Create account";
@@ -269,7 +274,7 @@
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
 "screen_room_details_edit_room_title" = "Edit Room";
-"screen_room_details_edition_error" = "We were unable to update all the information for this room.";
+"screen_room_details_edition_error" = "There was an unknown error and the information couldn't be changed.";
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli.";
 "screen_room_details_encryption_enabled_title" = "Crittografia messaggi abilitata";
@@ -317,11 +322,19 @@
 "screen_session_verification_waiting_to_accept_title" = "In attesa di accettare la richiesta";
 "screen_share_location_title" = "Share location";
 "screen_share_my_location_action" = "Share my location";
+"screen_share_open_apple_maps" = "Open in Apple Maps";
+"screen_share_open_google_maps" = "Open in Google Maps";
+"screen_share_open_osm_maps" = "Open in OpenStreetMap";
 "screen_share_this_location_action" = "Share this location";
 "screen_signout_confirmation_dialog_content" = "Sei sicuro di voler uscire?";
 "screen_signout_confirmation_dialog_title" = "Esci";
 "screen_signout_in_progress_dialog_content" = "Uscita in corso…";
 "screen_start_chat_error_starting_chat" = "Si è verificato un errore durante il tentativo di avviare una chat";
+"screen_view_location_title" = "Location";
+"screen_waitlist_message" = "There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.\n\nThanks for your patience!";
+"screen_waitlist_message_success" = "Welcome to %1$@!";
+"screen_waitlist_title" = "You’re almost there.";
+"screen_waitlist_title_success" = "You're in.";
 "session_verification_banner_message" = "Sembra che tu stia utilizzando un nuovo dispositivo. Verifica di essere tu per accedere ai tuoi messaggi crittografati.";
 "session_verification_banner_title" = "Accedi alla cronologia dei messaggi";
 "settings_rageshake" = "Rageshake";
@@ -386,6 +399,7 @@
 "test_untranslated_default_language_identifier" = "en";
 "dialog_title_error" = "Errore";
 "dialog_title_success" = "Operazione riuscita";
+"notification_fallback_content" = "Notifica";
 "notification_room_action_quick_reply" = "Risposta rapida";
 "rageshake_detection_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "screen_analytics_settings_help_us_improve" = "Share anonymous usage data to help us identify issues.";
