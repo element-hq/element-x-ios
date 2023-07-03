@@ -351,7 +351,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
-                                                                    appSettings: ServiceLocator.shared.settings)
+                                                                    appSettings: ServiceLocator.shared.settings,
+                                                                    analytics: ServiceLocator.shared.analytics)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {
@@ -548,6 +549,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
 
     private func startSync() {
+        ServiceLocator.shared.analytics.signpost.beginSync()
         guard let userSession else {
             fatalError("User session not setup")
         }
@@ -572,6 +574,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 case .startedUpdating:
                     showLoadingIndicator()
                 case .receivedSyncUpdate:
+                    ServiceLocator.shared.analytics.signpost.endSync()
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
                 default:
                     break

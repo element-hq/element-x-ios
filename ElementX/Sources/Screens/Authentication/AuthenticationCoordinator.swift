@@ -165,6 +165,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                          analytics: analytics,
                                                           userIndicatorController: userIndicatorController)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         

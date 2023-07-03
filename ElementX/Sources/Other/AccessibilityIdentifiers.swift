@@ -59,8 +59,10 @@ struct A11yIdentifiers {
         let settings = "home_screen-settings"
         let signOut = "home_screen-sign_out"
         let verificationBannerContinue = "home_screen-verification_continue"
+        
+        let roomNamePrefix = "home_screen-room_name"
         func roomName(_ name: String) -> String {
-            "home_screen-room_name:\(name)"
+            "\(roomNamePrefix):\(name)"
         }
     }
     

@@ -228,6 +228,7 @@ struct HomeScreen_Previews: PreviewProvider {
                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
                                             selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                             appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         return NavigationStack {

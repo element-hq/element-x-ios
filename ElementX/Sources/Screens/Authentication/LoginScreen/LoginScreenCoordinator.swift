@@ -21,6 +21,7 @@ struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     
+    let analytics: AnalyticsService
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -119,15 +120,18 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         startLoading(isInteractionBlocking: true)
         
         Task {
+            parameters.analytics.signpost.beginLogin()
             switch await authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceID: nil) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
+                parameters.analytics.signpost.endLogin()
                 stopLoading()
             case .failure(let error):
                 stopLoading()
+                parameters.analytics.signpost.endLogin()
                 switch error {
                 case .isOnWaitlist:
                     callback?(.isOnWaitlist(.init(username: username,

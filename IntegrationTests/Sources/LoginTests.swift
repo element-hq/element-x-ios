@@ -20,7 +20,14 @@ class LoginTests: XCTestCase {
     func testLoginFlow() throws {
         let parser = TestMeasurementParser()
         parser.capture(testCase: self) {
-            self.measure(metrics: [XCTClockMetric()]) {
+            let metrics: [XCTMetric] = [
+                XCTClockMetric(),
+                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.login)"),
+                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.sync)"),
+                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.roomFlow)")
+            ]
+            
+            self.measure(metrics: metrics) {
                 self.runLoginLogoutFlow()
             }
         }
@@ -47,7 +54,7 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
         
         homeserverTextField.clearAndTypeText(app.homeserver)
-                
+        
         let confirmButton = app.buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
         confirmButton.tap()
@@ -71,15 +78,8 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(nextButton.isEnabled)
         
         nextButton.tap()
-        
-        // Wait for login to finish
-        let doesNotExistPredicate = NSPredicate(format: "exists == 0")
-        expectation(for: doesNotExistPredicate, evaluatedWith: nextButton)
 
-        // timeout is huge because we're waiting for server actions as well.
-        waitForExpectations(timeout: 300.0)
-
-        // Handle save password sheet
+        // Wait for login and then handle save password sheet
         let savePasswordButton = app.buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
             savePasswordButton.tap()
@@ -99,9 +99,23 @@ class LoginTests: XCTestCase {
             alertAllowButton.tap()
         }
         
+        // Migration screen may be shown as an overlay.
+        // Wait for the home screen to become visible.
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
-        XCTAssertTrue(profileButton.waitForExistence(timeout: 10.0))
-
+        // Timeouts are huge because we're waiting for the server.
+        XCTAssertTrue(profileButton.waitForExistence(timeout: 300.0))
+        let isHittablePredicate = NSPredicate(format: "isHittable == 1")
+        expectation(for: isHittablePredicate, evaluatedWith: profileButton)
+        waitForExpectations(timeout: 300.0)
+        
+        // Open the first room in the list.
+        let rooms = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix))
+        rooms.firstMatch.tap()
+        // Temporary sleep to get it working.
+        sleep(20)
+        // Go back to the home screen.
+        app.navigationBars.firstMatch.buttons["All Chats"].tap()
+        
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()
         
