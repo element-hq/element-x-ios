@@ -116,7 +116,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            guard let item = state.items.first(where: { $0.id == itemID }), item.isReactable else { return }
+            guard let item = state.items[itemID], item.isReactable else { return }
             callback?(.displayEmojiPicker(itemID: itemID))
         case .reactionSummary(let itemId, let key):
             showReactionSummary(for: itemId, selectedKey: key)
@@ -232,8 +232,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
         
     private func buildTimelineViews() {
-        var timelineViews = [RoomTimelineViewProvider]()
-        
+        var timelineItemIDs = [String]()
+
         let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
         }
@@ -246,24 +246,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineViews.append(RoomTimelineViewProvider(timelineItem: firstItem, groupStyle: .single))
+                    timelineItemIDs.append(firstItem.id)
+                    updateViewModel(item: firstItem, groupStyle: .single)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
+                    timelineItemIDs.append(item.id)
                     if index == 0 {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .first))
+                        updateViewModel(item: item, groupStyle: .first)
                     } else if index == itemGroup.count - 1 {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .last))
+                        updateViewModel(item: item, groupStyle: .last)
                     } else {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .middle))
+                        updateViewModel(item: item, groupStyle: .middle)
                     }
                 }
             }
         }
         
-        state.items = timelineViews
+        state.itemIDs = timelineItemIDs
     }
-        
+
+    private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+        if let timelineItemViewModel = state.items[item.id] {
+            timelineItemViewModel.groupStyle = groupStyle
+            timelineItemViewModel.type = .init(timelineItem: item)
+        } else {
+            state.items[item.id] = RoomTimelineItemViewModel(item: item, groupStyle: groupStyle)
+        }
+    }
+
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
         if timelineItem is CollapsibleTimelineItem || otherTimelineItem is CollapsibleTimelineItem {
             return false

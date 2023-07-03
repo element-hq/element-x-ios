@@ -59,6 +59,9 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.timelineItems != context.viewState.items {
                 tableViewController.timelineItems = context.viewState.items
             }
+            if tableViewController.timelineIDs != context.viewState.itemIDs {
+                tableViewController.timelineIDs = context.viewState.itemIDs
+            }
             if tableViewController.canBackPaginate != context.viewState.canBackPaginate {
                 tableViewController.canBackPaginate = context.viewState.canBackPaginate
             }

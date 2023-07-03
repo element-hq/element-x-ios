@@ -84,7 +84,8 @@ struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
     var roomAvatarURL: URL?
-    var items: [RoomTimelineViewProvider] = []
+    var itemIDs: [String] = []
+    var items: [String: RoomTimelineItemViewModel] = [:]
     var members: [String: RoomMemberState] = [:]
     var canBackPaginate = true
     var isBackPaginating = false

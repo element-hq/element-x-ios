@@ -35,31 +35,31 @@ struct ReadMarkerRoomTimelineView: View {
     }
 }
 
-struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
-    static let viewModel = RoomScreenViewModel.mock
-    
-    static let item = ReadMarkerRoomTimelineItem()
-    static var previews: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
-            RoomTimelineViewProvider.text(.init(id: "",
-                                                timestamp: "",
-                                                isOutgoing: true,
-                                                isEditable: false,
-                                                sender: .init(id: "1", displayName: "Bob"),
-                                                content: .init(body: "This is another message")), .single)
-            
-            ReadMarkerRoomTimelineView(timelineItem: item)
-            
-            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
-            RoomTimelineViewProvider.text(.init(id: "",
-                                                timestamp: "",
-                                                isOutgoing: false,
-                                                isEditable: false,
-                                                sender: .init(id: "", displayName: "Alice"),
-                                                content: .init(body: "This is a message")), .single)
-        }
-        .padding(.horizontal, 8)
-        .environmentObject(viewModel.context)
-    }
-}
+// struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
+//    static let viewModel = RoomScreenViewModel.mock
+//
+//    static let item = ReadMarkerRoomTimelineItem()
+//    static var previews: some View {
+//        VStack(alignment: .leading, spacing: 0) {
+//            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
+//            RoomTimelineViewProvider.text(.init(id: "",
+//                                                timestamp: "",
+//                                                isOutgoing: true,
+//                                                isEditable: false,
+//                                                sender: .init(id: "1", displayName: "Bob"),
+//                                                content: .init(body: "This is another message")), .single)
+//
+//            ReadMarkerRoomTimelineView(timelineItem: item)
+//
+//            RoomTimelineViewProvider.separator(.init(id: "Separator", text: "Today"), .single)
+//            RoomTimelineViewProvider.text(.init(id: "",
+//                                                timestamp: "",
+//                                                isOutgoing: false,
+//                                                isEditable: false,
+//                                                sender: .init(id: "", displayName: "Alice"),
+//                                                content: .init(body: "This is a message")), .single)
+//        }
+//        .padding(.horizontal, 8)
+//        .environmentObject(viewModel.context)
+//    }
+// }
