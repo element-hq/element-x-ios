@@ -174,7 +174,7 @@ public enum L10n {
   public static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
   public static var commonImage: String { return L10n.tr("Localizable", "common_image") }
-  /// We can’t validate this user’s Matrix ID. The invite might not be received.
+  /// This Matrix ID can't be found, so the invite might not be received.
   public static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
   /// Leaving room
   public static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
@@ -260,7 +260,7 @@ public enum L10n {
   public static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
   /// Unable to decrypt
   public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
-  /// We were unable to successfully send invites to one or more users.
+  /// Invites couldn't be sent to one or more users.
   public static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
   /// Unable to send invite(s)
   public static var commonUnableToInviteTitle: String { return L10n.tr("Localizable", "common_unable_to_invite_title") }
@@ -324,9 +324,9 @@ public enum L10n {
   public static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
   }
-  /// Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.
+  /// Are you sure that you want to leave this room? You're the only person here. If you leave, no one will be able to join in the future, including you.
   public static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
-  /// Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.
+  /// Are you sure that you want to leave this room? This room is not public and you won't be able to rejoin without an invite.
   public static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
   /// Are you sure that you want to leave the room?
   public static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
@@ -352,6 +352,8 @@ public enum L10n {
   public static func notificationCompatSummaryTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_compat_summary_title", p1)
   }
+  /// Notification
+  public static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
   /// ** Failed to send - please open room
   public static var notificationInlineReplyFailed: String { return L10n.tr("Localizable", "notification_inline_reply_failed") }
   /// Join
@@ -518,6 +520,8 @@ public enum L10n {
   public static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions
   public static var screenBugReportContactMe: String { return L10n.tr("Localizable", "screen_bug_report_contact_me") }
+  /// Contact me
+  public static var screenBugReportContactMeTitle: String { return L10n.tr("Localizable", "screen_bug_report_contact_me_title") }
   /// Edit screenshot
   public static var screenBugReportEditScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_edit_screenshot") }
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
@@ -528,11 +532,11 @@ public enum L10n {
   public static var screenBugReportEditorSupporting: String { return L10n.tr("Localizable", "screen_bug_report_editor_supporting") }
   /// Send crash logs
   public static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
-  /// Send logs to help
+  /// Allow logs
   public static var screenBugReportIncludeLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_logs") }
   /// Send screenshot
   public static var screenBugReportIncludeScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_include_screenshot") }
-  /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
+  /// Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.
   public static var screenBugReportLogsDescription: String { return L10n.tr("Localizable", "screen_bug_report_logs_description") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   public static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
@@ -586,23 +590,23 @@ public enum L10n {
   public static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
   /// Block
   public static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
-  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
+  /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
   public static var screenDmDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_description") }
   /// Block user
   public static var screenDmDetailsBlockUser: String { return L10n.tr("Localizable", "screen_dm_details_block_user") }
   /// Unblock
   public static var screenDmDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_action") }
-  /// On unblocking the user, you will be able to see all messages by them again.
+  /// You'll be able to see all messages from them again.
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
-  /// Are you sure you want to decline joining %1$@?
+  /// Are you sure you want to decline the invitation to join %1$@?
   public static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
   }
   /// Decline invite
   public static var screenInvitesDeclineChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_chat_title") }
-  /// Are you sure you want to decline to chat with %1$@?
+  /// Are you sure you want to decline this private chat with %1$@?
   public static func screenInvitesDeclineDirectChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_direct_chat_message", String(describing: p1))
   }
@@ -688,7 +692,7 @@ public enum L10n {
   public static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
   /// Edit Room
   public static var screenRoomDetailsEditRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_edit_room_title") }
-  /// We were unable to update all the information for this room.
+  /// There was an unknown error and the information couldn't be changed.
   public static var screenRoomDetailsEditionError: String { return L10n.tr("Localizable", "screen_room_details_edition_error") }
   /// Unable to update room
   public static var screenRoomDetailsEditionErrorTitle: String { return L10n.tr("Localizable", "screen_room_details_edition_error_title") }
@@ -724,13 +728,13 @@ public enum L10n {
   public static var screenRoomInviteAgainAlertTitle: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_title") }
   /// Block
   public static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
-  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
+  /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
   public static var screenRoomMemberDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_description") }
   /// Block user
   public static var screenRoomMemberDetailsBlockUser: String { return L10n.tr("Localizable", "screen_room_member_details_block_user") }
   /// Unblock
   public static var screenRoomMemberDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_action") }
-  /// On unblocking the user, you will be able to see all messages by them again.
+  /// You'll be able to see all messages from them again.
   public static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
   /// Unblock user
   public static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
