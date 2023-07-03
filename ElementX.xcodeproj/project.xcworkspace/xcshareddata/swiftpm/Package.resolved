@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "40645a27fd55bbe0fa2065a90496fc823f45ff6e",
-        "version" : "1.0.93-alpha"
+        "revision" : "6d6c13bcf3bf900932599a62e2a157224d762630",
+        "version" : "1.0.94-alpha"
       }
     },
     {
