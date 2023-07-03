@@ -118,7 +118,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch timelineItem {
         case let item as LocationRoomTimelineItem:
             guard let geoURI = item.content.geoURI else { return .none }
-            return .displayLocation(body: item.content.body, geoURI: geoURI)
+            return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
         default:
             return await displayMediaActionIfPossible(timelineItem: timelineItem)
         }

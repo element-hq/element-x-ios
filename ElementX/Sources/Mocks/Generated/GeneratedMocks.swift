@@ -705,23 +705,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendLocation
 
-    var sendLocationBodyGeoURICallsCount = 0
-    var sendLocationBodyGeoURICalled: Bool {
-        return sendLocationBodyGeoURICallsCount > 0
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount = 0
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
+        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
     }
-    var sendLocationBodyGeoURIReceivedArguments: (body: String, geoURI: GeoURI)?
-    var sendLocationBodyGeoURIReceivedInvocations: [(body: String, geoURI: GeoURI)] = []
-    var sendLocationBodyGeoURIReturnValue: Result<Void, RoomProxyError>!
-    var sendLocationBodyGeoURIClosure: ((String, GeoURI) async -> Result<Void, RoomProxyError>)?
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, RoomProxyError>!
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, RoomProxyError>)?
 
-    func sendLocation(body: String, geoURI: GeoURI) async -> Result<Void, RoomProxyError> {
-        sendLocationBodyGeoURICallsCount += 1
-        sendLocationBodyGeoURIReceivedArguments = (body: body, geoURI: geoURI)
-        sendLocationBodyGeoURIReceivedInvocations.append((body: body, geoURI: geoURI))
-        if let sendLocationBodyGeoURIClosure = sendLocationBodyGeoURIClosure {
-            return await sendLocationBodyGeoURIClosure(body, geoURI)
+    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, RoomProxyError> {
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
+            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
         } else {
-            return sendLocationBodyGeoURIReturnValue
+            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
         }
     }
     //MARK: - retrySend
