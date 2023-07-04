@@ -16,6 +16,7 @@
 
 import Algorithms
 import Combine
+import OrderedCollections
 import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
@@ -232,7 +233,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
         
     private func buildTimelineViews() {
-        var timelineItemIDs = [String]()
+        var timelineItems = OrderedDictionary<String, RoomTimelineItemViewModel>()
 
         let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
@@ -246,32 +247,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemIDs.append(firstItem.id)
-                    updateViewModel(item: firstItem, groupStyle: .single)
+                    timelineItems.updateValue(updateViewModel(item: firstItem, groupStyle: .single),
+                                              forKey: firstItem.id)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
-                    timelineItemIDs.append(item.id)
                     if index == 0 {
-                        updateViewModel(item: item, groupStyle: .first)
+                        timelineItems.updateValue(updateViewModel(item: item, groupStyle: .first),
+                                                  forKey: item.id)
                     } else if index == itemGroup.count - 1 {
-                        updateViewModel(item: item, groupStyle: .last)
+                        timelineItems.updateValue(updateViewModel(item: item, groupStyle: .last),
+                                                  forKey: item.id)
                     } else {
-                        updateViewModel(item: item, groupStyle: .middle)
+                        timelineItems.updateValue(updateViewModel(item: item, groupStyle: .middle),
+                                                  forKey: item.id)
                     }
                 }
             }
         }
         
-        state.itemIDs = timelineItemIDs
+        state.items = timelineItems
     }
 
-    private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+    private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewModel {
         if let timelineItemViewModel = state.items[item.id] {
             timelineItemViewModel.groupStyle = groupStyle
-            timelineItemViewModel.type = .init(timelineItem: item)
+            timelineItemViewModel.type = .init(item: item)
+            return timelineItemViewModel
         } else {
-            state.items[item.id] = RoomTimelineItemViewModel(item: item, groupStyle: groupStyle)
+            return RoomTimelineItemViewModel(item: item, groupStyle: groupStyle)
         }
     }
 

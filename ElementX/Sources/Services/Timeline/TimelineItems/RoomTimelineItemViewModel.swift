@@ -18,7 +18,7 @@ import Foundation
 
 final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject {
     static func == (lhs: RoomTimelineItemViewModel, rhs: RoomTimelineItemViewModel) -> Bool {
-        lhs.id == rhs.id
+        lhs.type == rhs.type && lhs.groupStyle == rhs.groupStyle
     }
 
     @Published var type: RoomTimelineItemType
@@ -29,7 +29,7 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
     }
 
     init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
-        type = RoomTimelineItemType(timelineItem: item)
+        type = RoomTimelineItemType(item: item)
         self.groupStyle = groupStyle
     }
 
@@ -38,7 +38,7 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
     }
 }
 
-enum RoomTimelineItemType {
+enum RoomTimelineItemType: Equatable {
     case text(TextRoomTimelineItem)
     case separator(SeparatorRoomTimelineItem)
     case image(ImageRoomTimelineItem)
@@ -59,8 +59,8 @@ enum RoomTimelineItemType {
     case location(LocationRoomTimelineItem)
 
     // swiftlint:disable:next cyclomatic_complexity
-    init(timelineItem: RoomTimelineItemProtocol) {
-        switch timelineItem {
+    init(item: RoomTimelineItemProtocol) {
+        switch item {
         case let item as TextRoomTimelineItem:
             self = .text(item)
         case let item as ImageRoomTimelineItem:

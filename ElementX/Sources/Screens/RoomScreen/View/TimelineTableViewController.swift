@@ -17,6 +17,8 @@
 import Combine
 import SwiftUI
 
+import OrderedCollections
+
 /// A table view cell that displays a timeline item in a room. The cell is intended
 /// to be configured to display a SwiftUI view and not use any UIKit.
 class TimelineItemCell: UITableViewCell {
@@ -38,7 +40,7 @@ class TimelineTableViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineStyle: TimelineStyle
-    var timelineIDs: [String] = [] {
+    var timelineItems = OrderedDictionary<String, RoomTimelineItemViewModel>() {
         didSet {
             guard !scrollAdapter.isScrolling.value else {
                 // Delay updating until scrolling has stopped as programatic
@@ -49,14 +51,12 @@ class TimelineTableViewController: UIViewController {
 
             applySnapshot()
 
-            if timelineIDs.isEmpty {
+            if timelineItems.isEmpty {
                 paginateBackwardsPublisher.send()
             }
         }
     }
 
-    var timelineItems: [String: RoomTimelineItemViewModel] = [:]
-    
     /// The mode of the message composer. This is used to render selected
     /// items in the timeline when replying, editing etc.
     var composerMode: RoomScreenComposerMode = .default
@@ -75,6 +75,10 @@ class TimelineTableViewController: UIViewController {
     var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
+
+    private var timelineItemsIDs: [String] {
+        timelineItems.keys.elements
+    }
     
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
@@ -220,7 +224,7 @@ class TimelineTableViewController: UIViewController {
             return cell
         }
 
-        dataSource?.defaultRowAnimation = .bottom
+        dataSource?.defaultRowAnimation = .fade
         
         tableView.delegate = self
     }
@@ -236,18 +240,15 @@ class TimelineTableViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(timelineIDs)
-        dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
-            guard let self else {
-                return
-            }
-            updateTopPadding()
+        snapshot.appendItems(timelineItems.keys.elements)
+        dataSource.apply(snapshot, animatingDifferences: false)
 
-            if previousLayout.isBottomVisible {
-                scrollToBottom(animated: false)
-            } else if let pinnedItem = previousLayout.pinnedItem {
-                restoreScrollPosition(using: pinnedItem, and: snapshot)
-            }
+        updateTopPadding()
+
+        if previousLayout.isBottomVisible {
+            scrollToBottom(animated: false)
+        } else if let pinnedItem = previousLayout.pinnedItem {
+            restoreScrollPosition(using: pinnedItem, and: snapshot)
         }
     }
     
@@ -299,8 +300,8 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the bottom of the timeline.
     private func scrollToBottom(animated: Bool) {
-        guard let lastItem = timelineIDs.last,
-              let lastIndexPath = dataSource?.indexPath(for: lastItem)
+        guard let lastItemID = timelineItemsIDs.last,
+              let lastIndexPath = dataSource?.indexPath(for: lastItemID)
         else { return }
         
         tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
