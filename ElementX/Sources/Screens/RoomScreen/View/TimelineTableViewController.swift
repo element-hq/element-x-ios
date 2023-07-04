@@ -17,12 +17,14 @@
 import Combine
 import SwiftUI
 
+import OrderedCollections
+
 /// A table view cell that displays a timeline item in a room. The cell is intended
 /// to be configured to display a SwiftUI view and not use any UIKit.
 class TimelineItemCell: UITableViewCell {
     static let reuseIdentifier = "TimelineItemCell"
     
-    var item: RoomTimelineViewProvider?
+    var item: RoomTimelineItemViewModel?
     
     override func prepareForReuse() {
         item = nil
@@ -38,7 +40,7 @@ class TimelineTableViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineStyle: TimelineStyle
-    var timelineItems: [RoomTimelineViewProvider] = [] {
+    var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>() {
         didSet {
             guard !scrollAdapter.isScrolling.value else {
                 // Delay updating until scrolling has stopped as programatic
@@ -46,15 +48,15 @@ class TimelineTableViewController: UIViewController {
                 hasPendingUpdates = true
                 return
             }
-            
+
             applySnapshot()
-            
-            if timelineItems.isEmpty {
+
+            if timelineItemsDictionary.isEmpty {
                 paginateBackwardsPublisher.send()
             }
         }
     }
-    
+
     /// The mode of the message composer. This is used to render selected
     /// items in the timeline when replying, editing etc.
     var composerMode: RoomScreenComposerMode = .default
@@ -73,9 +75,13 @@ class TimelineTableViewController: UIViewController {
     var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
+
+    private var timelineItemsIDs: [String] {
+        timelineItemsDictionary.keys.elements
+    }
     
     /// The table's diffable data source.
-    private var dataSource: UITableViewDiffableDataSource<TimelineSection, RoomTimelineViewProvider>?
+    private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
     private var cancellables: Set<AnyCancellable> = []
     
     /// The scroll view adapter used to detect whether scrolling is in progress.
@@ -183,24 +189,28 @@ class TimelineTableViewController: UIViewController {
     
     /// Configures a diffable data source for the timeline's table view.
     private func configureDataSource() {
-        dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, timelineItem in
+        dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, id in
             let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
             guard let self, let cell = cell as? TimelineItemCell else { return cell }
             
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
 
-            cell.item = timelineItem
+            let viewModel = timelineItemsDictionary[id]
+            cell.item = viewModel
+            guard let viewModel else {
+                return cell
+            }
             cell.contentConfiguration = UIHostingConfiguration {
-                timelineItem
-                    .id(timelineItem.id)
+                RoomTimelineItemView(viewModel: viewModel)
+                    .id(id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                     .onAppear {
-                        coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
+                        coordinator.send(viewAction: .itemAppeared(id: id))
                     }
                     .onDisappear {
-                        coordinator.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                        coordinator.send(viewAction: .itemDisappeared(id: id))
                     }
                     .environment(\.openURL, OpenURLAction { url in
                         coordinator.send(viewAction: .linkClicked(url: url))
@@ -213,6 +223,8 @@ class TimelineTableViewController: UIViewController {
             
             return cell
         }
+
+        dataSource?.defaultRowAnimation = .fade
         
         tableView.delegate = self
     }
@@ -226,13 +238,13 @@ class TimelineTableViewController: UIViewController {
         let previousLayout = layout()
         self.previousLayout = previousLayout
         
-        var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>()
+        var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(timelineItems)
+        snapshot.appendItems(timelineItemsIDs)
         dataSource.apply(snapshot, animatingDifferences: false)
-        
+
         updateTopPadding()
-        
+
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         } else if let pinnedItem = previousLayout.pinnedItem {
@@ -254,12 +266,12 @@ class TimelineTableViewController: UIViewController {
         }
         
         guard let bottomItemIndexPath = tableView.indexPathsForVisibleRows?.last,
-              let bottomItem = dataSource.itemIdentifier(for: bottomItemIndexPath)
+              let bottomID = dataSource.itemIdentifier(for: bottomItemIndexPath)
         else { return layout }
         
-        let bottomCellFrame = tableView.cellFrame(for: bottomItem)
-        layout.pinnedItem = PinnedItem(id: bottomItem.id, position: .bottom, frame: bottomCellFrame)
-        layout.isBottomVisible = bottomItem == snapshot.itemIdentifiers.last
+        let bottomCellFrame = tableView.cellFrame(for: bottomID)
+        layout.pinnedItem = PinnedItem(id: bottomID, position: .bottom, frame: bottomCellFrame)
+        layout.isBottomVisible = bottomID == snapshot.itemIdentifiers.last
         
         return layout
     }
@@ -288,16 +300,16 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the bottom of the timeline.
     private func scrollToBottom(animated: Bool) {
-        guard let lastItem = timelineItems.last,
-              let lastIndexPath = dataSource?.indexPath(for: lastItem)
+        guard let lastItemID = timelineItemsIDs.last,
+              let lastIndexPath = dataSource?.indexPath(for: lastItemID)
         else { return }
         
         tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
     }
     
     /// Restores the position of the timeline using the supplied item and snapshot.
-    private func restoreScrollPosition(using pinnedItem: PinnedItem, and snapshot: NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>) {
-        guard let item = snapshot.itemIdentifiers.first(where: { $0.id == pinnedItem.id }),
+    private func restoreScrollPosition(using pinnedItem: PinnedItem, and snapshot: NSDiffableDataSourceSnapshot<TimelineSection, String>) {
+        guard let item = snapshot.itemIdentifiers.first(where: { $0 == pinnedItem.id }),
               let indexPath = dataSource?.indexPath(for: item)
         else { return }
         
@@ -398,8 +410,8 @@ extension TimelineTableViewController {
 
 private extension UITableView {
     /// Returns the frame of the cell for a particular timeline item.
-    func cellFrame(for item: RoomTimelineViewProvider) -> CGRect? {
-        guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item == item }) else {
+    func cellFrame(for id: String) -> CGRect? {
+        guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item?.id == id }) else {
             return nil
         }
         

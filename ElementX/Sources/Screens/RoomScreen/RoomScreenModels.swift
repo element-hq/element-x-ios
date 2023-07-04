@@ -18,6 +18,8 @@ import Combine
 import SwiftUI
 import UIKit
 
+import OrderedCollections
+
 enum RoomScreenViewModelAction {
     case displayRoomDetails
     case displayEmojiPicker(itemID: String)
@@ -84,7 +86,7 @@ struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
     var roomAvatarURL: URL?
-    var items: [RoomTimelineViewProvider] = []
+    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
     var members: [String: RoomMemberState] = [:]
     var canBackPaginate = true
     var isBackPaginating = false
@@ -101,6 +103,14 @@ struct RoomScreenViewState: BindableState {
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
+    }
+
+    var itemIDs: [String] {
+        itemsDictionary.keys.elements
+    }
+
+    var itemViewModels: [RoomTimelineItemViewModel] {
+        itemsDictionary.values.elements
     }
     
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()

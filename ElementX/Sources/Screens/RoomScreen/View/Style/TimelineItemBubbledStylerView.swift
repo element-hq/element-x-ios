@@ -307,7 +307,7 @@ private extension View {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
-    
+
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
@@ -320,40 +320,40 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
         replies
             .previewDisplayName("Replies")
     }
-    
+
     static var mockTimeline: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.state.items) { item in
-                    item.padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
+                ForEach(viewModel.state.itemViewModels) { itemViewModel in
+                    RoomTimelineItemView(viewModel: itemViewModel)
+                        .padding(TimelineStyle.bubbles.rowInsets)
+                    // Insets added in the table view cells
                 }
             }
         }
         .environment(\.timelineStyle, .bubbles)
         .environmentObject(viewModel.context)
     }
-    
+
     static var replies: some View {
         VStack {
-            RoomTimelineViewProvider.text(TextRoomTimelineItem(id: "",
-                                                               timestamp: "10:42",
-                                                               isOutgoing: true,
-                                                               isEditable: false,
-                                                               sender: .init(id: "whoever"),
-                                                               content: .init(body: "A long message that should be on multiple lines."),
-                                                               replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                     contentType: .text(.init(body: "Short")))),
-                                          .single)
-            
-            RoomTimelineViewProvider.text(TextRoomTimelineItem(id: "",
-                                                               timestamp: "10:42",
-                                                               isOutgoing: true,
-                                                               isEditable: false,
-                                                               sender: .init(id: "whoever"),
-                                                               content: .init(body: "Short message"),
-                                                               replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                     contentType: .text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))),
-                                          .single)
+            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: "",
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   contentType: .text(.init(body: "Short")))), groupStyle: .single))
+
+            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: "",
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Short message"),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   contentType: .text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))), groupStyle: .single))
         }
         .environmentObject(viewModel.context)
     }
