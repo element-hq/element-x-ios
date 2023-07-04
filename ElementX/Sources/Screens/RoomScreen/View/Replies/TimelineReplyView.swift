@@ -229,7 +229,7 @@ struct TimelineReplyView_Previews: PreviewProvider {
                                                                                           thumbnailSource: imageSource))))
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                contentType: .location(.init(body: "", geoURI: nil))))
+                                                                contentType: .location(.init(body: ""))))
         }
         .environmentObject(viewModel.context)
     }

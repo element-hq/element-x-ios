@@ -29,7 +29,7 @@ enum RoomScreenViewModelAction {
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: String)
-    case displayLocation(body: String, geoURI: GeoURI)
+    case displayLocation(body: String, geoURI: GeoURI, description: String?)
 }
 
 enum RoomScreenComposerMode: Equatable {

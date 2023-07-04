@@ -399,7 +399,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
-        LocationRoomTimelineItemContent(body: locationContent.body, geoURI: .init(string: locationContent.geoUri))
+        LocationRoomTimelineItemContent(body: locationContent.body,
+                                        geoURI: .init(string: locationContent.geoUri),
+                                        description: locationContent.description,
+                                        zoomLevel: locationContent.zoomLevel,
+                                        asset: locationContent.asset.map { .init(assetType: $0) })
     }
 
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
@@ -525,6 +529,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return .loaded(sender: sender, contentType: replyContent)
         case let .error(message):
             return .error(eventID: details.eventId, message: message)
+        }
+    }
+}
+
+private extension LocationRoomTimelineItemContent.AssetType {
+    init(assetType: MatrixRustSDK.AssetType) {
+        switch assetType {
+        case .sender:
+            self = .sender
+        case .pin:
+            self = .pin
         }
     }
 }

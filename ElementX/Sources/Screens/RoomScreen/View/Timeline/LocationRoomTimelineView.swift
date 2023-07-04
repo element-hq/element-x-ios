@@ -65,13 +65,14 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
-                                                     content: .init(body: "Fallback geo uri description", geoURI: nil)))
+                                                     content: .init(body: "Fallback geo uri description")))
 
         LocationRoomTimelineView(timelineItem: .init(id: UUID().uuidString,
                                                      timestamp: "Now",
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
-                                                     content: .init(body: "Fallback geo uri description", geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
+                                                     content: .init(body: "Fallback geo uri description",
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
     }
 }

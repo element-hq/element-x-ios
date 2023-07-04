@@ -308,8 +308,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
-                case .presentLocationViewer(_, let geoURI):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI)))
+                case .presentLocationViewer(_, let geoURI, let description):
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(member: let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):
@@ -513,7 +513,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .selectedLocation(let geoURI):
                 Task {
-                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage, geoURI: geoURI)
+                    _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
+                                                           geoURI: geoURI,
+                                                           description: nil,
+                                                           zoomLevel: nil,
+                                                           assetType: .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             case .close:
