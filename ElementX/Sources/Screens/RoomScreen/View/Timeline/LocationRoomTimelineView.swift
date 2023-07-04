@@ -109,6 +109,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description dsa dsa sa das adad ")))
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
     }
 }
