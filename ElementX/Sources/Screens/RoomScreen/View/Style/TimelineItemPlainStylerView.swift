@@ -133,19 +133,19 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     }
 }
 
-// struct TimelineItemPlainStylerView_Previews: PreviewProvider {
-//    static let viewModel = RoomScreenViewModel.mock
-//
-//    static var previews: some View {
-//        VStack(alignment: .leading, spacing: 0) {
-//            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
-//                let item = MockRoomTimelineController().timelineItems[index]
-//                RoomTimelineViewProvider(timelineItem: item, groupStyle: .single)
-//                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
-//            }
-//        }
-//        .environment(\.timelineStyle, .plain)
-//        .previewLayout(.sizeThatFits)
-//        .environmentObject(viewModel.context)
-//    }
-// }
+ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+
+    static var previews: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
+                let item = MockRoomTimelineController().timelineItems[index]
+                RoomTimelineItemView(viewModel: .init(item: item, groupStyle: .single))
+                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
+            }
+        }
+        .environment(\.timelineStyle, .plain)
+        .previewLayout(.sizeThatFits)
+        .environmentObject(viewModel.context)
+    }
+ }
