@@ -240,7 +240,7 @@ class TimelineTableViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(timelineItemsDictionary.keys.elements)
+        snapshot.appendItems(timelineItemsIDs)
         dataSource.apply(snapshot, animatingDifferences: false)
 
         updateTopPadding()
