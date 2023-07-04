@@ -14,14 +14,17 @@
 // limitations under the License.
 //
 
-import MatrixRustSDK
-
 struct LocationRoomTimelineItemContent: Hashable {
     let body: String
     let geoURI: GeoURI?
     let description: String?
     let zoomLevel: UInt8?
     let asset: AssetType?
+
+    enum AssetType {
+        case sender
+        case pin
+    }
 
     init(body: String,
          geoURI: GeoURI? = nil,
