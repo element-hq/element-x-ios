@@ -21,16 +21,51 @@ struct LocationRoomTimelineView: View {
     @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
+        let mapAspectRatio: Double = 3 / 2
+        let mapMaxHeight: Double = 300
+
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
-                MapLibreStaticMapView(geoURI: geoURI) {
-                    LocationMarkerView()
+                VStack(alignment: .leading, spacing: 0) {
+                    descriptionView
+                        .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
+
+                    MapLibreStaticMapView(geoURI: geoURI) {
+                        LocationMarkerView()
+                    }
+                    .frame(maxHeight: mapMaxHeight)
+                    .aspectRatio(mapAspectRatio, contentMode: .fit)
                 }
-                .frame(maxHeight: 300)
-                .aspectRatio(3 / 2, contentMode: .fit)
+                .background(backgroundView)
             } else {
                 FormattedBodyText(text: timelineItem.body)
             }
+        }
+    }
+
+    // MARK: - Private
+
+    @ViewBuilder
+    private var descriptionView: some View {
+        if let description = timelineItem.content.description, !description.isEmpty {
+            switch timelineStyle {
+            case .bubbles:
+                FormattedBodyText(text: description)
+                    .padding(8)
+            case .plain:
+                FormattedBodyText(text: description)
+                    .padding(.vertical, 8)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var backgroundView: some View {
+        switch timelineStyle {
+        case .bubbles:
+            timelineItem.isOutgoing ? Color.compound._bgBubbleOutgoing : Color.compound._bgBubbleIncoming
+        case .plain:
+            EmptyView()
         }
     }
 }
@@ -53,6 +88,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         body
             .environmentObject(viewModel.context)
+
         body
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
@@ -73,6 +109,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
-                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366))))
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description dsa dsa sa das adad ")))
     }
 }
