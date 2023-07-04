@@ -22,14 +22,21 @@ struct MapLibreMapView: UIViewRepresentable {
     struct Options {
         /// The initial zoom level
         let zoomLevel: Double
+        let fallbackZoomLevel: Double
+        
         /// The initial map center
-        let mapCenter: CLLocationCoordinate2D?
+        let mapCenter: CLLocationCoordinate2D
+        
+        let shouldCenterOnUser: Bool
+        
         /// Map annotations
         let annotations: [LocationAnnotation]
-
-        init(zoomLevel: Double, mapCenter: CLLocationCoordinate2D? = nil, annotations: [LocationAnnotation] = []) {
+        
+        init(zoomLevel: Double, fallbackZoomLevel: Double, mapCenter: CLLocationCoordinate2D, shouldCenterOnUser: Bool, annotations: [LocationAnnotation] = []) {
             self.zoomLevel = zoomLevel
+            self.fallbackZoomLevel = fallbackZoomLevel
             self.mapCenter = mapCenter
+            self.shouldCenterOnUser = shouldCenterOnUser
             self.annotations = annotations
         }
     }
@@ -43,7 +50,7 @@ struct MapLibreMapView: UIViewRepresentable {
     let options: Options
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
-    var showsUserLocationMode: ShowUserLocationMode = .hide
+    @Binding var showsUserLocationMode: ShowUserLocationMode
     
     /// Bind view errors if any
     let error: Binding<MapLibreError?>
@@ -59,9 +66,6 @@ struct MapLibreMapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MGLMapView {
         let mapView = makeMapView()
         mapView.delegate = context.coordinator
-        let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
-        panGesture.delegate = context.coordinator
-        mapView.addGestureRecognizer(panGesture)
         setupMap(mapView: mapView, with: options)
         return mapView
     }
@@ -86,10 +90,14 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MGLMapView, with options: Options) {
-        mapView.zoomLevel = options.zoomLevel
-        if let mapCenter = options.mapCenter {
-            mapView.centerCoordinate = mapCenter
+        switch mapView.locationManager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            mapView.zoomLevel = options.zoomLevel
+        default:
+            mapView.zoomLevel = options.fallbackZoomLevel
         }
+        // TODO: if authorized where we start?
+        mapView.centerCoordinate = options.mapCenter
     }
     
     private func makeMapView() -> MGLMapView {
@@ -104,14 +112,22 @@ struct MapLibreMapView: UIViewRepresentable {
     private func showUserLocation(in mapView: MGLMapView) {
         switch showsUserLocationMode {
         case .showAndFollow:
+            // TODO: this mode shows always the user annotation dot
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
         case .show:
             mapView.showsUserLocation = true
-            mapView.userTrackingMode = .none
+            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
+        case .showAndCenter:
+            mapView.showsUserLocation = true
+            if let userLocation = mapView.userLocation?.coordinate {
+                mapView.setCenter(userLocation, zoomLevel: options.zoomLevel, animated: true)
+                showsUserLocationMode = .show
+            }
+            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         case .hide:
             mapView.showsUserLocation = false
-            mapView.userTrackingMode = .none
+            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         }
     }
 }
@@ -119,7 +135,7 @@ struct MapLibreMapView: UIViewRepresentable {
 // MARK: - Coordinator
 
 extension MapLibreMapView {
-    class Coordinator: NSObject, MGLMapViewDelegate, UIGestureRecognizerDelegate {
+    class Coordinator: NSObject, MGLMapViewDelegate {
         // MARK: - Properties
 
         var mapLibreView: MapLibreMapView
@@ -146,13 +162,15 @@ extension MapLibreMapView {
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
-            guard mapView.showsUserLocation else {
+            guard mapLibreView.options.shouldCenterOnUser else {
                 return
             }
             
             switch manager.authorizationStatus {
             case .denied, .restricted:
                 mapLibreView.error.wrappedValue = .invalidLocationAuthorization
+            case .authorizedAlways, .authorizedWhenInUse:
+                break
             default:
                 break
             }
@@ -171,15 +189,9 @@ extension MapLibreMapView {
             false
         }
         
-        // MARK: UIGestureRecognizer
-        
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-            gestureRecognizer is UIPanGestureRecognizer
-        }
-        
-        @objc
-        func didPan() {
+        func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
             mapLibreView.userDidPan?()
+            return true
         }
     }
 }

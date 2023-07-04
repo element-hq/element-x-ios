@@ -33,26 +33,21 @@ enum StaticLocationInteractionMode: Hashable {
 }
 
 struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode, isSharingUserLocation: Bool = false, showsUserLocationMode: ShowUserLocationMode = .hide) {
+    init(interactionMode: StaticLocationInteractionMode) {
         self.interactionMode = interactionMode
-        self.isSharingUserLocation = isSharingUserLocation
-        self.showsUserLocationMode = showsUserLocationMode
-
         switch interactionMode {
         case .picker:
-            bindings = .init()
-        case .viewOnly(let geoURI, _):
-            bindings = .init(mapCenterLocation: .init(latitude: geoURI.latitude, longitude: geoURI.longitude))
+            bindings.showsUserLocationMode = .showAndFollow
+        case .viewOnly:
+            bindings.showsUserLocationMode = .show
         }
     }
 
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
-    var isSharingUserLocation: Bool
-    /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
-    var showsUserLocationMode: ShowUserLocationMode
+    var isSharingUserLocation = false
     
-    var bindings = StaticLocationScreenBindings()
+    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
 
     var showBottomToolbar: Bool {
         interactionMode == .picker
@@ -66,14 +61,18 @@ struct StaticLocationScreenViewState: BindableState {
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
     }
-
-    var isLocationPickerMode: Bool {
+    
+    var initialMapCenter: CLLocationCoordinate2D {
         switch interactionMode {
         case .picker:
-            return true
-        case .viewOnly:
-            return false
+            return .init(latitude: 49.843, longitude: 9.902056)
+        case .viewOnly(let geoURI, _):
+            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
+    }
+
+    var isLocationPickerMode: Bool {
+        interactionMode == .picker
     }
 
     var navigationTitle: String {
@@ -95,9 +94,13 @@ struct StaticLocationScreenViewState: BindableState {
     }
 
     var zoomLevel: Double {
+        15.0
+    }
+    
+    var fallbackZoomLevel: Double {
         switch interactionMode {
         case .picker:
-            return 5.0
+            return 2.7
         case .viewOnly:
             return 15.0
         }
@@ -115,6 +118,8 @@ struct StaticLocationScreenViewState: BindableState {
 
 struct StaticLocationScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
+    /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
+    var showsUserLocationMode: ShowUserLocationMode
     
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
@@ -138,5 +143,6 @@ struct StaticLocationScreenBindings {
 enum StaticLocationScreenViewAction {
     case close
     case selectLocation
+    case centerToUser
     case userDidPan
 }

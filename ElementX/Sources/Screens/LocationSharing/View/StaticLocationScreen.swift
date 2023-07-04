@@ -44,17 +44,20 @@ struct StaticLocationScreen: View {
         ZStack(alignment: .center) {
             MapLibreMapView(builder: builder,
                             options: mapOptions,
-                            showsUserLocationMode: .hide,
+                            showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
-                            mapCenterCoordinate: $context.mapCenterLocation,
-                            userDidPan: {
+                            mapCenterCoordinate: $context.mapCenterLocation) {
                                 context.send(viewAction: .userDidPan)
-                            })
+                            }
+                            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+            
             if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }
         }
-        .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+        .overlay(alignment: .bottomTrailing) {
+            centerToUserLocationButton
+        }
     }
 
     // MARK: - Private
@@ -82,11 +85,16 @@ struct StaticLocationScreen: View {
 
     private var mapOptions: MapLibreMapView.Options {
         guard let coordinate = context.viewState.mapAnnotationCoordinate else {
-            return .init(zoomLevel: context.viewState.zoomLevel)
+            return .init(zoomLevel: context.viewState.zoomLevel,
+                         fallbackZoomLevel: context.viewState.fallbackZoomLevel,
+                         mapCenter: context.viewState.initialMapCenter,
+                         shouldCenterOnUser: true)
         }
 
         return .init(zoomLevel: context.viewState.zoomLevel,
-                     mapCenter: coordinate,
+                     fallbackZoomLevel: context.viewState.fallbackZoomLevel,
+                     mapCenter: context.viewState.initialMapCenter,
+                     shouldCenterOnUser: true,
                      annotations: [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
                          LocationMarkerView()
                      }])
@@ -109,6 +117,15 @@ struct StaticLocationScreen: View {
                 Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
+    }
+    
+    private var centerToUserLocationButton: some View {
+        Button {
+            context.send(viewAction: .centerToUser)
+        } label: {
+            Image(asset: Asset.Images.locationPointer)
+        }
+        .padding(16)
     }
     
     private var closeButton: some View {

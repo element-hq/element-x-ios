@@ -22,6 +22,7 @@ import Foundation
 enum ShowUserLocationMode {
     /// this mode will show the user pin in map
     case show
+    case showAndCenter
     /// this mode will show the user pin in map and track him, panning the map automatically
     case showAndFollow
     /// this mode will not show the user pin in map

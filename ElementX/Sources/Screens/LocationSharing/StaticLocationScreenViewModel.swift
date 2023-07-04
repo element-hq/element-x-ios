@@ -38,8 +38,11 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             actionsSubject.send(.sendLocation(.init(coordinate: coordinate), isUserLocation: state.isSharingUserLocation))
         case .userDidPan:
-            state.showsUserLocationMode = .hide
+            state.bindings.showsUserLocationMode = .show
             state.isSharingUserLocation = false
+        case .centerToUser:
+            state.bindings.showsUserLocationMode = .showAndFollow
+            state.isSharingUserLocation = true
         }
     }
 }

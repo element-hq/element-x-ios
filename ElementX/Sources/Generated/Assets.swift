@@ -29,6 +29,9 @@ internal enum Asset {
     internal static let backgroundColor = ColorAsset(name: "colors/background-color")
   }
   internal enum Images {
+    internal static let locationMarker = ImageAsset(name: "images/location-marker")
+    internal static let locationPin = ImageAsset(name: "images/location-pin")
+    internal static let locationPointer = ImageAsset(name: "images/location-pointer")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
     internal static let closeCircle = ImageAsset(name: "images/close-circle")
@@ -37,8 +40,6 @@ internal enum Asset {
     internal static let encryptionWarning = ImageAsset(name: "images/encryption-warning")
     internal static let launchBackground = ImageAsset(name: "images/launch-background")
     internal static let launchLogo = ImageAsset(name: "images/launch-logo")
-    internal static let locationMarker = ImageAsset(name: "images/location-marker")
-    internal static let locationPin = ImageAsset(name: "images/location-pin")
     internal static let timelineComposerSendMessage = ImageAsset(name: "images/timeline-composer-send-message")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
   }
