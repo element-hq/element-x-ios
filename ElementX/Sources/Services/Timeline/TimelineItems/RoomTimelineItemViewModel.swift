@@ -28,8 +28,12 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
         type.id
     }
 
-    init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
-        type = RoomTimelineItemType(item: item)
+    convenience init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+        self.init(type: .init(item: item), groupStyle: groupStyle)
+    }
+
+    init(type: RoomTimelineItemType, groupStyle: TimelineGroupStyle) {
+        self.type = type
         self.groupStyle = groupStyle
     }
 
