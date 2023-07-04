@@ -133,7 +133,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     }
 }
 
- struct TimelineItemPlainStylerView_Previews: PreviewProvider {
+struct TimelineItemPlainStylerView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
@@ -148,4 +148,4 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
     }
- }
+}
