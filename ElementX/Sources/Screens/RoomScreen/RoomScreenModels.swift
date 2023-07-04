@@ -109,7 +109,7 @@ struct RoomScreenViewState: BindableState {
         itemsDictionary.keys.elements
     }
 
-    var items: [RoomTimelineItemViewModel] {
+    var itemViewModels: [RoomTimelineItemViewModel] {
         itemsDictionary.values.elements
     }
     

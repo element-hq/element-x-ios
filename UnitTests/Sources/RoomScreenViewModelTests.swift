@@ -51,9 +51,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped together.
-        XCTAssertEqual(viewModel.state.items[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.items[1].groupStyle, .middle, "Nothing should prevent the middle message from being grouped.")
-        XCTAssertEqual(viewModel.state.items[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[1].groupStyle, .middle, "Nothing should prevent the middle message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
     }
     
     func testMessageGroupingMultipleSenders() {
@@ -84,12 +84,12 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped by sender.
-        XCTAssertEqual(viewModel.state.items[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
-        XCTAssertEqual(viewModel.state.items[1].groupStyle, .single, "A message should not be grouped when the sender changes.")
-        XCTAssertEqual(viewModel.state.items[2].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
-        XCTAssertEqual(viewModel.state.items[3].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
-        XCTAssertEqual(viewModel.state.items[4].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
-        XCTAssertEqual(viewModel.state.items[5].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
+        XCTAssertEqual(viewModel.state.itemViewModels[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
+        XCTAssertEqual(viewModel.state.itemViewModels[1].groupStyle, .single, "A message should not be grouped when the sender changes.")
+        XCTAssertEqual(viewModel.state.itemViewModels[2].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
+        XCTAssertEqual(viewModel.state.itemViewModels[3].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
+        XCTAssertEqual(viewModel.state.itemViewModels[4].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
+        XCTAssertEqual(viewModel.state.itemViewModels[5].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
     }
     
     func testMessageGroupingWithLeadingReactions() {
@@ -115,9 +115,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
         
         // Then the first message should not be grouped but the other two should.
-        XCTAssertEqual(viewModel.state.items[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
-        XCTAssertEqual(viewModel.state.items[1].groupStyle, .first, "A new group should be made when the preceding message has reactions.")
-        XCTAssertEqual(viewModel.state.items[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[1].groupStyle, .first, "A new group should be made when the preceding message has reactions.")
+        XCTAssertEqual(viewModel.state.itemViewModels[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
     }
     
     func testMessageGroupingWithInnerReactions() {
@@ -143,9 +143,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
         
         // Then the first and second messages should be grouped and the last one should not.
-        XCTAssertEqual(viewModel.state.items[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.items[1].groupStyle, .last, "When the message has reactions, the group should end here.")
-        XCTAssertEqual(viewModel.state.items[2].groupStyle, .single, "The last message should not be grouped when the preceding message has reactions.")
+        XCTAssertEqual(viewModel.state.itemViewModels[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[1].groupStyle, .last, "When the message has reactions, the group should end here.")
+        XCTAssertEqual(viewModel.state.itemViewModels[2].groupStyle, .single, "The last message should not be grouped when the preceding message has reactions.")
     }
     
     func testMessageGroupingWithTrailingReactions() {
@@ -171,9 +171,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
         
         // Then the messages should be grouped together.
-        XCTAssertEqual(viewModel.state.items[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.items[1].groupStyle, .middle, "Nothing should prevent the second message from being grouped.")
-        XCTAssertEqual(viewModel.state.items[2].groupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[1].groupStyle, .middle, "Nothing should prevent the second message from being grouped.")
+        XCTAssertEqual(viewModel.state.itemViewModels[2].groupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
     }
 
     func testGoToUserDetailsSuccessNoDelay() async {

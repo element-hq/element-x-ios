@@ -27,10 +27,6 @@ struct TimelineItemStatusView: View {
             timelineItem.isOutgoing
     }
 
-    private var isLast: Bool {
-        context.viewState.itemIDs.last == timelineItem.id
-    }
-
     var body: some View {
         if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts

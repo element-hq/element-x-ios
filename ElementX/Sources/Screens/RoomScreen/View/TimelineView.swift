@@ -46,7 +46,7 @@ struct TimelineView: UIViewControllerRepresentable {
         init(viewModelContext: RoomScreenViewModel.Context) {
             context = viewModelContext
             
-            if viewModelContext.viewState.items.isEmpty {
+            if viewModelContext.viewState.itemViewModels.isEmpty {
                 viewModelContext.send(viewAction: .paginateBackwards)
             }
         }
