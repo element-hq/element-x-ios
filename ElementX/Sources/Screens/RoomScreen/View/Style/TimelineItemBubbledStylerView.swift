@@ -33,6 +33,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     
+    // Additional padding on the avatar side of the bubble. The
+    // amount depends on whether the avatar is shown or hidden.
+    var bubbleTrailingPadding: CGFloat { timelineItem.isOutgoing ? 8 : 0 }
+    var bubbleLeadingPadding: CGFloat {
+        guard !timelineItem.isOutgoing else { return 0 }
+        return isEncryptedOneToOneRoom ? 8 : 16
+    }
+    
     var reactionsLayoutDirection: LayoutDirection {
         guard timelineItem.isOutgoing else { return layoutDirection }
         return layoutDirection == .leftToRight ? .rightToLeft : .leftToRight
@@ -54,7 +62,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
                         messageBubbleWithReactions
                     }
-                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 56) // Padding to differentiate alignment.
                     
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
@@ -66,7 +74,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                             .padding(.bottom, 3)
                     }
                 }
-                .padding(.horizontal, 16)
+                .padding(.leading, bubbleLeadingPadding)
+                .padding(.trailing, bubbleTrailingPadding)
             }
         }
     }
