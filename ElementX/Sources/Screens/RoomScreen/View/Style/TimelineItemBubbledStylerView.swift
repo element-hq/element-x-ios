@@ -33,12 +33,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     
-    // Additional padding on the avatar side of the bubble. The
-    // amount depends on whether the avatar is shown or hidden.
-    var bubbleTrailingPadding: CGFloat { timelineItem.isOutgoing ? 8 : 0 }
-    var bubbleLeadingPadding: CGFloat {
-        guard !timelineItem.isOutgoing else { return 0 }
-        return isEncryptedOneToOneRoom ? 8 : 16
+    /// The base padding applied to bubbles on either side.
+    ///
+    /// **Note:** This is on top of the insets applied to the cells by the table view.
+    let bubbleHorizontalPadding: CGFloat = 8
+    /// Additional padding applied to outgoing bubbles when the avatar is shown
+    var bubbleAvatarPadding: CGFloat {
+        guard !timelineItem.isOutgoing, !isEncryptedOneToOneRoom else { return 0 }
+        return 8
     }
     
     var reactionsLayoutDirection: LayoutDirection {
@@ -62,7 +64,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
                         messageBubbleWithReactions
                     }
-                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 56) // Padding to differentiate alignment.
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
                     
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
@@ -74,8 +76,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                             .padding(.bottom, 3)
                     }
                 }
-                .padding(.leading, bubbleLeadingPadding)
-                .padding(.trailing, bubbleTrailingPadding)
+                .padding(.horizontal, bubbleHorizontalPadding)
+                .padding(.leading, bubbleAvatarPadding)
             }
         }
     }
