@@ -40,7 +40,7 @@ class TimelineTableViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineStyle: TimelineStyle
-    var timelineItems = OrderedDictionary<String, RoomTimelineItemViewModel>() {
+    var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>() {
         didSet {
             guard !scrollAdapter.isScrolling.value else {
                 // Delay updating until scrolling has stopped as programatic
@@ -51,7 +51,7 @@ class TimelineTableViewController: UIViewController {
 
             applySnapshot()
 
-            if timelineItems.isEmpty {
+            if timelineItemsDictionary.isEmpty {
                 paginateBackwardsPublisher.send()
             }
         }
@@ -77,7 +77,7 @@ class TimelineTableViewController: UIViewController {
     @Binding private var scrollToBottomButtonVisible: Bool
 
     private var timelineItemsIDs: [String] {
-        timelineItems.keys.elements
+        timelineItemsDictionary.keys.elements
     }
     
     /// The table's diffable data source.
@@ -196,7 +196,7 @@ class TimelineTableViewController: UIViewController {
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
 
-            let viewModel = timelineItems[id]
+            let viewModel = timelineItemsDictionary[id]
             cell.item = viewModel
             guard let viewModel else {
                 return cell
@@ -240,7 +240,7 @@ class TimelineTableViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(timelineItems.keys.elements)
+        snapshot.appendItems(timelineItemsDictionary.keys.elements)
         dataSource.apply(snapshot, animatingDifferences: false)
 
         updateTopPadding()

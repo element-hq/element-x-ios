@@ -56,8 +56,8 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.timelineStyle != timelineStyle {
                 tableViewController.timelineStyle = timelineStyle
             }
-            if tableViewController.timelineItems != context.viewState.items {
-                tableViewController.timelineItems = context.viewState.items
+            if tableViewController.timelineItemsDictionary != context.viewState.itemsDictionary {
+                tableViewController.timelineItemsDictionary = context.viewState.itemsDictionary
             }
             if tableViewController.canBackPaginate != context.viewState.canBackPaginate {
                 tableViewController.canBackPaginate = context.viewState.canBackPaginate

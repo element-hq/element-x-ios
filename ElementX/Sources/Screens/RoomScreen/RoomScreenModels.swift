@@ -86,7 +86,7 @@ struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
     var roomAvatarURL: URL?
-    var items = OrderedDictionary<String, RoomTimelineItemViewModel>()
+    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
     var members: [String: RoomMemberState] = [:]
     var canBackPaginate = true
     var isBackPaginating = false
@@ -106,7 +106,11 @@ struct RoomScreenViewState: BindableState {
     }
 
     var itemIDs: [String] {
-        items.keys.elements
+        itemsDictionary.keys.elements
+    }
+
+    var items: [RoomTimelineItemViewModel] {
+        itemsDictionary.values.elements
     }
     
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
