@@ -184,8 +184,8 @@ final class AppSettings {
     // MARK: - Maps
     
     // maptiler map urls
-    let lightTileMapStyleURL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810"
-    let darkTileMapStyleURL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3"
+    let lightTileMapStyleURL: URL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810"
+    let darkTileMapStyleURL: URL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3"
 
     // maptiler api key
     let mapTilerApiKey = "fU3vlMsMn4Jb6dnEIFsx"
