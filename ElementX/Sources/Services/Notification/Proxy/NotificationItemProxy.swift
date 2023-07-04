@@ -37,69 +37,14 @@ protocol NotificationItemProxyProtocol {
 
     var roomAvatarMediaSource: MediaSourceProxy? { get }
 
+    var roomJoinedMembers: Int { get }
+
+    var isRoomDirect: Bool { get }
+
     var isNoisy: Bool { get }
-
-    var isDirect: Bool { get }
-
-    /// Returns `true` if the event of the notification belongs to an encrypted room
-    var isRoomEncrypted: Bool? { get }
-
-    /// Returns `true` if was not possible to decrypt the notification content
-    var isEncrypted: Bool { get }
 }
 
-struct NotificationItemProxy: NotificationItemProxyProtocol {
-    let notificationItem: NotificationItem
-    let receiverID: String
-
-    var event: TimelineEventProxyProtocol {
-        TimelineEventProxy(timelineEvent: notificationItem.event)
-    }
-
-    var roomID: String {
-        notificationItem.roomId
-    }
-
-    var senderDisplayName: String? {
-        notificationItem.senderDisplayName
-    }
-
-    var roomDisplayName: String {
-        notificationItem.roomDisplayName
-    }
-
-    var roomCanonicalAlias: String? {
-        notificationItem.roomCanonicalAlias
-    }
-
-    var isNoisy: Bool {
-        notificationItem.isNoisy
-    }
-
-    var isDirect: Bool {
-        notificationItem.isDirect
-    }
-
-    var isRoomEncrypted: Bool? {
-        notificationItem.isEncrypted
-    }
-
-    var senderAvatarMediaSource: MediaSourceProxy? {
-        if let senderAvatarURLString = notificationItem.senderAvatarUrl,
-           let senderAvatarURL = URL(string: senderAvatarURLString) {
-            return MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
-        }
-        return nil
-    }
-
-    var roomAvatarMediaSource: MediaSourceProxy? {
-        if let roomAvatarURLString = notificationItem.roomAvatarUrl,
-           let roomAvatarURL = URL(string: roomAvatarURLString) {
-            return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
-        }
-        return nil
-    }
-
+extension NotificationItemProxyProtocol {
     var isEncrypted: Bool {
         switch event.type {
         case .messageLike(let content):
@@ -112,6 +57,63 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         default:
             return false
         }
+    }
+
+    var isDM: Bool {
+        isRoomDirect && roomJoinedMembers <= 2
+    }
+}
+
+struct NotificationItemProxy: NotificationItemProxyProtocol {
+    let notificationItem: NotificationItem
+    let receiverID: String
+
+    var event: TimelineEventProxyProtocol {
+        TimelineEventProxy(timelineEvent: notificationItem.event)
+    }
+
+    var roomID: String {
+        notificationItem.roomInfo.id
+    }
+
+    var senderDisplayName: String? {
+        notificationItem.senderInfo.displayName
+    }
+
+    var roomDisplayName: String {
+        notificationItem.roomInfo.displayName
+    }
+
+    var roomCanonicalAlias: String? {
+        notificationItem.roomInfo.canonicalAlias
+    }
+
+    var isRoomDirect: Bool {
+        notificationItem.roomInfo.isDirect
+    }
+
+    var roomJoinedMembers: Int {
+        Int(notificationItem.roomInfo.joinedMembersCount)
+    }
+
+    var isNoisy: Bool {
+        notificationItem.isNoisy
+    }
+
+    var senderAvatarMediaSource: MediaSourceProxy? {
+        if let senderAvatarURLString = notificationItem.senderInfo.avatarUrl,
+           let senderAvatarURL = URL(string: senderAvatarURLString) {
+            return MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
+        }
+        return nil
+    }
+
+    var roomAvatarMediaSource: MediaSourceProxy? {
+        if let roomAvatarURLString = notificationItem.roomInfo.avatarUrl,
+           let roomAvatarURL = URL(string: roomAvatarURLString) {
+            return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
+        }
+        return nil
     }
 }
 
@@ -138,7 +140,7 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isNoisy: Bool { false }
 
-    var isDirect: Bool { false }
+    var isRoomDirect: Bool { false }
 
     var isRoomEncrypted: Bool? { nil }
 
@@ -148,7 +150,7 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var notificationIdentifier: String { "" }
 
-    var isEncrypted: Bool { false }
+    var roomJoinedMembers: Int { 0 }
 }
 
 extension NotificationItemProxyProtocol {
@@ -187,7 +189,7 @@ extension NotificationItemProxyProtocol {
     }
 
     var icon: NotificationIcon {
-        if isDirect {
+        if isDM {
             return NotificationIcon(mediaSource: senderAvatarMediaSource, groupInfo: nil)
         } else {
             return NotificationIcon(mediaSource: roomAvatarMediaSource,
@@ -247,7 +249,7 @@ extension NotificationItemProxyProtocol {
         notification.categoryIdentifier = NotificationConstants.Category.invite
 
         let body: String
-        if !isDirect {
+        if !isDM {
             body = L10n.notificationRoomInviteBody
         } else {
             body = L10n.notificationInviteBody
