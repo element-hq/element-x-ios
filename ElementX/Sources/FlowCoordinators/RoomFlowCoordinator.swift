@@ -511,13 +511,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .selectedLocation(let geoURI):
+            case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
                     _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
                                                            geoURI: geoURI,
                                                            description: nil,
                                                            zoomLevel: nil,
-                                                           assetType: .pin)
+                                                           assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             case .close:

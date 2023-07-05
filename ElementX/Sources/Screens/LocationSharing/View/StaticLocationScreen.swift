@@ -106,7 +106,7 @@ struct StaticLocationScreen: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: shareMarkerSize, height: shareMarkerSize)
-                Text(context.viewState.isPinDropSharing ? L10n.screenShareThisLocationAction : L10n.screenShareMyLocationAction)
+                Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
     }
