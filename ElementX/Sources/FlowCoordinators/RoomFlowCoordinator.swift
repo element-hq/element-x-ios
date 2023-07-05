@@ -520,6 +520,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                            assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
+                
+                self.analytics.trackComposer(inThread: false,
+                                             isEditing: false,
+                                             isLocation: true,
+                                             isReply: false,
+                                             locationType: isUserLocation ? .MyLocation : .PinDrop,
+                                             startsThread: nil)
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             }
