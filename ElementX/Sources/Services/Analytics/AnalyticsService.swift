@@ -140,10 +140,22 @@ extension AnalyticsService {
     /// - Parameters:
     ///   - inThread: whether the composer is used in a Thread
     ///   - isEditing: whether the composer is used to edit a message
+    ///   - isLocation: whether this message it's a shared location
     ///   - isReply: whether the composer is used to reply a message
+    ///   - locationType: the type of the shared location
     ///   - startsThread: whether the composer is used to start a new thread
-    func trackComposer(inThread: Bool, isEditing: Bool, isReply: Bool, startsThread: Bool?) {
-        capture(event: AnalyticsEvent.Composer(inThread: inThread, isEditing: isEditing, isReply: isReply, startsThread: startsThread))
+    func trackComposer(inThread: Bool,
+                       isEditing: Bool,
+                       isLocation: Bool,
+                       isReply: Bool,
+                       locationType: AnalyticsEvent.Composer.LocationType? = nil,
+                       startsThread: Bool?) {
+        capture(event: AnalyticsEvent.Composer(inThread: inThread,
+                                               isEditing: isEditing,
+                                               isLocation: isLocation,
+                                               isReply: isReply,
+                                               locationType: locationType,
+                                               startsThread: startsThread))
     }
     
     /// Track the presentation of a room

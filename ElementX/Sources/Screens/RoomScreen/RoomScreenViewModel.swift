@@ -337,7 +337,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             break
         }
 
-        analytics.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
+        analytics.trackComposer(inThread: false, isEditing: isEdit, isLocation: false, isReply: isReply, startsThread: nil)
     }
     
     private func displayError(_ type: RoomScreenErrorType) {
