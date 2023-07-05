@@ -226,8 +226,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func dismissMigrationScreen() {
         navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+
+        // Not sure why but the full screen closure dismissal closure doesn't seem to work properly
+        // And not using the DispatchQueue.main results in the the screen getting presented as full screen too.
         if !appSettings.hasShownWelcomeScreen {
-            stateMachine.processEvent(.presentWelcomeScreen)
+            DispatchQueue.main.async {
+                self.stateMachine.processEvent(.presentWelcomeScreen)
+            }
         }
     }
     
