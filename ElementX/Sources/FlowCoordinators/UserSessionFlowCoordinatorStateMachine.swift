@@ -116,7 +116,7 @@ class UserSessionFlowCoordinatorStateMachine {
         stateMachine.addRoutes(event: .startWithWelcomeScreen, transitions: [.initial => .welcomeScreen])
         stateMachine.addRoutes(event: .completeMigration, transitions: [.migration => .roomList(selectedRoomId: nil)])
         stateMachine.addRoutes(event: .dismissedWelcomeScreen, transitions: [.welcomeScreen => .roomList(selectedRoomId: nil)])
-        
+
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
             case (.selectRoom(let roomId), .roomList):
@@ -155,6 +155,9 @@ class UserSessionFlowCoordinatorStateMachine {
 
             case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
+
+            case (.presentWelcomeScreen, .roomList):
+                return .welcomeScreen
                 
             default:
                 return nil

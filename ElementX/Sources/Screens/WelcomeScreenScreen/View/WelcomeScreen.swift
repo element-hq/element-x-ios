@@ -45,6 +45,9 @@ struct WelcomeScreen: View {
     private var header: some View {
         VStack(spacing: 32) {
             Image(asset: Asset.Images.launchLogo)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 118, height: 118)
                 .accessibilityHidden(true)
             title
         }

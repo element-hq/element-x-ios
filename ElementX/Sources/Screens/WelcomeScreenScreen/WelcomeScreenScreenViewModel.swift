@@ -20,13 +20,15 @@ import SwiftUI
 typealias WelcomeScreenScreenViewModelType = StateStoreViewModel<WelcomeScreenScreenViewState, WelcomeScreenScreenViewAction>
 
 class WelcomeScreenScreenViewModel: WelcomeScreenScreenViewModelType, WelcomeScreenScreenViewModelProtocol {
+    let appSettings: AppSettings
     private var actionsSubject: PassthroughSubject<WelcomeScreenScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<WelcomeScreenScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
+    init(appSettings: AppSettings = ServiceLocator.shared.settings) {
+        self.appSettings = appSettings
         super.init(initialViewState: WelcomeScreenScreenViewState())
     }
     
@@ -37,9 +39,7 @@ class WelcomeScreenScreenViewModel: WelcomeScreenScreenViewModelType, WelcomeScr
         case .doneTapped:
             actionsSubject.send(.dismiss)
         case .appeared:
-            // TODO: Set service locator settings to true
-//            ServiceLocator.shared.settings.hasShownWelcomeScreen = true
-            break
+            appSettings.hasShownWelcomeScreen = true
         }
     }
 }
