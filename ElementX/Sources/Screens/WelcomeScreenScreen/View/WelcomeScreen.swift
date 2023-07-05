@@ -37,7 +37,7 @@ struct WelcomeScreen: View {
     private var mainContent: some View {
         VStack(spacing: 42) {
             header
-            checkmarkList
+            list
         }
     }
 
@@ -67,8 +67,7 @@ struct WelcomeScreen: View {
         }
     }
 
-    /// The list of re-assurances about analytics.
-    private var checkmarkList: some View {
+    private var list: some View {
         VStack(alignment: .leading, spacing: 4) {
             RoundedLabelItem(title: context.viewState.bullet1, listPosition: .top) {
                 Image(systemName: "exclamationmark.transmission")
