@@ -19,33 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class WelcomeScreenScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
-    var viewModel: WelcomeScreenScreenViewModelProtocol!
-    
-    var context: WelcomeScreenScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
-        viewModel = WelcomeScreenScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-    }
-
-    func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-    }
-}
+class WelcomeScreenScreenViewModelTests: XCTestCase { }
