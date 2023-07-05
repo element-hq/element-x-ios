@@ -279,7 +279,7 @@
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_invite_people_title" = "Invite people";
-"screen_room_details_notification_title" = "Notification";
+"screen_room_details_notification_title" = "Notifications";
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
@@ -336,6 +336,12 @@
 "screen_waitlist_message_success" = "Welcome to %1$@!";
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
+"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
+"screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
+"screen_welcome_button" = "Let's go!";
+"screen_welcome_subtitle" = "Here’s what you need to know:";
+"screen_welcome_title" = "Welcome to %1$@!";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.";
 "session_verification_banner_title" = "Verify it’s you";
 "settings_rageshake" = "Rageshake";

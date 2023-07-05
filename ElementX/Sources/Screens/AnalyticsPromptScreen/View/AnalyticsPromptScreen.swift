@@ -58,16 +58,31 @@ struct AnalyticsPromptScreen: View {
                 .foregroundColor(.compound.textSecondary)
         }
     }
+
+    @ViewBuilder
+    private var checkMark: some View {
+        Image(systemName: "checkmark.circle")
+            .symbolVariant(.fill)
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(Color.compound.iconAccentTertiary, Color.compound.textOnSolidPrimary)
+    }
     
     /// The list of re-assurances about analytics.
     private var checkmarkList: some View {
         VStack(alignment: .leading, spacing: 4) {
-            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point1, listPosition: .top)
-            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point2, listPosition: .middle)
-            AnalyticsPromptScreenCheckmarkItem(title: context.viewState.strings.point3, listPosition: .bottom)
+            checkMarkItem(title: context.viewState.strings.point1, position: .top)
+            checkMarkItem(title: context.viewState.strings.point2, position: .middle)
+            checkMarkItem(title: context.viewState.strings.point3, position: .bottom)
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private func checkMarkItem(title: String, position: ListPosition) -> some View {
+        RoundedLabelItem(title: title, listPosition: position) {
+            checkMark
+        }
     }
     
     /// The stack of enable/disable buttons.

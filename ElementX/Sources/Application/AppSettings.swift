@@ -33,6 +33,7 @@ final class AppSettings {
         case readReceiptsEnabled
         case locationEventsEnabled
         case shareLocationEnabled
+        case hasShownWelcomeScreen
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -89,6 +90,9 @@ final class AppSettings {
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+
+    @UserPreference(key: UserDefaultsKeys.hasShownWelcomeScreen, defaultValue: false, storageType: .userDefaults(store))
+    var hasShownWelcomeScreen: Bool
     
     // MARK: - Authentication
     
@@ -119,7 +123,7 @@ final class AppSettings {
     /// proxy that it is the first sync (or that an upgrade on the backend will involve a slower sync).
     @UserPreference(key: UserDefaultsKeys.migratedAccounts, defaultValue: [:], storageType: .userDefaults(store))
     var migratedAccounts: [String: Bool]
-    
+
     // MARK: - Notifications
     
     var pusherAppId: String {
