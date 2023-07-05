@@ -523,7 +523,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
                 self.analytics.trackComposer(inThread: false,
                                              isEditing: false,
-                                             isLocation: true,
                                              isReply: false,
                                              locationType: isUserLocation ? .MyLocation : .PinDrop,
                                              startsThread: nil)
