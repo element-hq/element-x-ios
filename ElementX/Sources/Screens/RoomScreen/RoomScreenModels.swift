@@ -127,6 +127,8 @@ struct RoomScreenViewStateBindings {
         }
     }
     
+    /// The state of wether reactions listed on the timeline are expanded/collapsed.
+    /// Key is itemID, value is the collapsed state.
     var reactionsCollapsed: [String: Bool]
     
     /// A media item that will be previewed with QuickLook.
