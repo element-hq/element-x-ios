@@ -20,6 +20,7 @@ import SwiftUI
 /// The nth subview is the collapse/expand button which is only shown when the layout overflows `linesBeforeCollapsible` number of lines.
 /// When the button is shown it is tagged on the end of the collapsed or expanded layout.
 struct CollapsibleFlowLayout: Layout {
+    static let pointOffscreen = CGPoint(x: -10000, y: -10000)
     /// The horizontal spacing between items
     let itemSpacing: CGFloat
     /// The vertical spacing between lines
@@ -79,7 +80,7 @@ struct CollapsibleFlowLayout: Layout {
                 placeSubviews(in: bounds, lines: collapsedLinesWithButton)
                 // "Remove" (place with a proposed zero frame) any additional subviews
                 remainingSubviews.forEach { subview in
-                    subview.place(at: CGPoint(x: bounds.midX, y: bounds.midY), anchor: .leading, proposal: .zero)
+                    subview.place(at: Self.pointOffscreen, anchor: .leading, proposal: .zero)
                 }
                 
             } else {
@@ -91,7 +92,7 @@ struct CollapsibleFlowLayout: Layout {
             // Otherwise we are just calculating the size of all items without the button
             placeSubviews(in: bounds, lines: linesNoButton)
             // "Remove"(place with a proposed zero frame) the button
-            button.place(at: CGPoint(x: bounds.midX, y: bounds.midY), anchor: .leading, proposal: .zero)
+            button.place(at: Self.pointOffscreen, anchor: .leading, proposal: .zero)
         }
     }
     

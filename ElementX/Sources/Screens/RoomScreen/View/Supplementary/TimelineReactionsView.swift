@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import Flow
 import SwiftUI
 
 struct TimelineReactionsView: View {
@@ -29,45 +28,19 @@ struct TimelineReactionsView: View {
     let itemID: String
     let reactions: [AggregatedReaction]
     @Binding var collapsed: Bool
-    
-    @State private var collapseButtonFrame: CGRect = .zero
-    @State private var reactionsContainerFame: CGRect = .zero
-    @State private var reactionButtonFrames: [String: CGRect] = [:]
-    
-    /// The count of reactions hidden in the collapsed state
-    var hiddenCount: Int {
-        reactionButtonFrames.values.map {
-            /// The reaction views minimum heigh doesn't go to zero due to padding, hence the weird number here.
-            $0.height < 20 ? 1 : 0
-        }.reduce(0, +)
-    }
-    
+        
     var body: some View {
         CollapsibleFlowLayout(itemSpacing: 4, lineSpacing: 4, collapsed: collapsed, linesBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(itemID: itemID, reaction: reaction)
-                    .opacity((reactionButtonFrames[reaction.key] ?? .zero).size.height < 20 ? 0 : 1)
-                    .background(ViewFrameReader(frame: reactionsFrameBinding(for: reaction.key), coordinateSpace: .named(Self.flowCoordinateSpace)))
             }
             Button {
                 collapsed.toggle()
             } label: {
-                TimelineCollapseButton(collapsed: collapsed, hiddenCount: hiddenCount)
+                TimelineCollapseButton(collapsed: collapsed)
             }
-            /// The reaction views minimum heigh doesn't go to zero due to padding, hence the weird number here.
-            .opacity(collapseButtonFrame.size.height < 20 ? 0 : 1)
-            .background(ViewFrameReader(frame: $collapseButtonFrame, coordinateSpace: .named(Self.flowCoordinateSpace)))
         }
-        .background(ViewFrameReader(frame: $reactionsContainerFame, coordinateSpace: .named(Self.flowCoordinateSpace)))
         .coordinateSpace(name: Self.flowCoordinateSpace)
-    }
-    
-    private func reactionsFrameBinding(for key: String) -> Binding<CGRect> {
-        Binding(get: {
-            reactionButtonFrames[key] ?? .zero
-        }, set: {
-            reactionButtonFrames[key] = $0
-        })
     }
 }
 
@@ -103,11 +76,10 @@ struct TimelineReactionButtonLabel<Content: View>: View {
 
 struct TimelineCollapseButton: View {
     var collapsed: Bool
-    var hiddenCount: Int
     
     var body: some View {
         TimelineReactionButtonLabel {
-            Text(collapsed ? L10n.screenRoomReactionsShowMore(hiddenCount) : L10n.screenRoomReactionsShowLess)
+            Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
                 .layoutPriority(1)
                 .drawingGroup()
                 .font(.compound.bodyMD)

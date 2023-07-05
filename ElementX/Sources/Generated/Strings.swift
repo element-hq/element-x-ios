@@ -704,7 +704,7 @@ public enum L10n {
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
-  /// Notification
+  /// Notifications
   public static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
@@ -718,6 +718,8 @@ public enum L10n {
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
+  /// Message history is currently unavailable in this room
+  public static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
@@ -752,10 +754,8 @@ public enum L10n {
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
   /// Show less
   public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
-  /// Show %d
-  public static func screenRoomReactionsShowMore(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_room_reactions_show_more", p1)
-  }
+  /// Show more
+  public static var screenRoomReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_reactions_show_more") }
   /// Remove
   public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again
@@ -854,9 +854,23 @@ public enum L10n {
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
   /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
-  /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
+  /// Calls, location sharing, search and more will be added later this year.
+  public static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
+  /// Message history for encrypted rooms won’t be available in this update.
+  public static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
+  /// We’d love to hear from you, let us know what you think via the settings page.
+  public static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
+  /// Let's go!
+  public static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
+  /// Here’s what you need to know:
+  public static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
+  /// Welcome to %1$@!
+  public static func screenWelcomeTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
+  }
+  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
-  /// Access your message history
+  /// Verify it’s you
   public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
   /// Rageshake
   public static var settingsRageshake: String { return L10n.tr("Localizable", "settings_rageshake") }

@@ -279,10 +279,11 @@
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
 "screen_room_details_invite_people_title" = "Invite people";
-"screen_room_details_notification_title" = "Notification";
+"screen_room_details_notification_title" = "Notifications";
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
+"screen_room_encrypted_history_banner" = "Message history is currently unavailable in this room";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_invite_again_alert_message" = "Would you like to invite them back?";
 "screen_room_invite_again_alert_title" = "You are alone in this chat";
@@ -296,6 +297,8 @@
 "screen_room_member_list_room_members_header_title" = "Room members";
 "screen_room_message_copied" = "Message copied";
 "screen_room_no_permission_to_post" = "You do not have permission to post to this room";
+"screen_room_reactions_show_less" = "Show less";
+"screen_room_reactions_show_more" = "Show more";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
@@ -335,8 +338,14 @@
 "screen_waitlist_message_success" = "Welcome to %1$@!";
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
-"session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
-"session_verification_banner_title" = "Access your message history";
+"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
+"screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
+"screen_welcome_button" = "Let's go!";
+"screen_welcome_subtitle" = "Here’s what you need to know:";
+"screen_welcome_title" = "Welcome to %1$@!";
+"session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.";
+"session_verification_banner_title" = "Verify it’s you";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Detection threshold";
 "settings_title_general" = "General";
@@ -425,8 +434,6 @@
 "screen_room_details_topic_title" = "Topic";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_room_retry_send_menu_remove_action" = "Remove";
-"screen_room_reactions_show_more" = "Show %d";
-"screen_room_reactions_show_less" = "Show less";
 "screen_session_verification_cancelled_title" = "Verification cancelled";
 "screen_session_verification_positive_button_ready" = "Start";
 "screen_signout_confirmation_dialog_submit" = "Sign out";

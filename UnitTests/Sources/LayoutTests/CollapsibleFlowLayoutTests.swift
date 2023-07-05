@@ -51,9 +51,9 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
             CGRect(x: 105, y: 25, width: 100, height: 50),
             CGRect(x: 0, y: 80, width: 100, height: 50),
             CGRect(x: 105, y: 80, width: 100, height: 50),
-            CGRect(x: 102.5, y: 52.5, width: 0, height: 0),
-            CGRect(x: 102.5, y: 52.5, width: 0, height: 0),
-            CGRect(x: 102.5, y: 52.5, width: 0, height: 0)
+            CGRect(x: -10000, y: -10000, width: 0, height: 0),
+            CGRect(x: -10000, y: -10000, width: 0, height: 0),
+            CGRect(x: -10000, y: -10000, width: 0, height: 0)
         ]
         XCTAssertEqual(placedViews, targetPlacements)
         
@@ -105,7 +105,7 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
             CGRect(x: 105, y: 25, width: 100, height: 50),
             CGRect(x: 0, y: 80, width: 100, height: 50),
             // Button is hidden
-            CGRect(x: 102.5, y: 52.5, width: 0, height: 0)
+            CGRect(x: -10000, y: -10000, width: 0, height: 0)
         ]
         XCTAssertEqual(placedViews, targetPlacements)
     }
@@ -130,7 +130,7 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
         flowLayout.placeSubviews(in: CGRect(origin: .zero, size: size), proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
         
         let targetPlacements: [CGRect] = [
-            CGRect(x: 0, y: 0, width: 0, height: 0)
+            CGRect(x: -10000, y: -10000, width: 0, height: 0)
         ]
         XCTAssertEqual(placedViews, targetPlacements)
     }
