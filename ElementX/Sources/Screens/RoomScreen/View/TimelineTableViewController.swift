@@ -119,6 +119,13 @@ class TimelineTableViewController: UIViewController {
         // for each possible cell, causing layout issues
         tableView.accessibilityElementsHidden = Tests.shouldDisableTimelineAccessibility
         
+        tableView.publisher(for: \.contentSize)
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.updateTopPadding()
+            }
+            .store(in: &cancellables)
+        
         scrollToBottomPublisher
             .sink { [weak self] _ in
                 self?.scrollToBottom(animated: true)
@@ -242,9 +249,11 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
         dataSource.apply(snapshot, animatingDifferences: false)
-
+        
+        // Probably redundant now we observe content size changes…
+        // Leaving in place for the release and will reassess after.
         updateTopPadding()
-
+        
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         } else if let pinnedItem = previousLayout.pinnedItem {
@@ -283,7 +292,8 @@ class TimelineTableViewController: UIViewController {
         let contentHeight = tableView.contentSize.height - headerHeight
         let newHeight = max(0, tableView.visibleSize.height - contentHeight)
         
-        guard newHeight != headerHeight else { return }
+        // Round the check to account floating point accuracy during keyboard appearance.
+        guard newHeight.rounded() != headerHeight.rounded() else { return }
         
         if newHeight > 0 {
             let frame = CGRect(origin: .zero, size: CGSize(width: tableView.contentSize.width, height: newHeight))

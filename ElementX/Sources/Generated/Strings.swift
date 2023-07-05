@@ -718,6 +718,8 @@ public enum L10n {
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
+  /// Message history is currently unavailable in this room
+  public static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
@@ -848,9 +850,9 @@ public enum L10n {
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
   /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
-  /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
+  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
-  /// Access your message history
+  /// Verify it’s you
   public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
   /// Rageshake
   public static var settingsRageshake: String { return L10n.tr("Localizable", "settings_rageshake") }

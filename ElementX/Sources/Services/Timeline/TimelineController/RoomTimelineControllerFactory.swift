@@ -17,12 +17,10 @@
 import Foundation
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(userId: String,
-                                     roomProxy: RoomProxyProtocol,
+    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
-        RoomTimelineController(userId: userId,
-                               roomProxy: roomProxy,
+        RoomTimelineController(roomProxy: roomProxy,
                                timelineItemFactory: timelineItemFactory,
                                mediaProvider: mediaProvider,
                                appSettings: ServiceLocator.shared.settings)
