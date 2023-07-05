@@ -164,7 +164,8 @@ extension NotificationItemProxyProtocol {
     }
 
     var requiresMediaProvider: Bool {
-        if senderAvatarMediaSource != nil || roomAvatarMediaSource != nil {
+        if (isDirect && senderAvatarMediaSource != nil) ||
+            (!isDirect && roomAvatarMediaSource != nil) {
             return true
         }
         switch event.type {
@@ -255,7 +256,8 @@ extension NotificationItemProxyProtocol {
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
-                                                            icon: icon)
+                                                            icon: icon,
+                                                            requiresMediaProvider: requiresMediaProvider)
         notification.body = body
         
         return notification
@@ -301,7 +303,8 @@ extension NotificationItemProxyProtocol {
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: event.senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
-                                                            icon: icon)
+                                                            icon: icon,
+                                                            requiresMediaProvider: requiresMediaProvider)
         return notification
     }
 

@@ -105,7 +105,10 @@ extension UNMutableNotificationContent {
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderID: String,
                        senderName: String,
-                       icon: NotificationIcon) async throws -> UNMutableNotificationContent {
+                       icon: NotificationIcon,
+                       requiresMediaProvider: Bool) async throws -> UNMutableNotificationContent {
+        let shouldSkipPlaceholder = requiresMediaProvider && mediaProvider == nil
+
         var fetchedImage: INImage?
         let image: INImage
         if let mediaSource = icon.mediaSource {
@@ -121,7 +124,8 @@ extension UNMutableNotificationContent {
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+        } else if !shouldSkipPlaceholder,
+                  let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
