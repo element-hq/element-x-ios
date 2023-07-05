@@ -71,12 +71,15 @@ struct WelcomeScreen: View {
         VStack(alignment: .leading, spacing: 4) {
             RoundedLabelItem(title: context.viewState.bullet1, listPosition: .top) {
                 Image(systemName: "exclamationmark.transmission")
+                    .foregroundColor(.compound.iconSecondary)
             }
             RoundedLabelItem(title: context.viewState.bullet2, listPosition: .middle) {
                 Image(systemName: "lock")
+                    .foregroundColor(.compound.iconSecondary)
             }
             RoundedLabelItem(title: context.viewState.bullet3, listPosition: .bottom) {
                 Image(systemName: "plus.bubble")
+                    .foregroundColor(.compound.iconSecondary)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
