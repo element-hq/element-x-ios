@@ -106,22 +106,31 @@ extension UNMutableNotificationContent {
                        senderID: String,
                        senderName: String,
                        icon: NotificationIcon) async throws -> UNMutableNotificationContent {
+        // We display the placeholder only if...
+        var needsPlaceholder = false
+
         var fetchedImage: INImage?
         let image: INImage
         if let mediaSource = icon.mediaSource {
-            switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
-            case .success(let data):
-                fetchedImage = INImage(imageData: data)
-            case .failure(let error):
-                MXLog.error("Couldn't add sender icon: \(error)")
-            case .none:
-                break
+            if let mediaProvider {
+                switch await mediaProvider.loadImageDataFromSource(mediaSource) {
+                case .success(let data):
+                    fetchedImage = INImage(imageData: data)
+                case .failure(let error):
+                    MXLog.error("Couldn't add sender icon: \(error)")
+                    // ...The provider failed to fetch
+                    needsPlaceholder = true
+                }
             }
+        } else {
+            // ...There is no media
+            needsPlaceholder = true
         }
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+        } else if needsPlaceholder,
+                  let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
@@ -176,26 +185,46 @@ extension UNMutableNotificationContent {
     }
 
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
+        let fileName = "notification_placeholder_\(name)_\(id).png"
+        if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
+            MXLog.info("Found existing notification icon placeholder")
+            return data
+        }
+
+        MXLog.info("Generating notification icon placeholder")
         let image = PlaceholderAvatarImage(name: name,
                                            contentID: id)
             .clipShape(Circle())
-            .frame(width: 100, height: 100)
+            .frame(width: 50, height: 50)
         let renderer = await ImageRenderer(content: image)
         guard let image = await renderer.uiImage else {
+            MXLog.info("Generating notification icon placeholder failed")
             return nil
         }
 
+        let data: Data?
         // On simulator and macOS the image is rendered correctly
         // But on other devices is rendered upside down so we need to flip it
         #if targetEnvironment(simulator)
-        return image.pngData()
+        data = image.pngData()
         #else
         if ProcessInfo.processInfo.isiOSAppOnMac {
-            return image.pngData()
+            data = image.pngData()
         } else {
-            return image.flippedVertically().pngData()
+            data = image.flippedVertically().pngData()
         }
         #endif
+
+        if let data {
+            do {
+                // cache image data
+                try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: fileName)
+            } catch {
+                MXLog.error("Could not store placeholder image")
+                return data
+            }
+        }
+        return data
     }
 }
 
