@@ -85,6 +85,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if appSettings.migratedAccounts[userSession.userID] != true {
             // Show the migration screen for a new account.
             stateMachine.processEvent(.startWithMigration)
+        } else if !appSettings.hasShownWelcomeScreen {
+            stateMachine.processEvent(.startWithWelcomeScreen)
         } else {
             // Otherwise go straight to the home screen.
             stateMachine.processEvent(.start)
@@ -106,7 +108,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return // Not ready to handle a route.
         case .roomList:
             break // Nothing to tidy up on the home screen.
-        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
+        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen, .welcomeScreen:
             navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         }
         
@@ -140,6 +142,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .startWithMigration, .migration):
                 self.presentMigrationScreen() // Full screen cover
                 self.presentHomeScreen() // Have the home screen ready to show underneath
+            case (.initial, .startWithWelcomeScreen, .welcomeScreen):
+                self.presentHomeScreen()
+                self.presentWelcomeScreen()
+            case (.welcomeScreen, .dismissedWelcomeScreen, .roomList):
+                break
             case (.migration, .completeMigration, .roomList):
                 self.dismissMigrationScreen()
                 
@@ -256,6 +263,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+
+    private func presentWelcomeScreen() {
+        let welcomeScreenCoordinator = WelcomeScreenScreenCoordinator()
+        welcomeScreenCoordinator.actions.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationSplitCoordinator.setSheetCoordinator(welcomeScreenCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedWelcomeScreen)
+        }
     }
     
     // MARK: Settings
