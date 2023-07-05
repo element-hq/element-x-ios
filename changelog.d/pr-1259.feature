@@ -1,1 +1,0 @@
-Added a welcome screen that will appear only once.
