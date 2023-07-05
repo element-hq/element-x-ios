@@ -17,28 +17,26 @@
 import CoreLocation
 
 struct MapTilerStaticMap: MapTilerStaticMapProtocol {
-    private let lightURL: String
-    private let darkURL: String
+    private let lightURL: URL
+    private let darkURL: URL
     private let key: String
 
-    init(key: String, lightURL: String, darkURL: String) {
+    init(key: String, lightURL: URL, darkURL: URL) {
         self.lightURL = lightURL
         self.darkURL = darkURL
         self.key = key
     }
     
     func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
-        var path: String
+        var url: URL
         switch style {
         case .light:
-            path = lightURL
+            url = lightURL
         case .dark:
-            path = darkURL
+            url = darkURL
         }
-        
-        path.append(String(format: "/static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)))
-        
-        guard var url = URL(string: path) else { return nil }
+
+        url.appendPathComponent(String(format: "static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)), conformingTo: .png)
         url.append(queryItems: [.init(name: "attribution", value: attribution.rawValue)])
         let authorization = MapTilerAuthorization(key: key)
         return authorization.authorizeURL(url)
