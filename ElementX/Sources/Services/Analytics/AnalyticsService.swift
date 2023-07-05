@@ -146,13 +146,13 @@ extension AnalyticsService {
     func trackComposer(inThread: Bool,
                        isEditing: Bool,
                        isReply: Bool,
-                       locationType: AnalyticsEvent.Composer.LocationType? = nil,
+                       locationType: AnalyticsLocationType? = nil,
                        startsThread: Bool?) {
         capture(event: AnalyticsEvent.Composer(inThread: inThread,
                                                isEditing: isEditing,
                                                isLocation: locationType != nil,
                                                isReply: isReply,
-                                               locationType: locationType,
+                                               locationType: locationType.map { .init($0) },
                                                startsThread: startsThread))
     }
     
