@@ -271,15 +271,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         self.roomProxy = roomProxy
         
-        let userId = userSession.clientProxy.userID
+        let userID = userSession.clientProxy.userID
         
-        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userId))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
         
-        let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
-                                                                                           roomProxy: roomProxy,
+        let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController

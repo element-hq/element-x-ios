@@ -718,6 +718,8 @@ public enum L10n {
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
+  /// Message history is currently unavailable in this room
+  public static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details

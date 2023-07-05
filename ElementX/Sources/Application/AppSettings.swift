@@ -22,6 +22,7 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case loginDate
         case migratedAccounts
         case timelineStyle
         case analyticsConsentState
@@ -105,6 +106,13 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
 
+    /// The date that the call to `/login` completed successfully. This is used to put
+    /// a hard wall on the history of encrypted messages until we have key backup.
+    ///
+    /// Not a multi-account aware setting as key backup will come before multi-account.
+    @UserPreference(key: UserDefaultsKeys.loginDate, defaultValue: nil, storageType: .userDefaults(store))
+    var loginDate: Date?
+    
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
     /// This is a temporary workaround. In the future we should be able to receive a signal from the

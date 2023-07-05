@@ -205,6 +205,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
+        appSettings.loginDate = .now
+        
         showAnalyticsPromptIfNeeded { [weak self] in
             guard let self else { return }
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)

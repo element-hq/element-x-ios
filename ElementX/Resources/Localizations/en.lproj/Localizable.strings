@@ -283,6 +283,7 @@
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
+"screen_room_encrypted_history_banner" = "Message history is currently unavailable in this room";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_invite_again_alert_message" = "Would you like to invite them back?";
 "screen_room_invite_again_alert_title" = "You are alone in this chat";
