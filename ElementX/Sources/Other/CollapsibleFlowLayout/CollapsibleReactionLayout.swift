@@ -32,6 +32,7 @@ struct CollapsibleReactionLayout: Layout {
     
     init(itemSpacing: CGFloat = 0,
          lineSpacing: CGFloat = 0,
+         collapsed: Bool = true,
          linesBeforeCollapsible: Int? = nil) {
         self.itemSpacing = itemSpacing
         self.lineSpacing = lineSpacing
