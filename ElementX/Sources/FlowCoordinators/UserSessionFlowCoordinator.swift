@@ -225,11 +225,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissMigrationScreen() {
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil) { [weak self] in
-            guard let self else { return }
-            if !appSettings.hasShownWelcomeScreen {
-                stateMachine.processEvent(.presentWelcomeScreen)
-            }
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+        if !appSettings.hasShownWelcomeScreen {
+            stateMachine.processEvent(.presentWelcomeScreen)
         }
     }
     
