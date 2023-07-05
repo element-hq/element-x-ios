@@ -29,7 +29,7 @@ settings:
   APP_NAME: ElementX
   APP_DISPLAY_NAME: Element X
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.2.0
+  MARKETING_VERSION: 1.2.1
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
 
@@ -105,4 +105,4 @@ packages:
     minorVersion: 2.0.0
   Flow:
     url: https://github.com/tevelee/SwiftUI-Flow
-    minorVersion: 1.2.0
+    minorVersion: 1.2.1
