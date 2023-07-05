@@ -36,4 +36,9 @@ class UserNotificationCenterSpy: UserNotificationCenterProtocol {
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
         notificationCategoriesValue = categories
     }
+    
+    var getAuthorizationStatusValue: UNAuthorizationStatus?
+    func getAuthorizationStatus() async -> UNAuthorizationStatus {
+        getAuthorizationStatusValue ?? UNAuthorizationStatus.denied
+    }
 }

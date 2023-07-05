@@ -21,20 +21,42 @@ struct NotificationsSettingsScreen: View {
     
     var body: some View {
         Form {
+            if context.viewState.showSystemNotificationsAlert {
+                userPermissionSection
+            }
             enableNotificationSection
         }
         .compoundForm()
-        .navigationTitle(UntranslatedL10n.notifications)
+        .navigationTitle(UntranslatedL10n.screenNotificationsSettingsTitle)
         .track(screen: .settingsNotifications)
     }
     
     // MARK: - Private
 
-    @ViewBuilder
+    private var userPermissionSection: some View {
+        Section {
+            HStack(alignment: .firstTextBaseline, spacing: 13) {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .foregroundColor(.compound.iconTertiaryAlpha)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsTurnedOff)
+                        .font(.compound.bodyLG)
+                        .foregroundColor(.compound.textPrimary)
+                    Text(context.viewState.strings.changeYourSystemSettings)
+                }
+                .padding(.vertical, 5)
+            }
+            .onTapGesture {
+                context.send(viewAction: .openSystemSettings)
+            }
+        }
+        .compoundFormSection()
+    }
+    
     private var enableNotificationSection: some View {
         Section {
             Toggle(isOn: $context.enableNotifications) {
-                Text(UntranslatedL10n.notificationsSettingsAllowOnThisDevice)
+                Text(UntranslatedL10n.screenNotificationsSettingsEnableNotifications)
             }
             .toggleStyle(.compoundForm)
             .onChange(of: context.enableNotifications) { _ in
@@ -50,7 +72,10 @@ struct NotificationsSettingsScreen: View {
 struct NotificationSettingsScreen_Previews: PreviewProvider {
     static let viewModel: NotificationsSettingsScreenViewModel = {
         let appSettings = AppSettings()
-        return NotificationsSettingsScreenViewModel(appSettings: appSettings)
+        let notificationCenter = UserNotificationCenterMock()
+        notificationCenter.getAuthorizationStatusReturnValue = .notDetermined
+        var viewModel = NotificationsSettingsScreenViewModel(appSettings: appSettings, userNotificationCenter: notificationCenter)
+        return viewModel
     }()
 
     static var previews: some View {

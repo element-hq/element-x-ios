@@ -22,31 +22,63 @@ typealias NotificationsSettingsScreenViewModelType = StateStoreViewModel<Notific
 class NotificationsSettingsScreenViewModel: NotificationsSettingsScreenViewModelType, NotificationsSettingsScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<NotificationsSettingsScreenViewModelAction, Never> = .init()
     private let appSettings: AppSettings
+    private let userNotificationCenter: UserNotificationCenterProtocol
     
     var actions: AnyPublisher<NotificationsSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings) {
+    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol) {
         self.appSettings = appSettings
+        self.userNotificationCenter = userNotificationCenter
         let bindings = NotificationsSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
         super.init(initialViewState: NotificationsSettingsScreenViewState(bindings: bindings))
-        
+                
+        // Listen for changes to AppSettings.enableNotifications
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
+        
+        // Refresh authorization status uppon UIApplication.didBecomeActiveNotification notification
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                Task {
+                    await self?.readSystemAuthorizationStatus()
+                }
+            }
+            .store(in: &cancellables)
+        
+        Task {
+            await readSystemAuthorizationStatus()
+        }
     }
-    
+        
     // MARK: - Public
     
     override func process(viewAction: NotificationsSettingsScreenViewAction) {
         switch viewAction {
+        case .openSystemSettings:
+            Task {
+                await openSystemSettings()
+            }
         case .changedEnableNotifications:
             toogleNotifications()
         }
     }
     
     // MARK: - Private
+    
+    @MainActor
+    func readSystemAuthorizationStatus() async {
+        state.isUserPermissionGranted = await userNotificationCenter.getAuthorizationStatus() == .authorized
+    }
+
+    func openSystemSettings() async {
+        // Note: UIApplication.openNotificationSettingsURLString doesn't work on a simulator
+        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+            await UIApplication.shared.open(url)
+        }
+    }
     
     func toogleNotifications() {
         appSettings.enableNotifications.toggle()

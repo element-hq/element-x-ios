@@ -20,12 +20,35 @@ enum NotificationsSettingsScreenViewModelAction { }
 
 struct NotificationsSettingsScreenViewState: BindableState {
     var bindings: NotificationsSettingsScreenViewStateBindings
+    var strings = NotificationsSettingsScreenStrings()
+    var isUserPermissionGranted: Bool?
+    
+    var showSystemNotificationsAlert: Bool {
+        bindings.enableNotifications && isUserPermissionGranted == false
+    }
 }
 
 struct NotificationsSettingsScreenViewStateBindings {
     var enableNotifications = false
 }
 
+struct NotificationsSettingsScreenStrings {
+    let changeYourSystemSettings: AttributedString = {
+        let linkPlaceholder = "{link}"
+        var text = AttributedString(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsActionRequired(linkPlaceholder))
+        text.font = .compound.bodySM
+        text.foregroundColor = .compound.textSecondary
+        var linkString = AttributedString(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsActionRequiredContentLink)
+        linkString.font = .compound.bodySM
+        linkString.bold()
+        linkString.foregroundColor = .compound.textPrimary
+        text.replace(linkPlaceholder, with: linkString)
+        
+        return text
+    }()
+}
+
 enum NotificationsSettingsScreenViewAction {
+    case openSystemSettings
     case changedEnableNotifications
 }

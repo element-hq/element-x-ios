@@ -116,7 +116,7 @@ struct SettingsScreen: View {
             // Notifications
             if context.viewState.showNotificationsSettings {
                 Button { context.send(viewAction: .notifications) } label: {
-                    Label(UntranslatedL10n.notifications, systemImage: "bell")
+                    Label(UntranslatedL10n.screenNotificationsSettingsTitle, systemImage: "bell")
                 }
                 .buttonStyle(.compoundForm(accessory: .navigationLink))
                 .accessibilityIdentifier("notificationsButton")

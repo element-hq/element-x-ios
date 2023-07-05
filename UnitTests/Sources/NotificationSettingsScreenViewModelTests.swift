@@ -20,13 +20,31 @@ import XCTest
 
 @MainActor
 class NotificationSettingsScreenViewModelTests: XCTestCase {
-    private var viewModel: NotificationSettingsScreenViewModelProtocol!
-    private var context: NotificationSettingsScreenViewModelType.Context!
+    private var viewModel: NotificationsSettingsScreenViewModelProtocol!
+    private var context: NotificationsSettingsScreenViewModelType.Context!
+    private var appSettings: AppSettings!
+    private var userNotificationCenter: UserNotificationCenterMock!
     
     @MainActor override func setUpWithError() throws {
         AppSettings.reset()
         
-        viewModel = NotificationSettingsScreenViewModel()
+        userNotificationCenter = UserNotificationCenterMock()
+        userNotificationCenter.getAuthorizationStatusReturnValue = .authorized
+        appSettings = AppSettings()
+        viewModel = NotificationsSettingsScreenViewModel(appSettings: appSettings,
+                                                         userNotificationCenter: userNotificationCenter)
         context = viewModel.context
+    }
+    
+    func testEnableNotifications() {
+        appSettings.enableNotifications = false
+        context.send(viewAction: .changedEnableNotifications)
+        XCTAssertTrue(appSettings.enableNotifications)
+    }
+    
+    func testOptOut() {
+        appSettings.enableNotifications = true
+        context.send(viewAction: .changedEnableNotifications)
+        XCTAssertFalse(appSettings.enableNotifications)
     }
 }

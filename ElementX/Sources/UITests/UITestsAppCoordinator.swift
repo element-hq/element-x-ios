@@ -192,7 +192,7 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .notificationSettingsScreen:
-            let parameters = NotificationsSettingsScreenCoordinatorParameters()
+            let parameters = NotificationsSettingsScreenCoordinatorParameters(userNotificationCenter: UserNotificationCenterMock())
             return NotificationsSettingsScreenCoordinator(parameters: parameters)
         case .onboarding:
             return OnboardingCoordinator()
