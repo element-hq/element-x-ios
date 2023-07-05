@@ -46,10 +46,11 @@ struct StaticLocationScreen: View {
                             options: mapOptions,
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
-                            mapCenterCoordinate: $context.mapCenterLocation) {
-                                context.send(viewAction: .userDidPan)
-                            }
-                            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+                            mapCenterCoordinate: $context.mapCenterLocation,
+                            isLocationAuthorized: $context.isLocationAuthorized) {
+                context.send(viewAction: .userDidPan)
+            }
+            .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
             
             if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
@@ -86,15 +87,13 @@ struct StaticLocationScreen: View {
     private var mapOptions: MapLibreMapView.Options {
         guard let coordinate = context.viewState.mapAnnotationCoordinate else {
             return .init(zoomLevel: context.viewState.zoomLevel,
-                         fallbackZoomLevel: context.viewState.fallbackZoomLevel,
-                         mapCenter: context.viewState.initialMapCenter,
-                         shouldCenterOnUser: true)
+                         initialZoomLevel: context.viewState.initialZoomLevel,
+                         mapCenter: context.viewState.initialMapCenter)
         }
 
         return .init(zoomLevel: context.viewState.zoomLevel,
-                     fallbackZoomLevel: context.viewState.fallbackZoomLevel,
+                     initialZoomLevel: context.viewState.initialZoomLevel,
                      mapCenter: context.viewState.initialMapCenter,
-                     shouldCenterOnUser: true,
                      annotations: [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
                          LocationMarkerView()
                      }])
@@ -123,7 +122,7 @@ struct StaticLocationScreen: View {
         Button {
             context.send(viewAction: .centerToUser)
         } label: {
-            Image(asset: Asset.Images.locationPointer)
+            Image(asset: context.viewState.isSharingUserLocation ? Asset.Images.locationPointerFull : Asset.Images.locationPointer)
         }
         .padding(16)
     }

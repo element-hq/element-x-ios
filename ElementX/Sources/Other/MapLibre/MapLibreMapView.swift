@@ -22,21 +22,18 @@ struct MapLibreMapView: UIViewRepresentable {
     struct Options {
         /// The initial zoom level
         let zoomLevel: Double
-        let fallbackZoomLevel: Double
+        let initialZoomLevel: Double
         
         /// The initial map center
         let mapCenter: CLLocationCoordinate2D
         
-        let shouldCenterOnUser: Bool
-        
         /// Map annotations
         let annotations: [LocationAnnotation]
         
-        init(zoomLevel: Double, fallbackZoomLevel: Double, mapCenter: CLLocationCoordinate2D, shouldCenterOnUser: Bool, annotations: [LocationAnnotation] = []) {
+        init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
             self.zoomLevel = zoomLevel
-            self.fallbackZoomLevel = fallbackZoomLevel
+            self.initialZoomLevel = initialZoomLevel
             self.mapCenter = mapCenter
-            self.shouldCenterOnUser = shouldCenterOnUser
             self.annotations = annotations
         }
     }
@@ -58,6 +55,8 @@ struct MapLibreMapView: UIViewRepresentable {
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
+    @Binding var isLocationAuthorized: Bool
+    
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
     
@@ -90,13 +89,12 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MGLMapView, with options: Options) {
-        switch mapView.locationManager.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse:
+        if options.annotations.isEmpty {
+            mapView.zoomLevel = options.initialZoomLevel
+        } else {
             mapView.zoomLevel = options.zoomLevel
-        default:
-            mapView.zoomLevel = options.fallbackZoomLevel
         }
-        // TODO: if authorized where we start?
+        // TODO: test on device
         mapView.centerCoordinate = options.mapCenter
     }
     
@@ -112,18 +110,9 @@ struct MapLibreMapView: UIViewRepresentable {
     private func showUserLocation(in mapView: MGLMapView) {
         switch showsUserLocationMode {
         case .showAndFollow:
-            // TODO: this mode shows always the user annotation dot
-            mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
         case .show:
             mapView.showsUserLocation = true
-            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
-        case .showAndCenter:
-            mapView.showsUserLocation = true
-            if let userLocation = mapView.userLocation?.coordinate {
-                mapView.setCenter(userLocation, zoomLevel: options.zoomLevel, animated: true)
-                showsUserLocationMode = .show
-            }
             mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         case .hide:
             mapView.showsUserLocation = false
@@ -140,6 +129,8 @@ extension MapLibreMapView {
 
         var mapLibreView: MapLibreMapView
         
+        private var previousUserLocation: MGLUserLocation?
+
         // MARK: - Setup
 
         init(_ mapLibreView: MapLibreMapView) {
@@ -159,18 +150,21 @@ extension MapLibreMapView {
             mapLibreView.error.wrappedValue = .failedLoadingMap
         }
         
-        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
+        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
+            guard let userLocation else { return }
+            if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
+                mapView.zoomLevel = mapLibreView.options.zoomLevel
+            }
+            previousUserLocation = userLocation
+        }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
-            guard mapLibreView.options.shouldCenterOnUser else {
-                return
-            }
-            
             switch manager.authorizationStatus {
             case .denied, .restricted:
-                mapLibreView.error.wrappedValue = .invalidLocationAuthorization
+                mapLibreView.isLocationAuthorized = false
+            // not necessary mapLibreView.error.wrappedValue = .invalidLocationAuthorization
             case .authorizedAlways, .authorizedWhenInUse:
-                break
+                mapLibreView.isLocationAuthorized = true
             default:
                 break
             }

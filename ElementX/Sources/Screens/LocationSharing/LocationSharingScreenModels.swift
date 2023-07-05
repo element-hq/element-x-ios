@@ -19,6 +19,7 @@ import Foundation
 
 enum LocationSharingViewError: Error, Hashable {
     case failedSharingLocation
+    case missingAuthorization
     case mapError(MapLibreError)
 }
 
@@ -42,7 +43,7 @@ struct StaticLocationScreenViewState: BindableState {
             bindings.showsUserLocationMode = .show
         }
     }
-
+ 
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation = false
@@ -97,7 +98,7 @@ struct StaticLocationScreenViewState: BindableState {
         15.0
     }
     
-    var fallbackZoomLevel: Double {
+    var initialZoomLevel: Double {
         switch interactionMode {
         case .picker:
             return 2.7
@@ -120,6 +121,8 @@ struct StaticLocationScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode
+    
+    var isLocationAuthorized = false
     
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {

@@ -31,6 +31,7 @@ internal enum Asset {
   internal enum Images {
     internal static let locationMarker = ImageAsset(name: "images/location-marker")
     internal static let locationPin = ImageAsset(name: "images/location-pin")
+    internal static let locationPointerFull = ImageAsset(name: "images/location-pointer-full")
     internal static let locationPointer = ImageAsset(name: "images/location-pointer")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
