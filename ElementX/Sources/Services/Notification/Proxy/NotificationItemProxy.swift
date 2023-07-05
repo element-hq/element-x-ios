@@ -166,8 +166,8 @@ extension NotificationItemProxyProtocol {
     }
 
     var hasMedia: Bool {
-        if (isDirect && senderAvatarMediaSource != nil) ||
-            (!isDirect && roomAvatarMediaSource != nil) {
+        if (isDm && senderAvatarMediaSource != nil) ||
+            (!isDm && roomAvatarMediaSource != nil) {
             return true
         }
         switch event.type {
