@@ -113,6 +113,15 @@ struct SettingsScreen: View {
                 context.send(viewAction: .changedTimelineStyle)
             }
             
+            // Notifications
+            if context.viewState.showNotificationsSettings {
+                Button { context.send(viewAction: .notifications) } label: {
+                    Label(UntranslatedL10n.notifications, systemImage: "bell")
+                }
+                .buttonStyle(.compoundForm(accessory: .navigationLink))
+                .accessibilityIdentifier("notificationsButton")
+            }
+            
             // Analytics
             Button { context.send(viewAction: .analytics) } label: {
                 Label(L10n.commonAnalytics, systemImage: "chart.bar")
@@ -194,6 +203,7 @@ struct SettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
+        ServiceLocator.shared.settings.notificationsSettingsEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)
     }()

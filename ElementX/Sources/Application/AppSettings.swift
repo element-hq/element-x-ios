@@ -26,6 +26,7 @@ final class AppSettings {
         case migratedAccounts
         case timelineStyle
         case analyticsConsentState
+        case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
@@ -34,6 +35,7 @@ final class AppSettings {
         case locationEventsEnabled
         case shareLocationEnabled
         case hasShownWelcomeScreen
+        case notificationsSettingsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -178,6 +180,9 @@ final class AppSettings {
     
     // MARK: - Notifications
 
+    @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
+    var enableNotifications
+
     @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableInAppNotifications
 
@@ -218,4 +223,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.shareLocationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var shareLocationEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.notificationsSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var notificationsSettingsEnabled
 }

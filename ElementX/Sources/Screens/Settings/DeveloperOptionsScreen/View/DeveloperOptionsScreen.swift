@@ -66,6 +66,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.shareLocationEnabled) { _ in
                     context.send(viewAction: .changedShareLocationEnabled)
                 }
+                
+                Toggle(isOn: $context.notificationsSettingsEnabled) {
+                    Text("Show notification settings")
+                }
+                .onChange(of: context.notificationsSettingsEnabled) { _ in
+                    context.send(viewAction: .changedNotificationsSettingsEnabled)
+                }
             }
             
             Section {
