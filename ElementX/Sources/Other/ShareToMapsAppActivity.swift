@@ -66,18 +66,26 @@ extension ShareToMapsAppActivity.MapsAppType {
     func activityURL(for location: CLLocationCoordinate2D, locationDescription: String) -> URL {
         switch self {
         case .apple:
-            var url: URL = "https://maps.apple.com"
+            var url: URL = "https://maps.apple.com/"
             url.append(queryItems: [
                 .init(name: "ll", value: "\(location.latitude),\(location.longitude)"),
                 .init(name: "q", value: locationDescription)
             ])
             return url
         case .google:
-            // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://www.google.com/maps/search/?api=1&query=\(location.latitude),\(location.longitude)")!
+            var url: URL = "https://www.google.com/maps/search/"
+            url.append(queryItems: [
+                .init(name: "api", value: "1"),
+                .init(name: "query", value: "\(location.latitude),\(location.longitude)")
+            ])
+            return url
         case .osm:
-            // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://www.openstreetmap.org/?mlat=\(location.latitude)&mlon=\(location.longitude)")!
+            var url: URL = "https://www.openstreetmap.org/"
+            url.append(queryItems: [
+                .init(name: "mlat", value: "\(location.latitude)"),
+                .init(name: "mlon", value: "\(location.longitude)")
+            ])
+            return url
         }
     }
 
