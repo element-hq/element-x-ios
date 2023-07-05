@@ -750,6 +750,12 @@ public enum L10n {
   public static var screenRoomMessageCopied: String { return L10n.tr("Localizable", "screen_room_message_copied") }
   /// You do not have permission to post to this room
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
+  /// Show less
+  public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
+  /// Show %d
+  public static func screenRoomReactionsShowMore(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_reactions_show_more", p1)
+  }
   /// Remove
   public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again

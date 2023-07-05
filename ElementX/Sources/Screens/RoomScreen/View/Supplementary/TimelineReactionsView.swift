@@ -18,49 +18,67 @@ import Flow
 import SwiftUI
 
 struct TimelineReactionsView: View {
-    @Environment(\.layoutDirection) var layoutDirection: LayoutDirection
+    /// We use a coordinate space for measuring the reactions within their container.
+    /// For some reason when using .local the origin of reactions always shown as (0, 0)
+    private static let flowCoordinateSpace = "flowCoordinateSpace"
+    private static let hSpacing: CGFloat = 4
+    private static let vSpacing: CGFloat = 4
+    
+    @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
+
+    let itemID: String
     let reactions: [AggregatedReaction]
-    let toggleReaction: (String) -> Void
-    let showReactionSummary: (String) -> Void
+    @Binding var collapsed: Bool
+    
+    @State private var collapseButtonFrame: CGRect = .zero
+    @State private var reactionsContainerFame: CGRect = .zero
+    @State private var reactionButtonFrames: [String: CGRect] = [:]
+    
+    /// The count of reactions hidden in the collapsed state
+    var hiddenCount: Int {
+        reactionButtonFrames.values.map {
+            /// The reaction views minimum heigh doesn't go to zero due to padding, hence the weird number here.
+            $0.height < 20 ? 1 : 0
+        }.reduce(0, +)
+    }
     
     var body: some View {
-        HFlow(itemSpacing: 4, rowSpacing: 4) {
+        CollapsibleFlowLayout(itemSpacing: 4, lineSpacing: 4, collapsed: collapsed, linesBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
-                TimelineReactionButton(reaction: reaction,
-                                       toggleReaction: toggleReaction,
-                                       showReactionSummary: showReactionSummary)
+                TimelineReactionButton(itemID: itemID, reaction: reaction)
+                    .opacity((reactionButtonFrames[reaction.key] ?? .zero).size.height < 20 ? 0 : 1)
+                    .background(ViewFrameReader(frame: reactionsFrameBinding(for: reaction.key), coordinateSpace: .named(Self.flowCoordinateSpace)))
             }
+            Button {
+                collapsed.toggle()
+            } label: {
+                TimelineCollapseButton(collapsed: collapsed, hiddenCount: hiddenCount)
+            }
+            /// The reaction views minimum heigh doesn't go to zero due to padding, hence the weird number here.
+            .opacity(collapseButtonFrame.size.height < 20 ? 0 : 1)
+            .background(ViewFrameReader(frame: $collapseButtonFrame, coordinateSpace: .named(Self.flowCoordinateSpace)))
         }
-        .environment(\.layoutDirection, layoutDirection)
+        .background(ViewFrameReader(frame: $reactionsContainerFame, coordinateSpace: .named(Self.flowCoordinateSpace)))
+        .coordinateSpace(name: Self.flowCoordinateSpace)
+    }
+    
+    private func reactionsFrameBinding(for key: String) -> Binding<CGRect> {
+        Binding(get: {
+            reactionButtonFrames[key] ?? .zero
+        }, set: {
+            reactionButtonFrames[key] = $0
+        })
     }
 }
 
-struct TimelineReactionButton: View {
-    let reaction: AggregatedReaction
-    let toggleReaction: (String) -> Void
-    let showReactionSummary: (String) -> Void
-    
-    @State private var didLongPress = false
+/// The pill shape for the label that surrounds both the reaction and collapse buttons.
+struct TimelineReactionButtonLabel<Content: View>: View {
+    var isHighlighted = false
+    @ViewBuilder var content: () -> Content
     
     var body: some View {
-        label
-            .onTapGesture {
-                toggleReaction(reaction.key)
-            }
-            .longPressWithFeedback {
-                showReactionSummary(reaction.key)
-            }
-    }
-    
-    var label: some View {
         HStack(spacing: 4) {
-            Text(reaction.key)
-                .font(.compound.bodyMD)
-            if reaction.count > 1 {
-                Text(String(reaction.count))
-                    .font(.compound.bodyMD)
-                    .foregroundColor(textColor)
-            }
+            content()
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
@@ -71,32 +89,85 @@ struct TimelineReactionButton: View {
     }
     
     var backgroundShape: some InsettableShape {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+    }
+    
+    var overlayBackgroundColor: Color {
+        isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
+    }
+    
+    var overlayBorderColor: Color {
+        isHighlighted ? Color.compound.borderInteractivePrimary : .clear
+    }
+}
+
+struct TimelineCollapseButton: View {
+    var collapsed: Bool
+    var hiddenCount: Int
+    
+    var body: some View {
+        TimelineReactionButtonLabel {
+            Text(collapsed ? L10n.screenRoomReactionsShowMore(hiddenCount) : L10n.screenRoomReactionsShowLess)
+                .layoutPriority(1)
+                .drawingGroup()
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textPrimary)
+        }
+    }
+}
+
+struct TimelineReactionButton: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    let itemID: String
+    let reaction: AggregatedReaction
+    
+    var body: some View {
+        label
+            .onTapGesture {
+                context.send(viewAction: .toggleReaction(key: reaction.key, eventID: itemID))
+            }
+            .longPressWithFeedback {
+                context.send(viewAction: .reactionSummary(itemID: itemID, key: reaction.key))
+            }
+    }
+    
+    var label: some View {
+        TimelineReactionButtonLabel(isHighlighted: reaction.isHighlighted) {
+            Text(reaction.key)
+                .font(.compound.bodyMD)
+            if reaction.count > 1 {
+                Text(String(reaction.count))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(textColor)
+            }
+        }
     }
     
     var textColor: Color {
         reaction.isHighlighted ? Color.compound.textPrimary : .compound.textSecondary
     }
-    
-    var overlayBackgroundColor: Color {
-        reaction.isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
-    }
-    
-    var overlayBorderColor: Color {
-        reaction.isHighlighted ? Color.compound.borderInteractivePrimary : .clear
+}
+
+struct TimelineReactionViewPreviewsContainer: View {
+    @State private var collapseState1 = false
+    @State private var collapseState2 = true
+
+    var body: some View {
+        VStack {
+            TimelineReactionsView(itemID: "1", reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            Divider()
+            TimelineReactionsView(itemID: "2", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            Divider()
+            TimelineReactionsView(itemID: "3", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
+                .environment(\.layoutDirection, .rightToLeft)
+        }
+        .background(Color.red)
+        .frame(maxWidth: 250, alignment: .leading)
     }
 }
 
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in } showReactionSummary: { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in } showReactionSummary: { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in } showReactionSummary: { _ in }
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
-                .environment(\.layoutDirection, .leftToRight)
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
-                .environment(\.layoutDirection, .rightToLeft)
-        }
+        TimelineReactionViewPreviewsContainer()
     }
 }

@@ -127,6 +127,8 @@ struct RoomScreenViewStateBindings {
         }
     }
     
+    var reactionsCollapsed: [String: Bool]
+    
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
     

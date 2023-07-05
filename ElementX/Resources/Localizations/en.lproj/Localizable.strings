@@ -425,6 +425,8 @@
 "screen_room_details_topic_title" = "Topic";
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_room_retry_send_menu_remove_action" = "Remove";
+"screen_room_reactions_show_more" = "Show %d";
+"screen_room_reactions_show_less" = "Show less";
 "screen_session_verification_cancelled_title" = "Verification cancelled";
 "screen_session_verification_positive_button_ready" = "Start";
 "screen_signout_confirmation_dialog_submit" = "Sign out";
