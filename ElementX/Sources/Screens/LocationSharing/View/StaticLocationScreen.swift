@@ -33,6 +33,7 @@ struct StaticLocationScreen: View {
             }
             mapView
         }
+        .track(screen: context.viewState.isLocationPickerMode ? .locationSend : .locationView)
         .navigationTitle(context.viewState.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -49,7 +50,7 @@ struct StaticLocationScreen: View {
                             userDidPan: {
                                 context.send(viewAction: .userDidPan)
                             })
-            if context.viewState.showPinInTheCenter {
+            if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }
         }
@@ -105,7 +106,7 @@ struct StaticLocationScreen: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: shareMarkerSize, height: shareMarkerSize)
-                Text(context.viewState.isPinDropSharing ? L10n.screenShareThisLocationAction : L10n.screenShareMyLocationAction)
+                Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
     }
