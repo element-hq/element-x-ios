@@ -29,7 +29,9 @@ struct UIConstants {
     
     /// The padding used to the top of the view for breaker screens that don't have a navigation bar.
     static let onboardingBreakerScreenTopPadding: CGFloat = 80
-    
+
+    static let welcomeScreenTopPadding: CGFloat = 122
+
     /// The height to use for top/bottom spacers to pad the views to fit the `maxContentHeight`.
     static func spacerHeight(in geometry: GeometryProxy) -> CGFloat {
         max(0, (geometry.size.height - maxContentHeight) / 2)

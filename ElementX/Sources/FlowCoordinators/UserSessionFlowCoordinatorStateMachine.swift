@@ -63,6 +63,7 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Request to transition from the migration state to the home screen.
         case completeMigration
 
+        case presentWelcomeScreen
         case dismissedWelcomeScreen
         
         /// Request presentation for a particular room

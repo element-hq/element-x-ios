@@ -20,7 +20,14 @@ enum WelcomeScreenScreenViewModelAction {
     case dismiss
 }
 
-struct WelcomeScreenScreenViewState: BindableState { }
+struct WelcomeScreenScreenViewState: BindableState {
+    let title = L10n.screenWelcomeTitle(InfoPlistReader.main.bundleDisplayName)
+    let subtitle = L10n.screenWelcomeSubtitle
+    let bullet1 = L10n.screenWelcomeBullet1
+    let bullet2 = L10n.screenWelcomeBullet2
+    let bullet3 = L10n.screenWelcomeBullet3
+    let buttonTitle = L10n.screenWelcomeButton
+}
 
 enum WelcomeScreenScreenViewAction {
     case doneTapped

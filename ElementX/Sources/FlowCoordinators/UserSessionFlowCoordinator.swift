@@ -149,7 +149,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
             case (.migration, .completeMigration, .roomList):
                 self.dismissMigrationScreen()
-                
             case(.roomList, .selectRoom, .roomList):
                 break
             case(.roomList, .deselectRoom, .roomList):
@@ -222,7 +221,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissMigrationScreen() {
-        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil) { [weak self] in
+            guard let self else { return }
+            if !appSettings.hasShownWelcomeScreen {
+                stateMachine.processEvent(.presentWelcomeScreen)
+            }
+        }
     }
     
     // swiftlint:disable:next cyclomatic_complexity

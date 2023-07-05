@@ -704,7 +704,7 @@ public enum L10n {
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
-  /// Notification
+  /// Notifications
   public static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
@@ -850,6 +850,20 @@ public enum L10n {
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
   /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
+  /// Calls, location sharing, search and more will be added later this year.
+  public static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
+  /// Message history for encrypted rooms won’t be available in this update.
+  public static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
+  /// We’d love to hear from you, let us know what you think via the settings page.
+  public static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
+  /// Let's go!
+  public static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
+  /// Here’s what you need to know:
+  public static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
+  /// Welcome to %1$@!
+  public static func screenWelcomeTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
+  }
   /// Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Verify it’s you
