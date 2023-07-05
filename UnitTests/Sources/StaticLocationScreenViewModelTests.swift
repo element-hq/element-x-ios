@@ -32,13 +32,13 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
-        viewModel.state.isPinDropSharing = false
+        viewModel.state.isSharingUserLocation = true
         self.viewModel = viewModel
     }
     
     func testUserDidPan() async throws {
-        XCTAssertFalse(context.viewState.isPinDropSharing)
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
         context.send(viewAction: .userDidPan)
-        XCTAssertTrue(context.viewState.isPinDropSharing)
+        XCTAssertFalse(context.viewState.isSharingUserLocation)
     }
 }

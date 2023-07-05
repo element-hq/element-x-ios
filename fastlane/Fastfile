@@ -191,7 +191,7 @@ lane :upload_dsyms_to_sentry do |options|
   sentry_upload_dif(
     auth_token: auth_token,
     org_slug: 'element',
-    project_slug: 'elementx',
+    project_slug: 'element-x-ios',
     url: 'https://sentry.tools.element.io/',
     path: dsym_path,
   )

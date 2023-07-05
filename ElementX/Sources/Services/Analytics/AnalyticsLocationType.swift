@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,20 @@
 // limitations under the License.
 //
 
-import Foundation
+import AnalyticsEvents
 
-@MainActor
-protocol RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
+enum AnalyticsLocationType {
+    case myLocation
+    case pin
+}
+
+extension AnalyticsEvent.Composer.LocationType {
+    init(_ analyticsLocationType: AnalyticsLocationType) {
+        switch analyticsLocationType {
+        case .myLocation:
+            self = .MyLocation
+        case .pin:
+            self = .PinDrop
+        }
+    }
 }

@@ -24,7 +24,7 @@ enum LocationSharingViewError: Error, Hashable {
 
 enum StaticLocationScreenViewModelAction {
     case close
-    case sendLocation(GeoURI)
+    case sendLocation(GeoURI, isUserLocation: Bool)
 }
 
 enum StaticLocationInteractionMode: Hashable {
@@ -33,9 +33,9 @@ enum StaticLocationInteractionMode: Hashable {
 }
 
 struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode, isPinDropSharing: Bool = true, showsUserLocationMode: ShowUserLocationMode = .hide) {
+    init(interactionMode: StaticLocationInteractionMode, isSharingUserLocation: Bool = false, showsUserLocationMode: ShowUserLocationMode = .hide) {
         self.interactionMode = interactionMode
-        self.isPinDropSharing = isPinDropSharing
+        self.isSharingUserLocation = isSharingUserLocation
         self.showsUserLocationMode = showsUserLocationMode
 
         switch interactionMode {
@@ -47,10 +47,10 @@ struct StaticLocationScreenViewState: BindableState {
     }
 
     let interactionMode: StaticLocationInteractionMode
-    /// Indicates whether the user has moved around the map to drop a pin somewhere other than their current location
-    var isPinDropSharing = true
+    /// Indicates whether the user is sharing his current location
+    var isSharingUserLocation: Bool
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
-    var showsUserLocationMode: ShowUserLocationMode = .hide
+    var showsUserLocationMode: ShowUserLocationMode
     
     var bindings = StaticLocationScreenBindings()
 
@@ -67,10 +67,10 @@ struct StaticLocationScreenViewState: BindableState {
         }
     }
 
-    var showPinInTheCenter: Bool {
+    var isLocationPickerMode: Bool {
         switch interactionMode {
         case .picker:
-            return isPinDropSharing
+            return true
         case .viewOnly:
             return false
         }

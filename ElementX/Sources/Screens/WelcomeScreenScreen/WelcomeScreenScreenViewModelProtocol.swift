@@ -14,11 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
-protocol RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
+protocol WelcomeScreenScreenViewModelProtocol {
+    var actions: AnyPublisher<WelcomeScreenScreenViewModelAction, Never> { get }
+    var context: WelcomeScreenScreenViewModelType.Context { get }
 }

@@ -1,3 +1,30 @@
+## Changes in 1.2.0 (2023-07-05)
+
+No significant changes.
+
+
+## Changes in 1.1.9 (2023-07-05)
+
+No significant changes.
+
+
+## Changes in 1.1.8 (2023-07-05)
+
+✨ Features
+
+- Added a welcome screen that will appear only once. ([#1259](https://github.com/vector-im/element-x-ios/pull/1259))
+
+🙌 Improvements
+
+- Reduce horizonal message bubble padding when the avatar isn't shown ([#1233](https://github.com/vector-im/element-x-ios/pull/1233))
+- Push notifications will be displayed as DM only in direct rooms where joined members are at most 2. ([#1205](https://github.com/vector-im/element-x-ios/issues/1205))
+- Add encryption history banner. ([#1251](https://github.com/vector-im/element-x-ios/issues/1251))
+
+🐛 Bugfixes
+
+- Caching for the notification placeholder image, to avoid generating it too many times and taking too much memory. ([#1243](https://github.com/vector-im/element-x-ios/issues/1243))
+
+
 ## Changes in 1.1.7 (2023-06-30)
 
 ✨ Features

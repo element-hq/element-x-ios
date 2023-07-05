@@ -14,11 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
 @MainActor
-protocol RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
-}
+class WelcomeScreenScreenUITests: XCTestCase { }

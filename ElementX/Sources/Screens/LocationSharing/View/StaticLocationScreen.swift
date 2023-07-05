@@ -33,6 +33,7 @@ struct StaticLocationScreen: View {
             }
             mapView
         }
+        .track(screen: context.viewState.isLocationPickerMode ? .locationSend : .locationView)
         .navigationTitle(context.viewState.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -49,7 +50,7 @@ struct StaticLocationScreen: View {
                             userDidPan: {
                                 context.send(viewAction: .userDidPan)
                             })
-            if context.viewState.showPinInTheCenter {
+            if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }
         }
@@ -105,7 +106,7 @@ struct StaticLocationScreen: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: shareMarkerSize, height: shareMarkerSize)
-                Text(context.viewState.isPinDropSharing ? L10n.screenShareThisLocationAction : L10n.screenShareMyLocationAction)
+                Text(context.viewState.isSharingUserLocation ? L10n.screenShareMyLocationAction : L10n.screenShareThisLocationAction)
             }
         }
     }
@@ -127,8 +128,9 @@ struct StaticLocationScreen: View {
     @ViewBuilder
     private var shareSheet: some View {
         if let location = context.viewState.mapAnnotationCoordinate {
-            AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location)],
-                            applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location) })
+            let locationDescription = context.viewState.locationDescription
+            AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, locationDescription: locationDescription)],
+                            applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, locationDescription: locationDescription) })
                 .edgesIgnoringSafeArea(.bottom)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.hidden)

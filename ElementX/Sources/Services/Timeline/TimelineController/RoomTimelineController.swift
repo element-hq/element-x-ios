@@ -19,7 +19,6 @@ import Foundation
 import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
-    private let userId: String
     private let roomProxy: RoomProxyProtocol
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
@@ -42,12 +41,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         roomProxy.id
     }
     
-    init(userId: String,
-         roomProxy: RoomProxyProtocol,
+    init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings) {
-        self.userId = userId
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
@@ -246,6 +243,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
+        var lastEncryptedHistoryItemIndex: Int?
         
         let collapsibleChunks = timelineProvider.itemsPublisher.value.groupBy { isItemCollapsible($0) }
         
@@ -264,6 +262,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     isBackPaginating = true
                 } else if timelineItem is TimelineStartRoomTimelineItem {
                     canBackPaginate = false
+                } else if timelineItem is EncryptedHistoryRoomTimelineItem {
+                    canBackPaginate = false
                 }
                 
                 return timelineItem
@@ -280,10 +280,20 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     continue
                 }
                 
+                if timelineItem is EncryptedHistoryRoomTimelineItem {
+                    lastEncryptedHistoryItemIndex = newTimelineItems.endIndex
+                }
+                
                 newTimelineItems.append(timelineItem)
             } else {
                 newTimelineItems.append(CollapsibleTimelineItem(items: items))
             }
+        }
+        
+        if let lastEncryptedHistoryItemIndex {
+            // Remove everything up to the last encrypted history item.
+            // It only contains encrypted messages, state changes and date separators.
+            newTimelineItems.removeFirst(lastEncryptedHistoryItemIndex)
         }
 
         timelineItems = newTimelineItems
@@ -297,6 +307,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch itemProxy {
         case .event(let eventTimelineItem):
             let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
+            
+            if timelineItem is EncryptedRoomTimelineItem, isItemInEncryptionHistory(eventTimelineItem) {
+                return EncryptedHistoryRoomTimelineItem(id: eventTimelineItem.id)
+            }
             
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load
@@ -324,6 +338,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .unknown:
             return nil
         }
+    }
+    
+    /// Whether or not a specific item is part of the room's history that can't be decrypted due
+    /// to the lack of key-backup. This is handled differently so we only show a single item.
+    private func isItemInEncryptionHistory(_ itemProxy: EventTimelineItemProxy) -> Bool {
+        guard roomProxy.isEncrypted, let lastLoginDate = appSettings.lastLoginDate else { return false }
+        return itemProxy.timestamp < lastLoginDate
     }
     
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {

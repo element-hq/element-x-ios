@@ -26,10 +26,12 @@ final class ShareToMapsAppActivity: UIActivity {
 
     private let type: MapsAppType
     private let location: CLLocationCoordinate2D
+    private let locationDescription: String?
 
-    init(type: MapsAppType, location: CLLocationCoordinate2D) {
+    init(type: MapsAppType, location: CLLocationCoordinate2D, locationDescription: String?) {
         self.type = type
         self.location = location
+        self.locationDescription = locationDescription
         super.init()
     }
 
@@ -54,24 +56,36 @@ final class ShareToMapsAppActivity: UIActivity {
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {
-        UIApplication.shared.open(type.activityURL(for: location), options: [:]) { [weak self] result in
+        UIApplication.shared.open(type.activityURL(for: location, locationDescription: locationDescription), options: [:]) { [weak self] result in
             self?.activityDidFinish(result)
         }
     }
 }
 
 extension ShareToMapsAppActivity.MapsAppType {
-    func activityURL(for location: CLLocationCoordinate2D) -> URL {
+    func activityURL(for location: CLLocationCoordinate2D, locationDescription: String?) -> URL {
         switch self {
         case .apple:
-            // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://maps.apple.com?ll=\(location.latitude),\(location.longitude)&q=Pin")!
+            var url: URL = "https://maps.apple.com/"
+            url.append(queryItems: [
+                .init(name: "ll", value: "\(location.latitude),\(location.longitude)"),
+                .init(name: "q", value: locationDescription ?? "Pin")
+            ])
+            return url
         case .google:
-            // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://www.google.com/maps/search/?api=1&query=\(location.latitude),\(location.longitude)")!
+            var url: URL = "https://www.google.com/maps/search/"
+            url.append(queryItems: [
+                .init(name: "api", value: "1"),
+                .init(name: "query", value: "\(location.latitude),\(location.longitude)")
+            ])
+            return url
         case .osm:
-            // swiftlint:disable:next force_unwrapping
-            return URL(string: "https://www.openstreetmap.org/?mlat=\(location.latitude)&mlon=\(location.longitude)")!
+            var url: URL = "https://www.openstreetmap.org/"
+            url.append(queryItems: [
+                .init(name: "mlat", value: "\(location.latitude)"),
+                .init(name: "mlon", value: "\(location.longitude)")
+            ])
+            return url
         }
     }
 

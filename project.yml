@@ -29,7 +29,7 @@ settings:
   APP_NAME: ElementX
   APP_DISPLAY_NAME: Element X
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.1.8
+  MARKETING_VERSION: 1.2.1
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
 
@@ -44,7 +44,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.94-alpha
+    exactVersion: 1.0.95-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
@@ -60,7 +60,7 @@ packages:
     minorVersion: 1.0.0
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.5.0
+    minorVersion: 0.6.0
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.0.0
