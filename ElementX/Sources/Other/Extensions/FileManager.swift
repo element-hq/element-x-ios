@@ -44,7 +44,8 @@ extension FileManager {
         
         return newURL
     }
-    
+
+    @discardableResult
     func writeDataToTemporaryDirectory(data: Data, fileName: String) throws -> URL {
         let newURL = URL.temporaryDirectory.appendingPathComponent(fileName)
         
