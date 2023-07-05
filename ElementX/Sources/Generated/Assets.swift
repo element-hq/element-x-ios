@@ -40,6 +40,7 @@ internal enum Asset {
     internal static let locationMarker = ImageAsset(name: "images/location-marker")
     internal static let locationPin = ImageAsset(name: "images/location-pin")
     internal static let timelineComposerSendMessage = ImageAsset(name: "images/timeline-composer-send-message")
+    internal static let timelineReactionAddMore = ImageAsset(name: "images/timeline-reaction-add-more")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
   }
 }

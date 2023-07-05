@@ -266,7 +266,7 @@
 		659E5B766F76FDEC1BF393A4 /* RoomDetailsEditScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E413F4CBD7BF0588F394A9DD /* RoomDetailsEditScreenViewModel.swift */; };
 		65EDA77363BEDC40CDE43B43 /* InvitesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ADEA322D2089391E049535 /* InvitesScreen.swift */; };
 		663E198678778F7426A9B27D /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FAFE1C2149E6AC8156ED2B /* Collection.swift */; };
-		6676B1732A4CCBE900F8F6E7 /* CollapsibleFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6676B1722A4CCBE900F8F6E7 /* CollapsibleFlowLayout.swift */; };
+		6676B1732A4CCBE900F8F6E7 /* CollapsibleReactionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6676B1722A4CCBE900F8F6E7 /* CollapsibleReactionLayout.swift */; };
 		668B38502A54679F0043027B /* LayoutMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668B384F2A54679F0043027B /* LayoutMocks.swift */; };
 		66EA41CB2A54225C00697B17 /* CollapsibleFlowLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EA41CA2A54225C00697B17 /* CollapsibleFlowLayoutTests.swift */; };
 		6713835120D94BAA8ED7E3E5 /* MessageForwardingScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59846FA04E1DBBFDD8829C2A /* MessageForwardingScreenUITests.swift */; };
@@ -1039,7 +1039,7 @@
 		65AAD845E53B0C8B5E0812C2 /* UserDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiscoveryService.swift; sourceTree = "<group>"; };
 		65C2B80DD0BF6F10BB5FA922 /* MockAuthenticationServiceProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthenticationServiceProxy.swift; sourceTree = "<group>"; };
 		6654859746B0BE9611459391 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		6676B1722A4CCBE900F8F6E7 /* CollapsibleFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleFlowLayout.swift; sourceTree = "<group>"; };
+		6676B1722A4CCBE900F8F6E7 /* CollapsibleReactionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleReactionLayout.swift; sourceTree = "<group>"; };
 		667DD3A9D932D7D9EB380CAA /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sk; path = sk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		668B384F2A54679F0043027B /* LayoutMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutMocks.swift; sourceTree = "<group>"; };
 		669F35C505ACE1110589F875 /* MediaUploadingPreprocessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaUploadingPreprocessor.swift; sourceTree = "<group>"; };
@@ -2238,7 +2238,7 @@
 		6676B1742A4CCC4400F8F6E7 /* CollapsibleFlowLayout */ = {
 			isa = PBXGroup;
 			children = (
-				6676B1722A4CCBE900F8F6E7 /* CollapsibleFlowLayout.swift */,
+				6676B1722A4CCBE900F8F6E7 /* CollapsibleReactionLayout.swift */,
 			);
 			path = CollapsibleFlowLayout;
 			sourceTree = "<group>";
@@ -4327,7 +4327,7 @@
 				8285FF4B2C2331758C437FF7 /* ReportContentScreenViewModelProtocol.swift in Sources */,
 				A494741843F087881299ACF0 /* RestorationToken.swift in Sources */,
 				755EE5B0998C6A4D764D86E5 /* RoomAttachmentPicker.swift in Sources */,
-				6676B1732A4CCBE900F8F6E7 /* CollapsibleFlowLayout.swift in Sources */,
+				6676B1732A4CCBE900F8F6E7 /* CollapsibleReactionLayout.swift in Sources */,
 				0BDA19079FD6E17C5AC62E22 /* RoomDetailsEditScreen.swift in Sources */,
 				E78D429F18071545BF661A52 /* RoomDetailsEditScreenCoordinator.swift in Sources */,
 				A6D4C5EEA85A6A0ABA1559D6 /* RoomDetailsEditScreenModels.swift in Sources */,

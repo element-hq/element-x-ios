@@ -61,4 +61,27 @@ extension AggregatedReaction {
             AggregatedReaction(accountOwnerID: alice, key: "🐼", senders: mockIds(1))
         ]
     }
+    
+    static var mockReactions2: [AggregatedReaction] {
+        [
+            AggregatedReaction(accountOwnerID: alice, key: "😅", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🤷‍♂️", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🎨", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🎉", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🤯", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🫣", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🚀", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "😇", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🤭", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🫤", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐶", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐱", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐭", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐹", senders: [alice] + mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐰", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🦊", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐻", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐼", senders: mockIds(1))
+        ]
+    }
 }
