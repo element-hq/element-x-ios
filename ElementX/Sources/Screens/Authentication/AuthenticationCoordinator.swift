@@ -205,7 +205,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
-        appSettings.loginDate = .now
+        appSettings.lastLoginDate = .now
         
         showAnalyticsPromptIfNeeded { [weak self] in
             guard let self else { return }

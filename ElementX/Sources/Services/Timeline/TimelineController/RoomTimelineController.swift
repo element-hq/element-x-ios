@@ -343,8 +343,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     /// Whether or not a specific item is part of the room's history that can't be decrypted due
     /// to the lack of key-backup. This is handled differently so we only show a single item.
     private func isItemInEncryptionHistory(_ itemProxy: EventTimelineItemProxy) -> Bool {
-        guard roomProxy.isEncrypted, let loginDate = appSettings.loginDate else { return false }
-        return itemProxy.timestamp < loginDate
+        guard roomProxy.isEncrypted, let lastLoginDate = appSettings.lastLoginDate else { return false }
+        return itemProxy.timestamp < lastLoginDate
     }
     
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {

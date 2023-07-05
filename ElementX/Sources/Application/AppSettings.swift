@@ -22,7 +22,7 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
-        case loginDate
+        case lastLoginDate
         case migratedAccounts
         case timelineStyle
         case analyticsConsentState
@@ -110,8 +110,8 @@ final class AppSettings {
     /// a hard wall on the history of encrypted messages until we have key backup.
     ///
     /// Not a multi-account aware setting as key backup will come before multi-account.
-    @UserPreference(key: UserDefaultsKeys.loginDate, defaultValue: nil, storageType: .userDefaults(store))
-    var loginDate: Date?
+    @UserPreference(key: UserDefaultsKeys.lastLoginDate, defaultValue: nil, storageType: .userDefaults(store))
+    var lastLoginDate: Date?
     
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
