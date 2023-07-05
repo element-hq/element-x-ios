@@ -1,0 +1,1 @@
+Caching for the notification placeholder image, to avoid generating it too many times and taking too much memory.
