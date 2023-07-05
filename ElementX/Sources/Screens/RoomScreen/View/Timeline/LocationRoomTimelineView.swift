@@ -21,9 +21,6 @@ struct LocationRoomTimelineView: View {
     @Environment(\.timelineStyle) var timelineStyle
     
     var body: some View {
-        let mapAspectRatio: Double = 3 / 2
-        let mapMaxHeight: Double = 300
-
         TimelineStyler(timelineItem: timelineItem) {
             if let geoURI = timelineItem.content.geoURI {
                 VStack(alignment: .leading, spacing: 0) {
@@ -48,14 +45,9 @@ struct LocationRoomTimelineView: View {
     @ViewBuilder
     private var descriptionView: some View {
         if let description = timelineItem.content.description, !description.isEmpty {
-            switch timelineStyle {
-            case .bubbles:
-                FormattedBodyText(text: description)
-                    .padding(8)
-            case .plain:
-                FormattedBodyText(text: description)
-                    .padding(.vertical, 8)
-            }
+            FormattedBodyText(text: description)
+                .padding(.vertical, 8)
+                .padding(.horizontal, timelineStyle.isBubbles ? 8 : 0)
         }
     }
 
@@ -68,6 +60,9 @@ struct LocationRoomTimelineView: View {
             EmptyView()
         }
     }
+
+    private let mapAspectRatio: Double = 3 / 2
+    private let mapMaxHeight: Double = 300
 }
 
 private extension MapLibreStaticMapView {

@@ -30,6 +30,16 @@ enum TimelineStyle: String, CaseIterable, Codable {
             return EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8)
         }
     }
+
+    /// Short hand for `self == .bubbles`
+    var isBubbles: Bool {
+        switch self {
+        case .plain:
+            return false
+        case .bubbles:
+            return true
+        }
+    }
 }
 
 enum TimelineGroupStyle: Hashable {
