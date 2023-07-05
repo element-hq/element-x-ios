@@ -98,7 +98,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // After the first processing, update the modified content
             modifiedContent = try await itemProxy.process(mediaProvider: nil)
 
-            guard itemProxy.requiresMediaProvider else {
+            guard itemProxy.hasMedia else {
                 MXLog.info("\(tag) no media needed")
 
                 // We've processed the item and no media operations needed, so no need to go further

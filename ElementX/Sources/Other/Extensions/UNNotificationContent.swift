@@ -105,26 +105,31 @@ extension UNMutableNotificationContent {
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderID: String,
                        senderName: String,
-                       icon: NotificationIcon,
-                       requiresMediaProvider: Bool) async throws -> UNMutableNotificationContent {
-        let shouldSkipPlaceholder = requiresMediaProvider && mediaProvider == nil
+                       icon: NotificationIcon) async throws -> UNMutableNotificationContent {
+        // We display the placeholder only if...
+        var needsPlaceholder = false
 
         var fetchedImage: INImage?
         let image: INImage
         if let mediaSource = icon.mediaSource {
-            switch await mediaProvider?.loadImageDataFromSource(mediaSource) {
-            case .success(let data):
-                fetchedImage = INImage(imageData: data)
-            case .failure(let error):
-                MXLog.error("Couldn't add sender icon: \(error)")
-            case .none:
-                break
+            if let mediaProvider {
+                switch await mediaProvider.loadImageDataFromSource(mediaSource) {
+                case .success(let data):
+                    fetchedImage = INImage(imageData: data)
+                case .failure(let error):
+                    MXLog.error("Couldn't add sender icon: \(error)")
+                    // ...The provider failed to fetch
+                    needsPlaceholder = true
+                }
             }
+        } else {
+            // ...There is no media
+            needsPlaceholder = true
         }
 
         if let fetchedImage {
             image = fetchedImage
-        } else if !shouldSkipPlaceholder,
+        } else if needsPlaceholder,
                   let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
