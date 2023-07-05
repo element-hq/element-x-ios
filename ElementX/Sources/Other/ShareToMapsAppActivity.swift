@@ -26,9 +26,9 @@ final class ShareToMapsAppActivity: UIActivity {
 
     private let type: MapsAppType
     private let location: CLLocationCoordinate2D
-    private let locationDescription: String
+    private let locationDescription: String?
 
-    init(type: MapsAppType, location: CLLocationCoordinate2D, locationDescription: String) {
+    init(type: MapsAppType, location: CLLocationCoordinate2D, locationDescription: String?) {
         self.type = type
         self.location = location
         self.locationDescription = locationDescription
@@ -63,13 +63,13 @@ final class ShareToMapsAppActivity: UIActivity {
 }
 
 extension ShareToMapsAppActivity.MapsAppType {
-    func activityURL(for location: CLLocationCoordinate2D, locationDescription: String) -> URL {
+    func activityURL(for location: CLLocationCoordinate2D, locationDescription: String?) -> URL {
         switch self {
         case .apple:
             var url: URL = "https://maps.apple.com/"
             url.append(queryItems: [
                 .init(name: "ll", value: "\(location.latitude),\(location.longitude)"),
-                .init(name: "q", value: locationDescription)
+                .init(name: "q", value: locationDescription ?? "Pin")
             ])
             return url
         case .google:

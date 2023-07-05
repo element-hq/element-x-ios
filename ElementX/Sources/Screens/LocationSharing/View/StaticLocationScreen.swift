@@ -128,7 +128,7 @@ struct StaticLocationScreen: View {
     @ViewBuilder
     private var shareSheet: some View {
         if let location = context.viewState.mapAnnotationCoordinate {
-            let locationDescription = context.viewState.locationDescription ?? "Pin"
+            let locationDescription = context.viewState.locationDescription
             AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, locationDescription: locationDescription)],
                             applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, locationDescription: locationDescription) })
                 .edgesIgnoringSafeArea(.bottom)
