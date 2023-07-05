@@ -59,9 +59,11 @@ struct WelcomeScreen: View {
             Text(context.viewState.title)
                 .font(Font.compound.headingLGBold)
                 .foregroundColor(Color.compound.textPrimary)
+                .multilineTextAlignment(.center)
             Text(context.viewState.subtitle)
                 .font(Font.compound.bodyMD)
                 .foregroundColor(Color.compound.textPrimary)
+                .multilineTextAlignment(.center)
         }
     }
 
@@ -69,26 +71,17 @@ struct WelcomeScreen: View {
     private var checkmarkList: some View {
         VStack(alignment: .leading, spacing: 4) {
             RoundedLabelItem(title: context.viewState.bullet1, listPosition: .top) {
-                iconImage(asset: Asset.Images.spikyAlert)
+                Image(systemName: "exclamationmark.transmission")
             }
             RoundedLabelItem(title: context.viewState.bullet2, listPosition: .middle) {
-                iconImage(asset: Asset.Images.lock)
+                Image(systemName: "lock")
             }
             RoundedLabelItem(title: context.viewState.bullet3, listPosition: .bottom) {
-                iconImage(asset: Asset.Images.bubblePlus)
+                Image(systemName: "plus.bubble")
             }
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
-    }
-
-    @ViewBuilder
-    private func iconImage(asset: ImageAsset) -> some View {
-        Image(asset: asset)
-            .resizable()
-            .scaledToFit()
-            .frame(width: iconSize, height: iconSize)
-            .offset(y: iconSize * 0.2)
     }
 
     @ViewBuilder
