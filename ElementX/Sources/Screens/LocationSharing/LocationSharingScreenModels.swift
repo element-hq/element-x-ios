@@ -67,10 +67,10 @@ struct StaticLocationScreenViewState: BindableState {
         }
     }
 
-    var showPinInTheCenter: Bool {
+    var isLocationPickerMode: Bool {
         switch interactionMode {
         case .picker:
-            return isPinDropSharing
+            return true
         case .viewOnly:
             return false
         }
