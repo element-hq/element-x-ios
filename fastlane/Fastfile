@@ -152,6 +152,7 @@ lane :integration_tests do
     devices: ["iPhone 13 Pro"],
     ensure_devices_found: true,
     result_bundle: true,
+    reset_simulator: true,
     include_simulator_logs: true
   )
 
