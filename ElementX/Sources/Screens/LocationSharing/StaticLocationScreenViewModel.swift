@@ -29,7 +29,7 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
     init(interactionMode: StaticLocationInteractionMode) {
         super.init(initialViewState: .init(interactionMode: interactionMode))
     }
-    
+       
     override func process(viewAction: StaticLocationScreenViewAction) {
         switch viewAction {
         case .close:
@@ -40,12 +40,15 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
         case .userDidPan:
             state.bindings.showsUserLocationMode = .show
         case .centerToUser:
-            guard state.bindings.isLocationAuthorized else {
-                // TODO: text and button to settings
-                state.bindings.alertInfo = .init(id: .missingAuthorization)
-                return
+            switch state.bindings.isLocationAuthorized {
+            case .some(true), .none:
+                state.bindings.showsUserLocationMode = .showAndFollow
+            case .some(false):
+                state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
+                                                 primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
+                                                 secondaryButton: .init(title: L10n.commonSettings,
+                                                                        action: { [weak self] in self?.actionsSubject.send(.openSystemSettings) }))
             }
-            state.bindings.showsUserLocationMode = .showAndFollow
         }
     }
 }

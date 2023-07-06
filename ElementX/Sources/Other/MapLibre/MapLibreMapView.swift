@@ -55,7 +55,7 @@ struct MapLibreMapView: UIViewRepresentable {
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
-    @Binding var isLocationAuthorized: Bool
+    @Binding var isLocationAuthorized: Bool?
     
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
@@ -95,13 +95,16 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     private func showUserLocation(in mapView: MGLMapView) {
-        switch showsUserLocationMode {
-        case .showAndFollow:
+        switch (showsUserLocationMode, options.annotations) {
+        case (.showAndFollow, _):
             mapView.userTrackingMode = .follow
-        case .show:
+        case (.show, let annotations) where !annotations.isEmpty:
+            guard mapView.locationManager.authorizationStatus != .notDetermined else { return }
+            fallthrough
+        case (.show, _):
             mapView.showsUserLocation = true
             mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
-        case .hide:
+        case (.hide, _):
             mapView.showsUserLocation = false
             mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         }
@@ -153,10 +156,11 @@ extension MapLibreMapView {
             switch manager.authorizationStatus {
             case .denied, .restricted:
                 mapLibreView.isLocationAuthorized = false
-            // not necessary mapLibreView.error.wrappedValue = .invalidLocationAuthorization
             case .authorizedAlways, .authorizedWhenInUse:
                 mapLibreView.isLocationAuthorized = true
-            default:
+            case .notDetermined:
+                mapLibreView.isLocationAuthorized = nil
+            @unknown default:
                 break
             }
         }

@@ -18,13 +18,13 @@ import CoreLocation
 import Foundation
 
 enum LocationSharingViewError: Error, Hashable {
-    case failedSharingLocation
     case missingAuthorization
     case mapError(MapLibreError)
 }
 
 enum StaticLocationScreenViewModelAction {
     case close
+    case openSystemSettings
     case sendLocation(GeoURI, isUserLocation: Bool)
 }
 
@@ -47,7 +47,7 @@ struct StaticLocationScreenViewState: BindableState {
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
-        bindings.isLocationAuthorized && bindings.showsUserLocationMode == .showAndFollow
+        bindings.isLocationAuthorized == true && bindings.showsUserLocationMode == .showAndFollow
     }
     
     var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
@@ -124,7 +124,7 @@ struct StaticLocationScreenBindings {
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     var showsUserLocationMode: ShowUserLocationMode
     
-    var isLocationAuthorized = false
+    var isLocationAuthorized: Bool?
     
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
@@ -135,7 +135,7 @@ struct StaticLocationScreenBindings {
             return nil
         }
         set {
-            alertInfo = newValue.map { AlertInfo(id: .mapError($0)) }
+            alertInfo = newValue.map { AlertInfo(locationSharingViewError: .mapError($0)) }
         }
     }
     
@@ -150,4 +150,31 @@ enum StaticLocationScreenViewAction {
     case selectLocation
     case centerToUser
     case userDidPan
+}
+
+extension AlertInfo where T == LocationSharingViewError {
+    init(locationSharingViewError error: LocationSharingViewError,
+         primaryButton: AlertButton = AlertButton(title: L10n.actionOk, action: nil),
+         secondaryButton: AlertButton? = nil) {
+        switch error {
+        case .missingAuthorization:
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorMissingLocationAuth,
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .mapError(.failedLoadingMap):
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorFailedLoadingMap,
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .mapError(.failedLocatingUser):
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorFailedLocatingUser,
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        }
+    }
 }

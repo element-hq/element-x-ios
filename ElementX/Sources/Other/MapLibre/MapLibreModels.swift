@@ -36,7 +36,6 @@ enum MapTilerStyle {
 enum MapLibreError: Error {
     case failedLoadingMap
     case failedLocatingUser
-    case invalidLocationAuthorization
 }
 
 enum MapTilerAttributionPlacement: String {
