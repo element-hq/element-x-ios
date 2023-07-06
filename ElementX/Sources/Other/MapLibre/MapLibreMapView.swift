@@ -89,8 +89,8 @@ struct MapLibreMapView: UIViewRepresentable {
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
-        mapView.logoViewPosition = .bottomLeft
-        mapView.attributionButtonPosition = .bottomLeft
+        mapView.logoViewPosition = .topLeft
+        mapView.attributionButtonPosition = .topLeft
         mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
         return mapView
     }
