@@ -94,6 +94,7 @@ struct WelcomeScreen: View {
             Text(context.viewState.buttonTitle)
         }
         .buttonStyle(.elementAction(.xLarge))
+        .accessibilityIdentifier(A11yIdentifiers.welcomeScreen.letsGo)
     }
 }
 

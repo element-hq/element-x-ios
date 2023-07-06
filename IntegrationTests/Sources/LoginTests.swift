@@ -100,6 +100,16 @@ class LoginTests: XCTestCase {
         }
         
         // Migration screen may be shown as an overlay.
+        // we let that happen eg:
+        // if (Detect migration screen) { (wait for no migration screen ) }
+
+        // Welcome screen may be shown as an overlay.
+        if app.buttons[A11yIdentifiers.welcomeScreen.letsGo].waitForExistence(timeout: 1.0) {
+            let goButton = app.buttons[A11yIdentifiers.welcomeScreen.letsGo]
+            XCTAssertTrue(goButton.waitForExistence(timeout: 1.0))
+            goButton.tap()
+        }
+
         // Wait for the home screen to become visible.
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         // Timeouts are huge because we're waiting for the server.
