@@ -85,10 +85,10 @@ class RoomProxy: RoomProxyProtocol {
 
         subscribeToBackpagination()
         
-        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items,
-                                                     updatePublisher: updatesPublisher,
-                                                     backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
-
+        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           updatePublisher: updatesPublisher,
+                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+        
         Task {
             await fetchMembers()
             await updateMembers()

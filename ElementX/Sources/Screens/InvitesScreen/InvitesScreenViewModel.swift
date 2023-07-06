@@ -105,8 +105,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
 
                 for inviteIndex in 0..<invites.count {
                     group.addTask {
-                        let invite = invites[inviteIndex]
-                        let roomID = invite.roomDetails.id
+                        let roomID = invites[inviteIndex].roomDetails.id
                         guard let inviter = await clientProxy.roomForIdentifier(roomID)?.inviter() else {
                             return nil
                         }
