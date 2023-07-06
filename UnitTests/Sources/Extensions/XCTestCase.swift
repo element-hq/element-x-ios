@@ -22,7 +22,7 @@ extension XCTestCase {
     ///
     ///  ```
     /// let collectedEvents = somePublisher.collect(3).first()
-    /// let awaitDeferred = xcAwaitDeferred(collectedEvents)
+    /// let awaitDeferred = xcDeferFulfillment(collectedEvents)
     /// // Do some other work that publishes to somePublisher
     /// XCTAssertEqual(try await awaitDeferred.execute(), [expected, values, here])
     ///  ```
@@ -30,7 +30,7 @@ extension XCTestCase {
     ///   - publisher: The publisher to wait on.
     ///   - timeout: A timeout after which we give up.
     /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-    func xcAwaitDeferred<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10) -> XCTDeferredFulfillment<T.Output> {
+    func xcDeferFulfillment<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10) -> XCTDeferredFulfillment<T.Output> {
         var result: Result<T.Output, Error>?
         let expectation = expectation(description: "Awaiting publisher")
         let cancellable = publisher
@@ -56,7 +56,7 @@ extension XCTestCase {
     
     struct XCTDeferredFulfillment<T> {
         let closure: () async throws -> T
-        @discardableResult func execute() async throws -> T {
+        @discardableResult func fulfill() async throws -> T {
             try await closure()
         }
     }

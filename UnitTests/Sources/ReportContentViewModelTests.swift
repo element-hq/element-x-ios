@@ -31,14 +31,14 @@ class ReportContentScreenViewModelTests: XCTestCase {
                                                      senderID: senderID,
                                                      roomProxy: roomProxy)
         
-        let deferred = xcAwaitDeferred(viewModel.actions.collect(2).first())
+        let deferred = xcDeferFulfillment(viewModel.actions.collect(2).first())
         
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = false
         viewModel.context.send(viewAction: .submit)
         
-        let actions = try await deferred.execute()
+        let actions = try await deferred.fulfill()
         XCTAssertEqual(actions, [.submitStarted, .submitFinished])
    
         // Then the content should be reported, but the user should not be included.
