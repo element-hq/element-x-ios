@@ -663,7 +663,7 @@ class RoomProxy: RoomProxyProtocol {
             self?.backPaginationStateSubject.send(status)
         }
         do {
-            backPaginationStateObservationToken = try room.subscribeToBackPaginationState(listener: listener)
+            backPaginationStateObservationToken = try room.subscribeToBackPaginationStatus(listener: listener)
         } catch {
             MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
         }
