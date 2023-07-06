@@ -46,7 +46,9 @@ struct StaticLocationScreenViewState: BindableState {
  
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
-    var isSharingUserLocation = false
+    var isSharingUserLocation: Bool {
+        bindings.isLocationAuthorized && bindings.showsUserLocationMode == .showAndFollow
+    }
     
     var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
 

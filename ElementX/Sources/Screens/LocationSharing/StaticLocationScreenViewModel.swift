@@ -28,23 +28,6 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
     
     init(interactionMode: StaticLocationInteractionMode) {
         super.init(initialViewState: .init(interactionMode: interactionMode))
-        
-        setupBindings()
-    }
-    
-    private func setupBindings() {
-        guard state.interactionMode == .picker else { return }
-        context.$viewState
-            .map(\.bindings.isLocationAuthorized)
-            .dropFirst()
-            .first()
-            .sink { [weak self] isLocationAuthorized in
-                guard let self else { return }
-                if isLocationAuthorized {
-                    self.state.isSharingUserLocation = true
-                }
-            }
-            .store(in: &cancellables)
     }
     
     override func process(viewAction: StaticLocationScreenViewAction) {
@@ -56,14 +39,13 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             actionsSubject.send(.sendLocation(.init(coordinate: coordinate), isUserLocation: state.isSharingUserLocation))
         case .userDidPan:
             state.bindings.showsUserLocationMode = .show
-            state.isSharingUserLocation = false
         case .centerToUser:
             guard state.bindings.isLocationAuthorized else {
+                // TODO: text and button to settings
                 state.bindings.alertInfo = .init(id: .missingAuthorization)
                 return
             }
             state.bindings.showsUserLocationMode = .showAndFollow
-            state.isSharingUserLocation = true
         }
     }
 }

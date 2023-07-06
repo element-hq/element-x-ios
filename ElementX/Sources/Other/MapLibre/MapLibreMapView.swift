@@ -94,12 +94,15 @@ struct MapLibreMapView: UIViewRepresentable {
         } else {
             mapView.zoomLevel = options.zoomLevel
         }
-        // TODO: test on device
         mapView.centerCoordinate = options.mapCenter
     }
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
+        
+        mapView.logoViewPosition = .bottomLeft
+        mapView.attributionButtonPosition = .bottomLeft
+        mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
         
         return mapView
     }
@@ -150,7 +153,10 @@ extension MapLibreMapView {
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
             guard let userLocation else { return }
             if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
-                mapView.zoomLevel = mapLibreView.options.zoomLevel
+                // TODO: test on device
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)
+                }
             }
             previousUserLocation = userLocation
         }
