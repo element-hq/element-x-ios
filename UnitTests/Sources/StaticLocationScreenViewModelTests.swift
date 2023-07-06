@@ -52,4 +52,28 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isSharingUserLocation)
         XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
     }
+    
+    func testCenterOnUserWithoutAuth() async throws {
+        context.showsUserLocationMode = .hide
+        context.isLocationAuthorized = nil
+        context.send(viewAction: .centerToUser)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
+    }
+    
+    func testCenterOnUserWithDeniedAuth() async throws {
+        context.isLocationAuthorized = false
+        context.showsUserLocationMode = .hide
+        context.send(viewAction: .centerToUser)
+        XCTAssertNotEqual(context.showsUserLocationMode, .showAndFollow)
+        XCTAssertNotNil(context.alertInfo)
+    }
+    
+    func testErrorMapping() async throws {
+        let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
+        XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap)
+        let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
+        XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser)
+        let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
+        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth)
+    }
 }
