@@ -20,8 +20,8 @@ import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
     struct Options {
-        /// The initial zoom level
         let zoomLevel: Double
+        /// The initial zoom level
         let initialZoomLevel: Double
         
         /// The initial map center
@@ -72,13 +72,7 @@ struct MapLibreMapView: UIViewRepresentable {
     func updateUIView(_ mapView: MGLMapView, context: Context) {
         mapView.removeAllAnnotations()
         mapView.addAnnotations(options.annotations)
-        
-        if colorScheme == .dark {
-            mapView.styleURL = builder.dynamicMapURL(for: .dark)
-        } else {
-            mapView.styleURL = builder.dynamicMapURL(for: .light)
-        }
-        
+        mapView.styleURL = builder.dynamicMapURL(for: .init(colorScheme))
         showUserLocation(in: mapView)
     }
     
@@ -89,21 +83,15 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MGLMapView, with options: Options) {
-        if options.annotations.isEmpty {
-            mapView.zoomLevel = options.initialZoomLevel
-        } else {
-            mapView.zoomLevel = options.zoomLevel
-        }
+        mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
         mapView.centerCoordinate = options.mapCenter
     }
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
-        
         mapView.logoViewPosition = .bottomLeft
         mapView.attributionButtonPosition = .bottomLeft
         mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
-        
         return mapView
     }
     
@@ -152,12 +140,13 @@ extension MapLibreMapView {
         
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
             guard let userLocation else { return }
+
             if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
-                // TODO: test on device
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)
                 }
             }
+
             previousUserLocation = userLocation
         }
         
@@ -201,5 +190,18 @@ private extension MGLMapView {
             return
         }
         removeAnnotations(annotations)
+    }
+}
+
+private extension MapTilerStyle {
+    init(_ colorScheme: ColorScheme) {
+        switch colorScheme {
+        case .light:
+            self = .light
+        case .dark:
+            self = .dark
+        @unknown default:
+            fatalError()
+        }
     }
 }
