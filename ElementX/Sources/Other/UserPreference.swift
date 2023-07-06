@@ -78,7 +78,7 @@ extension UserPreference {
 
     /// Convenience initializer that also immediatelly stores the provided initialValue.
     /// The initial value is stored every time the app is launched.
-    /// And weill override any existing values.
+    /// And will override any existing values.
     ///
     /// - Parameters:
     ///   - key: the raw representable key used to store the value, needs conform also to String
