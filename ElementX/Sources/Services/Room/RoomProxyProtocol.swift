@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum RoomProxyError: Error {
+enum RoomProxyError: Error, Equatable {
     case noMoreMessagesToBackPaginate
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
