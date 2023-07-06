@@ -114,9 +114,9 @@ struct SettingsScreen: View {
             }
             
             // Notifications
-            if context.viewState.showNotificationsSettings {
+            if context.viewState.showNotificationSettings {
                 Button { context.send(viewAction: .notifications) } label: {
-                    Label(L10n.screenNotificationsSettingsTitle, systemImage: "bell")
+                    Label(L10n.screenNotificationSettingsTitle, systemImage: "bell")
                 }
                 .buttonStyle(.compoundForm(accessory: .navigationLink))
                 .accessibilityIdentifier("notificationsButton")
@@ -203,7 +203,7 @@ struct SettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        ServiceLocator.shared.settings.notificationsSettingsEnabled = true
+        ServiceLocator.shared.settings.notificationSettingsEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)
     }()

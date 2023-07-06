@@ -17,22 +17,22 @@
 import Combine
 import SwiftUI
 
-typealias NotificationsSettingsScreenViewModelType = StateStoreViewModel<NotificationsSettingsScreenViewState, NotificationsSettingsScreenViewAction>
+typealias NotificationSettingsScreenViewModelType = StateStoreViewModel<NotificationSettingsScreenViewState, NotificationSettingsScreenViewAction>
 
-class NotificationsSettingsScreenViewModel: NotificationsSettingsScreenViewModelType, NotificationsSettingsScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<NotificationsSettingsScreenViewModelAction, Never> = .init()
+class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelType, NotificationSettingsScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<NotificationSettingsScreenViewModelAction, Never> = .init()
     private let appSettings: AppSettings
     private let userNotificationCenter: UserNotificationCenterProtocol
     
-    var actions: AnyPublisher<NotificationsSettingsScreenViewModelAction, Never> {
+    var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
     init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol) {
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
-        let bindings = NotificationsSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        super.init(initialViewState: NotificationsSettingsScreenViewState(bindings: bindings))
+        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
+        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings))
                 
         // Listen for changes to AppSettings.enableNotifications
         appSettings.$enableNotifications
@@ -55,7 +55,7 @@ class NotificationsSettingsScreenViewModel: NotificationsSettingsScreenViewModel
         
     // MARK: - Public
     
-    override func process(viewAction: NotificationsSettingsScreenViewAction) {
+    override func process(viewAction: NotificationSettingsScreenViewAction) {
         switch viewAction {
         case .openSystemSettings:
             Task {
@@ -75,7 +75,7 @@ class NotificationsSettingsScreenViewModel: NotificationsSettingsScreenViewModel
 
     func openSystemSettings() async {
         // Note: UIApplication.openNotificationSettingsURLString doesn't work on a simulator
-        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
             await UIApplication.shared.open(url)
         }
     }

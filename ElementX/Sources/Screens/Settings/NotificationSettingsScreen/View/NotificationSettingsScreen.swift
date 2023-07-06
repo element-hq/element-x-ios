@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-struct NotificationsSettingsScreen: View {
-    @ObservedObject var context: NotificationsSettingsScreenViewModel.Context
+struct NotificationSettingsScreen: View {
+    @ObservedObject var context: NotificationSettingsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -27,7 +27,7 @@ struct NotificationsSettingsScreen: View {
             enableNotificationSection
         }
         .compoundForm()
-        .navigationTitle(L10n.screenNotificationsSettingsTitle)
+        .navigationTitle(L10n.screenNotificationSettingsTitle)
         .track(screen: .settingsNotifications)
     }
     
@@ -39,7 +39,7 @@ struct NotificationsSettingsScreen: View {
                 Image(systemName: "exclamationmark.circle.fill")
                     .foregroundColor(.compound.iconTertiaryAlpha)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(L10n.screenNotificationsSettingsSystemNotificationsTurnedOff)
+                    Text(L10n.screenNotificationSettingsSystemNotificationsTurnedOff)
                         .font(.compound.bodyLG)
                         .foregroundColor(.compound.textPrimary)
                     Text(context.viewState.strings.changeYourSystemSettings)
@@ -56,7 +56,7 @@ struct NotificationsSettingsScreen: View {
     private var enableNotificationSection: some View {
         Section {
             Toggle(isOn: $context.enableNotifications) {
-                Text(L10n.screenNotificationsSettingsEnableNotifications)
+                Text(L10n.screenNotificationSettingsEnableNotifications)
             }
             .toggleStyle(.compoundForm)
             .onChange(of: context.enableNotifications) { _ in
@@ -70,15 +70,15 @@ struct NotificationsSettingsScreen: View {
 // MARK: - Previews
 
 struct NotificationSettingsScreen_Previews: PreviewProvider {
-    static let viewModel: NotificationsSettingsScreenViewModel = {
+    static let viewModel: NotificationSettingsScreenViewModel = {
         let appSettings = AppSettings()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.getAuthorizationStatusReturnValue = .notDetermined
-        var viewModel = NotificationsSettingsScreenViewModel(appSettings: appSettings, userNotificationCenter: notificationCenter)
+        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings, userNotificationCenter: notificationCenter)
         return viewModel
     }()
 
     static var previews: some View {
-        NotificationsSettingsScreen(context: viewModel.context)
+        NotificationSettingsScreen(context: viewModel.context)
     }
 }

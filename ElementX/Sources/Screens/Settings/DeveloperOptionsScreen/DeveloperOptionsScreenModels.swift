@@ -31,7 +31,7 @@ struct DeveloperOptionsScreenViewStateBindings {
     var isEncryptionSyncEnabled: Bool
     var locationEventsEnabled: Bool
     var shareLocationEnabled: Bool
-    var notificationsSettingsEnabled: Bool
+    var notificationSettingsEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -41,6 +41,6 @@ enum DeveloperOptionsScreenViewAction {
     case changedIsEncryptionSyncEnabled
     case changedLocationEventsEnabled
     case changedShareLocationEnabled
-    case changedNotificationsSettingsEnabled
+    case changedNotificationSettingsEnabled
     case clearCache
 }

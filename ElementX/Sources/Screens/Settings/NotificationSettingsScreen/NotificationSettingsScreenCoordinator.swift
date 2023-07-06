@@ -17,32 +17,32 @@
 import Combine
 import SwiftUI
 
-struct NotificationsSettingsScreenCoordinatorParameters {
+struct NotificationSettingsScreenCoordinatorParameters {
     let userNotificationCenter: UserNotificationCenterProtocol
 }
 
-enum NotificationsSettingsScreenCoordinatorAction { }
+enum NotificationSettingsScreenCoordinatorAction { }
 
-final class NotificationsSettingsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: NotificationsSettingsScreenCoordinatorParameters
-    private var viewModel: NotificationsSettingsScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<NotificationsSettingsScreenCoordinatorAction, Never> = .init()
+final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
+    private let parameters: NotificationSettingsScreenCoordinatorParameters
+    private var viewModel: NotificationSettingsScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<NotificationSettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<NotificationsSettingsScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<NotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: NotificationsSettingsScreenCoordinatorParameters) {
+    init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = NotificationsSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
-                                                         userNotificationCenter: parameters.userNotificationCenter)
+        viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
+                                                        userNotificationCenter: parameters.userNotificationCenter)
     }
     
     func start() { }
         
     func toPresentable() -> AnyView {
-        AnyView(NotificationsSettingsScreen(context: viewModel.context))
+        AnyView(NotificationSettingsScreen(context: viewModel.context))
     }
 }

@@ -35,7 +35,7 @@ struct SettingsScreenViewState: BindableState {
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showSessionVerificationSection: Bool
-    var showNotificationsSettings: Bool
+    var showNotificationSettings: Bool
     var showDeveloperOptions: Bool
 }
 

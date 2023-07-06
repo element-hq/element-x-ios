@@ -35,7 +35,7 @@ final class AppSettings {
         case locationEventsEnabled
         case shareLocationEnabled
         case hasShownWelcomeScreen
-        case notificationsSettingsEnabled
+        case notificationSettingsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -224,6 +224,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.shareLocationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var shareLocationEnabled
     
-    @UserPreference(key: UserDefaultsKeys.notificationsSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var notificationsSettingsEnabled
+    @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var notificationSettingsEnabled
 }

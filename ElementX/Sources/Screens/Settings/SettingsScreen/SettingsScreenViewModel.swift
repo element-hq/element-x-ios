@@ -40,7 +40,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            showSessionVerificationSection: showSessionVerificationSection,
-                                           showNotificationsSettings: appSettings.notificationsSettingsEnabled,
+                                           showNotificationSettings: appSettings.notificationSettingsEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
@@ -52,8 +52,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        appSettings.$notificationsSettingsEnabled
-            .weakAssign(to: \.state.showNotificationsSettings, on: self)
+        appSettings.$notificationSettingsEnabled
+            .weakAssign(to: \.state.showNotificationSettings, on: self)
             .store(in: &cancellables)
         
         Task {

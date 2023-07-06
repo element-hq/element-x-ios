@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol NotificationsSettingsScreenViewModelProtocol {
-    var actions: AnyPublisher<NotificationsSettingsScreenViewModelAction, Never> { get }
-    var context: NotificationsSettingsScreenViewModelType.Context { get }
+protocol NotificationSettingsScreenViewModelProtocol {
+    var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> { get }
+    var context: NotificationSettingsScreenViewModelType.Context { get }
 }

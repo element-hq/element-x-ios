@@ -140,10 +140,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentNotificationSettings() {
-        let params = NotificationsSettingsScreenCoordinatorParameters(
+        let params = NotificationSettingsScreenCoordinatorParameters(
             userNotificationCenter: UNUserNotificationCenter.current()
         )
-        let coordinator = NotificationsSettingsScreenCoordinator(parameters: params)
+        let coordinator = NotificationSettingsScreenCoordinator(parameters: params)
         parameters.navigationStackCoordinator?.push(coordinator)
     }
 }

@@ -20,8 +20,8 @@ import XCTest
 
 @MainActor
 class NotificationSettingsScreenViewModelTests: XCTestCase {
-    private var viewModel: NotificationsSettingsScreenViewModelProtocol!
-    private var context: NotificationsSettingsScreenViewModelType.Context!
+    private var viewModel: NotificationSettingsScreenViewModelProtocol!
+    private var context: NotificationSettingsScreenViewModelType.Context!
     private var appSettings: AppSettings!
     private var userNotificationCenter: UserNotificationCenterMock!
     
@@ -31,8 +31,8 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         userNotificationCenter = UserNotificationCenterMock()
         userNotificationCenter.getAuthorizationStatusReturnValue = .authorized
         appSettings = AppSettings()
-        viewModel = NotificationsSettingsScreenViewModel(appSettings: appSettings,
-                                                         userNotificationCenter: userNotificationCenter)
+        viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+                                                        userNotificationCenter: userNotificationCenter)
         context = viewModel.context
     }
     

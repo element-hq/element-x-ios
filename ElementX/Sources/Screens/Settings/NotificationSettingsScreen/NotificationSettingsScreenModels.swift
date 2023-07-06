@@ -16,11 +16,11 @@
 
 import Foundation
 
-enum NotificationsSettingsScreenViewModelAction { }
+enum NotificationSettingsScreenViewModelAction { }
 
-struct NotificationsSettingsScreenViewState: BindableState {
-    var bindings: NotificationsSettingsScreenViewStateBindings
-    var strings = NotificationsSettingsScreenStrings()
+struct NotificationSettingsScreenViewState: BindableState {
+    var bindings: NotificationSettingsScreenViewStateBindings
+    var strings = NotificationSettingsScreenStrings()
     var isUserPermissionGranted: Bool?
     
     var showSystemNotificationsAlert: Bool {
@@ -28,17 +28,17 @@ struct NotificationsSettingsScreenViewState: BindableState {
     }
 }
 
-struct NotificationsSettingsScreenViewStateBindings {
+struct NotificationSettingsScreenViewStateBindings {
     var enableNotifications = false
 }
 
-struct NotificationsSettingsScreenStrings {
+struct NotificationSettingsScreenStrings {
     let changeYourSystemSettings: AttributedString = {
         let linkPlaceholder = "{link}"
-        var text = AttributedString(L10n.screenNotificationsSettingsSystemNotificationsActionRequired(linkPlaceholder))
+        var text = AttributedString(L10n.screenNotificationSettingsSystemNotificationsActionRequired(linkPlaceholder))
         text.font = .compound.bodySM
         text.foregroundColor = .compound.textSecondary
-        var linkString = AttributedString(L10n.screenNotificationsSettingsSystemNotificationsActionRequiredContentLink)
+        var linkString = AttributedString(L10n.screenNotificationSettingsSystemNotificationsActionRequiredContentLink)
         linkString.font = .compound.bodySM
         linkString.bold()
         linkString.foregroundColor = .compound.textPrimary
@@ -48,7 +48,7 @@ struct NotificationsSettingsScreenStrings {
     }()
 }
 
-enum NotificationsSettingsScreenViewAction {
+enum NotificationSettingsScreenViewAction {
     case openSystemSettings
     case changedEnableNotifications
 }
