@@ -32,13 +32,24 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
-        viewModel.state.isSharingUserLocation = true
+        viewModel.state.bindings.isLocationAuthorized = true
         self.viewModel = viewModel
     }
     
     func testUserDidPan() async throws {
         XCTAssertTrue(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
         context.send(viewAction: .userDidPan)
         XCTAssertFalse(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .show)
+    }
+    
+    func testCenterOnUser() async throws {
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
+        context.showsUserLocationMode = .show
+        XCTAssertFalse(context.viewState.isSharingUserLocation)
+        context.send(viewAction: .centerToUser)
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
     }
 }
