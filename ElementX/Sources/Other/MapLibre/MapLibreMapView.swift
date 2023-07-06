@@ -70,8 +70,6 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
-        mapView.removeAllAnnotations()
-        mapView.addAnnotations(options.annotations)
         mapView.styleURL = builder.dynamicMapURL(for: .init(colorScheme))
         showUserLocation(in: mapView)
     }
@@ -83,6 +81,7 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MGLMapView, with options: Options) {
+        mapView.addAnnotations(options.annotations)
         mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
         mapView.centerCoordinate = options.mapCenter
     }
