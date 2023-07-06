@@ -5183,7 +5183,7 @@
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.2.1;
+				minimumVersion = 1.2.0;
 			};
 		};
 		6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */ = {

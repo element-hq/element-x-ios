@@ -105,4 +105,4 @@ packages:
     minorVersion: 2.0.0
   Flow:
     url: https://github.com/tevelee/SwiftUI-Flow
-    minorVersion: 1.2.1
+    minorVersion: 1.2.0
