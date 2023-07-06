@@ -14,10 +14,3 @@
 "soft_logout_clear_data_submit" = "Clear all data";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
-
-// MARK: - Notifications
-"screen_notifications_settings_title" = "Notifications";
-"screen_notifications_settings_enable_notifications" = "Enable notifications on this device";
-"screen_notifications_settings_system_notifications_turned_off" = "System notifications turned off";
-"screen_notifications_settings_system_notifications_action_required" = "To receive notifications, please change your %1$s.";
-"screen_notifications_settings_system_notifications_action_required_content_link" = "system settings";

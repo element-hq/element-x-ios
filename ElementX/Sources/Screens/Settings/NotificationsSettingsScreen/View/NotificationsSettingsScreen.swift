@@ -27,7 +27,7 @@ struct NotificationsSettingsScreen: View {
             enableNotificationSection
         }
         .compoundForm()
-        .navigationTitle(UntranslatedL10n.screenNotificationsSettingsTitle)
+        .navigationTitle(L10n.screenNotificationsSettingsTitle)
         .track(screen: .settingsNotifications)
     }
     
@@ -39,7 +39,7 @@ struct NotificationsSettingsScreen: View {
                 Image(systemName: "exclamationmark.circle.fill")
                     .foregroundColor(.compound.iconTertiaryAlpha)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsTurnedOff)
+                    Text(L10n.screenNotificationsSettingsSystemNotificationsTurnedOff)
                         .font(.compound.bodyLG)
                         .foregroundColor(.compound.textPrimary)
                     Text(context.viewState.strings.changeYourSystemSettings)
@@ -56,7 +56,7 @@ struct NotificationsSettingsScreen: View {
     private var enableNotificationSection: some View {
         Section {
             Toggle(isOn: $context.enableNotifications) {
-                Text(UntranslatedL10n.screenNotificationsSettingsEnableNotifications)
+                Text(L10n.screenNotificationsSettingsEnableNotifications)
             }
             .toggleStyle(.compoundForm)
             .onChange(of: context.enableNotifications) { _ in

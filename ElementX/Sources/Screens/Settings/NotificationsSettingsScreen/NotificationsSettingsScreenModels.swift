@@ -35,10 +35,10 @@ struct NotificationsSettingsScreenViewStateBindings {
 struct NotificationsSettingsScreenStrings {
     let changeYourSystemSettings: AttributedString = {
         let linkPlaceholder = "{link}"
-        var text = AttributedString(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsActionRequired(linkPlaceholder))
+        var text = AttributedString(L10n.screenNotificationsSettingsSystemNotificationsActionRequired(linkPlaceholder))
         text.font = .compound.bodySM
         text.foregroundColor = .compound.textSecondary
-        var linkString = AttributedString(UntranslatedL10n.screenNotificationsSettingsSystemNotificationsActionRequiredContentLink)
+        var linkString = AttributedString(L10n.screenNotificationsSettingsSystemNotificationsActionRequiredContentLink)
         linkString.font = .compound.bodySM
         linkString.bold()
         linkString.foregroundColor = .compound.textPrimary
