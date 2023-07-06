@@ -20,6 +20,23 @@ struct InvitesScreen: View {
     @ObservedObject var context: InvitesScreenViewModel.Context
     
     var body: some View {
+        Group {
+            if context.viewState.isLoading {
+                ProgressView()
+            } else {
+                mainContent
+            }
+        }
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .navigationTitle(L10n.actionInvitesList)
+        .alert(item: $context.alertInfo)
+        .track(screen: .invites)
+    }
+    
+    // MARK: - Private
+
+    @ViewBuilder
+    private var mainContent: some View {
         ScrollView {
             if !context.viewState.invites.isEmpty {
                 LazyVStack(spacing: 0) {
@@ -34,13 +51,7 @@ struct InvitesScreen: View {
                 noInvitesContent
             }
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .navigationTitle(L10n.actionInvitesList)
-        .alert(item: $context.alertInfo)
-        .track(screen: .invites)
     }
-    
-    // MARK: - Private
     
     private var noInvitesContent: some View {
         Text(L10n.screenInvitesEmptyList)
