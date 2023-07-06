@@ -22,8 +22,6 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
 
-    private let backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>
-
     private let backPaginationStateSubject = CurrentValueSubject<BackPaginationStatus, Never>(.idle)
     var backPaginationState: BackPaginationStatus {
         backPaginationStateSubject.value
@@ -45,8 +43,6 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
          updatePublisher: AnyPublisher<TimelineDiff, Never>,
          backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
-        self.backPaginationStatePublisher = backPaginationStatePublisher
-
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>(currentItems.map(TimelineItemProxy.init))
         
         // Manually call it here as the didSet doesn't work from constructors
