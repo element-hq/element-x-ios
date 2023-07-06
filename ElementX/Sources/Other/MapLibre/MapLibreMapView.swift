@@ -29,7 +29,6 @@ struct MapLibreMapView: UIViewRepresentable {
         
         /// Map annotations
         let annotations: [LocationAnnotation]
-        
         init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
             self.zoomLevel = zoomLevel
             self.initialZoomLevel = initialZoomLevel
