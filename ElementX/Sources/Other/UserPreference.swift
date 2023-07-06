@@ -77,10 +77,12 @@ extension UserPreference {
     }
 
     /// Convenience initializer that also immediatelly stores the provided initialValue.
+    /// The initial value is stored every time the app is launched.
+    /// And weill override any existing values.
     ///
     /// - Parameters:
     ///   - key: the raw representable key used to store the value, needs conform also to String
-    ///   - initialValue: the initial value that will be stored, the initialValue is also used as defaultValue
+    ///   - initialValue: the initial value that will be stored when the app is launched, the initialValue is also used as defaultValue
     ///   - storageType: the storage type where the wrappedValue will be stored.
     convenience init<R: RawRepresentable>(key: R, initialValue: T, storageType: StorageType) where R.RawValue == String {
         self.init(key: key, defaultValue: initialValue, storageType: storageType)
