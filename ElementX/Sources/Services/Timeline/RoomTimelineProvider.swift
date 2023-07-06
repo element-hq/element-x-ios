@@ -21,30 +21,44 @@ import MatrixRustSDK
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
-    
-    private let itemsSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
-    
-    var itemsPublisher: CurrentValuePublisher<[TimelineItemProxy], Never> {
-        itemsSubject.asCurrentValuePublisher()
-    }
-    
-    private var itemProxies: [TimelineItemProxy] {
-        didSet {
-            itemsSubject.send(itemProxies)
-        }
-    }
-    
-    init(currentItems: [TimelineItem], updatePublisher: AnyPublisher<TimelineDiff, Never>) {
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
 
-        itemProxies = currentItems.map(TimelineItemProxy.init)
+    private let backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>
+
+    private let backPaginationStateSubject = CurrentValueSubject<BackPaginationStatus, Never>(.idle)
+    var backPaginationState: BackPaginationStatus {
+        backPaginationStateSubject.value
+    }
+
+    private let itemProxiesSubject: CurrentValueSubject<[TimelineItemProxy], Never>
+    var itemProxies: [TimelineItemProxy] {
+        itemProxiesSubject.value
+    }
+
+    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+        itemProxiesSubject
+            .combineLatest(backPaginationStateSubject)
+            .map(TimelineProviderUpdate.init)
+            .eraseToAnyPublisher()
+    }
+
+    init(currentItems: [TimelineItem],
+         updatePublisher: AnyPublisher<TimelineDiff, Never>,
+         backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>) {
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
+        self.backPaginationStatePublisher = backPaginationStatePublisher
+
+        itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>(currentItems.map(TimelineItemProxy.init))
         
         // Manually call it here as the didSet doesn't work from constructors
-        itemsSubject.send(itemProxies)
-        
+        itemProxiesSubject.send(itemProxies)
+
         updatePublisher
             .collect(.byTime(serialDispatchQueue, 0.1))
             .sink { [weak self] in self?.updateItemsWithDiffs($0) }
+            .store(in: &cancellables)
+
+        backPaginationStatePublisher
+            .sink { [weak self] in self?.backPaginationStateSubject.send($0) }
             .store(in: &cancellables)
     }
     
@@ -59,7 +73,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         
         MXLog.verbose("Received timeline diff")
         
-        itemProxies = diffs
+        let items = diffs
             .reduce(itemProxies) { currentItems, diff in
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                     MXLog.error("Failed building CollectionDifference from \(diff)")
@@ -73,6 +87,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 
                 return updatedItems
             }
+
+        itemProxiesSubject.send(items)
         
         MXLog.verbose("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
     }
@@ -186,12 +202,8 @@ private extension VirtualTimelineItem {
         switch self {
         case .dayDivider(let timestamp):
             return "DayDiviver(\(timestamp))"
-        case .loadingIndicator:
-            return "LoadingIndicator"
         case .readMarker:
             return "ReadMarker"
-        case .timelineStart:
-            return "TimelineStart"
         }
     }
 }
