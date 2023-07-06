@@ -37,7 +37,7 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         } catch {
             // we want to show the profile (if any) even if the search fails
             if let queriedProfile = await queriedProfile {
-                return .success(filterAccountOwner([queriedProfile]))
+                return .success([queriedProfile])
             } else {
                 return .failure(.failedSearchingUsers)
             }
@@ -59,7 +59,7 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
     }
     
     private func profileIfPossible(with searchQuery: String) async -> UserProfileProxy? {
-        guard searchQuery.isMatrixIdentifier else {
+        guard searchQuery.isMatrixIdentifier, searchQuery != clientProxy.userID else {
             return nil
         }
         
