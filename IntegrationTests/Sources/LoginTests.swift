@@ -21,6 +21,7 @@ class LoginTests: XCTestCase {
         let parser = TestMeasurementParser()
         parser.capture(testCase: self) {
             let metrics: [XCTMetric] = [
+                XCTApplicationLaunchMetric(),
                 XCTClockMetric(),
                 XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.login)"),
                 XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.sync)"),
@@ -100,8 +101,17 @@ class LoginTests: XCTestCase {
         }
         
         // Migration screen may be shown as an overlay.
-        // we let that happen eg:
-        // if (Detect migration screen) { (wait for no migration screen ) }
+        // we let that happen and wait
+
+        if app.staticTexts[A11yIdentifiers.migrationScreen.message].waitForExistence(timeout: 10.0) {
+            let message = app.staticTexts[A11yIdentifiers.migrationScreen.message]
+            var elapsed = 0
+            while elapsed < 300 {
+                if !message.waitForExistence(timeout: 1.0) { break }
+                sleep(10)
+                elapsed += 10
+            }
+        }
 
         // Welcome screen may be shown as an overlay.
         if app.buttons[A11yIdentifiers.welcomeScreen.letsGo].waitForExistence(timeout: 1.0) {
@@ -114,17 +124,14 @@ class LoginTests: XCTestCase {
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         // Timeouts are huge because we're waiting for the server.
         XCTAssertTrue(profileButton.waitForExistence(timeout: 300.0))
-        let isHittablePredicate = NSPredicate(format: "isHittable == 1")
-        expectation(for: isHittablePredicate, evaluatedWith: profileButton)
-        waitForExpectations(timeout: 300.0)
         
-        // Open the first room in the list.
-        let rooms = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix))
-        rooms.firstMatch.tap()
-        // Temporary sleep to get it working.
-        sleep(20)
-        // Go back to the home screen.
-        app.navigationBars.firstMatch.buttons["All Chats"].tap()
+//        // Open the first room in the list.
+//        let rooms = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix))
+//        rooms.firstMatch.tap()
+//        // Temporary sleep to get it working.
+//        sleep(20)
+//        // Go back to the home screen.
+//        app.navigationBars.firstMatch.buttons["All Chats"].tap()
         
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()

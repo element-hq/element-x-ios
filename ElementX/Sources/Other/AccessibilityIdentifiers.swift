@@ -34,6 +34,7 @@ struct A11yIdentifiers {
     static let createRoomScreen = CreateRoomScreen()
     static let invitesScreen = InvitesScreen()
     static let welcomeScreen = WelcomeScreen()
+    static let migrationScreen = MigrationScreen()
 
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"
@@ -148,5 +149,9 @@ struct A11yIdentifiers {
 
     struct WelcomeScreen {
         let letsGo = "welcome_screen-lets_go"
+    }
+
+    struct MigrationScreen {
+        let message = "migration_screen-message"
     }
 }
