@@ -80,6 +80,8 @@ class LoginTests: XCTestCase {
         
         nextButton.tap()
 
+        sleep(10)
+
         // Wait for login and then handle save password sheet
         let savePasswordButton = app.buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
