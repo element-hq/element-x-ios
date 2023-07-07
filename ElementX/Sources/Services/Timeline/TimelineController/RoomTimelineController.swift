@@ -295,6 +295,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             // It only contains encrypted messages, state changes and date separators.
             newTimelineItems.removeFirst(lastEncryptedHistoryItemIndex)
         } else {
+            // Otherwise check if we need to add anything to the top of the timeline.
             switch timelineProvider.backPaginationState {
             case .timelineStartReached:
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
