@@ -68,7 +68,7 @@ struct DeveloperOptionsScreen: View {
                 }
                 
                 Toggle(isOn: $context.notificationSettingsEnabled) {
-                    Text("Show notifications settings")
+                    Text("Show notification settings")
                 }
                 .onChange(of: context.notificationSettingsEnabled) { _ in
                     context.send(viewAction: .changedNotificationSettingsEnabled)
