@@ -55,6 +55,7 @@ class RoomProxy: RoomProxyProtocol {
 
     deinit {
         roomTimelineObservationToken?.cancel()
+        backPaginationStateObservationToken?.cancel()
         roomListItem.unsubscribe()
     }
 
