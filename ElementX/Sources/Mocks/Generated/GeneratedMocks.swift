@@ -1075,6 +1075,20 @@ class RoomProxyMock: RoomProxyProtocol {
         }
     }
 }
+class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
+    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+        get { return underlyingUpdatePublisher }
+        set(value) { underlyingUpdatePublisher = value }
+    }
+    var underlyingUpdatePublisher: AnyPublisher<TimelineProviderUpdate, Never>!
+    var itemProxies: [TimelineItemProxy] = []
+    var backPaginationState: BackPaginationStatus {
+        get { return underlyingBackPaginationState }
+        set(value) { underlyingBackPaginationState = value }
+    }
+    var underlyingBackPaginationState: BackPaginationStatus!
+
+}
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
         get { return underlyingCallbacks }
