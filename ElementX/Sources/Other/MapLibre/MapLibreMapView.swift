@@ -20,8 +20,9 @@ import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
     struct Options {
+        /// the final zoom level used when the first user location emit
         let zoomLevel: Double
-        /// The initial zoom level
+        /// The initial zoom level used when the map it firstly loaded and the user location is not yet available, in case of annotations this property is not being used
         let initialZoomLevel: Double
         
         /// The initial map center
@@ -49,7 +50,7 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var showsUserLocationMode: ShowUserLocationMode
     
     /// Bind view errors if any
-    let error: Binding<MapLibreError?>
+    @Binding var error: MapLibreError?
     
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
@@ -98,6 +99,10 @@ struct MapLibreMapView: UIViewRepresentable {
         case (.showAndFollow, _):
             mapView.userTrackingMode = .follow
         case (.show, let annotations) where !annotations.isEmpty:
+            /** in the show mode, if there are annotations, we check the authorizationStatus,
+             if it's not determined, we wont prompt the user with a request for permissions,
+             because he should be able to see the annotations without sharing his location informations
+             **/
             guard mapView.locationManager.authorizationStatus != .notDetermined else { return }
             fallthrough
         case (.show, _):
@@ -136,7 +141,7 @@ extension MapLibreMapView {
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
-            mapLibreView.error.wrappedValue = .failedLoadingMap
+            mapLibreView.error = .failedLoadingMap
         }
         
         func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
@@ -178,7 +183,23 @@ extension MapLibreMapView {
         }
         
         func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
-            mapLibreView.userDidPan?()
+            // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
+            switch reason {
+            case .gesturePan,
+                 .gesturePinch,
+                 .gestureRotate:
+                mapLibreView.userDidPan?()
+            case .gestureOneFingerZoom,
+                 .gestureTilt,
+                 .gestureZoomIn,
+                 .gestureZoomOut,
+                 .programmatic,
+                 .resetNorth,
+                 .transitionCancelled:
+                break
+            default:
+                break
+            }
             return true
         }
     }

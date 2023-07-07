@@ -51,7 +51,6 @@ struct StaticLocationScreen: View {
                 context.send(viewAction: .userDidPan)
             }
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
-            
             if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }
@@ -76,7 +75,7 @@ struct StaticLocationScreen: View {
             }
         }
 
-        if context.viewState.showBottomToolbar {
+        if context.viewState.isLocationPickerMode {
             ToolbarItemGroup(placement: .bottomBar) {
                 selectLocationButton
                 Spacer()
@@ -85,7 +84,7 @@ struct StaticLocationScreen: View {
     }
 
     private var mapOptions: MapLibreMapView.Options {
-        guard let coordinate = context.viewState.mapAnnotationCoordinate else {
+        if context.viewState.isLocationPickerMode {
             return .init(zoomLevel: context.viewState.zoomLevel,
                          initialZoomLevel: context.viewState.initialZoomLevel,
                          mapCenter: context.viewState.initialMapCenter)
@@ -94,13 +93,13 @@ struct StaticLocationScreen: View {
         return .init(zoomLevel: context.viewState.zoomLevel,
                      initialZoomLevel: context.viewState.initialZoomLevel,
                      mapCenter: context.viewState.initialMapCenter,
-                     annotations: [LocationAnnotation(coordinate: coordinate, anchorPoint: .bottomCenter) {
+                     annotations: [LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
                          LocationMarkerView()
                      }])
     }
 
     private var mapSafeAreaEdges: Edge.Set {
-        context.viewState.showBottomToolbar ? .horizontal : [.horizontal, .bottom]
+        context.viewState.isLocationPickerMode ? .horizontal : [.horizontal, .bottom]
     }
     
     @ScaledMetric private var shareMarkerSize: CGFloat = 28
@@ -143,14 +142,13 @@ struct StaticLocationScreen: View {
 
     @ViewBuilder
     private var shareSheet: some View {
-        if let location = context.viewState.mapAnnotationCoordinate {
-            let locationDescription = context.viewState.locationDescription
-            AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, locationDescription: locationDescription)],
-                            applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, locationDescription: locationDescription) })
-                .edgesIgnoringSafeArea(.bottom)
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.hidden)
-        }
+        let location = context.viewState.initialMapCenter
+        let locationDescription = context.viewState.locationDescription
+        AppActivityView(activityItems: [ShareToMapsAppActivity.MapsAppType.apple.activityURL(for: location, locationDescription: locationDescription)],
+                        applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, locationDescription: locationDescription) })
+            .edgesIgnoringSafeArea(.bottom)
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.hidden)
     }
 }
 

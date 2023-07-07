@@ -43,7 +43,7 @@ struct StaticLocationScreenViewState: BindableState {
             bindings.showsUserLocationMode = .show
         }
     }
- 
+
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
@@ -51,23 +51,11 @@ struct StaticLocationScreenViewState: BindableState {
     }
     
     var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
-
-    var showBottomToolbar: Bool {
-        interactionMode == .picker
-    }
-
-    var mapAnnotationCoordinate: CLLocationCoordinate2D? {
-        switch interactionMode {
-        case .picker:
-            return nil
-        case .viewOnly(let geoURI, _):
-            return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
-        }
-    }
-    
+ 
     var initialMapCenter: CLLocationCoordinate2D {
         switch interactionMode {
         case .picker:
+            // middle point in Europe, to be used if the users location is not yet known
             return .init(latitude: 49.843, longitude: 9.902056)
         case .viewOnly(let geoURI, _):
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
@@ -121,7 +109,7 @@ struct StaticLocationScreenViewState: BindableState {
 
 struct StaticLocationScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
-    /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
+
     var showsUserLocationMode: ShowUserLocationMode
     
     var isLocationAuthorized: Bool?
