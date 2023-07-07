@@ -22,7 +22,7 @@ extension XCTestCase {
     ///
     ///  ```
     /// let collectedEvents = somePublisher.collect(3).first()
-    /// let awaitDeferred = xcDeferFulfillment(collectedEvents)
+    /// let awaitDeferred = deferFulfillment(collectedEvents)
     /// // Do some other work that publishes to somePublisher
     /// XCTAssertEqual(try await awaitDeferred.execute(), [expected, values, here])
     ///  ```
@@ -30,11 +30,11 @@ extension XCTestCase {
     ///   - publisher: The publisher to wait on.
     ///   - timeout: A timeout after which we give up.
     /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-    func xcDeferFulfillment<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10) -> XCTDeferredFulfillment<T.Output> {
+    func deferFulfillment<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10, message: String? = nil) -> DeferredFulfillment<T.Output> {
         var result: Result<T.Output, Error>?
-        let expectation = expectation(description: "Awaiting publisher")
+        let expectation = expectation(description: message ?? "Awaiting publisher")
         let cancellable = publisher
-            .sink(receiveCompletion: { completion in
+            .sink { completion in
                 switch completion {
                 case .failure(let error):
                     result = .failure(error)
@@ -42,19 +42,19 @@ extension XCTestCase {
                     break
                 }
                 expectation.fulfill()
-            }, receiveValue: { value in
+            } receiveValue: { value in
                 result = .success(value)
-            })
+            }
         
-        return XCTDeferredFulfillment<T.Output>(closure: {
+        return DeferredFulfillment<T.Output> {
             await self.fulfillment(of: [expectation], timeout: timeout)
             cancellable.cancel()
             let unwrappedResult = try XCTUnwrap(result, "Awaited publisher did not produce any output")
             return try unwrappedResult.get()
-        })
+        }
     }
     
-    struct XCTDeferredFulfillment<T> {
+    struct DeferredFulfillment<T> {
         let closure: () async throws -> T
         @discardableResult func fulfill() async throws -> T {
             try await closure()

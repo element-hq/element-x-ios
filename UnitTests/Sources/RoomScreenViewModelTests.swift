@@ -213,9 +213,10 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         let roomMemberMock = RoomMemberProxyMock()
         roomMemberMock.userID = "bob"
+        let expectation = XCTestExpectation(description: "Go to user details")
+        
         roomProxyMock.getMemberUserIDClosure = { _ in
-            try? await Task.sleep(for: .milliseconds(200))
-            return .success(roomMemberMock)
+            .success(roomMemberMock)
         }
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
@@ -229,6 +230,7 @@ class RoomScreenViewModelTests: XCTestCase {
             switch action {
             case .displayRoomMemberDetails(let member):
                 XCTAssert(member === roomMemberMock)
+                expectation.fulfill()
             default:
                 XCTFail("Did not received the expected action")
             }
@@ -236,7 +238,8 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
-        try? await Task.sleep(for: .milliseconds(300))
+        await fulfillment(of: [expectation])
+        
         XCTAssert(userIndicatorControllerMock.submitIndicatorDelayCallsCount == 1)
         XCTAssert(userIndicatorControllerMock.retractIndicatorWithIdCallsCount == 1)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)

@@ -31,7 +31,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
                                                      senderID: senderID,
                                                      roomProxy: roomProxy)
         
-        let deferred = xcDeferFulfillment(viewModel.actions.collect(2).first())
+        let deferred = deferFulfillment(viewModel.actions.collect(2).first(), message: "2 actions should be published.")
         
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
