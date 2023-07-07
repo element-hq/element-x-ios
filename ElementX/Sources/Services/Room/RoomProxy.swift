@@ -34,7 +34,9 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var roomTimelineObservationToken: TaskHandle?
+    private var backPaginationStateObservationToken: TaskHandle?
 
+    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.eraseToAnyPublisher()
@@ -50,9 +52,10 @@ class RoomProxy: RoomProxyProtocol {
     var timelineProvider: RoomTimelineProviderProtocol {
         innerTimelineProvider
     }
-    
+
     deinit {
         roomTimelineObservationToken?.cancel()
+        backPaginationStateObservationToken?.cancel()
         roomListItem.unsubscribe()
     }
 
@@ -79,9 +82,13 @@ class RoomProxy: RoomProxyProtocol {
         
         let result = await room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
+
+        subscribeToBackpagination()
         
-        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items, updatePublisher: updatesPublisher)
-        
+        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items,
+                                                     updatePublisher: updatesPublisher,
+                                                     backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+
         Task {
             await fetchMembers()
             await updateMembers()
@@ -651,9 +658,20 @@ class RoomProxy: RoomProxyProtocol {
     private func update(displayName: String) {
         self.displayName = displayName
     }
+
+    private func subscribeToBackpagination() {
+        let listener = RoomBackpaginationStatusListener { [weak self] status in
+            self?.backPaginationStateSubject.send(status)
+        }
+        do {
+            backPaginationStateObservationToken = try room.subscribeToBackPaginationStatus(listener: listener)
+        } catch {
+            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
+        }
+    }
 }
 
-private class RoomTimelineListener: TimelineListener {
+private final class RoomTimelineListener: TimelineListener {
     private let onUpdateClosure: (TimelineDiff) -> Void
    
     init(_ onUpdateClosure: @escaping (TimelineDiff) -> Void) {
@@ -665,7 +683,7 @@ private class RoomTimelineListener: TimelineListener {
     }
 }
 
-private class UploadProgressListener: ProgressWatcher {
+private final class UploadProgressListener: ProgressWatcher {
     private let onUpdateClosure: (Double) -> Void
    
     init(_ onUpdateClosure: @escaping (Double) -> Void) {
@@ -676,5 +694,17 @@ private class UploadProgressListener: ProgressWatcher {
         DispatchQueue.main.async { [weak self] in
             self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
         }
+    }
+}
+
+private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
+    private let onUpdateClosure: (BackPaginationStatus) -> Void
+
+    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+
+    func onUpdate(status: BackPaginationStatus) {
+        onUpdateClosure(status)
     }
 }

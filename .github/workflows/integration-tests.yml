@@ -14,7 +14,7 @@ jobs:
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
       group: integration-tests-${{ github.head_ref }}
-      cancel-in-progress: true
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v3
