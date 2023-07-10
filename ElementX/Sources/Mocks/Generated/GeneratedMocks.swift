@@ -197,6 +197,25 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class NotificationCenterMock: NotificationCenterProtocol {
+
+    //MARK: - post
+
+    var postNameObjectCallsCount = 0
+    var postNameObjectCalled: Bool {
+        return postNameObjectCallsCount > 0
+    }
+    var postNameObjectReceivedArguments: (aName: NSNotification.Name, anObject: Any?)?
+    var postNameObjectReceivedInvocations: [(aName: NSNotification.Name, anObject: Any?)] = []
+    var postNameObjectClosure: ((NSNotification.Name, Any?) -> Void)?
+
+    func post(name aName: NSNotification.Name, object anObject: Any?) {
+        postNameObjectCallsCount += 1
+        postNameObjectReceivedArguments = (aName: aName, anObject: anObject)
+        postNameObjectReceivedInvocations.append((aName: aName, anObject: anObject))
+        postNameObjectClosure?(aName, anObject)
+    }
+}
 class NotificationManagerMock: NotificationManagerProtocol {
     var delegate: NotificationManagerDelegate?
 

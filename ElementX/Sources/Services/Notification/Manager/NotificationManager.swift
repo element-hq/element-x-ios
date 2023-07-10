@@ -19,8 +19,9 @@ import Foundation
 import UIKit
 import UserNotifications
 
-class NotificationManager: NSObject, NotificationManagerProtocol {
+final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
+    private let internalNotificationCenter: NotificationCenter
     private let appSettings: AppSettings
     
     private var userSession: UserSessionProtocol?
@@ -28,9 +29,13 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     private var notificationsEnabled = false
     
     init(notificationCenter: UserNotificationCenterProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         internalNotificationCenter: NotificationCenter = .default) {
         self.notificationCenter = notificationCenter
         self.appSettings = appSettings
+        self.internalNotificationCenter = internalNotificationCenter
+        super.init()
+        addObservers()
     }
 
     // MARK: NotificationManagerProtocol
@@ -167,6 +172,45 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             requestAuthorization()
         } else {
             delegate?.unregisterForRemoteNotifications()
+        }
+    }
+
+    private func addObservers() {
+        internalNotificationCenter
+            .publisher(for: .roomTimelineAppeared)
+            .sink { [weak self] notification in
+                guard let roomID = notification.object as? String else {
+                    return
+                }
+                self?.removeMessageNotifications(for: roomID)
+            }
+            .store(in: &cancellables)
+
+        internalNotificationCenter
+            .publisher(for: .invitesScreenAppeared)
+            .sink { [weak self] _ in
+                self?.removeInviteNotifications()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func removeMessageNotifications(for roomID: String) {
+        Task {
+            let notificationsIdentifiers = await notificationCenter
+                .deliveredNotifications()
+                .filter { $0.request.content.roomID == roomID }
+                .map(\.request.identifier)
+            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+        }
+    }
+
+    private func removeInviteNotifications() {
+        Task {
+            let notificationsIdentifiers = await notificationCenter
+                .deliveredNotifications()
+                .filter { $0.request.content.categoryIdentifier == NotificationConstants.Category.invite }
+                .map(\.request.identifier)
+            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
         }
     }
 }
