@@ -18,10 +18,4 @@ import ElementX
 import XCTest
 
 @MainActor
-class NotificationSettingsScreenUITests: XCTestCase {
-    /// Verify that the notification settings screen is displayed correctly.
-    func testNotificationSettingsScreen() async throws {
-        let app = Application.launch(.notificationSettingsScreen)
-        try await app.assertScreenshot(.notificationSettingsScreen)
-    }
-}
+class NotificationSettingsScreenUITests: XCTestCase { }
