@@ -96,6 +96,6 @@ class InvitesScreenViewModelTests: XCTestCase {
                                            appSettings: ServiceLocator.shared.settings,
                                            analytics: ServiceLocator.shared.analytics,
                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                           mockNotificationCenter: mockNotificationCenter)
+                                           notificationCenterProtocol: mockNotificationCenter)
     }
 }
