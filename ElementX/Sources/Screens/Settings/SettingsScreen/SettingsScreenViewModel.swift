@@ -40,6 +40,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            showSessionVerificationSection: showSessionVerificationSection,
+                                           showNotificationSettings: appSettings.notificationSettingsEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
@@ -49,6 +50,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
 
         userSession.clientProxy.avatarURLPublisher
             .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$notificationSettingsEnabled
+            .weakAssign(to: \.state.showNotificationSettings, on: self)
             .store(in: &cancellables)
         
         Task {
@@ -92,6 +97,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.sessionVerification)
         case .changedTimelineStyle:
             appSettings.timelineStyle = state.bindings.timelineStyle
+        case .notifications:
+            callback?(.notifications)
         case .developerOptions:
             callback?(.developerOptions)
         }

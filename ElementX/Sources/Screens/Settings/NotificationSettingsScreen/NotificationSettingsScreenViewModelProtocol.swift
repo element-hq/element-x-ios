@@ -14,16 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
-import UserNotifications
+import Combine
 
-protocol UserNotificationCenterProtocol: AnyObject {
-    var delegate: UNUserNotificationCenterDelegate? { get set }
-    func add(_ request: UNNotificationRequest) async throws
-    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
-    func authorizationStatus() async -> UNAuthorizationStatus
+@MainActor
+protocol NotificationSettingsScreenViewModelProtocol {
+    var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> { get }
+    var context: NotificationSettingsScreenViewModelType.Context { get }
 }
-
-// sourcery: AutoMockable
-extension UserNotificationCenterProtocol { }
