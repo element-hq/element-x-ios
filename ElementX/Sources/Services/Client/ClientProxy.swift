@@ -428,7 +428,7 @@ class ClientProxy: ClientProxyProtocol {
                                 return
                             }
                             // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                            try await inviteSummaryProvider?.setRoomList(roomListService.invites())
+                            try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
                         } catch {
                             MXLog.error("Failed configuring invites room list with error: \(error)")
                         }
