@@ -21,13 +21,13 @@ import XCTest
 final class CollapsibleFlowLayoutTests: XCTestCase {
     func testFlowLayoutWithExpandAndCollapse() {
         let containerSize = CGSize(width: 250, height: 400)
-        var flowLayout = CollapsibleFlowLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        var flowLayout = CollapsibleFlowLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
             placedViews.append(rect)
         }
-        let subViews: [LayoutSubviewMock] = [
+        let subviews: [LayoutSubviewMock] = [
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
@@ -37,7 +37,7 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
             // The expand/collapse button
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback)
         ]
-        let subviewsMock = LayoutSubviewsMock(subviews: subViews)
+        let subviewsMock = LayoutSubviewsMock(subviews: subviews)
         var a: () = ()
         var size = flowLayout.sizeThatFits(proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
         
@@ -81,19 +81,19 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
     
     func testFlowLayoutWithExpandButtonIsHidden() {
         let containerSize = CGSize(width: 250, height: 400)
-        let flowLayout = CollapsibleFlowLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        let flowLayout = CollapsibleFlowLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
             placedViews.append(rect)
         }
-        let subViews: [LayoutSubviewMock] = [
+        let subviews: [LayoutSubviewMock] = [
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback),
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback)
         ]
-        let subviewsMock = LayoutSubviewsMock(subviews: subViews)
+        let subviewsMock = LayoutSubviewsMock(subviews: subviews)
         var a: () = ()
         let size = flowLayout.sizeThatFits(proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
         
@@ -112,17 +112,17 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
     
     func testFlowLayoutEmptyState() {
         let containerSize = CGSize(width: 250, height: 400)
-        let flowLayout = CollapsibleFlowLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        let flowLayout = CollapsibleFlowLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
             placedViews.append(rect)
         }
-        let subViews: [LayoutSubviewMock] = [
+        let subviews: [LayoutSubviewMock] = [
             // No subviews to layout just the expand/collapse button
             LayoutSubviewMock(size: CGSize(width: 100, height: 50), placedPositionCallback: placedViewsCallback)
         ]
-        let subviewsMock = LayoutSubviewsMock(subviews: subViews)
+        let subviewsMock = LayoutSubviewsMock(subviews: subviews)
         var a: () = ()
         let size = flowLayout.sizeThatFits(proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
         

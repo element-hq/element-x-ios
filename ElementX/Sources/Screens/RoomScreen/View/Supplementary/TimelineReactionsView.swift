@@ -20,9 +20,9 @@ struct TimelineReactionsView: View {
     /// We use a coordinate space for measuring the reactions within their container.
     /// For some reason when using .local the origin of reactions always shown as (0, 0)
     private static let flowCoordinateSpace = "flowCoordinateSpace"
-    private static let hSpacing: CGFloat = 4
-    private static let vSpacing: CGFloat = 4
-    
+    private static let horizontalSpacing: CGFloat = 4
+    private static let verticalSpacing: CGFloat = 4
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
 
     let itemID: String
@@ -30,14 +30,18 @@ struct TimelineReactionsView: View {
     @Binding var collapsed: Bool
         
     var body: some View {
-        CollapsibleFlowLayout(itemSpacing: 4, lineSpacing: 4, collapsed: collapsed, linesBeforeCollapsible: 2) {
+        CollapsibleFlowLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
-                TimelineReactionButton(itemID: itemID, reaction: reaction)
+                TimelineReactionButton(itemID: itemID, reaction: reaction) { key in
+                    context.send(viewAction: .toggleReaction(key: key, eventID: itemID))
+                } showReactionSummary: { key in
+                    context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
+                }
             }
             Button {
                 collapsed.toggle()
             } label: {
-                TimelineCollapseButton(collapsed: collapsed)
+                TimelineCollapseButtonLabel(collapsed: collapsed)
             }
         }
         .coordinateSpace(name: Self.flowCoordinateSpace)
@@ -74,7 +78,7 @@ struct TimelineReactionButtonLabel<Content: View>: View {
     }
 }
 
-struct TimelineCollapseButton: View {
+struct TimelineCollapseButtonLabel: View {
     var collapsed: Bool
     
     var body: some View {
@@ -89,17 +93,18 @@ struct TimelineCollapseButton: View {
 }
 
 struct TimelineReactionButton: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
     let itemID: String
     let reaction: AggregatedReaction
+    let toggleReaction: (String) -> Void
+    let showReactionSummary: (String) -> Void
     
     var body: some View {
         label
             .onTapGesture {
-                context.send(viewAction: .toggleReaction(key: reaction.key, eventID: itemID))
+                toggleReaction(reaction.key)
             }
             .longPressWithFeedback {
-                context.send(viewAction: .reactionSummary(itemID: itemID, key: reaction.key))
+                showReactionSummary(reaction.key)
             }
     }
     
