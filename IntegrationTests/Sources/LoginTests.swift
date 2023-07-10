@@ -115,7 +115,7 @@ class LoginTests: XCTestCase {
         if message.waitForExistence(timeout: 10.0) {
             let doesNotExistPredicate = NSPredicate(format: "exists == 0")
             expectation(for: doesNotExistPredicate, evaluatedWith: message)
-            waitForExpectations(timeout: 300.0) 
+            waitForExpectations(timeout: 300.0)
         }
 
         // Welcome screen may be shown as an overlay.
