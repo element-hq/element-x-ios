@@ -57,12 +57,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     override func process(viewAction: NotificationSettingsScreenViewAction) {
         switch viewAction {
-        case .openSystemSettings:
-            Task {
-                await openSystemSettings()
-            }
+        case .linkClicked(let url):
+            MXLog.warning("Link clicked: \(url)")
         case .changedEnableNotifications:
-            toogleNotifications()
+            toggleNotifications()
         }
     }
     
@@ -73,14 +71,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
 
-    func openSystemSettings() async {
-        // Note: UIApplication.openNotificationSettingsURLString doesn't work on a simulator
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            await UIApplication.shared.open(url)
-        }
-    }
-    
-    func toogleNotifications() {
+    func toggleNotifications() {
         appSettings.enableNotifications.toggle()
     }
 }

@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum NotificationSettingsScreenViewModelAction { }
 
@@ -36,12 +37,10 @@ struct NotificationSettingsScreenStrings {
     let changeYourSystemSettings: AttributedString = {
         let linkPlaceholder = "{link}"
         var text = AttributedString(L10n.screenNotificationSettingsSystemNotificationsActionRequired(linkPlaceholder))
-        text.font = .compound.bodySM
-        text.foregroundColor = .compound.textSecondary
         var linkString = AttributedString(L10n.screenNotificationSettingsSystemNotificationsActionRequiredContentLink)
-        linkString.font = .compound.bodySM
+        // Note: On the simulator, `UIApplication.openNotificationSettingsURLString` opens the `Settings` application instead of the application's notification settings screen.
+        linkString.link = URL(string: UIApplication.openNotificationSettingsURLString)
         linkString.bold()
-        linkString.foregroundColor = .compound.textPrimary
         text.replace(linkPlaceholder, with: linkString)
         
         return text
@@ -49,6 +48,6 @@ struct NotificationSettingsScreenStrings {
 }
 
 enum NotificationSettingsScreenViewAction {
-    case openSystemSettings
+    case linkClicked(url: URL)
     case changedEnableNotifications
 }

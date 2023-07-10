@@ -43,11 +43,15 @@ struct NotificationSettingsScreen: View {
                         .font(.compound.bodyLG)
                         .foregroundColor(.compound.textPrimary)
                     Text(context.viewState.strings.changeYourSystemSettings)
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                        .tint(.compound.textPrimary)
+                        .environment(\.openURL, OpenURLAction { url in
+                            context.send(viewAction: .linkClicked(url: url))
+                            return .systemAction
+                        })
                 }
                 .padding(.vertical, 5)
-            }
-            .onTapGesture {
-                context.send(viewAction: .openSystemSettings)
             }
         }
         .compoundFormSection()
