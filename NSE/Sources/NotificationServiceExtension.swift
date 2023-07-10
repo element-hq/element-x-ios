@@ -71,26 +71,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession = try NSEUserSession(credentials: credentials)
+            let userSession = try NSEUserSession(credentials: credentials, isEncryptionSyncEnabled: settings.isEncryptionSyncEnabled)
             self.userSession = userSession
-            var itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-            if settings.isEncryptionSyncEnabled,
-               itemProxy?.isEncrypted == true,
-               let _ = try? userSession.startEncryptionSync() {
-                // TODO: The following wait with a timeout should be handled by the SDK
-                // We try to decrypt the notification for 10 seconds at most
-                let date = Date()
-                repeat {
-                    // if the sync terminated we try one last time then we break from the loop
-                    guard userSession.isSyncing else {
-                        itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-                        break
-                    }
-                    itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId)
-                } while itemProxy?.isEncrypted == true && date.timeIntervalSinceNow > -10
-            }
-
-            guard let itemProxy else {
+            guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard()
             }
@@ -146,7 +129,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private func cleanUp() {
         handler = nil
         modifiedContent = nil
-        userSession?.stopEncryptionSync()
     }
 
     deinit {
