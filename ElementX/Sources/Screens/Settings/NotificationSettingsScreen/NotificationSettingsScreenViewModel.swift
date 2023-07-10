@@ -70,7 +70,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     @MainActor
     func readSystemAuthorizationStatus() async {
-        state.isUserPermissionGranted = await userNotificationCenter.getAuthorizationStatus() == .authorized
+        state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
 
     func openSystemSettings() async {

@@ -29,7 +29,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         AppSettings.reset()
         
         userNotificationCenter = UserNotificationCenterMock()
-        userNotificationCenter.getAuthorizationStatusReturnValue = .authorized
+        userNotificationCenter.authorizationStatusReturnValue = .authorized
         appSettings = AppSettings()
         viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                         userNotificationCenter: userNotificationCenter)

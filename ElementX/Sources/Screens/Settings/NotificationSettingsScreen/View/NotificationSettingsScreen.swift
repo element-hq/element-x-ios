@@ -73,7 +73,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
     static let viewModel: NotificationSettingsScreenViewModel = {
         let appSettings = AppSettings()
         let notificationCenter = UserNotificationCenterMock()
-        notificationCenter.getAuthorizationStatusReturnValue = .notDetermined
+        notificationCenter.authorizationStatusReturnValue = .notDetermined
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings, userNotificationCenter: notificationCenter)
         return viewModel
     }()

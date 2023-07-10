@@ -22,7 +22,7 @@ protocol UserNotificationCenterProtocol: AnyObject {
     func add(_ request: UNNotificationRequest) async throws
     func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
-    func getAuthorizationStatus() async -> UNAuthorizationStatus
+    func authorizationStatus() async -> UNAuthorizationStatus
 }
 
 // sourcery: AutoMockable

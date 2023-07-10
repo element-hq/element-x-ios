@@ -1381,21 +1381,21 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         setNotificationCategoriesReceivedInvocations.append(categories)
         setNotificationCategoriesClosure?(categories)
     }
-    //MARK: - getAuthorizationStatus
+    //MARK: - authorizationStatus
 
-    var getAuthorizationStatusCallsCount = 0
-    var getAuthorizationStatusCalled: Bool {
-        return getAuthorizationStatusCallsCount > 0
+    var authorizationStatusCallsCount = 0
+    var authorizationStatusCalled: Bool {
+        return authorizationStatusCallsCount > 0
     }
-    var getAuthorizationStatusReturnValue: UNAuthorizationStatus!
-    var getAuthorizationStatusClosure: (() async -> UNAuthorizationStatus)?
+    var authorizationStatusReturnValue: UNAuthorizationStatus!
+    var authorizationStatusClosure: (() async -> UNAuthorizationStatus)?
 
-    func getAuthorizationStatus() async -> UNAuthorizationStatus {
-        getAuthorizationStatusCallsCount += 1
-        if let getAuthorizationStatusClosure = getAuthorizationStatusClosure {
-            return await getAuthorizationStatusClosure()
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        authorizationStatusCallsCount += 1
+        if let authorizationStatusClosure = authorizationStatusClosure {
+            return await authorizationStatusClosure()
         } else {
-            return getAuthorizationStatusReturnValue
+            return authorizationStatusReturnValue
         }
     }
 }

@@ -18,7 +18,7 @@ import Foundation
 import UserNotifications
 
 extension UNUserNotificationCenter {
-    func getAuthorizationStatus() async -> UNAuthorizationStatus {
+    func authorizationStatus() async -> UNAuthorizationStatus {
         await notificationSettings().authorizationStatus
     }
 }
