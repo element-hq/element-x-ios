@@ -217,7 +217,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func markRoomAsRead() async {
-        notificationCenterProtocol.post(name: .roomTimelineAppeared, object: roomProxy.id)
+        notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
         _ = await timelineController.markRoomAsRead()
     }
 

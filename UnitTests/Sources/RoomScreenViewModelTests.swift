@@ -366,7 +366,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         viewModel.context.send(viewAction: .markRoomAsRead)
         await Task.yield()
-        XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomTimelineAppeared)
+        XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
         let roomID = notificationCenterMock.postNameObjectReceivedArguments?.anObject as? String
         XCTAssertEqual(roomID, roomProxyMock.id)
     }

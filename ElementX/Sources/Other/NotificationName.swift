@@ -17,6 +17,6 @@
 import Foundation
 
 extension Notification.Name {
-    static let roomTimelineAppeared = Notification.Name("roomTimelineAppeared")
+    static let roomMarkedAsRead = Notification.Name("roomMarkedAsRead")
     static let invitesScreenAppeared = Notification.Name("invitesScreenAppeared")
 }

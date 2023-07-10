@@ -175,7 +175,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private func addObservers() {
         NotificationCenter
             .default
-            .publisher(for: .roomTimelineAppeared)
+            .publisher(for: .roomMarkedAsRead)
             .sink { [weak self] notification in
                 guard let roomID = notification.object as? String else {
                     return
