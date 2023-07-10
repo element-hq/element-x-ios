@@ -50,7 +50,15 @@ extension AggregatedReaction {
             AggregatedReaction(accountOwnerID: alice, key: "🚀", senders: [alice] + mockIds(3)),
             AggregatedReaction(accountOwnerID: alice, key: "😇", senders: mockIds(2)),
             AggregatedReaction(accountOwnerID: alice, key: "🤭", senders: [alice] + mockIds(8)),
-            AggregatedReaction(accountOwnerID: alice, key: "🫤", senders: mockIds(10))
+            AggregatedReaction(accountOwnerID: alice, key: "🫤", senders: mockIds(10)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐶", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐱", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐭", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐹", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐰", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🦊", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐻", senders: mockIds(1)),
+            AggregatedReaction(accountOwnerID: alice, key: "🐼", senders: mockIds(1))
         ]
     }
 }

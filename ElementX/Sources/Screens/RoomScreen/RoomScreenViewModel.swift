@@ -52,7 +52,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         bindings: .init(composerText: "", composerFocused: false)),
+                                                         bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
 
         setupSubscriptions()
@@ -653,6 +653,19 @@ private extension RoomProxyProtocol {
     /// Checks if the other person left the room in a direct chat
     var isUserAloneInDirectRoom: Bool {
         isDirect && activeMembersCount == 1
+    }
+}
+
+extension RoomScreenViewModel.Context {
+    /// A function to make it easier to bind to reactions expand/collapsed state
+    /// - Parameter itemID: The id of the timeline item the reacted to
+    /// - Returns: Wether the reactions should show in the collapsed state, true by default.
+    func reactionsCollapsedBinding(for itemID: String) -> Binding<Bool> {
+        Binding(get: {
+            self.reactionsCollapsed[itemID] ?? true
+        }, set: {
+            self.reactionsCollapsed[itemID] = $0
+        })
     }
 }
 
