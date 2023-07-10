@@ -26,7 +26,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     private var userSession: UserSessionProtocol?
     private var cancellables = Set<AnyCancellable>()
     private var notificationsEnabled = false
-    private var permissionGranted = false
     
     init(notificationCenter: UserNotificationCenterProtocol,
          appSettings: AppSettings) {
@@ -76,10 +75,10 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {
             do {
-                self.permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.info("[NotificationManager] permission granted: \(self.permissionGranted)")
+                let permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
+                MXLog.info("[NotificationManager] permission granted: \(permissionGranted)")
                 await MainActor.run {
-                    if self.permissionGranted {
+                    if permissionGranted {
                         self.delegate?.registerForRemoteNotifications()
                     }
                 }

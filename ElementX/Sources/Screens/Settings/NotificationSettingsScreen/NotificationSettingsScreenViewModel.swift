@@ -66,7 +66,6 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     // MARK: - Private
     
-    @MainActor
     func readSystemAuthorizationStatus() async {
         state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
