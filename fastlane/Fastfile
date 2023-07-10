@@ -110,6 +110,8 @@ lane :unit_tests do
 end
 
 lane :ui_tests do |options|
+  reset_simulator_contents()
+  
   create_simulator_if_necessary(
     name: "iPad (9th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"

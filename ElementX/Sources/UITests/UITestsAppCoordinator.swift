@@ -328,7 +328,7 @@ class MockScreen: Identifiable {
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen:
-            let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
+            let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
             let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
