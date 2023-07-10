@@ -22,6 +22,7 @@ class InvitesScreenViewModelTests: XCTestCase {
     var viewModel: InvitesScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!
+    var mockNotificationCenter: NotificationCenterMock!
     
     var context: InvitesScreenViewModelType.Context {
         viewModel.context
@@ -30,6 +31,7 @@ class InvitesScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         clientProxy = MockClientProxy(userID: "@a:b.com")
         userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        mockNotificationCenter = NotificationCenterMock()
     }
 
     func testEmptyState() async throws {
@@ -72,6 +74,14 @@ class InvitesScreenViewModelTests: XCTestCase {
         context.send(viewAction: .decline(.init(roomDetails: details, isUnread: false)))
         XCTAssertNotNil(context.alertInfo)
     }
+
+    func testHasAppeared() async {
+        setupViewModel()
+        context.send(viewAction: .appeared)
+
+        await Task.yield()
+        XCTAssertEqual(mockNotificationCenter.postNameObjectReceivedArguments?.aName, .invitesScreenAppeared)
+    }
     
     // MARK: - Private
     
@@ -85,6 +95,7 @@ class InvitesScreenViewModelTests: XCTestCase {
         viewModel = InvitesScreenViewModel(userSession: userSession,
                                            appSettings: ServiceLocator.shared.settings,
                                            analytics: ServiceLocator.shared.analytics,
-                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                           mockNotificationCenter: mockNotificationCenter)
     }
 }

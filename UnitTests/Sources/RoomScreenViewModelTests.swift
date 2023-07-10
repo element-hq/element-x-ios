@@ -349,6 +349,27 @@ class RoomScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
+
+    func testMarkAsRead() async {
+        // Setup
+        let notificationCenterMock = NotificationCenterMock()
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock,
+                                            notificationCenterProtocol: notificationCenterMock)
+
+        viewModel.context.send(viewAction: .markRoomAsRead)
+        await Task.yield()
+        XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomTimelineAppeared)
+        let roomID = notificationCenterMock.postNameObjectReceivedArguments?.anObject as? String
+        XCTAssertEqual(roomID, roomProxyMock.id)
+    }
 }
 
 private extension TextRoomTimelineItem {
