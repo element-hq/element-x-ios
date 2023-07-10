@@ -139,7 +139,10 @@
 "emoji_picker_category_places" = "Travel & Places";
 "emoji_picker_category_symbols" = "Symbols";
 "error_failed_creating_the_permalink" = "Failed creating the permalink";
+"error_failed_loading_map" = "Element could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Failed loading messages";
+"error_failed_locating_user" = "Element could not access your location. Please try again later.";
+"error_missing_location_auth" = "Element does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
@@ -248,7 +251,6 @@
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
 "screen_login_error_unsupported_authentication" = "The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.";
 "screen_login_form_header" = "Enter your details";
-"screen_login_server_header" = "Where your conversations live";
 "screen_login_title" = "Welcome back!";
 "screen_login_title_with_homeserver" = "Sign in to %1$@";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
@@ -256,6 +258,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";
+"screen_notification_settings_enable_notifications" = "Enable notifications on this device";
+"screen_notification_settings_system_notifications_action_required" = "To receive notifications, please change your %1$@.";
+"screen_notification_settings_system_notifications_action_required_content_link" = "system settings";
+"screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
+"screen_notification_settings_title" = "Notifications";
 "screen_onboarding_sign_in_manually" = "Sign in manually";
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
 "screen_onboarding_sign_up" = "Create account";
@@ -297,6 +304,8 @@
 "screen_room_member_list_room_members_header_title" = "Room members";
 "screen_room_message_copied" = "Message copied";
 "screen_room_no_permission_to_post" = "You do not have permission to post to this room";
+"screen_room_reactions_show_less" = "Show less";
+"screen_room_reactions_show_more" = "Show more";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
@@ -424,6 +433,7 @@
 "screen_dm_details_unblock_user" = "Unblock user";
 "screen_login_password_hint" = "Password";
 "screen_login_submit" = "Continue";
+"screen_login_subtitle" = "Matrix is an open network for secure, decentralised communication.";
 "screen_login_username_hint" = "Username";
 "screen_report_content_block_user" = "Block user";
 "screen_room_details_leave_room_title" = "Leave room";
