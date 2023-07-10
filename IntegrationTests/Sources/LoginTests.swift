@@ -109,16 +109,13 @@ class LoginTests: XCTestCase {
         }
         
         // Migration screen may be shown as an overlay.
-        // we let that happen and wait
+        // if that pops up soon enough, we just let that happen and wait
+        let message = app.staticTexts[A11yIdentifiers.migrationScreen.message]
 
-        if app.staticTexts[A11yIdentifiers.migrationScreen.message].waitForExistence(timeout: 10.0) {
-            let message = app.staticTexts[A11yIdentifiers.migrationScreen.message]
-            var elapsed = 0
-            while elapsed < 300 {
-                if !message.waitForExistence(timeout: 1.0) { break }
-                sleep(10)
-                elapsed += 10
-            }
+        if message.waitForExistence(timeout: 10.0) {
+            let doesNotExistPredicate = NSPredicate(format: "exists == 0")
+            expectation(for: doesNotExistPredicate, evaluatedWith: message)
+            waitForExpectations(timeout: 300.0) 
         }
 
         // Welcome screen may be shown as an overlay.
