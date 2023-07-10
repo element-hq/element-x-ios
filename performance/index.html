@@ -17,6 +17,8 @@
       <tr>
         <td><canvas id="launchPerformance"/></td>
         <td><canvas id="loginPerformance"/></td>
+        <td><canvas id="syncPerformance"/></td>
+        <td><canvas id="roomflowPerformance"/></td>
       </tr>
      </table>
   <script>
@@ -41,6 +43,10 @@
     makeChart(launchPerformance,"launchPerformance")
     var loginPerformance = perfdata.filter(function (d) { return d.Test == "loginPerformance"  });
     makeChart(loginPerformance,"loginPerformance")
+    var syncPerformance = perfdata.filter(function (d) { return d.Test == "syncPerformance"  });
+    makeChart(syncPerformance,"syncPerformance")
+    var roomflowPerformance = perfdata.filter(function (d) { return d.Test == "roomflowPerformance"  });
+    makeChart(roomflowPerformance,"roomflowPerformance")
   }
     
   function makeChart(perfdata, canvas_id) {
