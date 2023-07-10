@@ -12,10 +12,10 @@ NOW=`date -u -Iminutes`
 
 # Find all the measurement lines in the file, then strip out the gumph into a CSV-like format.
 grep ".*measured.*values" $1 | sed -e "s/.*Test Case .*-\[//" -e "s/\]' measured \[/,/" -e "s/\].*values: \[/,/" -e "s/\], performance.*//" -e "s/^/$2,/" \
-   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration (AppLaunch), s/launchPerformance/" \
-   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration (Login), s/loginPerformance/" \
-   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration (RoomFlow), s/roomflowPerformance/" \
-   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration (Sync), s/syncPerformance/" \
+   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration .AppLaunch., s/launchPerformance/" \
+   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration .Login., s/loginPerformance/" \
+   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration .RoomFlow., s/roomflowPerformance/" \
+   -e "s/IntegrationTests.LoginTests testLoginFlow,Duration .Sync., s/syncPerformance/" \
    -e "s/IntegrationTests.LoginTests testLoginFlow,Clock Monotonic Time, s/totalTime/" \
    -e "s/^/$NOW,/"
 
