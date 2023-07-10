@@ -17,6 +17,8 @@
 import Foundation
 import UserNotifications
 
+// Sadly we can't mock this because the delegate needs to be weak
+// Use UserNotificationCenterSpy
 protocol UserNotificationCenterProtocol: AnyObject {
     var delegate: UNUserNotificationCenterDelegate? { get set }
     func add(_ request: UNNotificationRequest) async throws

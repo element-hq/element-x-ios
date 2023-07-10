@@ -21,7 +21,6 @@ import UserNotifications
 
 final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
-    private let internalNotificationCenter: NotificationCenter
     private let appSettings: AppSettings
     
     private var userSession: UserSessionProtocol?
@@ -29,11 +28,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private var notificationsEnabled = false
     
     init(notificationCenter: UserNotificationCenterProtocol,
-         appSettings: AppSettings,
-         internalNotificationCenter: NotificationCenter = .default) {
+         appSettings: AppSettings) {
         self.notificationCenter = notificationCenter
         self.appSettings = appSettings
-        self.internalNotificationCenter = internalNotificationCenter
         super.init()
         addObservers()
     }
@@ -176,7 +173,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     private func addObservers() {
-        internalNotificationCenter
+        NotificationCenter
+            .default
             .publisher(for: .roomTimelineAppeared)
             .sink { [weak self] notification in
                 guard let roomID = notification.object as? String else {
@@ -186,7 +184,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             }
             .store(in: &cancellables)
 
-        internalNotificationCenter
+        NotificationCenter
+            .default
             .publisher(for: .invitesScreenAppeared)
             .sink { [weak self] _ in
                 self?.removeInviteNotifications()
