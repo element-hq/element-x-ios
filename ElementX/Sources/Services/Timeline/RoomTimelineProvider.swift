@@ -173,7 +173,7 @@ private extension TimelineItem {
         if let virtualTimelineItem = asVirtual() {
             return virtualTimelineItem.debugIdentifier
         } else if let eventTimelineItem = asEvent() {
-            return eventTimelineItem.uniqueIdentifier()
+            return eventTimelineItem.eventId() ?? eventTimelineItem.transactionId() ?? "UnknownTimelineItem"
         }
         
         return "UnknownTimelineItem"
@@ -184,7 +184,7 @@ private extension TimelineItemProxy {
     var debugIdentifier: String {
         switch self {
         case .event(let eventTimelineItem):
-            return eventTimelineItem.item.uniqueIdentifier()
+            return eventTimelineItem.id
         case .virtual(let virtualTimelineItem):
             return virtualTimelineItem.debugIdentifier
         case .unknown:

@@ -248,7 +248,7 @@ class TimelineTableViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: true)
         
         // Probably redundant now we observe content size changes…
         // Leaving in place for the release and will reassess after.

@@ -25,7 +25,7 @@ enum TimelineItemProxy {
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem))
+            self = .event(EventTimelineItemProxy(item: eventItem, id: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem)
         } else {
@@ -44,17 +44,19 @@ enum TimelineItemDeliveryStatus: Hashable {
 /// A light wrapper around event timeline items returned from Rust.
 struct EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
+    let id: String
     
-    init(item: MatrixRustSDK.EventTimelineItem) {
+    init(item: MatrixRustSDK.EventTimelineItem, id: UInt64) {
         self.item = item
-    }
-    
-    var id: String {
-        item.uniqueIdentifier()
+        self.id = String(id)
     }
 
     var transactionID: String? {
         item.transactionId()
+    }
+
+    var eventID: String? {
+        item.eventId()
     }
     
     var deliveryStatus: TimelineItemDeliveryStatus? {
