@@ -28,12 +28,13 @@ import SwiftUI
 /// ```
 struct ViewFrameReader: View {
     @Binding var frame: CGRect
+    let coordinateSpace: CoordinateSpace = .local
     
     var body: some View {
         GeometryReader { geometry in
             Color.clear
                 .preference(key: FramePreferenceKey.self,
-                            value: geometry.frame(in: .local))
+                            value: geometry.frame(in: coordinateSpace))
         }
         .onPreferenceChange(FramePreferenceKey.self) { newValue in
             guard frame != newValue else { return }

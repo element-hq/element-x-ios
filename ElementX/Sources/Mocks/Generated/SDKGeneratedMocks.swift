@@ -651,31 +651,6 @@ class SDKClientMock: SDKClientProtocol {
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(`identifiers`, `kind`, `appDisplayName`, `deviceDisplayName`, `profileTag`, `lang`)
     }
-    //MARK: - `slidingSync`
-
-    public var slidingSyncIdThrowableError: Error?
-    public var slidingSyncIdCallsCount = 0
-    public var slidingSyncIdCalled: Bool {
-        return slidingSyncIdCallsCount > 0
-    }
-    public var slidingSyncIdReceivedId: String?
-    public var slidingSyncIdReceivedInvocations: [String] = []
-    public var slidingSyncIdReturnValue: SlidingSyncBuilder!
-    public var slidingSyncIdClosure: ((String) throws -> SlidingSyncBuilder)?
-
-    public func `slidingSync`(`id`: String) throws -> SlidingSyncBuilder {
-        if let error = slidingSyncIdThrowableError {
-            throw error
-        }
-        slidingSyncIdCallsCount += 1
-        slidingSyncIdReceivedId = id
-        slidingSyncIdReceivedInvocations.append(`id`)
-        if let slidingSyncIdClosure = slidingSyncIdClosure {
-            return try slidingSyncIdClosure(`id`)
-        } else {
-            return slidingSyncIdReturnValue
-        }
-    }
     //MARK: - `unignoreUser`
 
     public var unignoreUserUserIdThrowableError: Error?

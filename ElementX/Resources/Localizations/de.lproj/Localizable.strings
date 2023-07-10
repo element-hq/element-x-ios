@@ -139,7 +139,10 @@
 "emoji_picker_category_places" = "Reisen & Orte";
 "emoji_picker_category_symbols" = "Symbole";
 "error_failed_creating_the_permalink" = "Fehler beim Erstellen des Permalinks";
+"error_failed_loading_map" = "Element konnte die Karte nicht laden. Bitte versuche es später erneut.";
 "error_failed_loading_messages" = "Fehler beim Laden der Nachrichten";
+"error_failed_locating_user" = "Element konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut.";
+"error_missing_location_auth" = "Element hat keine Berechtigung, auf deinen Standort zuzugreifen. Du kannst den Zugriff unter Einstellungen > Standort aktivieren.";
 "error_no_compatible_app_found" = "Keine kompatible App für diese Aktion gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, ein Fehler ist aufgetreten.";
@@ -248,7 +251,6 @@
 "screen_login_error_invalid_user_id" = "Dies ist kein gültiger Benutzeridentifikator. Erwartetes Format: '@user:homeserver.org'";
 "screen_login_error_unsupported_authentication" = "Der ausgewählte Homeserver unterstützt kein Passwort- oder OIDC-Login. Bitte kontaktiere deinen Admin oder wähle einen anderen Homeserver.";
 "screen_login_form_header" = "Gib deine Daten ein";
-"screen_login_server_header" = "Wo deine Gespräche leben";
 "screen_login_title" = "Willkommen zurück!";
 "screen_login_title_with_homeserver" = "Bei %1$@ anmelden";
 "screen_media_picker_error_failed_selection" = "Medienauswahl fehlgeschlagen, bitte versuche es erneut.";
@@ -256,6 +258,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Hochladen von Medien fehlgeschlagen, bitte versuchen Sie es erneut.";
 "screen_migration_message" = "Dies ist ein einmaliger Vorgang, danke fürs Warten.";
 "screen_migration_title" = "Deinen Account einrichten";
+"screen_notification_settings_enable_notifications" = "Enable notifications on this device";
+"screen_notification_settings_system_notifications_action_required" = "To receive notifications, please change your %1$@.";
+"screen_notification_settings_system_notifications_action_required_content_link" = "system settings";
+"screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
+"screen_notification_settings_title" = "Notifications";
 "screen_onboarding_sign_in_manually" = "Manuell anmelden";
 "screen_onboarding_sign_in_with_qr_code" = "Mit QR-Code anmelden";
 "screen_onboarding_sign_up" = "Konto erstellen";
@@ -279,10 +286,11 @@
 "screen_room_details_encryption_enabled_subtitle" = "Nachrichten sind mit Schlössern gesichert. Nur du und der Empfänger haben die eindeutigen Schlüssel, um sie zu entsperren.";
 "screen_room_details_encryption_enabled_title" = "Nachrichtenverschlüsselung aktiviert";
 "screen_room_details_invite_people_title" = "Personen einladen";
-"screen_room_details_notification_title" = "Benachrichtigung";
+"screen_room_details_notification_title" = "Benachrichtigungen";
 "screen_room_details_room_name_label" = "Raumname";
 "screen_room_details_share_room_title" = "Raum teilen";
 "screen_room_details_updating_room" = "Aktualisiere Raum...";
+"screen_room_encrypted_history_banner" = "Der Nachrichtenverlauf ist in diesem Raum derzeit nicht verfügbar";
 "screen_room_error_failed_retrieving_user_details" = "Benutzerdetails konnten nicht abgerufen werden";
 "screen_room_invite_again_alert_message" = "Möchtest du sie wieder einladen?";
 "screen_room_invite_again_alert_title" = "Du bist allein in diesem Chat";
@@ -296,6 +304,8 @@
 "screen_room_member_list_room_members_header_title" = "Raummitglieder";
 "screen_room_message_copied" = "Nachricht kopiert";
 "screen_room_no_permission_to_post" = "Du bist keine Berechtigung, um in diesem Raum zu posten";
+"screen_room_reactions_show_less" = "Weniger anzeigen";
+"screen_room_reactions_show_more" = "Mehr anzeigen";
 "screen_room_retry_send_menu_send_again_action" = "Erneut senden";
 "screen_room_retry_send_menu_title" = "Ihre Nachricht konnte nicht gesendet werden";
 "screen_roomlist_a11y_create_message" = "Ein neues Gespräch oder einen neuen Raum erstellen";
@@ -335,6 +345,12 @@
 "screen_waitlist_message_success" = "Willkommen bei %1$@!";
 "screen_waitlist_title" = "Du hast es fast geschafft!";
 "screen_waitlist_title_success" = "Du bist dabei.";
+"screen_welcome_bullet_1" = "Anrufe, Standortfreigabe, Suche und mehr werden später in diesem Jahr hinzugefügt.";
+"screen_welcome_bullet_2" = "Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein.";
+"screen_welcome_bullet_3" = "Wir würden uns freuen, wenn du uns über die Einstellungsseite deine Meinung mitteilst.";
+"screen_welcome_button" = "Los geht's!";
+"screen_welcome_subtitle" = "Folgendes musst du wissen:";
+"screen_welcome_title" = "Willkommen bei %1$@!";
 "session_verification_banner_message" = "Es sieht so aus, als ob du ein neues Gerät verwendest. Verifiziere, dass du es bist, um auf deine verschlüsselten Nachrichten zuzugreifen.";
 "session_verification_banner_title" = "Greife auf deine Nachrichten-Historie zu";
 "settings_rageshake" = "Rageshake";
@@ -417,6 +433,7 @@
 "screen_dm_details_unblock_user" = "Nutzer entblockieren";
 "screen_login_password_hint" = "Passwort";
 "screen_login_submit" = "Weiter";
+"screen_login_subtitle" = "Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation";
 "screen_login_username_hint" = "Benutzername";
 "screen_report_content_block_user" = "Nutzer blockieren";
 "screen_room_details_leave_room_title" = "Raum verlassen";

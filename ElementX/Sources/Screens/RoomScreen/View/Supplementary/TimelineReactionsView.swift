@@ -14,33 +14,89 @@
 // limitations under the License.
 //
 
-import Flow
 import SwiftUI
 
 struct TimelineReactionsView: View {
-    @Environment(\.layoutDirection) var layoutDirection: LayoutDirection
+    /// We use a coordinate space for measuring the reactions within their container.
+    /// For some reason when using .local the origin of reactions always shown as (0, 0)
+    private static let flowCoordinateSpace = "flowCoordinateSpace"
+    private static let horizontalSpacing: CGFloat = 4
+    private static let verticalSpacing: CGFloat = 4
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
+
+    let itemID: String
     let reactions: [AggregatedReaction]
-    let toggleReaction: (String) -> Void
-    let showReactionSummary: (String) -> Void
-    
+    @Binding var collapsed: Bool
+        
     var body: some View {
-        HFlow(itemSpacing: 4, rowSpacing: 4) {
+        CollapsibleFlowLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
-                TimelineReactionButton(reaction: reaction,
-                                       toggleReaction: toggleReaction,
-                                       showReactionSummary: showReactionSummary)
+                TimelineReactionButton(itemID: itemID, reaction: reaction) { key in
+                    context.send(viewAction: .toggleReaction(key: key, eventID: itemID))
+                } showReactionSummary: { key in
+                    context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
+                }
+            }
+            Button {
+                collapsed.toggle()
+            } label: {
+                TimelineCollapseButtonLabel(collapsed: collapsed)
             }
         }
-        .environment(\.layoutDirection, layoutDirection)
+        .coordinateSpace(name: Self.flowCoordinateSpace)
+    }
+}
+
+/// The pill shape for the label that surrounds both the reaction and collapse buttons.
+struct TimelineReactionButtonLabel<Content: View>: View {
+    var isHighlighted = false
+    @ViewBuilder var content: () -> Content
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            content()
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
+        .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
+        .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
+        .accessibilityElement(children: .combine)
+    }
+    
+    var backgroundShape: some InsettableShape {
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+    }
+    
+    var overlayBackgroundColor: Color {
+        isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
+    }
+    
+    var overlayBorderColor: Color {
+        isHighlighted ? Color.compound.borderInteractivePrimary : .clear
+    }
+}
+
+struct TimelineCollapseButtonLabel: View {
+    var collapsed: Bool
+    
+    var body: some View {
+        TimelineReactionButtonLabel {
+            Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
+                .layoutPriority(1)
+                .drawingGroup()
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textPrimary)
+        }
     }
 }
 
 struct TimelineReactionButton: View {
+    let itemID: String
     let reaction: AggregatedReaction
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
-    
-    @State private var didLongPress = false
     
     var body: some View {
         label
@@ -53,7 +109,7 @@ struct TimelineReactionButton: View {
     }
     
     var label: some View {
-        HStack(spacing: 4) {
+        TimelineReactionButtonLabel(isHighlighted: reaction.isHighlighted) {
             Text(reaction.key)
                 .font(.compound.bodyMD)
             if reaction.count > 1 {
@@ -62,41 +118,33 @@ struct TimelineReactionButton: View {
                     .foregroundColor(textColor)
             }
         }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 8)
-        .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
-        .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
-        .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
-        .accessibilityElement(children: .combine)
-    }
-    
-    var backgroundShape: some InsettableShape {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
     }
     
     var textColor: Color {
         reaction.isHighlighted ? Color.compound.textPrimary : .compound.textSecondary
     }
-    
-    var overlayBackgroundColor: Color {
-        reaction.isHighlighted ? Color.compound.bgSubtlePrimary : .compound.bgSubtleSecondary
-    }
-    
-    var overlayBorderColor: Color {
-        reaction.isHighlighted ? Color.compound.borderInteractivePrimary : .clear
+}
+
+struct TimelineReactionViewPreviewsContainer: View {
+    @State private var collapseState1 = false
+    @State private var collapseState2 = true
+
+    var body: some View {
+        VStack {
+            TimelineReactionsView(itemID: "1", reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            Divider()
+            TimelineReactionsView(itemID: "2", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            Divider()
+            TimelineReactionsView(itemID: "3", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
+                .environment(\.layoutDirection, .rightToLeft)
+        }
+        .background(Color.red)
+        .frame(maxWidth: 250, alignment: .leading)
     }
 }
 
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            TimelineReactionButton(reaction: AggregatedReaction.mockThumbsUpHighlighted) { _ in } showReactionSummary: { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockClap) { _ in } showReactionSummary: { _ in }
-            TimelineReactionButton(reaction: AggregatedReaction.mockParty) { _ in } showReactionSummary: { _ in }
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
-                .environment(\.layoutDirection, .leftToRight)
-            TimelineReactionsView(reactions: AggregatedReaction.mockReactions) { _ in } showReactionSummary: { _ in }
-                .environment(\.layoutDirection, .rightToLeft)
-        }
+        TimelineReactionViewPreviewsContainer()
     }
 }

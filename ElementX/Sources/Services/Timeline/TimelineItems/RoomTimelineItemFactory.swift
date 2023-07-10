@@ -323,8 +323,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
             AggregatedReaction(accountOwnerID: userID, key: reaction.key, senders: reaction.senders)
-        }.sorted { a, b in
-            a.count > b.count
+        }
+        .sorted { a, b in
+            // Sort by count and then by key for a consistence experience.
+            // Otherwise emojis can switch around. We can replace
+            // with timestamp as a secondary sort when it is available.
+            (a.count, a.key) > (b.count, b.key)
         }
     }
 

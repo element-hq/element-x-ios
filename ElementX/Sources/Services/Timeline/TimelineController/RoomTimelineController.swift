@@ -53,7 +53,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         timelineProvider
-            .itemsPublisher
+            .updatePublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -183,7 +183,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
     func debugInfo(for itemID: String) -> TimelineItemDebugInfo {
-        for timelineItemProxy in timelineProvider.itemsPublisher.value {
+        for timelineItemProxy in timelineProvider.itemProxies {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
@@ -245,7 +245,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var isBackPaginating = false
         var lastEncryptedHistoryItemIndex: Int?
         
-        let collapsibleChunks = timelineProvider.itemsPublisher.value.groupBy { isItemCollapsible($0) }
+        let collapsibleChunks = timelineProvider.itemProxies.groupBy { isItemCollapsible($0) }
         
         for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
             let isLastItem = index == collapsibleChunks.indices.last
@@ -294,6 +294,17 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             // Remove everything up to the last encrypted history item.
             // It only contains encrypted messages, state changes and date separators.
             newTimelineItems.removeFirst(lastEncryptedHistoryItemIndex)
+        } else {
+            // Otherwise check if we need to add anything to the top of the timeline.
+            switch timelineProvider.backPaginationState {
+            case .timelineStartReached:
+                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
+                newTimelineItems.insert(timelineStart, at: 0)
+            case .paginating:
+                newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
+            case .idle:
+                break
+            }
         }
 
         timelineItems = newTimelineItems
@@ -330,10 +341,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return SeparatorRoomTimelineItem(id: identifier, text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem()
-            case .loadingIndicator:
-                return PaginationIndicatorRoomTimelineItem()
-            case .timelineStart:
-                return TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
             }
         case .unknown:
             return nil

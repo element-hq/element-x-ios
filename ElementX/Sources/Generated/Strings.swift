@@ -308,8 +308,14 @@ public enum L10n {
   public static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
   /// Failed creating the permalink
   public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
+  /// Element could not load the map. Please try again later.
+  public static var errorFailedLoadingMap: String { return L10n.tr("Localizable", "error_failed_loading_map") }
   /// Failed loading messages
   public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
+  /// Element could not access your location. Please try again later.
+  public static var errorFailedLocatingUser: String { return L10n.tr("Localizable", "error_failed_locating_user") }
+  /// Element does not have permission to access your location. You can enable access in Settings > Location
+  public static var errorMissingLocationAuth: String { return L10n.tr("Localizable", "error_missing_location_auth") }
   /// No compatible app was found to handle this action.
   public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent
@@ -630,10 +636,10 @@ public enum L10n {
   public static var screenLoginFormHeader: String { return L10n.tr("Localizable", "screen_login_form_header") }
   /// Password
   public static var screenLoginPasswordHint: String { return L10n.tr("Localizable", "screen_login_password_hint") }
-  /// Where your conversations live
-  public static var screenLoginServerHeader: String { return L10n.tr("Localizable", "screen_login_server_header") }
   /// Continue
   public static var screenLoginSubmit: String { return L10n.tr("Localizable", "screen_login_submit") }
+  /// Matrix is an open network for secure, decentralised communication.
+  public static var screenLoginSubtitle: String { return L10n.tr("Localizable", "screen_login_subtitle") }
   /// Welcome back!
   public static var screenLoginTitle: String { return L10n.tr("Localizable", "screen_login_title") }
   /// Sign in to %1$@
@@ -652,6 +658,18 @@ public enum L10n {
   public static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
   public static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
+  /// Enable notifications on this device
+  public static var screenNotificationSettingsEnableNotifications: String { return L10n.tr("Localizable", "screen_notification_settings_enable_notifications") }
+  /// To receive notifications, please change your %1$@.
+  public static func screenNotificationSettingsSystemNotificationsActionRequired(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required", String(describing: p1))
+  }
+  /// system settings
+  public static var screenNotificationSettingsSystemNotificationsActionRequiredContentLink: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required_content_link") }
+  /// System notifications turned off
+  public static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
+  /// Notifications
+  public static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
   /// Sign in manually
   public static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in with QR code
@@ -752,6 +770,10 @@ public enum L10n {
   public static var screenRoomMessageCopied: String { return L10n.tr("Localizable", "screen_room_message_copied") }
   /// You do not have permission to post to this room
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
+  /// Show less
+  public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
+  /// Show more
+  public static var screenRoomReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_reactions_show_more") }
   /// Remove
   public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again

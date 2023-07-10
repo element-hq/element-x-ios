@@ -156,7 +156,6 @@ targets:
     - package: Sentry
     - package: URLRouting
     - package: Version
-    - package: Flow
 
     sources:
     - path: ../Sources
