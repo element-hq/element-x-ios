@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class ReportContentScreenViewModelTests: XCTestCase {
@@ -24,7 +23,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
     let senderID = "@meany:server.com"
     let reportReason = "I don't like it."
     
-    func testReportContent() async {
+    func testReportContent() async throws {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
@@ -32,13 +31,16 @@ class ReportContentScreenViewModelTests: XCTestCase {
                                                      senderID: senderID,
                                                      roomProxy: roomProxy)
         
+        let deferred = deferFulfillment(viewModel.actions.collect(2).first(), message: "2 actions should be published.")
+        
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = false
         viewModel.context.send(viewAction: .submit)
         
-        _ = await viewModel.actions.values.first()
-        
+        let actions = try await deferred.fulfill()
+        XCTAssertEqual(actions, [.submitStarted, .submitFinished])
+   
         // Then the content should be reported, but the user should not be included.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
         XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")

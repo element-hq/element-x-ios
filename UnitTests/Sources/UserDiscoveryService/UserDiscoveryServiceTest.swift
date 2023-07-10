@@ -24,7 +24,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     var clientProxy: MockClientProxy!
     
     override func setUpWithError() throws {
-        clientProxy = .init(userID: "")
+        clientProxy = .init(userID: "@foo:matrix.org")
         service = UserDiscoveryService(clientProxy: clientProxy)
     }
     
@@ -34,12 +34,28 @@ class UserDiscoveryServiceTest: XCTestCase {
         let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 1)
     }
+
+    func testOwnerIsFiltered() async throws {
+        clientProxy.searchUsersResult = .success(.init(results: [UserProfileProxy(userID: "@foo:matrix.org")], limited: true))
+
+        let results = await (try? search(query: "AAA").get()) ?? []
+        assertSearchResults(results, toBe: 0)
+    }
     
     func testGetProfileIsNotCalled() async {
         clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
         clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
         
         let results = await (try? search(query: "AAA").get()) ?? []
+        assertSearchResults(results, toBe: 3)
+        XCTAssertFalse(clientProxy.getProfileCalled)
+    }
+
+    func testGetProfileIsNotCalledForAccountOwnerID() async {
+        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
+        clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
+
+        let results = await (try? search(query: "foo:matrix.org").get()) ?? []
         assertSearchResults(results, toBe: 3)
         XCTAssertFalse(clientProxy.getProfileCalled)
     }
