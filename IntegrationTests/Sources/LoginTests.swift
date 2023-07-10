@@ -82,17 +82,23 @@ class LoginTests: XCTestCase {
 
         sleep(10)
 
-        // Wait for login and then handle save password sheet
-        let savePasswordButton = app.buttons["Save Password"]
-        if savePasswordButton.waitForExistence(timeout: 10.0) {
-            savePasswordButton.tap()
-        }
-        
         // Handle analytics prompt screen
         if app.staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 1.0) {
+            // Wait for login and then handle save password sheet
+            let savePasswordButton = app.buttons["Save Password"]
+            if savePasswordButton.waitForExistence(timeout: 10.0) {
+                savePasswordButton.tap()
+            }
+        
             let enableButton = app.buttons[A11yIdentifiers.analyticsPromptScreen.enable]
             XCTAssertTrue(enableButton.waitForExistence(timeout: 10.0))
             enableButton.tap()
+        }
+
+        // This might come in a different order, wait for both.
+        let savePasswordButton = app.buttons["Save Password"]
+        if savePasswordButton.waitForExistence(timeout: 10.0) {
+            savePasswordButton.tap()
         }
         
         // Handle the notifications permission alert https://stackoverflow.com/a/58171074/730924
