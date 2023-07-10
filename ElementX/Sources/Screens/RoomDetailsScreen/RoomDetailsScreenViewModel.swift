@@ -23,6 +23,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let notificationSettingsProxy: NotificationSettingsProxyProtocol
 
     private var accountOwner: RoomMemberProxyProtocol? {
         didSet { updatePowerLevelPermissions() }
@@ -35,10 +36,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         notificationSettingsProxy: NotificationSettingsProxyProtocol,
+         appSettings: AppSettings) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.notificationSettingsProxy = notificationSettingsProxy
         
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
@@ -49,11 +53,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
+                                           showNotificationSettings: appSettings.notificationSettingsEnabled,
+                                           notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)
         
         setupRoomSubscription()
         fetchMembers()
+        
+        setupNotificationSettingsSubscription()
+        fetchNotificationSettings()
     }
     
     // MARK: - Public
@@ -87,6 +96,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             Task { await ignore() }
         case .unignoreConfirmed:
             Task { await unignore() }
+        case .processTapNotifications:
+            if state.notificationSettingsState.isError {
+                fetchNotificationSettings()
+            } else {
+                callback?(.requestNotificationSettingsPresentation)
+            }
+        case .processToogleMuteNotifications:
+            Task { await toggleMuteNotifications() }
         }
     }
     
@@ -146,6 +163,62 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomAvatar = accountOwner?.canSendStateEvent(type: .roomAvatar) ?? false
     }
     
+    private func setupNotificationSettingsSubscription() {
+        notificationSettingsProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                guard let self else { return }
+                
+                switch callback {
+                case .settingsDidChange:
+                    self.fetchNotificationSettings()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchNotificationSettings() {
+        Task {
+            await fetchRoomNotificationSettings()
+        }
+    }
+    
+    private func fetchRoomNotificationSettings() async {
+        do {
+            let notificationMode = try await notificationSettingsProxy.getNotificationSettings(room: roomProxy)
+            state.notificationSettingsState = .loaded(settings: notificationMode)
+        } catch {
+            state.notificationSettingsState = .error
+            state.bindings.alertInfo = AlertInfo(id: .alert,
+                                                 title: L10n.commonError,
+                                                 message: UntranslatedL10n.screenRoomDetailsErrorLoadingNotificationSettings)
+        }
+    }
+    
+    private func toggleMuteNotifications() async {
+        guard case .loaded(let notificationMode) = state.notificationSettingsState else { return }
+        state.isProcessingMuteToggleAction = true
+        switch notificationMode.mode {
+        case .mute:
+            do {
+                try await notificationSettingsProxy.unmuteRoom(room: roomProxy)
+            } catch {
+                state.bindings.alertInfo = AlertInfo(id: .alert,
+                                                     title: L10n.commonError,
+                                                     message: UntranslatedL10n.screenRoomDetailsErrorUnmuting)
+            }
+        default:
+            do {
+                try await notificationSettingsProxy.setNotificationMode(room: roomProxy, mode: .mute)
+            } catch {
+                state.bindings.alertInfo = AlertInfo(id: .alert,
+                                                     title: L10n.commonError,
+                                                     message: UntranslatedL10n.screenRoomDetailsErrorMuting)
+            }
+        }
+        state.isProcessingMuteToggleAction = false
+    }
+
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
     private func leaveRoom() async {

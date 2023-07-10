@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 
 // MARK: - Coordinator
@@ -22,6 +23,7 @@ import UIKit
 // MARK: View model
 
 enum RoomDetailsScreenViewModelAction {
+    case requestNotificationSettingsPresentation
     case requestMemberDetailsPresentation
     case requestInvitePeoplePresentation
     case leftRoom
@@ -46,6 +48,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomName = false
     var canEditRoomTopic = false
     var canEditRoomAvatar = false
+    let showNotificationSettings: Bool
+    var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -58,6 +62,36 @@ struct RoomDetailsScreenViewState: BindableState {
     var bindings: RoomDetailsScreenViewStateBindings
 
     var dmRecipient: RoomMemberDetails?
+    
+    var shortcuts: [RoomDetailsScreenViewShortcut] {
+        var shortcuts: [RoomDetailsScreenViewShortcut] = []
+        if showNotificationSettings {
+            shortcuts.append(.mute)
+        }
+        if let permalink = dmRecipient?.permalink {
+            shortcuts.append(.share(link: permalink))
+        } else if let permalink {
+            shortcuts.append(.share(link: permalink))
+        }
+        return shortcuts
+    }
+    
+    var isProcessingMuteToggleAction = false
+    
+    var areNotificationsMuted: Bool {
+        if case .loaded(let settings) = notificationSettingsState {
+            return settings.mode == .mute
+        }
+        return false
+    }
+    
+    var notificationShortcutButtonTitle: String {
+        areNotificationsMuted ? L10n.commonUnmute : L10n.commonMute
+    }
+    
+    var notificationShortcutButtonImage: Image {
+        areNotificationsMuted ? Image(systemName: "bell.slash.fill") : Image(systemName: "bell")
+    }
 }
 
 struct RoomDetailsScreenViewStateBindings {
@@ -138,11 +172,64 @@ enum RoomDetailsScreenViewAction {
     case confirmLeave
     case ignoreConfirmed
     case unignoreConfirmed
+    case processTapNotifications
+    case processToogleMuteNotifications
+}
+
+enum RoomDetailsScreenViewShortcut {
+    case share(link: URL)
+    case mute
+}
+
+extension RoomDetailsScreenViewShortcut: Hashable { }
+
+enum RoomDetailsNotificationSettingsState {
+    case loading
+    case loaded(settings: RoomNotificationSettingsProxyProtocol)
+    case error
+}
+
+extension RoomDetailsNotificationSettingsState {
+    var label: String {
+        switch self {
+        case .loading:
+            return L10n.commonLoading
+        case .loaded(let settings):
+            if settings.isDefault {
+                return UntranslatedL10n.screenRoomDetailsNotificationModeDefault
+            } else {
+                return UntranslatedL10n.screenRoomDetailsNotificationModeCustom
+            }
+        case .error:
+            return L10n.commonError
+        }
+    }
+    
+    var isLoading: Bool {
+        if case .loading = self {
+            return true
+        }
+        return false
+    }
+    
+    var isLoaded: Bool {
+        if case .loaded = self {
+            return true
+        }
+        return false
+    }
+    
+    var isError: Bool {
+        if case .error = self {
+            return true
+        }
+        return false
+    }
 }
 
 enum RoomDetailsScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
-    case alert(String)
+    case alert
     /// Leaving room has failed..
     case unknown
 }

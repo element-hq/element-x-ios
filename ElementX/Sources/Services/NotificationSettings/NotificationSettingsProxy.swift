@@ -47,8 +47,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     
     func getNotificationSettings(room: RoomProxyProtocol) async throws -> RoomNotificationSettingsProxyProtocol {
         let roomMotificationSettings = try await notificationSettings.getRoomNotificationSettings(roomId: room.id, isEncrypted: room.isEncrypted, activeMembersCount: UInt64(room.activeMembersCount))
-        let mode = RoomNotificationSettingsProxy(roomNotificationSettings: roomMotificationSettings)
-        return mode
+        return RoomNotificationSettingsProxy(roomNotificationSettings: roomMotificationSettings)
     }
     
     func setNotificationMode(room: RoomProxyProtocol, mode: RoomNotificationMode) async throws {
@@ -56,8 +55,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
-        let mode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
-        return mode
+        await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
     }
     
     func restoreDefaultNotificationMode(room: RoomProxyProtocol) async throws {

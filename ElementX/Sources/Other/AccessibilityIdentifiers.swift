@@ -103,6 +103,7 @@ struct A11yIdentifiers {
         let dmAvatar = "room_details-dm_avatar"
         let people = "room_details-people"
         let invite = "room_details-invite"
+        let notifications = "room_details-notifications"
     }
     
     struct RoomMemberDetailsScreen {
