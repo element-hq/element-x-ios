@@ -491,3 +491,4 @@ Date,SHA,Test,Data1,Data2,Data3,Data4,Data5
 2023-07-10T08:48+00:00,83e27564d5862fa040c876ab4d491ae1ac629c9e,IntegrationTests.LoginTests testLoginFlow,Duration (RoomFlow), s,21.658354, 22.031916, 21.976702, 21.486660, 22.074982
 2023-07-10T08:48+00:00,83e27564d5862fa040c876ab4d491ae1ac629c9e,IntegrationTests.LoginTests testLoginFlow,Duration (Sync), s,0.547178, 0.740559, 0.568958, 0.506751, 0.517356
 2023-07-10T08:48+00:00,83e27564d5862fa040c876ab4d491ae1ac629c9e,IntegrationTests.LoginTests testLoginFlow,Duration (AppLaunch), s,1.205084, 1.222006, 1.135844, 1.056058, 1.079205
+2023-07-10T09:15+00:00,8a52b9b7d311f79ca150a274970712bc29971520,IntegrationTests.ApplicationTests testLaunchPerformance,Duration (AppLaunch), s,1.289148, 1.202580, 1.322408, 1.090379, 1.094524
