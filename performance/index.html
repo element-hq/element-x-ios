@@ -13,6 +13,8 @@
       <tr>
         <td><h2>Launch time</h2></td>
         <td><h2>Login time</h2></td>
+        <td><h2>Sync time</h2></td>
+        <td><h2>Roomflow time [1]</h2></td>
       </tr>
       <tr>
         <td><canvas id="launchPerformance"/></td>
@@ -21,6 +23,7 @@
         <td><canvas id="roomflowPerformance"/></td>
       </tr>
      </table>
+     <div>[1] We're not confident that this is measuring a valid flow at present. Please disreguard for now</div>
   <script>
   d3.csv('./perf-data.csv').then(makeCharts);
   
