@@ -57,6 +57,9 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
     @Binding var isLocationAuthorized: Bool?
+
+    // The radius of uncertainty for the location, measured in meters.
+    @Binding var geolocationUncertainty: CLLocationAccuracy?
     
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
@@ -155,6 +158,7 @@ extension MapLibreMapView {
             }
 
             previousUserLocation = userLocation
+            updateGeolocationUncertainty(location: userLocation)
         }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
@@ -176,13 +180,7 @@ extension MapLibreMapView {
                 mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
             }
         }
-        
-        // MARK: Callout
-                
-        func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
-            false
-        }
-        
+
         func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
             // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
             switch reason {
@@ -202,6 +200,36 @@ extension MapLibreMapView {
                 break
             }
             return true
+        }
+
+        // MARK: Callout
+
+        func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+            false
+        }
+
+        // MARK: Private
+
+        private func updateGeolocationUncertainty(location: MGLUserLocation) {
+            guard let clLocation = location.location else {
+                mapLibreView.geolocationUncertainty = nil
+                return
+            }
+            
+            let uncertainty: CLLocationAccuracy?
+
+            switch (clLocation.horizontalAccuracy, clLocation.verticalAccuracy) {
+            case (let hAccuracy, let vAccuracy) where hAccuracy < 0 && vAccuracy < 0:
+                uncertainty = nil
+            case (let hAccuracy, let vAccuracy) where hAccuracy >= 0 && vAccuracy < 0:
+                uncertainty = hAccuracy
+            case (let hAccuracy, let vAccuracy) where hAccuracy < 0 && vAccuracy >= 0:
+                uncertainty = vAccuracy
+            case (let hAccuracy, let vAccuracy):
+                uncertainty = max(hAccuracy, vAccuracy)
+            }
+
+            mapLibreView.geolocationUncertainty = uncertainty
         }
     }
 }
