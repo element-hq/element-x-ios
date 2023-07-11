@@ -148,19 +148,19 @@ extension AlertInfo where T == LocationSharingViewError {
         case .missingAuthorization:
             self.init(id: error,
                       title: "",
-                      message: L10n.errorMissingLocationAuth,
+                      message: L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLoadingMap):
             self.init(id: error,
                       title: "",
-                      message: L10n.errorFailedLoadingMap,
+                      message: L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         case .mapError(.failedLocatingUser):
             self.init(id: error,
                       title: "",
-                      message: L10n.errorFailedLocatingUser,
+                      message: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
                       primaryButton: primaryButton,
                       secondaryButton: secondaryButton)
         }
