@@ -327,7 +327,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .cancelSend(transactionID: "test cancel send id"))
+        viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
         try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])

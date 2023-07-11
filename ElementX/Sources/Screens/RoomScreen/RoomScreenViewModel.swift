@@ -669,7 +669,7 @@ extension RoomScreenViewModel.Context {
     /// A function to make it easier to bind to reactions expand/collapsed state
     /// - Parameter itemID: The id of the timeline item the reacted to
     /// - Returns: Wether the reactions should show in the collapsed state, true by default.
-    func reactionsCollapsedBinding(for itemID: String) -> Binding<Bool> {
+    func reactionsCollapsedBinding(for itemID: TimelineItemIdentifier) -> Binding<Bool> {
         Binding(get: {
             self.reactionsCollapsed[itemID] ?? true
         }, set: {
