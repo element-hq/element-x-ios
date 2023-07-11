@@ -25,7 +25,7 @@ struct TimelineReactionsView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
 
-    let itemID: String
+    let itemID: TimelineItemIdentifier
     let reactions: [AggregatedReaction]
     @Binding var collapsed: Bool
         
@@ -33,7 +33,7 @@ struct TimelineReactionsView: View {
         CollapsibleFlowLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(itemID: itemID, reaction: reaction) { key in
-                    context.send(viewAction: .toggleReaction(key: key, eventID: itemID))
+                    context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
                 }
@@ -93,7 +93,7 @@ struct TimelineCollapseButtonLabel: View {
 }
 
 struct TimelineReactionButton: View {
-    let itemID: String
+    let itemID: TimelineItemIdentifier
     let reaction: AggregatedReaction
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
@@ -131,11 +131,11 @@ struct TimelineReactionViewPreviewsContainer: View {
 
     var body: some View {
         VStack {
-            TimelineReactionsView(itemID: "1", reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            TimelineReactionsView(itemID: .init(timelineID: "1"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
             Divider()
-            TimelineReactionsView(itemID: "2", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
             Divider()
-            TimelineReactionsView(itemID: "3", reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
+            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
                 .environment(\.layoutDirection, .rightToLeft)
         }
         .background(Color.red)
