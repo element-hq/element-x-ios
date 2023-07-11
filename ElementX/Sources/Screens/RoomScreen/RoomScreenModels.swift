@@ -57,7 +57,7 @@ enum RoomScreenViewAction {
     case itemTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
-    case toggleReaction(key: String, eventID: String)
+    case toggleReaction(key: String, itemID: String)
     case cancelReply
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.

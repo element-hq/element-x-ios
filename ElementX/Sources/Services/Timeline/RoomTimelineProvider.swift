@@ -184,7 +184,7 @@ private extension TimelineItemProxy {
     var debugIdentifier: String {
         switch self {
         case .event(let eventTimelineItem):
-            return eventTimelineItem.id
+            return eventTimelineItem.id.eventID ?? eventTimelineItem.id.transactionID ?? eventTimelineItem.id.timelineID
         case .virtual(let virtualTimelineItem):
             return virtualTimelineItem.debugIdentifier
         case .unknown:

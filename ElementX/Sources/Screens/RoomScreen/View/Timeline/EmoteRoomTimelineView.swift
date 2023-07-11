@@ -55,7 +55,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> EmoteRoomTimelineItem {
-        EmoteRoomTimelineItem(id: UUID().uuidString,
+        EmoteRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                               timestamp: timestamp,
                               isOutgoing: false,
                               isEditable: false,

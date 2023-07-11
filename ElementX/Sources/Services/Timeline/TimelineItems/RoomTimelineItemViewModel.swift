@@ -25,7 +25,7 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
     @Published var groupStyle: TimelineGroupStyle
 
     var id: String {
-        type.id
+        type.id.timelineID
     }
 
     convenience init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
@@ -109,7 +109,7 @@ enum RoomTimelineItemType: Equatable {
         }
     }
 
-    var id: String {
+    var id: TimelineItemIdentifier {
         switch self {
         case .text(let item as RoomTimelineItemProtocol),
              .separator(let item as RoomTimelineItemProtocol),

@@ -91,14 +91,14 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
 
     @ViewBuilder
     static var body: some View {
-        LocationRoomTimelineView(timelineItem: .init(id: UUID().uuidString,
+        LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: UUID().uuidString),
                                                      timestamp: "Now",
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description")))
 
-        LocationRoomTimelineView(timelineItem: .init(id: UUID().uuidString,
+        LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: UUID().uuidString),
                                                      timestamp: "Now",
                                                      isOutgoing: false,
                                                      isEditable: false,

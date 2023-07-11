@@ -18,5 +18,5 @@ import Foundation
 import UIKit
 
 protocol RoomTimelineItemProtocol {
-    var id: String { get }
+    var id: TimelineItemIdentifier { get }
 }
