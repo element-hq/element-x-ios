@@ -26,10 +26,9 @@ struct BugReportScreen: View {
     var body: some View {
         Form {
             textFieldSection
-            
             attachScreenshotSection
-            
             sendLogsSection
+            canContactSection
         }
         .scrollDismissesKeyboard(.immediately)
         .compoundForm()
@@ -72,6 +71,18 @@ struct BugReportScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
             Text(L10n.screenBugReportLogsDescription)
+                .compoundFormSectionFooter()
+        }
+        .compoundFormSection()
+    }
+
+    private var canContactSection: some View {
+        Section {
+            Toggle(L10n.screenBugReportContactMeTitle, isOn: $context.canContact)
+                .toggleStyle(.compoundForm)
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.canContact)
+        } footer: {
+            Text(L10n.screenBugReportContactMe)
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()

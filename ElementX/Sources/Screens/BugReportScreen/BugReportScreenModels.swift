@@ -33,6 +33,7 @@ struct BugReportScreenViewState: BindableState {
 struct BugReportScreenViewStateBindings {
     var reportText: String
     var sendingLogsEnabled: Bool
+    var canContact: Bool
 }
 
 enum BugReportScreenViewAction {

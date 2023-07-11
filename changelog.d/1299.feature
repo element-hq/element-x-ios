@@ -1,0 +1,1 @@
+Contact Me switch added to the Bug Report screen.

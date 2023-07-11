@@ -103,7 +103,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
             MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
-            MultipartFormData(key: "text", type: .text(value: bugReport.text))
+            MultipartFormData(key: "text", type: .text(value: bugReport.text)),
+            MultipartFormData(key: "can_contact", type: .text(value: "\(bugReport.canContact)"))
         ]
         
         if let deviceID = bugReport.deviceID {
