@@ -1317,4 +1317,86 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
         }
     }
 }
+class UserNotificationCenterMock: UserNotificationCenterProtocol {
+    var delegate: UNUserNotificationCenterDelegate?
+
+    //MARK: - add
+
+    var addThrowableError: Error?
+    var addCallsCount = 0
+    var addCalled: Bool {
+        return addCallsCount > 0
+    }
+    var addReceivedRequest: UNNotificationRequest?
+    var addReceivedInvocations: [UNNotificationRequest] = []
+    var addClosure: ((UNNotificationRequest) async throws -> Void)?
+
+    func add(_ request: UNNotificationRequest) async throws {
+        if let error = addThrowableError {
+            throw error
+        }
+        addCallsCount += 1
+        addReceivedRequest = request
+        addReceivedInvocations.append(request)
+        try await addClosure?(request)
+    }
+    //MARK: - requestAuthorization
+
+    var requestAuthorizationOptionsThrowableError: Error?
+    var requestAuthorizationOptionsCallsCount = 0
+    var requestAuthorizationOptionsCalled: Bool {
+        return requestAuthorizationOptionsCallsCount > 0
+    }
+    var requestAuthorizationOptionsReceivedOptions: UNAuthorizationOptions?
+    var requestAuthorizationOptionsReceivedInvocations: [UNAuthorizationOptions] = []
+    var requestAuthorizationOptionsReturnValue: Bool!
+    var requestAuthorizationOptionsClosure: ((UNAuthorizationOptions) async throws -> Bool)?
+
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+        if let error = requestAuthorizationOptionsThrowableError {
+            throw error
+        }
+        requestAuthorizationOptionsCallsCount += 1
+        requestAuthorizationOptionsReceivedOptions = options
+        requestAuthorizationOptionsReceivedInvocations.append(options)
+        if let requestAuthorizationOptionsClosure = requestAuthorizationOptionsClosure {
+            return try await requestAuthorizationOptionsClosure(options)
+        } else {
+            return requestAuthorizationOptionsReturnValue
+        }
+    }
+    //MARK: - setNotificationCategories
+
+    var setNotificationCategoriesCallsCount = 0
+    var setNotificationCategoriesCalled: Bool {
+        return setNotificationCategoriesCallsCount > 0
+    }
+    var setNotificationCategoriesReceivedCategories: Set<UNNotificationCategory>?
+    var setNotificationCategoriesReceivedInvocations: [Set<UNNotificationCategory>] = []
+    var setNotificationCategoriesClosure: ((Set<UNNotificationCategory>) -> Void)?
+
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+        setNotificationCategoriesCallsCount += 1
+        setNotificationCategoriesReceivedCategories = categories
+        setNotificationCategoriesReceivedInvocations.append(categories)
+        setNotificationCategoriesClosure?(categories)
+    }
+    //MARK: - authorizationStatus
+
+    var authorizationStatusCallsCount = 0
+    var authorizationStatusCalled: Bool {
+        return authorizationStatusCallsCount > 0
+    }
+    var authorizationStatusReturnValue: UNAuthorizationStatus!
+    var authorizationStatusClosure: (() async -> UNAuthorizationStatus)?
+
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        authorizationStatusCallsCount += 1
+        if let authorizationStatusClosure = authorizationStatusClosure {
+            return await authorizationStatusClosure()
+        } else {
+            return authorizationStatusReturnValue
+        }
+    }
+}
 // swiftlint:enable all

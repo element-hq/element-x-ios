@@ -31,7 +31,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                                isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
                                                                locationEventsEnabled: appSettings.locationEventsEnabled,
-                                                               shareLocationEnabled: appSettings.shareLocationEnabled)
+                                                               shareLocationEnabled: appSettings.shareLocationEnabled,
+                                                               notificationSettingsEnabled: appSettings.notificationSettingsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -55,6 +56,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.locationEventsEnabled = state.bindings.locationEventsEnabled
         case .changedShareLocationEnabled:
             appSettings.shareLocationEnabled = state.bindings.shareLocationEnabled
+        case .changedNotificationSettingsEnabled:
+            appSettings.notificationSettingsEnabled = state.bindings.notificationSettingsEnabled
         case .clearCache:
             callback?(.clearCache)
         }

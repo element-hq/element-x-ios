@@ -133,12 +133,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - NotificationManagerDelegate
     
-    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
-        if granted {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
+    func registerForRemoteNotifications() {
+        UIApplication.shared.registerForRemoteNotifications()
     }
     
+    func unregisterForRemoteNotifications() {
+        UIApplication.shared.unregisterForRemoteNotifications()
+    }
+        
     func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
         guard let roomId = content.roomID else {
             return true

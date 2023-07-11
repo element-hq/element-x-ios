@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,16 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
-import UserNotifications
+import ElementX
+import XCTest
 
-protocol UserNotificationCenterProtocol: AnyObject {
-    var delegate: UNUserNotificationCenterDelegate? { get set }
-    func add(_ request: UNNotificationRequest) async throws
-    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
-    func authorizationStatus() async -> UNAuthorizationStatus
-}
-
-// sourcery: AutoMockable
-extension UserNotificationCenterProtocol { }
+@MainActor
+class NotificationSettingsScreenUITests: XCTestCase { }

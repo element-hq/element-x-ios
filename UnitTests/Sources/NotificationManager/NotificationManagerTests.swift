@@ -179,8 +179,12 @@ final class NotificationManagerTests: XCTestCase {
 }
 
 extension NotificationManagerTests: NotificationManagerDelegate {
-    func authorizationStatusUpdated(_ service: ElementX.NotificationManagerProtocol, granted: Bool) {
-        authorizationStatusWasGranted = granted
+    func registerForRemoteNotifications() {
+        authorizationStatusWasGranted = true
+    }
+    
+    func unregisterForRemoteNotifications() {
+        authorizationStatusWasGranted = false
     }
     
     func shouldDisplayInAppNotification(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) -> Bool {

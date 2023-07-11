@@ -178,6 +178,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testGoToUserDetailsSuccessNoDelay() async {
         // Setup
+        let expectation = expectation(description: #function)
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         let roomMemberMock = RoomMemberProxyMock()
@@ -197,11 +198,12 @@ class RoomScreenViewModelTests: XCTestCase {
             default:
                 XCTFail("Did not received the expected action")
             }
+            expectation.fulfill()
         }
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
-        await Task.yield()
+        await fulfillment(of: [expectation])
         XCTAssert(userIndicatorControllerMock.submitIndicatorDelayCallsCount == 1)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
@@ -288,7 +290,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .retrySend(transactionID: "test retry send id"))
-        await Task.yield()
+        try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
     }
@@ -325,7 +327,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .cancelSend(transactionID: "test cancel send id"))
-        await Task.yield()
+        try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
     }
