@@ -197,6 +197,25 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class NotificationCenterMock: NotificationCenterProtocol {
+
+    //MARK: - post
+
+    var postNameObjectCallsCount = 0
+    var postNameObjectCalled: Bool {
+        return postNameObjectCallsCount > 0
+    }
+    var postNameObjectReceivedArguments: (aName: NSNotification.Name, anObject: Any?)?
+    var postNameObjectReceivedInvocations: [(aName: NSNotification.Name, anObject: Any?)] = []
+    var postNameObjectClosure: ((NSNotification.Name, Any?) -> Void)?
+
+    func post(name aName: NSNotification.Name, object anObject: Any?) {
+        postNameObjectCallsCount += 1
+        postNameObjectReceivedArguments = (aName: aName, anObject: anObject)
+        postNameObjectReceivedInvocations.append((aName: aName, anObject: anObject))
+        postNameObjectClosure?(aName, anObject)
+    }
+}
 class NotificationManagerMock: NotificationManagerProtocol {
     var delegate: NotificationManagerDelegate?
 
@@ -1364,6 +1383,39 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         } else {
             return requestAuthorizationOptionsReturnValue
         }
+    }
+    //MARK: - deliveredNotifications
+
+    var deliveredNotificationsCallsCount = 0
+    var deliveredNotificationsCalled: Bool {
+        return deliveredNotificationsCallsCount > 0
+    }
+    var deliveredNotificationsReturnValue: [UNNotification]!
+    var deliveredNotificationsClosure: (() async -> [UNNotification])?
+
+    func deliveredNotifications() async -> [UNNotification] {
+        deliveredNotificationsCallsCount += 1
+        if let deliveredNotificationsClosure = deliveredNotificationsClosure {
+            return await deliveredNotificationsClosure()
+        } else {
+            return deliveredNotificationsReturnValue
+        }
+    }
+    //MARK: - removeDeliveredNotifications
+
+    var removeDeliveredNotificationsWithIdentifiersCallsCount = 0
+    var removeDeliveredNotificationsWithIdentifiersCalled: Bool {
+        return removeDeliveredNotificationsWithIdentifiersCallsCount > 0
+    }
+    var removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers: [String]?
+    var removeDeliveredNotificationsWithIdentifiersReceivedInvocations: [[String]] = []
+    var removeDeliveredNotificationsWithIdentifiersClosure: (([String]) -> Void)?
+
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        removeDeliveredNotificationsWithIdentifiersCallsCount += 1
+        removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers = identifiers
+        removeDeliveredNotificationsWithIdentifiersReceivedInvocations.append(identifiers)
+        removeDeliveredNotificationsWithIdentifiersClosure?(identifiers)
     }
     //MARK: - setNotificationCategories
 

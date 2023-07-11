@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,9 @@
 // limitations under the License.
 //
 
-import XCTest
+import Foundation
 
-class ApplicationTests: XCTestCase {
-    func testLaunchPerformance() throws {
-        let parser = TestMeasurementParser()
-        
-        parser.capture(testCase: self) {
-            self.measure(metrics: [XCTApplicationLaunchMetric()]) {
-                Application.launch()
-            }
-        }
-        
-        guard let actualDuration = parser.valueForMetric(.appLaunch) else {
-            XCTFail("Couldn't retrieve app launch duration")
-            return
-        }
-    }
+extension Notification.Name {
+    static let roomMarkedAsRead = Notification.Name("roomMarkedAsRead")
+    static let invitesScreenAppeared = Notification.Name("invitesScreenAppeared")
 }

@@ -74,6 +74,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testLeaveRoomSuccess() async {
+        let expectation = expectation(description: #function)
         roomProxyMock.leaveRoomClosure = {
             .success(())
         }
@@ -84,23 +85,25 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             default:
                 XCTFail("leftRoom expected")
             }
+            expectation.fulfill()
         }
         context.send(viewAction: .confirmLeave)
-        await Task.yield()
+        await fulfillment(of: [expectation])
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
     }
     
-    func testLeaveRoomError() async throws {
+    func testLeaveRoomError() async {
+        let expectation = expectation(description: #function)
         roomProxyMock.leaveRoomClosure = {
-            .failure(.failedLeavingRoom)
+            defer {
+                expectation.fulfill()
+            }
+            return .failure(.failedLeavingRoom)
         }
-        let deferred = deferFulfillment(context.$viewState.collect(2).first())
         context.send(viewAction: .confirmLeave)
-        let states = try await deferred.fulfill()
-        
+        await fulfillment(of: [expectation])
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
-        XCTAssertNil(states[0].bindings.alertInfo)
-        XCTAssertNotNil(states[1].bindings.alertInfo)
+        XCTAssertNotNil(context.alertInfo)
     }
     
     func testInitialDMDetailsState() async {

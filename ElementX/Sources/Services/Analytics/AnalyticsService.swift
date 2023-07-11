@@ -35,6 +35,10 @@ class AnalyticsService {
     private let client: AnalyticsClientProtocol
     private let appSettings: AppSettings
     private let bugReportService: BugReportServiceProtocol
+    
+    /// A signpost client for performance testing the app. This client doesn't respect the
+    /// `isRunning` state or behave any differently when `start`/`reset` are called.
+    let signpost = Signposter()
 
     init(client: AnalyticsClientProtocol, appSettings: AppSettings, bugReportService: BugReportServiceProtocol) {
         self.client = client

@@ -43,7 +43,6 @@ enum RoomProxyError: Error, Equatable {
     case failedUploadingAvatar
 }
 
-@MainActor
 // sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }

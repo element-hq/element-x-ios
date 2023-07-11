@@ -35,6 +35,7 @@ class HomeScreenViewModelTests: XCTestCase {
                                         attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: ServiceLocator.shared.settings,
+                                        analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
@@ -96,6 +97,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomSuccess() async throws {
         let mockRoomId = "1"
         var correctResult = false
+        let expectation = expectation(description: #function)
         viewModel.callback = { result in
             switch result {
             case .roomLeft(let roomIdentifier):
@@ -103,12 +105,13 @@ class HomeScreenViewModelTests: XCTestCase {
             default:
                 break
             }
+            expectation.fulfill()
         }
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
         room.leaveRoomClosure = { .success(()) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
-        await Task.yield()
+        await fulfillment(of: [expectation])
         XCTAssertNil(context.alertInfo)
         XCTAssertTrue(correctResult)
     }

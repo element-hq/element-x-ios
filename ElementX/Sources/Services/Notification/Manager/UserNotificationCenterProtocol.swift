@@ -17,10 +17,14 @@
 import Foundation
 import UserNotifications
 
+// Sadly we can't mock this because the delegate needs to be weak
+// Use UserNotificationCenterSpy
 protocol UserNotificationCenterProtocol: AnyObject {
     var delegate: UNUserNotificationCenterDelegate? { get set }
     func add(_ request: UNNotificationRequest) async throws
     func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
+    func deliveredNotifications() async -> [UNNotification]
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
     func authorizationStatus() async -> UNAuthorizationStatus
 }
