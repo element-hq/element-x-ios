@@ -72,7 +72,7 @@ class TimelineTableViewController: UIViewController {
         }
     }
         
-    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
+    var contextMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
 
@@ -214,10 +214,10 @@ class TimelineTableViewController: UIViewController {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                     .onAppear {
-                        coordinator.send(viewAction: .itemAppeared(id: id))
+                        coordinator.send(viewAction: .itemAppeared(itemID: viewModel.id))
                     }
                     .onDisappear {
-                        coordinator.send(viewAction: .itemDisappeared(id: id))
+                        coordinator.send(viewAction: .itemDisappeared(itemID: viewModel.id))
                     }
                     .environment(\.openURL, OpenURLAction { url in
                         coordinator.send(viewAction: .linkClicked(url: url))
@@ -421,7 +421,7 @@ extension TimelineTableViewController {
 private extension UITableView {
     /// Returns the frame of the cell for a particular timeline item.
     func cellFrame(for id: String) -> CGRect? {
-        guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item?.id == id }) else {
+        guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item?.id.timelineID == id }) else {
             return nil
         }
         

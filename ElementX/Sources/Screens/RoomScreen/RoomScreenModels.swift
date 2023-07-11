@@ -22,22 +22,22 @@ import OrderedCollections
 
 enum RoomScreenViewModelAction {
     case displayRoomDetails
-    case displayEmojiPicker(itemID: String)
-    case displayReportContent(itemID: String, senderID: String)
+    case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
     case displayLocationPicker
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
-    case displayMessageForwarding(itemID: String)
+    case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
 }
 
 enum RoomScreenComposerMode: Equatable {
     case `default`
-    case reply(itemID: String, replyDetails: TimelineItemReplyDetails)
-    case edit(originalItemId: String)
+    case reply(itemID: TimelineItemIdentifier, replyDetails: TimelineItemReplyDetails)
+    case edit(originalItemId: TimelineItemIdentifier)
     
     var isEdit: Bool {
         switch self {
@@ -52,21 +52,21 @@ enum RoomScreenComposerMode: Equatable {
 enum RoomScreenViewAction {
     case displayRoomDetails
     case paginateBackwards
-    case itemAppeared(id: String)
-    case itemDisappeared(id: String)
-    case itemTapped(id: String)
+    case itemAppeared(itemID: TimelineItemIdentifier)
+    case itemDisappeared(itemID: TimelineItemIdentifier)
+    case itemTapped(itemID: TimelineItemIdentifier)
     case linkClicked(url: URL)
     case sendMessage
-    case toggleReaction(key: String, itemID: String)
+    case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case cancelReply
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
     
-    case timelineItemMenu(itemID: String)
-    case timelineItemMenuAction(itemID: String, action: TimelineItemMenuAction)
+    case timelineItemMenu(itemID: TimelineItemIdentifier)
+    case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
-    case displayEmojiPicker(itemID: String)
+    case displayEmojiPicker(itemID: TimelineItemIdentifier)
     
     case displayCameraPicker
     case displayMediaPicker
@@ -76,10 +76,10 @@ enum RoomScreenViewAction {
     case handlePasteOrDrop(provider: NSItemProvider)
     case tappedOnUser(userID: String)
     
-    case reactionSummary(itemID: String, key: String)
+    case reactionSummary(itemID: TimelineItemIdentifier, key: String)
 
-    case retrySend(transactionID: String?)
-    case cancelSend(transactionID: String?)
+    case retrySend(itemID: TimelineItemIdentifier)
+    case cancelSend(itemID: TimelineItemIdentifier)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -97,7 +97,7 @@ struct RoomScreenViewState: BindableState {
     
     var bindings: RoomScreenViewStateBindings
     
-    var timelineItemMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemMenuActions?)?
+    var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
     var composerMode: RoomScreenComposerMode = .default
     
@@ -105,7 +105,7 @@ struct RoomScreenViewState: BindableState {
         bindings.composerText.count == 0
     }
 
-    var itemIDs: [String] {
+    var timelineIDs: [String] {
         itemsDictionary.keys.elements
     }
 
@@ -146,14 +146,14 @@ struct RoomScreenViewStateBindings {
     var reactionSummaryInfo: ReactionSummaryInfo?
 }
 
-struct TimelineItemActionMenuInfo: Identifiable, Equatable {
+struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     static func == (lhs: TimelineItemActionMenuInfo, rhs: TimelineItemActionMenuInfo) -> Bool {
         lhs.id == rhs.id
     }
 
     let item: EventBasedTimelineItemProtocol
     
-    var id: String {
+    var id: TimelineItemIdentifier {
         item.id
     }
 }
@@ -161,7 +161,7 @@ struct TimelineItemActionMenuInfo: Identifiable, Equatable {
 struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
     let title = L10n.screenRoomRetrySendMenuTitle
 
-    let transactionID: String?
+    let itemID: TimelineItemIdentifier
 }
 
 struct ReactionSummaryInfo: Identifiable {

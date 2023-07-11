@@ -44,7 +44,7 @@ struct AudioRoomTimelineView_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: UUID().uuidString,
+        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
                                                                   isEditable: false,

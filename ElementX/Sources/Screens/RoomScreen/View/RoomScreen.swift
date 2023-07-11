@@ -71,12 +71,12 @@ struct RoomScreen: View {
                 context.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
-            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { item in
+            .confirmationDialog(item: $context.sendFailedConfirmationDialogInfo, titleVisibility: .visible) { info in
                 Button(L10n.screenRoomRetrySendMenuSendAgainAction) {
-                    context.send(viewAction: .retrySend(transactionID: item.transactionID))
+                    context.send(viewAction: .retrySend(itemID: info.itemID))
                 }
                 Button(L10n.screenRoomRetrySendMenuRemoveAction, role: .destructive) {
-                    context.send(viewAction: .cancelSend(transactionID: item.transactionID))
+                    context.send(viewAction: .cancelSend(itemID: info.itemID))
                 }
             }
     }

@@ -67,7 +67,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
         }
         .onTapGesture {
-            context.send(viewAction: .itemTapped(id: timelineItem.id))
+            context.send(viewAction: .itemTapped(itemID: timelineItem.id))
         }
         // We need a tap gesture before this long one so that it doesn't
         // steal away the gestures from the scroll view

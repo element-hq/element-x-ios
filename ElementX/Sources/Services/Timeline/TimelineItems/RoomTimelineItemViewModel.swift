@@ -24,8 +24,8 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
     @Published var type: RoomTimelineItemType
     @Published var groupStyle: TimelineGroupStyle
 
-    var id: String {
-        type.id.timelineID
+    var id: TimelineItemIdentifier {
+        type.id
     }
 
     convenience init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {

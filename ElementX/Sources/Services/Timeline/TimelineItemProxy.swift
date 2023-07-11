@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct TimelineItemIdentifier: Equatable {
+struct TimelineItemIdentifier: Hashable {
     let timelineID: String
     var eventID: String?
     var transactionID: String?
