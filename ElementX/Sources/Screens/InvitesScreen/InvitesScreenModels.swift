@@ -48,4 +48,5 @@ struct InvitesScreenRoomDetails: Identifiable {
 enum InvitesScreenViewAction {
     case accept(InvitesScreenRoomDetails)
     case decline(InvitesScreenRoomDetails)
+    case appeared
 }

@@ -51,8 +51,11 @@ struct InvitesScreen: View {
                 noInvitesContent
             }
         }
+        .onAppear {
+            context.send(viewAction: .appeared)
+        }
     }
-    
+
     private var noInvitesContent: some View {
         Text(L10n.screenInvitesEmptyList)
             .font(.compound.bodyLG)

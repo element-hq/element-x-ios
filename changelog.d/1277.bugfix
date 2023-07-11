@@ -1,0 +1,1 @@
+Push notifications for a room are cleared from the notification centre when opening its timeline. Same for invitations when opening the invite screen.
