@@ -24,6 +24,7 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let notificationCenterProtocol: NotificationCenterProtocol
     
     private let previouslySeenInvites: Set<String>
     private let actionsSubject: PassthroughSubject<InvitesScreenViewModelAction, Never> = .init()
@@ -36,11 +37,13 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
     init(userSession: UserSessionProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.userSession = userSession
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        self.notificationCenterProtocol = notificationCenterProtocol
         
         previouslySeenInvites = appSettings.seenInvites
         super.init(initialViewState: InvitesScreenViewState(), imageProvider: userSession.mediaProvider)
@@ -55,6 +58,8 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             accept(invite: invite)
         case .decline(let invite):
             startDeclineFlow(invite: invite)
+        case .appeared:
+            notificationCenterProtocol.post(name: .invitesScreenAppeared, object: nil)
         }
     }
     
