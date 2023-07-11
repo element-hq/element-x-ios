@@ -38,8 +38,17 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             guard let coordinate = state.bindings.mapCenterLocation else { return }
             actionsSubject.send(.sendLocation(.init(coordinate: coordinate), isUserLocation: state.isSharingUserLocation))
         case .userDidPan:
-            state.showsUserLocationMode = .hide
-            state.isSharingUserLocation = false
+            state.bindings.showsUserLocationMode = .show
+        case .centerToUser:
+            switch state.bindings.isLocationAuthorized {
+            case .some(true), .none:
+                state.bindings.showsUserLocationMode = .showAndFollow
+            case .some(false):
+                let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
+                state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
+                                                 primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
+                                                 secondaryButton: .init(title: L10n.commonSettings, action: action))
+            }
         }
     }
 }

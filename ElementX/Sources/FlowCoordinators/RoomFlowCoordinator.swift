@@ -515,7 +515,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
                                                            geoURI: geoURI,
                                                            description: nil,
-                                                           zoomLevel: nil,
+                                                           zoomLevel: 15,
                                                            assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
