@@ -308,8 +308,20 @@ public enum L10n {
   public static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
   /// Failed creating the permalink
   public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
+  /// %1$@ could not load the map. Please try again later.
+  public static func errorFailedLoadingMap(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_failed_loading_map", String(describing: p1))
+  }
   /// Failed loading messages
   public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
+  /// %1$@ could not access your location. Please try again later.
+  public static func errorFailedLocatingUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_failed_locating_user", String(describing: p1))
+  }
+  /// %1$@ does not have permission to access your location. You can enable access in Settings > Location
+  public static func errorMissingLocationAuth(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_missing_location_auth", String(describing: p1))
+  }
   /// No compatible app was found to handle this action.
   public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent
@@ -630,10 +642,10 @@ public enum L10n {
   public static var screenLoginFormHeader: String { return L10n.tr("Localizable", "screen_login_form_header") }
   /// Password
   public static var screenLoginPasswordHint: String { return L10n.tr("Localizable", "screen_login_password_hint") }
-  /// Where your conversations live
-  public static var screenLoginServerHeader: String { return L10n.tr("Localizable", "screen_login_server_header") }
   /// Continue
   public static var screenLoginSubmit: String { return L10n.tr("Localizable", "screen_login_submit") }
+  /// Matrix is an open network for secure, decentralised communication.
+  public static var screenLoginSubtitle: String { return L10n.tr("Localizable", "screen_login_subtitle") }
   /// Welcome back!
   public static var screenLoginTitle: String { return L10n.tr("Localizable", "screen_login_title") }
   /// Sign in to %1$@
@@ -652,6 +664,18 @@ public enum L10n {
   public static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
   public static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
+  /// Enable notifications on this device
+  public static var screenNotificationSettingsEnableNotifications: String { return L10n.tr("Localizable", "screen_notification_settings_enable_notifications") }
+  /// To receive notifications, please change your %1$@.
+  public static func screenNotificationSettingsSystemNotificationsActionRequired(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required", String(describing: p1))
+  }
+  /// system settings
+  public static var screenNotificationSettingsSystemNotificationsActionRequiredContentLink: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required_content_link") }
+  /// System notifications turned off
+  public static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
+  /// Notifications
+  public static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
   /// Sign in manually
   public static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in with QR code
@@ -704,7 +728,7 @@ public enum L10n {
   public static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave room
   public static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
-  /// Notification
+  /// Notifications
   public static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// People
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
@@ -718,6 +742,8 @@ public enum L10n {
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
+  /// Message history is currently unavailable in this room
+  public static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
@@ -752,16 +778,22 @@ public enum L10n {
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
   /// Show less
   public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
-  /// Show %d
-  public static func screenRoomReactionsShowMore(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_room_reactions_show_more", p1)
-  }
+  /// Show more
+  public static var screenRoomReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_reactions_show_more") }
   /// Remove
   public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again
   public static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
   public static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
+  /// Add emoji
+  public static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
+  /// Show less
+  public static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomTimelineMoreReactions(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_timeline_more_reactions", p1)
+  }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats
@@ -854,9 +886,23 @@ public enum L10n {
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
   /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
-  /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
+  /// Calls, location sharing, search and more will be added later this year.
+  public static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
+  /// Message history for encrypted rooms won’t be available in this update.
+  public static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
+  /// We’d love to hear from you, let us know what you think via the settings page.
+  public static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
+  /// Let's go!
+  public static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
+  /// Here’s what you need to know:
+  public static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
+  /// Welcome to %1$@!
+  public static func screenWelcomeTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
+  }
+  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
-  /// Access your message history
+  /// Verify it’s you
   public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
   /// Rageshake
   public static var settingsRageshake: String { return L10n.tr("Localizable", "settings_rageshake") }

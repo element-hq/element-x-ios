@@ -14,9 +14,10 @@
 // limitations under the License.
 //
 
+import Combine
+import NotificationCenter
 import XCTest
 
-import Combine
 @testable import ElementX
 
 final class NotificationManagerTests: XCTestCase {
@@ -176,11 +177,41 @@ final class NotificationManagerTests: XCTestCase {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(notificationTappedDelegateCalled)
     }
+
+    func test_MessageNotificationsRemoval() async throws {
+        // No interaction if the object is nil or of the wrong type
+        NotificationCenter.default.post(name: .roomMarkedAsRead, object: nil)
+        try await Task.sleep(for: .microseconds(200))
+        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
+        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 0)
+
+        NotificationCenter.default.post(name: .roomMarkedAsRead, object: 1)
+        try await Task.sleep(for: .microseconds(200))
+        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
+        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 0)
+
+        // The center calls the delivered and the removal functions when an id is passed
+        NotificationCenter.default.post(name: .roomMarkedAsRead, object: "RoomID")
+        try await Task.sleep(for: .microseconds(200))
+        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
+        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 1)
+    }
+
+    func test_InvitesNotificationsRemoval() async throws {
+        NotificationCenter.default.post(name: .invitesScreenAppeared, object: nil)
+        try await Task.sleep(for: .microseconds(200))
+        XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
+        XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 1)
+    }
 }
 
 extension NotificationManagerTests: NotificationManagerDelegate {
-    func authorizationStatusUpdated(_ service: ElementX.NotificationManagerProtocol, granted: Bool) {
-        authorizationStatusWasGranted = granted
+    func registerForRemoteNotifications() {
+        authorizationStatusWasGranted = true
+    }
+    
+    func unregisterForRemoteNotifications() {
+        authorizationStatusWasGranted = false
     }
     
     func shouldDisplayInAppNotification(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) -> Bool {

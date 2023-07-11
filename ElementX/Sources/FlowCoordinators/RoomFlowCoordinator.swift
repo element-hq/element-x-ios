@@ -271,15 +271,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         self.roomProxy = roomProxy
         
-        let userId = userSession.clientProxy.userID
+        let userID = userSession.clientProxy.userID
         
-        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userId))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
         
-        let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
-                                                                                           roomProxy: roomProxy,
+        let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
@@ -511,15 +510,21 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .selectedLocation(let geoURI):
+            case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
                     _ = await self.roomProxy?.sendLocation(body: geoURI.bodyMessage,
                                                            geoURI: geoURI,
                                                            description: nil,
-                                                           zoomLevel: nil,
-                                                           assetType: .pin)
+                                                           zoomLevel: 15,
+                                                           assetType: isUserLocation ? .sender : .pin)
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
+                
+                self.analytics.trackComposer(inThread: false,
+                                             isEditing: false,
+                                             isReply: false,
+                                             locationType: isUserLocation ? .myLocation : .pin,
+                                             startsThread: nil)
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             }

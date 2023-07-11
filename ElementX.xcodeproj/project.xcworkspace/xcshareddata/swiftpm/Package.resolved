@@ -102,8 +102,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "2f5fa5f1e2f6c6ae1a47c33d953a3ce289167eb0",
-        "version" : "0.5.0"
+        "revision" : "42b2faa417c1e95f430bf8f6e379adba25ad5ef8",
+        "version" : "0.6.0"
       }
     },
     {
@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "6d6c13bcf3bf900932599a62e2a157224d762630",
-        "version" : "1.0.94-alpha"
+        "revision" : "8bc8015237083035cb5f4a00d1eedb9ebbbb83c6",
+        "version" : "1.0.96-alpha"
       }
     },
     {
@@ -140,15 +140,6 @@
       "state" : {
         "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
-      "state" : {
-        "revision" : "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
-        "version" : "1.2.2"
       }
     },
     {
@@ -212,15 +203,6 @@
       "state" : {
         "revision" : "887e75b96da6be36a062e1b0ef832c32a803348b",
         "version" : "6.0.1"
-      }
-    },
-    {
-      "identity" : "swiftui-flow",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tevelee/SwiftUI-Flow",
-      "state" : {
-        "revision" : "d592b610a92869b74ede8ee4c0435a29219be9d8",
-        "version" : "1.2.0"
       }
     },
     {

@@ -178,6 +178,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
     func testGoToUserDetailsSuccessNoDelay() async {
         // Setup
+        let expectation = expectation(description: #function)
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         let roomMemberMock = RoomMemberProxyMock()
@@ -197,11 +198,12 @@ class RoomScreenViewModelTests: XCTestCase {
             default:
                 XCTFail("Did not received the expected action")
             }
+            expectation.fulfill()
         }
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
-        await Task.yield()
+        await fulfillment(of: [expectation])
         XCTAssert(userIndicatorControllerMock.submitIndicatorDelayCallsCount == 1)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
@@ -213,9 +215,10 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         let roomMemberMock = RoomMemberProxyMock()
         roomMemberMock.userID = "bob"
+        let expectation = XCTestExpectation(description: "Go to user details")
+        
         roomProxyMock.getMemberUserIDClosure = { _ in
-            try? await Task.sleep(for: .milliseconds(200))
-            return .success(roomMemberMock)
+            .success(roomMemberMock)
         }
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
@@ -229,6 +232,7 @@ class RoomScreenViewModelTests: XCTestCase {
             switch action {
             case .displayRoomMemberDetails(let member):
                 XCTAssert(member === roomMemberMock)
+                expectation.fulfill()
             default:
                 XCTFail("Did not received the expected action")
             }
@@ -236,7 +240,8 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
-        try? await Task.sleep(for: .milliseconds(300))
+        await fulfillment(of: [expectation])
+        
         XCTAssert(userIndicatorControllerMock.submitIndicatorDelayCallsCount == 1)
         XCTAssert(userIndicatorControllerMock.retractIndicatorWithIdCallsCount == 1)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
@@ -285,7 +290,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .retrySend(transactionID: "test retry send id"))
-        await Task.yield()
+        try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
     }
@@ -322,7 +327,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .cancelSend(transactionID: "test cancel send id"))
-        await Task.yield()
+        try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
     }
@@ -343,6 +348,27 @@ class RoomScreenViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .cancelSend(transactionID: nil))
         await Task.yield()
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
+    }
+
+    func testMarkAsRead() async {
+        // Setup
+        let notificationCenterMock = NotificationCenterMock()
+        let timelineController = MockRoomTimelineController()
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+
+        let viewModel = RoomScreenViewModel(timelineController: timelineController,
+                                            mediaProvider: MockMediaProvider(),
+                                            roomProxy: roomProxyMock,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analytics: ServiceLocator.shared.analytics,
+                                            userIndicatorController: userIndicatorControllerMock,
+                                            notificationCenterProtocol: notificationCenterMock)
+
+        viewModel.context.send(viewAction: .markRoomAsRead)
+        await Task.yield()
+        XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
+        let roomID = notificationCenterMock.postNameObjectReceivedArguments?.anObject as? String
+        XCTAssertEqual(roomID, roomProxyMock.id)
     }
 }
 

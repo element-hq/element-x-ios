@@ -33,18 +33,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
+    private let notificationCenterProtocol: NotificationCenterProtocol
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        self.notificationCenterProtocol = notificationCenterProtocol
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -214,6 +217,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func markRoomAsRead() async {
+        notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
         _ = await timelineController.markRoomAsRead()
     }
 

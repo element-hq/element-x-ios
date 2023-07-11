@@ -34,7 +34,9 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var roomTimelineObservationToken: TaskHandle?
+    private var backPaginationStateObservationToken: TaskHandle?
 
+    private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.eraseToAnyPublisher()
@@ -50,9 +52,10 @@ class RoomProxy: RoomProxyProtocol {
     var timelineProvider: RoomTimelineProviderProtocol {
         innerTimelineProvider
     }
-    
+
     deinit {
         roomTimelineObservationToken?.cancel()
+        backPaginationStateObservationToken?.cancel()
         roomListItem.unsubscribe()
     }
 
@@ -79,8 +82,12 @@ class RoomProxy: RoomProxyProtocol {
         
         let result = await room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
+
+        subscribeToBackpagination()
         
-        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items, updatePublisher: updatesPublisher)
+        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           updatePublisher: updatesPublisher,
+                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
         
         Task {
             await fetchMembers()
@@ -202,7 +209,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -222,7 +229,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -236,7 +243,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -259,7 +266,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -279,7 +286,7 @@ class RoomProxy: RoomProxyProtocol {
                    imageInfo: ImageInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -304,7 +311,7 @@ class RoomProxy: RoomProxyProtocol {
                    videoInfo: VideoInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -328,7 +335,7 @@ class RoomProxy: RoomProxyProtocol {
                    audioInfo: AudioInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -352,7 +359,7 @@ class RoomProxy: RoomProxyProtocol {
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -377,7 +384,7 @@ class RoomProxy: RoomProxyProtocol {
                       description: String?,
                       zoomLevel: UInt8?,
                       assetType: AssetType?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -395,7 +402,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func retrySend(transactionID: String) async {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -406,7 +413,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func cancelSend(transactionID: String) async {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -417,7 +424,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -435,7 +442,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -453,7 +460,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -483,7 +490,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -499,7 +506,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -521,7 +528,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func leaveRoom() async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -651,9 +658,20 @@ class RoomProxy: RoomProxyProtocol {
     private func update(displayName: String) {
         self.displayName = displayName
     }
+
+    private func subscribeToBackpagination() {
+        let listener = RoomBackpaginationStatusListener { [weak self] status in
+            self?.backPaginationStateSubject.send(status)
+        }
+        do {
+            backPaginationStateObservationToken = try room.subscribeToBackPaginationStatus(listener: listener)
+        } catch {
+            MXLog.error("Failed to subscribe to back pagination state with error: \(error)")
+        }
+    }
 }
 
-private class RoomTimelineListener: TimelineListener {
+private final class RoomTimelineListener: TimelineListener {
     private let onUpdateClosure: (TimelineDiff) -> Void
    
     init(_ onUpdateClosure: @escaping (TimelineDiff) -> Void) {
@@ -665,7 +683,7 @@ private class RoomTimelineListener: TimelineListener {
     }
 }
 
-private class UploadProgressListener: ProgressWatcher {
+private final class UploadProgressListener: ProgressWatcher {
     private let onUpdateClosure: (Double) -> Void
    
     init(_ onUpdateClosure: @escaping (Double) -> Void) {
@@ -676,5 +694,17 @@ private class UploadProgressListener: ProgressWatcher {
         DispatchQueue.main.async { [weak self] in
             self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
         }
+    }
+}
+
+private final class RoomBackpaginationStatusListener: BackPaginationStatusListener {
+    private let onUpdateClosure: (BackPaginationStatus) -> Void
+
+    init(_ onUpdateClosure: @escaping (BackPaginationStatus) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+
+    func onUpdate(status: BackPaginationStatus) {
+        onUpdateClosure(status)
     }
 }

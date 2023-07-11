@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,20 @@
 // limitations under the License.
 //
 
-import Combine
-import MatrixRustSDK
+import AnalyticsEvents
 
-struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
-    var itemsPublisher = CurrentValuePublisher<[TimelineItemProxy], Never>([])
-    
-    private var itemProxies = [TimelineItemProxy]()
+enum AnalyticsLocationType {
+    case myLocation
+    case pin
+}
+
+extension AnalyticsEvent.Composer.LocationType {
+    init(_ analyticsLocationType: AnalyticsLocationType) {
+        switch analyticsLocationType {
+        case .myLocation:
+            self = .MyLocation
+        case .pin:
+            self = .PinDrop
+        }
+    }
 }

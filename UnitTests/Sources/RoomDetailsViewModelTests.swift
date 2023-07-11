@@ -68,6 +68,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testLeaveRoomSuccess() async {
+        let expectation = expectation(description: #function)
         roomProxyMock.leaveRoomClosure = {
             .success(())
         }
@@ -78,18 +79,23 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             default:
                 XCTFail("leftRoom expected")
             }
+            expectation.fulfill()
         }
         context.send(viewAction: .confirmLeave)
-        await Task.yield()
+        await fulfillment(of: [expectation])
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
     }
     
     func testLeaveRoomError() async {
+        let expectation = expectation(description: #function)
         roomProxyMock.leaveRoomClosure = {
-            .failure(.failedLeavingRoom)
+            defer {
+                expectation.fulfill()
+            }
+            return .failure(.failedLeavingRoom)
         }
         context.send(viewAction: .confirmLeave)
-        await context.nextViewState()
+        await fulfillment(of: [expectation])
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
         XCTAssertNotNil(context.alertInfo)
     }

@@ -17,9 +17,20 @@
 import Foundation
 import UserNotifications
 
-class UserNotificationCenterSpy: UserNotificationCenterProtocol {
+final class UserNotificationCenterSpy: UserNotificationCenterProtocol {
     weak var delegate: UNUserNotificationCenterDelegate?
-    
+
+    var deliveredNotificationsCallsCount = 0
+    func deliveredNotifications() async -> [UNNotification] {
+        deliveredNotificationsCallsCount += 1
+        return []
+    }
+
+    var removeDeliveredNotificationsCallsCount = 0
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        removeDeliveredNotificationsCallsCount += 1
+    }
+
     var addRequest: UNNotificationRequest?
     func add(_ request: UNNotificationRequest) async throws {
         addRequest = request
@@ -35,5 +46,10 @@ class UserNotificationCenterSpy: UserNotificationCenterProtocol {
     var notificationCategoriesValue: Set<UNNotificationCategory>?
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
         notificationCategoriesValue = categories
+    }
+    
+    var authorizationStatusValue: UNAuthorizationStatus?
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        authorizationStatusValue ?? UNAuthorizationStatus.denied
     }
 }

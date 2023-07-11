@@ -23,7 +23,7 @@ struct StaticLocationScreenCoordinatorParameters {
 
 enum StaticLocationScreenCoordinatorAction {
     case close
-    case selectedLocation(GeoURI)
+    case selectedLocation(GeoURI, isUserLocation: Bool)
 }
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
@@ -51,8 +51,14 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 actionsSubject.send(.close)
-            case .sendLocation(let geoURI):
-                actionsSubject.send(.selectedLocation(geoURI))
+            case .openSystemSettings:
+                guard let url = URL(string: UIApplication.openSettingsURLString),
+                      UIApplication.shared.canOpenURL(url) else {
+                    return
+                }
+                UIApplication.shared.open(url)
+            case .sendLocation(let geoURI, let isUserLocation):
+                actionsSubject.send(.selectedLocation(geoURI, isUserLocation: isUserLocation))
             }
         }
         .store(in: &cancellables)

@@ -16,11 +16,11 @@
 
 import Foundation
 
-enum ReportContentScreenViewModelAction {
+enum ReportContentScreenViewModelAction: Equatable {
     case cancel
     case submitStarted
     case submitFinished
-    case submitFailed(error: Error)
+    case submitFailed(error: RoomProxyError)
 }
 
 struct ReportContentScreenViewState: BindableState {

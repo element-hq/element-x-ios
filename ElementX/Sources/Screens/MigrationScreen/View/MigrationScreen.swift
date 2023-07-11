@@ -43,6 +43,7 @@ struct MigrationScreen: View {
                 .font(.compound.bodyLG)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
+                .accessibilityIdentifier(A11yIdentifiers.migrationScreen.message)
         }
     }
 }

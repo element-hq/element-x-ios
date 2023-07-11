@@ -55,6 +55,8 @@ struct RoomTimelineItemView: View {
             UnsupportedRoomTimelineView(timelineItem: item)
         case .timelineStart(let item):
             TimelineStartRoomTimelineView(timelineItem: item)
+        case .encryptedHistory(let item):
+            EncryptedHistoryRoomTimelineView(timelineItem: item)
         case .state(let item):
             StateRoomTimelineView(timelineItem: item)
         case .group(let item):

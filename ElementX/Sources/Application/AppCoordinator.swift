@@ -133,12 +133,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - NotificationManagerDelegate
     
-    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
-        if granted {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
+    func registerForRemoteNotifications() {
+        UIApplication.shared.registerForRemoteNotifications()
     }
     
+    func unregisterForRemoteNotifications() {
+        UIApplication.shared.unregisterForRemoteNotifications()
+    }
+        
     func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
         guard let roomId = content.roomID else {
             return true
@@ -351,7 +353,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
-                                                                    appSettings: ServiceLocator.shared.settings)
+                                                                    appSettings: ServiceLocator.shared.settings,
+                                                                    analytics: ServiceLocator.shared.analytics)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {
@@ -548,6 +551,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
 
     private func startSync() {
+        ServiceLocator.shared.analytics.signpost.beginSync()
         guard let userSession else {
             fatalError("User session not setup")
         }
@@ -572,6 +576,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 case .startedUpdating:
                     showLoadingIndicator()
                 case .receivedSyncUpdate:
+                    ServiceLocator.shared.analytics.signpost.endSync()
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
                 default:
                     break

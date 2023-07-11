@@ -16,33 +16,31 @@
 
 import SwiftUI
 
-struct AnalyticsPromptScreenCheckmarkItem: View {
-    /// Represents the position of a checkmark item in a list.
-    enum ListPosition {
-        case top, middle, bottom
-        
-        /// The corners that should be rounded for this position.
-        var roundedCorners: UIRectCorner {
-            switch self {
-            case .top:
-                return [.topLeft, .topRight]
-            case .middle:
-                return []
-            case .bottom:
-                return [.bottomLeft, .bottomRight]
-            }
+/// Represents the position of a checkmark item in a list.
+enum ListPosition {
+    case top, middle, bottom
+
+    /// The corners that should be rounded for this position.
+    var roundedCorners: UIRectCorner {
+        switch self {
+        case .top:
+            return [.topLeft, .topRight]
+        case .middle:
+            return []
+        case .bottom:
+            return [.bottomLeft, .bottomRight]
         }
     }
-    
+}
+
+struct RoundedLabelItem<Icon: View>: View {
     let title: String
     let listPosition: ListPosition
+    let iconContent: () -> Icon
     
     var body: some View {
         Label { Text(title) } icon: {
-            Image(systemName: "checkmark.circle")
-                .symbolVariant(.fill)
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(Color.compound.iconAccentTertiary, Color.compound.textOnSolidPrimary)
+            iconContent()
         }
         .labelStyle(CheckmarkLabelStyle())
         .padding(.horizontal, 20)
@@ -68,14 +66,32 @@ private struct CheckmarkLabelStyle: LabelStyle {
 
 struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+
+    @ViewBuilder
+    static var testImage1: some View {
+        Image(systemName: "circle")
+    }
+
+    @ViewBuilder
+    static var testImage2: some View {
+        Image(systemName: "square")
+    }
     
     static var previews: some View {
         VStack(alignment: .leading, spacing: 4) {
-            AnalyticsPromptScreenCheckmarkItem(title: strings.point1, listPosition: .top)
-            AnalyticsPromptScreenCheckmarkItem(title: strings.point2, listPosition: .middle)
-            AnalyticsPromptScreenCheckmarkItem(title: "This is a short string.", listPosition: .middle)
-            AnalyticsPromptScreenCheckmarkItem(title: "This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct.",
-                                               listPosition: .bottom)
+            RoundedLabelItem(title: strings.point1, listPosition: .top) {
+                testImage1
+            }
+            RoundedLabelItem(title: strings.point2, listPosition: .middle) {
+                testImage2
+            }
+            RoundedLabelItem(title: "This is a short string.", listPosition: .middle) {
+                testImage1
+            }
+            RoundedLabelItem(title: "This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct.",
+                             listPosition: .bottom) {
+                testImage2
+            }
         }
         .padding()
     }

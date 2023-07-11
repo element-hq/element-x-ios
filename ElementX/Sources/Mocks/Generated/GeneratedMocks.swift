@@ -197,6 +197,25 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class NotificationCenterMock: NotificationCenterProtocol {
+
+    //MARK: - post
+
+    var postNameObjectCallsCount = 0
+    var postNameObjectCalled: Bool {
+        return postNameObjectCallsCount > 0
+    }
+    var postNameObjectReceivedArguments: (aName: NSNotification.Name, anObject: Any?)?
+    var postNameObjectReceivedInvocations: [(aName: NSNotification.Name, anObject: Any?)] = []
+    var postNameObjectClosure: ((NSNotification.Name, Any?) -> Void)?
+
+    func post(name aName: NSNotification.Name, object anObject: Any?) {
+        postNameObjectCallsCount += 1
+        postNameObjectReceivedArguments = (aName: aName, anObject: anObject)
+        postNameObjectReceivedInvocations.append((aName: aName, anObject: anObject))
+        postNameObjectClosure?(aName, anObject)
+    }
+}
 class NotificationManagerMock: NotificationManagerProtocol {
     var delegate: NotificationManagerDelegate?
 
@@ -1075,6 +1094,20 @@ class RoomProxyMock: RoomProxyProtocol {
         }
     }
 }
+class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
+    var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {
+        get { return underlyingUpdatePublisher }
+        set(value) { underlyingUpdatePublisher = value }
+    }
+    var underlyingUpdatePublisher: AnyPublisher<TimelineProviderUpdate, Never>!
+    var itemProxies: [TimelineItemProxy] = []
+    var backPaginationState: BackPaginationStatus {
+        get { return underlyingBackPaginationState }
+        set(value) { underlyingBackPaginationState = value }
+    }
+    var underlyingBackPaginationState: BackPaginationStatus!
+
+}
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
         get { return underlyingCallbacks }
@@ -1300,6 +1333,121 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
             return toPresentableClosure()
         } else {
             return toPresentableReturnValue
+        }
+    }
+}
+class UserNotificationCenterMock: UserNotificationCenterProtocol {
+    var delegate: UNUserNotificationCenterDelegate?
+
+    //MARK: - add
+
+    var addThrowableError: Error?
+    var addCallsCount = 0
+    var addCalled: Bool {
+        return addCallsCount > 0
+    }
+    var addReceivedRequest: UNNotificationRequest?
+    var addReceivedInvocations: [UNNotificationRequest] = []
+    var addClosure: ((UNNotificationRequest) async throws -> Void)?
+
+    func add(_ request: UNNotificationRequest) async throws {
+        if let error = addThrowableError {
+            throw error
+        }
+        addCallsCount += 1
+        addReceivedRequest = request
+        addReceivedInvocations.append(request)
+        try await addClosure?(request)
+    }
+    //MARK: - requestAuthorization
+
+    var requestAuthorizationOptionsThrowableError: Error?
+    var requestAuthorizationOptionsCallsCount = 0
+    var requestAuthorizationOptionsCalled: Bool {
+        return requestAuthorizationOptionsCallsCount > 0
+    }
+    var requestAuthorizationOptionsReceivedOptions: UNAuthorizationOptions?
+    var requestAuthorizationOptionsReceivedInvocations: [UNAuthorizationOptions] = []
+    var requestAuthorizationOptionsReturnValue: Bool!
+    var requestAuthorizationOptionsClosure: ((UNAuthorizationOptions) async throws -> Bool)?
+
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
+        if let error = requestAuthorizationOptionsThrowableError {
+            throw error
+        }
+        requestAuthorizationOptionsCallsCount += 1
+        requestAuthorizationOptionsReceivedOptions = options
+        requestAuthorizationOptionsReceivedInvocations.append(options)
+        if let requestAuthorizationOptionsClosure = requestAuthorizationOptionsClosure {
+            return try await requestAuthorizationOptionsClosure(options)
+        } else {
+            return requestAuthorizationOptionsReturnValue
+        }
+    }
+    //MARK: - deliveredNotifications
+
+    var deliveredNotificationsCallsCount = 0
+    var deliveredNotificationsCalled: Bool {
+        return deliveredNotificationsCallsCount > 0
+    }
+    var deliveredNotificationsReturnValue: [UNNotification]!
+    var deliveredNotificationsClosure: (() async -> [UNNotification])?
+
+    func deliveredNotifications() async -> [UNNotification] {
+        deliveredNotificationsCallsCount += 1
+        if let deliveredNotificationsClosure = deliveredNotificationsClosure {
+            return await deliveredNotificationsClosure()
+        } else {
+            return deliveredNotificationsReturnValue
+        }
+    }
+    //MARK: - removeDeliveredNotifications
+
+    var removeDeliveredNotificationsWithIdentifiersCallsCount = 0
+    var removeDeliveredNotificationsWithIdentifiersCalled: Bool {
+        return removeDeliveredNotificationsWithIdentifiersCallsCount > 0
+    }
+    var removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers: [String]?
+    var removeDeliveredNotificationsWithIdentifiersReceivedInvocations: [[String]] = []
+    var removeDeliveredNotificationsWithIdentifiersClosure: (([String]) -> Void)?
+
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        removeDeliveredNotificationsWithIdentifiersCallsCount += 1
+        removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers = identifiers
+        removeDeliveredNotificationsWithIdentifiersReceivedInvocations.append(identifiers)
+        removeDeliveredNotificationsWithIdentifiersClosure?(identifiers)
+    }
+    //MARK: - setNotificationCategories
+
+    var setNotificationCategoriesCallsCount = 0
+    var setNotificationCategoriesCalled: Bool {
+        return setNotificationCategoriesCallsCount > 0
+    }
+    var setNotificationCategoriesReceivedCategories: Set<UNNotificationCategory>?
+    var setNotificationCategoriesReceivedInvocations: [Set<UNNotificationCategory>] = []
+    var setNotificationCategoriesClosure: ((Set<UNNotificationCategory>) -> Void)?
+
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+        setNotificationCategoriesCallsCount += 1
+        setNotificationCategoriesReceivedCategories = categories
+        setNotificationCategoriesReceivedInvocations.append(categories)
+        setNotificationCategoriesClosure?(categories)
+    }
+    //MARK: - authorizationStatus
+
+    var authorizationStatusCallsCount = 0
+    var authorizationStatusCalled: Bool {
+        return authorizationStatusCallsCount > 0
+    }
+    var authorizationStatusReturnValue: UNAuthorizationStatus!
+    var authorizationStatusClosure: (() async -> UNAuthorizationStatus)?
+
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        authorizationStatusCallsCount += 1
+        if let authorizationStatusClosure = authorizationStatusClosure {
+            return await authorizationStatusClosure()
+        } else {
+            return authorizationStatusReturnValue
         }
     }
 }

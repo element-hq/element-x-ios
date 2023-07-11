@@ -165,6 +165,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                          analytics: analytics,
                                                           userIndicatorController: userIndicatorController)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
@@ -205,6 +206,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
+        appSettings.lastLoginDate = .now
+        
         showAnalyticsPromptIfNeeded { [weak self] in
             guard let self else { return }
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)

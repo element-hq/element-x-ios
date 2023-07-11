@@ -23,6 +23,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -38,10 +39,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          attributedStringBuilder: AttributedStringBuilderProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
+         analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
         self.appSettings = appSettings
+        self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
@@ -96,6 +99,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 guard roomListMode != self.state.roomListMode else {
                     return
+                }
+                
+                // End the initial sync performance timing once the room list is about to be displayed.
+                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
+                    analytics.signpost.endSync()
                 }
                 
                 self.state.roomListMode = roomListMode

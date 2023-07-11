@@ -1,4 +1,4 @@
-[![Element iOS Matrix room #element-ios:matrix.org](https://img.shields.io/matrix/element-ios:matrix.org.svg?label=%23element-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-ios:matrix.org)
+[![Element iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
 ![GitHub](https://img.shields.io/github/license/vector-im/element-x-ios)
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/vector-im/element-x-ios/unit_tests.yml?style=flat-square)
@@ -29,7 +29,7 @@ This project is in work in progress. The app does not cover yet all functionalit
 
 Please see our [contribution guide](CONTRIBUTING.md).
 
-Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-ios:matrix.org).
+Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-ios:matrix.org).
 
 ## Build instructions
 

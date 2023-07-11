@@ -59,6 +59,8 @@ enum AnalyticsScreen: Int {
     case spaceBottomSheet
     case invites
     case createSpace
+    case locationSend
+    case locationView
 
     /// The screen name reported to the AnalyticsEvent.
     var screenName: AnalyticsEvent.MobileScreen.ScreenName {
@@ -145,6 +147,10 @@ enum AnalyticsScreen: Int {
             return .Invites
         case .createSpace:
             return .CreateSpace
+        case .locationSend:
+            return .LocationSend
+        case .locationView:
+            return .LocationView
         }
     }
 }

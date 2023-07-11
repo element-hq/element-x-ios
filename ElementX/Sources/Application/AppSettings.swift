@@ -22,9 +22,11 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case lastLoginDate
         case migratedAccounts
         case timelineStyle
         case analyticsConsentState
+        case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
@@ -32,6 +34,8 @@ final class AppSettings {
         case readReceiptsEnabled
         case locationEventsEnabled
         case shareLocationEnabled
+        case hasShownWelcomeScreen
+        case notificationSettingsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -88,6 +92,9 @@ final class AppSettings {
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+
+    @UserPreference(key: UserDefaultsKeys.hasShownWelcomeScreen, defaultValue: false, storageType: .userDefaults(store))
+    var hasShownWelcomeScreen: Bool
     
     // MARK: - Authentication
     
@@ -105,13 +112,20 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
 
+    /// The date that the call to `/login` completed successfully. This is used to put
+    /// a hard wall on the history of encrypted messages until we have key backup.
+    ///
+    /// Not a multi-account aware setting as key backup will come before multi-account.
+    @UserPreference(key: UserDefaultsKeys.lastLoginDate, defaultValue: nil, storageType: .userDefaults(store))
+    var lastLoginDate: Date?
+    
     /// A dictionary of accounts that have performed an initial sync through their proxy.
     ///
     /// This is a temporary workaround. In the future we should be able to receive a signal from the
     /// proxy that it is the first sync (or that an upgrade on the backend will involve a slower sync).
     @UserPreference(key: UserDefaultsKeys.migratedAccounts, defaultValue: [:], storageType: .userDefaults(store))
     var migratedAccounts: [String: Bool]
-    
+
     // MARK: - Notifications
     
     var pusherAppId: String {
@@ -166,6 +180,9 @@ final class AppSettings {
     
     // MARK: - Notifications
 
+    @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
+    var enableNotifications
+
     @UserPreference(key: UserDefaultsKeys.enableInAppNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableInAppNotifications
 
@@ -174,7 +191,7 @@ final class AppSettings {
     var pusherProfileTag: String?
 
     /// Tag describing if the app and the NSE should use the encryption sync
-    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: SharedUserDefaultsKeys.isEncryptionSyncEnabled, defaultValue: true, storageType: .userDefaults(store))
     var isEncryptionSyncEnabled
         
     // MARK: - Other
@@ -206,4 +223,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.shareLocationEnabled, defaultValue: false, storageType: .userDefaults(store))
     var shareLocationEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var notificationSettingsEnabled
 }

@@ -19,16 +19,20 @@ import Foundation
 import UIKit
 import UserNotifications
 
-class NotificationManager: NSObject, NotificationManagerProtocol {
+final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let appSettings: AppSettings
     
     private var userSession: UserSessionProtocol?
-
+    private var cancellables = Set<AnyCancellable>()
+    private var notificationsEnabled = false
+    
     init(notificationCenter: UserNotificationCenterProtocol,
          appSettings: AppSettings) {
         self.notificationCenter = notificationCenter
         self.appSettings = appSettings
+        super.init()
+        addObservers()
     }
 
     // MARK: NotificationManagerProtocol
@@ -50,15 +54,35 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                     options: [])
         notificationCenter.setNotificationCategories([messageCategory, inviteCategory])
         notificationCenter.delegate = self
+        
+        notificationsEnabled = appSettings.enableNotifications
+        MXLog.info("[NotificationManager] app setting 'enableNotifications' is '\(notificationsEnabled)'")
+        
+        // Listen for changes to AppSettings.enableNotifications
+        appSettings.$enableNotifications
+            .sink { [weak self] newValue in
+                self?.enableNotifications(newValue)
+            }
+            .store(in: &cancellables)
+        
+        // Request authorization uppon UIApplication.didBecomeActiveNotification notification
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.requestAuthorization()
+            }
+            .store(in: &cancellables)
     }
-
+    
     func requestAuthorization() {
+        guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {
             do {
-                let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.info("[NotificationManager] permission granted: \(granted)")
+                let permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
+                MXLog.info("[NotificationManager] permission granted: \(permissionGranted)")
                 await MainActor.run {
-                    self.delegate?.authorizationStatusUpdated(self, granted: granted)
+                    if permissionGranted {
+                        self.delegate?.registerForRemoteNotifications()
+                    }
                 }
             } catch {
                 MXLog.error("[NotificationManager] request authorization failed: \(error)")
@@ -135,6 +159,58 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
         appSettings.pusherProfileTag = newTag
         return newTag
+    }
+    
+    private func enableNotifications(_ enable: Bool) {
+        guard notificationsEnabled != enable else { return }
+        notificationsEnabled = enable
+        MXLog.info("[NotificationManager] app setting 'enableNotifications' changed to '\(enable)'")
+        if enable {
+            requestAuthorization()
+        } else {
+            delegate?.unregisterForRemoteNotifications()
+        }
+    }
+
+    private func addObservers() {
+        NotificationCenter
+            .default
+            .publisher(for: .roomMarkedAsRead)
+            .sink { [weak self] notification in
+                guard let roomID = notification.object as? String else {
+                    return
+                }
+                self?.removeMessageNotifications(for: roomID)
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter
+            .default
+            .publisher(for: .invitesScreenAppeared)
+            .sink { [weak self] _ in
+                self?.removeInviteNotifications()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func removeMessageNotifications(for roomID: String) {
+        Task {
+            let notificationsIdentifiers = await notificationCenter
+                .deliveredNotifications()
+                .filter { $0.request.content.roomID == roomID }
+                .map(\.request.identifier)
+            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+        }
+    }
+
+    private func removeInviteNotifications() {
+        Task {
+            let notificationsIdentifiers = await notificationCenter
+                .deliveredNotifications()
+                .filter { $0.request.content.categoryIdentifier == NotificationConstants.Category.invite }
+                .map(\.request.identifier)
+            notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+        }
     }
 }
 

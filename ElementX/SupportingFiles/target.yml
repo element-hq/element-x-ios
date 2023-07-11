@@ -69,6 +69,7 @@ targets:
         NSCameraUsageDescription: To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.
         NSMicrophoneUsageDescription: To take videos with audio and send them as a message $(APP_DISPLAY_NAME) needs access to the microphone.
         NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
+        NSLocationWhenInUseUsageDescription: When you share your location to people, $(APP_DISPLAY_NAME) needs access to show them a map.
         UIBackgroundModes: [
           fetch
         ]
@@ -156,7 +157,6 @@ targets:
     - package: Sentry
     - package: URLRouting
     - package: Version
-    - package: Flow
 
     sources:
     - path: ../Sources

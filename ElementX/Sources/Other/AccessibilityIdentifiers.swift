@@ -33,7 +33,9 @@ struct A11yIdentifiers {
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
     static let createRoomScreen = CreateRoomScreen()
     static let invitesScreen = InvitesScreen()
-    
+    static let welcomeScreen = WelcomeScreen()
+    static let migrationScreen = MigrationScreen()
+
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"
         let enable = "analytics_prompt-enable"
@@ -59,8 +61,10 @@ struct A11yIdentifiers {
         let settings = "home_screen-settings"
         let signOut = "home_screen-sign_out"
         let verificationBannerContinue = "home_screen-verification_continue"
+        
+        let roomNamePrefix = "home_screen-room_name"
         func roomName(_ name: String) -> String {
-            "home_screen-room_name:\(name)"
+            "\(roomNamePrefix):\(name)"
         }
     }
     
@@ -141,5 +145,13 @@ struct A11yIdentifiers {
     struct CreateRoomScreen {
         let roomName = "create_room-room_name"
         let roomTopic = "create_room-room_topic"
+    }
+
+    struct WelcomeScreen {
+        let letsGo = "welcome_screen-lets_go"
+    }
+
+    struct MigrationScreen {
+        let message = "migration_screen-message"
     }
 }

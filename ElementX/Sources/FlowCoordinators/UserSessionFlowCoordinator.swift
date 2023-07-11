@@ -28,6 +28,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
@@ -37,7 +38,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-    
+
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
@@ -46,13 +47,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         analytics: AnalyticsService) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
+        self.analytics = analytics
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -64,8 +67,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   navigationStackCoordinator: detailNavigationStackCoordinator,
                                                   navigationSplitCoordinator: navigationSplitCoordinator,
                                                   emojiProvider: EmojiProvider(),
-                                                  appSettings: ServiceLocator.shared.settings,
-                                                  analytics: ServiceLocator.shared.analytics,
+                                                  appSettings: appSettings,
+                                                  analytics: analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         setupStateMachine()
@@ -73,9 +76,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         roomFlowCoordinator.actions.sink { action in
             switch action {
             case .presentedRoom(let roomID):
+                self.analytics.signpost.beginRoomFlow(roomID)
                 self.stateMachine.processEvent(.selectRoom(roomId: roomID))
             case .dismissedRoom:
                 self.stateMachine.processEvent(.deselectRoom)
+                self.analytics.signpost.endRoomFlow()
             }
         }
         .store(in: &cancellables)
@@ -85,6 +90,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if appSettings.migratedAccounts[userSession.userID] != true {
             // Show the migration screen for a new account.
             stateMachine.processEvent(.startWithMigration)
+        } else if !appSettings.hasShownWelcomeScreen {
+            stateMachine.processEvent(.startWithWelcomeScreen)
         } else {
             // Otherwise go straight to the home screen.
             stateMachine.processEvent(.start)
@@ -106,7 +113,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return // Not ready to handle a route.
         case .roomList:
             break // Nothing to tidy up on the home screen.
-        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
+        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen, .welcomeScreen:
             navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         }
         
@@ -135,13 +142,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             let animated = (context.userInfo as? UserSessionFlowCoordinatorStateMachine.EventUserInfo)?.animated ?? true
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
-                self.presentHomeScreen()
+                presentHomeScreen()
             
             case (.initial, .startWithMigration, .migration):
-                self.presentMigrationScreen() // Full screen cover
-                self.presentHomeScreen() // Have the home screen ready to show underneath
+                presentMigrationScreen() // Full screen cover
+                presentHomeScreen() // Have the home screen ready to show underneath
             case (.migration, .completeMigration, .roomList):
-                self.dismissMigrationScreen()
+                dismissMigrationScreen()
+
+            case (.initial, .startWithWelcomeScreen, .welcomeScreen):
+                presentHomeScreen()
+                presentWelcomeScreen()
+            case (.roomList, .presentWelcomeScreen, .welcomeScreen):
+                presentWelcomeScreen()
+            case (.welcomeScreen, .dismissedWelcomeScreen, .roomList):
+                break
                 
             case(.roomList, .selectRoom, .roomList):
                 break
@@ -154,27 +169,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
 
             case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
-                self.presentSessionVerification(animated: animated)
+                presentSessionVerification(animated: animated)
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
-                self.presentSettingsScreen(animated: animated)
+                presentSettingsScreen(animated: animated)
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
-                self.presentFeedbackScreen(animated: animated)
+                presentFeedbackScreen(animated: animated)
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
                 
             case (.roomList, .showStartChatScreen, .startChatScreen):
-                self.presentStartChat(animated: animated)
+                presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
                 
             case (.roomList, .showInvitesScreen, .invitesScreen):
-                self.presentInvitesList(animated: animated)
+                presentInvitesList(animated: animated)
             case (.invitesScreen, .showInvitesScreen, .invitesScreen):
                 break
             case (.invitesScreen, .closedInvitesScreen, .roomList):
@@ -216,6 +231,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func dismissMigrationScreen() {
         navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+
+        // Not sure why but the full screen closure dismissal closure doesn't seem to work properly
+        // And not using the DispatchQueue.main results in the the screen getting presented as full screen too.
+        if !appSettings.hasShownWelcomeScreen {
+            DispatchQueue.main.async {
+                self.stateMachine.processEvent(.presentWelcomeScreen)
+            }
+        }
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -256,6 +279,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+
+    private func presentWelcomeScreen() {
+        let welcomeScreenCoordinator = WelcomeScreenScreenCoordinator()
+        welcomeScreenCoordinator.actions.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationSplitCoordinator.setSheetCoordinator(welcomeScreenCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedWelcomeScreen)
+        }
     }
     
     // MARK: Settings

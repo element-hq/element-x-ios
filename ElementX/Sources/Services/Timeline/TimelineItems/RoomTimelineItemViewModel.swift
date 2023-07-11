@@ -58,6 +58,7 @@ enum RoomTimelineItemType: Equatable {
     case sticker(StickerRoomTimelineItem)
     case unsupported(UnsupportedRoomTimelineItem)
     case timelineStart(TimelineStartRoomTimelineItem)
+    case encryptedHistory(EncryptedHistoryRoomTimelineItem)
     case state(StateRoomTimelineItem)
     case group(CollapsibleTimelineItem)
     case location(LocationRoomTimelineItem)
@@ -95,6 +96,8 @@ enum RoomTimelineItemType: Equatable {
             self = .unsupported(item)
         case let item as TimelineStartRoomTimelineItem:
             self = .timelineStart(item)
+        case let item as EncryptedHistoryRoomTimelineItem:
+            self = .encryptedHistory(item)
         case let item as StateRoomTimelineItem:
             self = .state(item)
         case let item as CollapsibleTimelineItem:
@@ -123,6 +126,7 @@ enum RoomTimelineItemType: Equatable {
              .sticker(let item as RoomTimelineItemProtocol),
              .unsupported(let item as RoomTimelineItemProtocol),
              .timelineStart(let item as RoomTimelineItemProtocol),
+             .encryptedHistory(let item as RoomTimelineItemProtocol),
              .state(let item as RoomTimelineItemProtocol),
              .group(let item as RoomTimelineItemProtocol),
              .location(let item as RoomTimelineItemProtocol):
@@ -137,7 +141,7 @@ enum RoomTimelineItemType: Equatable {
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false
-        case .timelineStart, .separator, .readMarker, .paginationIndicator: // Virtual items are never reactable
+        case .timelineStart, .encryptedHistory, .separator, .readMarker, .paginationIndicator: // Virtual items are never reactable
             return false
         case .group:
             return false

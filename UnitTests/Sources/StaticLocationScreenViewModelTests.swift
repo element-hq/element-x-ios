@@ -32,13 +32,48 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
-        viewModel.state.isPinDropSharing = false
+        viewModel.state.bindings.isLocationAuthorized = true
         self.viewModel = viewModel
     }
     
     func testUserDidPan() async throws {
-        XCTAssertFalse(context.viewState.isPinDropSharing)
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
         context.send(viewAction: .userDidPan)
-        XCTAssertTrue(context.viewState.isPinDropSharing)
+        XCTAssertFalse(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .show)
+    }
+    
+    func testCenterOnUser() async throws {
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
+        context.showsUserLocationMode = .show
+        XCTAssertFalse(context.viewState.isSharingUserLocation)
+        context.send(viewAction: .centerToUser)
+        XCTAssertTrue(context.viewState.isSharingUserLocation)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
+    }
+    
+    func testCenterOnUserWithoutAuth() async throws {
+        context.showsUserLocationMode = .hide
+        context.isLocationAuthorized = nil
+        context.send(viewAction: .centerToUser)
+        XCTAssertEqual(context.showsUserLocationMode, .showAndFollow)
+    }
+    
+    func testCenterOnUserWithDeniedAuth() async throws {
+        context.isLocationAuthorized = false
+        context.showsUserLocationMode = .hide
+        context.send(viewAction: .centerToUser)
+        XCTAssertNotEqual(context.showsUserLocationMode, .showAndFollow)
+        XCTAssertNotNil(context.alertInfo)
+    }
+    
+    func testErrorMapping() async throws {
+        let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
+        XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
+        let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
+        XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
+        let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
+        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName))
     }
 }

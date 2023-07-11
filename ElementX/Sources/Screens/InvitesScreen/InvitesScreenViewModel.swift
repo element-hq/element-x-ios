@@ -24,11 +24,12 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let notificationCenterProtocol: NotificationCenterProtocol
     
     private let previouslySeenInvites: Set<String>
     private let actionsSubject: PassthroughSubject<InvitesScreenViewModelAction, Never> = .init()
     @CancellableTask private var fetchInvitersTask: Task<Void, Never>?
-    
+
     var actions: AnyPublisher<InvitesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -36,11 +37,13 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
     init(userSession: UserSessionProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.userSession = userSession
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        self.notificationCenterProtocol = notificationCenterProtocol
         
         previouslySeenInvites = appSettings.seenInvites
         super.init(initialViewState: InvitesScreenViewState(), imageProvider: userSession.mediaProvider)
@@ -55,6 +58,8 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             accept(invite: invite)
         case .decline(let invite):
             startDeclineFlow(invite: invite)
+        case .appeared:
+            notificationCenterProtocol.post(name: .invitesScreenAppeared, object: nil)
         }
     }
     
@@ -75,62 +80,57 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
         }
         
         inviteSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
-                
-                let invites = self.buildInvites(from: roomSummaries)
-                appSettings.seenInvites = Set(invites.map(\.roomDetails.id))
-                self.state.invites = invites
 
-                fetchInviters(invites: invites)
+                fetchInvitersTask = Task { [weak self] in
+                    guard let self else { return }
+                    let fullInvites = await self.buildInvites(from: roomSummaries)
+                    guard !Task.isCancelled else { return }
+                    self.state.invites = fullInvites
+                    self.state.isLoading = false
+                    self.appSettings.seenInvites = Set(fullInvites.map(\.roomDetails.id))
+                }
             }
             .store(in: &cancellables)
     }
-    
-    private func buildInvites(from summaries: [RoomSummary]) -> [InvitesScreenRoomDetails] {
-        summaries.compactMap { summary in
-            guard case .filled(let details) = summary else {
-                return nil
-            }
-            return InvitesScreenRoomDetails(roomDetails: details, isUnread: !previouslySeenInvites.contains(details.id))
-        }
-    }
 
-    private func fetchInviters(invites: [InvitesScreenRoomDetails]) {
-        fetchInvitersTask = Task { [weak self] in
-            await withTaskGroup(of: (String, RoomMemberProxyProtocol)?.self) { group in
-                for invite in invites {
-                    group.addTask { [weak self] in
-                        let roomID = invite.roomDetails.id
-                        guard let inviter = await self?.fetchInviter(for: roomID) else {
+    private func buildInvites(from summaries: [RoomSummary]) async -> [InvitesScreenRoomDetails] {
+        await Task.detached {
+            let invites: [InvitesScreenRoomDetails] = summaries.compactMap { summary in
+                guard case .filled(let details) = summary else {
+                    return nil
+                }
+                return InvitesScreenRoomDetails(roomDetails: details, isUnread: !self.previouslySeenInvites.contains(details.id))
+            }
+
+            // fetch the inviters...
+            return await withTaskGroup(of: (Int, RoomMemberProxyProtocol)?.self) { [clientProxy = self.clientProxy] group in
+                var invitesWithInviters = invites
+
+                for inviteIndex in 0..<invites.count {
+                    group.addTask {
+                        let roomID = invites[inviteIndex].roomDetails.id
+                        guard let inviter = await clientProxy.roomForIdentifier(roomID)?.inviter() else {
                             return nil
                         }
-                        return (roomID, inviter)
+                        return (inviteIndex, inviter)
                     }
                 }
 
                 for await result in group {
-                    guard let self, !Task.isCancelled else {
-                        break
-                    }
-
-                    guard let (roomID, inviter) = result else {
+                    guard let (inviteIndex, inviter) = result else {
                         continue
                     }
 
-                    guard let inviteIndex = self.state.invites.firstIndex(where: { $0.roomDetails.id == roomID }) else {
-                        return
-                    }
-
-                    self.state.invites[inviteIndex].inviter = inviter
+                    invitesWithInviters[inviteIndex].inviter = inviter
                 }
+
+                return invitesWithInviters
             }
         }
-    }
-
-    private func fetchInviter(for roomID: String) async -> RoomMemberProxyProtocol? {
-        await clientProxy.roomForIdentifier(roomID)?.inviter()
+        .value
     }
 
     private func startDeclineFlow(invite: InvitesScreenRoomDetails) {

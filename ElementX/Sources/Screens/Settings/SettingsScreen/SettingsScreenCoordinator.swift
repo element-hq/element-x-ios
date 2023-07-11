@@ -59,6 +59,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 self.presentDeveloperOptions()
             case .logout:
                 self.callback?(.logout)
+            case .notifications:
+                self.presentNotificationSettings()
             }
         }
     }
@@ -135,5 +137,13 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
 
     private func showSuccess(label: String) {
         parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
+    }
+    
+    private func presentNotificationSettings() {
+        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(
+            userNotificationCenter: UNUserNotificationCenter.current()
+        )
+        let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
 }
