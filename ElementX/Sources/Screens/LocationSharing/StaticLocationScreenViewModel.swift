@@ -44,10 +44,11 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             case .some(true), .none:
                 state.bindings.showsUserLocationMode = .showAndFollow
             case .some(false):
+                let action = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
                 state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
                                                  primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
                                                  secondaryButton: .init(title: L10n.commonSettings,
-                                                                        action: { [weak self] in self?.actionsSubject.send(.openSystemSettings) }))
+                                                                        action: action))
             }
         }
     }
