@@ -211,25 +211,12 @@ extension MapLibreMapView {
         // MARK: Private
 
         private func updateGeolocationUncertainty(location: MGLUserLocation) {
-            guard let clLocation = location.location else {
+            guard let clLocation = location.location, clLocation.horizontalAccuracy >= 0 else {
                 mapLibreView.geolocationUncertainty = nil
                 return
             }
-            
-            let uncertainty: CLLocationAccuracy?
 
-            switch (clLocation.horizontalAccuracy, clLocation.verticalAccuracy) {
-            case (let hAccuracy, let vAccuracy) where hAccuracy < 0 && vAccuracy < 0:
-                uncertainty = nil
-            case (let hAccuracy, let vAccuracy) where hAccuracy >= 0 && vAccuracy < 0:
-                uncertainty = hAccuracy
-            case (let hAccuracy, let vAccuracy) where hAccuracy < 0 && vAccuracy >= 0:
-                uncertainty = vAccuracy
-            case (let hAccuracy, let vAccuracy):
-                uncertainty = max(hAccuracy, vAccuracy)
-            }
-
-            mapLibreView.geolocationUncertainty = uncertainty
+            mapLibreView.geolocationUncertainty = clLocation.horizontalAccuracy
         }
     }
 }
