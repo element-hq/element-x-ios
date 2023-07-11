@@ -139,10 +139,10 @@
 "emoji_picker_category_places" = "Travel & Places";
 "emoji_picker_category_symbols" = "Symbols";
 "error_failed_creating_the_permalink" = "Failed creating the permalink";
-"error_failed_loading_map" = "Element could not load the map. Please try again later.";
+"error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Failed loading messages";
-"error_failed_locating_user" = "Element could not access your location. Please try again later.";
-"error_missing_location_auth" = "Element does not have permission to access your location. You can enable access in Settings > Location";
+"error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
+"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
@@ -308,6 +308,8 @@
 "screen_room_reactions_show_more" = "Show more";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
 "screen_room_retry_send_menu_title" = "Your message failed to send";
+"screen_room_timeline_add_reaction" = "Add emoji";
+"screen_room_timeline_less_reactions" = "Show less";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_server_confirmation_change_server" = "Change account provider";

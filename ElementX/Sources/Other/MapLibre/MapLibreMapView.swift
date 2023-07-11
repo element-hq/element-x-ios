@@ -20,15 +20,20 @@ import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
     struct Options {
-        /// The initial zoom level
+        /// the final zoom level used when the first user location emit
         let zoomLevel: Double
+        /// The initial zoom level used when the map it firstly loaded and the user location is not yet available, in case of annotations this property is not being used
+        let initialZoomLevel: Double
+        
         /// The initial map center
-        let mapCenter: CLLocationCoordinate2D?
+        let mapCenter: CLLocationCoordinate2D
+        
         /// Map annotations
         let annotations: [LocationAnnotation]
 
-        init(zoomLevel: Double, mapCenter: CLLocationCoordinate2D? = nil, annotations: [LocationAnnotation] = []) {
+        init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
             self.zoomLevel = zoomLevel
+            self.initialZoomLevel = initialZoomLevel
             self.mapCenter = mapCenter
             self.annotations = annotations
         }
@@ -43,14 +48,16 @@ struct MapLibreMapView: UIViewRepresentable {
     let options: Options
     
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
-    var showsUserLocationMode: ShowUserLocationMode = .hide
+    @Binding var showsUserLocationMode: ShowUserLocationMode
     
     /// Bind view errors if any
-    let error: Binding<MapLibreError?>
+    @Binding var error: MapLibreError?
     
     /// Coordinate of the center of the map
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
+    @Binding var isLocationAuthorized: Bool?
+    
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
     
@@ -59,23 +66,12 @@ struct MapLibreMapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MGLMapView {
         let mapView = makeMapView()
         mapView.delegate = context.coordinator
-        let panGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.didPan))
-        panGesture.delegate = context.coordinator
-        mapView.addGestureRecognizer(panGesture)
         setupMap(mapView: mapView, with: options)
         return mapView
     }
     
     func updateUIView(_ mapView: MGLMapView, context: Context) {
-        mapView.removeAllAnnotations()
-        mapView.addAnnotations(options.annotations)
-        
-        if colorScheme == .dark {
-            mapView.styleURL = builder.dynamicMapURL(for: .dark)
-        } else {
-            mapView.styleURL = builder.dynamicMapURL(for: .light)
-        }
-        
+        mapView.styleURL = builder.dynamicMapURL(for: .init(colorScheme))
         showUserLocation(in: mapView)
     }
     
@@ -86,32 +82,36 @@ struct MapLibreMapView: UIViewRepresentable {
     // MARK: - Private
 
     private func setupMap(mapView: MGLMapView, with options: Options) {
-        mapView.zoomLevel = options.zoomLevel
-        if let mapCenter = options.mapCenter {
-            mapView.centerCoordinate = mapCenter
-        }
+        mapView.addAnnotations(options.annotations)
+        mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
+        mapView.centerCoordinate = options.mapCenter
     }
     
     private func makeMapView() -> MGLMapView {
         let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
-        
-        showUserLocation(in: mapView)
-        mapView.attributionButton.isHidden = true
-        
+        mapView.logoViewPosition = .topLeft
+        mapView.attributionButtonPosition = .topLeft
+        mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
         return mapView
     }
     
     private func showUserLocation(in mapView: MGLMapView) {
-        switch showsUserLocationMode {
-        case .showAndFollow:
-            mapView.showsUserLocation = true
+        switch (showsUserLocationMode, options.annotations) {
+        case (.showAndFollow, _):
             mapView.userTrackingMode = .follow
-        case .show:
+        case (.show, let annotations) where !annotations.isEmpty:
+            /** in the show mode, if there are annotations, we check the authorizationStatus,
+             if it's not determined, we wont prompt the user with a request for permissions,
+             because he should be able to see the annotations without sharing his location informations
+             **/
+            guard mapView.locationManager.authorizationStatus != .notDetermined else { return }
+            fallthrough
+        case (.show, _):
             mapView.showsUserLocation = true
-            mapView.userTrackingMode = .none
-        case .hide:
+            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
+        case (.hide, _):
             mapView.showsUserLocation = false
-            mapView.userTrackingMode = .none
+            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         }
     }
 }
@@ -119,11 +119,13 @@ struct MapLibreMapView: UIViewRepresentable {
 // MARK: - Coordinator
 
 extension MapLibreMapView {
-    class Coordinator: NSObject, MGLMapViewDelegate, UIGestureRecognizerDelegate {
+    class Coordinator: NSObject, MGLMapViewDelegate {
         // MARK: - Properties
 
         var mapLibreView: MapLibreMapView
         
+        private var previousUserLocation: MGLUserLocation?
+
         // MARK: - Setup
 
         init(_ mapLibreView: MapLibreMapView) {
@@ -140,20 +142,30 @@ extension MapLibreMapView {
         }
         
         func mapViewDidFailLoadingMap(_ mapView: MGLMapView, withError error: Error) {
-            mapLibreView.error.wrappedValue = .failedLoadingMap
+            mapLibreView.error = .failedLoadingMap
         }
         
-        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) { }
+        func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
+            guard let userLocation else { return }
+
+            if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)
+                }
+            }
+
+            previousUserLocation = userLocation
+        }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
-            guard mapView.showsUserLocation else {
-                return
-            }
-            
             switch manager.authorizationStatus {
             case .denied, .restricted:
-                mapLibreView.error.wrappedValue = .invalidLocationAuthorization
-            default:
+                mapLibreView.isLocationAuthorized = false
+            case .authorizedAlways, .authorizedWhenInUse:
+                mapLibreView.isLocationAuthorized = true
+            case .notDetermined:
+                mapLibreView.isLocationAuthorized = nil
+            @unknown default:
                 break
             }
         }
@@ -171,15 +183,25 @@ extension MapLibreMapView {
             false
         }
         
-        // MARK: UIGestureRecognizer
-        
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-            gestureRecognizer is UIPanGestureRecognizer
-        }
-        
-        @objc
-        func didPan() {
-            mapLibreView.userDidPan?()
+        func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
+            // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
+            switch reason {
+            case .gesturePan,
+                 .gesturePinch,
+                 .gestureRotate:
+                mapLibreView.userDidPan?()
+            case .gestureOneFingerZoom,
+                 .gestureTilt,
+                 .gestureZoomIn,
+                 .gestureZoomOut,
+                 .programmatic,
+                 .resetNorth,
+                 .transitionCancelled:
+                break
+            default:
+                break
+            }
+            return true
         }
     }
 }
@@ -192,5 +214,18 @@ private extension MGLMapView {
             return
         }
         removeAnnotations(annotations)
+    }
+}
+
+private extension MapTilerStyle {
+    init(_ colorScheme: ColorScheme) {
+        switch colorScheme {
+        case .light:
+            self = .light
+        case .dark:
+            self = .dark
+        @unknown default:
+            fatalError()
+        }
     }
 }

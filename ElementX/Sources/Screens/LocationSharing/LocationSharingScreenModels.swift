@@ -18,12 +18,13 @@ import CoreLocation
 import Foundation
 
 enum LocationSharingViewError: Error, Hashable {
-    case failedSharingLocation
+    case missingAuthorization
     case mapError(MapLibreError)
 }
 
 enum StaticLocationScreenViewModelAction {
     case close
+    case openSystemSettings
     case sendLocation(GeoURI, isUserLocation: Bool)
 }
 
@@ -33,47 +34,36 @@ enum StaticLocationInteractionMode: Hashable {
 }
 
 struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode, isSharingUserLocation: Bool = false, showsUserLocationMode: ShowUserLocationMode = .hide) {
+    init(interactionMode: StaticLocationInteractionMode) {
         self.interactionMode = interactionMode
-        self.isSharingUserLocation = isSharingUserLocation
-        self.showsUserLocationMode = showsUserLocationMode
-
         switch interactionMode {
         case .picker:
-            bindings = .init()
-        case .viewOnly(let geoURI, _):
-            bindings = .init(mapCenterLocation: .init(latitude: geoURI.latitude, longitude: geoURI.longitude))
+            bindings.showsUserLocationMode = .showAndFollow
+        case .viewOnly:
+            bindings.showsUserLocationMode = .show
         }
     }
 
     let interactionMode: StaticLocationInteractionMode
     /// Indicates whether the user is sharing his current location
-    var isSharingUserLocation: Bool
-    /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
-    var showsUserLocationMode: ShowUserLocationMode
-    
-    var bindings = StaticLocationScreenBindings()
-
-    var showBottomToolbar: Bool {
-        interactionMode == .picker
+    var isSharingUserLocation: Bool {
+        bindings.isLocationAuthorized == true && bindings.showsUserLocationMode == .showAndFollow
     }
-
-    var mapAnnotationCoordinate: CLLocationCoordinate2D? {
+    
+    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
+ 
+    var initialMapCenter: CLLocationCoordinate2D {
         switch interactionMode {
         case .picker:
-            return nil
+            // middle point in Europe, to be used if the users location is not yet known
+            return .init(latitude: 49.843, longitude: 9.902056)
         case .viewOnly(let geoURI, _):
             return .init(latitude: geoURI.latitude, longitude: geoURI.longitude)
         }
     }
 
     var isLocationPickerMode: Bool {
-        switch interactionMode {
-        case .picker:
-            return true
-        case .viewOnly:
-            return false
-        }
+        interactionMode == .picker
     }
 
     var navigationTitle: String {
@@ -95,9 +85,13 @@ struct StaticLocationScreenViewState: BindableState {
     }
 
     var zoomLevel: Double {
+        15.0
+    }
+    
+    var initialZoomLevel: Double {
         switch interactionMode {
         case .picker:
-            return 5.0
+            return 2.7
         case .viewOnly:
             return 15.0
         }
@@ -115,6 +109,10 @@ struct StaticLocationScreenViewState: BindableState {
 
 struct StaticLocationScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
+
+    var showsUserLocationMode: ShowUserLocationMode
+    
+    var isLocationAuthorized: Bool?
     
     /// Information describing the currently displayed alert.
     var mapError: MapLibreError? {
@@ -125,7 +123,7 @@ struct StaticLocationScreenBindings {
             return nil
         }
         set {
-            alertInfo = newValue.map { AlertInfo(id: .mapError($0)) }
+            alertInfo = newValue.map { AlertInfo(locationSharingViewError: .mapError($0)) }
         }
     }
     
@@ -138,5 +136,33 @@ struct StaticLocationScreenBindings {
 enum StaticLocationScreenViewAction {
     case close
     case selectLocation
+    case centerToUser
     case userDidPan
+}
+
+extension AlertInfo where T == LocationSharingViewError {
+    init(locationSharingViewError error: LocationSharingViewError,
+         primaryButton: AlertButton = AlertButton(title: L10n.actionOk, action: nil),
+         secondaryButton: AlertButton? = nil) {
+        switch error {
+        case .missingAuthorization:
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName),
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .mapError(.failedLoadingMap):
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName),
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        case .mapError(.failedLocatingUser):
+            self.init(id: error,
+                      title: "",
+                      message: L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName),
+                      primaryButton: primaryButton,
+                      secondaryButton: secondaryButton)
+        }
+    }
 }

@@ -308,14 +308,20 @@ public enum L10n {
   public static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
   /// Failed creating the permalink
   public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
-  /// Element could not load the map. Please try again later.
-  public static var errorFailedLoadingMap: String { return L10n.tr("Localizable", "error_failed_loading_map") }
+  /// %1$@ could not load the map. Please try again later.
+  public static func errorFailedLoadingMap(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_failed_loading_map", String(describing: p1))
+  }
   /// Failed loading messages
   public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
-  /// Element could not access your location. Please try again later.
-  public static var errorFailedLocatingUser: String { return L10n.tr("Localizable", "error_failed_locating_user") }
-  /// Element does not have permission to access your location. You can enable access in Settings > Location
-  public static var errorMissingLocationAuth: String { return L10n.tr("Localizable", "error_missing_location_auth") }
+  /// %1$@ could not access your location. Please try again later.
+  public static func errorFailedLocatingUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_failed_locating_user", String(describing: p1))
+  }
+  /// %1$@ does not have permission to access your location. You can enable access in Settings > Location
+  public static func errorMissingLocationAuth(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_missing_location_auth", String(describing: p1))
+  }
   /// No compatible app was found to handle this action.
   public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent
@@ -780,6 +786,14 @@ public enum L10n {
   public static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
   public static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
+  /// Add emoji
+  public static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
+  /// Show less
+  public static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomTimelineMoreReactions(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_timeline_more_reactions", p1)
+  }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats
