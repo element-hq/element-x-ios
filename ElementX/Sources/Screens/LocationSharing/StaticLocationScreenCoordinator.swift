@@ -53,7 +53,9 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.close)
             case .openSystemSettings:
                 guard let url = URL(string: UIApplication.openSettingsURLString),
-                      UIApplication.shared.canOpenURL(url) else { return }
+                      UIApplication.shared.canOpenURL(url) else { 
+                      return 
+                }
                 UIApplication.shared.open(url)
             case .sendLocation(let geoURI, let isUserLocation):
                 actionsSubject.send(.selectedLocation(geoURI, isUserLocation: isUserLocation))
