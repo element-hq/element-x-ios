@@ -231,7 +231,7 @@ class TimelineTableViewController: UIViewController {
             return cell
         }
 
-        dataSource?.defaultRowAnimation = .left
+//        dataSource?.defaultRowAnimation = .automatic
         
         tableView.delegate = self
     }
