@@ -79,7 +79,8 @@ class InvitesScreenViewModel: InvitesScreenViewModelType, InvitesScreenViewModel
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
 
-                fetchInvitersTask = Task {
+                fetchInvitersTask = Task { [weak self] in
+                    guard let self else { return }
                     let fullInvites = await self.buildInvites(from: roomSummaries)
                     guard !Task.isCancelled else { return }
                     self.state.invites = fullInvites
