@@ -29,7 +29,7 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
     init(interactionMode: StaticLocationInteractionMode) {
         super.init(initialViewState: .init(interactionMode: interactionMode))
     }
-       
+    
     override func process(viewAction: StaticLocationScreenViewAction) {
         switch viewAction {
         case .close:
@@ -44,11 +44,10 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             case .some(true), .none:
                 state.bindings.showsUserLocationMode = .showAndFollow
             case .some(false):
-                let action = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
+                let action: () -> Void = { [weak self] in self?.actionsSubject.send(.openSystemSettings) }
                 state.bindings.alertInfo = .init(locationSharingViewError: .missingAuthorization,
                                                  primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
-                                                 secondaryButton: .init(title: L10n.commonSettings,
-                                                                        action: action))
+                                                 secondaryButton: .init(title: L10n.commonSettings, action: action))
             }
         }
     }
