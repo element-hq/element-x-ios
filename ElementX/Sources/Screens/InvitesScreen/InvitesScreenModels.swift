@@ -21,6 +21,10 @@ enum InvitesScreenViewModelAction {
 struct InvitesScreenViewState: BindableState {
     var invites: [InvitesScreenRoomDetails] = []
     var bindings: InvitesScreenViewStateBindings = .init()
+
+    // ideally we wanted to derive this state from `invites` being `Optional.none`.
+    // But we needed to make it a non optional array due to a strange crash in release builds (https://github.com/vector-im/element-x-ios/pull/1120)
+    var isLoading = true
 }
 
 struct InvitesScreenViewStateBindings {

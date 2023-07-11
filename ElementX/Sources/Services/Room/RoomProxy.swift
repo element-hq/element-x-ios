@@ -85,10 +85,10 @@ class RoomProxy: RoomProxyProtocol {
 
         subscribeToBackpagination()
         
-        innerTimelineProvider = RoomTimelineProvider(currentItems: result.items,
-                                                     updatePublisher: updatesPublisher,
-                                                     backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
-
+        innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
+                                                           updatePublisher: updatesPublisher,
+                                                           backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
+        
         Task {
             await fetchMembers()
             await updateMembers()
@@ -209,7 +209,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -229,7 +229,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -243,7 +243,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -266,7 +266,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -286,7 +286,7 @@ class RoomProxy: RoomProxyProtocol {
                    imageInfo: ImageInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -311,7 +311,7 @@ class RoomProxy: RoomProxyProtocol {
                    videoInfo: VideoInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -335,7 +335,7 @@ class RoomProxy: RoomProxyProtocol {
                    audioInfo: AudioInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -359,7 +359,7 @@ class RoomProxy: RoomProxyProtocol {
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -384,7 +384,7 @@ class RoomProxy: RoomProxyProtocol {
                       description: String?,
                       zoomLevel: UInt8?,
                       assetType: AssetType?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -402,7 +402,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func retrySend(transactionID: String) async {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -413,7 +413,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func cancelSend(transactionID: String) async {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -424,7 +424,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -442,7 +442,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -460,7 +460,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -490,7 +490,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -506,7 +506,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -528,7 +528,7 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     func leaveRoom() async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }

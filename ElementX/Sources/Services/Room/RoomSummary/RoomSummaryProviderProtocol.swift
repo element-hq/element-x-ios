@@ -41,7 +41,7 @@ enum RoomSummaryProviderState {
     }
 }
 
-enum RoomSummary: CustomStringConvertible {
+enum RoomSummary: CustomStringConvertible, Equatable {
     case empty
     case filled(details: RoomSummaryDetails)
     case invalidated(details: RoomSummaryDetails)
@@ -72,6 +72,17 @@ enum RoomSummary: CustomStringConvertible {
             return "\(String(describing: Self.self)): Invalidated(\(details.id))"
         case .filled(let details):
             return "\(String(describing: Self.self)): Filled(\(details.id))"
+        }
+    }
+
+    static func == (lhs: RoomSummary, rhs: RoomSummary) -> Bool {
+        switch (lhs, rhs) {
+        case (.empty, .empty):
+            return true
+        case (.filled(let lhsDetails), .filled(let rhsDetails)), (.invalidated(let lhsDetails), .invalidated(let rhsDetails)):
+            return lhsDetails.id == rhsDetails.id
+        default:
+            return false
         }
     }
 }

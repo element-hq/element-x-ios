@@ -49,7 +49,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
         XCTAssertNil(roomProxy.ignoreUserReceivedUserID, "The sender shouldn't have been ignored.")
     }
     
-    func testReportIgnoringSender() async {
+    func testReportIgnoringSender() async throws {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
         roomProxy.reportContentReasonReturnValue = .success(())
@@ -61,9 +61,11 @@ class ReportContentScreenViewModelTests: XCTestCase {
         // When reporting the content and also ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = true
+
+        let deferred = deferFulfillment(viewModel.actions.collect(2).first())
         viewModel.context.send(viewAction: .submit)
-        
-        _ = await viewModel.actions.values.first()
+        let result = try await deferred.fulfill()
+        XCTAssertEqual(result, [.submitStarted, .submitFinished])
         
         // Then the content should be reported, and the user should be ignored.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
