@@ -45,7 +45,7 @@ struct TimelineReactionsView: View {
     }
     
     var body: some View {
-        CollapsibleReactionLayout(itemSpacing: 4, lineSpacing: 4, collapsed: collapsed, linesBeforeCollapsible: 2) {
+        CollapsibleReactionLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(itemID: itemID, reaction: reaction)
                     .opacity((reactionButtonFrames[reaction.key] ?? .zero).size.height < 20 ? 0 : 1)

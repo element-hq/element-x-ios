@@ -15,55 +15,55 @@
 //
 import SwiftUI
 
-/// A flow layout that will show a collapse/expand button when the layout wraps over a defined number of lines.
+/// A flow layout that will show a collapse/expand button when the layout wraps over a defined number of rows.
 /// With n subviews passed to the layout, n-2 first views represent the main views to be laid out.
-/// The n-1th subview is the collapse/expand button which is only shown when the layout overflows `linesBeforeCollapsible` number of lines.
+/// The n-1th subview is the collapse/expand button which is only shown when the layout overflows `rowsBeforeCollapsible` number of rows.
 /// When the button is shown it is tagged on the end of the collapsed or expanded layout.
 /// The nth subview is a supplementary subview which is  shown when there are greater than 0 subviews.
 struct CollapsibleReactionLayout: Layout {
     /// The horizontal spacing between items
     let itemSpacing: CGFloat
-    /// The vertical spacing between lines
-    let lineSpacing: CGFloat
-    /// The number of lines before the collapse/expand button is shown
-    let linesBeforeCollapsible: Int?
+    /// The vertical spacing between rows
+    let rowSpacing: CGFloat
+    /// The number of rows before the collapse/expand button is shown
+    let rowsBeforeCollapsible: Int?
     /// Whether the layout should display in expanded or collapsed state
     var collapsed: Bool
     
     init(itemSpacing: CGFloat = 0,
-         lineSpacing: CGFloat = 0,
+         rowSpacing: CGFloat = 0,
          collapsed: Bool = true,
-         linesBeforeCollapsible: Int? = nil) {
+         rowsBeforeCollapsible: Int? = nil) {
         self.itemSpacing = itemSpacing
-        self.lineSpacing = lineSpacing
+        self.rowSpacing = rowSpacing
         self.collapsed = collapsed
-        self.linesBeforeCollapsible = linesBeforeCollapsible
+        self.rowsBeforeCollapsible = rowsBeforeCollapsible
     }
     
     func sizeThatFits(proposal: ProposedViewSize, subviews: some FlowLayoutSubviews, cache: inout ()) -> CGSize {
         let collapseButton = subviews[subviews.count - 2]
         let addMoreButton = subviews[subviews.count - 1]
         let reactions = subviews.prefix(subviews.count - 2)
-        // Calculate the layout of the lines with the reactions button and add more button
-        let reactionsAndAddMore = calculateLines(proposal: proposal, subviews: Array(reactions + [addMoreButton]))
-        // If we have extended beyond the defined number of lines we are showing the expand/collapse ui
-        if let linesBeforeCollapsible, reactionsAndAddMore.count > linesBeforeCollapsible {
+        // Calculate the layout of the rows with the reactions button and add more button
+        let reactionsAndAddMore = calculateRows(proposal: proposal, subviews: Array(reactions + [addMoreButton]))
+        // If we have extended beyond the defined number of rows we are showing the expand/collapse ui
+        if let rowsBeforeCollapsible, reactionsAndAddMore.count > rowsBeforeCollapsible {
             if collapsed {
-                // Truncate to `linesBeforeCollapsible` number of lines and replace the item at the end of the last line with the button
-                let collapsedLines = Array(reactionsAndAddMore.prefix(linesBeforeCollapsible))
-                let (collapsedLinesWithButtons, _) = replaceTailingItemsWithButtons(lineWidth: proposal.width ?? 0, lines: collapsedLines, collapseButton: collapseButton, addMoreButton: addMoreButton)
-                let size = sizeThatFits(proposal: proposal, lines: collapsedLinesWithButtons)
+                // Truncate to `rowsBeforeCollapsible` number of rows and replace the item at the end of the last row with the button
+                let collapsedRows = Array(reactionsAndAddMore.prefix(rowsBeforeCollapsible))
+                let (collapsedRowsWithButtons, _) = replaceTailingItemsWithButtons(rowWidth: proposal.width ?? 0, rows: collapsedRows, collapseButton: collapseButton, addMoreButton: addMoreButton)
+                let size = sizeThatFits(proposal: proposal, rows: collapsedRowsWithButtons)
                 return size
             } else {
                 // Show all subviews with the button at the end
-                var linesWithButtons = calculateLines(proposal: proposal, subviews: Array(subviews))
-                ensureCollapseAndAddMoreButtonsOnTheSameLine(&linesWithButtons)
-                let size = sizeThatFits(proposal: proposal, lines: linesWithButtons)
+                var rowsWithButtons = calculateRows(proposal: proposal, subviews: Array(subviews))
+                ensureCollapseAndAddMoreButtonsOnTheSameLine(&rowsWithButtons)
+                let size = sizeThatFits(proposal: proposal, rows: rowsWithButtons)
                 return size
             }
         } else {
             // Otherwise we are just calculating the size of all items without the button
-            return sizeThatFits(proposal: proposal, lines: reactionsAndAddMore)
+            return sizeThatFits(proposal: proposal, rows: reactionsAndAddMore)
         }
     }
     
@@ -71,19 +71,19 @@ struct CollapsibleReactionLayout: Layout {
         let collapseButton = subviews[subviews.count - 2]
         let addMoreButton = subviews[subviews.count - 1]
         let reactions = subviews.prefix(subviews.count - 2)
-        // Calculate the layout of the lines with the reactions button and add more button
-        let reactionsAndAddMore = calculateLines(proposal: ProposedViewSize(bounds.size), subviews: Array(reactions + [addMoreButton]))
-        // If we have extended beyond the defined number of lines we are showing the expand/collapse ui
-        if let linesBeforeCollapsible, reactionsAndAddMore.count > linesBeforeCollapsible {
+        // Calculate the layout of the rows with the reactions button and add more button
+        let reactionsAndAddMore = calculateRows(proposal: ProposedViewSize(bounds.size), subviews: Array(reactions + [addMoreButton]))
+        // If we have extended beyond the defined number of rows we are showing the expand/collapse ui
+        if let rowsBeforeCollapsible, reactionsAndAddMore.count > rowsBeforeCollapsible {
             if collapsed {
-                // Truncate to `linesBeforeCollapsible` number of lines and replace the item at the end of the last line with the button
-                let collapsedLines = Array(reactionsAndAddMore.prefix(linesBeforeCollapsible))
-                let (collapsedLinesWithButtons, subviewsToHide) = replaceTailingItemsWithButtons(lineWidth: bounds.width, lines: collapsedLines, collapseButton: collapseButton, addMoreButton: addMoreButton)
+                // Truncate to `rowsBeforeCollapsible` number of rows and replace the item at the end of the last row with the button
+                let collapsedRows = Array(reactionsAndAddMore.prefix(rowsBeforeCollapsible))
+                let (collapsedRowsWithButtons, subviewsToHide) = replaceTailingItemsWithButtons(rowWidth: bounds.width, rows: collapsedRows, collapseButton: collapseButton, addMoreButton: addMoreButton)
                 
-                var remainingSubviews = subviewsToHide + Array(reactionsAndAddMore.suffix(reactionsAndAddMore.count - linesBeforeCollapsible)).joined()
-                // remove the add button which was in initial lines calculation
+                var remainingSubviews = subviewsToHide + Array(reactionsAndAddMore.suffix(reactionsAndAddMore.count - rowsBeforeCollapsible)).joined()
+                // remove the add button which was in initial rows calculation
                 remainingSubviews.removeLast()
-                placeSubviews(in: bounds, lines: collapsedLinesWithButtons)
+                placeSubviews(in: bounds, rows: collapsedRowsWithButtons)
                 // "Remove" (place with a proposed zero frame) any additional subviews
                 remainingSubviews.forEach { subview in
                     subview.place(at: CGPoint(x: bounds.minX - 1000, y: bounds.minY - 1000), anchor: .leading, proposal: .zero)
@@ -91,118 +91,118 @@ struct CollapsibleReactionLayout: Layout {
                 
             } else {
                 // Show all subviews with the buttons at the end
-                var linesWithButtons = calculateLines(proposal: ProposedViewSize(bounds.size), subviews: Array(subviews))
-                ensureCollapseAndAddMoreButtonsOnTheSameLine(&linesWithButtons)
-                placeSubviews(in: bounds, lines: linesWithButtons)
+                var rowsWithButtons = calculateRows(proposal: ProposedViewSize(bounds.size), subviews: Array(subviews))
+                ensureCollapseAndAddMoreButtonsOnTheSameLine(&rowsWithButtons)
+                placeSubviews(in: bounds, rows: rowsWithButtons)
             }
         } else {
             // Otherwise we are just placing the reactions and add button
-            placeSubviews(in: bounds, lines: reactionsAndAddMore)
+            placeSubviews(in: bounds, rows: reactionsAndAddMore)
             // "Remove"(place with a proposed zero frame) the collapse button
             collapseButton.place(at: CGPoint(x: bounds.minX - 1000, y: bounds.minY - 1000), anchor: .leading, proposal: .zero)
         }
     }
     
     /// Given a proposed size and a flat list of subviews, calculates and returns a structure representing
-    /// how the subviews should wrap on to multiple lines given the size's width.
+    /// how the subviews should wrap on to multiple rows given the size's width.
     /// - Parameters:
     ///   - proposal: The proposed size
     ///   - subviews: The subviews
-    /// - Returns: A 2d array, the first dimension representing the lines, the second being the items per line.
-    private func calculateLines(proposal: ProposedViewSize, subviews: [FlowLayoutSubview]) -> [[FlowLayoutSubview]] {
-        var lines = [[FlowLayoutSubview]]()
+    /// - Returns: A 2d array, the first dimension representing the rows, the second being the items per row.
+    private func calculateRows(proposal: ProposedViewSize, subviews: [FlowLayoutSubview]) -> [[FlowLayoutSubview]] {
+        var rows = [[FlowLayoutSubview]]()
         var currentLine = [FlowLayoutSubview]()
         
-        var lineX: CGFloat = 0
+        var rowX: CGFloat = 0
         for subview in subviews {
             let size = subview.sizeThatFits(.unspecified)
             let hSpacing = currentLine.isEmpty ? 0 : itemSpacing
-            // If the current view does not fine on this line bump to the next
-            if lineX + size.width > proposal.width ?? 0 {
-                lines.append(currentLine)
+            // If the current view does not fine on this row bump to the next
+            if rowX + size.width > proposal.width ?? 0 {
+                rows.append(currentLine)
                 currentLine = [LayoutSubview]()
-                lineX = 0
+                rowX = 0
             }
-            lineX += hSpacing + size.width
+            rowX += hSpacing + size.width
             currentLine.append(subview)
         }
-        // If there is more in the current line remember to append it on
+        // If there is more in the current row remember to append it on
         if currentLine.count > 0 {
-            lines.append(currentLine)
+            rows.append(currentLine)
         }
-        return lines
+        return rows
     }
     
-    /// Given a list of lines calculate the size needed to display them
+    /// Given a list of rows calculate the size needed to display them
     /// - Parameters:
     ///   - proposal: The proposed size
-    ///   - lines: The list of lines
-    /// - Returns: The size render the lines
-    private func sizeThatFits(proposal: ProposedViewSize, lines: [[FlowLayoutSubview]]) -> CGSize {
-        lines.enumerated().reduce(CGSize.zero) { partialResult, lineItem in
-            let (lineIndex, line) = lineItem
-            let lineSize = line.enumerated().reduce(CGSize.zero) { partialResult, subviewItem in
+    ///   - rows: The list of rows
+    /// - Returns: The size render the rows
+    private func sizeThatFits(proposal: ProposedViewSize, rows: [[FlowLayoutSubview]]) -> CGSize {
+        rows.enumerated().reduce(CGSize.zero) { partialResult, rowItem in
+            let (rowIndex, row) = rowItem
+            let rowSize = row.enumerated().reduce(CGSize.zero) { partialResult, subviewItem in
                 let (subviewIndex, subview) = subviewItem
                 let size = subview.sizeThatFits(.unspecified)
                 let hSpacing = subviewIndex == 0 ? 0 : itemSpacing
                 return CGSize(width: partialResult.width + size.width + hSpacing, height: max(partialResult.height, size.height))
             }
-            let vSpacing = lineIndex == 0 ? 0 : lineSpacing
-            return CGSize(width: max(partialResult.width, lineSize.width), height: partialResult.height + lineSize.height + vSpacing)
+            let vSpacing = rowIndex == 0 ? 0 : rowSpacing
+            return CGSize(width: max(partialResult.width, rowSize.width), height: partialResult.height + rowSize.height + vSpacing)
         }
     }
     
-    /// Used to render the collapsed state, this takes the lines inputted and adds the button to the last line,
+    /// Used to render the collapsed state, this takes the rows inputted and adds the button to the last row,
     /// removing only as many trailing subviews as needed to make space for it. It also returns the items removed.
     /// - Parameters:
-    ///   - lineWidth: The width of the parent
-    ///   - lines: The input list of lines
+    ///   - rowWidth: The width of the parent
+    ///   - rows: The input list of rows
     ///   - button: The button to replace the trailing items
-    /// - Returns: The new lines structure with button replaced and the subviews remove from the input to make space for the button
-    private func replaceTailingItemsWithButtons(lineWidth: CGFloat, lines: [[FlowLayoutSubview]], collapseButton: FlowLayoutSubview, addMoreButton: FlowLayoutSubview) -> ([[FlowLayoutSubview]], [FlowLayoutSubview]) {
-        var lines = lines
-        let lastLine = lines[lines.count - 1]
+    /// - Returns: The new rows structure with button replaced and the subviews remove from the input to make space for the button
+    private func replaceTailingItemsWithButtons(rowWidth: CGFloat, rows: [[FlowLayoutSubview]], collapseButton: FlowLayoutSubview, addMoreButton: FlowLayoutSubview) -> ([[FlowLayoutSubview]], [FlowLayoutSubview]) {
+        var rows = rows
+        let lastLine = rows[rows.count - 1]
         let collapseButtonSize = collapseButton.sizeThatFits(.unspecified)
         let addMoreButtonSize = addMoreButton.sizeThatFits(.unspecified)
         let buttonsWidth = collapseButtonSize.width + itemSpacing + addMoreButtonSize.width
-        var lineX: CGFloat = 0
+        var rowX: CGFloat = 0
         for (i, subview) in lastLine.enumerated() {
             let size = subview.sizeThatFits(.unspecified)
             let hSpacing = i == 0 ? 0 : itemSpacing
-            lineX += size.width + hSpacing
-            if lineX > (lineWidth - (buttonsWidth + hSpacing)) {
+            rowX += size.width + hSpacing
+            if rowX > (rowWidth - (buttonsWidth + hSpacing)) {
                 let lastLineWithButton = Array(lastLine.prefix(i)) + [collapseButton, addMoreButton]
                 let subviewsToHide = Array(lastLine.suffix(lastLine.count - i))
-                lines[lines.count - 1] = lastLineWithButton
-                return (lines, subviewsToHide)
+                rows[rows.count - 1] = lastLineWithButton
+                return (rows, subviewsToHide)
             }
         }
         let lastLineWithButton = Array(lastLine) + [collapseButton, addMoreButton]
-        lines[lines.count - 1] = lastLineWithButton
-        return (lines, [])
+        rows[rows.count - 1] = lastLineWithButton
+        return (rows, [])
     }
     
-    private func ensureCollapseAndAddMoreButtonsOnTheSameLine(_ lines: inout [[FlowLayoutSubview]]) {
-        guard var lastLine = lines.last, lastLine.count == 1 else {
+    private func ensureCollapseAndAddMoreButtonsOnTheSameLine(_ rows: inout [[FlowLayoutSubview]]) {
+        guard var lastLine = rows.last, lastLine.count == 1 else {
             return
         }
-        var secondLastLine = lines[lines.count - 2]
+        var secondLastLine = rows[rows.count - 2]
         let collapseButton = secondLastLine.removeLast()
         lastLine.prepend(collapseButton)
-        lines[lines.count - 2] = secondLastLine
-        lines[lines.count - 1] = lastLine
+        rows[rows.count - 2] = secondLastLine
+        rows[rows.count - 1] = lastLine
     }
     
-    /// Given a list of lines place them in the layout.
+    /// Given a list of rows place them in the layout.
     /// - Parameters:
     ///   - bounds: The bounds of the parent
-    ///   - lines: THe input line structure.
-    private func placeSubviews(in bounds: CGRect, lines: [[FlowLayoutSubview]]) {
-        var lineY: CGFloat = bounds.minY
-        var lineHeight: CGFloat = 0
+    ///   - rows: THe input row structure.
+    private func placeSubviews(in bounds: CGRect, rows: [[FlowLayoutSubview]]) {
+        var rowY: CGFloat = bounds.minY
+        var rowHeight: CGFloat = 0
         
-        let sizes = lines.map { line in
-            line.map { subview in
+        let sizes = rows.map { row in
+            row.map { subview in
                 subview.sizeThatFits(.unspecified)
             }
         }
@@ -211,18 +211,18 @@ struct CollapsibleReactionLayout: Layout {
             max(partialResult, size.height)
         }
         
-        for (i, line) in sizes.enumerated() {
-            var lineX: CGFloat = bounds.minX
-            let vSpacing = i == 0 ? 0 : lineSpacing
-            for (j, size) in line.enumerated() {
-                let subview = lines[i][j]
+        for (i, row) in sizes.enumerated() {
+            var rowX: CGFloat = bounds.minX
+            let vSpacing = i == 0 ? 0 : rowSpacing
+            for (j, size) in row.enumerated() {
+                let subview = rows[i][j]
                 let hSpacing = j == 0 ? 0 : itemSpacing
-                let point = CGPoint(x: lineX + hSpacing, y: lineY + vSpacing + (maxHeight / 2))
+                let point = CGPoint(x: rowX + hSpacing, y: rowY + vSpacing + (maxHeight / 2))
                 subview.place(at: point, anchor: .leading, proposal: ProposedViewSize(CGSize(width: size.width, height: maxHeight)))
-                lineHeight = max(lineHeight, maxHeight)
-                lineX += size.width + hSpacing
+                rowHeight = max(rowHeight, maxHeight)
+                rowX += size.width + hSpacing
             }
-            lineY += lineHeight + vSpacing
+            rowY += rowHeight + vSpacing
         }
     }
 }

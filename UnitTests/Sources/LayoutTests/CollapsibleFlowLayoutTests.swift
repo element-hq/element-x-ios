@@ -21,7 +21,7 @@ import XCTest
 final class CollapsibleReactionLayoutTests: XCTestCase {
     func testFlowLayoutWithExpandAndCollapse() {
         let containerSize = CGSize(width: 250, height: 400)
-        var flowLayout = CollapsibleReactionLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        var flowLayout = CollapsibleReactionLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
@@ -81,7 +81,7 @@ final class CollapsibleReactionLayoutTests: XCTestCase {
     
     func testFlowLayoutWithExpandButtonIsHidden() {
         let containerSize = CGSize(width: 250, height: 400)
-        let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
@@ -112,7 +112,7 @@ final class CollapsibleReactionLayoutTests: XCTestCase {
     
     func testFlowLayoutEmptyState() {
         let containerSize = CGSize(width: 250, height: 400)
-        let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, lineSpacing: 5, linesBeforeCollapsible: 2)
+        let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
         
         var placedViews: [CGRect] = []
         let placedViewsCallback = { rect in
