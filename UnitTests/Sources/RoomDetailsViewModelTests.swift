@@ -35,30 +35,36 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         AppSettings.reset()
     }
     
-    func testLeaveRoomTappedWhenPublic() async {
+    func testLeaveRoomTappedWhenPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        await context.nextViewState()
+        let deferred = deferFulfillment(context.$viewState.collect(2).first())
         context.send(viewAction: .processTapLeave)
-        XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
-        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
+        let states = try await deferred.fulfill()
+    
+        XCTAssertNil(states[0].bindings.leaveRoomAlertItem)
+        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.state, .public)
+        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
     
-    func testLeaveRoomTappedWhenRoomNotPublic() async {
+    func testLeaveRoomTappedWhenRoomNotPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        await context.nextViewState()
+        let deferred = deferFulfillment(context.$viewState.collect(2).first())
         context.send(viewAction: .processTapLeave)
-        XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
-        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
+        let states = try await deferred.fulfill()
+        context.send(viewAction: .processTapLeave)
+        XCTAssertNil(states[0].bindings.leaveRoomAlertItem)
+        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.state, .private)
+        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
     
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
@@ -84,14 +90,17 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
     }
     
-    func testLeaveRoomError() async {
+    func testLeaveRoomError() async throws {
         roomProxyMock.leaveRoomClosure = {
             .failure(.failedLeavingRoom)
         }
+        let deferred = deferFulfillment(context.$viewState.collect(2).first())
         context.send(viewAction: .confirmLeave)
-        await context.nextViewState()
+        let states = try await deferred.fulfill()
+        
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
-        XCTAssertNotNil(context.alertInfo)
+        XCTAssertNil(states[0].bindings.alertInfo)
+        XCTAssertNotNil(states[1].bindings.alertInfo)
     }
     
     func testInitialDMDetailsState() async {
@@ -121,13 +130,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
+            .removeDuplicates()
+            .collect(3).first())
         context.send(viewAction: .ignoreConfirmed)
         
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
-        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
-        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        let states = try await deferred.fulfill()
+        XCTAssertEqual(states, [false, true, false])
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
     }
     
@@ -146,13 +155,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
+            .removeDuplicates()
+            .collect(3).first())
         context.send(viewAction: .ignoreConfirmed)
         
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
-        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
-        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        let states = try await deferred.fulfill()
+        XCTAssertEqual(states, [false, true, false])
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
     }
@@ -172,13 +181,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
+            .removeDuplicates()
+            .collect(3).first())
+        
         context.send(viewAction: .unignoreConfirmed)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
-        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
-        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        let states = try await deferred.fulfill()
+        XCTAssertEqual(states, [false, true, false])
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
     }
     
@@ -197,13 +206,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         await context.nextViewState()
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
+            .removeDuplicates()
+            .collect(3).first())
+        
         context.send(viewAction: .unignoreConfirmed)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == true }
-        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        
-        _ = await context.$viewState.values.first { $0.isProcessingIgnoreRequest == false }
-        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        let states = try await deferred.fulfill()
+        XCTAssertEqual(states, [false, true, false])
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
     }
