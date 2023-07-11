@@ -27,8 +27,7 @@
       "containerPath" : "container:ElementX.xcodeproj",
       "identifier" : "D3DB351B7FBE0F49649171FC",
       "name" : "IntegrationTests"
-    },
-    "testTimeoutsEnabled" : true
+    }
   },
   "testTargets" : [
     {

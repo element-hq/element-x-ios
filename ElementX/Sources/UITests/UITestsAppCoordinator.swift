@@ -78,6 +78,7 @@ class MockScreen: Identifiable {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                       analytics: ServiceLocator.shared.analytics,
                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -336,7 +337,8 @@ class MockScreen: Identifiable {
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
                                                          bugReportService: BugReportServiceMock(),
                                                          roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
-                                                         appSettings: ServiceLocator.shared.settings)
+                                                         appSettings: ServiceLocator.shared.settings,
+                                                         analytics: ServiceLocator.shared.analytics)
             
             coordinator.start()
             

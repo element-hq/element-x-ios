@@ -143,15 +143,16 @@ end
 
 lane :integration_tests do
   create_simulator_if_necessary(
-    name: "iPhone 13 Pro",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro"
+    name: "iPhone 14 Pro",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro"
   )
 
   run_tests(
     scheme: "IntegrationTests",
-    devices: ["iPhone 13 Pro"],
+    devices: ["iPhone 14 Pro"],
     ensure_devices_found: true,
     result_bundle: true,
+    reset_simulator: true,
     include_simulator_logs: true
   )
 
@@ -391,7 +392,7 @@ private_lane :create_simulator_if_necessary do |options|
   UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
 
 
-  # Use use a `(` here to avoid matching `iPhone 13 Pro` on `iPhone 13 Pro Max` for example
+  # Use use a `(` here to avoid matching `iPhone 14 Pro` on `iPhone 14 Pro Max` for example
   begin sh("xcrun simctl list devices | grep '#{simulator_name} ('")
     UI.success "Simulator already exists"
   rescue

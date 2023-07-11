@@ -52,6 +52,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         attributedStringBuilder: parameters.attributedStringBuilder,
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: ServiceLocator.shared.settings,
+                                        analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         viewModel.callback = { [weak self] action in

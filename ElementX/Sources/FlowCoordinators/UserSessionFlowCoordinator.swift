@@ -28,6 +28,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
@@ -46,13 +47,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         analytics: AnalyticsService) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
+        self.analytics = analytics
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -64,8 +67,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   navigationStackCoordinator: detailNavigationStackCoordinator,
                                                   navigationSplitCoordinator: navigationSplitCoordinator,
                                                   emojiProvider: EmojiProvider(),
-                                                  appSettings: ServiceLocator.shared.settings,
-                                                  analytics: ServiceLocator.shared.analytics,
+                                                  appSettings: appSettings,
+                                                  analytics: analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         setupStateMachine()
@@ -73,9 +76,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         roomFlowCoordinator.actions.sink { action in
             switch action {
             case .presentedRoom(let roomID):
+                self.analytics.signpost.beginRoomFlow(roomID)
                 self.stateMachine.processEvent(.selectRoom(roomId: roomID))
             case .dismissedRoom:
                 self.stateMachine.processEvent(.deselectRoom)
+                self.analytics.signpost.endRoomFlow()
             }
         }
         .store(in: &cancellables)
