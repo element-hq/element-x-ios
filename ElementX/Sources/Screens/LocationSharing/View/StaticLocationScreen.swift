@@ -84,20 +84,18 @@ struct StaticLocationScreen: View {
     }
 
     private var mapOptions: MapLibreMapView.Options {
-        if context.viewState.isLocationPickerMode {
-            return .init(zoomLevel: context.viewState.zoomLevel,
-                         initialZoomLevel: context.viewState.initialZoomLevel,
-                         mapCenter: context.viewState.initialMapCenter)
-        }
-
-        let annotation = LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
-            LocationMarkerView()
+        var annotations: [LocationAnnotation] = []
+        if context.viewState.isLocationPickerMode == false {
+            let annotation = LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
+                LocationMarkerView()
+            }
+            annotations.append(annotation)
         }
 
         return .init(zoomLevel: context.viewState.zoomLevel,
                      initialZoomLevel: context.viewState.initialZoomLevel,
                      mapCenter: context.viewState.initialMapCenter,
-                     annotations: [annotation])
+                     annotations: annotations)
     }
 
     private var mapSafeAreaEdges: Edge.Set {
