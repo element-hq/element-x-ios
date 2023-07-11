@@ -71,7 +71,7 @@ enum RoomTimelineItemFixtures {
                                                                                           ReadReceipt(userID: "bob", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "charlie", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,

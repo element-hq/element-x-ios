@@ -313,7 +313,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
-            AggregatedReaction(accountOwnerID: userID, key: reaction.key, senders: reaction.senders)
+            AggregatedReaction(accountOwnerID: userID, key: reaction.key, senders: reaction.senders.map(\.senderId))
         }
         .sorted { a, b in
             // Sort by count and then by key for a consistence experience.
