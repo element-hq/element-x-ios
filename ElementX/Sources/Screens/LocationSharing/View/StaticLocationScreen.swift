@@ -90,12 +90,14 @@ struct StaticLocationScreen: View {
                          mapCenter: context.viewState.initialMapCenter)
         }
 
+        let annotation = LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
+            LocationMarkerView()
+        }
+
         return .init(zoomLevel: context.viewState.zoomLevel,
                      initialZoomLevel: context.viewState.initialZoomLevel,
                      mapCenter: context.viewState.initialMapCenter,
-                     annotations: [LocationAnnotation(coordinate: context.viewState.initialMapCenter, anchorPoint: .bottomCenter) {
-                         LocationMarkerView()
-                     }])
+                     annotations: [annotation])
     }
 
     private var mapSafeAreaEdges: Edge.Set {
