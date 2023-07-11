@@ -46,7 +46,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case copyPermalink
     case redact
     case reply
-    case forward(itemID: String)
+    case forward(itemID: TimelineItemIdentifier)
     case viewSource
     case retryDecryption(sessionID: String)
     case report
@@ -188,7 +188,7 @@ public struct TimelineItemMenu: View {
     private func reactionButton(for emoji: String) -> some View {
         Button {
             presentationMode.wrappedValue.dismiss()
-            context.send(viewAction: .toggleReaction(key: emoji, eventID: item.id))
+            context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {
             Text(emoji)
                 .padding(8.0)
