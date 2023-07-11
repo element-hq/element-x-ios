@@ -70,10 +70,10 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     
     func testErrorMapping() async throws {
         let mapError = AlertInfo(locationSharingViewError: .mapError(.failedLoadingMap))
-        XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap)
+        XCTAssertEqual(mapError.message, L10n.errorFailedLoadingMap(InfoPlistReader.main.bundleDisplayName))
         let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
-        XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser)
+        XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
         let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
-        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth)
+        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName))
     }
 }
