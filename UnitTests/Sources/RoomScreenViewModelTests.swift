@@ -351,7 +351,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
 
-    func testMarkAsRead() async {
+    func testMarkAsRead() async throws {
         // Setup
         let notificationCenterMock = NotificationCenterMock()
         let timelineController = MockRoomTimelineController()
@@ -366,7 +366,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             notificationCenterProtocol: notificationCenterMock)
 
         viewModel.context.send(viewAction: .markRoomAsRead)
-        await Task.yield()
+        try await Task.sleep(for: .microseconds(100))
         XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
         let roomID = notificationCenterMock.postNameObjectReceivedArguments?.anObject as? String
         XCTAssertEqual(roomID, roomProxyMock.id)
