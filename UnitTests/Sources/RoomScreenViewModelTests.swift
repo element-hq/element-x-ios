@@ -289,7 +289,8 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .retrySend(transactionID: "test retry send id"))
+        viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
+        await Task.yield()
         try? await Task.sleep(for: .microseconds(500))
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
@@ -308,7 +309,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .retrySend(transactionID: nil))
+        viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString)))
         await Task.yield()
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 0)
     }
@@ -345,7 +346,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .cancelSend(transactionID: nil))
+        viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString)))
         await Task.yield()
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
@@ -375,7 +376,7 @@ class RoomScreenViewModelTests: XCTestCase {
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [sender])] : []
-        self.init(id: UUID().uuidString,
+        self.init(id: .init(timelineID: UUID().uuidString),
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",

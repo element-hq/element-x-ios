@@ -231,7 +231,7 @@ class TimelineTableViewController: UIViewController {
             return cell
         }
 
-        dataSource?.defaultRowAnimation = .fade
+        dataSource?.defaultRowAnimation = .left
         
         tableView.delegate = self
     }
@@ -248,7 +248,9 @@ class TimelineTableViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
-        dataSource.apply(snapshot, animatingDifferences: true)
+
+        MXLog.verbose("DIFF:\(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
+        dataSource.apply(snapshot, animatingDifferences: false)
         
         // Probably redundant now we observe content size changes…
         // Leaving in place for the release and will reassess after.

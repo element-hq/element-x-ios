@@ -128,12 +128,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.info("Send reply in \(roomID)")
         }
 
-        guard let eventID = itemID?.eventID else {
-            MXLog.error("Failed sending message with error: missing eventID")
-            return
-        }
-
-        switch await roomProxy.sendMessage(message, inReplyTo: eventID) {
+        switch await roomProxy.sendMessage(message, inReplyTo: itemID?.eventID) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):

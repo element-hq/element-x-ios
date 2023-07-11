@@ -20,7 +20,7 @@ import XCTest
 final class TextBasedRoomTimelineTests: XCTestCase {
     func testTextRoomTimelineItemWhitespaceEnd() {
         let timestamp = "Now"
-        let timelineItem = TextRoomTimelineItem(id: UUID().uuidString, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString), timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         let view = TextBasedRoomTimelineViewMock<TextRoomTimelineItem>()
         view.underlyingTimelineItem = timelineItem
         view.timelineStyle = .bubbles
@@ -30,7 +30,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndLonger() {
         let timestamp = "10:00 AM"
-        let timelineItem = TextRoomTimelineItem(id: UUID().uuidString, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString), timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         let view = TextBasedRoomTimelineViewMock<TextRoomTimelineItem>()
         view.underlyingTimelineItem = timelineItem
         view.timelineStyle = .bubbles
@@ -39,7 +39,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
     }
 
     func testTextRoomTimelineItemWhitespaceEndPlain() {
-        let timelineItem = TextRoomTimelineItem(id: UUID().uuidString, timestamp: "Now", isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString), timestamp: "Now", isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         let view = TextBasedRoomTimelineViewMock<TextRoomTimelineItem>()
         view.underlyingTimelineItem = timelineItem
         view.timelineStyle = .plain
@@ -49,7 +49,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: UUID().uuidString, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        var timelineItem = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString), timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         let editedCount = L10n.commonEditedSuffix.count
         let view = TextBasedRoomTimelineViewMock<TextRoomTimelineItem>()
@@ -61,7 +61,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndWithEditAndAlert() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: UUID().uuidString, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        var timelineItem = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString), timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         timelineItem.properties.deliveryStatus = .sendingFailed
         let editedCount = L10n.commonEditedSuffix.count
