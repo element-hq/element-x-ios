@@ -140,7 +140,23 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
-        
+
+    private func fetchLastMessage(roomListItem: RoomListItemProtocol) -> EventTimelineItem? {
+        class RoomMessageBox {
+            var roomMessage: EventTimelineItem?
+        }
+
+        let semaphore = DispatchSemaphore(value: 0)
+        let box = RoomMessageBox()
+
+        Task {
+            box.roomMessage = await roomListItem.latestEvent()
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return box.roomMessage
+    }
+
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
         guard let roomListItem = try? roomListService.room(roomId: identifier) else {
             MXLog.error("\(name): Failed finding room with id: \(identifier)")
@@ -149,8 +165,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var attributedLastMessage: AttributedString?
         var lastMessageFormattedTimestamp: String?
-        
-        if let latestRoomMessage = roomListItem.latestEvent() {
+
+        if let latestRoomMessage = fetchLastMessage(roomListItem: roomListItem) {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, id: 0)
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
