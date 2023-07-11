@@ -17,8 +17,8 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool

@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
-    let id: String
+struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
+    let id: TimelineItemIdentifier
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool

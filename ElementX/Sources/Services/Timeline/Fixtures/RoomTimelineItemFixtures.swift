@@ -19,15 +19,15 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: "Yesterday", text: "Yesterday"),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        SeparatorRoomTimelineItem(id: .init(timelineID: "Yesterday"), text: "Yesterday"),
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "10:10 AM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Jacob"),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -36,7 +36,7 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me"])
                              ])),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -46,21 +46,21 @@ enum RoomTimelineItemFixtures {
                                  AggregatedReaction(accountOwnerID: "me", key: "🙏", senders: ["helena"]),
                                  AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me", "helena", "jacob"])
                              ])),
-        SeparatorRoomTimelineItem(id: "Today", text: "Today"),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        SeparatorRoomTimelineItem(id: .init(timelineID: "Today"), text: "Today"),
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "And John's speech was amazing!")),
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
@@ -210,7 +210,7 @@ enum RoomTimelineItemFixtures {
 
 private extension TextRoomTimelineItem {
     init(text: String, senderDisplayName: String) {
-        self.init(id: UUID().uuidString,
+        self.init(id: .init(timelineID: UUID().uuidString),
                   timestamp: "10:47 am",
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,

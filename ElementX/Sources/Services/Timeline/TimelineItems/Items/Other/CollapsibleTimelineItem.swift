@@ -16,10 +16,10 @@
 
 import Foundation
 
-struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let items: [RoomTimelineItemProtocol]
-    let itemIDs: [String]
+    let itemIDs: [TimelineItemIdentifier]
     
     init(items: [RoomTimelineItemProtocol]) {
         self.items = items
@@ -37,13 +37,5 @@ struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Identifiable, Hashable
     static func == (lhs: CollapsibleTimelineItem, rhs: CollapsibleTimelineItem) -> Bool {
         // Technically not a correct implementation of equality as the items themselves could be updated.
         lhs.id == rhs.id && lhs.itemIDs == rhs.itemIDs
-    }
-    
-    // MARK: - Hashable
-    
-    func hash(into hasher: inout Hasher) {
-        // Technically not a correct implementation of hashing as the items themselves could be updated.
-        hasher.combine(id)
-        hasher.combine(itemIDs)
     }
 }

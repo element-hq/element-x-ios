@@ -17,8 +17,8 @@
 import Foundation
 import UIKit
 
-struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let body: String
     let timestamp: String
     let isOutgoing: Bool

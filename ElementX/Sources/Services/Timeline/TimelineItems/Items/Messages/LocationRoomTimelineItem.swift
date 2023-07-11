@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Hashable {
-    let id: String
+struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
 
     let timestamp: String
     let isOutgoing: Bool

@@ -16,6 +16,6 @@
 
 import Foundation
 
-struct ReadMarkerRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id = "readMarkerTimelineItemIdentifier"
+struct ReadMarkerRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+    let id = TimelineItemIdentifier(timelineID: "readMarkerTimelineItemIdentifier")
 }

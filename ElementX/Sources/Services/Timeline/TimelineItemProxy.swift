@@ -17,6 +17,12 @@
 import Foundation
 import MatrixRustSDK
 
+struct TimelineItemIdentifier: Equatable {
+    let timelineID: String
+    var eventID: String?
+    var transactionID: String?
+}
+
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
@@ -44,19 +50,11 @@ enum TimelineItemDeliveryStatus: Hashable {
 /// A light wrapper around event timeline items returned from Rust.
 struct EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
-    let id: String
+    let id: TimelineItemIdentifier
     
     init(item: MatrixRustSDK.EventTimelineItem, id: UInt64) {
         self.item = item
-        self.id = String(id)
-    }
-
-    var transactionID: String? {
-        item.transactionId()
-    }
-
-    var eventID: String? {
-        item.eventId()
+        self.id = TimelineItemIdentifier(timelineID: String(id), eventID: item.eventId(), transactionID: item.transactionId())
     }
     
     var deliveryStatus: TimelineItemDeliveryStatus? {

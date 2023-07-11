@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct StateRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct StateRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let body: String
     let timestamp: String
     let isOutgoing: Bool
