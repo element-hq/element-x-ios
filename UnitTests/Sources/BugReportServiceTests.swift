@@ -39,6 +39,7 @@ class BugReportServiceTests: XCTestCase {
                                   text: "i cannot send message",
                                   includeLogs: true,
                                   includeCrashLog: true,
+                                  canContact: false,
                                   githubLabels: [],
                                   files: [])
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
@@ -67,6 +68,7 @@ class BugReportServiceTests: XCTestCase {
                                   text: "i cannot send message",
                                   includeLogs: true,
                                   includeCrashLog: true,
+                                  canContact: false,
                                   githubLabels: [],
                                   files: [])
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)

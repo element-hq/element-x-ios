@@ -76,4 +76,31 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
         XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName))
     }
+
+    func testSendUserLocation() async throws {
+        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        context.geolocationUncertainty = 10
+        let deferred = deferFulfillment(viewModel.actions.first())
+        context.send(viewAction: .selectLocation)
+        guard case .sendLocation(let geoUri, let isUserLocation) = try await deferred.fulfill() else {
+            XCTFail("Sent action should be 'sendLocation'")
+            return
+        }
+        XCTAssertEqual(geoUri.uncertainty, 10)
+        XCTAssertTrue(isUserLocation)
+    }
+
+    func testSendPickedLocation() async throws {
+        context.mapCenterLocation = .init(latitude: 0, longitude: 0)
+        context.isLocationAuthorized = nil
+        context.geolocationUncertainty = 10
+        let deferred = deferFulfillment(viewModel.actions.first())
+        context.send(viewAction: .selectLocation)
+        guard case .sendLocation(let geoUri, let isUserLocation) = try await deferred.fulfill() else {
+            XCTFail("Sent action should be 'sendLocation'")
+            return
+        }
+        XCTAssertEqual(geoUri.uncertainty, nil)
+        XCTAssertFalse(isUserLocation)
+    }
 }
