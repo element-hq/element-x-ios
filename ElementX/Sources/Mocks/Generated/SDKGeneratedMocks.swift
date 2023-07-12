@@ -274,23 +274,7 @@ class SDKClientMock: SDKClientProtocol {
             return getNotificationSettingsReturnValue
         }
     }
-    //MARK: - `getNotificationSettings`
 
-    public var getNotificationSettingsCallsCount = 0
-    public var getNotificationSettingsCalled: Bool {
-        return getNotificationSettingsCallsCount > 0
-    }
-    public var getNotificationSettingsReturnValue: NotificationSettings!
-    public var getNotificationSettingsClosure: (() -> NotificationSettings)?
-
-    public func `getNotificationSettings`() -> NotificationSettings {
-        getNotificationSettingsCallsCount += 1
-        if let getNotificationSettingsClosure = getNotificationSettingsClosure {
-            return getNotificationSettingsClosure()
-        } else {
-            return getNotificationSettingsReturnValue
-        }
-    }
     //MARK: - `getProfile`
 
     public var getProfileUserIdThrowableError: Error?
