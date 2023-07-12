@@ -31,6 +31,23 @@ class SDKClientMock: SDKClientProtocol {
             return accountDataEventTypeReturnValue
         }
     }
+    //MARK: - `app`
+
+    public var appCallsCount = 0
+    public var appCalled: Bool {
+        return appCallsCount > 0
+    }
+    public var appReturnValue: AppBuilder!
+    public var appClosure: (() -> AppBuilder)?
+
+    public func `app`() -> AppBuilder {
+        appCallsCount += 1
+        if let appClosure = appClosure {
+            return appClosure()
+        } else {
+            return appReturnValue
+        }
+    }
     //MARK: - `avatarUrl`
 
     public var avatarUrlThrowableError: Error?
@@ -240,29 +257,21 @@ class SDKClientMock: SDKClientProtocol {
             return getMediaThumbnailMediaSourceWidthHeightReturnValue
         }
     }
-    //MARK: - `getNotificationItem`
+    //MARK: - `getNotificationSettings`
 
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesThrowableError: Error?
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount = 0
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesCalled: Bool {
-        return getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount > 0
+    public var getNotificationSettingsCallsCount = 0
+    public var getNotificationSettingsCalled: Bool {
+        return getNotificationSettingsCallsCount > 0
     }
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesReceivedArguments: (`roomId`: String, `eventId`: String, `filterByPushRules`: Bool)?
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesReceivedInvocations: [(`roomId`: String, `eventId`: String, `filterByPushRules`: Bool)] = []
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesReturnValue: NotificationItem?
-    public var getNotificationItemRoomIdEventIdFilterByPushRulesClosure: ((String, String, Bool) throws -> NotificationItem?)?
+    public var getNotificationSettingsReturnValue: NotificationSettings!
+    public var getNotificationSettingsClosure: (() -> NotificationSettings)?
 
-    public func `getNotificationItem`(`roomId`: String, `eventId`: String, `filterByPushRules`: Bool) throws -> NotificationItem? {
-        if let error = getNotificationItemRoomIdEventIdFilterByPushRulesThrowableError {
-            throw error
-        }
-        getNotificationItemRoomIdEventIdFilterByPushRulesCallsCount += 1
-        getNotificationItemRoomIdEventIdFilterByPushRulesReceivedArguments = (roomId: roomId, eventId: eventId, filterByPushRules: filterByPushRules)
-        getNotificationItemRoomIdEventIdFilterByPushRulesReceivedInvocations.append((roomId: roomId, eventId: eventId, filterByPushRules: filterByPushRules))
-        if let getNotificationItemRoomIdEventIdFilterByPushRulesClosure = getNotificationItemRoomIdEventIdFilterByPushRulesClosure {
-            return try getNotificationItemRoomIdEventIdFilterByPushRulesClosure(`roomId`, `eventId`, `filterByPushRules`)
+    public func `getNotificationSettings`() -> NotificationSettings {
+        getNotificationSettingsCallsCount += 1
+        if let getNotificationSettingsClosure = getNotificationSettingsClosure {
+            return getNotificationSettingsClosure()
         } else {
-            return getNotificationItemRoomIdEventIdFilterByPushRulesReturnValue
+            return getNotificationSettingsReturnValue
         }
     }
     //MARK: - `getProfile`
@@ -384,54 +393,21 @@ class SDKClientMock: SDKClientProtocol {
         logoutCallsCount += 1
         try logoutClosure?()
     }
-    //MARK: - `mainEncryptionSync`
+    //MARK: - `notificationClient`
 
-    public var mainEncryptionSyncIdListenerThrowableError: Error?
-    public var mainEncryptionSyncIdListenerCallsCount = 0
-    public var mainEncryptionSyncIdListenerCalled: Bool {
-        return mainEncryptionSyncIdListenerCallsCount > 0
+    public var notificationClientCallsCount = 0
+    public var notificationClientCalled: Bool {
+        return notificationClientCallsCount > 0
     }
-    public var mainEncryptionSyncIdListenerReceivedArguments: (`id`: String, `listener`: EncryptionSyncListener)?
-    public var mainEncryptionSyncIdListenerReceivedInvocations: [(`id`: String, `listener`: EncryptionSyncListener)] = []
-    public var mainEncryptionSyncIdListenerReturnValue: EncryptionSync!
-    public var mainEncryptionSyncIdListenerClosure: ((String, EncryptionSyncListener) throws -> EncryptionSync)?
+    public var notificationClientReturnValue: NotificationClientBuilder!
+    public var notificationClientClosure: (() -> NotificationClientBuilder)?
 
-    public func `mainEncryptionSync`(`id`: String, `listener`: EncryptionSyncListener) throws -> EncryptionSync {
-        if let error = mainEncryptionSyncIdListenerThrowableError {
-            throw error
-        }
-        mainEncryptionSyncIdListenerCallsCount += 1
-        mainEncryptionSyncIdListenerReceivedArguments = (id: id, listener: listener)
-        mainEncryptionSyncIdListenerReceivedInvocations.append((id: id, listener: listener))
-        if let mainEncryptionSyncIdListenerClosure = mainEncryptionSyncIdListenerClosure {
-            return try mainEncryptionSyncIdListenerClosure(`id`, `listener`)
+    public func `notificationClient`() -> NotificationClientBuilder {
+        notificationClientCallsCount += 1
+        if let notificationClientClosure = notificationClientClosure {
+            return notificationClientClosure()
         } else {
-            return mainEncryptionSyncIdListenerReturnValue
-        }
-    }
-    //MARK: - `notificationEncryptionSync`
-
-    public var notificationEncryptionSyncIdListenerNumItersThrowableError: Error?
-    public var notificationEncryptionSyncIdListenerNumItersCallsCount = 0
-    public var notificationEncryptionSyncIdListenerNumItersCalled: Bool {
-        return notificationEncryptionSyncIdListenerNumItersCallsCount > 0
-    }
-    public var notificationEncryptionSyncIdListenerNumItersReceivedArguments: (`id`: String, `listener`: EncryptionSyncListener, `numIters`: UInt8)?
-    public var notificationEncryptionSyncIdListenerNumItersReceivedInvocations: [(`id`: String, `listener`: EncryptionSyncListener, `numIters`: UInt8)] = []
-    public var notificationEncryptionSyncIdListenerNumItersReturnValue: EncryptionSync!
-    public var notificationEncryptionSyncIdListenerNumItersClosure: ((String, EncryptionSyncListener, UInt8) throws -> EncryptionSync)?
-
-    public func `notificationEncryptionSync`(`id`: String, `listener`: EncryptionSyncListener, `numIters`: UInt8) throws -> EncryptionSync {
-        if let error = notificationEncryptionSyncIdListenerNumItersThrowableError {
-            throw error
-        }
-        notificationEncryptionSyncIdListenerNumItersCallsCount += 1
-        notificationEncryptionSyncIdListenerNumItersReceivedArguments = (id: id, listener: listener, numIters: numIters)
-        notificationEncryptionSyncIdListenerNumItersReceivedInvocations.append((id: id, listener: listener, numIters: numIters))
-        if let notificationEncryptionSyncIdListenerNumItersClosure = notificationEncryptionSyncIdListenerNumItersClosure {
-            return try notificationEncryptionSyncIdListenerNumItersClosure(`id`, `listener`, `numIters`)
-        } else {
-            return notificationEncryptionSyncIdListenerNumItersReturnValue
+            return notificationClientReturnValue
         }
     }
     //MARK: - `restoreSession`
@@ -453,48 +429,6 @@ class SDKClientMock: SDKClientProtocol {
         restoreSessionSessionReceivedSession = session
         restoreSessionSessionReceivedInvocations.append(`session`)
         try restoreSessionSessionClosure?(`session`)
-    }
-    //MARK: - `roomListService`
-
-    public var roomListServiceThrowableError: Error?
-    public var roomListServiceCallsCount = 0
-    public var roomListServiceCalled: Bool {
-        return roomListServiceCallsCount > 0
-    }
-    public var roomListServiceReturnValue: RoomListService!
-    public var roomListServiceClosure: (() throws -> RoomListService)?
-
-    public func `roomListService`() throws -> RoomListService {
-        if let error = roomListServiceThrowableError {
-            throw error
-        }
-        roomListServiceCallsCount += 1
-        if let roomListServiceClosure = roomListServiceClosure {
-            return try roomListServiceClosure()
-        } else {
-            return roomListServiceReturnValue
-        }
-    }
-    //MARK: - `roomListServiceWithEncryption`
-
-    public var roomListServiceWithEncryptionThrowableError: Error?
-    public var roomListServiceWithEncryptionCallsCount = 0
-    public var roomListServiceWithEncryptionCalled: Bool {
-        return roomListServiceWithEncryptionCallsCount > 0
-    }
-    public var roomListServiceWithEncryptionReturnValue: RoomListService!
-    public var roomListServiceWithEncryptionClosure: (() throws -> RoomListService)?
-
-    public func `roomListServiceWithEncryption`() throws -> RoomListService {
-        if let error = roomListServiceWithEncryptionThrowableError {
-            throw error
-        }
-        roomListServiceWithEncryptionCallsCount += 1
-        if let roomListServiceWithEncryptionClosure = roomListServiceWithEncryptionClosure {
-            return try roomListServiceWithEncryptionClosure()
-        } else {
-            return roomListServiceWithEncryptionReturnValue
-        }
     }
     //MARK: - `rooms`
 
@@ -614,22 +548,6 @@ class SDKClientMock: SDKClientProtocol {
         setDisplayNameNameReceivedName = name
         setDisplayNameNameReceivedInvocations.append(`name`)
         try setDisplayNameNameClosure?(`name`)
-    }
-    //MARK: - `setNotificationDelegate`
-
-    public var setNotificationDelegateNotificationDelegateCallsCount = 0
-    public var setNotificationDelegateNotificationDelegateCalled: Bool {
-        return setNotificationDelegateNotificationDelegateCallsCount > 0
-    }
-    public var setNotificationDelegateNotificationDelegateReceivedNotificationDelegate: NotificationDelegate?
-    public var setNotificationDelegateNotificationDelegateReceivedInvocations: [NotificationDelegate?] = []
-    public var setNotificationDelegateNotificationDelegateClosure: ((NotificationDelegate?) -> Void)?
-
-    public func `setNotificationDelegate`(`notificationDelegate`: NotificationDelegate?) {
-        setNotificationDelegateNotificationDelegateCallsCount += 1
-        setNotificationDelegateNotificationDelegateReceivedNotificationDelegate = notificationDelegate
-        setNotificationDelegateNotificationDelegateReceivedInvocations.append(`notificationDelegate`)
-        setNotificationDelegateNotificationDelegateClosure?(`notificationDelegate`)
     }
     //MARK: - `setPusher`
 

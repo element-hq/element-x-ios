@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let body: String
     let timestamp: String
     let isOutgoing: Bool

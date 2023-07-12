@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let body: String
     
     let eventType: String

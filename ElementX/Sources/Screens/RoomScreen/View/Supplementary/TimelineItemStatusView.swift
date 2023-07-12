@@ -23,7 +23,7 @@ struct TimelineItemStatusView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
-        context.viewState.itemIDs.last == timelineItem.id &&
+        context.viewState.timelineIDs.last == timelineItem.id.timelineID &&
             timelineItem.isOutgoing
     }
 
@@ -53,7 +53,7 @@ struct TimelineItemStatusView: View {
                     .foregroundColor(.compound.iconCriticalPrimary)
                     .frame(width: 16, height: 16)
                     .onTapGesture {
-                        context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
+                        context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                     }
             }
         }

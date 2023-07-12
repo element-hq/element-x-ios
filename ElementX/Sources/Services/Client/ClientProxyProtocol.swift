@@ -84,7 +84,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func startSync()
 
-    func stopSync()
+    func pauseSync()
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     

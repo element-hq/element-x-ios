@@ -16,6 +16,6 @@
 
 import Foundation
 
-struct PaginationIndicatorRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id = "paginationIndicatorTimelineItemIdentifier"
+struct PaginationIndicatorRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+    let id = TimelineItemIdentifier(timelineID: "paginationIndicatorTimelineItemIdentifier")
 }

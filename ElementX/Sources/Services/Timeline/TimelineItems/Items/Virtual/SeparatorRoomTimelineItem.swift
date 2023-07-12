@@ -16,7 +16,7 @@
 
 import Foundation
 
-struct SeparatorRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct SeparatorRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
     let text: String
 }

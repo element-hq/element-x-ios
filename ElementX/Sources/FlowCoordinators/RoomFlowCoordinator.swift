@@ -207,8 +207,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
                 break
                 
-            case (.room, .presentMessageForwarding(let eventID), .messageForwarding):
-                presentMessageForwarding(for: eventID)
+            case (.room, .presentMessageForwarding(let itemID), .messageForwarding):
+                presentMessageForwarding(for: itemID)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
             case (.room, .presentMapNavigator(let mode), .mapNavigator):
@@ -401,14 +401,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentReportContent(for itemID: String, from senderID: String) {
-        guard let roomProxy else {
+    private func presentReportContent(for itemID: TimelineItemIdentifier, from senderID: String) {
+        guard let roomProxy, let eventID = itemID.eventID else {
             fatalError()
         }
         
         let navigationCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
-        let parameters = ReportContentScreenCoordinatorParameters(itemID: itemID,
+        let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
                                                                   senderID: senderID,
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController)
@@ -479,17 +479,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentEmojiPicker(for itemId: String) {
+    private func presentEmojiPicker(for itemID: TimelineItemIdentifier) {
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
-                                                            itemId: itemId)
+                                                            itemID: itemID)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
-            case let .emojiSelected(emoji: emoji, itemId: itemId):
-                MXLog.debug("Selected \(emoji) for \(itemId)")
+            case let .emojiSelected(emoji: emoji, itemID: itemID):
+                MXLog.debug("Selected \(emoji) for \(itemID)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await self?.timelineController?.toggleReaction(emoji, to: itemId)
+                    await self?.timelineController?.toggleReaction(emoji, to: itemID)
                 }
             case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
@@ -547,8 +547,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMessageForwarding(for eventID: String) {
-        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.roomSummaryProvider else {
+    private func presentMessageForwarding(for itemID: TimelineItemIdentifier) {
+        guard let roomProxy, let roomSummaryProvider = userSession.clientProxy.roomSummaryProvider, let eventID = itemID.eventID else {
             fatalError()
         }
         
@@ -624,14 +624,14 @@ private extension RoomFlowCoordinator {
     enum State: StateType {
         case initial
         case room(roomID: String)
-        case reportContent(roomID: String, itemID: String, senderID: String)
+        case reportContent(roomID: String, itemID: TimelineItemIdentifier, senderID: String)
         case roomDetails(roomID: String, isRoot: Bool)
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
-        case emojiPicker(roomID: String, itemID: String)
+        case emojiPicker(roomID: String, itemID: TimelineItemIdentifier)
         case mapNavigator(roomID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
-        case messageForwarding(roomID: String, itemID: String)
+        case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
     }
     
     struct EventUserInfo {
@@ -643,7 +643,7 @@ private extension RoomFlowCoordinator {
         case presentRoom(roomID: String)
         case dismissRoom
         
-        case presentReportContent(itemID: String, senderID: String)
+        case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
         case dismissReportContent
         
         case presentRoomDetails(roomID: String)
@@ -655,7 +655,7 @@ private extension RoomFlowCoordinator {
         case presentMediaUploadPreview(fileURL: URL)
         case dismissMediaUploadPreview
         
-        case presentEmojiPicker(itemID: String)
+        case presentEmojiPicker(itemID: TimelineItemIdentifier)
         case dismissEmojiPicker
 
         case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
@@ -664,7 +664,7 @@ private extension RoomFlowCoordinator {
         case presentRoomMemberDetails(member: HashableRoomMemberWrapper)
         case dismissRoomMemberDetails
         
-        case presentMessageForwarding(itemID: String)
+        case presentMessageForwarding(itemID: TimelineItemIdentifier)
         case dismissMessageForwarding
     }
 }

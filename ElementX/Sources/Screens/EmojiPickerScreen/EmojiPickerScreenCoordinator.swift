@@ -18,11 +18,11 @@ import SwiftUI
 
 struct EmojiPickerScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
-    let itemId: String
+    let itemID: TimelineItemIdentifier
 }
 
 enum EmojiPickerScreenCoordinatorAction {
-    case emojiSelected(emoji: String, itemId: String)
+    case emojiSelected(emoji: String, itemID: TimelineItemIdentifier)
     case dismiss
 }
 
@@ -44,7 +44,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case let .emojiSelected(emoji: emoji):
-                self.callback?(.emojiSelected(emoji: emoji, itemId: self.parameters.itemId))
+                self.callback?(.emojiSelected(emoji: emoji, itemID: self.parameters.itemID))
             case .dismiss:
                 self.callback?(.dismiss)
             }

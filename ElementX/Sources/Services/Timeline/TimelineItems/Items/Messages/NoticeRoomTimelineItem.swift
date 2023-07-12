@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct NoticeRoomTimelineItem: TextBasedRoomTimelineItem, Identifiable, Hashable {
-    let id: String
+struct NoticeRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
+    let id: TimelineItemIdentifier
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
