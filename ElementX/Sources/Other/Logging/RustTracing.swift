@@ -48,25 +48,23 @@ struct TracingConfiguration {
     enum Target: String {
         case common = ""
         
-        case hyper, sled, matrix_sdk_sled, matrix_sdk_ffi, matrix_sdk_crypto
+        case hyper, matrix_sdk_ffi, matrix_sdk_crypto
         
         case matrix_sdk_http_client = "matrix_sdk::http_client"
         case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
-        case matrix_sdk_room_timeline = "matrix_sdk::room::timeline"
+        case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
     }
     
     static let targets: OrderedDictionary<Target, LogLevel> = [
         .common: .info,
         .hyper: .warn,
-        .sled: .warn,
-        .matrix_sdk_sled: .warn,
         .matrix_sdk_crypto: .debug,
         .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .trace,
         .matrix_sdk_base_sliding_sync: .trace,
-        .matrix_sdk_room_timeline: .info
+        .matrix_sdk_ui_timeline: .info
     ]
     
     var overrides = [Target: LogLevel]()
