@@ -169,37 +169,47 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 }
 
 private extension TimelineItem {
-    var debugIdentifier: String {
+    var debugIdentifier: DebugIdentifier {
         if let virtualTimelineItem = asVirtual() {
             return virtualTimelineItem.debugIdentifier
         } else if let eventTimelineItem = asEvent() {
-            return eventTimelineItem.eventId() ?? eventTimelineItem.transactionId() ?? "UnknownTimelineItem"
+            return .event(timelineID: String(uniqueId()),
+                          eventID: eventTimelineItem.eventId(),
+                          transactionID: eventTimelineItem.transactionId())
         }
         
-        return "UnknownTimelineItem"
+        return .unknown
     }
 }
 
 private extension TimelineItemProxy {
-    var debugIdentifier: String {
+    var debugIdentifier: DebugIdentifier {
         switch self {
         case .event(let eventTimelineItem):
-            return eventTimelineItem.id.eventID ?? eventTimelineItem.id.transactionID ?? eventTimelineItem.id.timelineID
+            return .event(timelineID: eventTimelineItem.id.timelineID,
+                          eventID: eventTimelineItem.id.eventID,
+                          transactionID: eventTimelineItem.id.transactionID)
         case .virtual(let virtualTimelineItem):
             return virtualTimelineItem.debugIdentifier
         case .unknown:
-            return "UnknownTimelineItem"
+            return .unknown
         }
     }
 }
 
 private extension VirtualTimelineItem {
-    var debugIdentifier: String {
+    var debugIdentifier: DebugIdentifier {
         switch self {
         case .dayDivider(let timestamp):
-            return "DayDiviver(\(timestamp))"
+            return .virtual("DayDiviver(\(timestamp))")
         case .readMarker:
-            return "ReadMarker"
+            return .virtual("ReadMarker")
         }
     }
+}
+
+enum DebugIdentifier {
+    case event(timelineID: String?, eventID: String?, transactionID: String?)
+    case virtual(String)
+    case unknown
 }
