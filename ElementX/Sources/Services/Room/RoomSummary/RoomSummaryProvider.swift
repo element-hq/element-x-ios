@@ -142,19 +142,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
 
     private func fetchLastMessage(roomListItem: RoomListItemProtocol) -> EventTimelineItem? {
-        class RoomMessageBox {
-            var roomMessage: EventTimelineItem?
+        class FetchResult {
+            var latestRoomEvent: EventTimelineItem?
         }
 
         let semaphore = DispatchSemaphore(value: 0)
-        let box = RoomMessageBox()
+        let result = FetchResult()
 
         Task {
-            box.roomMessage = await roomListItem.latestEvent()
+            result.latestRoomEvent = await roomListItem.latestEvent()
             semaphore.signal()
         }
         semaphore.wait()
-        return box.roomMessage
+        return result.latestRoomEvent
     }
 
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
