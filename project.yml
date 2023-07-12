@@ -32,6 +32,7 @@ settings:
   MARKETING_VERSION: 1.2.1
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
+  MAPLIBRE_API_KEY: ""
 
 include:
   - path: ElementX/SupportingFiles/target.yml

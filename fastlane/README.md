@@ -69,6 +69,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### config_production
+
+```sh
+[bundle exec] fastlane config_production
+```
+
+
+
 ### upload_dsyms_to_sentry
 
 ```sh
