@@ -132,7 +132,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             try appService?.pause()
         } catch {
-            MXLog.error("Failed stopping app service with error: \(error)")
+            MXLog.error("Failed pausing app service with error: \(error)")
         }
     }
     

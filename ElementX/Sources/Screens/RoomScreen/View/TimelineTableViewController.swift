@@ -72,7 +72,7 @@ class TimelineTableViewController: UIViewController {
         }
     }
         
-    var contextMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
+    var contextMenuActionProvider: (@MainActor (_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
 
@@ -249,7 +249,7 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
 
-        MXLog.verbose("DIFF:\(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
+        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
         dataSource.apply(snapshot, animatingDifferences: false)
         
         // Probably redundant now we observe content size changes…
