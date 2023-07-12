@@ -542,7 +542,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     // MARK: - Application State
 
     private func stopSync() {
-        userSession?.clientProxy.stopSync()
+        userSession?.clientProxy.pauseSync()
         
         backgroundAppRefreshTask?.setTaskCompleted(success: true)
         backgroundAppRefreshTask = nil
@@ -602,7 +602,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     @objc
     private func applicationWillTerminate() {
-        userSession?.clientProxy.stopSync()
+        userSession?.clientProxy.pauseSync()
     }
 
     @objc
@@ -616,7 +616,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             guard let self else { return }
             
-            userSession?.clientProxy.stopSync()
+            userSession?.clientProxy.pauseSync()
             
             backgroundTask?.stop()
             backgroundTask = nil

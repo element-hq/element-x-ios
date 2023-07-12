@@ -53,7 +53,7 @@ class ClientProxy: ClientProxyProtocol {
     
     deinit {
         client.setDelegate(delegate: nil)
-        stopSync()
+        pauseSync()
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -126,7 +126,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func stopSync() {
+    func pauseSync() {
         MXLog.info("Stopping sync")
 
         do {
@@ -353,7 +353,7 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: Private
     
     private func restartSync() {
-        stopSync()
+        pauseSync()
         startSync()
     }
 
