@@ -57,6 +57,9 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var mapCenterCoordinate: CLLocationCoordinate2D?
 
     @Binding var isLocationAuthorized: Bool?
+
+    // The radius of uncertainty for the location, measured in meters.
+    @Binding var geolocationUncertainty: CLLocationAccuracy?
     
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
@@ -155,6 +158,7 @@ extension MapLibreMapView {
             }
 
             previousUserLocation = userLocation
+            updateGeolocationUncertainty(location: userLocation)
         }
         
         func mapView(_ mapView: MGLMapView, didChangeLocationManagerAuthorization manager: MGLLocationManager) {
@@ -176,13 +180,7 @@ extension MapLibreMapView {
                 mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
             }
         }
-        
-        // MARK: Callout
-                
-        func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
-            false
-        }
-        
+
         func mapView(_ mapView: MGLMapView, shouldChangeFrom oldCamera: MGLMapCamera, to newCamera: MGLMapCamera, reason: MGLCameraChangeReason) -> Bool {
             // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
             switch reason {
@@ -202,6 +200,23 @@ extension MapLibreMapView {
                 break
             }
             return true
+        }
+
+        // MARK: Callout
+
+        func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+            false
+        }
+
+        // MARK: Private
+
+        private func updateGeolocationUncertainty(location: MGLUserLocation) {
+            guard let clLocation = location.location, clLocation.horizontalAccuracy >= 0 else {
+                mapLibreView.geolocationUncertainty = nil
+                return
+            }
+
+            mapLibreView.geolocationUncertainty = clLocation.horizontalAccuracy
         }
     }
 }
