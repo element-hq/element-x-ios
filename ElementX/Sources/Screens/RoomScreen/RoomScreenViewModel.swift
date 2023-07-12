@@ -450,6 +450,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
+                    displayError(.alert(L10n.errorFailedCreatingThePermalink))
                     break
                 }
 

@@ -122,13 +122,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendMessage(_ message: String, inReplyTo itemID: TimelineItemIdentifier?) async {
+        var inReplyTo: String?
         if itemID == nil {
             MXLog.info("Send message in \(roomID)")
-        } else {
+        } else if let eventID = itemID?.eventID {
+            inReplyTo = eventID
             MXLog.info("Send reply in \(roomID)")
+        } else {
+            MXLog.error("Send reply in \(roomID) failed: missing event ID")
+            return
         }
 
-        switch await roomProxy.sendMessage(message, inReplyTo: itemID?.eventID) {
+        switch await roomProxy.sendMessage(message, inReplyTo: inReplyTo) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
