@@ -31,6 +31,10 @@ Please see our [contribution guide](CONTRIBUTING.md).
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-ios:matrix.org).
 
+## Forking
+
+Please read our [forking guide](FORKING.md).
+
 ## Build instructions
 
 Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
