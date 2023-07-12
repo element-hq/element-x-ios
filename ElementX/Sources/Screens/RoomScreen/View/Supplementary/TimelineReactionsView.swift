@@ -147,7 +147,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
                 .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
                 // Vertical sizing is done by the layout so that the add more button
                 // matches the height of the text based buttons.
-                .padding(.horizontal, 8)
+                .padding(.horizontal, 10)
                 .frame(maxHeight: .infinity, alignment: .center)
         }
     }
