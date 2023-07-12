@@ -146,7 +146,7 @@ class MockClientProxy: ClientProxyProtocol {
         if let notificationSettingsResult {
             return notificationSettingsResult
         } else {
-            return NotificationSettingsProxyMock()
+            return NotificationSettingsProxyMock(with: .init())
         }
     }
 }
