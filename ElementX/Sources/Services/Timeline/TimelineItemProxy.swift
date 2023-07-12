@@ -19,7 +19,7 @@ import MatrixRustSDK
 
 struct TimelineItemIdentifier: Hashable {
     /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
-    /// It's value is consistent only per timeline instance, it should not be used to identify an item across timeline instances.
+    /// It's value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
     let timelineID: String
 
     /// Uniquely identifies the timeline item from the server side.
