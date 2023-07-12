@@ -47,3 +47,4 @@ Tools/Scripts/element-android
 !/UITests/Sources/__Snapshots__/Application/pseudo-iPad-9th-generation.*.png
 !/UITests/Sources/__Snapshots__/Application/en-GB-iPhone-14.*.png
 !/UITests/Sources/__Snapshots__/Application/pseudo-iPhone-14.*.png
+/.maplibre_key
