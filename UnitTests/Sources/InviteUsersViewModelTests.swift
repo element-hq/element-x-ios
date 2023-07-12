@@ -59,17 +59,27 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
      
-    func testInviteButton() async {
+    func testInviteButton() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: mockedMembers))))
-        _ = await viewModel.context.$viewState.values.first(where: { $0.membershipState.isEmpty == false })
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState
+            .map(\.membershipState)
+            .map(\.isEmpty)
+            .removeDuplicates()
+            .collect(2).first(), message: "2 states should be published.")
         context.send(viewAction: .toggleUser(.mockAlice))
+        
+        let states = try await deferredState.fulfill()
+        XCTAssertEqual(states, [true, false])
+        
+        let deferredAction = deferFulfillment(viewModel.actions.first(), message: "1 action should be published.")
         
         Task.detached(priority: .low) {
             await self.context.send(viewAction: .proceed)
         }
         
-        let action = await viewModel.actions.values.first()
+        let action = try await deferredAction.fulfill()
         
         guard case let .invite(members) = action else {
             XCTFail("Sent action should be 'invite'")
