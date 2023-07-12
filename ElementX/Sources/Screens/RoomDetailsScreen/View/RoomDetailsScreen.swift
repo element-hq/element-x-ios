@@ -78,7 +78,7 @@ struct RoomDetailsScreen: View {
                          imageProvider: context.imageProvider,
                          subtitle: context.viewState.canonicalAlias) {
             if !context.viewState.shortcuts.isEmpty {
-                headerSectionShortcuts()
+                headerSectionShortcuts
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
@@ -93,14 +93,14 @@ struct RoomDetailsScreen: View {
                          imageProvider: context.imageProvider,
                          subtitle: recipient.id) {
             if !context.viewState.shortcuts.isEmpty {
-                headerSectionShortcuts()
+                headerSectionShortcuts
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
     }
     
     @ViewBuilder
-    private func headerSectionShortcuts() -> some View {
+    private var headerSectionShortcuts: some View {
         HStack(spacing: 32) {
             ForEach(context.viewState.shortcuts, id: \.self) { shortcut in
                 switch shortcut {
