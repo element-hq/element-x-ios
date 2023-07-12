@@ -359,7 +359,8 @@ class ClientProxy: ClientProxyProtocol {
     
     func notificationSettings() async -> NotificationSettingsProxyProtocol {
         await Task.dispatch(on: clientQueue) {
-            NotificationSettingsProxy(notificationSettingsProxy: self.client.getNotificationSettings())
+            NotificationSettingsProxy(notificationSettings: self.client.getNotificationSettings(),
+                                      backgroundTaskService: self.backgroundTaskService)
         }
     }
     

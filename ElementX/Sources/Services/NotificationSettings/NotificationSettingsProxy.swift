@@ -36,12 +36,13 @@ private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate 
 
 final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     private(set) var notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
-    private var syncUpdateCancellable: AnyCancellable?
+    private let backgroundTaskService: BackgroundTaskServiceProtocol?
 
     let callbacks = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
 
-    init(notificationSettingsProxy: MatrixRustSDK.NotificationSettingsProtocol) {
-        notificationSettings = notificationSettingsProxy
+    init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol, backgroundTaskService: BackgroundTaskServiceProtocol?) {
+        self.notificationSettings = notificationSettings
+        self.backgroundTaskService = backgroundTaskService
         notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
     }
     
@@ -51,6 +52,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setNotificationMode(room: RoomProxyProtocol, mode: RoomNotificationMode) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
+        defer { backgroundTask?.stop() }
+        
         try await notificationSettings.setRoomNotificationMode(roomId: room.id, mode: mode)
     }
     
@@ -59,6 +63,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func restoreDefaultNotificationMode(room: RoomProxyProtocol) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "restoreDefaultNotificationMode")
+        defer { backgroundTask?.stop() }
+
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: room.id)
     }
     
@@ -67,6 +74,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
        
     func unmuteRoom(room: RoomProxyProtocol) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "unmuteRoom")
+        defer { backgroundTask?.stop() }
+
         try await notificationSettings.unmuteRoom(roomId: room.id, isEncrypted: room.isEncrypted, membersCount: UInt64(room.activeMembersCount))
     }
     
@@ -75,6 +85,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setRoomMentionEnabled(enabled: Bool) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setRoomMentionEnabled")
+        defer { backgroundTask?.stop() }
+
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
     }
     
@@ -83,6 +96,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setUserMentionEnabled(enabled: Bool) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setUserMentionEnabled")
+        defer { backgroundTask?.stop() }
+
         try await notificationSettings.setUserMentionEnabled(enabled: enabled)
     }
     
@@ -91,6 +107,9 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     }
     
     func setCallEnabled(enabled: Bool) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setCallEnabled")
+        defer { backgroundTask?.stop() }
+
         try await notificationSettings.setCallEnabled(enabled: enabled)
     }
     
