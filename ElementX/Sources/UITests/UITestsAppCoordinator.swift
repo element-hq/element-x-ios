@@ -361,7 +361,7 @@ class MockScreen: Identifiable {
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock(),
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock()))
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithRoomAvatar:
@@ -382,7 +382,7 @@ class MockScreen: Identifiable {
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock(),
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock()))
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithEmptyTopic:
@@ -405,7 +405,7 @@ class MockScreen: Identifiable {
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock(),
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock()))
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithInvite:
@@ -424,7 +424,7 @@ class MockScreen: Identifiable {
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock(),
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock()))
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenDmDetails:
@@ -444,7 +444,7 @@ class MockScreen: Identifiable {
                                                                              mediaProvider: MockMediaProvider(),
                                                                              userDiscoveryService: UserDiscoveryServiceMock(),
                                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                             notificationSettings: NotificationSettingsProxyMock()))
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomEditDetails, .roomEditDetailsReadOnly:
