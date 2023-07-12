@@ -36,7 +36,8 @@ class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLo
             actionsSubject.send(.close)
         case .selectLocation:
             guard let coordinate = state.bindings.mapCenterLocation else { return }
-            actionsSubject.send(.sendLocation(.init(coordinate: coordinate), isUserLocation: state.isSharingUserLocation))
+            let uncertainty = state.isSharingUserLocation ? context.geolocationUncertainty : nil
+            actionsSubject.send(.sendLocation(.init(coordinate: coordinate, uncertainty: uncertainty), isUserLocation: state.isSharingUserLocation))
         case .userDidPan:
             state.bindings.showsUserLocationMode = .show
         case .centerToUser:

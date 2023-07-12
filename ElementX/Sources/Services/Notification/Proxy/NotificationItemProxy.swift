@@ -67,13 +67,10 @@ extension NotificationItemProxyProtocol {
 struct NotificationItemProxy: NotificationItemProxyProtocol {
     let notificationItem: NotificationItem
     let receiverID: String
+    let roomID: String
 
     var event: TimelineEventProxyProtocol {
         TimelineEventProxy(timelineEvent: notificationItem.event)
-    }
-
-    var roomID: String {
-        notificationItem.roomInfo.id
     }
 
     var senderDisplayName: String? {

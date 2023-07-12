@@ -45,6 +45,7 @@ struct A11yIdentifiers {
     struct BugReportScreen {
         let report = "bug_report-report"
         let sendLogs = "bug_report-send_logs"
+        let canContact = "bug_report-can_contact"
         let screenshot = "bug_report-screenshot"
         let removeScreenshot = "bug_report-remove_screenshot"
         let attachScreenshot = "bug-report-attach_screenshot"

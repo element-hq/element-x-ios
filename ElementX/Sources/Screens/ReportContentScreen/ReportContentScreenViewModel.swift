@@ -20,7 +20,7 @@ import SwiftUI
 typealias ReportContentScreenViewModelType = StateStoreViewModel<ReportContentScreenViewState, ReportContentScreenViewAction>
 
 class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportContentScreenViewModelProtocol {
-    private let itemID: String
+    private let eventID: String
     private let senderID: String
     private let roomProxy: RoomProxyProtocol
     private let actionsSubject: PassthroughSubject<ReportContentScreenViewModelAction, Never> = .init()
@@ -29,8 +29,8 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(itemID: String, senderID: String, roomProxy: RoomProxyProtocol) {
-        self.itemID = itemID
+    init(eventID: String, senderID: String, roomProxy: RoomProxyProtocol) {
+        self.eventID = eventID
         self.senderID = senderID
         self.roomProxy = roomProxy
         
@@ -53,7 +53,7 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
     private func submitReport() async {
         actionsSubject.send(.submitStarted)
         
-        if case let .failure(error) = await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
+        if case let .failure(error) = await roomProxy.reportContent(eventID, reason: state.bindings.reasonText) {
             MXLog.error("Submit Report Content failed: \(error)")
             actionsSubject.send(.submitFailed(error: error))
             return

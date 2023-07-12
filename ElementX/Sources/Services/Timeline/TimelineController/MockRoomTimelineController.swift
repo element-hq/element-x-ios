@@ -51,23 +51,23 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> { .success(()) }
     
-    func processItemAppearance(_ itemID: String) async { }
+    func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     
-    func processItemDisappearance(_ itemID: String) async { }
+    func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
 
-    func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction { .none }
+    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction { .none }
     
-    func sendMessage(_ message: String, inReplyTo itemID: String?) async { }
+    func sendMessage(_ message: String, inReplyTo itemID: TimelineItemIdentifier?) async { }
     
-    func toggleReaction(_ reaction: String, to itemID: String) async { }
+    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
 
-    func editMessage(_ newMessage: String, original itemID: String) async { }
+    func editMessage(_ newMessage: String, original itemID: TimelineItemIdentifier) async { }
     
-    func redact(_ itemID: String) async { }
+    func redact(_ itemID: TimelineItemIdentifier) async { }
 
-    func cancelSend(_ transactionID: String) async { }
+    func cancelSend(_ itemID: TimelineItemIdentifier) async { }
     
-    func debugInfo(for itemID: String) -> TimelineItemDebugInfo {
+    func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
     }
         

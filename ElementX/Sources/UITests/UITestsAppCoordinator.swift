@@ -474,7 +474,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .reportContent:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ReportContentScreenCoordinator(parameters: .init(itemID: "test",
+            let coordinator = ReportContentScreenCoordinator(parameters: .init(eventID: "test",
                                                                                senderID: RoomMemberProxyMock.mockAlice.userID,
                                                                                roomProxy: RoomProxyMock(with: .init(displayName: "test"))))
             navigationStackCoordinator.setRootCoordinator(coordinator)

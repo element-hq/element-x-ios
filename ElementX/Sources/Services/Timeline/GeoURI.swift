@@ -78,8 +78,8 @@ private extension RegexGeoURI {
 }
 
 extension GeoURI {
-    init(coordinate: CLLocationCoordinate2D) {
-        self.init(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    init(coordinate: CLLocationCoordinate2D, uncertainty: CLLocationAccuracy?) {
+        self.init(latitude: coordinate.latitude, longitude: coordinate.longitude, uncertainty: uncertainty)
     }
 }
 

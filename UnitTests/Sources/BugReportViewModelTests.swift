@@ -84,7 +84,7 @@ class BugReportViewModelTests: XCTestCase {
         }
         
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
-        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
+        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))
     }
 
     func testSendReportWithError() async throws {
@@ -111,6 +111,6 @@ class BugReportViewModelTests: XCTestCase {
         }
         
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
-        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
+        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))
     }
 }

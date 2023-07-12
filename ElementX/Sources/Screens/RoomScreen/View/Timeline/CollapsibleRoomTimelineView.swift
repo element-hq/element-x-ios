@@ -71,8 +71,8 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
 
 struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
     static let item = CollapsibleTimelineItem(items: [
-        SeparatorRoomTimelineItem(id: "First separator", text: "This is a separator"),
-        SeparatorRoomTimelineItem(id: "Second separator", text: "This is another separator")
+        SeparatorRoomTimelineItem(id: .init(timelineID: "First separator"), text: "This is a separator"),
+        SeparatorRoomTimelineItem(id: .init(timelineID: "Second separator"), text: "This is another separator")
     ])
     
     static var previews: some View {

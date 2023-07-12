@@ -84,7 +84,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> {
         guard roomProxy.hasUnreadNotifications,
-              let eventID = timelineItems.last?.id
+              let eventID = timelineItems.last?.id.eventID
         else { return .success(()) }
         
         switch await roomProxy.sendReadReceipt(for: eventID) {
@@ -95,7 +95,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemID: String) async {
+    func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return
         }
@@ -105,9 +105,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemDisappearance(_ itemID: String) { }
+    func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
 
-    func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction {
+    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return .none
         }
@@ -121,14 +121,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyTo itemID: String?) async {
+    func sendMessage(_ message: String, inReplyTo itemID: TimelineItemIdentifier?) async {
+        var inReplyTo: String?
         if itemID == nil {
             MXLog.info("Send message in \(roomID)")
-        } else {
+        } else if let eventID = itemID?.eventID {
+            inReplyTo = eventID
             MXLog.info("Send reply in \(roomID)")
+        } else {
+            MXLog.error("Send reply in \(roomID) failed: missing event ID")
+            return
         }
-        
-        switch await roomProxy.sendMessage(message, inReplyTo: itemID) {
+
+        switch await roomProxy.sendMessage(message, inReplyTo: inReplyTo) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -136,9 +141,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to itemID: String) async {
+    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async {
         MXLog.info("Toggle reaction in \(roomID)")
-        switch await roomProxy.toggleReaction(reaction, to: itemID) {
+        guard let eventID = itemID.eventID else {
+            MXLog.error("Failed toggling reaction: missing eventID")
+            return
+        }
+
+        switch await roomProxy.toggleReaction(reaction, to: eventID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):
@@ -146,28 +156,32 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func editMessage(_ newMessage: String, original itemID: String) async {
+    func editMessage(_ newMessage: String, original itemID: TimelineItemIdentifier) async {
         MXLog.info("Edit message in \(roomID)")
         if let timelineItem = timelineItems.first(where: { $0.id == itemID }),
            let item = timelineItem as? EventBasedTimelineItemProtocol,
-           item.hasFailedToSend,
-           let transactionID = item.properties.transactionID {
+           item.hasFailedToSend {
             MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
-            await cancelSend(transactionID)
+            await cancelSend(itemID)
             await sendMessage(newMessage)
-        } else {
-            switch await roomProxy.editMessage(newMessage, original: itemID) {
+        } else if let eventID = itemID.eventID {
+            switch await roomProxy.editMessage(newMessage, original: eventID) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):
                 MXLog.error("Failed editing message with error: \(error)")
             }
+        } else {
+            MXLog.error("Editing failed: missing identifiers")
         }
     }
     
-    func redact(_ itemID: String) async {
+    func redact(_ itemID: TimelineItemIdentifier) async {
         MXLog.info("Send redaction in \(roomID)")
-        switch await roomProxy.redact(itemID) {
+        guard let eventID = itemID.eventID else {
+            return
+        }
+        switch await roomProxy.redact(eventID) {
         case .success:
             MXLog.info("Finished redacting message")
         case .failure(let error):
@@ -175,14 +189,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
 
-    func cancelSend(_ transactionID: String) async {
+    func cancelSend(_ itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed cancelling send, missing transaction ID")
+            return
+        }
         MXLog.info("Cancelling send in \(roomID)")
         await roomProxy.cancelSend(transactionID: transactionID)
     }
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
-    func debugInfo(for itemID: String) -> TimelineItemDebugInfo {
+    func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         for timelineItemProxy in timelineProvider.itemProxies {
             switch timelineItemProxy {
             case .event(let item):
@@ -339,7 +357,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
                 // Separators without stable identifiers cause UI glitches
                 let identifier = "\(chunkIndex)-\(dateString)"
-                return SeparatorRoomTimelineItem(id: identifier, text: dateString)
+                return SeparatorRoomTimelineItem(id: .init(timelineID: identifier), text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem()
             }
@@ -373,12 +391,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func fetchEventDetails(for timelineItem: EventBasedMessageTimelineItemProtocol, refetchOnError: Bool) {
+        guard let eventID = timelineItem.id.eventID else {
+            return
+        }
+
         switch timelineItem.replyDetails {
         case .notLoaded:
-            roomProxy.fetchDetails(for: timelineItem.id)
+            roomProxy.fetchDetails(for: eventID)
         case .error:
             if refetchOnError {
-                roomProxy.fetchDetails(for: timelineItem.id)
+                roomProxy.fetchDetails(for: eventID)
             }
         default:
             break

@@ -109,6 +109,7 @@ struct StaticLocationScreenViewState: BindableState {
 
 struct StaticLocationScreenBindings {
     var mapCenterLocation: CLLocationCoordinate2D?
+    var geolocationUncertainty: CLLocationAccuracy?
 
     var showsUserLocationMode: ShowUserLocationMode
     
