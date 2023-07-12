@@ -18,8 +18,16 @@ import Foundation
 import MatrixRustSDK
 
 struct TimelineItemIdentifier: Hashable {
+    /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
+    /// It's value is consistent only per timeline instance, it should not be used to identify an item across timeline instances.
     let timelineID: String
+
+    /// Uniquely identifies the timeline item from the server side.
+    /// Only available for EventTimelineItem and only when the item is returned by the server.
     var eventID: String?
+
+    /// Uniquely identfies the local echo of the timeline item.
+    /// Only available for sent EventTimelineItem that have not been returned by the server yet.
     var transactionID: String?
 }
 
