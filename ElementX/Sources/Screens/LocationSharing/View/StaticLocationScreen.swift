@@ -47,10 +47,12 @@ struct StaticLocationScreen: View {
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
                             mapCenterCoordinate: $context.mapCenterLocation,
-                            isLocationAuthorized: $context.isLocationAuthorized) {
+                            isLocationAuthorized: $context.isLocationAuthorized,
+                            geolocationUncertainty: $context.geolocationUncertainty) {
                 context.send(viewAction: .userDidPan)
             }
             .ignoresSafeArea(.all, edges: mapSafeAreaEdges)
+
             if context.viewState.isLocationPickerMode {
                 LocationMarkerView()
             }

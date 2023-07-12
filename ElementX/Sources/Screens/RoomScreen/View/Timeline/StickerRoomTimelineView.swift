@@ -58,7 +58,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                                                                           body: "Some image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -66,7 +66,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                                                                           body: "Some other image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -74,7 +74,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                                                                           body: "Blurhashed image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,

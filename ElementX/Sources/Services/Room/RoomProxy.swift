@@ -39,7 +39,9 @@ class RoomProxy: RoomProxyProtocol {
     private let backPaginationStateSubject = PassthroughSubject<BackPaginationStatus, Never>()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
-        membersSubject.eraseToAnyPublisher()
+        membersSubject
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
     
     private var timelineListener: RoomTimelineListener?

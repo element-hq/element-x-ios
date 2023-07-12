@@ -120,14 +120,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            guard let item = state.itemsDictionary[itemID], item.isReactable else { return }
+            guard let item = state.itemsDictionary[itemID.timelineID], item.isReactable else { return }
             callback?(.displayEmojiPicker(itemID: itemID))
-        case .reactionSummary(let itemId, let key):
-            showReactionSummary(for: itemId, selectedKey: key)
-        case .retrySend(let transactionID):
-            Task { await handleRetrySend(transactionID: transactionID) }
-        case .cancelSend(let transactionID):
-            Task { await handleCancelSend(transactionID: transactionID) }
+        case .reactionSummary(let itemID, let key):
+            showReactionSummary(for: itemID, selectedKey: key)
+        case .retrySend(let itemID):
+            Task { await handleRetrySend(itemID: itemID) }
+        case .cancelSend(let itemID):
+            Task { await handleCancelSend(itemID: itemID) }
         }
     }
     
@@ -221,9 +221,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         _ = await timelineController.markRoomAsRead()
     }
 
-    private func itemTapped(with itemId: String) async {
+    private func itemTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
-        let action = await timelineController.processItemTap(itemId)
+        let action = await timelineController.processItemTap(itemID)
 
         switch action {
         case .displayMediaFile(let file, let title):
@@ -252,19 +252,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
                     timelineItemsDictionary.updateValue(updateViewModel(item: firstItem, groupStyle: .single),
-                                                        forKey: firstItem.id)
+                                                        forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
                         timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .first),
-                                                            forKey: item.id)
+                                                            forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
                         timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .last),
-                                                            forKey: item.id)
+                                                            forKey: item.id.timelineID)
                     } else {
                         timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .middle),
-                                                            forKey: item.id)
+                                                            forKey: item.id.timelineID)
                     }
                 }
             }
@@ -274,7 +274,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewModel {
-        if let timelineItemViewModel = state.itemsDictionary[item.id] {
+        if let timelineItemViewModel = state.itemsDictionary[item.id.timelineID] {
             timelineItemViewModel.groupStyle = groupStyle
             timelineItemViewModel.type = .init(item: item)
             return timelineItemViewModel
@@ -360,7 +360,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: TimelineItemActionMenu
     
-    private func showTimelineItemActionMenu(for itemID: String) {
+    private func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a menu for non-event based items.
@@ -370,8 +370,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
     
-    private func timelineItemMenuActionsForItemId(_ itemId: String) -> TimelineItemMenuActions? {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
+    private func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
             return nil
@@ -395,7 +395,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         ]
 
         if item.isMessage {
-            actions.append(.forward(itemID: itemId))
+            actions.append(.forward(itemID: itemID))
         }
 
         if item.isEditable {
@@ -426,7 +426,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: String) {
+    private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -449,7 +449,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             setComposerMode(.edit(originalItemId: messageTimelineItem.id))
         case .copyPermalink:
             do {
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventTimelineItem.id, roomIdentifier: timelineController.roomID,
+                guard let eventID = eventTimelineItem.id.eventID else {
+                    displayError(.alert(L10n.errorFailedCreatingThePermalink))
+                    break
+                }
+
+                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventID, roomIdentifier: timelineController.roomID,
                                                                  baseURL: appSettings.permalinkBaseURL)
                 UIPasteboard.general.url = permalink
             } catch {
@@ -457,9 +462,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .redact:
             Task {
-                if eventTimelineItem.hasFailedToSend,
-                   let transactionID = eventTimelineItem.properties.transactionID {
-                    await timelineController.cancelSend(transactionID)
+                if eventTimelineItem.hasFailedToSend {
+                    await timelineController.cancelSend(itemID)
                 } else {
                     await timelineController.redact(itemID)
                 }
@@ -567,16 +571,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
 
-    private func handleRetrySend(transactionID: String?) async {
-        guard let transactionID else {
+    private func handleRetrySend(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Retry Send: missing transaction ID")
             return
         }
 
         await roomProxy.retrySend(transactionID: transactionID)
     }
 
-    private func handleCancelSend(transactionID: String?) async {
-        guard let transactionID else {
+    private func handleCancelSend(itemID: TimelineItemIdentifier) async {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Failed Cancel Send: missing transaction ID")
             return
         }
 
@@ -643,7 +649,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Reaction summary
     
-    private func showReactionSummary(for itemID: String, selectedKey: String) {
+    private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -664,7 +670,7 @@ extension RoomScreenViewModel.Context {
     /// A function to make it easier to bind to reactions expand/collapsed state
     /// - Parameter itemID: The id of the timeline item the reacted to
     /// - Returns: Wether the reactions should show in the collapsed state, true by default.
-    func reactionsCollapsedBinding(for itemID: String) -> Binding<Bool> {
+    func reactionsCollapsedBinding(for itemID: TimelineItemIdentifier) -> Binding<Bool> {
         Binding(get: {
             self.reactionsCollapsed[itemID] ?? true
         }, set: {

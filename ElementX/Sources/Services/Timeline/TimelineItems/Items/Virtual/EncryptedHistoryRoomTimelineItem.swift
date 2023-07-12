@@ -16,6 +16,6 @@
 
 import Foundation
 
-struct EncryptedHistoryRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+struct EncryptedHistoryRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
 }

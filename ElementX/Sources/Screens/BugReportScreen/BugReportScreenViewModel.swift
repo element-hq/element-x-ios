@@ -38,7 +38,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
         self.userID = userID
         self.deviceID = deviceID
         
-        let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: true)
+        let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: true, canContact: false)
         super.init(initialViewState: BugReportScreenViewState(screenshot: screenshot,
                                                               bindings: bindings,
                                                               isModallyPresented: isModallyPresented))
@@ -84,6 +84,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                                   text: context.reportText,
                                   includeLogs: context.sendingLogsEnabled,
                                   includeCrashLog: true,
+                                  canContact: context.canContact,
                                   githubLabels: [],
                                   files: files)
         

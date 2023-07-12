@@ -71,7 +71,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
-        TextRoomTimelineItem(id: UUID().uuidString,
+        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: timestamp,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,

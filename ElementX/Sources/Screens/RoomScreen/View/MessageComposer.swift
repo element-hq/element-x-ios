@@ -173,7 +173,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 
 struct MessageComposer_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
-    
+
     static var previews: some View {
         VStack {
             MessageComposer(text: .constant(""),
@@ -184,7 +184,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
-            
+
             MessageComposer(text: .constant("This is a short message."),
                             focused: .constant(false),
                             sendingDisabled: false,
@@ -193,7 +193,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
-            
+
             MessageComposer(text: .constant("This is a very long message that will wrap to 2 lines on an iPhone 14."),
                             focused: .constant(false),
                             sendingDisabled: false,
@@ -202,7 +202,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
-            
+
             MessageComposer(text: .constant("This is an even longer message that will wrap to 3 lines on an iPhone 14, just to see the difference it makes."),
                             focused: .constant(false),
                             sendingDisabled: false,
@@ -211,20 +211,20 @@ struct MessageComposer_Previews: PreviewProvider {
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
-            
+
             MessageComposer(text: .constant("Some message"),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            mode: .edit(originalItemId: UUID().uuidString),
+                            mode: .edit(originalItemId: .init(timelineID: UUID().uuidString)),
                             sendAction: { },
                             pasteAction: { _ in },
                             replyCancellationAction: { },
                             editCancellationAction: { })
-            
+
             MessageComposer(text: .constant(""),
                             focused: .constant(false),
                             sendingDisabled: false,
-                            mode: .reply(itemID: UUID().uuidString,
+                            mode: .reply(itemID: .init(timelineID: UUID().uuidString),
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
                                                                contentType: .text(.init(body: "Text: Where the wild things are")))),
                             sendAction: { },
@@ -233,7 +233,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
         }
         .padding(.horizontal)
-        
+
         ScrollView {
             VStack {
                 let replyTypes: [TimelineItemReplyDetails] = [
@@ -251,12 +251,12 @@ struct MessageComposer_Previews: PreviewProvider {
                                                                                  thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
                     .loading(eventID: "")
                 ]
-                
+
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     MessageComposer(text: .constant(""),
                                     focused: .constant(false),
                                     sendingDisabled: false,
-                                    mode: .reply(itemID: UUID().uuidString,
+                                    mode: .reply(itemID: .init(timelineID: UUID().uuidString),
                                                  replyDetails: replyDetails),
                                     sendAction: { },
                                     pasteAction: { _ in },

@@ -16,14 +16,14 @@
 
 import UIKit
 
-struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     enum EncryptionType: Hashable {
         case megolmV1AesSha2(sessionId: String)
         case olmV1Curve25519AesSha2(senderKey: String)
         case unknown
     }
     
-    let id: String
+    let id: TimelineItemIdentifier
     let body: String
     let encryptionType: EncryptionType
     let timestamp: String

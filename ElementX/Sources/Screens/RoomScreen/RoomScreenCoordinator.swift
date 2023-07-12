@@ -25,15 +25,15 @@ struct RoomScreenCoordinatorParameters {
 }
 
 enum RoomScreenCoordinatorAction {
-    case presentReportContent(itemID: String, senderID: String)
+    case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case presentMediaUploadPicker(MediaPickerScreenSource)
     case presentMediaUploadPreviewScreen(URL)
     case presentRoomDetails
     case presentLocationPicker
     case presentLocationViewer(body: String, geoURI: GeoURI, description: String?)
-    case presentEmojiPicker(itemID: String)
+    case presentEmojiPicker(itemID: TimelineItemIdentifier)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)
-    case presentMessageForwarding(itemID: String)
+    case presentMessageForwarding(itemID: TimelineItemIdentifier)
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {

@@ -125,7 +125,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
             }
             .onTapGesture {
-                context.send(viewAction: .itemTapped(id: timelineItem.id))
+                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
             // We need a tap gesture before this long one so that it doesn't
             // steal away the gestures from the scroll view
@@ -178,7 +178,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if timelineItem.hasFailedToSend {
             backgroundedLocalizedSendInfo
                 .onTapGesture {
-                    context.sendFailedConfirmationDialogInfo = .init(transactionID: timelineItem.properties.transactionID)
+                    context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                 }
         } else {
             backgroundedLocalizedSendInfo
@@ -335,7 +335,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
 
     static var replies: some View {
         VStack {
-            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: "",
+            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -344,7 +344,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                                    contentType: .text(.init(body: "Short")))), groupStyle: .single))
 
-            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: "",
+            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
