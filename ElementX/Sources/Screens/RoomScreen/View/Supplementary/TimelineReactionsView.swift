@@ -50,7 +50,7 @@ struct TimelineReactionsView: View {
             Button {
                 context.send(viewAction: .displayEmojiPicker(itemID: itemID))
             } label: {
-                TimelineReactionAddMoreButton()
+                TimelineReactionAddMoreButtonLabel()
             }
             .animation(.easeOut, value: collapsed)
             .reactionLayoutItem(.addMore)
@@ -135,7 +135,7 @@ struct TimelineReactionButton: View {
     }
 }
 
-struct TimelineReactionAddMoreButton: View {
+struct TimelineReactionAddMoreButtonLabel: View {
     @ScaledMetric private var addMoreButtonIconSize = 16
     
     var body: some View {
