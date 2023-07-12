@@ -65,15 +65,11 @@ struct TimelineReactionButtonLabel<Content: View>: View {
     @ViewBuilder var content: () -> Content
     
     var body: some View {
-        HStack(spacing: 4) {
-            content()
-        }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 8)
-        .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
-        .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
-        .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
-        .accessibilityElement(children: .combine)
+        content()
+            .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
+            .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
+            .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
+            .accessibilityElement(children: .combine)
     }
     
     var backgroundShape: some InsettableShape {
@@ -95,6 +91,8 @@ struct TimelineCollapseButtonLabel: View {
     var body: some View {
         TimelineReactionButtonLabel {
             Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 8)
                 .layoutPriority(1)
                 .drawingGroup()
                 .font(.compound.bodyMD)
@@ -120,13 +118,17 @@ struct TimelineReactionButton: View {
     
     var label: some View {
         TimelineReactionButtonLabel(isHighlighted: reaction.isHighlighted) {
-            Text(reaction.key)
-                .font(.compound.bodyMD)
-            if reaction.count > 1 {
-                Text(String(reaction.count))
+            HStack(spacing: 4) {
+                Text(reaction.key)
                     .font(.compound.bodyMD)
-                    .foregroundColor(textColor)
+                if reaction.count > 1 {
+                    Text(String(reaction.count))
+                        .font(.compound.bodyMD)
+                        .foregroundColor(textColor)
+                }
             }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 8)
         }
     }
     

@@ -228,7 +228,7 @@ struct CollapsibleReactionLayout: Layout {
         }
     }
     
-    /// Group  the subviews by type using  `ReactionLayoutItemType`
+    /// Group the subviews by type using `ReactionLayoutItemType`
     /// - Parameter subviews: A flat list of all the subviews
     /// - Returns: The subviews organised by type
     private func getSubviewsByItemType(subviews: [FlowLayoutSubview]) -> ReactionSubviews? {

@@ -118,7 +118,7 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
         flowLayout.placeSubviews(in: CGRect(origin: .zero, size: size), proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
         
         let targetPlacements: [CGRect] = [
-            // both buttons are nor displayed
+            // both buttons are not displayed
             CGRect(x: -10000, y: -10000, width: 0, height: 0),
             CGRect(x: -10000, y: -10000, width: 0, height: 0)
         ]

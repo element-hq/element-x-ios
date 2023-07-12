@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "reaction-add-more.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "reaction-add-more@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "reaction-add-more@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "timeline-reaction-add-more.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
