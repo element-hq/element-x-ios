@@ -24,25 +24,36 @@ struct TimelineReactionsView: View {
     private static let verticalSpacing: CGFloat = 4
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
+    @Namespace private var animation
 
     let itemID: String
     let reactions: [AggregatedReaction]
     @Binding var collapsed: Bool
         
     var body: some View {
-        CollapsibleFlowLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
+        CollapsibleReactionLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
-                TimelineReactionButton(itemID: itemID, reaction: reaction) { key in
+                TimelineReactionButton(reaction: reaction) { key in
                     context.send(viewAction: .toggleReaction(key: key, eventID: itemID))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
                 }
+                .reactionLayoutItem(.reaction)
             }
             Button {
                 collapsed.toggle()
             } label: {
                 TimelineCollapseButtonLabel(collapsed: collapsed)
             }
+            .reactionLayoutItem(.expandCollapse)
+            .animation(.easeOut, value: collapsed)
+            Button {
+                context.send(viewAction: .displayEmojiPicker(itemID: itemID))
+            } label: {
+                TimelineReactionAddMoreButton()
+            }
+            .animation(.easeOut, value: collapsed)
+            .reactionLayoutItem(.addMore)
         }
         .coordinateSpace(name: Self.flowCoordinateSpace)
     }
@@ -93,7 +104,6 @@ struct TimelineCollapseButtonLabel: View {
 }
 
 struct TimelineReactionButton: View {
-    let itemID: String
     let reaction: AggregatedReaction
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
@@ -101,10 +111,10 @@ struct TimelineReactionButton: View {
     var body: some View {
         label
             .onTapGesture {
-                context.send(viewAction: .toggleReaction(key: reaction.key, eventID: itemID))
+                toggleReaction(reaction.key)
             }
             .longPressWithFeedback {
-                context.send(viewAction: .reactionSummary(itemID: itemID, key: reaction.key))
+                showReactionSummary(reaction.key)
             }
     }
     
@@ -115,14 +125,8 @@ struct TimelineReactionButton: View {
             if reaction.count > 1 {
                 Text(String(reaction.count))
                     .font(.compound.bodyMD)
-                if reaction.count > 1 {
-                    Text(String(reaction.count))
-                        .font(.compound.bodyMD)
-                        .foregroundColor(textColor)
-                }
+                    .foregroundColor(textColor)
             }
-            .padding(.vertical, 6)
-            .padding(.horizontal, 8)
         }
     }
     
