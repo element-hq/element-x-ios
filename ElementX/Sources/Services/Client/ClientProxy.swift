@@ -372,7 +372,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    // swiftlint:disable:next function_body_length
     private func configureAppService() async {
         guard appService == nil else {
             fatalError("This shouldn't be called more than once")
@@ -386,62 +385,68 @@ class ClientProxy: ClientProxyProtocol {
                 .finish()
             let roomListService = appService.roomListService()
 
+            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                      eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                      eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms")
-
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
-
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                        eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                                                        eventStringBuilder: eventStringBuilder,
                                                         name: "Invites")
 
             self.appService = appService
             self.roomListService = roomListService
 
-            appServiceUpdateTaskHandle = appService.state(listener: AppStateObserverProxy { [weak self] state in
-                guard let self else { return }
-                MXLog.info("Received app service update: \(state)")
-                switch state {
-                case .error:
-                    restartSync()
-                case .terminated, .running:
-                    break
-                }
-            })
-
-            roomListStateUpdateTaskHandle = roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
-                MXLog.info("Received room list update: \(state)")
-                guard let self,
-                      state != .error,
-                      state != .terminated else {
-                    // The app service is responsible of handling error and termination
-                    return
-                }
-
-                // The invites are available only when entering `running`
-                if state == .running {
-                    Task {
-                        do {
-                            guard let roomListService = self.roomListService else {
-                                MXLog.error("Room list service is not configured")
-                                return
-                            }
-                            // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                            try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
-                        } catch {
-                            MXLog.error("Failed configuring invites room list with error: \(error)")
-                        }
-                    }
-                    callbacks.send(.receivedSyncUpdate)
-                } else {
-                    callbacks.send(.startedUpdating)
-                }
-            })
+            appServiceUpdateTaskHandle = createAppServiceObserver(appService)
+            roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
 
         } catch {
             MXLog.error("Failed building room list service with error: \(error)")
         }
+    }
+
+    private func createAppServiceObserver(_ appService: App) -> TaskHandle {
+        appService.state(listener: AppStateObserverProxy { [weak self] state in
+            guard let self else { return }
+            MXLog.info("Received app service update: \(state)")
+            switch state {
+            case .error:
+                restartSync()
+            case .terminated, .running:
+                break
+            }
+        })
+    }
+
+    private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
+        roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
+            MXLog.info("Received room list update: \(state)")
+            guard let self,
+                  state != .error,
+                  state != .terminated else {
+                // The app service is responsible of handling error and termination
+                return
+            }
+
+            // The invites are available only when entering `running`
+            if state == .running {
+                Task {
+                    do {
+                        guard let roomListService = self.roomListService else {
+                            MXLog.error("Room list service is not configured")
+                            return
+                        }
+                        // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
+                        try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
+                    } catch {
+                        MXLog.error("Failed configuring invites room list with error: \(error)")
+                    }
+                }
+                callbacks.send(.receivedSyncUpdate)
+            } else {
+                callbacks.send(.startedUpdating)
+            }
+        })
     }
     
     private func roomTupleForIdentifier(_ identifier: String) -> (RoomListItem?, Room?) {
