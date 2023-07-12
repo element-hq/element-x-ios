@@ -191,7 +191,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.notificationSettingsState = .error
             state.bindings.alertInfo = AlertInfo(id: .alert,
                                                  title: L10n.commonError,
-                                                 message: UntranslatedL10n.screenRoomDetailsErrorLoadingNotificationSettings)
+                                                 message: L10n.screenRoomDetailsErrorLoadingNotificationSettings)
         }
     }
     
@@ -205,7 +205,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,
-                                                     message: UntranslatedL10n.screenRoomDetailsErrorUnmuting)
+                                                     message: L10n.screenRoomDetailsErrorUnmuting)
             }
         default:
             do {
@@ -213,7 +213,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,
-                                                     message: UntranslatedL10n.screenRoomDetailsErrorMuting)
+                                                     message: L10n.screenRoomDetailsErrorMuting)
             }
         }
         state.isProcessingMuteToggleAction = false

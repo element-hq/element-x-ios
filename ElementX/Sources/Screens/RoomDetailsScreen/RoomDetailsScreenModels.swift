@@ -196,9 +196,9 @@ extension RoomDetailsNotificationSettingsState {
             return L10n.commonLoading
         case .loaded(let settings):
             if settings.isDefault {
-                return UntranslatedL10n.screenRoomDetailsNotificationModeDefault
+                return L10n.screenRoomDetailsNotificationModeDefault
             } else {
-                return UntranslatedL10n.screenRoomDetailsNotificationModeCustom
+                return L10n.screenRoomDetailsNotificationModeCustom
             }
         case .error:
             return L10n.commonError
