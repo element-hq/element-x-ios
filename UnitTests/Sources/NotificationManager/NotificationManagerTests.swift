@@ -223,10 +223,12 @@ final class NotificationManagerTests: XCTestCase {
     func test_InvitesNotificationsRemoval() async throws {
         let notificationPublisher = NotificationCenter.default.publisher(for: .invitesScreenAppeared).first()
         let expectation = expectation(description: #function)
-        let subscription = notificationPublisher
+        var cancellables: Set<AnyCancellable> = .init()
+        notificationPublisher
             .sink { _ in
                 expectation.fulfill()
             }
+            .store(in: &cancellables)
 
         NotificationCenter.default.post(name: .invitesScreenAppeared, object: nil)
         await fulfillment(of: [expectation])
