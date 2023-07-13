@@ -147,7 +147,8 @@ lane :ui_tests do |options|
     path: "./fastlane/test_output/UITests.xcresult",
     output_path: "./fastlane/test_output/UITests.xcresult.zip"
   )
-  sh("rm -rf ./fastlane/test_output/UITests.xcresult")
+  # Shell working directory is already inside the fastlane dir.
+  sh("rm -rf ./test_output/UITests.xcresult")
 end
 
 
