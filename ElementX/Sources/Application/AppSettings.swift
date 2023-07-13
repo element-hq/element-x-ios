@@ -161,7 +161,7 @@ final class AppSettings {
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
     let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
-                                                        host: "https://posthog.hss.element.io",
+                                                        host: "https://posthog.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL("https://element.io/cookie-policy"))
     #endif
