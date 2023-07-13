@@ -110,6 +110,7 @@ lane :unit_tests do
 end
 
 lane :ui_tests do |options|
+  # Use a fresh simulator state to ensure hardware keyboard isn't attached.
   reset_simulator_contents()
   
   create_simulator_if_necessary(
@@ -140,6 +141,13 @@ lane :ui_tests do |options|
     scheme: "UITests",
     binary_basename: "ElementX.app"
   )
+  
+  # Zip the result bundle for faster upload.
+  zip(
+    path: "./fastlane/test_output/UITests.xcresult",
+    output_path: "./fastlane/test_output/UITests.xcresult.zip"
+  )
+  sh("rm -rf ./fastlane/test_output/UITests.xcresult")
 end
 
 
