@@ -1,23 +1,11 @@
 import ArgumentParser
 import Foundation
-import Yams
 
 struct SetupProject: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool to setup the required components to efficiently run and contribute to Element X iOS")
 
     @Flag(help: "Use this only on ci to avoid installing failing packages")
     var ci = false
-
-    enum Error: LocalizedError {
-        case errorReadingProjectYAML
-
-        var errorDescription: String? {
-            switch self {
-            case .errorReadingProjectYAML:
-                return "Error reading/parsing the file 'project.yml'"
-            }
-        }
-    }
 
     func run() throws {
         try setupGitHooks()
