@@ -56,6 +56,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
         
         try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode)
+        await waitForSettingsDidChange()
     }
     
     func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
@@ -67,6 +68,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
+        await waitForSettingsDidChange()
     }
     
     func containsKeywordsRules() async -> Bool {
@@ -78,6 +80,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, membersCount: activeMembersCount)
+        await waitForSettingsDidChange()
     }
     
     func isRoomMentionEnabled() async throws -> Bool {
@@ -89,6 +92,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
+        await waitForSettingsDidChange()
     }
     
     func isUserMentionEnabled() async throws -> Bool {
@@ -100,6 +104,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setUserMentionEnabled(enabled: enabled)
+        await waitForSettingsDidChange()
     }
     
     func isCallEnabled() async throws -> Bool {
@@ -111,9 +116,21 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setCallEnabled(enabled: enabled)
+        await waitForSettingsDidChange()
     }
     
     // MARK: - Private
+    
+    func waitForSettingsDidChange(timeout duration: Duration = .seconds(2.0)) async {
+        await withCheckedContinuation { continuation in
+            self.callbacks
+                .timeout(.seconds(duration.seconds), scheduler: DispatchQueue.main)
+                .first(where: { $0 == .settingsDidChange })
+                .subscribe(Subscribers.Sink(receiveCompletion: { _ in
+                    continuation.resume()
+                }, receiveValue: { _ in }))
+        }
+    }
     
     @MainActor
     func settingsDidChange() {

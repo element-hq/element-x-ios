@@ -478,6 +478,13 @@ class MockScreen: Identifiable {
                                                                                  roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomNotificationSettings:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
+            let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(notificationSettingsProxy: NotificationSettingsProxyMock(with: .init()),
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .reportContent:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ReportContentScreenCoordinator(parameters: .init(eventID: "test",
