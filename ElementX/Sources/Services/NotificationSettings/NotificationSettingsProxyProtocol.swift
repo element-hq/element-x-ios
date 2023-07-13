@@ -26,12 +26,12 @@ enum NotificationSettingsProxyCallback {
 protocol NotificationSettingsProxyProtocol {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> { get }
     
-    func getNotificationSettings(room: RoomProxyProtocol) async throws -> RoomNotificationSettingsProxyProtocol
-    func setNotificationMode(room: RoomProxyProtocol, mode: RoomNotificationMode) async throws
+    func getNotificationSettings(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws -> RoomNotificationSettingsProxyProtocol
+    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws
     func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode
-    func restoreDefaultNotificationMode(room: RoomProxyProtocol) async throws
+    func restoreDefaultNotificationMode(roomId: String) async throws
     func containsKeywordsRules() async -> Bool
-    func unmuteRoom(room: RoomProxyProtocol) async throws
+    func unmuteRoom(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws
     func isRoomMentionEnabled() async throws -> Bool
     func setRoomMentionEnabled(enabled: Bool) async throws
     func isUserMentionEnabled() async throws -> Bool

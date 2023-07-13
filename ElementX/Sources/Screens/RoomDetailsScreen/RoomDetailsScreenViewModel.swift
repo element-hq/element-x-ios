@@ -185,7 +185,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func fetchRoomNotificationSettings() async {
         do {
-            let notificationMode = try await notificationSettingsProxy.getNotificationSettings(room: roomProxy)
+            let notificationMode = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
+                                                                                               isEncrypted: roomProxy.isEncrypted,
+                                                                                               activeMembersCount: UInt64(roomProxy.activeMembersCount))
             state.notificationSettingsState = .loaded(settings: notificationMode)
         } catch {
             state.notificationSettingsState = .error
@@ -201,7 +203,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         switch notificationMode.mode {
         case .mute:
             do {
-                try await notificationSettingsProxy.unmuteRoom(room: roomProxy)
+                try await notificationSettingsProxy.unmuteRoom(roomId: roomProxy.id,
+                                                               isEncrypted: roomProxy.isEncrypted,
+                                                               activeMembersCount: UInt64(roomProxy.activeMembersCount))
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,
@@ -209,7 +213,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         default:
             do {
-                try await notificationSettingsProxy.setNotificationMode(room: roomProxy, mode: .mute)
+                try await notificationSettingsProxy.setNotificationMode(roomId: roomProxy.id, mode: .mute)
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,

@@ -29,7 +29,7 @@ extension NotificationSettingsProxyMock {
         self.init()
         
         callbacks = configuration.callback
-        getNotificationSettingsRoomReturnValue = configuration.roomMode
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = configuration.roomMode
         getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue = configuration.defaultRoomMode
     }
 }

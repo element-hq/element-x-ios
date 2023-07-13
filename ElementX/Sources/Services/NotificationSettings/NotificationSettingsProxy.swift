@@ -46,38 +46,38 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
     }
     
-    func getNotificationSettings(room: RoomProxyProtocol) async throws -> RoomNotificationSettingsProxyProtocol {
-        let roomMotificationSettings = try await notificationSettings.getRoomNotificationSettings(roomId: room.id, isEncrypted: room.isEncrypted, activeMembersCount: UInt64(room.activeMembersCount))
+    func getNotificationSettings(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws -> RoomNotificationSettingsProxyProtocol {
+        let roomMotificationSettings = try await notificationSettings.getRoomNotificationSettings(roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
         return RoomNotificationSettingsProxy(roomNotificationSettings: roomMotificationSettings)
     }
     
-    func setNotificationMode(room: RoomProxyProtocol, mode: RoomNotificationMode) async throws {
+    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
         defer { backgroundTask?.stop() }
         
-        try await notificationSettings.setRoomNotificationMode(roomId: room.id, mode: mode)
+        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode)
     }
     
     func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
         await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
     }
     
-    func restoreDefaultNotificationMode(room: RoomProxyProtocol) async throws {
+    func restoreDefaultNotificationMode(roomId: String) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "restoreDefaultNotificationMode")
         defer { backgroundTask?.stop() }
 
-        try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: room.id)
+        try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
     }
     
     func containsKeywordsRules() async -> Bool {
         await notificationSettings.containsKeywordsRules()
     }
        
-    func unmuteRoom(room: RoomProxyProtocol) async throws {
+    func unmuteRoom(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "unmuteRoom")
         defer { backgroundTask?.stop() }
 
-        try await notificationSettings.unmuteRoom(roomId: room.id, isEncrypted: room.isEncrypted, membersCount: UInt64(room.activeMembersCount))
+        try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, membersCount: activeMembersCount)
     }
     
     func isRoomMentionEnabled() async throws -> Bool {

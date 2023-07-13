@@ -322,48 +322,48 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
 
     //MARK: - getNotificationSettings
 
-    var getNotificationSettingsRoomThrowableError: Error?
-    var getNotificationSettingsRoomCallsCount = 0
-    var getNotificationSettingsRoomCalled: Bool {
-        return getNotificationSettingsRoomCallsCount > 0
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError: Error?
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount = 0
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCalled: Bool {
+        return getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount > 0
     }
-    var getNotificationSettingsRoomReceivedRoom: RoomProxyProtocol?
-    var getNotificationSettingsRoomReceivedInvocations: [RoomProxyProtocol] = []
-    var getNotificationSettingsRoomReturnValue: RoomNotificationSettingsProxyProtocol!
-    var getNotificationSettingsRoomClosure: ((RoomProxyProtocol) async throws -> RoomNotificationSettingsProxyProtocol)?
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedArguments: (roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)?
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedInvocations: [(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)] = []
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue: RoomNotificationSettingsProxyProtocol!
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure: ((String, Bool, UInt64) async throws -> RoomNotificationSettingsProxyProtocol)?
 
-    func getNotificationSettings(room: RoomProxyProtocol) async throws -> RoomNotificationSettingsProxyProtocol {
-        if let error = getNotificationSettingsRoomThrowableError {
+    func getNotificationSettings(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws -> RoomNotificationSettingsProxyProtocol {
+        if let error = getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError {
             throw error
         }
-        getNotificationSettingsRoomCallsCount += 1
-        getNotificationSettingsRoomReceivedRoom = room
-        getNotificationSettingsRoomReceivedInvocations.append(room)
-        if let getNotificationSettingsRoomClosure = getNotificationSettingsRoomClosure {
-            return try await getNotificationSettingsRoomClosure(room)
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount += 1
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
+        if let getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure = getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure {
+            return try await getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure(roomId, isEncrypted, activeMembersCount)
         } else {
-            return getNotificationSettingsRoomReturnValue
+            return getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue
         }
     }
     //MARK: - setNotificationMode
 
-    var setNotificationModeRoomModeThrowableError: Error?
-    var setNotificationModeRoomModeCallsCount = 0
-    var setNotificationModeRoomModeCalled: Bool {
-        return setNotificationModeRoomModeCallsCount > 0
+    var setNotificationModeRoomIdModeThrowableError: Error?
+    var setNotificationModeRoomIdModeCallsCount = 0
+    var setNotificationModeRoomIdModeCalled: Bool {
+        return setNotificationModeRoomIdModeCallsCount > 0
     }
-    var setNotificationModeRoomModeReceivedArguments: (room: RoomProxyProtocol, mode: RoomNotificationMode)?
-    var setNotificationModeRoomModeReceivedInvocations: [(room: RoomProxyProtocol, mode: RoomNotificationMode)] = []
-    var setNotificationModeRoomModeClosure: ((RoomProxyProtocol, RoomNotificationMode) async throws -> Void)?
+    var setNotificationModeRoomIdModeReceivedArguments: (roomId: String, mode: RoomNotificationMode)?
+    var setNotificationModeRoomIdModeReceivedInvocations: [(roomId: String, mode: RoomNotificationMode)] = []
+    var setNotificationModeRoomIdModeClosure: ((String, RoomNotificationMode) async throws -> Void)?
 
-    func setNotificationMode(room: RoomProxyProtocol, mode: RoomNotificationMode) async throws {
-        if let error = setNotificationModeRoomModeThrowableError {
+    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws {
+        if let error = setNotificationModeRoomIdModeThrowableError {
             throw error
         }
-        setNotificationModeRoomModeCallsCount += 1
-        setNotificationModeRoomModeReceivedArguments = (room: room, mode: mode)
-        setNotificationModeRoomModeReceivedInvocations.append((room: room, mode: mode))
-        try await setNotificationModeRoomModeClosure?(room, mode)
+        setNotificationModeRoomIdModeCallsCount += 1
+        setNotificationModeRoomIdModeReceivedArguments = (roomId: roomId, mode: mode)
+        setNotificationModeRoomIdModeReceivedInvocations.append((roomId: roomId, mode: mode))
+        try await setNotificationModeRoomIdModeClosure?(roomId, mode)
     }
     //MARK: - getDefaultNotificationRoomMode
 
@@ -388,23 +388,23 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
     }
     //MARK: - restoreDefaultNotificationMode
 
-    var restoreDefaultNotificationModeRoomThrowableError: Error?
-    var restoreDefaultNotificationModeRoomCallsCount = 0
-    var restoreDefaultNotificationModeRoomCalled: Bool {
-        return restoreDefaultNotificationModeRoomCallsCount > 0
+    var restoreDefaultNotificationModeRoomIdThrowableError: Error?
+    var restoreDefaultNotificationModeRoomIdCallsCount = 0
+    var restoreDefaultNotificationModeRoomIdCalled: Bool {
+        return restoreDefaultNotificationModeRoomIdCallsCount > 0
     }
-    var restoreDefaultNotificationModeRoomReceivedRoom: RoomProxyProtocol?
-    var restoreDefaultNotificationModeRoomReceivedInvocations: [RoomProxyProtocol] = []
-    var restoreDefaultNotificationModeRoomClosure: ((RoomProxyProtocol) async throws -> Void)?
+    var restoreDefaultNotificationModeRoomIdReceivedRoomId: String?
+    var restoreDefaultNotificationModeRoomIdReceivedInvocations: [String] = []
+    var restoreDefaultNotificationModeRoomIdClosure: ((String) async throws -> Void)?
 
-    func restoreDefaultNotificationMode(room: RoomProxyProtocol) async throws {
-        if let error = restoreDefaultNotificationModeRoomThrowableError {
+    func restoreDefaultNotificationMode(roomId: String) async throws {
+        if let error = restoreDefaultNotificationModeRoomIdThrowableError {
             throw error
         }
-        restoreDefaultNotificationModeRoomCallsCount += 1
-        restoreDefaultNotificationModeRoomReceivedRoom = room
-        restoreDefaultNotificationModeRoomReceivedInvocations.append(room)
-        try await restoreDefaultNotificationModeRoomClosure?(room)
+        restoreDefaultNotificationModeRoomIdCallsCount += 1
+        restoreDefaultNotificationModeRoomIdReceivedRoomId = roomId
+        restoreDefaultNotificationModeRoomIdReceivedInvocations.append(roomId)
+        try await restoreDefaultNotificationModeRoomIdClosure?(roomId)
     }
     //MARK: - containsKeywordsRules
 
@@ -425,23 +425,23 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
     }
     //MARK: - unmuteRoom
 
-    var unmuteRoomRoomThrowableError: Error?
-    var unmuteRoomRoomCallsCount = 0
-    var unmuteRoomRoomCalled: Bool {
-        return unmuteRoomRoomCallsCount > 0
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountThrowableError: Error?
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount = 0
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountCalled: Bool {
+        return unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount > 0
     }
-    var unmuteRoomRoomReceivedRoom: RoomProxyProtocol?
-    var unmuteRoomRoomReceivedInvocations: [RoomProxyProtocol] = []
-    var unmuteRoomRoomClosure: ((RoomProxyProtocol) async throws -> Void)?
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedArguments: (roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)?
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedInvocations: [(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)] = []
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure: ((String, Bool, UInt64) async throws -> Void)?
 
-    func unmuteRoom(room: RoomProxyProtocol) async throws {
-        if let error = unmuteRoomRoomThrowableError {
+    func unmuteRoom(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws {
+        if let error = unmuteRoomRoomIdIsEncryptedActiveMembersCountThrowableError {
             throw error
         }
-        unmuteRoomRoomCallsCount += 1
-        unmuteRoomRoomReceivedRoom = room
-        unmuteRoomRoomReceivedInvocations.append(room)
-        try await unmuteRoomRoomClosure?(room)
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount += 1
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
+        try await unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure?(roomId, isEncrypted, activeMembersCount)
     }
     //MARK: - isRoomMentionEnabled
 
