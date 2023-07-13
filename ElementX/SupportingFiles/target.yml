@@ -45,6 +45,10 @@ targets:
     type: application
     platform: iOS
 
+    configFiles:
+      Debug: ../../secrets.xcconfig
+      Release: ../../secrets.xcconfig
+
     info:
       path: ../SupportingFiles/Info.plist
       properties:

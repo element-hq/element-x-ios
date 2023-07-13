@@ -4,6 +4,7 @@ attributes:
 
 fileGroups:
     - project.yml
+    - secrets.xcconfig
 
 options:
   groupSortPosition: bottom
