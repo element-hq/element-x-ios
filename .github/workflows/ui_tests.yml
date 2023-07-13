@@ -8,12 +8,12 @@ on:
         required: false
 
   schedule:
-    - cron:  '0 0 * * 1-5'
+    - cron:  '0 0,12 * * 1-5'
 
 jobs:
   tests:
     name: Tests
-    runs-on: macos-13
+    runs-on: perf-only
 
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
