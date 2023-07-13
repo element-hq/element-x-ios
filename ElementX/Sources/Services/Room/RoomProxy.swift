@@ -55,6 +55,10 @@ class RoomProxy: RoomProxyProtocol {
         innerTimelineProvider
     }
 
+    var currentUserID: String {
+        room.currentUserId()
+    }
+
     deinit {
         roomTimelineObservationToken?.cancel()
         backPaginationStateObservationToken?.cancel()
@@ -644,6 +648,15 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedUploadingAvatar)
             }
+        }
+    }
+
+    func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserRedact(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can redact with error: \(error)")
+            return .failure(.failedCheckingPermission)
         }
     }
 

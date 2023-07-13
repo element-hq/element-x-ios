@@ -41,6 +41,7 @@ enum RoomProxyError: Error, Equatable {
     case failedSettingRoomTopic
     case failedRemovingAvatar
     case failedUploadingAvatar
+    case failedCheckingPermission
 }
 
 // sourcery: AutoMockable
@@ -54,6 +55,7 @@ protocol RoomProxyProtocol {
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var hasUnreadNotifications: Bool { get }
+    var currentUserID: String { get }
     
     var name: String? { get }
     var displayName: String? { get }
@@ -159,6 +161,8 @@ protocol RoomProxyProtocol {
     func removeAvatar() async -> Result<Void, RoomProxyError>
     
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError>
+
+    func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
 }
 
 extension RoomProxyProtocol {
