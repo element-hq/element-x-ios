@@ -540,7 +540,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
-        let params = RoomMemberDetailsScreenCoordinatorParameters(roomMemberProxy: member, mediaProvider: userSession.mediaProvider)
+        guard let roomProxy else {
+            fatalError()
+        }
+        let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy, roomMemberProxy: member, mediaProvider: userSession.mediaProvider)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
 
         navigationStackCoordinator.push(coordinator) { [weak self] in

@@ -21,12 +21,19 @@ import XCTest
 @MainActor
 class RoomMemberDetailsViewModelTests: XCTestCase {
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
+    var roomProxyMock: RoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!
     var context: RoomMemberDetailsScreenViewModelType.Context { viewModel.context }
 
+    override func setUp() async throws {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+    }
+
     func testInitialState() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -39,7 +46,9 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
@@ -53,6 +62,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(states, [false, true, false])
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
+        try await Task.sleep(for: .microseconds(100))
+        XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
 
     func testIgnoreFailure() async throws {
@@ -61,7 +72,9 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(100))
             return .failure(.ignoreUserFailed)
         }
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
@@ -74,6 +87,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(states, [false, true, false])
         XCTAssertNotNil(context.alertInfo)
         XCTAssertFalse(context.viewState.details.isIgnored)
+        try await Task.sleep( for: .microseconds(100))
+        XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
 
     func testUnignoreSuccess() async throws {
@@ -82,7 +97,9 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+            roomMemberProxy: roomMemberProxyMock,
+            mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -95,15 +112,20 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         let states = try await deferred.fulfill()
         XCTAssertEqual(states, [false, true, false])
         XCTAssertFalse(context.viewState.details.isIgnored)
+        try await Task.sleep(for: .microseconds(100))
+        XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
 
     func testUnignoreFailure() async throws {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         roomMemberProxyMock.unignoreUserClosure = {
             try? await Task.sleep(for: .milliseconds(100))
             return .failure(.unignoreUserFailed)
         }
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -117,11 +139,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(states, [false, true, false])
         XCTAssertTrue(context.viewState.details.isIgnored)
         XCTAssertNotNil(context.alertInfo)
+        try await Task.sleep(for: .microseconds(100))
+        XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
 
     func testInitialStateAccountOwner() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -130,7 +156,9 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
     func testInitialStateIgnoredUser() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
-        viewModel = RoomMemberDetailsScreenViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)

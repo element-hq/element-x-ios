@@ -98,19 +98,20 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetailsScreen_Previews: PreviewProvider {
+    static let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
-        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
-        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
-        return RoomMemberDetailsScreenViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {
