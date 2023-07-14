@@ -60,8 +60,15 @@ struct LayoutSubviewsMock: Equatable, RandomAccessCollection {
 /// A mock of the SwiftUI `LayoutSubview` struct
 struct LayoutSubviewMock: FlowLayoutSubview, Equatable {
     var size: CGSize
-    
+    var layoutValues = [String: Any]()
     var placedPositionCallback: (CGRect) -> Void
+    
+    subscript<K>(key: K.Type) -> K.Value where K: LayoutValueKey {
+        guard let value = layoutValues[String(describing: key.self)] as? K.Value else {
+            fatalError("There is no value for the provided layout key.")
+        }
+        return value
+    }
     
     func sizeThatFits(_ proposal: ProposedViewSize) -> CGSize {
         size
