@@ -313,13 +313,28 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in
-            AggregatedReaction(accountOwnerID: userID, key: reaction.key, senders: reaction.senders.map(\.senderId))
+            let senders = reaction.senders
+                .map { senderData in
+                    ReactionSender(senderID: senderData.senderId, timestamp: Date(timeIntervalSince1970: TimeInterval(senderData.timestamp / 1000)))
+                }
+                .sorted { a, b in
+                    // Sort reactions within an aggregation by timestamp descending.
+                    // This puts the most recent at the top, useful in cases like the
+                    // reaction summary view.
+                    a.timestamp > b.timestamp
+                }
+            return AggregatedReaction(accountOwnerID: userID, key: reaction.key, senders: senders)
         }
         .sorted { a, b in
-            // Sort by count and then by key for a consistence experience.
-            // Otherwise emojis can switch around. We can replace
-            // with timestamp as a secondary sort when it is available.
-            (a.count, a.key) > (b.count, b.key)
+            // Sort aggregated reactions by count and then timestamp ascending, using
+            // the most recent reaction in the aggregation(hence index 0).
+            // This appends new aggregations on the end of the reaction layout
+            // and the deterministic sort avoids reactions jumping around if the reactions timeline
+            // view reloads.
+            if a.count == b.count {
+                return a.senders[0].timestamp < b.senders[0].timestamp
+            }
+            return a.count > b.count
         }
     }
 

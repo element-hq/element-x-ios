@@ -67,7 +67,7 @@ struct ReactionsSummaryView: View {
                 ScrollView {
                     VStack(alignment: .leading) {
                         ForEach(reaction.senders, id: \.self) { sender in
-                            ReactionSummarySenderView(sender: sender, member: members[sender], imageProvider: imageProvider)
+                            ReactionSummarySenderView(sender: sender, member: members[sender.senderID], imageProvider: imageProvider)
                                 .padding(.horizontal, 16)
                         }
                     }
@@ -107,28 +107,34 @@ private struct ReactionSummaryButton: View {
 }
 
 private struct ReactionSummarySenderView: View {
-    var sender: String
+    var sender: ReactionSender
     var member: RoomMemberState?
     let imageProvider: ImageProviderProtocol?
     
     var displayName: String {
-        member?.displayName ?? sender
+        member?.displayName ?? sender.senderID
     }
     
     var body: some View {
         HStack {
             LoadableAvatarImage(url: member?.avatarURL,
                                 name: displayName,
-                                contentID: sender,
+                                contentID: sender.senderID,
                                 avatarSize: .user(on: .timeline),
                                 imageProvider: imageProvider)
+            
             VStack(alignment: .leading) {
                 Text(displayName)
                     .font(.compound.bodyMDSemibold)
-                Text(sender)
+                Text(sender.senderID)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(sender.timestamp.formattedMinimal())
+                .font(.compound.bodyXS)
+                .foregroundColor(.compound.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 8)
