@@ -217,7 +217,7 @@ class NotificationCenterMock: NotificationCenterProtocol {
     }
 }
 class NotificationManagerMock: NotificationManagerProtocol {
-    var delegate: NotificationManagerDelegate?
+    weak var delegate: NotificationManagerDelegate?
 
     //MARK: - start
 
@@ -1604,7 +1604,7 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
     }
 }
 class UserNotificationCenterMock: UserNotificationCenterProtocol {
-    var delegate: UNUserNotificationCenterDelegate?
+    weak var delegate: UNUserNotificationCenterDelegate?
 
     //MARK: - add
 
