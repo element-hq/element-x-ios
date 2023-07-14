@@ -58,7 +58,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         } else {
             if let delay {
                 delayedIndicators.insert(indicator.id)
-                Timer.scheduledTimer(withTimeInterval: Double(delay.components.seconds), repeats: false) { [weak self] _ in
+                Timer.scheduledTimer(withTimeInterval: Double(delay.seconds), repeats: false) { [weak self] _ in
                     guard let self else { return }
                     
                     guard delayedIndicators.contains(indicator.id) else {
