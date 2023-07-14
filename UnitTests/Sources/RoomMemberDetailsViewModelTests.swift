@@ -87,7 +87,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(states, [false, true, false])
         XCTAssertNotNil(context.alertInfo)
         XCTAssertFalse(context.viewState.details.isIgnored)
-        try await Task.sleep( for: .microseconds(100))
+        try await Task.sleep(for: .microseconds(100))
         XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
 
@@ -98,8 +98,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             return .success(())
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
-            roomMemberProxy: roomMemberProxyMock,
-            mediaProvider: MockMediaProvider())
+                                                     roomMemberProxy: roomMemberProxyMock,
+                                                     mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
