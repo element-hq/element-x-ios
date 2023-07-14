@@ -29,7 +29,7 @@ struct AggregatedReaction: Hashable {
 /// Details of who sent the reaction
 struct ReactionSender: Hashable {
     /// The id of the user who sent the reaction
-    let senderId: String
+    let senderID: String
     /// The time that the reaction was received on the original homeserver
     let timestamp: Date
 }
@@ -42,6 +42,6 @@ extension AggregatedReaction {
     
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
-        senders.contains(where: { $0.senderId == accountOwnerID })
+        senders.contains(where: { $0.senderID == accountOwnerID })
     }
 }

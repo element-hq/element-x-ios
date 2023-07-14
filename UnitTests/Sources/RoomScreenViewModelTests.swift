@@ -375,7 +375,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false) {
-        let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(senderId: sender, timestamp: Date())])] : []
+        let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(senderID: sender, timestamp: Date())])] : []
         self.init(id: .init(timelineID: UUID().uuidString),
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",

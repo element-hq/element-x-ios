@@ -26,7 +26,7 @@ extension AggregatedReaction {
     private static func mockReaction(key: String, senderIDs: [String]) -> AggregatedReaction {
         let senders = senderIDs
             .map { id in
-                ReactionSender(senderId: id, timestamp: Date())
+                ReactionSender(senderID: id, timestamp: Date())
             }
         return AggregatedReaction(accountOwnerID: alice, key: key, senders: senders)
     }
