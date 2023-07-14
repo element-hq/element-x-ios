@@ -140,4 +140,13 @@ class MockClientProxy: ClientProxyProtocol {
         getProfileCalled = true
         return getProfileResult
     }
+    
+    var notificationSettingsResult: NotificationSettingsProxyProtocol?
+    func notificationSettings() -> NotificationSettingsProxyProtocol {
+        if let notificationSettingsResult {
+            return notificationSettingsResult
+        } else {
+            return NotificationSettingsProxyMock(with: .init())
+        }
+    }
 }

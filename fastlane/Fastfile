@@ -110,6 +110,9 @@ lane :unit_tests do
 end
 
 lane :ui_tests do |options|
+  # Use a fresh simulator state to ensure hardware keyboard isn't attached.
+  reset_simulator_contents()
+  
   create_simulator_if_necessary(
     name: "iPad (9th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"
@@ -138,6 +141,14 @@ lane :ui_tests do |options|
     scheme: "UITests",
     binary_basename: "ElementX.app"
   )
+  
+  # Zip the result bundle for faster upload.
+  zip(
+    path: "./fastlane/test_output/UITests.xcresult",
+    output_path: "./fastlane/test_output/UITests.xcresult.zip"
+  )
+  # Shell working directory is already inside the fastlane dir.
+  sh("rm -rf ./test_output/UITests.xcresult")
 end
 
 
@@ -169,6 +180,9 @@ lane :config_nightly do
   data = YAML.load_file target_file_path
   data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
+
+  config_maplibre()
+  
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")
@@ -180,6 +194,11 @@ lane :config_nightly do
   release_version = get_version_number(target: "ElementX")
 
   update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
+end
+
+lane :config_production do
+  config_maplibre()
+  xcodegen(spec: "project.yml")
 end
 
 lane :upload_dsyms_to_sentry do |options|
@@ -398,5 +417,15 @@ private_lane :create_simulator_if_necessary do |options|
   rescue
     sh("xcrun simctl create '#{simulator_name}' #{simulator_type}")
   end
+end
 
+private_lane :config_maplibre do
+  api_key = ENV["MAPLIBRE_API_KEY"]
+  UI.user_error!("Invalid Map Libre API key.") unless !api_key.to_s.empty?
+
+  set_xcconfig_value(
+    path: './secrets.xcconfig',
+    name: 'MAPLIBRE_API_KEY',
+    value: api_key
+  )
 end

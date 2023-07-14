@@ -23,6 +23,7 @@ struct InfoPlistReader {
         static let keychainAccessGroupIdentifier = "keychainAccessGroupIdentifier"
         static let bundleShortVersion = "CFBundleShortVersionString"
         static let bundleDisplayName = "CFBundleDisplayName"
+        static let mapLibreAPIKey = "mapLibreAPIKey"
     }
 
     /// Info.plist reader on the bundle object that contains the current executable.
@@ -74,6 +75,11 @@ struct InfoPlistReader {
     /// Bundle display name of the target
     var bundleDisplayName: String {
         infoPlistStringValue(forKey: Keys.bundleDisplayName)
+    }
+
+    /// Map Libre API Key
+    var mapLibreAPIKey: String {
+        infoPlistStringValue(forKey: Keys.mapLibreAPIKey)
     }
 
     private func infoPlistStringValue(forKey key: String) -> String {

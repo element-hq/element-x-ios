@@ -10,10 +10,13 @@ coverage:
 
 ignore:
   - "ElementX/Sources/Generated"
+  - "ElementX/Sources/Mocks"
   - "ElementX/Sources/Vendor"
   - "ElementX/Sources/UITests"
+  - "ElementX/Sources/UnitTests"
   - "Tools"
-  - "**/Mock*.swift" 
+  - "**/Mock*.swift"
+  - "**/*Mock.swift"
 
 flag_management:
   default_rules:
