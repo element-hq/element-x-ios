@@ -205,7 +205,7 @@ final class AppSettings {
     let darkTileMapStyleURL: URL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3"
 
     // maptiler api key
-    let mapTilerApiKey = "fU3vlMsMn4Jb6dnEIFsx"
+    let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
     
     // maptiler geocoding url
     let geocodingURLFormatString = "https://api.maptiler.com/geocoding/%f,%f.json"

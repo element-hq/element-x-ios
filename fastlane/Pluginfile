@@ -6,3 +6,4 @@ gem 'fastlane-plugin-diawi', git: 'https://github.com/mhtranbn/fastlane-plugin-d
 gem 'fastlane-plugin-xcodegen'
 gem 'fastlane-plugin-sentry'
 gem 'fastlane-plugin-browserstack'
+gem 'fastlane-plugin-xcconfig'

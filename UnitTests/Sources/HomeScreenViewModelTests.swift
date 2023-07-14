@@ -88,10 +88,9 @@ class HomeScreenViewModelTests: XCTestCase {
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
         room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
-        let deferred = deferFulfillment(context.$viewState.first(), message: "viewState should be published.")
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
-        try await deferred.fulfill()
-        XCTAssertNotNil(context.alertInfo)
+        let state = await context.nextViewState()
+        XCTAssertNotNil(state?.bindings.alertInfo)
     }
     
     func testLeaveRoomSuccess() async throws {

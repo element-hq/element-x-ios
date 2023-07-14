@@ -179,27 +179,59 @@ final class NotificationManagerTests: XCTestCase {
     }
 
     func test_MessageNotificationsRemoval() async throws {
+        let notificationPublisher = NotificationCenter.default.publisher(for: .roomMarkedAsRead).first()
+        var cancellables: Set<AnyCancellable> = .init()
+        let expectation1 = expectation(description: #function)
+        notificationPublisher
+            .sink { _ in
+                expectation1.fulfill()
+            }
+            .store(in: &cancellables)
+        
         // No interaction if the object is nil or of the wrong type
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: nil)
-        try await Task.sleep(for: .microseconds(200))
+        await fulfillment(of: [expectation1])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 0)
-
+        
+        let expectation2 = expectation(description: #function)
+        notificationPublisher
+            .sink { _ in
+                expectation2.fulfill()
+            }
+            .store(in: &cancellables)
+        
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: 1)
-        try await Task.sleep(for: .microseconds(200))
+        await fulfillment(of: [expectation2])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 0)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 0)
-
+        
+        let expectation3 = expectation(description: #function)
+        notificationPublisher
+            .sink { _ in
+                expectation3.fulfill()
+            }
+            .store(in: &cancellables)
+        
         // The center calls the delivered and the removal functions when an id is passed
         NotificationCenter.default.post(name: .roomMarkedAsRead, object: "RoomID")
-        try await Task.sleep(for: .microseconds(200))
+        await fulfillment(of: [expectation3])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 1)
     }
 
     func test_InvitesNotificationsRemoval() async throws {
+        let notificationPublisher = NotificationCenter.default.publisher(for: .invitesScreenAppeared).first()
+        let expectation = expectation(description: #function)
+        var cancellables: Set<AnyCancellable> = .init()
+        notificationPublisher
+            .sink { _ in
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+
         NotificationCenter.default.post(name: .invitesScreenAppeared, object: nil)
-        try await Task.sleep(for: .microseconds(200))
+        await fulfillment(of: [expectation])
         XCTAssertEqual(notificationCenter.deliveredNotificationsCallsCount, 1)
         XCTAssertEqual(notificationCenter.removeDeliveredNotificationsCallsCount, 1)
     }
