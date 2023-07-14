@@ -30,6 +30,10 @@ struct RoomDetailsScreen: View {
             }
 
             topicSection
+            
+            if context.viewState.showNotificationSettings {
+                notificationSection
+            }
 
             if context.viewState.dmRecipient == nil {
                 aboutSection
@@ -73,14 +77,8 @@ struct RoomDetailsScreen: View {
                          avatarSize: .room(on: .details),
                          imageProvider: context.imageProvider,
                          subtitle: context.viewState.canonicalAlias) {
-            if let permalink = context.viewState.permalink {
-                HStack(spacing: 32) {
-                    ShareLink(item: permalink) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
-                }
-                .padding(.top, 32)
+            if !context.viewState.shortcuts.isEmpty {
+                headerSectionShortcuts
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
@@ -94,17 +92,29 @@ struct RoomDetailsScreen: View {
                          avatarSize: .user(on: .memberDetails),
                          imageProvider: context.imageProvider,
                          subtitle: recipient.id) {
-            if let permalink = recipient.permalink {
-                HStack(spacing: 32) {
+            if !context.viewState.shortcuts.isEmpty {
+                headerSectionShortcuts
+            }
+        }
+        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
+    }
+    
+    @ViewBuilder
+    private var headerSectionShortcuts: some View {
+        HStack(spacing: 32) {
+            ForEach(context.viewState.shortcuts, id: \.self) { shortcut in
+                switch shortcut {
+                case .mute:
+                    toggleMuteButton
+                case .share(let permalink):
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
-                .padding(.top, 32)
             }
         }
-        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
+        .padding(.top, 32)
     }
     
     @ViewBuilder
@@ -162,6 +172,49 @@ struct RoomDetailsScreen: View {
         .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         .compoundFormSection()
         .foregroundColor(.compound.textPrimary)
+    }
+    
+    @ViewBuilder
+    private var notificationSection: some View {
+        Section {
+            Button {
+                context.send(viewAction: .processTapNotifications)
+            } label: {
+                LabeledContent {
+                    if context.viewState.notificationSettingsState.isLoading {
+                        ProgressView()
+                    } else if context.viewState.notificationSettingsState.isError {
+                        Image(systemName: "exclamationmark.circle")
+                    } else {
+                        Text(context.viewState.notificationSettingsState.label)
+                            .foregroundColor(.compound.textSecondary)
+                            .font(.compound.bodyLG)
+                    }
+                } label: {
+                    Label(L10n.screenRoomDetailsNotificationTitle, systemImage: "bell")
+                }
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+        }
+        .listRowSeparatorTint(.compound.borderDisabled)
+        .buttonStyle(FormButtonStyle(accessory: context.viewState.notificationSettingsState.isLoaded ? .navigationLink : nil))
+        .foregroundColor(.compound.textPrimary)
+        .disabled(context.viewState.notificationSettingsState.isLoading)
+    }
+    
+    @ViewBuilder
+    private var toggleMuteButton: some View {
+        Button {
+            context.send(viewAction: .processToogleMuteNotifications)
+        } label: {
+            if context.viewState.isProcessingMuteToggleAction {
+                ProgressView()
+            } else {
+                context.viewState.notificationShortcutButtonImage
+            }
+        }
+        .buttonStyle(FormActionButtonStyle(title: context.viewState.notificationShortcutButtonTitle))
+        .disabled(context.viewState.isProcessingMuteToggleAction)
     }
 
     @ViewBuilder
@@ -256,10 +309,17 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
         
+        var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
+        notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
+        let appSettings = AppSettings()
+        
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: appSettings)
     }()
     
     static let dmRoomViewModel = {
@@ -274,11 +334,15 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        let appSettings = AppSettings()
         
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: appSettings)
     }()
     
     static var previews: some View {

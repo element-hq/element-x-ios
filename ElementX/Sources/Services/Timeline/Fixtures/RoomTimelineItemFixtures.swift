@@ -34,7 +34,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me"])
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: [ReactionSender(senderID: "me", timestamp: Date())])
                              ])),
         TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
                              timestamp: "10:11 AM",
@@ -43,8 +43,14 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(accountOwnerID: "me", key: "🙏", senders: ["helena"]),
-                                 AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: ["me", "helena", "jacob"])
+                                 AggregatedReaction(accountOwnerID: "me", key: "🙏", senders: [ReactionSender(senderID: "helena", timestamp: Date())]),
+                                 AggregatedReaction(accountOwnerID: "me",
+                                                    key: "🙌",
+                                                    senders: [
+                                                        ReactionSender(senderID: "me", timestamp: Date()),
+                                                        ReactionSender(senderID: "helena", timestamp: Date()),
+                                                        ReactionSender(senderID: "jacob", timestamp: Date())
+                                                    ])
                              ])),
         SeparatorRoomTimelineItem(id: .init(timelineID: "Today"), text: "Today"),
         TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),

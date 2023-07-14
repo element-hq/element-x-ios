@@ -285,7 +285,12 @@
 "screen_room_details_edition_error_title" = "Unable to update room";
 "screen_room_details_encryption_enabled_subtitle" = "Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.";
 "screen_room_details_encryption_enabled_title" = "Message encryption enabled";
+"screen_room_details_error_loading_notification_settings" = "An error occurred when loading notification settings.";
+"screen_room_details_error_muting" = "Failed muting this room, please try again.";
+"screen_room_details_error_unmuting" = "Failed unmuting this room, please try again.";
 "screen_room_details_invite_people_title" = "Invite people";
+"screen_room_details_notification_mode_custom" = "Custom";
+"screen_room_details_notification_mode_default" = "Default";
 "screen_room_details_notification_title" = "Notifications";
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
