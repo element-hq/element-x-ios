@@ -31,10 +31,6 @@ Please see our [contribution guide](CONTRIBUTING.md).
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-ios:matrix.org).
 
-## Forking
-
-Please read our [forking guide](FORKING.md).
-
 ## Build instructions
 
 Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
@@ -44,6 +40,10 @@ Please refer to the [setting up a development environment](CONTRIBUTING.md#setti
 When you are experiencing an issue on ElementX iOS, please first search in [GitHub issues](https://github.com/vector-im/element-x-ios/issues)
 and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
 If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
+
+## Forking
+
+Please read our [forking guide](docs/FORKING.md).
 
 ## Copyright & License
 
