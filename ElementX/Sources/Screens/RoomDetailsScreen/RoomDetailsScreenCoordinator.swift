@@ -24,6 +24,7 @@ struct RoomDetailsScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let notificationSettings: NotificationSettingsProxyProtocol
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -47,7 +48,9 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomDetailsScreenViewModel(accountUserID: parameters.accountUserID,
                                                roomProxy: parameters.roomProxy,
                                                mediaProvider: parameters.mediaProvider,
-                                               userIndicatorController: parameters.userIndicatorController)
+                                               userIndicatorController: parameters.userIndicatorController,
+                                               notificationSettingsProxy: parameters.notificationSettings,
+                                               appSettings: ServiceLocator.shared.settings)
     }
     
     // MARK: - Public
@@ -65,6 +68,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.leftRoom)
             case .requestEditDetailsPresentation(let accountOwner):
                 self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
+            case .requestNotificationSettingsPresentation:
+                self.presentNotificationSettings()
             }
         }
     }
@@ -182,6 +187,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                                  message: L10n.commonUnableToInviteMessage)
         }
     }
+    
+    private func presentNotificationSettings() { }
 }
 
 private extension Result {

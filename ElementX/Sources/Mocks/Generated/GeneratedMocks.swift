@@ -313,6 +313,260 @@ class NotificationManagerMock: NotificationManagerProtocol {
         requestAuthorizationClosure?()
     }
 }
+class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
+    var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
+        get { return underlyingCallbacks }
+        set(value) { underlyingCallbacks = value }
+    }
+    var underlyingCallbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never>!
+
+    //MARK: - getNotificationSettings
+
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError: Error?
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount = 0
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCalled: Bool {
+        return getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount > 0
+    }
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedArguments: (roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)?
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedInvocations: [(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)] = []
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue: RoomNotificationSettingsProxyProtocol!
+    var getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure: ((String, Bool, UInt64) async throws -> RoomNotificationSettingsProxyProtocol)?
+
+    func getNotificationSettings(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws -> RoomNotificationSettingsProxyProtocol {
+        if let error = getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError {
+            throw error
+        }
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountCallsCount += 1
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
+        if let getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure = getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure {
+            return try await getNotificationSettingsRoomIdIsEncryptedActiveMembersCountClosure(roomId, isEncrypted, activeMembersCount)
+        } else {
+            return getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue
+        }
+    }
+    //MARK: - setNotificationMode
+
+    var setNotificationModeRoomIdModeThrowableError: Error?
+    var setNotificationModeRoomIdModeCallsCount = 0
+    var setNotificationModeRoomIdModeCalled: Bool {
+        return setNotificationModeRoomIdModeCallsCount > 0
+    }
+    var setNotificationModeRoomIdModeReceivedArguments: (roomId: String, mode: RoomNotificationMode)?
+    var setNotificationModeRoomIdModeReceivedInvocations: [(roomId: String, mode: RoomNotificationMode)] = []
+    var setNotificationModeRoomIdModeClosure: ((String, RoomNotificationMode) async throws -> Void)?
+
+    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws {
+        if let error = setNotificationModeRoomIdModeThrowableError {
+            throw error
+        }
+        setNotificationModeRoomIdModeCallsCount += 1
+        setNotificationModeRoomIdModeReceivedArguments = (roomId: roomId, mode: mode)
+        setNotificationModeRoomIdModeReceivedInvocations.append((roomId: roomId, mode: mode))
+        try await setNotificationModeRoomIdModeClosure?(roomId, mode)
+    }
+    //MARK: - getDefaultNotificationRoomMode
+
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountCallsCount = 0
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountCalled: Bool {
+        return getDefaultNotificationRoomModeIsEncryptedActiveMembersCountCallsCount > 0
+    }
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedArguments: (isEncrypted: Bool, activeMembersCount: UInt64)?
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedInvocations: [(isEncrypted: Bool, activeMembersCount: UInt64)] = []
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue: RoomNotificationMode!
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure: ((Bool, UInt64) async -> RoomNotificationMode)?
+
+    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
+        getDefaultNotificationRoomModeIsEncryptedActiveMembersCountCallsCount += 1
+        getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedArguments = (isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedInvocations.append((isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
+        if let getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure = getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure {
+            return await getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure(isEncrypted, activeMembersCount)
+        } else {
+            return getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue
+        }
+    }
+    //MARK: - restoreDefaultNotificationMode
+
+    var restoreDefaultNotificationModeRoomIdThrowableError: Error?
+    var restoreDefaultNotificationModeRoomIdCallsCount = 0
+    var restoreDefaultNotificationModeRoomIdCalled: Bool {
+        return restoreDefaultNotificationModeRoomIdCallsCount > 0
+    }
+    var restoreDefaultNotificationModeRoomIdReceivedRoomId: String?
+    var restoreDefaultNotificationModeRoomIdReceivedInvocations: [String] = []
+    var restoreDefaultNotificationModeRoomIdClosure: ((String) async throws -> Void)?
+
+    func restoreDefaultNotificationMode(roomId: String) async throws {
+        if let error = restoreDefaultNotificationModeRoomIdThrowableError {
+            throw error
+        }
+        restoreDefaultNotificationModeRoomIdCallsCount += 1
+        restoreDefaultNotificationModeRoomIdReceivedRoomId = roomId
+        restoreDefaultNotificationModeRoomIdReceivedInvocations.append(roomId)
+        try await restoreDefaultNotificationModeRoomIdClosure?(roomId)
+    }
+    //MARK: - containsKeywordsRules
+
+    var containsKeywordsRulesCallsCount = 0
+    var containsKeywordsRulesCalled: Bool {
+        return containsKeywordsRulesCallsCount > 0
+    }
+    var containsKeywordsRulesReturnValue: Bool!
+    var containsKeywordsRulesClosure: (() async -> Bool)?
+
+    func containsKeywordsRules() async -> Bool {
+        containsKeywordsRulesCallsCount += 1
+        if let containsKeywordsRulesClosure = containsKeywordsRulesClosure {
+            return await containsKeywordsRulesClosure()
+        } else {
+            return containsKeywordsRulesReturnValue
+        }
+    }
+    //MARK: - unmuteRoom
+
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountThrowableError: Error?
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount = 0
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountCalled: Bool {
+        return unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount > 0
+    }
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedArguments: (roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)?
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedInvocations: [(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64)] = []
+    var unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure: ((String, Bool, UInt64) async throws -> Void)?
+
+    func unmuteRoom(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws {
+        if let error = unmuteRoomRoomIdIsEncryptedActiveMembersCountThrowableError {
+            throw error
+        }
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountCallsCount += 1
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedArguments = (roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        unmuteRoomRoomIdIsEncryptedActiveMembersCountReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
+        try await unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure?(roomId, isEncrypted, activeMembersCount)
+    }
+    //MARK: - isRoomMentionEnabled
+
+    var isRoomMentionEnabledThrowableError: Error?
+    var isRoomMentionEnabledCallsCount = 0
+    var isRoomMentionEnabledCalled: Bool {
+        return isRoomMentionEnabledCallsCount > 0
+    }
+    var isRoomMentionEnabledReturnValue: Bool!
+    var isRoomMentionEnabledClosure: (() async throws -> Bool)?
+
+    func isRoomMentionEnabled() async throws -> Bool {
+        if let error = isRoomMentionEnabledThrowableError {
+            throw error
+        }
+        isRoomMentionEnabledCallsCount += 1
+        if let isRoomMentionEnabledClosure = isRoomMentionEnabledClosure {
+            return try await isRoomMentionEnabledClosure()
+        } else {
+            return isRoomMentionEnabledReturnValue
+        }
+    }
+    //MARK: - setRoomMentionEnabled
+
+    var setRoomMentionEnabledEnabledThrowableError: Error?
+    var setRoomMentionEnabledEnabledCallsCount = 0
+    var setRoomMentionEnabledEnabledCalled: Bool {
+        return setRoomMentionEnabledEnabledCallsCount > 0
+    }
+    var setRoomMentionEnabledEnabledReceivedEnabled: Bool?
+    var setRoomMentionEnabledEnabledReceivedInvocations: [Bool] = []
+    var setRoomMentionEnabledEnabledClosure: ((Bool) async throws -> Void)?
+
+    func setRoomMentionEnabled(enabled: Bool) async throws {
+        if let error = setRoomMentionEnabledEnabledThrowableError {
+            throw error
+        }
+        setRoomMentionEnabledEnabledCallsCount += 1
+        setRoomMentionEnabledEnabledReceivedEnabled = enabled
+        setRoomMentionEnabledEnabledReceivedInvocations.append(enabled)
+        try await setRoomMentionEnabledEnabledClosure?(enabled)
+    }
+    //MARK: - isUserMentionEnabled
+
+    var isUserMentionEnabledThrowableError: Error?
+    var isUserMentionEnabledCallsCount = 0
+    var isUserMentionEnabledCalled: Bool {
+        return isUserMentionEnabledCallsCount > 0
+    }
+    var isUserMentionEnabledReturnValue: Bool!
+    var isUserMentionEnabledClosure: (() async throws -> Bool)?
+
+    func isUserMentionEnabled() async throws -> Bool {
+        if let error = isUserMentionEnabledThrowableError {
+            throw error
+        }
+        isUserMentionEnabledCallsCount += 1
+        if let isUserMentionEnabledClosure = isUserMentionEnabledClosure {
+            return try await isUserMentionEnabledClosure()
+        } else {
+            return isUserMentionEnabledReturnValue
+        }
+    }
+    //MARK: - setUserMentionEnabled
+
+    var setUserMentionEnabledEnabledThrowableError: Error?
+    var setUserMentionEnabledEnabledCallsCount = 0
+    var setUserMentionEnabledEnabledCalled: Bool {
+        return setUserMentionEnabledEnabledCallsCount > 0
+    }
+    var setUserMentionEnabledEnabledReceivedEnabled: Bool?
+    var setUserMentionEnabledEnabledReceivedInvocations: [Bool] = []
+    var setUserMentionEnabledEnabledClosure: ((Bool) async throws -> Void)?
+
+    func setUserMentionEnabled(enabled: Bool) async throws {
+        if let error = setUserMentionEnabledEnabledThrowableError {
+            throw error
+        }
+        setUserMentionEnabledEnabledCallsCount += 1
+        setUserMentionEnabledEnabledReceivedEnabled = enabled
+        setUserMentionEnabledEnabledReceivedInvocations.append(enabled)
+        try await setUserMentionEnabledEnabledClosure?(enabled)
+    }
+    //MARK: - isCallEnabled
+
+    var isCallEnabledThrowableError: Error?
+    var isCallEnabledCallsCount = 0
+    var isCallEnabledCalled: Bool {
+        return isCallEnabledCallsCount > 0
+    }
+    var isCallEnabledReturnValue: Bool!
+    var isCallEnabledClosure: (() async throws -> Bool)?
+
+    func isCallEnabled() async throws -> Bool {
+        if let error = isCallEnabledThrowableError {
+            throw error
+        }
+        isCallEnabledCallsCount += 1
+        if let isCallEnabledClosure = isCallEnabledClosure {
+            return try await isCallEnabledClosure()
+        } else {
+            return isCallEnabledReturnValue
+        }
+    }
+    //MARK: - setCallEnabled
+
+    var setCallEnabledEnabledThrowableError: Error?
+    var setCallEnabledEnabledCallsCount = 0
+    var setCallEnabledEnabledCalled: Bool {
+        return setCallEnabledEnabledCallsCount > 0
+    }
+    var setCallEnabledEnabledReceivedEnabled: Bool?
+    var setCallEnabledEnabledReceivedInvocations: [Bool] = []
+    var setCallEnabledEnabledClosure: ((Bool) async throws -> Void)?
+
+    func setCallEnabled(enabled: Bool) async throws {
+        if let error = setCallEnabledEnabledThrowableError {
+            throw error
+        }
+        setCallEnabledEnabledCallsCount += 1
+        setCallEnabledEnabledReceivedEnabled = enabled
+        setCallEnabledEnabledReceivedInvocations.append(enabled)
+        try await setCallEnabledEnabledClosure?(enabled)
+    }
+}
 class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var userID: String {
         get { return underlyingUserID }
@@ -412,6 +666,19 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
             return canSendStateEventTypeReturnValue
         }
     }
+}
+class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
+    var mode: RoomNotificationMode {
+        get { return underlyingMode }
+        set(value) { underlyingMode = value }
+    }
+    var underlyingMode: RoomNotificationMode!
+    var isDefault: Bool {
+        get { return underlyingIsDefault }
+        set(value) { underlyingIsDefault = value }
+    }
+    var underlyingIsDefault: Bool!
+
 }
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {

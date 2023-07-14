@@ -357,6 +357,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func notificationSettings() async -> NotificationSettingsProxyProtocol {
+        await Task.dispatch(on: clientQueue) {
+            NotificationSettingsProxy(notificationSettings: self.client.getNotificationSettings(),
+                                      backgroundTaskService: self.backgroundTaskService)
+        }
+    }
+    
     // MARK: Private
     
     private func restartSync(delay: Duration = .zero) {

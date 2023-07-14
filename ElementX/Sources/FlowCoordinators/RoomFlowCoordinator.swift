@@ -364,12 +364,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
-                                                            navigationStackCoordinator: navigationStackCoordinator,
-                                                            roomProxy: roomProxy,
-                                                            mediaProvider: userSession.mediaProvider,
-                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                            userIndicatorController: userIndicatorController)
+        let params = await RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
+                                                                  navigationStackCoordinator: navigationStackCoordinator,
+                                                                  roomProxy: roomProxy,
+                                                                  mediaProvider: userSession.mediaProvider,
+                                                                  userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                                  userIndicatorController: userIndicatorController,
+                                                                  notificationSettings: userSession.clientProxy.notificationSettings())
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
