@@ -113,4 +113,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
+    
+    func notificationSettings() async -> NotificationSettingsProxyProtocol
 }

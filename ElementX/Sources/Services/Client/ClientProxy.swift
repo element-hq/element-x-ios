@@ -110,19 +110,26 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        roomListService?.isSyncing() ?? false
+        isStartingSync || roomListService?.isSyncing() ?? false
     }
     
+    /// Ensure we don't call start sync whilst awaiting a previous call.
+    private var isStartingSync = false
+    
     func startSync() {
-        MXLog.info("Starting sync")
-        guard !isSyncing else {
-            return
-        }
+        guard !isSyncing else { return }
 
-        do {
-            try appService?.start()
-        } catch {
-            MXLog.error("Failed starting app service with error: \(error)")
+        MXLog.info("Starting sync")
+        isStartingSync = true
+        
+        Task {
+            do {
+                try await appService?.start()
+            } catch {
+                MXLog.error("Failed starting app service with error: \(error)")
+            }
+            
+            isStartingSync = false
         }
     }
     
@@ -350,11 +357,30 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func notificationSettings() async -> NotificationSettingsProxyProtocol {
+        await Task.dispatch(on: clientQueue) {
+            NotificationSettingsProxy(notificationSettings: self.client.getNotificationSettings(),
+                                      backgroundTaskService: self.backgroundTaskService)
+        }
+    }
+    
     // MARK: Private
     
-    private func restartSync() {
-        pauseSync()
-        startSync()
+    private func restartSync(delay: Duration = .zero) {
+        isStartingSync = true
+        
+        Task {
+            try await Task.sleep(for: delay)
+            
+            do {
+                MXLog.info("Restart the app service.")
+                try await self.appService?.start()
+            } catch {
+                MXLog.error("Failed restarting app service after error.")
+            }
+            
+            self.isStartingSync = false
+        }
     }
 
     private func loadUserAvatarURLFromCache() {
@@ -378,7 +404,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let appService = try client
+            let appService = try await client
                 .app()
                 .withEncryptionSync(withCrossProcessLock: appSettings.isEncryptionSyncEnabled,
                                     appIdentifier: "MainApp")
@@ -410,10 +436,10 @@ class ClientProxy: ClientProxyProtocol {
             guard let self else { return }
             MXLog.info("Received app service update: \(state)")
             switch state {
-            case .error:
-                restartSync()
-            case .terminated, .running:
+            case .running, .terminated:
                 break
+            case .error:
+                restartSync(delay: .seconds(1))
             }
         })
     }

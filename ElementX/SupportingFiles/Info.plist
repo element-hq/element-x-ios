@@ -60,5 +60,7 @@
 	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
 	<key>keychainAccessGroupIdentifier</key>
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
+	<key>mapLibreAPIKey</key>
+	<string>$(MAPLIBRE_API_KEY)</string>
 </dict>
 </plist>

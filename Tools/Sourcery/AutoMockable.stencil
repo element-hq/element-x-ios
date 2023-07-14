@@ -117,7 +117,7 @@ import {{ import }}
         {% endif %}
 {% endmacro %}
 {% macro mockOptionalVariable variable %}
-    {% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}: {{ variable.typeName }}
+    {% if variable.name == 'delegate' %}weak {% endif %}{% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}: {{ variable.typeName }}
 {% endmacro %}
 {% macro mockNonOptionalArrayOrDictionaryVariable variable %}
     {% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}: {{ variable.typeName }} = {% if variable.isArray %}[]{% elif variable.isDictionary %}[:]{% endif %}

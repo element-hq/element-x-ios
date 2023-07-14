@@ -45,6 +45,10 @@ targets:
     type: application
     platform: iOS
 
+    configFiles:
+      Debug: ../../secrets.xcconfig
+      Release: ../../secrets.xcconfig
+
     info:
       path: ../SupportingFiles/Info.plist
       properties:
@@ -76,6 +80,7 @@ targets:
         BGTaskSchedulerPermittedIdentifiers: [
           io.element.elementx.background.refresh
         ]
+        mapLibreAPIKey: $(MAPLIBRE_API_KEY)
 
 
     settings:

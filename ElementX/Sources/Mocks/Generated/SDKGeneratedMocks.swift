@@ -274,6 +274,7 @@ class SDKClientMock: SDKClientProtocol {
             return getNotificationSettingsReturnValue
         }
     }
+
     //MARK: - `getProfile`
 
     public var getProfileUserIdThrowableError: Error?
