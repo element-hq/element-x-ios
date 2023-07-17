@@ -31,11 +31,11 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
 
-    private var appService: App?
-    private var appServiceStateUpdateTaskHandle: TaskHandle?
+    private var syncService: SyncService?
+    private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
     #warning("This is a workaround until the RustSDK provides a sync service state getter")
-    private var appServiceStateUpdateCurrentValueSubject = CurrentValueSubject<AppState, Never>(.terminated)
+    private var appServiceStateUpdateCurrentValueSubject = CurrentValueSubject<SyncServiceState, Never>(.terminated)
 
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
@@ -127,7 +127,7 @@ class ClientProxy: ClientProxyProtocol {
         
         Task {
             do {
-                try await appService?.start()
+                try await syncService?.start()
             } catch {
                 MXLog.error("Failed starting app service with error: \(error)")
             }
@@ -140,7 +140,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Stopping sync")
 
         do {
-            try appService?.pause()
+            try syncService?.pause()
         } catch {
             MXLog.error("Failed pausing app service with error: \(error)")
         }
@@ -377,7 +377,7 @@ class ClientProxy: ClientProxyProtocol {
             
             do {
                 MXLog.info("Restart the app service.")
-                try await self.appService?.start()
+                try await self.syncService?.start()
             } catch {
                 MXLog.error("Failed restarting app service after error.")
             }
@@ -402,17 +402,17 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func configureAppService() async {
-        guard appService == nil else {
+        guard syncService == nil else {
             fatalError("This shouldn't be called more than once")
         }
         
         do {
-            let appService = try await client
-                .app()
+            let syncService = try await client
+                .syncService()
                 .withEncryptionSync(withCrossProcessLock: appSettings.isEncryptionSyncEnabled,
                                     appIdentifier: "MainApp")
                 .finish()
-            let roomListService = appService.roomListService()
+            let roomListService = syncService.roomListService()
 
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
@@ -423,10 +423,10 @@ class ClientProxy: ClientProxyProtocol {
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites")
 
-            self.appService = appService
+            self.syncService = syncService
             self.roomListService = roomListService
 
-            appServiceStateUpdateTaskHandle = createAppServiceObserver(appService)
+            syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
             roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
 
         } catch {
@@ -434,8 +434,8 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    private func createAppServiceObserver(_ appService: App) -> TaskHandle {
-        appService.state(listener: AppStateObserverProxy { [weak self] state in
+    private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
+        syncService.state(listener: SyncServiceStateObserverProxy { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received app service update: \(state)")
@@ -443,7 +443,7 @@ class ClientProxy: ClientProxyProtocol {
             appServiceStateUpdateCurrentValueSubject.send(state)
             
             switch state {
-            case .running, .terminated:
+            case .running, .terminated, .idle:
                 break
             case .error:
                 restartSync(delay: .seconds(1))
@@ -509,14 +509,14 @@ extension ClientProxy: MediaLoaderProtocol {
     }
 }
 
-private class AppStateObserverProxy: AppStateObserver {
-    private let onUpdateClosure: (AppState) -> Void
+private class SyncServiceStateObserverProxy: SyncServiceStateObserver {
+    private let onUpdateClosure: (SyncServiceState) -> Void
 
-    init(onUpdateClosure: @escaping (AppState) -> Void) {
+    init(onUpdateClosure: @escaping (SyncServiceState) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(state: AppState) {
+    func onUpdate(state: SyncServiceState) {
         onUpdateClosure(state)
     }
 }
