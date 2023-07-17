@@ -31,23 +31,6 @@ class SDKClientMock: SDKClientProtocol {
             return accountDataEventTypeReturnValue
         }
     }
-    //MARK: - `app`
-
-    public var appCallsCount = 0
-    public var appCalled: Bool {
-        return appCallsCount > 0
-    }
-    public var appReturnValue: AppBuilder!
-    public var appClosure: (() -> AppBuilder)?
-
-    public func `app`() -> AppBuilder {
-        appCallsCount += 1
-        if let appClosure = appClosure {
-            return appClosure()
-        } else {
-            return appReturnValue
-        }
-    }
     //MARK: - `avatarUrl`
 
     public var avatarUrlThrowableError: Error?
@@ -274,7 +257,6 @@ class SDKClientMock: SDKClientProtocol {
             return getNotificationSettingsReturnValue
         }
     }
-
     //MARK: - `getProfile`
 
     public var getProfileUserIdThrowableError: Error?
@@ -569,6 +551,23 @@ class SDKClientMock: SDKClientProtocol {
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang)
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         try setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(`identifiers`, `kind`, `appDisplayName`, `deviceDisplayName`, `profileTag`, `lang`)
+    }
+    //MARK: - `syncService`
+
+    public var syncServiceCallsCount = 0
+    public var syncServiceCalled: Bool {
+        return syncServiceCallsCount > 0
+    }
+    public var syncServiceReturnValue: SyncServiceBuilder!
+    public var syncServiceClosure: (() -> SyncServiceBuilder)?
+
+    public func `syncService`() -> SyncServiceBuilder {
+        syncServiceCallsCount += 1
+        if let syncServiceClosure = syncServiceClosure {
+            return syncServiceClosure()
+        } else {
+            return syncServiceReturnValue
+        }
     }
     //MARK: - `unignoreUser`
 
