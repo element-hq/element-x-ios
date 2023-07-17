@@ -19,7 +19,7 @@ import SwiftUI
 class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol, CustomStringConvertible {
     private let rootCoordinator: CoordinatorProtocol
     
-    private var dismisalTimer: Timer?
+    private var dismissalTimer: Timer?
     private var displayTimes = [String: Date]()
     private var delayedIndicators = Set<String>()
     
@@ -32,8 +32,8 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
             activeIndicator = indicatorQueue.last
             
             if let activeIndicator, !activeIndicator.persistent {
-                dismisalTimer?.invalidate()
-                dismisalTimer = Timer.scheduledTimer(withTimeInterval: nonPersistentDisplayDuration, repeats: false) { [weak self] _ in
+                dismissalTimer?.invalidate()
+                dismissalTimer = Timer.scheduledTimer(withTimeInterval: nonPersistentDisplayDuration, repeats: false) { [weak self] _ in
                     self?.retractIndicatorWithId(activeIndicator.id)
                 }
             }
@@ -55,27 +55,24 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     func submitIndicator(_ indicator: UserIndicator, delay: Duration?) {
         if let index = indicatorQueue.firstIndex(where: { $0.id == indicator.id }) {
             indicatorQueue[index] = indicator
+            displayTimes[indicator.id] = .now
         } else {
             if let delay {
                 delayedIndicators.insert(indicator.id)
+
                 Timer.scheduledTimer(withTimeInterval: delay.seconds, repeats: false) { [weak self] _ in
                     guard let self else { return }
                     
                     guard delayedIndicators.contains(indicator.id) else {
                         return
                     }
-                    
-                    retractIndicatorWithId(indicator.id)
-                    indicatorQueue.append(indicator)
-                    delayedIndicators.remove(indicator.id)
+
+                    enqueue(indicator: indicator)
                 }
             } else {
-                retractIndicatorWithId(indicator.id)
-                indicatorQueue.append(indicator)
+                enqueue(indicator: indicator)
             }
         }
-        
-        displayTimes[indicator.id] = .now
     }
     
     func retractAllIndicators() {
@@ -102,5 +99,13 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     var description: String {
         "UserIndicatorController(\(String(describing: rootCoordinator)))"
+    }
+
+    // MARK: - Private
+
+    private func enqueue(indicator: UserIndicator) {
+        retractIndicatorWithId(indicator.id)
+        indicatorQueue.append(indicator)
+        displayTimes[indicator.id] = .now
     }
 }
