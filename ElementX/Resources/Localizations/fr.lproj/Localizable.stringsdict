@@ -146,5 +146,21 @@
 			<string>%1$d membres</string>
 		</dict>
 	</dict>
+	<key>screen_room_timeline_more_reactions</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string></string>
+			<key>other</key>
+			<string>%1$d de plus</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
