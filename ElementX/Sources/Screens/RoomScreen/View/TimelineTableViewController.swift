@@ -253,8 +253,11 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
 
-        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
-        dataSource.apply(snapshot, animatingDifferences: shouldAnimate)
+        let currentSnapshot = dataSource.snapshot()
+        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
+        
+        let animated = shouldAnimate && snapshot.itemIdentifiers.last != currentSnapshot.itemIdentifiers.last
+        dataSource.apply(snapshot, animatingDifferences: animated)
         // Probably redundant now we observe content size changes…
         // Leaving in place for the release and will reassess after.
         updateTopPadding()
