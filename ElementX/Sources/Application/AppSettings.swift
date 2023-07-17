@@ -36,6 +36,7 @@ final class AppSettings {
         case shareLocationEnabled
         case hasShownWelcomeScreen
         case notificationSettingsEnabled
+        case timelineDiffableAnimationsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -226,4 +227,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var notificationSettingsEnabled
+
+    @UserPreference(key: UserDefaultsKeys.timelineDiffableAnimationsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var timelineDiffableAnimationsEnabled
 }

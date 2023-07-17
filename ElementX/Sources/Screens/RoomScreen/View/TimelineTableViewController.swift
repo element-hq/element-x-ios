@@ -170,8 +170,10 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.shouldAnimate = true
+        if ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                self.shouldAnimate = true
+            }
         }
     }
     
