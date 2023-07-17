@@ -255,7 +255,7 @@ class TimelineTableViewController: UIViewController {
 
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
-        
+
         let animated = shouldAnimate && snapshot.itemIdentifiers.last != currentSnapshot.itemIdentifiers.last
         dataSource.apply(snapshot, animatingDifferences: animated)
         // Probably redundant now we observe content size changes…
