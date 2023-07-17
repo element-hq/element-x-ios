@@ -32,7 +32,10 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListStateUpdateTaskHandle: TaskHandle?
 
     private var appService: App?
-    private var appServiceUpdateTaskHandle: TaskHandle?
+    private var appServiceStateUpdateTaskHandle: TaskHandle?
+    
+    #warning("This is a workaround until the RustSDK provides a sync service state getter")
+    private var appServiceStateUpdateCurrentValueSubject = CurrentValueSubject<AppState, Never>(.terminated)
 
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
@@ -110,7 +113,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        isStartingSync || roomListService?.isSyncing() ?? false
+        isStartingSync || appServiceStateUpdateCurrentValueSubject.value == .running
     }
     
     /// Ensure we don't call start sync whilst awaiting a previous call.
@@ -423,7 +426,7 @@ class ClientProxy: ClientProxyProtocol {
             self.appService = appService
             self.roomListService = roomListService
 
-            appServiceUpdateTaskHandle = createAppServiceObserver(appService)
+            appServiceStateUpdateTaskHandle = createAppServiceObserver(appService)
             roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
 
         } catch {
@@ -434,7 +437,11 @@ class ClientProxy: ClientProxyProtocol {
     private func createAppServiceObserver(_ appService: App) -> TaskHandle {
         appService.state(listener: AppStateObserverProxy { [weak self] state in
             guard let self else { return }
+            
             MXLog.info("Received app service update: \(state)")
+            
+            appServiceStateUpdateCurrentValueSubject.send(state)
+            
             switch state {
             case .running, .terminated:
                 break
