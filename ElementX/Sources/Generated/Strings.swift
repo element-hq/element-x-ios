@@ -319,8 +319,8 @@ public enum L10n {
     return L10n.tr("Localizable", "error_failed_locating_user", String(describing: p1))
   }
   /// %1$@ does not have permission to access your location. You can enable access in Settings > Location
-  public static func errorMissingLocationAuth(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "error_missing_location_auth", String(describing: p1))
+  public static func errorMissingLocationAuthIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_missing_location_auth_ios", String(describing: p1))
   }
   /// No compatible app was found to handle this action.
   public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
