@@ -57,9 +57,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = true
-            Task.detached {
-                await self.roomProxy.updateMembers()
-            }
+            updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
@@ -73,11 +71,15 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = false
-            Task.detached {
-                await self.roomProxy.updateMembers()
-            }
+            updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
+        }
+    }
+
+    private func updateMembers() {
+        Task.detached {
+            await self.roomProxy.updateMembers()
         }
     }
 }
