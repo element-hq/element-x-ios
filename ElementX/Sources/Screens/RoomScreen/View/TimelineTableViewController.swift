@@ -97,6 +97,8 @@ class TimelineTableViewController: UIViewController {
     private var previousLayout: LayoutDescriptor?
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
+    /// Wether the scroll and the animations should happen
+    private var shouldAnimate = false
     
     init(coordinator: TimelineView.Coordinator,
          timelineStyle: TimelineStyle,
@@ -168,6 +170,9 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.shouldAnimate = true
+        }
     }
     
     override func didMove(toParent parent: UIViewController?) {
@@ -231,8 +236,7 @@ class TimelineTableViewController: UIViewController {
             return cell
         }
 
-//        dataSource?.defaultRowAnimation = .automatic
-        
+        dataSource?.defaultRowAnimation = .fade
         tableView.delegate = self
     }
     
@@ -250,12 +254,11 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendItems(timelineItemsIDs)
 
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
-        dataSource.apply(snapshot, animatingDifferences: false)
-        
+        dataSource.apply(snapshot, animatingDifferences: shouldAnimate)
         // Probably redundant now we observe content size changes…
         // Leaving in place for the release and will reassess after.
         updateTopPadding()
-        
+
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         } else if let pinnedItem = previousLayout.pinnedItem {
