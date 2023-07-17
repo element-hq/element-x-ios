@@ -19,11 +19,13 @@ import SwiftUI
 typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberDetailsScreenViewState, RoomMemberDetailsScreenViewAction>
 
 class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
-    let roomMemberProxy: RoomMemberProxyProtocol
+    private let roomProxy: RoomProxyProtocol
+    private let roomMemberProxy: RoomMemberProxyProtocol
     
     var callback: ((RoomMemberDetailsScreenViewModelAction) -> Void)?
     
-    init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(roomProxy: RoomProxyProtocol, roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
         self.roomMemberProxy = roomMemberProxy
         let initialViewState = RoomMemberDetailsScreenViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
                                                                 bindings: .init())
@@ -55,6 +57,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = true
+            updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
@@ -68,8 +71,15 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         switch result {
         case .success:
             state.details.isIgnored = false
+            updateMembers()
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
+        }
+    }
+
+    private func updateMembers() {
+        Task.detached {
+            await self.roomProxy.updateMembers()
         }
     }
 }

@@ -1,0 +1,1 @@
+Fix for UI not retaining blocked/unlocked user state after dismissing and re-entering the details from the room member list.
