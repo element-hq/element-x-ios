@@ -171,6 +171,8 @@ class TimelineTableViewController: UIViewController {
         scrollToBottom(animated: false)
         hasAppearedOnce = true
         if ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled {
+            // This is to prevent the SS proxy issue that forces a full refresh of all the timeline items
+            // the first time the timeline is opened
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 self.shouldAnimate = true
             }
