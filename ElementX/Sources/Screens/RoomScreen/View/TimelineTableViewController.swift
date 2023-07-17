@@ -256,11 +256,10 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
+        // We only animate if the last item has changed
+        // We don't care to animate backpagination since we want to keep the scrolling position when that happens
         let animated = shouldAnimate && snapshot.itemIdentifiers.last != currentSnapshot.itemIdentifiers.last
         dataSource.apply(snapshot, animatingDifferences: animated)
-        // Probably redundant now we observe content size changes…
-        // Leaving in place for the release and will reassess after.
-        updateTopPadding()
 
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
