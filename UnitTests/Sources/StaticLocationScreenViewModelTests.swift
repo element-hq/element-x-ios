@@ -74,7 +74,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         let locationError = AlertInfo(locationSharingViewError: .mapError(.failedLocatingUser))
         XCTAssertEqual(locationError.message, L10n.errorFailedLocatingUser(InfoPlistReader.main.bundleDisplayName))
         let authorizationError = AlertInfo(locationSharingViewError: .missingAuthorization)
-        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuth(InfoPlistReader.main.bundleDisplayName))
+        XCTAssertEqual(authorizationError.message, L10n.errorMissingLocationAuthIos(InfoPlistReader.main.bundleDisplayName))
     }
 
     func testSendUserLocation() async throws {
