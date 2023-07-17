@@ -488,13 +488,13 @@ public enum L10n {
   public static var screenAccountProviderFormSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_form_subtitle") }
   /// Find an account provider
   public static var screenAccountProviderFormTitle: String { return L10n.tr("Localizable", "screen_account_provider_form_title") }
-  /// This is where you conversations will live — just like you would use an email provider to keep your emails.
+  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
   public static var screenAccountProviderSigninSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signin_subtitle") }
   /// You’re about to sign in to %@
   public static func screenAccountProviderSigninTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signin_title", String(describing: p1))
   }
-  /// This is where you conversations will live — just like you would use an email provider to keep your emails.
+  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
   public static var screenAccountProviderSignupSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signup_subtitle") }
   /// You’re about to create an account on %@
   public static func screenAccountProviderSignupTitle(_ p1: Any) -> String {
@@ -530,7 +530,7 @@ public enum L10n {
   public static var screenAnalyticsSettingsShareData: String { return L10n.tr("Localizable", "screen_analytics_settings_share_data") }
   /// Attach screenshot
   public static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
-  /// You may contact me if you have any follow up questions
+  /// You may contact me if you have any follow up questions.
   public static var screenBugReportContactMe: String { return L10n.tr("Localizable", "screen_bug_report_contact_me") }
   /// Contact me
   public static var screenBugReportContactMeTitle: String { return L10n.tr("Localizable", "screen_bug_report_contact_me_title") }
@@ -786,6 +786,30 @@ public enum L10n {
   public static var screenRoomMessageCopied: String { return L10n.tr("Localizable", "screen_room_message_copied") }
   /// You do not have permission to post to this room
   public static var screenRoomNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_no_permission_to_post") }
+  /// Allow custom setting
+  public static var screenRoomNotificationSettingsAllowCustom: String { return L10n.tr("Localizable", "screen_room_notification_settings_allow_custom") }
+  /// Turning this on will override your default setting
+  public static var screenRoomNotificationSettingsAllowCustomFootnote: String { return L10n.tr("Localizable", "screen_room_notification_settings_allow_custom_footnote") }
+  /// Notify me in this chat for
+  public static var screenRoomNotificationSettingsCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_custom_settings_title") }
+  /// You can change it in your %1$@.
+  public static func screenRoomNotificationSettingsDefaultSettingFootnote(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_footnote", String(describing: p1))
+  }
+  /// global settings
+  public static var screenRoomNotificationSettingsDefaultSettingFootnoteContentLink: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_footnote_content_link") }
+  /// Default setting
+  public static var screenRoomNotificationSettingsDefaultSettingTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_title") }
+  /// An error occurred while loading notification settings.
+  public static var screenRoomNotificationSettingsErrorLoadingSettings: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_loading_settings") }
+  /// Failed restoring the default mode, please try again.
+  public static var screenRoomNotificationSettingsErrorRestoringDefault: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_restoring_default") }
+  /// Failed setting the mode, please try again.
+  public static var screenRoomNotificationSettingsErrorSettingMode: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_setting_mode") }
+  /// All messages
+  public static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
+  /// Mentions and Keywords only
+  public static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// Show less
   public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
   /// Show more
