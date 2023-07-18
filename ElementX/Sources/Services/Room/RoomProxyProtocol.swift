@@ -55,7 +55,7 @@ protocol RoomProxyProtocol {
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var hasUnreadNotifications: Bool { get }
-    var currentUserID: String { get }
+    var ownUserID: String { get }
     
     var name: String? { get }
     var displayName: String? { get }

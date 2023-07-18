@@ -107,7 +107,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await markRoomAsRead() }
         case .timelineItemMenu(let itemID):
             Task {
-                if case let .success(value) = await roomProxy.canUserRedact(userID: roomProxy.currentUserID) {
+                if case let .success(value) = await roomProxy.canUserRedact(userID: roomProxy.ownUserID) {
                     canCurrentUserRedact = value
                 } else {
                     canCurrentUserRedact = false

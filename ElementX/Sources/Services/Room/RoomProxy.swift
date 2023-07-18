@@ -55,8 +55,8 @@ class RoomProxy: RoomProxyProtocol {
         innerTimelineProvider
     }
 
-    var currentUserID: String {
-        room.currentUserId()
+    var ownUserID: String {
+        room.ownUserId()
     }
 
     deinit {

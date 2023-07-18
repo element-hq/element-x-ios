@@ -718,11 +718,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingHasUnreadNotifications = value }
     }
     var underlyingHasUnreadNotifications: Bool!
-    var currentUserID: String {
-        get { return underlyingCurrentUserID }
-        set(value) { underlyingCurrentUserID = value }
+    var ownUserID: String {
+        get { return underlyingOwnUserID }
+        set(value) { underlyingOwnUserID = value }
     }
-    var underlyingCurrentUserID: String!
+    var underlyingOwnUserID: String!
     var name: String?
     var displayName: String?
     var topic: String?
