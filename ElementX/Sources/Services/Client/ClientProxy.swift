@@ -149,8 +149,8 @@ class ClientProxy: ClientProxyProtocol {
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                let roomId = try self.client.getDmRoom(userId: userID)?.id()
-                return .success(roomId)
+                let roomID = try self.client.getDmRoom(userId: userID)?.id()
+                return .success(roomID)
             } catch {
                 return .failure(.failedRetrievingDirectRoom)
             }
@@ -182,8 +182,8 @@ class ClientProxy: ClientProxyProtocol {
                                                       preset: isRoomPrivate ? .privateChat : .publicChat,
                                                       invite: userIDs,
                                                       avatar: avatarURL?.absoluteString)
-                let roomId = try self.client.createRoom(request: parameters)
-                return .success(roomId)
+                let roomID = try self.client.createRoom(request: parameters)
+                return .success(roomID)
             } catch {
                 return .failure(.failedCreatingRoom)
             }
@@ -208,16 +208,16 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     /// Await the room to be available in the room summary list
-    /// - Parameter result: the result of a room creation Task with the roomId
+    /// - Parameter result: the result of a room creation Task with the `roomID`.
     private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?) async -> Result<String, ClientProxyError> {
-        guard case .success(let roomId) = result else { return result }
+        guard case .success(let roomID) = result else { return result }
         let runner = ExpiringTaskRunner { [weak self] in
             guard let roomLists = self?.roomSummaryProvider?.roomListPublisher.values else {
                 return
             }
             // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
             for await roomList in roomLists {
-                guard let summary = roomList.first(where: { $0.id == roomId }) else { continue }
+                guard let summary = roomList.first(where: { $0.id == roomID }) else { continue }
                 guard let name else { break }
                 if summary.name == name {
                     break

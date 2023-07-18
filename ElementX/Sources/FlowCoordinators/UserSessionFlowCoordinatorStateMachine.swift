@@ -29,23 +29,23 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the welcome screen.
         case welcomeScreen
         
-        /// Showing the home screen. The `selectedRoomId` represents the timeline shown on the detail panel (if any)
-        case roomList(selectedRoomId: String?)
+        /// Showing the home screen. The `selectedRoomID` represents the timeline shown on the detail panel (if any)
+        case roomList(selectedRoomID: String?)
                 
         /// Showing the session verification flows
-        case sessionVerificationScreen(selectedRoomId: String?)
+        case sessionVerificationScreen(selectedRoomID: String?)
 
         /// Showing the session verification flows
-        case feedbackScreen(selectedRoomId: String?)
+        case feedbackScreen(selectedRoomID: String?)
         
         /// Showing the settings screen
-        case settingsScreen(selectedRoomId: String?)
+        case settingsScreen(selectedRoomID: String?)
         
         /// Showing the start chat screen
-        case startChatScreen(selectedRoomId: String?)
+        case startChatScreen(selectedRoomID: String?)
         
         /// Showing invites list screen
-        case invitesScreen(selectedRoomId: String?)
+        case invitesScreen(selectedRoomID: String?)
     }
     
     struct EventUserInfo {
@@ -54,21 +54,26 @@ class UserSessionFlowCoordinatorStateMachine {
 
     /// Events that can be triggered on the AppCoordinator state machine
     enum Event: EventType {
-        /// Start the user session flows
+        /// Start the user session flows.
         case start
-        /// Starts the user session flows with the welcome screen
+        /// Starts the user session flows with the welcome screen.
+        /// **Note:** This is event is only for users who used the app before v1.1.8.
+        /// It can be removed once the older TestFlight builds have expired.
         case startWithWelcomeScreen
         /// Start the user session flows with a migration screen.
         case startWithMigration
+        
         /// Request to transition from the migration state to the home screen.
         case completeMigration
-
+        
+        /// Request presentation of the welcome screen.
         case presentWelcomeScreen
+        /// The welcome screen has been dismissed.
         case dismissedWelcomeScreen
         
         /// Request presentation for a particular room
-        /// - Parameter roomId:the room identifier
-        case selectRoom(roomId: String)
+        /// - Parameter roomID:the room identifier
+        case selectRoom(roomID: String)
         /// The room screen has been dismissed
         case deselectRoom
         
@@ -111,50 +116,50 @@ class UserSessionFlowCoordinatorStateMachine {
 
     // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomId: nil)])
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomID: nil)])
         stateMachine.addRoutes(event: .startWithMigration, transitions: [.initial => .migration])
         stateMachine.addRoutes(event: .startWithWelcomeScreen, transitions: [.initial => .welcomeScreen])
-        stateMachine.addRoutes(event: .completeMigration, transitions: [.migration => .roomList(selectedRoomId: nil)])
-        stateMachine.addRoutes(event: .dismissedWelcomeScreen, transitions: [.welcomeScreen => .roomList(selectedRoomId: nil)])
+        stateMachine.addRoutes(event: .completeMigration, transitions: [.migration => .roomList(selectedRoomID: nil)])
+        stateMachine.addRoutes(event: .dismissedWelcomeScreen, transitions: [.welcomeScreen => .roomList(selectedRoomID: nil)])
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
-            case (.selectRoom(let roomId), .roomList):
-                return .roomList(selectedRoomId: roomId)
-            case (.selectRoom(let roomId), .invitesScreen):
-                return .invitesScreen(selectedRoomId: roomId)
+            case (.selectRoom(let roomID), .roomList):
+                return .roomList(selectedRoomID: roomID)
+            case (.selectRoom(let roomID), .invitesScreen):
+                return .invitesScreen(selectedRoomID: roomID)
             case (.deselectRoom, .roomList):
-                return .roomList(selectedRoomId: nil)
+                return .roomList(selectedRoomID: nil)
             case (.deselectRoom, .invitesScreen):
-                return .invitesScreen(selectedRoomId: nil)
+                return .invitesScreen(selectedRoomID: nil)
 
-            case (.showSettingsScreen, .roomList(let selectedRoomId)):
-                return .settingsScreen(selectedRoomId: selectedRoomId)
-            case (.dismissedSettingsScreen, .settingsScreen(let selectedRoomId)):
-                return .roomList(selectedRoomId: selectedRoomId)
+            case (.showSettingsScreen, .roomList(let selectedRoomID)):
+                return .settingsScreen(selectedRoomID: selectedRoomID)
+            case (.dismissedSettingsScreen, .settingsScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.feedbackScreen, .roomList(let selectedRoomId)):
-                return .feedbackScreen(selectedRoomId: selectedRoomId)
-            case (.dismissedFeedbackScreen, .feedbackScreen(let selectedRoomId)):
-                return .roomList(selectedRoomId: selectedRoomId)
+            case (.feedbackScreen, .roomList(let selectedRoomID)):
+                return .feedbackScreen(selectedRoomID: selectedRoomID)
+            case (.dismissedFeedbackScreen, .feedbackScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.showSessionVerificationScreen, .roomList(let selectedRoomId)):
-                return .sessionVerificationScreen(selectedRoomId: selectedRoomId)
-            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomId)):
-                return .roomList(selectedRoomId: selectedRoomId)
+            case (.showSessionVerificationScreen, .roomList(let selectedRoomID)):
+                return .sessionVerificationScreen(selectedRoomID: selectedRoomID)
+            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
-            case (.showStartChatScreen, .roomList(let selectedRoomId)):
-                return .startChatScreen(selectedRoomId: selectedRoomId)
-            case (.dismissedStartChatScreen, .startChatScreen(let selectedRoomId)):
-                return .roomList(selectedRoomId: selectedRoomId)
+            case (.showStartChatScreen, .roomList(let selectedRoomID)):
+                return .startChatScreen(selectedRoomID: selectedRoomID)
+            case (.dismissedStartChatScreen, .startChatScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
             
-            case (.showInvitesScreen, .roomList(let selectedRoomId)):
-                return .invitesScreen(selectedRoomId: selectedRoomId)
-            case (.showInvitesScreen, .invitesScreen(let selectedRoomId)):
-                return .invitesScreen(selectedRoomId: selectedRoomId)
+            case (.showInvitesScreen, .roomList(let selectedRoomID)):
+                return .invitesScreen(selectedRoomID: selectedRoomID)
+            case (.showInvitesScreen, .invitesScreen(let selectedRoomID)):
+                return .invitesScreen(selectedRoomID: selectedRoomID)
 
-            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
-                return .roomList(selectedRoomId: selectedRoomId)
+            case (.closedInvitesScreen, .invitesScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
 
             case (.presentWelcomeScreen, .roomList):
                 return .welcomeScreen
@@ -190,10 +195,10 @@ class UserSessionFlowCoordinatorStateMachine {
     }
 
     /// Flag indicating the machine is displaying room screen with given room identifier
-    func isDisplayingRoomScreen(withRoomId roomId: String) -> Bool {
+    func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         switch stateMachine.state {
-        case .roomList(let selectedRoomId):
-            return roomId == selectedRoomId
+        case .roomList(let selectedRoomID):
+            return roomID == selectedRoomID
         default:
             return false
         }
