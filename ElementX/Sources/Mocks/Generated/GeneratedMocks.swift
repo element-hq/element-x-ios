@@ -718,6 +718,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingHasUnreadNotifications = value }
     }
     var underlyingHasUnreadNotifications: Bool!
+    var ownUserID: String {
+        get { return underlyingOwnUserID }
+        set(value) { underlyingOwnUserID = value }
+    }
+    var underlyingOwnUserID: String!
     var name: String?
     var displayName: String?
     var topic: String?
@@ -1358,6 +1363,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return await uploadAvatarMediaClosure(media)
         } else {
             return uploadAvatarMediaReturnValue
+        }
+    }
+    //MARK: - canUserRedact
+
+    var canUserRedactUserIDCallsCount = 0
+    var canUserRedactUserIDCalled: Bool {
+        return canUserRedactUserIDCallsCount > 0
+    }
+    var canUserRedactUserIDReceivedUserID: String?
+    var canUserRedactUserIDReceivedInvocations: [String] = []
+    var canUserRedactUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserRedactUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserRedactUserIDCallsCount += 1
+        canUserRedactUserIDReceivedUserID = userID
+        canUserRedactUserIDReceivedInvocations.append(userID)
+        if let canUserRedactUserIDClosure = canUserRedactUserIDClosure {
+            return await canUserRedactUserIDClosure(userID)
+        } else {
+            return canUserRedactUserIDReturnValue
         }
     }
 }

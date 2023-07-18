@@ -34,6 +34,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
+
+    private var canCurrentUserRedact = false
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -104,7 +106,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .markRoomAsRead:
             Task { await markRoomAsRead() }
         case .timelineItemMenu(let itemID):
-            showTimelineItemActionMenu(for: itemID)
+            Task {
+                if case let .success(value) = await roomProxy.canUserRedact(userID: roomProxy.ownUserID) {
+                    canCurrentUserRedact = value
+                } else {
+                    canCurrentUserRedact = false
+                }
+                showTimelineItemActionMenu(for: itemID)
+            }
         case .timelineItemMenuAction(let itemID, let action):
             processTimelineItemMenuAction(action, itemID: itemID)
         case .displayCameraPicker:
@@ -408,9 +417,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         actions.append(.copyPermalink)
         
-        if item.isOutgoing {
+        if canRedactItem(item) {
             actions.append(.redact)
-        } else {
+        }
+
+        if !item.isOutgoing {
             actions.append(.report)
         }
 
@@ -423,6 +434,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         return .init(actions: actions, debugActions: debugActions)
+    }
+
+    private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
+        item.isOutgoing || (canCurrentUserRedact && !roomProxy.isDirect)
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
