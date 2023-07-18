@@ -69,12 +69,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             options.tracesSampleRate = 1.0
 
             options.beforeSend = { event in
-                MXLog.error("Sentry detected crash: \(event)")
+                MXLog.error("Sentry detected crash: \(event.eventId.sentryIdString)")
                 return event
             }
 
             options.onCrashedLastRun = { [weak self] event in
-                MXLog.error("Sentry detected application was crashed: \(event)")
+                MXLog.error("Sentry detected application was crashed: \(event.eventId.sentryIdString)")
                 self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
