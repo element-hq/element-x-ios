@@ -436,7 +436,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions, debugActions: debugActions)
     }
 
-    private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool  {
+    private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
         item.isOutgoing || (canCurrentUserRedact && !roomProxy.isDirect)
     }
     
