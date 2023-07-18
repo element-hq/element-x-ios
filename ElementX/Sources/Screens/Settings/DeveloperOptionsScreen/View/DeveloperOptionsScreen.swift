@@ -22,7 +22,7 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
-            Section {
+            Section("Timeline") {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }
@@ -30,29 +30,33 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
                 
-                Toggle(isOn: $context.userSuggestionsEnabled) {
-                    Text("User suggestions")
-                }
-                .onChange(of: context.userSuggestionsEnabled) { _ in
-                    context.send(viewAction: .changedUserSuggestionsEnabled)
-                }
-
                 Toggle(isOn: $context.readReceiptsEnabled) {
                     Text("Show read receipts")
-                    Text("requires app reboot")
+                    Text("Requires app reboot")
                 }
                 .onChange(of: context.readReceiptsEnabled) { _ in
                     context.send(viewAction: .changedReadReceiptsEnabled)
                 }
-
+            }
+            
+            Section("Notifications") {
                 Toggle(isOn: $context.isEncryptionSyncEnabled) {
                     Text("Use notification encryption sync")
-                    Text("requires app reboot")
+                    Text("Requires app reboot")
                 }
                 .onChange(of: context.isEncryptionSyncEnabled) { _ in
                     context.send(viewAction: .changedIsEncryptionSyncEnabled)
                 }
-
+                
+                Toggle(isOn: $context.notificationSettingsEnabled) {
+                    Text("Show notification settings")
+                }
+                .onChange(of: context.notificationSettingsEnabled) { _ in
+                    context.send(viewAction: .changedNotificationSettingsEnabled)
+                }
+            }
+            
+            Section("Location sharing") {
                 Toggle(isOn: $context.locationEventsEnabled) {
                     Text("Location events in timeline")
                 }
@@ -66,12 +70,14 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.shareLocationEnabled) { _ in
                     context.send(viewAction: .changedShareLocationEnabled)
                 }
-                
-                Toggle(isOn: $context.notificationSettingsEnabled) {
-                    Text("Show notification settings")
+            }
+            
+            Section("Room creation") {
+                Toggle(isOn: $context.userSuggestionsEnabled) {
+                    Text("User suggestions")
                 }
-                .onChange(of: context.notificationSettingsEnabled) { _ in
-                    context.send(viewAction: .changedNotificationSettingsEnabled)
+                .onChange(of: context.userSuggestionsEnabled) { _ in
+                    context.send(viewAction: .changedUserSuggestionsEnabled)
                 }
             }
             
@@ -80,6 +86,14 @@ struct DeveloperOptionsScreen: View {
                     showConfetti = true
                 } label: {
                     Text("🥳")
+                        .frame(maxWidth: .infinity)
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
+                }
+                
+                Button {
+                    fatalError("This crash is a test.")
+                } label: {
+                    Text("💥")
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -118,8 +132,10 @@ struct DeveloperOptionsScreen: View {
 // MARK: - Previews
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
+    static let viewModel = DeveloperOptionsScreenViewModel(appSettings: ServiceLocator.shared.settings)
     static var previews: some View {
-        let viewModel = DeveloperOptionsScreenViewModel(appSettings: ServiceLocator.shared.settings)
-        DeveloperOptionsScreen(context: viewModel.context)
+        NavigationStack {
+            DeveloperOptionsScreen(context: viewModel.context)
+        }
     }
 }
