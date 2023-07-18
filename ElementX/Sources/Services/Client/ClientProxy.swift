@@ -34,9 +34,6 @@ class ClientProxy: ClientProxyProtocol {
     private var syncService: SyncService?
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
-    #warning("This is a workaround until the RustSDK provides a sync service state getter")
-    private var appServiceStateUpdateCurrentValueSubject = CurrentValueSubject<SyncServiceState, Never>(.terminated)
-
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
 
@@ -113,7 +110,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSyncing: Bool {
-        isStartingSync || appServiceStateUpdateCurrentValueSubject.value == .running
+        isStartingSync || syncService?.currentState() == .running
     }
     
     /// Ensure we don't call start sync whilst awaiting a previous call.
@@ -439,8 +436,6 @@ class ClientProxy: ClientProxyProtocol {
             guard let self else { return }
             
             MXLog.info("Received app service update: \(state)")
-            
-            appServiceStateUpdateCurrentValueSubject.send(state)
             
             switch state {
             case .running, .terminated, .idle:
