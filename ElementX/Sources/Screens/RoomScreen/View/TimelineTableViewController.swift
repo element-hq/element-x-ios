@@ -157,6 +157,10 @@ class TimelineTableViewController: UIViewController {
                 self.scrollToBottom(animated: false) // Force the bottom to be visible as some timelines misbehave.
             }
             .store(in: &cancellables)
+
+        ServiceLocator.shared.settings.$timelineDiffableAnimationsEnabled
+            .weakAssign(to: \.shouldAnimate, on: self)
+            .store(in: &cancellables)
         
         configureDataSource()
     }
@@ -170,11 +174,6 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
-        // This is to prevent the SS proxy issue that forces a full refresh of all the timeline items
-        // the first time the timeline is opened
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.shouldAnimate = ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled
-        }
     }
     
     override func didMove(toParent parent: UIViewController?) {
