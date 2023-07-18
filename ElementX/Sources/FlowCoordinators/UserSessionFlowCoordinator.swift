@@ -77,7 +77,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentedRoom(let roomID):
                 self.analytics.signpost.beginRoomFlow(roomID)
-                self.stateMachine.processEvent(.selectRoom(roomId: roomID))
+                self.stateMachine.processEvent(.selectRoom(roomID: roomID))
             case .dismissedRoom:
                 self.stateMachine.processEvent(.deselectRoom)
                 self.analytics.signpost.endRoomFlow()
@@ -100,8 +100,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     func stop() { }
 
-    func isDisplayingRoomScreen(withRoomId roomId: String) -> Bool {
-        stateMachine.isDisplayingRoomScreen(withRoomId: roomId)
+    func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
+        stateMachine.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
     // MARK: - FlowCoordinatorProtocol
@@ -202,8 +202,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addTransitionHandler { [weak self] context in
             switch context.toState {
-            case .roomList(let selectedRoomId):
-                self?.selectedRoomSubject.send(selectedRoomId)
+            case .roomList(let selectedRoomID):
+                self?.selectedRoomSubject.send(selectedRoomID)
             default:
                 break
             }
@@ -259,8 +259,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .presentRoomDetails(let roomID):
                 self.roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
             case .roomLeft(let roomID):
-                if case .roomList(selectedRoomId: let selectedRoomId) = stateMachine.state,
-                   selectedRoomId == roomID {
+                if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
+                   selectedRoomID == roomID {
                     self.roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
                 }
             case .presentSettingsScreen:

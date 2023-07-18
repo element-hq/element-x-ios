@@ -142,14 +142,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
         
     func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
-        guard let roomId = content.roomID else {
+        guard let roomID = content.roomID else {
             return true
         }
         guard let userSessionFlowCoordinator else {
             // there is not a user session yet
             return false
         }
-        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
+        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
     func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
@@ -179,10 +179,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         MXLog.info("[AppCoordinator] handle notification reply")
         
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+        guard let roomID = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
         }
-        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
+        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID)
         switch await roomProxy?.sendMessage(replyText) {
         case .success:
             break
