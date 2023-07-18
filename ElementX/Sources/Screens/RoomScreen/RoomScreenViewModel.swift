@@ -411,7 +411,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.edit)
         }
 
-        if item.isMessage, !(item is LocationRoomTimelineItem) {
+        if item.isMessage, !item.isLocation {
             actions.append(.copy)
         }
         

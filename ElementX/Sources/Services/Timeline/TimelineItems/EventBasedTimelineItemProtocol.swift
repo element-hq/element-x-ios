@@ -42,6 +42,10 @@ extension EventBasedTimelineItemProtocol {
         self is EventBasedMessageTimelineItemProtocol
     }
 
+    var isLocation: Bool {
+        self is LocationRoomTimelineItem
+    }
+
     var isRedacted: Bool {
         self is RedactedRoomTimelineItem
     }
