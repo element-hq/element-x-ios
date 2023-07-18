@@ -97,7 +97,7 @@ class TimelineTableViewController: UIViewController {
     private var previousLayout: LayoutDescriptor?
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
-    /// Wether the scroll and the animations should happen
+    /// Whether the scroll and the animations should happen
     private var shouldAnimate = false
     
     init(coordinator: TimelineView.Coordinator,
@@ -170,13 +170,11 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
-        if ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled {
             // This is to prevent the SS proxy issue that forces a full refresh of all the timeline items
             // the first time the timeline is opened
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.shouldAnimate = true
+                self.shouldAnimate = ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled
             }
-        }
     }
     
     override func didMove(toParent parent: UIViewController?) {
