@@ -355,8 +355,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                // Separators without stable identifiers cause UI glitches
-                let identifier = "\(chunkIndex)-\(dateString)"
+                let identifier = date.formatted(.iso8601.dateSeparator(.dash))
                 return SeparatorRoomTimelineItem(id: .init(timelineID: identifier), text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem()
