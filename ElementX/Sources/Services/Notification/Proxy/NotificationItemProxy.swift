@@ -70,13 +70,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     let roomID: String
 
     var event: TimelineEventProxyProtocol {
-        switch notificationItem.event {
-        case .timeline(let timelineEvent):
-            return TimelineEventProxy(timelineEvent: timelineEvent)
-        case .invite:
-            #warning("Review me")
-            fatalError(".invite not supported yet")
-        }
+        TimelineEventProxy(timelineEvent: notificationItem.event)
     }
 
     var senderDisplayName: String? {
@@ -100,7 +94,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var isNoisy: Bool {
-        notificationItem.isNoisy == true
+        notificationItem.isNoisy ?? false
     }
 
     var senderAvatarMediaSource: MediaSourceProxy? {

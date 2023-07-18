@@ -18,6 +18,7 @@ import Foundation
 import MatrixRustSDK
 
 final class NSEUserSession {
+    private let isEncryptionSyncEnabled: Bool
     private let baseClient: Client
     private let notificationClient: NotificationClient
     private let userID: String
@@ -25,26 +26,35 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
-    init(credentials: KeychainCredentials) throws {
+    init(credentials: KeychainCredentials, isEncryptionSyncEnabled: Bool) throws {
         userID = credentials.userID
-        baseClient = try ClientBuilder()
+        var builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
-            .build()
 
+        if isEncryptionSyncEnabled {
+            builder = builder.withMemoryStateStore()
+        }
+
+        baseClient = try builder.build()
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = try baseClient
+        notificationClient = baseClient
             .notificationClient()
-            .retryDecryption(withCrossProcessLock: true)
+            .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
             .finish()
+
+        self.isEncryptionSyncEnabled = isEncryptionSyncEnabled
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
         await Task.dispatch(on: .global()) {
             do {
-                #warning("Review me")
-                guard let notification = try self.notificationClient.legacyGetNotification(roomId: roomID, eventId: eventID) else {
+                let notification = try self.isEncryptionSyncEnabled ?
+                    self.notificationClient.getNotificationWithSlidingSync(roomId: roomID, eventId: eventID) :
+                    self.notificationClient.getNotificationWithContext(roomId: roomID, eventId: eventID)
+
+                guard let notification else {
                     return nil
                 }
                 return NotificationItemProxy(notificationItem: notification, receiverID: self.userID, roomID: roomID)
