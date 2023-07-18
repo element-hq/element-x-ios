@@ -3618,7 +3618,7 @@
 			path = Timeline;
 			sourceTree = "<group>";
 		};
-		"TEMP_DD7E56C3-C054-403A-942D-AAD3ACD56CFE" /* element-x-ios */ = {
+		"TEMP_F9C0D387-4F2A-4721-B83D-6CECB81A6B6F" /* element-x-ios */ = {
 			isa = PBXGroup;
 			children = (
 				41553551C55AD59885840F0E /* secrets.xcconfig */,
@@ -5327,7 +5327,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.100-alpha";
+				version = "1.0.101-alpha";
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
