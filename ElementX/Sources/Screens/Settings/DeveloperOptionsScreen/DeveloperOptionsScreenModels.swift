@@ -32,6 +32,7 @@ struct DeveloperOptionsScreenViewStateBindings {
     var locationEventsEnabled: Bool
     var shareLocationEnabled: Bool
     var notificationSettingsEnabled: Bool
+    var timelineDiffableAnimationsEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -42,5 +43,6 @@ enum DeveloperOptionsScreenViewAction {
     case changedLocationEventsEnabled
     case changedShareLocationEnabled
     case changedNotificationSettingsEnabled
+    case changedTimelineDiffableAnimationsEnabled
     case clearCache
 }

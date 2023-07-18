@@ -97,6 +97,8 @@ class TimelineTableViewController: UIViewController {
     private var previousLayout: LayoutDescriptor?
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
+    /// Whether the scroll and the animations should happen
+    private var shouldAnimate = false
     
     init(coordinator: TimelineView.Coordinator,
          timelineStyle: TimelineStyle,
@@ -168,6 +170,11 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
+        // This is to prevent the SS proxy issue that forces a full refresh of all the timeline items
+        // the first time the timeline is opened
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.shouldAnimate = ServiceLocator.shared.settings.timelineDiffableAnimationsEnabled
+        }
     }
     
     override func didMove(toParent parent: UIViewController?) {
@@ -231,8 +238,7 @@ class TimelineTableViewController: UIViewController {
             return cell
         }
 
-//        dataSource?.defaultRowAnimation = .automatic
-        
+        dataSource?.defaultRowAnimation = .fade
         tableView.delegate = self
     }
     
@@ -249,13 +255,14 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
 
-        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: dataSource.snapshot().itemIdentifiers))")
-        dataSource.apply(snapshot, animatingDifferences: false)
-        
-        // Probably redundant now we observe content size changes…
-        // Leaving in place for the release and will reassess after.
-        updateTopPadding()
-        
+        let currentSnapshot = dataSource.snapshot()
+        MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
+
+        // We only animate if the last item has changed
+        // We don't care to animate backpagination since we want to keep the scrolling position when that happens
+        let animated = shouldAnimate && snapshot.itemIdentifiers.last != currentSnapshot.itemIdentifiers.last
+        dataSource.apply(snapshot, animatingDifferences: animated)
+
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         } else if let pinnedItem = previousLayout.pinnedItem {
