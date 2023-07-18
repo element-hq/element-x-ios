@@ -39,6 +39,11 @@ extension NSItemProvider {
             return false
         }
         
+        // Prevents media upload triggering for text copied from Notes.app #1247
+        if mimeType == "application/x-webarchive" {
+            return false
+        }
+        
         return mimeType.hasPrefix("image/") || mimeType.hasPrefix("video/") || mimeType.hasPrefix("application/")
     }
 }
