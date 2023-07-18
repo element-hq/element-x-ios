@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import SwiftUIIntrospect
 
 extension View {
     /// Disable the interactive dismiss while the search is on.
@@ -27,6 +28,21 @@ extension View {
     /// - Note: the modifier needs to be called before the `searchable` modifier to work properly
     func dismissSearchOnDisappear() -> some View {
         modifier(DismissSearchOnDisappear())
+    }
+    
+    /// Configures a searchable's underlying search controller.
+    /// - Parameters:
+    ///   - hidesNavigationBar: A Boolean indicating whether to hide the navigation bar when searching.
+    ///   - showsCancelButton: A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button.
+    ///
+    ///   This modifier may be moved into Compound once styles for the various configuration options have been defined.
+    func searchableConfiguration(hidesNavigationBar: Bool = true,
+                                 showsCancelButton: Bool = true) -> some View {
+        introspect(.navigationStack, on: .iOS(.v16), scope: .ancestor) { navigationController in
+            guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
+            searchController.hidesNavigationBarDuringPresentation = hidesNavigationBar
+            searchController.automaticallyShowsCancelButton = showsCancelButton
+        }
     }
 }
 

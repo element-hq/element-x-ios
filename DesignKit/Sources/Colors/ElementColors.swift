@@ -21,7 +21,6 @@ import SwiftUI
 
 public extension Color {
     static let element = ElementColors()
-    static let global = Color.global
 }
 
 public struct ElementColors {
@@ -29,26 +28,6 @@ public struct ElementColors {
     
     private let colors = DesignTokens.CompoundColors()
     
-    @available(swift, obsoleted: 5.0, message: "Use textActionPrimary from Compound.")
-    public var accent: Color { colors.primaryContent }
-    @available(swift, obsoleted: 5.0, message: "Use textCriticalPrimary/iconCriticalPrimary from Compound.")
-    public var alert: Color { colors.alert }
-    @available(swift, obsoleted: 5.0, message: "Use textLinkExternal from Compound.")
-    public var links: Color { colors.links }
-    @available(swift, obsoleted: 5.0, message: "Use textPrimary/iconPrimary from Compound.")
-    public var primaryContent: Color { colors.primaryContent }
-    @available(swift, obsoleted: 5.0, message: "Use textSecondary/iconSecondary from Compound.")
-    public var secondaryContent: Color { colors.secondaryContent }
-    @available(swift, obsoleted: 5.0, message: "Use iconTertiary form Compound for icons. For text use textSecondary. For borders and backgrounds check with Design.")
-    public var tertiaryContent: Color { colors.tertiaryContent }
-    @available(swift, obsoleted: 5.0, message: "Use iconQuaternary from Compound for icons. For text, borders and backgrounds check with Design.")
-    public var quaternaryContent: Color { colors.quaternaryContent }
-    @available(swift, obsoleted: 5.0, message: "Check with Design for the tokens to use from Compound.")
-    public var quinaryContent: Color { colors.quinaryContent }
-    @available(swift, obsoleted: 5.0, message: "Use bgSubtleSecondary from Compound.")
-    public var system: Color { colors.system }
-    @available(swift, obsoleted: 5.0, message: "Use bgCanvasDefault from Compound for backgrounds. For text or icons use textOnSolidPrimary/iconOnSolidPrimary.")
-    public var background: Color { colors.background }
     @available(swift, deprecated: 5.0, message: "Use textActionAccent/iconAccentTertiary from Compound.")
     public var brand: Color { colors.accent }
     

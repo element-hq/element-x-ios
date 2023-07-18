@@ -15,8 +15,8 @@
 //
 
 import DesignTokens
-import Introspect
 import SwiftUI
+import SwiftUIIntrospect
 
 public extension TextFieldStyle where Self == ElementTextFieldStyle {
     static func elementInput(labelText: String? = nil,
@@ -131,7 +131,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                     }
                     .onTapGesture { isFocused = true } // Set focus with taps outside of the text field
                 }
-                .introspectTextField { textField in
+                .introspect(.textField, on: .iOS(.v16)) { textField in
                     textField.clearButtonMode = .whileEditing
                     textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor(placeholderColor)])

@@ -17,6 +17,7 @@
 import Combine
 import Compound
 import SwiftUI
+import SwiftUIIntrospect
 
 struct HomeScreen: View {
     enum Constants {
@@ -69,7 +70,7 @@ struct HomeScreen: View {
                 .disableAutocorrection(true)
             }
         }
-        .introspectScrollView { scrollView in
+        .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
             guard scrollView != scrollViewAdapter.scrollView else { return }
             scrollViewAdapter.scrollView = scrollView
         }
