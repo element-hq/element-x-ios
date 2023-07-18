@@ -233,10 +233,11 @@ private class ElementTextView: UITextView {
     }
     
     override func paste(_ sender: Any?) {
-        super.paste(sender)
-        
         guard let provider = UIPasteboard.general.itemProviders.first,
               provider.isSupportedForPasteOrDrop else {
+            // If the item is not supported for media upload then
+            // just try pasting its contents into the textfield
+            super.paste(sender)
             return
         }
         
