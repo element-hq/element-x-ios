@@ -18,7 +18,7 @@ import Foundation
 
 extension MapTilerStyleBuilder {
     init(appSettings: AppSettings) {
-        self.init(lightURL: appSettings.lightTileMapStyleURL, darkURL: appSettings.darkTileMapStyleURL, key: appSettings.mapTilerApiKey)
+        self.init(baseURL: appSettings.mapTilerBaseURL, key: appSettings.mapTilerApiKey)
     }
 }
 

@@ -17,25 +17,17 @@
 import Foundation
 
 struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
-    private let lightURL: URL
-    private let darkURL: URL
+    private let baseURL: URL
     private let key: String
     
-    init(lightURL: URL, darkURL: URL, key: String) {
-        self.lightURL = lightURL
-        self.darkURL = darkURL
+    init(baseURL: URL, key: String) {
+        self.baseURL = baseURL
         self.key = key
     }
     
     func dynamicMapURL(for style: MapLibreStyle) -> URL? {
-        var url: URL
-        switch style {
-        case .light:
-            url = lightURL
-        case .dark:
-            url = darkURL
-        }
-        
+        var url: URL = baseURL
+        url.appendPathComponent(style.rawValue, conformingTo: .item)
         url.appendPathComponent("style.json", conformingTo: .json)
         let authorization = MapTilerAuthorization(key: key)
         return authorization.authorizeURL(url)
