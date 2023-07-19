@@ -17,5 +17,5 @@
 import Foundation
 
 protocol MapTilerStyleBuilderProtocol {
-    func dynamicMapURL(for style: MapTilerStyle) -> URL?
+    func dynamicMapURL(for style: MapLibreStyle) -> URL?
 }

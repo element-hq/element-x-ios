@@ -14,12 +14,7 @@
 // limitations under the License.
 //
 
-import CoreLocation
-
-protocol MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapLibreStyle,
-                      coordinates: CLLocationCoordinate2D,
-                      zoomLevel: Double,
-                      size: CGSize,
-                      attribution: MapTilerAttributionPlacement) -> URL?
+enum MapLibreStyle: String {
+    case light = "9bc819c8-e627-474a-a348-ec144fe3d810"
+    case dark = "dea61faf-292b-4774-9660-58fcef89a7f3"
 }

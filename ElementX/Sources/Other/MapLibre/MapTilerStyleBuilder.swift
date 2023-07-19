@@ -27,7 +27,7 @@ struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
         self.key = key
     }
     
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
+    func dynamicMapURL(for style: MapLibreStyle) -> URL? {
         var url: URL
         switch style {
         case .light:

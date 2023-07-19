@@ -28,11 +28,6 @@ enum ShowUserLocationMode {
     case hide
 }
 
-enum MapTilerStyle {
-    case light
-    case dark
-}
-
 enum MapLibreError: Error {
     case failedLoadingMap
     case failedLocatingUser
