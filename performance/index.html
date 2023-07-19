@@ -9,12 +9,13 @@
   <body>
     <h1>Performance metrics from element-x-ios nightly integration runs</h2>
     <div>Also see the <a href="./perf-data.csv">raw data</a>. Be aware these are not absolute timings, the performance of the github runner will affect the time. Compare them as a relative action only.</div>
+    <div>Metrics are gathered based on signposts in the iOS code, while the app is being controlled automatically. The flows are repeated 5 times and the min/median/max presented here. Time for automation to complete is not included in these timings - they hook into the backends of the app where appropriate.</div>
     <table>
       <tr>
-        <td><h2>Launch time</h2></td>
-        <td><h2>Login time</h2></td>
-        <td><h2>Sync time</h2></td>
-        <td><h2>Roomflow time [1]</h2></td>
+        <td><h2>Launch time(s)</h2></td>
+        <td><h2>Login time(s)</h2></td>
+        <td><h2>Sync time(s)</h2></td>
+        <td><h2>Roomflow time(s) [1]</h2></td>
       </tr>
       <tr>
         <td><canvas id="launchPerformance"/></td>
@@ -22,8 +23,15 @@
         <td><canvas id="syncPerformance"/></td>
         <td><canvas id="roomflowPerformance"/></td>
       </tr>
+      <tr>
+        <td><small>Time to start app to first paint</small></td>
+        <td><small>Time from submitting user/pass form to completing all pre-sync tasks</small></td>
+        <td><small>Time from first request for sync to populated room list view in app</small></td>
+        <td><small>Time from click on first room in list to seeing contents of room.</small></td>
+
+      </tr>
      </table>
-     <div>[1] We're not confident that this is measuring a valid flow at present. Please disreguard for now</div>
+     <div>[1] We're not confident that this is measuring a valid flow at present, it should probably not be taking ~21s to complete. Please disreguard for now</div>
   <script>
   d3.csv('./perf-data.csv').then(makeCharts);
   
