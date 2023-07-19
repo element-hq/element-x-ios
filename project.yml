@@ -54,7 +54,7 @@ packages:
     minorVersion: 5.13.0
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: d1a28b8a311e33ddb517d10391037f1547a3c7b6
+    revision: 29233e1c95a17372d5e5afe689c31680bb07b1ea
     # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
@@ -80,9 +80,9 @@ packages:
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
-  Introspect:
+  SwiftUIIntrospect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    minorVersion: 0.2.0
+    minorVersion: 0.9.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 2.0.3

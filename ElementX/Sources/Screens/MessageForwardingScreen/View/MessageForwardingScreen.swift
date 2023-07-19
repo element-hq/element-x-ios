@@ -46,6 +46,7 @@ struct MessageForwardingScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+        .searchableConfiguration(hidesNavigationBar: false)
         .compoundSearchField()
         .disableAutocorrection(true)
     }
