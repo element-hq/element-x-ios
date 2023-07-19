@@ -53,14 +53,12 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, icon: Image(systemName: "camera.fill"))
                 }
-                
-                if ServiceLocator.shared.settings.shareLocationEnabled {
-                    Button {
-                        context.showAttachmentPopover = false
-                        context.send(viewAction: .displayLocationPicker)
-                    } label: {
-                        PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
-                    }
+
+                Button {
+                    context.showAttachmentPopover = false
+                    context.send(viewAction: .displayLocationPicker)
+                } label: {
+                    PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
                 }
             }
             .padding(.top, isPresented ? 20 : 0)
