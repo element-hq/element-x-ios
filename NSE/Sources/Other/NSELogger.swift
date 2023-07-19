@@ -81,7 +81,7 @@ class NSELogger {
         }
         isConfigured = true
 
-        MXLog.configure(target: "nse")
+        MXLog.configure(target: "nse", redirectToFiles: isatty(STDERR_FILENO) == 0)
     }
 
     static func logMemory(with tag: String) {

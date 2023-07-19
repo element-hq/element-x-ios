@@ -39,7 +39,7 @@ final class NSEUserSession {
         baseClient = try builder.build()
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = baseClient
+        notificationClient = try baseClient
             .notificationClient()
             .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
             .finish()
@@ -57,7 +57,10 @@ final class NSEUserSession {
                 guard let notification else {
                     return nil
                 }
-                return NotificationItemProxy(notificationItem: notification, receiverID: self.userID, roomID: roomID)
+                return NotificationItemProxy(notificationItem: notification,
+                                             eventID: eventID,
+                                             receiverID: self.userID,
+                                             roomID: roomID)
             } catch {
                 MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
                 return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: self.userID)
