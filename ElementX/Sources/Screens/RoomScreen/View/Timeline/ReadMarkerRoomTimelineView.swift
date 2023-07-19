@@ -38,7 +38,8 @@ struct ReadMarkerRoomTimelineView: View {
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
-    static let item = ReadMarkerRoomTimelineItem()
+    static let item = ReadMarkerRoomTimelineItem(id: .init(timelineID: .init(UUID().uuidString)))
+
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
             RoomTimelineItemView(viewModel: .init(type: .separator(.init(id: .init(timelineID: "Separator"), text: "Today")), groupStyle: .single))

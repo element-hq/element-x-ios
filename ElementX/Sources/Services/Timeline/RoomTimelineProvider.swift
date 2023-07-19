@@ -171,7 +171,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 private extension TimelineItem {
     var debugIdentifier: DebugIdentifier {
         if let virtualTimelineItem = asVirtual() {
-            return virtualTimelineItem.debugIdentifier
+            return .virtual(timelineID: String(uniqueId()), dscription: virtualTimelineItem.description)
         } else if let eventTimelineItem = asEvent() {
             return .event(timelineID: String(uniqueId()),
                           eventID: eventTimelineItem.eventId(),
@@ -189,8 +189,8 @@ private extension TimelineItemProxy {
             return .event(timelineID: eventTimelineItem.id.timelineID,
                           eventID: eventTimelineItem.id.eventID,
                           transactionID: eventTimelineItem.id.transactionID)
-        case .virtual(let virtualTimelineItem):
-            return virtualTimelineItem.debugIdentifier
+        case .virtual(let virtualTimelineItem, let timelineID):
+            return .virtual(timelineID: timelineID, dscription: virtualTimelineItem.description)
         case .unknown:
             return .unknown
         }
@@ -198,18 +198,18 @@ private extension TimelineItemProxy {
 }
 
 private extension VirtualTimelineItem {
-    var debugIdentifier: DebugIdentifier {
+    var description: String {
         switch self {
         case .dayDivider(let timestamp):
-            return .virtual("DayDiviver(\(timestamp))")
+            return "DayDiviver(\(timestamp))"
         case .readMarker:
-            return .virtual("ReadMarker")
+            return "ReadMarker"
         }
     }
 }
 
 enum DebugIdentifier {
-    case event(timelineID: String?, eventID: String?, transactionID: String?)
-    case virtual(String)
+    case event(timelineID: String, eventID: String?, transactionID: String?)
+    case virtual(timelineID: String, dscription: String)
     case unknown
 }
