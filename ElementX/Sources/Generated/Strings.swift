@@ -436,6 +436,8 @@ public enum L10n {
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
   public static var reportContentHint: String { return L10n.tr("Localizable", "report_content_hint") }
+  /// Add attachment
+  public static var richTextEditorA11yAddAttachment: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_attachment") }
   /// Toggle bullet list
   public static var richTextEditorBulletList: String { return L10n.tr("Localizable", "rich_text_editor_bullet_list") }
   /// Toggle code block
@@ -920,7 +922,7 @@ public enum L10n {
   public static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
   /// You're in.
   public static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
-  /// Calls, location sharing, search and more will be added later this year.
+  /// Calls, polls, search and more will be added later this year.
   public static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
   /// Message history for encrypted rooms won’t be available in this update.
   public static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }

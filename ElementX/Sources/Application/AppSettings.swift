@@ -32,8 +32,6 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case readReceiptsEnabled
-        case locationEventsEnabled
-        case shareLocationEnabled
         case hasShownWelcomeScreen
         case notificationSettingsEnabled
         case timelineDiffableAnimationsEnabled
@@ -218,12 +216,6 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
-
-    @UserPreference(key: UserDefaultsKeys.locationEventsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var locationEventsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.shareLocationEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var shareLocationEnabled
     
     @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var notificationSettingsEnabled

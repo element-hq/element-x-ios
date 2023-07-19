@@ -30,8 +30,6 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                                isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
-                                                               locationEventsEnabled: appSettings.locationEventsEnabled,
-                                                               shareLocationEnabled: appSettings.shareLocationEnabled,
                                                                notificationSettingsEnabled: appSettings.notificationSettingsEnabled,
                                                                timelineDiffableAnimationsEnabled: appSettings.timelineDiffableAnimationsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
@@ -53,10 +51,6 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.readReceiptsEnabled = state.bindings.readReceiptsEnabled
         case .changedIsEncryptionSyncEnabled:
             appSettings.isEncryptionSyncEnabled = state.bindings.isEncryptionSyncEnabled
-        case .changedLocationEventsEnabled:
-            appSettings.locationEventsEnabled = state.bindings.locationEventsEnabled
-        case .changedShareLocationEnabled:
-            appSettings.shareLocationEnabled = state.bindings.shareLocationEnabled
         case .changedNotificationSettingsEnabled:
             appSettings.notificationSettingsEnabled = state.bindings.notificationSettingsEnabled
         case .changedTimelineDiffableAnimationsEnabled:

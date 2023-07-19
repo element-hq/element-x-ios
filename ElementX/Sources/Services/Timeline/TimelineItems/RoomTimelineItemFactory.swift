@@ -75,9 +75,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .audio(let content):
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .location(let content):
-                guard ServiceLocator.shared.settings.locationEventsEnabled else {
-                    return nil
-                }
                 return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             case .none:
                 return nil

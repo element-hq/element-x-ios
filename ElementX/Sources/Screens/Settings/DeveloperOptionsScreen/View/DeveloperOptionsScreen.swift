@@ -19,7 +19,7 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
-    
+
     var body: some View {
         Form {
             Section("Timeline") {
@@ -38,7 +38,7 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedReadReceiptsEnabled)
                 }
             }
-            
+
             Section("Notifications") {
                 Toggle(isOn: $context.isEncryptionSyncEnabled) {
                     Text("Use notification encryption sync")
@@ -55,23 +55,7 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedNotificationSettingsEnabled)
                 }
             }
-            
-            Section("Location sharing") {
-                Toggle(isOn: $context.locationEventsEnabled) {
-                    Text("Location events in timeline")
-                }
-                .onChange(of: context.locationEventsEnabled) { _ in
-                    context.send(viewAction: .changedLocationEventsEnabled)
-                }
-                
-                Toggle(isOn: $context.shareLocationEnabled) {
-                    Text("Show share location action")
-                }
-                .onChange(of: context.shareLocationEnabled) { _ in
-                    context.send(viewAction: .changedShareLocationEnabled)
-                }
-            }
-            
+
             Section("Room creation") {
                 Toggle(isOn: $context.userSuggestionsEnabled) {
                     Text("User suggestions")
@@ -87,7 +71,7 @@ struct DeveloperOptionsScreen: View {
                     context.send(viewAction: .changedTimelineDiffableAnimationsEnabled)
                 }
             }
-            
+
             Section {
                 Button {
                     showConfetti = true
@@ -104,7 +88,7 @@ struct DeveloperOptionsScreen: View {
                         .frame(maxWidth: .infinity)
                 }
             }
-            
+
             Section {
                 Button(role: .destructive) {
                     context.send(viewAction: .clearCache)
@@ -119,7 +103,7 @@ struct DeveloperOptionsScreen: View {
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
     }
-    
+
     @ViewBuilder
     private var effectsView: some View {
         if showConfetti {
@@ -129,7 +113,7 @@ struct DeveloperOptionsScreen: View {
                 .task { await removeConfettiAfterDelay() }
         }
     }
-    
+
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
