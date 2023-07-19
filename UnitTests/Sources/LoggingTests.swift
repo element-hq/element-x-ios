@@ -252,21 +252,21 @@ class LoggingTests: XCTestCase {
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        let textMessage = TextRoomTimelineItem(id: .random,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
                                                sender: .init(id: "sender"),
                                                content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
         let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        let noticeMessage = NoticeRoomTimelineItem(id: .random,
                                                    timestamp: "",
                                                    isOutgoing: false,
                                                    isEditable: false,
                                                    sender: .init(id: "sender"),
                                                    content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
         let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        let emoteMessage = EmoteRoomTimelineItem(id: .random,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -278,13 +278,13 @@ class LoggingTests: XCTestCase {
                                                  isEditable: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
-        let videoMessage = VideoRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        let videoMessage = VideoRoomTimelineItem(id: .random,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
-        let fileMessage = FileRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        let fileMessage = FileRoomTimelineItem(id: .random,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,

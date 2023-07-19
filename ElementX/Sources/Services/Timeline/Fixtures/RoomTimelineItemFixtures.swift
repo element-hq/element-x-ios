@@ -20,14 +20,14 @@ enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
         SeparatorRoomTimelineItem(id: .init(timelineID: "Yesterday"), text: "Yesterday"),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "10:10 AM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Jacob"),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -36,7 +36,7 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: [ReactionSender(senderID: "me", timestamp: Date())])
                              ])),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -53,20 +53,20 @@ enum RoomTimelineItemFixtures {
                                                     ])
                              ])),
         SeparatorRoomTimelineItem(id: .init(timelineID: "Today"), text: "Today"),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "And John's speech was amazing!")),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
@@ -77,7 +77,7 @@ enum RoomTimelineItemFixtures {
                                                                                           ReadReceipt(userID: "bob", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "charlie", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
@@ -216,7 +216,7 @@ enum RoomTimelineItemFixtures {
 
 private extension TextRoomTimelineItem {
     init(text: String, senderDisplayName: String) {
-        self.init(id: .init(timelineID: UUID().uuidString),
+        self.init(id: .random,
                   timestamp: "10:47 am",
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,

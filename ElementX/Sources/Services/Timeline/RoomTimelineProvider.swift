@@ -171,14 +171,14 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 private extension TimelineItem {
     var debugIdentifier: DebugIdentifier {
         if let virtualTimelineItem = asVirtual() {
-            return virtualTimelineItem.debugIdentifier
+            return .virtual(timelineID: String(uniqueId()), dscription: virtualTimelineItem.description)
         } else if let eventTimelineItem = asEvent() {
             return .event(timelineID: String(uniqueId()),
                           eventID: eventTimelineItem.eventId(),
                           transactionID: eventTimelineItem.transactionId())
         }
         
-        return .unknown
+        return .unknown(timelineID: String(uniqueId()))
     }
 }
 
@@ -189,27 +189,27 @@ private extension TimelineItemProxy {
             return .event(timelineID: eventTimelineItem.id.timelineID,
                           eventID: eventTimelineItem.id.eventID,
                           transactionID: eventTimelineItem.id.transactionID)
-        case .virtual(let virtualTimelineItem):
-            return virtualTimelineItem.debugIdentifier
-        case .unknown:
-            return .unknown
+        case .virtual(let virtualTimelineItem, let timelineID):
+            return .virtual(timelineID: timelineID, dscription: virtualTimelineItem.description)
+        case .unknown(let item):
+            return .unknown(timelineID: String(item.uniqueId()))
         }
     }
 }
 
 private extension VirtualTimelineItem {
-    var debugIdentifier: DebugIdentifier {
+    var description: String {
         switch self {
         case .dayDivider(let timestamp):
-            return .virtual("DayDiviver(\(timestamp))")
+            return "DayDiviver(\(timestamp))"
         case .readMarker:
-            return .virtual("ReadMarker")
+            return "ReadMarker"
         }
     }
 }
 
 enum DebugIdentifier {
-    case event(timelineID: String?, eventID: String?, transactionID: String?)
-    case virtual(String)
-    case unknown
+    case event(timelineID: String, eventID: String?, transactionID: String?)
+    case virtual(timelineID: String, dscription: String)
+    case unknown(timelineID: String)
 }

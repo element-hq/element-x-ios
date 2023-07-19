@@ -55,7 +55,7 @@ private struct EncryptedHistoryLabelStyle: LabelStyle {
 
 struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = EncryptedHistoryRoomTimelineItem(id: .init(timelineID: UUID().uuidString))
+        let item = EncryptedHistoryRoomTimelineItem(id: .random)
         EncryptedHistoryRoomTimelineView(timelineItem: item)
     }
 }

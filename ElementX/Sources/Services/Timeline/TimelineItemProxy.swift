@@ -31,17 +31,24 @@ struct TimelineItemIdentifier: Hashable {
     var transactionID: String?
 }
 
+extension TimelineItemIdentifier {
+    /// Use only for mocks/tests
+    static var random: Self {
+        .init(timelineID: UUID().uuidString)
+    }
+}
+
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, timelineID: String)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
             self = .event(EventTimelineItemProxy(item: eventItem, id: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem)
+            self = .virtual(virtualItem, timelineID: String(item.uniqueId()))
         } else {
             self = .unknown(item)
         }

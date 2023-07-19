@@ -42,7 +42,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {
-        RedactedRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        RedactedRoomTimelineItem(id: .random,
                                  body: text,
                                  timestamp: timestamp,
                                  isOutgoing: false,

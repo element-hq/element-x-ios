@@ -309,7 +309,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString)))
+        viewModel.context.send(viewAction: .retrySend(itemID: .random))
         await Task.yield()
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 0)
     }
@@ -346,7 +346,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: userIndicatorControllerMock)
 
         // Test
-        viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString)))
+        viewModel.context.send(viewAction: .cancelSend(itemID: .random))
         await Task.yield()
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
@@ -376,7 +376,7 @@ class RoomScreenViewModelTests: XCTestCase {
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(senderID: sender, timestamp: Date())])] : []
-        self.init(id: .init(timelineID: UUID().uuidString),
+        self.init(id: .random,
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",

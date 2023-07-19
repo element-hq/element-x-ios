@@ -67,7 +67,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider {
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
-        EncryptedRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        EncryptedRoomTimelineItem(id: .random,
                                   body: text,
                                   encryptionType: .unknown,
                                   timestamp: timestamp,

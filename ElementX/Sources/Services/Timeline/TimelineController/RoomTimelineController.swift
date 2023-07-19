@@ -349,16 +349,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             return timelineItem
-        case .virtual(let virtualItem):
+        case .virtual(let virtualItem, let timelineID):
             switch virtualItem {
             case .dayDivider(let timestamp):
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                let identifier = date.formatted(.iso8601.dateSeparator(.dash))
-                return SeparatorRoomTimelineItem(id: .init(timelineID: identifier), text: dateString)
+                return SeparatorRoomTimelineItem(id: .init(timelineID: timelineID), text: dateString)
             case .readMarker:
-                return ReadMarkerRoomTimelineItem()
+                return ReadMarkerRoomTimelineItem(id: .init(timelineID: timelineID))
             }
         case .unknown:
             return nil
