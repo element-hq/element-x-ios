@@ -25,7 +25,7 @@ struct MapTilerStyleBuilder: MapTilerStyleBuilderProtocol {
         self.key = key
     }
     
-    func dynamicMapURL(for style: MapLibreStyle) -> URL? {
+    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
         var url: URL = baseURL
         url.appendPathComponent(style.rawValue, conformingTo: .item)
         url.appendPathComponent("style.json", conformingTo: .json)

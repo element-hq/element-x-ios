@@ -233,7 +233,7 @@ private extension MGLMapView {
     }
 }
 
-private extension MapLibreStyle {
+private extension MapTilerStyle {
     init(_ colorScheme: ColorScheme) {
         switch colorScheme {
         case .light:

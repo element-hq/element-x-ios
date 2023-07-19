@@ -88,7 +88,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
 }
 
 private extension ColorScheme {
-    var mapStyle: MapLibreStyle {
+    var mapStyle: MapTilerStyle {
         switch self {
         case .light:
             return .light
@@ -113,7 +113,7 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
 }
 
 private struct MapTilerStaticMapMock: MapTilerStaticMapProtocol {
-    func staticMapURL(for style: MapLibreStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
         switch style {
         case .light:
             return URL(string: "https://www.maptiler.com/img/cloud/home/map5.webp")

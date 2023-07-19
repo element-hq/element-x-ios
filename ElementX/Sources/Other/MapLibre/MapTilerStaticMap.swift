@@ -25,7 +25,7 @@ struct MapTilerStaticMap: MapTilerStaticMapProtocol {
         self.key = key
     }
     
-    func staticMapURL(for style: MapLibreStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
+    func staticMapURL(for style: MapTilerStyle, coordinates: CLLocationCoordinate2D, zoomLevel: Double, size: CGSize, attribution: MapTilerAttributionPlacement) -> URL? {
         var url: URL = baseURL
         url.appendPathComponent(style.rawValue, conformingTo: .item)
         url.appendPathComponent(String(format: "static/%f,%f,%f/%dx%d@2x.png", coordinates.longitude, coordinates.latitude, zoomLevel, Int(size.width), Int(size.height)), conformingTo: .png)
