@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+/// The style for a map.
+/// Values should be Map Libre style IDs generated with an account where the API key belongs to.
 enum MapLibreStyle: String {
     case light = "9bc819c8-e627-474a-a348-ec144fe3d810"
     case dark = "dea61faf-292b-4774-9660-58fcef89a7f3"
