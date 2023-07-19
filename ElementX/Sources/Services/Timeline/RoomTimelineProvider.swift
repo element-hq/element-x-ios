@@ -178,7 +178,7 @@ private extension TimelineItem {
                           transactionID: eventTimelineItem.transactionId())
         }
         
-        return .unknown
+        return .unknown(timelineID: String(uniqueId()))
     }
 }
 
@@ -191,8 +191,8 @@ private extension TimelineItemProxy {
                           transactionID: eventTimelineItem.id.transactionID)
         case .virtual(let virtualTimelineItem, let timelineID):
             return .virtual(timelineID: timelineID, dscription: virtualTimelineItem.description)
-        case .unknown:
-            return .unknown
+        case .unknown(let item):
+            return .unknown(timelineID: String(item.uniqueId()))
         }
     }
 }
@@ -211,5 +211,5 @@ private extension VirtualTimelineItem {
 enum DebugIdentifier {
     case event(timelineID: String, eventID: String?, transactionID: String?)
     case virtual(timelineID: String, dscription: String)
-    case unknown
+    case unknown(timelineID: String)
 }

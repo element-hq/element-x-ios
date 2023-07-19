@@ -35,7 +35,7 @@ struct TimelineItemIdentifier: Hashable {
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
     case virtual(MatrixRustSDK.VirtualTimelineItem, timelineID: String)
-    case unknown(MatrixRustSDK.TimelineItem, timelineID: String)
+    case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
@@ -43,7 +43,7 @@ enum TimelineItemProxy {
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem, timelineID: String(item.uniqueId()))
         } else {
-            self = .unknown(item, timelineID: String(item.uniqueId()))
+            self = .unknown(item)
         }
     }
 }
