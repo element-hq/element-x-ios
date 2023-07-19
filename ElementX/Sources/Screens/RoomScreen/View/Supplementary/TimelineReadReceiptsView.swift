@@ -78,7 +78,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider {
                                    ReadReceipt(userID: RoomMemberProxyMock.mockDan.userID, formattedTimestamp: "Way, way before")]
 
     static func mockTimelineItem(with receipts: [ReadReceipt]) -> TextRoomTimelineItem {
-        TextRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+        TextRoomTimelineItem(id: .random,
                              timestamp: "Now",
                              isOutgoing: true,
                              isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"),

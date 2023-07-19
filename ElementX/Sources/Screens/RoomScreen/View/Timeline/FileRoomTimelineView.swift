@@ -45,21 +45,21 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
 
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
             
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,

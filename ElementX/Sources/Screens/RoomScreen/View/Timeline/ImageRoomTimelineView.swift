@@ -66,21 +66,21 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
             
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
             
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,

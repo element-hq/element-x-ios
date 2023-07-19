@@ -77,21 +77,21 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some video", duration: 21, source: nil, thumbnailSource: nil)))
 
-            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some other video", duration: 22, source: nil, thumbnailSource: nil)))
             
-            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .init(timelineID: UUID().uuidString),
+            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,

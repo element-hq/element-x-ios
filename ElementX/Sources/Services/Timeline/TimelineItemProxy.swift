@@ -31,6 +31,13 @@ struct TimelineItemIdentifier: Hashable {
     var transactionID: String?
 }
 
+extension TimelineItemIdentifier {
+    /// Use only for mocks/tests
+    static var random: Self {
+        .init(timelineID: UUID().uuidString)
+    }
+}
+
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
