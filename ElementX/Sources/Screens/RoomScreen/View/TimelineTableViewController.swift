@@ -142,8 +142,9 @@ class TimelineTableViewController: UIViewController {
         scrollToBottom(animated: false)
         hasAppearedOnce = true
         paginateBackwardsPublisher.send()
-        // This allows the reversed table view never fully be considered at the bottom
-        tableView.contentOffset.y = 1
+
+        // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
+        tableView.contentOffset.y = -1
     }
     
     override func viewWillLayoutSubviews() {
@@ -250,7 +251,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 15
+            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 0
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.scrollToBottomButtonVisible != scrollToBottomButtonVisible {
@@ -259,7 +260,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         }
 
         if scrollView.contentOffset.y == 0 {
-            scrollView.contentOffset.y = 1
+            scrollView.contentOffset.y = -1
         }
     }
 
