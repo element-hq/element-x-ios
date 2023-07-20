@@ -161,13 +161,6 @@ class TimelineTableViewController: UIViewController {
         hasAppearedOnce = true
     }
     
-    override func didMove(toParent parent: UIViewController?) {
-        super.didMove(toParent: parent)
-        
-        // Ensure the padding is correct before display.
-//        updateTopPadding()
-    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -238,7 +231,7 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the bottom of the timeline.
     private func scrollToTop(animated: Bool) {
-        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: animated)
+        tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
     }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
@@ -248,6 +241,7 @@ class TimelineTableViewController: UIViewController {
         guard canBackPaginate,
               !isBackPaginating,
               !hasPendingUpdates,
+              // TODO: this probably needs to change
               tableView.contentOffset.y < tableView.visibleSize.height * 2.0
         else { return }
         
