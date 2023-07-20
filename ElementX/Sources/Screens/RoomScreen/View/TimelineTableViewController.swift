@@ -115,7 +115,7 @@ class TimelineTableViewController: UIViewController {
         
         scrollToBottomPublisher
             .sink { [weak self] _ in
-                self?.scrollToTop(animated: true)
+                self?.scrollToBottom(animated: true)
             }
             .store(in: &cancellables)
         
@@ -150,7 +150,7 @@ class TimelineTableViewController: UIViewController {
         super.viewWillAppear(animated)
         
         guard !hasAppearedOnce else { return }
-        scrollToTop(animated: false)
+        scrollToBottom(animated: false)
         hasAppearedOnce = true
     }
     
@@ -223,7 +223,7 @@ class TimelineTableViewController: UIViewController {
     }
     
     /// Scrolls to the bottom of the timeline.
-    private func scrollToTop(animated: Bool) {
+    private func scrollToBottom(animated: Bool) {
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
     }
     
