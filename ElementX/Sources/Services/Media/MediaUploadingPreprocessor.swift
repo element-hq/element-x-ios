@@ -416,13 +416,18 @@ struct MediaUploadingPreprocessor {
                 let newAsset = AVURLAsset(url: newOutputURL)
                 guard let track = try? await newAsset.loadTracks(withMediaType: .video).first,
                       let durationInSeconds = try? await newAsset.load(.duration).seconds,
-                      let naturalSize = try? await track.load(.naturalSize) else {
+                      let naturalSize = try? await track.load(.naturalSize),
+                      let preferredTransform = try? await track.load(.preferredTransform) else {
                     return .failure(.failedConvertingVideo)
                 }
                 
+                // The naturalSize does not take the preferredTransform into consideration resulting
+                // in portrait videos reporting inverted values.
+                let isPortrait = isVideoTransformPortrait(preferredTransform)
+                
                 return .success(.init(url: newOutputURL,
-                                      height: naturalSize.height,
-                                      width: naturalSize.width,
+                                      height: isPortrait ? naturalSize.width : naturalSize.height,
+                                      width: isPortrait ? naturalSize.height : naturalSize.width,
                                       duration: durationInSeconds * 1000,
                                       mimeType: "video/mp4"))
             } catch {
@@ -430,6 +435,17 @@ struct MediaUploadingPreprocessor {
             }
         default:
             return .failure(.failedConvertingVideo)
+        }
+    }
+    
+    private func isVideoTransformPortrait(_ transform: CGAffineTransform) -> Bool {
+        switch (transform.a, transform.b, transform.c, transform.d) {
+        case (0, 1, -1, 0):
+            return true
+        case (0, -1, 1, 0):
+            return true
+        default:
+            return false
         }
     }
 }
