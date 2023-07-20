@@ -503,7 +503,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         showLoadingIndicator()
         
-        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator())
         
         stopSync()
         userSessionFlowCoordinator?.stop()

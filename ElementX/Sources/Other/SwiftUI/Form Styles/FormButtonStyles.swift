@@ -153,14 +153,20 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 .buttonStyle(FormButtonStyle())
                 
                 Button { } label: {
+                    Label("Block user", systemImage: "circle.slash")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .progressView))
+                .disabled(true)
+                
+                Button { } label: {
                     Label("Show something", systemImage: "rectangle.portrait")
                 }
                 .buttonStyle(FormButtonStyle(accessory: .navigationLink))
 
                 Button(role: .destructive) { } label: {
-                    Label("Show destruction", systemImage: "rectangle.portrait")
+                    Label("Destroy", systemImage: "trash")
                 }
-                .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+                .buttonStyle(FormButtonStyle())
                 
                 ShareLink(item: "test")
                     .buttonStyle(FormButtonStyle())
