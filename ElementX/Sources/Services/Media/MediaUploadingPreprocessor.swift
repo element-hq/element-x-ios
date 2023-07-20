@@ -416,13 +416,13 @@ struct MediaUploadingPreprocessor {
                 let newAsset = AVURLAsset(url: newOutputURL)
                 guard let track = try? await newAsset.loadTracks(withMediaType: .video).first,
                       let durationInSeconds = try? await newAsset.load(.duration).seconds,
-                      let naturalSize = try? await track.load(.naturalSize) else {
+                      let adjustedNaturalSize = try? await track.size else {
                     return .failure(.failedConvertingVideo)
                 }
                 
                 return .success(.init(url: newOutputURL,
-                                      height: naturalSize.height,
-                                      width: naturalSize.width,
+                                      height: adjustedNaturalSize.height,
+                                      width: adjustedNaturalSize.width,
                                       duration: durationInSeconds * 1000,
                                       mimeType: "video/mp4"))
             } catch {
@@ -430,6 +430,28 @@ struct MediaUploadingPreprocessor {
             }
         default:
             return .failure(.failedConvertingVideo)
+        }
+    }
+}
+
+private extension AVAssetTrack {
+    var size: CGSize {
+        get async throws {
+            let naturalSize = try await load(.naturalSize)
+            guard mediaType == .video else {
+                return naturalSize
+            }
+
+            // The naturalSize does not take the preferredTransform into consideration resulting
+            // in portrait videos reporting inverted values.
+            let transform = try await load(.preferredTransform)
+
+            switch (transform.a, transform.b, transform.c, transform.d) {
+            case (0, 1, -1, 0), (0, -1, 1, 0):
+                return CGSize(width: naturalSize.height, height: naturalSize.width)
+            default:
+                return CGSize(width: naturalSize.width, height: naturalSize.height)
+            }
         }
     }
 }
