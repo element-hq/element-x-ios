@@ -287,6 +287,7 @@ extension TimelineTableViewController: UITableViewDelegate {
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         scrollToTop(animated: true)
+        scrollAdapter.scrollViewDidScrollToTop(scrollView)
         return false
     }
 }
