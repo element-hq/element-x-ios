@@ -199,9 +199,8 @@ final class AppSettings {
     
     // MARK: - Maps
     
-    // maptiler map urls
-    let lightTileMapStyleURL: URL = "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810"
-    let darkTileMapStyleURL: URL = "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3"
+    // maptiler base url
+    let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
 
     // maptiler api key
     let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey

@@ -30,3 +30,14 @@ One way to avoid pushing the API key by mistake is running on your machine the c
 git update-index assume-unchanged secrets.xcconfig
 ``` 
 this will prevent pushing any update of the file`secrets.xcconfig`.
+
+Finally you need to setup your map styles overriding the values you find in the code:
+
+```swift
+enum MapTilerStyle: String {
+    case light = “your_style_id_light”
+    case dark = “your_style_id_dark”
+}
+```
+
+You aren’t required to use custom styles here. You can use already available styles like `basic-v2` and `basic-v2-dark`

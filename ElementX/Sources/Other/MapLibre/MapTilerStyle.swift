@@ -14,16 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
-
-extension MapTilerStyleBuilder {
-    init(appSettings: AppSettings) {
-        self.init(baseURL: appSettings.mapTilerBaseURL, key: appSettings.mapTilerApiKey)
-    }
-}
-
-extension MapTilerGeoCodingService {
-    init(session: URLSession = .shared, appSettings: AppSettings) {
-        self.init(session: session, key: appSettings.mapTilerApiKey, geocodingURL: appSettings.geocodingURLFormatString)
-    }
+/// The style for a map.
+/// Values should be Map Libre style IDs generated with an account where the API key belongs to.
+/// For more information read [FORKING.md](https://github.com/vector-im/element-x-ios/blob/develop/docs/FORKING.md#setup-the-location-sharing).
+enum MapTilerStyle: String {
+    case light = "9bc819c8-e627-474a-a348-ec144fe3d810"
+    case dark = "dea61faf-292b-4774-9660-58fcef89a7f3"
 }

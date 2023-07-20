@@ -70,9 +70,8 @@ private extension MapLibreStaticMapView {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
                   attributionPlacement: .bottomLeft,
-                  mapTilerStatic: MapTilerStaticMap(key: ServiceLocator.shared.settings.mapTilerApiKey,
-                                                    lightURL: ServiceLocator.shared.settings.lightTileMapStyleURL,
-                                                    darkURL: ServiceLocator.shared.settings.darkTileMapStyleURL),
+                  mapTilerStatic: MapTilerStaticMap(baseURL: ServiceLocator.shared.settings.mapTilerBaseURL,
+                                                    key: ServiceLocator.shared.settings.mapTilerApiKey),
                   pinAnnotationView: pinAnnotationView)
     }
 }
