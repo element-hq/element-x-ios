@@ -77,9 +77,7 @@ class TimelineTableViewController: UIViewController {
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
     private var cancellables: Set<AnyCancellable> = []
-    
-    /// The scroll view adapter used to detect whether scrolling is in progress.
-    private let scrollAdapter = ScrollViewAdapter()
+
     /// A publisher used to throttle back pagination requests.
     ///
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
@@ -267,27 +265,8 @@ extension TimelineTableViewController: UITableViewDelegate {
 
     // MARK: ScrollViewAdapter Methods
     
-    // Required delegate methods are forwarded to the adapter so others can be implemented.
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewWillBeginDragging(scrollView)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        scrollAdapter.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewDidEndScrollingAnimation(scrollView)
-    }
-        
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewDidEndDecelerating(scrollView)
-    }
-
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         scrollToTop(animated: true)
-        scrollAdapter.scrollViewDidScrollToTop(scrollView)
         return false
     }
 }
