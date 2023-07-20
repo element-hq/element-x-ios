@@ -21,6 +21,8 @@ struct RoomTimelineItemView: View {
     var body: some View {
         timelineView
             .environment(\.timelineGroupStyle, viewModel.groupStyle)
+            .animation(.elementDefault, value: viewModel.type)
+            .animation(.elementDefault, value: viewModel.groupStyle)
     }
 
     @ViewBuilder private var timelineView: some View {

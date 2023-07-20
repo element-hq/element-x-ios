@@ -77,9 +77,7 @@ class TimelineTableViewController: UIViewController {
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
     private var cancellables: Set<AnyCancellable> = []
-    
-    /// The scroll view adapter used to detect whether scrolling is in progress.
-    private let scrollAdapter = ScrollViewAdapter()
+
     /// A publisher used to throttle back pagination requests.
     ///
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
@@ -142,8 +140,9 @@ class TimelineTableViewController: UIViewController {
         scrollToBottom(animated: false)
         hasAppearedOnce = true
         paginateBackwardsPublisher.send()
-        // This allows the reversed table view never fully be considered at the bottom
-        tableView.contentOffset.y = 1
+
+        // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
+        tableView.contentOffset.y = -1
     }
     
     override func viewWillLayoutSubviews() {
@@ -213,13 +212,20 @@ class TimelineTableViewController: UIViewController {
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
         // We only animate when new items come at the end of the timeline
-        let animated = shouldAnimate && snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
+        let animated = shouldAnimate &&
+            hasAppearedOnce &&
+            snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
     
     /// Scrolls to the bottom of the timeline.
     private func scrollToBottom(animated: Bool) {
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
+    }
+
+    /// Scrolls to the top of the timeline.
+    private func scrollToTop(animated: Bool) {
+        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
     }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
@@ -233,11 +239,6 @@ class TimelineTableViewController: UIViewController {
         
         coordinator.send(viewAction: .paginateBackwards)
     }
-
-    private func scrollToTop(animated: Bool) {
-        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
-        scrollAdapter.scrollViewDidScrollToTop(tableView)
-    }
 }
 
 // MARK: - UITableViewDelegate
@@ -250,7 +251,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 15
+            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 0
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.scrollToBottomButtonVisible != scrollToBottomButtonVisible {
@@ -258,29 +259,10 @@ extension TimelineTableViewController: UITableViewDelegate {
             }
         }
 
+        // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
         if scrollView.contentOffset.y == 0 {
-            scrollView.contentOffset.y = 1
+            scrollView.contentOffset.y = -1
         }
-    }
-
-    // MARK: ScrollViewAdapter Methods
-    
-    // Required delegate methods are forwarded to the adapter so others can be implemented.
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewWillBeginDragging(scrollView)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        scrollAdapter.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewDidEndScrollingAnimation(scrollView)
-    }
-        
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewDidEndDecelerating(scrollView)
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
