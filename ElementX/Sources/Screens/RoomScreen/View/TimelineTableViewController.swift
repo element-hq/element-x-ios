@@ -259,6 +259,7 @@ extension TimelineTableViewController: UITableViewDelegate {
             }
         }
 
+        // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
         if scrollView.contentOffset.y == 0 {
             scrollView.contentOffset.y = -1
         }
