@@ -25,6 +25,8 @@ protocol NotificationItemProxyProtocol {
 
     var eventID: String { get }
 
+    var senderID: String { get }
+
     var roomID: String { get }
 
     var receiverID: String { get }
@@ -132,6 +134,8 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     let roomID: String
 
     let receiverID: String
+
+    var senderID: String { "" }
 
     var senderDisplayName: String? { nil }
 
@@ -249,7 +253,7 @@ extension NotificationItemProxyProtocol {
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: event,
+                                                            senderID: senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
                                                             icon: icon)
         notification.body = body
@@ -295,7 +299,7 @@ extension NotificationItemProxyProtocol {
         notification.categoryIdentifier = NotificationConstants.Category.message
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: event.senderID,
+                                                            senderID: senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
                                                             icon: icon)
         return notification

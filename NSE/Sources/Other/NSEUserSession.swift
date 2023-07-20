@@ -28,18 +28,14 @@ final class NSEUserSession {
 
     init(credentials: KeychainCredentials, isEncryptionSyncEnabled: Bool) throws {
         userID = credentials.userID
-        var builder = ClientBuilder()
+        let builder = ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
-
-        if isEncryptionSyncEnabled {
-            builder = builder.withMemoryStateStore()
-        }
 
         baseClient = try builder.build()
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = try baseClient
+        notificationClient = baseClient
             .notificationClient()
             .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
             .finish()
