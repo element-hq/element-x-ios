@@ -222,6 +222,12 @@ class TimelineTableViewController: UIViewController {
     private func scrollToBottom(animated: Bool) {
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
     }
+
+    /// Scrolls to the top of the timeline.
+    private func scrollToTop(animated: Bool) {
+        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
+        scrollAdapter.scrollViewDidScrollToTop(tableView)
+    }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
     ///
@@ -233,11 +239,6 @@ class TimelineTableViewController: UIViewController {
         else { return }
         
         coordinator.send(viewAction: .paginateBackwards)
-    }
-
-    private func scrollToTop(animated: Bool) {
-        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
-        scrollAdapter.scrollViewDidScrollToTop(tableView)
     }
 }
 
