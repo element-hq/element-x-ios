@@ -212,7 +212,9 @@ class TimelineTableViewController: UIViewController {
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
         // We only animate when new items come at the end of the timeline
-        let animated = shouldAnimate && snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
+        let animated = shouldAnimate &&
+            hasAppearedOnce &&
+            snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
     
@@ -264,7 +266,7 @@ extension TimelineTableViewController: UITableViewDelegate {
     }
 
     // MARK: ScrollViewAdapter Methods
-    
+
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         scrollToTop(animated: true)
         return false
