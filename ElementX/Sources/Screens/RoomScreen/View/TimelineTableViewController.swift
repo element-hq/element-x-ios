@@ -119,16 +119,6 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-//        scrollAdapter.isScrolling
-//            .sink { [weak self] isScrolling in
-//                guard !isScrolling, let self, self.hasPendingUpdates else { return }
-//                // When scrolling has stopped, apply any pending updates.
-//                self.applySnapshot()
-//                self.hasPendingUpdates = false
-//                self.paginateBackwardsPublisher.send(())
-//            }
-//            .store(in: &cancellables)
-        
         paginateBackwardsPublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
@@ -233,8 +223,7 @@ class TimelineTableViewController: UIViewController {
     private func paginateBackwardsIfNeeded() {
         guard canBackPaginate,
               !isBackPaginating,
-              // TODO: this probably needs to change
-              tableView.contentOffset.y < tableView.visibleSize.height * 2.0
+              tableView.contentOffset.y > tableView.contentSize.height - tableView.visibleSize.height
         else { return }
         
         coordinator.send(viewAction: .paginateBackwards)
