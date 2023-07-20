@@ -209,7 +209,12 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
-        dataSource.apply(snapshot, animatingDifferences: shouldAnimate)
+        // We need to decide if we want to use animations only for the appearence at the bottom or in general
+        // however I noticed that while paginating since some remote messages may lag a bit behind in the first
+        // collected update, this may cause some moving around while scrolling very fast towards the top which is more
+        // noticeable by the animation. However it looks way cooler.
+        let animated = shouldAnimate && snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
+        dataSource.apply(snapshot, animatingDifferences: animated)
     }
     
     /// Scrolls to the bottom of the timeline.
