@@ -675,6 +675,6 @@ private extension RoomFlowCoordinator {
 
 private extension GeoURI {
     var bodyMessage: String {
-        String(format: "Location was shared at %@ as of %@", string, Date().description)
+        "Location was shared at \(string)"
     }
 }

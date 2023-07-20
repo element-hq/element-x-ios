@@ -53,6 +53,8 @@ struct RoomEventStringBuilder {
                 message = L10n.commonVideo
             case .file:
                 message = L10n.commonFile
+            case .location:
+                message = L10n.commonSharedLocation
             default:
                 message = messageContent.body()
             }

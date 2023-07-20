@@ -26,7 +26,7 @@ struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatabl
     let content: LocationRoomTimelineItemContent
 
     var body: String {
-        content.body
+        L10n.commonSharedLocation
     }
 
     var replyDetails: TimelineItemReplyDetails?
