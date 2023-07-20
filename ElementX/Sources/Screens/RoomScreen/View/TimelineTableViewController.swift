@@ -42,13 +42,6 @@ class TimelineTableViewController: UIViewController {
     var timelineStyle: TimelineStyle
     var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>() {
         didSet {
-            guard !scrollAdapter.isScrolling.value else {
-                // Delay updating until scrolling has stopped as programatic
-                // changes to the scroll position kills any inertia.
-                hasPendingUpdates = true
-                return
-            }
-
             applySnapshot()
 
             if timelineItemsDictionary.isEmpty {
@@ -92,7 +85,7 @@ class TimelineTableViewController: UIViewController {
     /// quick succession can execute before ``isBackPaginating`` becomes `true`.
     private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
-    private var hasPendingUpdates = false
+//    private var hasPendingUpdates = false
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     /// Whether the scroll and the animations should happen
@@ -126,15 +119,15 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        scrollAdapter.isScrolling
-            .sink { [weak self] isScrolling in
-                guard !isScrolling, let self, self.hasPendingUpdates else { return }
-                // When scrolling has stopped, apply any pending updates.
-                self.applySnapshot()
-                self.hasPendingUpdates = false
-                self.paginateBackwardsPublisher.send(())
-            }
-            .store(in: &cancellables)
+//        scrollAdapter.isScrolling
+//            .sink { [weak self] isScrolling in
+//                guard !isScrolling, let self, self.hasPendingUpdates else { return }
+//                // When scrolling has stopped, apply any pending updates.
+//                self.applySnapshot()
+//                self.hasPendingUpdates = false
+//                self.paginateBackwardsPublisher.send(())
+//            }
+//            .store(in: &cancellables)
         
         paginateBackwardsPublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
@@ -240,7 +233,6 @@ class TimelineTableViewController: UIViewController {
     private func paginateBackwardsIfNeeded() {
         guard canBackPaginate,
               !isBackPaginating,
-              !hasPendingUpdates,
               // TODO: this probably needs to change
               tableView.contentOffset.y < tableView.visibleSize.height * 2.0
         else { return }
