@@ -34,10 +34,14 @@ struct Application: App {
     var body: some Scene {
         WindowGroup {
             appCoordinator.toPresentable()
+                .statusBarHidden(shouldHideStatusBar)
+                .introspect(.window, on: .iOS(.v16)) { window in
+                    // Workaround for SwiftUI not consistently applying the tint colour to Alerts/Confirmation Dialogs.
+                    window.tintColor = UIColor(Color.compound.textActionPrimary)
+                }
                 .task {
                     appCoordinator.start()
                 }
-                .statusBarHidden(shouldHideStatusBar)
         }
     }
     
