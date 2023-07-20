@@ -35,6 +35,7 @@ class TimelineItemCell: UITableViewCell {
 ///
 /// This class subclasses `UIViewController` as `UITableViewController` adds some
 /// extra keyboard handling magic that wasn't playing well with SwiftUI (as of iOS 16.1).
+/// Also this TableViewController uses a **flipped tableview**
 class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineView.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
@@ -84,8 +85,6 @@ class TimelineTableViewController: UIViewController {
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
     /// quick succession can execute before ``isBackPaginating`` becomes `true`.
     private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
-    /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
-//    private var hasPendingUpdates = false
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     /// Whether the scroll and the animations should happen
@@ -142,6 +141,7 @@ class TimelineTableViewController: UIViewController {
         guard !hasAppearedOnce else { return }
         scrollToBottom(animated: false)
         hasAppearedOnce = true
+        paginateBackwardsPublisher.send()
     }
     
     override func viewWillLayoutSubviews() {
@@ -188,6 +188,7 @@ class TimelineTableViewController: UIViewController {
             .minSize(height: 1)
             .background(Color.clear)
 
+            // Flipping the cell can create some issues with cell resizing, so flip the content View
             cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
@@ -209,10 +210,7 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
-        // We need to decide if we want to use animations only for the appearence at the bottom or in general
-        // however I noticed that while paginating since some remote messages may lag a bit behind in the first
-        // collected update, this may cause some moving around while scrolling very fast towards the top which is more
-        // noticeable by the animation. However it looks way cooler.
+        // We only animate when new items come at the end of the timeline
         let animated = shouldAnimate && snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
@@ -228,10 +226,14 @@ class TimelineTableViewController: UIViewController {
     private func paginateBackwardsIfNeeded() {
         guard canBackPaginate,
               !isBackPaginating,
-              tableView.contentOffset.y > tableView.contentSize.height - tableView.visibleSize.height
+              tableView.contentOffset.y > tableView.contentSize.height - tableView.visibleSize.height * 2.0
         else { return }
         
         coordinator.send(viewAction: .paginateBackwards)
+    }
+
+    private func scrollToTop(animated: Bool) {
+        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
     }
 }
 
@@ -276,6 +278,11 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         scrollAdapter.scrollViewDidScrollToTop(scrollView)
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        scrollToTop(animated: true)
+        return false
     }
 }
 

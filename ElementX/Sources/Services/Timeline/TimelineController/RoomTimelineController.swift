@@ -277,11 +277,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
                 let timelineItem = buildTimelineItem(for: itemProxy, chunkIndex: reversedIndex)
                 
-                if timelineItem is PaginationIndicatorRoomTimelineItem {
-                    isBackPaginating = true
-                } else if timelineItem is TimelineStartRoomTimelineItem {
-                    canBackPaginate = false
-                } else if timelineItem is EncryptedHistoryRoomTimelineItem {
+                if timelineItem is EncryptedHistoryRoomTimelineItem {
                     canBackPaginate = false
                 }
                 
@@ -319,8 +315,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             case .timelineStartReached:
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
                 newTimelineItems.insert(timelineStart, at: 0)
+                canBackPaginate = false
             case .paginating:
                 newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(), at: 0)
+                isBackPaginating = true
             case .idle:
                 break
             }
