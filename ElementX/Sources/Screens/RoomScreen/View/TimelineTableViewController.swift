@@ -226,7 +226,6 @@ class TimelineTableViewController: UIViewController {
     /// Scrolls to the top of the timeline.
     private func scrollToTop(animated: Bool) {
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
-        scrollAdapter.scrollViewDidScrollToTop(tableView)
     }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
