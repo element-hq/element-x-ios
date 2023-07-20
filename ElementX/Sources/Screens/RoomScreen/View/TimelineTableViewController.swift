@@ -188,7 +188,7 @@ class TimelineTableViewController: UIViewController {
             .minSize(height: 1)
             .background(Color.clear)
 
-            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
+            cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
 
