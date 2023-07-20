@@ -43,7 +43,7 @@ struct TimelineReplyView: View {
                     ReplyView(sender: sender,
                               plainBody: content.body,
                               formattedBody: nil,
-                              icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
+                              icon: .init(kind: .systemIcon("doc.text.fill"), cornerRadii: iconCornerRadii))
                 case .image(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,
