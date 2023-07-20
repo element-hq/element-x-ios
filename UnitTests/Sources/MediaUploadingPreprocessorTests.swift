@@ -41,8 +41,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(audioInfo.size, 764_176)
     }
     
-    func testVideoProcessing() async {
-        guard let url = Bundle(for: Self.self).url(forResource: "test_video.mov", withExtension: nil) else {
+    func testLandscapeMovVideoProcessing() async {
+        guard let url = Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil) else {
             XCTFail("Failed retrieving test asset")
             return
         }
@@ -54,7 +54,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         // Check that the file name is preserved
-        XCTAssertEqual(videoURL.lastPathComponent, "test_video.mp4")
+        XCTAssertEqual(videoURL.lastPathComponent, "landscape_test_video.mp4")
         
         // Check that the thumbnail is generated correctly
         guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
@@ -81,6 +81,46 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
     }
 
+    func testPortraitMp4VideoProcessing() async {
+        guard let url = Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil) else {
+            XCTFail("Failed retrieving test asset")
+            return
+        }
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .video(videoURL, thumbnailURL, videoInfo) = result else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        // Check that the file name is preserved
+        XCTAssertEqual(videoURL.lastPathComponent, "portrait_test_video.mp4")
+        
+        // Check that the thumbnail is generated correctly
+        guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
+              let thumbnail = UIImage(data: thumbnailData) else {
+            XCTFail("Invalid thumbnail")
+            return
+        }
+        
+        XCTAssert(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
+        XCTAssert(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
+        
+        // Check resulting video info
+        XCTAssertEqual(videoInfo.mimetype, "video/mp4")
+        XCTAssertEqual(videoInfo.blurhash, "K7C$_zt70LKQMx^+~B9GIU")
+        XCTAssertEqual(videoInfo.size, 9_775_822)
+        XCTAssertEqual(videoInfo.width, 1080)
+        XCTAssertEqual(videoInfo.height, 1920)
+        XCTAssertEqual(floor(videoInfo.duration ?? 0), 21000)
+        
+        XCTAssertNotNil(videoInfo.thumbnailInfo)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size, 82854)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
+    }
+    
     func testLandscapeImageProcessing() async {
         guard let url = Bundle(for: Self.self).url(forResource: "landscape_test_image.jpg", withExtension: nil) else {
             XCTFail("Failed retrieving test asset")
