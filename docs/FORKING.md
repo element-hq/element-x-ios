@@ -40,4 +40,4 @@ enum MapTilerStyle: String {
 }
 ```
 
-You aren’t required to use custom styles here. You can use already available styles like `basic-v2` and `toner-v2`
+You aren’t required to use custom styles here. You can use already available styles like `basic-v2` and `basic-v2-dark`
