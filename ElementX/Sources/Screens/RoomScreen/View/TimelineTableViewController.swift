@@ -77,7 +77,7 @@ class TimelineTableViewController: UIViewController {
     @Binding private var scrollToBottomButtonVisible: Bool
 
     private var timelineItemsIDs: [String] {
-        timelineItemsDictionary.keys.elements
+        timelineItemsDictionary.keys.elements.reversed()
     }
     
     /// The table's diffable data source.
@@ -93,8 +93,6 @@ class TimelineTableViewController: UIViewController {
     private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
     private var hasPendingUpdates = false
-    /// We need to store the previous layout as computing it on the fly leads to problems.
-    private var previousLayout: LayoutDescriptor?
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     /// Whether the scroll and the animations should happen
@@ -115,22 +113,16 @@ class TimelineTableViewController: UIViewController {
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
         tableView.backgroundColor = UIColor(.compound.bgCanvasDefault)
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         view.addSubview(tableView)
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider
         // for each possible cell, causing layout issues
         tableView.accessibilityElementsHidden = Tests.shouldDisableTimelineAccessibility
         
-        tableView.publisher(for: \.contentSize)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.updateTopPadding()
-            }
-            .store(in: &cancellables)
-        
         scrollToBottomPublisher
             .sink { [weak self] _ in
-                self?.scrollToBottom(animated: true)
+                self?.scrollToTop(animated: true)
             }
             .store(in: &cancellables)
         
@@ -150,13 +142,6 @@ class TimelineTableViewController: UIViewController {
                 self?.paginateBackwardsIfNeeded()
             }
             .store(in: &cancellables)
-        
-        NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
-            .sink { [weak self] _ in
-                guard let self, let layout = self.previousLayout, layout.isBottomVisible else { return }
-                self.scrollToBottom(animated: false) // Force the bottom to be visible as some timelines misbehave.
-            }
-            .store(in: &cancellables)
 
         ServiceLocator.shared.settings.$timelineDiffableAnimationsEnabled
             .weakAssign(to: \.shouldAnimate, on: self)
@@ -172,7 +157,7 @@ class TimelineTableViewController: UIViewController {
         super.viewWillAppear(animated)
         
         guard !hasAppearedOnce else { return }
-        scrollToBottom(animated: false)
+        scrollToTop(animated: false)
         hasAppearedOnce = true
     }
     
@@ -180,7 +165,7 @@ class TimelineTableViewController: UIViewController {
         super.didMove(toParent: parent)
         
         // Ensure the padding is correct before display.
-        updateTopPadding()
+//        updateTopPadding()
     }
     
     override func viewWillLayoutSubviews() {
@@ -191,13 +176,6 @@ class TimelineTableViewController: UIViewController {
         }
         
         tableView.frame = CGRect(origin: .zero, size: view.frame.size)
-        
-        // Update the table's layout if necessary after the frame changed.
-        updateTopPadding()
-        
-        if let previousLayout, previousLayout.isBottomVisible {
-            scrollToBottom(animated: false)
-        }
     }
     
     /// Configures a diffable data source for the timeline's table view.
@@ -233,7 +211,8 @@ class TimelineTableViewController: UIViewController {
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)
             .background(Color.clear)
-            
+
+            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
 
@@ -246,10 +225,7 @@ class TimelineTableViewController: UIViewController {
     /// the scroll position will be updated to maintain the position of the last visible item.
     private func applySnapshot() {
         guard let dataSource else { return }
-        
-        let previousLayout = layout()
-        self.previousLayout = previousLayout
-        
+
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
@@ -257,90 +233,12 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
-        // We only animate if the last item has changed
-        // We don't care to animate backpagination since we want to keep the scrolling position when that happens
-        let animated = shouldAnimate && snapshot.itemIdentifiers.last != currentSnapshot.itemIdentifiers.last
-        dataSource.apply(snapshot, animatingDifferences: animated)
-
-        if previousLayout.isBottomVisible {
-            scrollToBottom(animated: false)
-        } else if let pinnedItem = previousLayout.pinnedItem {
-            restoreScrollPosition(using: pinnedItem, and: snapshot)
-        }
-    }
-    
-    /// Returns a description of the current layout in order to update the
-    /// scroll position after adding/updating items to the timeline.
-    private func layout() -> LayoutDescriptor {
-        guard let dataSource else { return LayoutDescriptor() }
-        
-        let snapshot = dataSource.snapshot()
-        var layout = LayoutDescriptor(numberOfItems: snapshot.numberOfItems)
-        
-        guard !snapshot.itemIdentifiers.isEmpty else {
-            layout.isBottomVisible = true
-            return layout
-        }
-        
-        guard let bottomItemIndexPath = tableView.indexPathsForVisibleRows?.last,
-              let bottomID = dataSource.itemIdentifier(for: bottomItemIndexPath)
-        else { return layout }
-        
-        let bottomCellFrame = tableView.cellFrame(for: bottomID)
-        layout.pinnedItem = PinnedItem(id: bottomID, position: .bottom, frame: bottomCellFrame)
-        layout.isBottomVisible = bottomID == snapshot.itemIdentifiers.last
-        
-        return layout
-    }
-    
-    /// Updates the additional padding added to the top of the table (via a header)
-    /// in order to fill the timeline from the bottom of the view upwards.
-    private func updateTopPadding() {
-        let headerHeight = tableView.tableHeaderView?.frame.height ?? 0
-        let contentHeight = tableView.contentSize.height - headerHeight
-        let newHeight = max(0, tableView.visibleSize.height - contentHeight)
-        
-        // Round the check to account floating point accuracy during keyboard appearance.
-        guard newHeight.rounded() != headerHeight.rounded() else { return }
-        
-        if newHeight > 0 {
-            let frame = CGRect(origin: .zero, size: CGSize(width: tableView.contentSize.width, height: newHeight))
-            tableView.tableHeaderView = UIView(frame: frame) // Updating an existing view's height doesn't move the cells.
-        } else {
-            tableView.tableHeaderView = nil
-        }
-    }
-    
-    /// Whether or not the bottom of the scroll view is visible (with some small tolerance added).
-    private func isAtBottom() -> Bool {
-        tableView.contentOffset.y < (tableView.contentSize.height - tableView.visibleSize.height - 15)
+        dataSource.apply(snapshot, animatingDifferences: shouldAnimate)
     }
     
     /// Scrolls to the bottom of the timeline.
-    private func scrollToBottom(animated: Bool) {
-        guard let lastItemID = timelineItemsIDs.last,
-              let lastIndexPath = dataSource?.indexPath(for: lastItemID)
-        else { return }
-        
-        tableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
-    }
-    
-    /// Restores the position of the timeline using the supplied item and snapshot.
-    private func restoreScrollPosition(using pinnedItem: PinnedItem, and snapshot: NSDiffableDataSourceSnapshot<TimelineSection, String>) {
-        guard let item = snapshot.itemIdentifiers.first(where: { $0 == pinnedItem.id }),
-              let indexPath = dataSource?.indexPath(for: item)
-        else { return }
-        
-        // Scroll the item into view.
-        tableView.scrollToRow(at: indexPath, at: pinnedItem.position, animated: false)
-        
-        guard let oldFrame = pinnedItem.frame, let newFrame = tableView.cellFrame(for: item) else { return }
-        
-        // Remove any unwanted offset that was added by scrollToRow.
-        let deltaY = newFrame.maxY - oldFrame.maxY
-        if deltaY != 0 {
-            tableView.contentOffset.y += deltaY
-        }
+    private func scrollToTop(animated: Bool) {
+        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: animated)
     }
     
     /// Checks whether or a backwards pagination is needed and requests one if so.
@@ -367,11 +265,11 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let isAtBottom = self.isAtBottom()
+            let scrollToBottomButtonVisible = tableView.contentOffset.y > 15
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
-            if self.scrollToBottomButtonVisible != isAtBottom {
-                self.scrollToBottomButtonVisible = isAtBottom
+            if self.scrollToBottomButtonVisible != scrollToBottomButtonVisible {
+                self.scrollToBottomButtonVisible = scrollToBottomButtonVisible
             }
         }
     }
@@ -407,32 +305,5 @@ extension TimelineTableViewController {
     /// The sections of the table view used in the diffable data source.
     enum TimelineSection {
         case main
-    }
-    
-    /// A description of the timeline's layout.
-    struct LayoutDescriptor {
-        var numberOfItems = 0
-        var pinnedItem: PinnedItem?
-        var isBottomVisible = false
-    }
-    
-    /// An item that should have its position pinned after updates.
-    struct PinnedItem {
-        let id: String
-        let position: UITableView.ScrollPosition
-        let frame: CGRect?
-    }
-}
-
-// MARK: - Cell Layout
-
-private extension UITableView {
-    /// Returns the frame of the cell for a particular timeline item.
-    func cellFrame(for id: String) -> CGRect? {
-        guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item?.id.timelineID == id }) else {
-            return nil
-        }
-        
-        return convert(timelineCell.frame, to: superview)
     }
 }
