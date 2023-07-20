@@ -142,6 +142,8 @@ class TimelineTableViewController: UIViewController {
         scrollToBottom(animated: false)
         hasAppearedOnce = true
         paginateBackwardsPublisher.send()
+        // This allows the reversed table view never fully be considered at the bottom
+        tableView.contentOffset.y = 1
     }
     
     override func viewWillLayoutSubviews() {
@@ -234,6 +236,7 @@ class TimelineTableViewController: UIViewController {
 
     private func scrollToTop(animated: Bool) {
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
+        scrollAdapter.scrollViewDidScrollToTop(tableView)
     }
 }
 
@@ -247,12 +250,16 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let scrollToBottomButtonVisible = tableView.contentOffset.y > 15
+            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 15
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.scrollToBottomButtonVisible != scrollToBottomButtonVisible {
                 self.scrollToBottomButtonVisible = scrollToBottomButtonVisible
             }
+        }
+
+        if scrollView.contentOffset.y == 0 {
+            scrollView.contentOffset.y = 1
         }
     }
 
@@ -274,10 +281,6 @@ extension TimelineTableViewController: UITableViewDelegate {
         
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         scrollAdapter.scrollViewDidEndDecelerating(scrollView)
-    }
-    
-    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        scrollAdapter.scrollViewDidScrollToTop(scrollView)
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
