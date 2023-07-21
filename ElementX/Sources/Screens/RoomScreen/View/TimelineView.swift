@@ -83,9 +83,6 @@ struct TimelineView: View {
                 context.scrollToBottomButtonVisible = value > 0
             }
             .onReceive(context.viewState.scrollToBottomPublisher) {
-                guard let last = context.viewState.timelineIDs.last else {
-                    return
-                }
                 withAnimation {
                     scrollView.scrollTo(bottomID)
                 }
