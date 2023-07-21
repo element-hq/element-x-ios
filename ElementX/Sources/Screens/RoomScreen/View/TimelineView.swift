@@ -17,34 +17,25 @@
 import Combine
 import SwiftUI
 
+import Introspect
+
 struct TimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
 
-    private let visibleArea = "visibleArea"
-    private let scrollAreaID = "scrollArea"
     private let bottomID = "bottomID"
 
-    @State private var contentHeight: CGFloat?
-    @State private var offset: CGFloat?
-    @State private var visibleHeight: CGFloat?
+    @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
 
     var body: some View {
         ScrollViewReader { scrollView in
             ScrollView {
-                // This is used as a pointer to the bottom of the view
-                // both for scrolling purposes and to understand the
-                // current content offset
-                GeometryReader { proxy in
-                    let frame = proxy.frame(in: .named(scrollAreaID))
-                    // Since the scroll view is flipped the offset maxY is inverted
-                    let offset = -frame.maxY
-                    Color.clear.preference(key: ScrollViewOffsetPreferenceKey.self, value: offset)
-                }
-                // It takes a little bit of space so we give it 0 in height
-                .frame(height: 0)
-                .id(bottomID)
+                // Only used ton get to the bottom of the scroll view
+                Divider()
+                    .id(bottomID)
+                    .hidden()
+                    .frame(height: 0)
 
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.itemViewModels.reversed()) { viewModel in
@@ -55,61 +46,49 @@ struct TimelineView: View {
                             .scaleEffect(x: 1, y: -1)
                     }
                 }
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear.preference(key: ContentHeightPreferenceKey.self, value: proxy.size.height)
-                    }
-                )
             }
-            .coordinateSpace(name: scrollAreaID)
+            .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
+            }
             .scaleEffect(x: 1, y: -1)
-            .animation(.default, value: context.viewState.itemViewModels)
-            .onPreferenceChange(ContentHeightPreferenceKey.self) { value in
-                guard let value, value != contentHeight else {
+            .animation(.elementDefault, value: context.viewState.itemViewModels)
+            .onReceive(scrollViewAdapter.didScroll) { _ in
+                guard let scrollView = scrollViewAdapter.scrollView else {
                     return
                 }
-
-                contentHeight = value
-            }
-            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
-                guard let value, value != offset else {
-                    return
-                }
-
-                offset = value
-                context.scrollToBottomButtonVisible = value > 0
-
+                let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+                context.scrollToBottomButtonVisible = offset > 0
                 paginateBackwardsPublisher.send()
             }
-            .onReceive(context.viewState.scrollToBottomPublisher) {
+            .onReceive(context.viewState.scrollToBottomPublisher) { _ in
                 withAnimation {
                     scrollView.scrollTo(bottomID)
                 }
             }
-            .background(
-                GeometryReader { proxy in
-                    Color.clear.preference(key: VisibleHeightPreferenceKey.self, value: proxy.size.height)
-                }
-            )
-            .onPreferenceChange(VisibleHeightPreferenceKey.self) { value in
-                guard let value, value != visibleHeight else {
-                    return
-                }
-                visibleHeight = value
-            }
             .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
-                guard let offset,
-                      let contentHeight,
-                      let visibleHeight,
-                      context.viewState.canBackPaginate,
-                      !context.viewState.isBackPaginating,
-                      offset > contentHeight - visibleHeight * 2.0 else {
-                    return
-                }
-
-                context.send(viewAction: .paginateBackwards)
+                tryPaginateBackwards()
             }
         }
+    }
+
+    private func tryPaginateBackwards() {
+        guard let scrollView = scrollViewAdapter.scrollView,
+              context.viewState.canBackPaginate,
+              !context.viewState.isBackPaginating else {
+            return
+        }
+
+        let visibleHeight = scrollView.visibleSize.height
+        let contentHeight = scrollView.contentSize.height
+        let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+        let threshold = contentHeight - visibleHeight * 2
+
+        guard offset > threshold else {
+            return
+        }
+
+        context.send(viewAction: .paginateBackwards)
     }
 }
 
