@@ -22,18 +22,44 @@ struct PollRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Text("<Poll event>")
+            Text("Poll: \(poll.question)")
+            ForEach(poll.answer, id: \.id) { answer in
+                Text(answer.text)
+                if let votes = poll.votes[answer.id] {
+                    ForEach(votes, id: \.self) { voter in
+                        Text("- \(voter)")
+                            .padding(.leading, 10)
+                    }
+                }
+            }
+            Text("Ended: \(poll.endTime.map(String.init) ?? "Never")")
         }
+    }
+
+    // MARK: - Private
+
+    private var poll: Poll {
+        timelineItem.poll
     }
 }
 
 struct PollRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         PollRoomTimelineView(timelineItem: .init(id: .random,
+                                                 poll: .mock,
                                                  body: "Foo",
                                                  timestamp: "Now",
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  sender: .init(id: "Bob")))
     }
+}
+
+private extension Poll {
+    static let mock: Self = .init(question: "Do you like polls?",
+                                  pollKind: .disclosed,
+                                  maxSelections: 1,
+                                  answer: [.init(id: "1", text: "Yes"), .init(id: "2", text: "No")],
+                                  votes: [:],
+                                  endTime: nil)
 }

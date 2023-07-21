@@ -16,10 +16,23 @@
 
 struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
+    let poll: Poll
     let body: String
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
     let sender: TimelineItemSender
     var properties: RoomTimelineItemProperties = .init()
+}
+
+#warning("AG: remove sdk dependency")
+import MatrixRustSDK
+
+struct Poll: Equatable {
+    let question: String
+    let pollKind: PollKind
+    let maxSelections: UInt64
+    let answer: [PollAnswer]
+    let votes: [String: [String]]
+    let endTime: UInt64?
 }

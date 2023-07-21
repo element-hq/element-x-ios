@@ -91,7 +91,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
-            return buildPollTimelineItem(eventItemProxy, isOutgoing)
+            let poll = Poll(question: question,
+                            pollKind: kind,
+                            maxSelections: maxSelections,
+                            answer: answers,
+                            votes: votes,
+                            endTime: endTime)
+            return buildPollTimelineItem(poll, eventItemProxy, isOutgoing)
         case .pollEnd(startEvent: let startEvent):
             return buildPollEndTimelineItem(eventItemProxy, isOutgoing)
         }
@@ -313,9 +319,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     #warning("AG: refine mapping")
-    private func buildPollTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+    private func buildPollTimelineItem(_ poll: Poll,
+                                       _ eventItemProxy: EventTimelineItemProxy,
                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         PollRoomTimelineItem(id: eventItemProxy.id,
+                             poll: poll,
                              body: "TBD",
                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                              isOutgoing: isOutgoing,
