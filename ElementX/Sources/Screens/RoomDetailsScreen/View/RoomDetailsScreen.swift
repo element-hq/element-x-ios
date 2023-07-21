@@ -121,8 +121,7 @@ struct RoomDetailsScreen: View {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .compoundFormSecondaryTextRow()
                         .lineLimit(isTopicExpanded ? nil : 3)
                         .onTapGesture { isTopicExpanded.toggle() }
                 } else {
