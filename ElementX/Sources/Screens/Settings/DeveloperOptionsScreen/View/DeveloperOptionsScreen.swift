@@ -26,16 +26,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }
-                .onChange(of: context.shouldCollapseRoomStateEvents) { _ in
-                    context.send(viewAction: .changedShouldCollapseRoomStateEvents)
-                }
                 
                 Toggle(isOn: $context.readReceiptsEnabled) {
                     Text("Show read receipts")
                     Text("Requires app reboot")
-                }
-                .onChange(of: context.readReceiptsEnabled) { _ in
-                    context.send(viewAction: .changedReadReceiptsEnabled)
                 }
             }
 
@@ -44,15 +38,9 @@ struct DeveloperOptionsScreen: View {
                     Text("Use notification encryption sync")
                     Text("Requires app reboot")
                 }
-                .onChange(of: context.isEncryptionSyncEnabled) { _ in
-                    context.send(viewAction: .changedIsEncryptionSyncEnabled)
-                }
                 
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")
-                }
-                .onChange(of: context.notificationSettingsEnabled) { _ in
-                    context.send(viewAction: .changedNotificationSettingsEnabled)
                 }
             }
 
@@ -60,8 +48,9 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.userSuggestionsEnabled) {
                     Text("User suggestions")
                 }
-                .onChange(of: context.userSuggestionsEnabled) { _ in
-                    context.send(viewAction: .changedUserSuggestionsEnabled)
+
+                Toggle(isOn: $context.timelineDiffableAnimationsEnabled) {
+                    Text("Enable diffable animations in the timeline")
                 }
             }
 

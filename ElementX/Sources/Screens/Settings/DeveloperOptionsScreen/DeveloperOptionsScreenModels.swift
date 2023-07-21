@@ -24,19 +24,20 @@ struct DeveloperOptionsScreenViewState: BindableState {
     var bindings: DeveloperOptionsScreenViewStateBindings
 }
 
+@dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var userSuggestionsEnabled: Bool
-    var readReceiptsEnabled: Bool
-    var isEncryptionSyncEnabled: Bool
-    var notificationSettingsEnabled: Bool
+    private let appSettings: AppSettings
+
+    init(appSettings: AppSettings) {
+        self.appSettings = appSettings
+    }
+
+    subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<AppSettings, Setting>) -> Setting {
+        get { appSettings[keyPath: keyPath] }
+        set { appSettings[keyPath: keyPath] = newValue }
+    }
 }
 
 enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedUserSuggestionsEnabled
-    case changedReadReceiptsEnabled
-    case changedIsEncryptionSyncEnabled
-    case changedNotificationSettingsEnabled
     case clearCache
 }
