@@ -224,8 +224,7 @@ class TimelineTableViewController: UIViewController {
 
     /// Scrolls to the top of the timeline.
     private func scrollToTop(animated: Bool) {
-        let index = timelineItemsIDs.count - 1
-        guard index >= 0 else {
+        guard !timelineItemsIDs.isEmpty else {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
