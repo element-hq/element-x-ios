@@ -37,7 +37,9 @@ struct Application: App {
                 .statusBarHidden(shouldHideStatusBar)
                 .introspect(.window, on: .iOS(.v16)) { window in
                     // Workaround for SwiftUI not consistently applying the tint colour to Alerts/Confirmation Dialogs.
-                    window.tintColor = UIColor(Color.compound.textActionPrimary)
+                    window.tintColor = UIColor(named: "colorGray1400",
+                                               in: Bundle(identifier: "CompoundDesignTokens-CompoundDesignTokens-resources"),
+                                               compatibleWith: nil)
                 }
                 .task {
                     appCoordinator.start()
