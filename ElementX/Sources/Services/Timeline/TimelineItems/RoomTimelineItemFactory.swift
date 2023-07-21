@@ -90,8 +90,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        avatarURLString: avatarUrl,
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
-        case .poll, .pollEnd:
-            return nil
+        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, endTime: let endTime, testingOnlyVotes: let testingOnlyVotes):
+            return buildPollTimelineItem(eventItemProxy, isOutgoing)
+        case .pollEnd(startEvent: let startEvent):
+            return buildPollEndTimelineItem(eventItemProxy, isOutgoing)
         }
     }
     
@@ -308,6 +310,18 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                         reactions: aggregateReactions(eventItemProxy.reactions),
                                                                         deliveryStatus: eventItemProxy.deliveryStatus,
                                                                         orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+    }
+
+    #warning("AG: remove optionality in the return value")
+    private func buildPollTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        nil
+    }
+
+    #warning("AG: remove optionality in the return value")
+    private func buildPollEndTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+                                          _ isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        nil
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
