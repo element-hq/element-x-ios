@@ -24,7 +24,7 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea()) // Kills the toolbar translucency.
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(alignment: .bottom, spacing: attachmentButtonPadding) {
                     RoomAttachmentPicker(context: context)
@@ -36,6 +36,7 @@ struct RoomScreen: View {
                 .padding(.trailing, 12)
                 .padding(.top, 8)
                 .padding(.bottom)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }

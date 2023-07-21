@@ -260,19 +260,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(updateViewModel(item: firstItem, groupStyle: .single),
+                    timelineItemsDictionary.updateValue(.init(item: firstItem, groupStyle: .single),
                                                         forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(.init(item: item, groupStyle: .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(.init(item: item, groupStyle: .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(.init(item: item, groupStyle: .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }
@@ -280,16 +280,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.itemsDictionary = timelineItemsDictionary
-    }
-
-    private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewModel {
-        if let timelineItemViewModel = state.itemsDictionary[item.id.timelineID] {
-            timelineItemViewModel.groupStyle = groupStyle
-            timelineItemViewModel.type = .init(item: item)
-            return timelineItemViewModel
-        } else {
-            return RoomTimelineItemViewModel(item: item, groupStyle: groupStyle)
-        }
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
