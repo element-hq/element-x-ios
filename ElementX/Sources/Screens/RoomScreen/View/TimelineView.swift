@@ -16,65 +16,80 @@
 
 import SwiftUI
 
-/// A table view wrapper that displays the timeline of a room.
-struct TimelineView: UIViewControllerRepresentable {
-    @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
+struct ScrollViewOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+struct HeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+struct TimelineView: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
-    
-    func makeUIViewController(context: Context) -> TimelineTableViewController {
-        let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
-                                                              timelineStyle: timelineStyle,
-                                                              scrollToBottomButtonVisible: $viewModelContext.scrollToBottomButtonVisible,
-                                                              scrollToBottomPublisher: viewModelContext.viewState.scrollToBottomPublisher)
-        return tableViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {
-        context.coordinator.update(tableViewController: uiViewController, timelineStyle: timelineStyle)
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(viewModelContext: viewModelContext)
-    }
-    
-    // MARK: - Coordinator
-    
-    @MainActor
-    class Coordinator {
-        let context: RoomScreenViewModel.Context
-        
-        init(viewModelContext: RoomScreenViewModel.Context) {
-            context = viewModelContext
-            
-            if viewModelContext.viewState.itemViewModels.isEmpty {
-                viewModelContext.send(viewAction: .paginateBackwards)
+
+    private let scrollAreaId = "scrollArea"
+    private let bottomID = "bottomID"
+
+    @State private var height: CGFloat?
+    @State private var offset: CGFloat?
+
+    var body: some View {
+        ScrollViewReader { scrollView in
+            ScrollView {
+                GeometryReader { proxy in
+                    let frame = proxy.frame(in: .named(scrollAreaId))
+                    // Since the scroll view is flipped the offset maxY is inverted
+                    let offset = -frame.maxY
+                    let height = frame.height
+                    Color.clear.preference(key: ScrollViewOffsetPreferenceKey.self, value: offset)
+                    Color.clear.preference(key: HeightPreferenceKey.self, value: height)
+                }
+                // It takes a little space so we give it 0 in height
+                .frame(height: 0)
+                .id(bottomID)
+
+                LazyVStack(spacing: 0) {
+                    ForEach(context.viewState.itemViewModels.reversed()) { viewModel in
+                        RoomTimelineItemView(viewModel: viewModel)
+                            .environmentObject(context)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(timelineStyle.rowInsets)
+                            .scaleEffect(x: 1, y: -1)
+                    }
+                }
             }
-        }
-        
-        /// Updates the specified table view's properties from the current view state.
-        func update(tableViewController: TimelineTableViewController, timelineStyle: TimelineStyle) {
-            if tableViewController.timelineStyle != timelineStyle {
-                tableViewController.timelineStyle = timelineStyle
+            .coordinateSpace(name: scrollAreaId)
+            .scaleEffect(x: 1, y: -1)
+            .animation(.default, value: context.viewState.itemViewModels)
+            .onPreferenceChange(HeightPreferenceKey.self) { value in
+                guard let value, value != height else {
+                    return
+                }
+                height = value
             }
-            if tableViewController.timelineItemsDictionary != context.viewState.itemsDictionary {
-                tableViewController.timelineItemsDictionary = context.viewState.itemsDictionary
+            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+                guard let value else {
+                    return
+                }
+                context.scrollToBottomButtonVisible = value > 0
             }
-            if tableViewController.canBackPaginate != context.viewState.canBackPaginate {
-                tableViewController.canBackPaginate = context.viewState.canBackPaginate
+            .onReceive(context.viewState.scrollToBottomPublisher) {
+                guard let last = context.viewState.timelineIDs.last else {
+                    return
+                }
+                withAnimation {
+                    scrollView.scrollTo(bottomID)
+                }
             }
-            if tableViewController.isBackPaginating != context.viewState.isBackPaginating {
-                tableViewController.isBackPaginating = context.viewState.isBackPaginating
-            }
-            if tableViewController.composerMode != context.viewState.composerMode {
-                tableViewController.composerMode = context.viewState.composerMode
-            }
-            
-            // Doesn't have an equatable conformance :(
-            tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider
-        }
-        
-        func send(viewAction: RoomScreenViewAction) {
-            context.send(viewAction: viewAction)
         }
     }
 }

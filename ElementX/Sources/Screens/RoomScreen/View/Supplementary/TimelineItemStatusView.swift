@@ -28,6 +28,11 @@ struct TimelineItemStatusView: View {
     }
 
     var body: some View {
+        mainContent
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
         if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts
         } else {
