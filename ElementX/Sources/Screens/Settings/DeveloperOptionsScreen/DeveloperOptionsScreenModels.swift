@@ -30,7 +30,6 @@ struct DeveloperOptionsScreenViewStateBindings {
     var readReceiptsEnabled: Bool
     var isEncryptionSyncEnabled: Bool
     var notificationSettingsEnabled: Bool
-    var timelineDiffableAnimationsEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -39,6 +38,5 @@ enum DeveloperOptionsScreenViewAction {
     case changedReadReceiptsEnabled
     case changedIsEncryptionSyncEnabled
     case changedNotificationSettingsEnabled
-    case changedTimelineDiffableAnimationsEnabled
     case clearCache
 }
