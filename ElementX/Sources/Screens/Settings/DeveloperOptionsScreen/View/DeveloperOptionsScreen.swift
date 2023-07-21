@@ -63,13 +63,6 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.userSuggestionsEnabled) { _ in
                     context.send(viewAction: .changedUserSuggestionsEnabled)
                 }
-
-                Toggle(isOn: $context.timelineDiffableAnimationsEnabled) {
-                    Text("Enable diffable animations in the timeline")
-                }
-                .onChange(of: context.timelineDiffableAnimationsEnabled) { _ in
-                    context.send(viewAction: .changedTimelineDiffableAnimationsEnabled)
-                }
             }
 
             Section {

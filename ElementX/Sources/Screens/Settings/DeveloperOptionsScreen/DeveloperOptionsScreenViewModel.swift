@@ -30,8 +30,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                                                userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
                                                                readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                                isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
-                                                               notificationSettingsEnabled: appSettings.notificationSettingsEnabled,
-                                                               timelineDiffableAnimationsEnabled: appSettings.timelineDiffableAnimationsEnabled)
+                                                               notificationSettingsEnabled: appSettings.notificationSettingsEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
@@ -53,8 +52,6 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             appSettings.isEncryptionSyncEnabled = state.bindings.isEncryptionSyncEnabled
         case .changedNotificationSettingsEnabled:
             appSettings.notificationSettingsEnabled = state.bindings.notificationSettingsEnabled
-        case .changedTimelineDiffableAnimationsEnabled:
-            appSettings.timelineDiffableAnimationsEnabled = state.bindings.timelineDiffableAnimationsEnabled
         case .clearCache:
             callback?(.clearCache)
         }

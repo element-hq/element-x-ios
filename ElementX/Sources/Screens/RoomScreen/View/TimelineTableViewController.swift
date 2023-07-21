@@ -122,10 +122,6 @@ class TimelineTableViewController: UIViewController {
                 self?.paginateBackwardsIfNeeded()
             }
             .store(in: &cancellables)
-
-        ServiceLocator.shared.settings.$timelineDiffableAnimationsEnabled
-            .weakAssign(to: \.shouldAnimate, on: self)
-            .store(in: &cancellables)
         
         configureDataSource()
     }
@@ -137,12 +133,13 @@ class TimelineTableViewController: UIViewController {
         super.viewWillAppear(animated)
         
         guard !hasAppearedOnce else { return }
-        scrollToBottom(animated: false)
+        tableView.contentOffset.y = -1
         hasAppearedOnce = true
         paginateBackwardsPublisher.send()
 
-        // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
-        tableView.contentOffset.y = -1
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.shouldAnimate = true
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -213,18 +210,24 @@ class TimelineTableViewController: UIViewController {
 
         // We only animate when new items come at the end of the timeline
         let animated = shouldAnimate &&
-            hasAppearedOnce &&
             snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
     
     /// Scrolls to the bottom of the timeline.
     private func scrollToBottom(animated: Bool) {
+        guard !timelineItemsIDs.isEmpty else {
+            return
+        }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
     }
 
     /// Scrolls to the top of the timeline.
     private func scrollToTop(animated: Bool) {
+        let index = timelineItemsIDs.count - 1
+        guard index >= 0 else {
+            return
+        }
         tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 0), at: .bottom, animated: animated)
     }
     
