@@ -90,7 +90,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        avatarURLString: avatarUrl,
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
-        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, endTime: let endTime, testingOnlyVotes: let testingOnlyVotes):
+        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
             return buildPollTimelineItem(eventItemProxy, isOutgoing)
         case .pollEnd(startEvent: let startEvent):
             return buildPollEndTimelineItem(eventItemProxy, isOutgoing)

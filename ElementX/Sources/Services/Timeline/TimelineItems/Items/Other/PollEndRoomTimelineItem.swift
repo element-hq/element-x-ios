@@ -21,5 +21,5 @@ struct PollEndRoomTimelineItem: EventBasedTimelineItemProtocol {
     let isOutgoing: Bool
     let isEditable: Bool
     let sender: TimelineItemSender
-    var properties: RoomTimelineItemProperties
+    var properties: RoomTimelineItemProperties = .init()
 }
