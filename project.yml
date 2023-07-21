@@ -54,7 +54,7 @@ packages:
     minorVersion: 5.13.0
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: 29233e1c95a17372d5e5afe689c31680bb07b1ea
+    revision: d9e119fbef20857eb790dd4aafbe16ff46011eca
     # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms

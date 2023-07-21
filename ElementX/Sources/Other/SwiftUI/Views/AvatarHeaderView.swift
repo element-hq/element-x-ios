@@ -54,19 +54,21 @@ struct AvatarHeaderView<Footer: View>: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AvatarHeaderView(avatarUrl: URL.picturesDirectory,
-                         name: "Test",
-                         id: "test",
-                         avatarSize: .room(on: .details),
-                         imageProvider: MockMediaProvider(),
-                         subtitle: "test") {
-            HStack(spacing: 32) {
-                ShareLink(item: "test") {
-                    Image(systemName: "square.and.arrow.up")
+        Form {
+            AvatarHeaderView(avatarUrl: URL.picturesDirectory,
+                             name: "Test Room",
+                             id: "test",
+                             avatarSize: .room(on: .details),
+                             imageProvider: MockMediaProvider(),
+                             subtitle: "#test:matrix.org") {
+                HStack(spacing: 32) {
+                    ShareLink(item: "test") {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
-                .buttonStyle(FormActionButtonStyle(title: "Test"))
+                .padding(.top, 32)
             }
-            .padding(.top, 32)
         }
     }
 }

@@ -30,7 +30,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         let mediaProvider = MockMediaProvider()
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: mediaProvider)
         
-        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
         

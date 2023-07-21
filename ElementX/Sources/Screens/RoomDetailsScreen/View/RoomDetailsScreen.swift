@@ -68,8 +68,7 @@ struct RoomDetailsScreen: View {
     }
     
     // MARK: - Private
-
-    @ViewBuilder
+    
     private var normalRoomHeaderSection: some View {
         AvatarHeaderView(avatarUrl: context.viewState.avatarURL,
                          name: context.viewState.title,
@@ -83,8 +82,7 @@ struct RoomDetailsScreen: View {
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
-
-    @ViewBuilder
+    
     private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
         AvatarHeaderView(avatarUrl: recipient.avatarURL,
                          name: recipient.name,
@@ -123,8 +121,7 @@ struct RoomDetailsScreen: View {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
                     Text(topic)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .compoundFormSecondaryTextRow()
                         .lineLimit(isTopicExpanded ? nil : 3)
                         .onTapGesture { isTopicExpanded.toggle() }
                 } else {
@@ -132,9 +129,8 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapAddTopic)
                     } label: {
                         Text(L10n.screenRoomDetailsAddTopicTitle)
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.compound.bodyLG)
                     }
+                    .buttonStyle(.compoundForm())
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
                 }
             } header: {
@@ -152,8 +148,6 @@ struct RoomDetailsScreen: View {
             } label: {
                 LabeledContent {
                     Text(String(context.viewState.joinedMembersCount))
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyLG)
                 } label: {
                     Label(L10n.commonPeople, systemImage: "person")
                 }
@@ -169,9 +163,8 @@ struct RoomDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+        .buttonStyle(.compoundForm(accessory: .navigationLink))
         .compoundFormSection()
-        .foregroundColor(.compound.textPrimary)
     }
     
     @ViewBuilder
@@ -187,8 +180,6 @@ struct RoomDetailsScreen: View {
                         Image(systemName: "exclamationmark.circle")
                     } else {
                         Text(context.viewState.notificationSettingsState.label)
-                            .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodyLG)
                     }
                 } label: {
                     Label(L10n.screenRoomDetailsNotificationTitle, systemImage: "bell")
@@ -196,9 +187,7 @@ struct RoomDetailsScreen: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
         }
-        .listRowSeparatorTint(.compound.borderDisabled)
-        .buttonStyle(FormButtonStyle(accessory: context.viewState.notificationSettingsState.isLoaded ? .navigationLink : nil))
-        .foregroundColor(.compound.textPrimary)
+        .buttonStyle(.compoundForm(accessory: context.viewState.notificationSettingsState.isLoaded ? .navigationLink : nil))
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
@@ -222,16 +211,12 @@ struct RoomDetailsScreen: View {
         if context.viewState.isEncrypted {
             Section {
                 Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
-                        Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
-                            .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
-                    }
+                    Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
                 } icon: {
                     Image(systemName: "lock.shield")
                 }
-                .labelStyle(FormRowLabelStyle(alignment: .top))
+                .labelStyle(.compoundFormRow(secondaryText: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                             alignment: .top))
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundFormSectionHeader()
@@ -247,21 +232,26 @@ struct RoomDetailsScreen: View {
             } label: {
                 Label(L10n.actionLeaveRoom, systemImage: "door.right.hand.open")
             }
-            .buttonStyle(FormButtonStyle(accessory: nil))
+            .buttonStyle(.compoundForm())
         }
         .compoundFormSection()
     }
-
-    @ViewBuilder
+    
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             Button(role: user.isIgnored ? nil : .destructive) {
                 context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
             } label: {
-                Label(user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                      systemImage: "slash.circle")
+                LabeledContent {
+                    if context.viewState.isProcessingIgnoreRequest {
+                        ProgressView()
+                    }
+                } label: {
+                    Label(user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
+                          systemImage: "slash.circle")
+                }
             }
-            .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+            .buttonStyle(.compoundForm())
             .disabled(context.viewState.isProcessingIgnoreRequest)
         }
         .compoundFormSection()
@@ -313,6 +303,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
+        appSettings.notificationSettingsEnabled = true
         
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
@@ -333,6 +324,28 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                                   isDirect: true,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
+                                                  members: members,
+                                                  activeMembersCount: 2))
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        let appSettings = AppSettings()
+        
+        return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
+                                          roomProxy: roomProxy,
+                                          mediaProvider: MockMediaProvider(),
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          notificationSettingsProxy: notificationSettingsProxy,
+                                          appSettings: appSettings)
+    }()
+    
+    static let simpleRoomViewModel = {
+        let members: [RoomMemberProxyMock] = [
+            .mockAlice,
+            .mockBob,
+            .mockCharlie
+        ]
+        let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
+                                                  isDirect: false,
+                                                  isEncrypted: false,
                                                   members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
@@ -350,5 +363,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
             .previewDisplayName("Generic Room")
         RoomDetailsScreen(context: dmRoomViewModel.context)
             .previewDisplayName("DM Room")
+        RoomDetailsScreen(context: simpleRoomViewModel.context)
+            .previewDisplayName("Simple Room")
     }
 }
