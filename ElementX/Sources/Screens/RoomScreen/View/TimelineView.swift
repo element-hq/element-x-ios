@@ -14,46 +14,35 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
-
-struct ScrollViewOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
-
-struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
 
 struct TimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
 
-    private let scrollAreaId = "scrollArea"
+    private let visibleArea = "visibleArea"
+    private let scrollAreaID = "scrollArea"
     private let bottomID = "bottomID"
 
-    @State private var height: CGFloat?
+    @State private var contentHeight: CGFloat?
     @State private var offset: CGFloat?
+    @State private var visibleHeight: CGFloat?
+    @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
 
     var body: some View {
         ScrollViewReader { scrollView in
             ScrollView {
+                // This is used as a pointer to the bottom of the view
+                // both for scrolling purposes and to understand the
+                // current content offset
                 GeometryReader { proxy in
-                    let frame = proxy.frame(in: .named(scrollAreaId))
+                    let frame = proxy.frame(in: .named(scrollAreaID))
                     // Since the scroll view is flipped the offset maxY is inverted
                     let offset = -frame.maxY
-                    let height = frame.height
                     Color.clear.preference(key: ScrollViewOffsetPreferenceKey.self, value: offset)
-                    Color.clear.preference(key: HeightPreferenceKey.self, value: height)
                 }
-                // It takes a little space so we give it 0 in height
+                // It takes a little bit of space so we give it 0 in height
                 .frame(height: 0)
                 .id(bottomID)
 
@@ -66,28 +55,85 @@ struct TimelineView: View {
                             .scaleEffect(x: 1, y: -1)
                     }
                 }
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear.preference(key: ContentHeightPreferenceKey.self, value: proxy.size.height)
+                    }
+                )
             }
-            .coordinateSpace(name: scrollAreaId)
+            .coordinateSpace(name: scrollAreaID)
             .scaleEffect(x: 1, y: -1)
             .animation(.default, value: context.viewState.itemViewModels)
-            .onPreferenceChange(HeightPreferenceKey.self) { value in
-                guard let value, value != height else {
+            .onPreferenceChange(ContentHeightPreferenceKey.self) { value in
+                guard let value, value != contentHeight else {
                     return
                 }
-                height = value
+
+                contentHeight = value
             }
             .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
-                guard let value else {
+                guard let value, value != offset else {
                     return
                 }
+
+                offset = value
                 context.scrollToBottomButtonVisible = value > 0
+
+                paginateBackwardsPublisher.send()
             }
             .onReceive(context.viewState.scrollToBottomPublisher) {
                 withAnimation {
                     scrollView.scrollTo(bottomID)
                 }
             }
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.preference(key: VisibleHeightPreferenceKey.self, value: proxy.size.height)
+                }
+            )
+            .onPreferenceChange(VisibleHeightPreferenceKey.self) { value in
+                guard let value, value != visibleHeight else {
+                    return
+                }
+                visibleHeight = value
+            }
+            .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
+                guard let offset,
+                      let contentHeight,
+                      let visibleHeight,
+                      context.viewState.canBackPaginate,
+                      !context.viewState.isBackPaginating,
+                      offset > contentHeight - visibleHeight * 2.0 else {
+                    return
+                }
+
+                context.send(viewAction: .paginateBackwards)
+            }
         }
+    }
+}
+
+private struct ScrollViewOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+private struct ContentHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+private struct VisibleHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
     }
 }
 
