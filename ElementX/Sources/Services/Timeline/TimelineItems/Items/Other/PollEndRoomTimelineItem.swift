@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-struct PollEndRoomTimelineItem: EventBasedTimelineItemProtocol {
+struct PollEndRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
     let body: String
     let timestamp: String

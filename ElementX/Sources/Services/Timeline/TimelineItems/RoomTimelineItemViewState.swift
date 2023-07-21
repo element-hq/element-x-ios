@@ -68,6 +68,8 @@ enum RoomTimelineItemType: Equatable {
     case state(StateRoomTimelineItem)
     case group(CollapsibleTimelineItem)
     case location(LocationRoomTimelineItem)
+    case poll(PollRoomTimelineItem)
+    case pollEnd(PollEndRoomTimelineItem)
 
     // swiftlint:disable:next cyclomatic_complexity
     init(item: RoomTimelineItemProtocol) {
@@ -110,6 +112,10 @@ enum RoomTimelineItemType: Equatable {
             self = .group(item)
         case let item as LocationRoomTimelineItem:
             self = .location(item)
+        case let item as PollRoomTimelineItem:
+            self = .poll(item)
+        case let item as PollEndRoomTimelineItem:
+            self = .pollEnd(item)
         default:
             fatalError("Unknown timeline item")
         }
@@ -135,7 +141,9 @@ enum RoomTimelineItemType: Equatable {
              .encryptedHistory(let item as RoomTimelineItemProtocol),
              .state(let item as RoomTimelineItemProtocol),
              .group(let item as RoomTimelineItemProtocol),
-             .location(let item as RoomTimelineItemProtocol):
+             .location(let item as RoomTimelineItemProtocol),
+             .poll(let item as RoomTimelineItemProtocol),
+             .pollEnd(let item as RoomTimelineItemProtocol):
             return item.id
         }
     }
@@ -143,7 +151,7 @@ enum RoomTimelineItemType: Equatable {
     /// Whether or not it is possible to send a reaction to this timeline item.
     var isReactable: Bool {
         switch self {
-        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location:
+        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location, .poll, .pollEnd:
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false

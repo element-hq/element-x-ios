@@ -21,7 +21,9 @@ struct PollRoomTimelineView: View {
     @Environment(\.timelineStyle) var timelineStyle
 
     var body: some View {
-        Text("Hello World")
+        TimelineStyler(timelineItem: timelineItem) {
+            Text("<Poll event>")
+        }
     }
 }
 
