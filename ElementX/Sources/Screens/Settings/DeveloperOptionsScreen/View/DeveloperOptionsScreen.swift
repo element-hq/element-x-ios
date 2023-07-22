@@ -105,7 +105,7 @@ struct DeveloperOptionsScreen: View {
 // MARK: - Previews
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
-    static let viewModel = DeveloperOptionsScreenViewModel(appSettings: ServiceLocator.shared.settings)
+    static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings)
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)
