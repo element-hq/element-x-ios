@@ -48,10 +48,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.userSuggestionsEnabled) {
                     Text("User suggestions")
                 }
-
-                Toggle(isOn: $context.timelineDiffableAnimationsEnabled) {
-                    Text("Enable diffable animations in the timeline")
-                }
             }
 
             Section {

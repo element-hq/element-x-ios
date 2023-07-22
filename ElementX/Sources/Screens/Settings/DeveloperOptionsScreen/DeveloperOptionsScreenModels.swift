@@ -48,7 +48,6 @@ protocol DeveloperOptions: AnyObject {
     var readReceiptsEnabled: Bool { get set }
     var isEncryptionSyncEnabled: Bool { get set }
     var notificationSettingsEnabled: Bool { get set }
-    var timelineDiffableAnimationsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptions { }
