@@ -40,13 +40,15 @@ struct ShimmerModifier: ViewModifier {
     /// The colour that causes the view to remain unchanged.
     private let regularColor = Color.white
     
+    /// A slow linear animation which auto-repeats after a delay.
+    private let animation: Animation = Tests.isRunningUITests ? .noAnimation : .linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)
+    
     func body(content: Content) -> some View {
         content
             .mask { gradient }
+            .animation(animation, value: animationTrigger)
             .task {
-                withElementAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
-                    animationTrigger.toggle()
-                }
+                animationTrigger.toggle()
             }
     }
     
