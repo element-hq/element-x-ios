@@ -81,6 +81,11 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         } action: {
             context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
         }
+        .contextMenu {
+            context.viewState.macContextMenu(item: timelineItem) { action in
+                context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
+            }
+        }
     }
     
     @ViewBuilder

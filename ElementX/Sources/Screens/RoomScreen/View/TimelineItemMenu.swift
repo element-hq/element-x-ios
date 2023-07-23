@@ -50,9 +50,11 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case viewSource
     case retryDecryption(sessionID: String)
     case report
+    case react
     
     var id: Self { self }
-
+    
+    /// Whether the item should cancel a reply/edit occurring in the composer.
     var switchToDefaultComposer: Bool {
         switch self {
         case .reply, .edit:
@@ -61,7 +63,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             return true
         }
     }
-
+    
+    /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
         case .copy, .edit, .redact, .viewSource:
@@ -70,7 +73,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             return false
         }
     }
-
+    
+    /// Whether the action should be shown for a redacted item.
     var canAppearInRedacted: Bool {
         switch self {
         case .viewSource:
@@ -79,20 +83,37 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             return false
         }
     }
+    
+    /// The item's label.
+    var label: some View {
+        switch self {
+        case .copy: return Label(L10n.actionCopy, systemImage: "doc.on.doc")
+        case .edit: return Label(L10n.actionEdit, systemImage: "pencil.line")
+        case .copyPermalink: return Label(L10n.actionCopyLinkToMessage, systemImage: "link")
+        case .reply: return Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
+        case .forward: return Label(L10n.actionForward, systemImage: "arrowshape.turn.up.right")
+        case .redact: return Label(L10n.actionRemove, systemImage: "trash")
+        case .viewSource: return Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
+        case .retryDecryption: return Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
+        case .report: return Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
+        case .react: return Label(L10n.screenRoomTimelineAddReaction, systemImage: "hand.thumbsup")
+        }
+    }
+}
+
+extension RoomTimelineItemProtocol {
+    var isReactable: Bool {
+        guard let eventItem = self as? EventBasedTimelineItemProtocol else { return false }
+        return !eventItem.isRedacted && !eventItem.hasFailedToSend && !eventItem.hasFailedDecryption
+    }
 }
 
 public struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
-
-    private var canShowReactions: Bool {
-        !item.isRedacted &&
-            !item.hasFailedToSend &&
-            !item.hasFailedDecryption
-    }
     
     public var body: some View {
         VStack {
@@ -104,7 +125,7 @@ public struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if canShowReactions {
+                    if item.isReactable {
                         reactionsSection
                             .padding(.top, 4.0)
                             .padding(.bottom, 8.0)
@@ -171,7 +192,7 @@ public struct TimelineItemMenu: View {
             reactionButton(for: "👏")
             
             Button {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
                 // Otherwise we get errors that a sheet is already presented
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     context.send(viewAction: .displayEmojiPicker(itemID: item.id))
@@ -187,7 +208,7 @@ public struct TimelineItemMenu: View {
     
     private func reactionButton(for emoji: String) -> some View {
         Button {
-            presentationMode.wrappedValue.dismiss()
+            dismiss()
             context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {
             Text(emoji)
@@ -211,65 +232,21 @@ public struct TimelineItemMenu: View {
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
         ForEach(actions, id: \.self) { action in
-            switch action {
-            case .copy:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionCopy, systemImageName: "doc.on.doc")
-                }
-            case .edit:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionEdit, systemImageName: "pencil.line")
-                }
-            case .copyPermalink:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionCopyLinkToMessage, systemImageName: "link")
-                }
-            case .reply:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionReply, systemImageName: "arrowshape.turn.up.left")
-                }
-            case .forward:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionForward, systemImageName: "arrowshape.turn.up.right")
-                }
-            case .redact:
-                Button(role: .destructive) { send(action) } label: {
-                    MenuLabel(title: L10n.actionRemove, systemImageName: "trash")
-                }
-            case .viewSource:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionViewSource, systemImageName: "doc.text.below.ecg")
-                }
-            case .retryDecryption:
-                Button { send(action) } label: {
-                    MenuLabel(title: L10n.actionRetryDecryption, systemImageName: "arrow.down.message")
-                }
-            case .report:
-                Button(role: .destructive) { send(action) } label: {
-                    MenuLabel(title: L10n.actionReportContent, systemImageName: "exclamationmark.bubble")
-                }
+            Button { send(action) } label: {
+                action.label
+                    .labelStyle(FixedIconSizeLabelStyle())
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
             }
         }
     }
     
     private func send(_ action: TimelineItemMenuAction) {
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
         // Otherwise we might get errors that a sheet is already presented
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             context.send(viewAction: .timelineItemMenuAction(itemID: item.id, action: action))
-        }
-    }
-    
-    private struct MenuLabel: View {
-        let title: String
-        let systemImageName: String
-        
-        var body: some View {
-            Label(title, systemImage: systemImageName)
-                .labelStyle(FixedIconSizeLabelStyle())
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
         }
     }
 }
