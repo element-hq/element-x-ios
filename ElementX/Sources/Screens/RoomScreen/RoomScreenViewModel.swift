@@ -79,7 +79,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:
