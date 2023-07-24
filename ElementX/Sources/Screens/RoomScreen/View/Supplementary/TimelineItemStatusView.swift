@@ -21,10 +21,10 @@ struct TimelineItemStatusView: View {
     @Environment(\.timelineStyle) private var style
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @ObservedObject var timelineViewState: TimelineViewState
 
     private var isLastOutgoingMessage: Bool {
-        context.viewState.timelineViewState.timelineIDs.last == timelineItem.id.timelineID &&
-            timelineItem.isOutgoing
+        timelineItem.isOutgoing && timelineViewState.timelineIDs.last == timelineItem.id.timelineID
     }
 
     var body: some View {

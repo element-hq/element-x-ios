@@ -70,7 +70,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         if !timelineItem.isOutgoing {
                             Spacer()
                         }
-                        TimelineItemStatusView(timelineItem: timelineItem)
+                        TimelineItemStatusView(timelineItem: timelineItem, timelineViewState: context.viewState.timelineViewState)
                             .environmentObject(context)
                             .padding(.top, 8)
                             .padding(.bottom, 3)

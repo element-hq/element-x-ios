@@ -42,7 +42,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     supplementaryViews
                 }
             }
-            TimelineItemStatusView(timelineItem: timelineItem)
+            TimelineItemStatusView(timelineItem: timelineItem, timelineViewState: context.viewState.timelineViewState)
                 .environmentObject(context)
         }
     }
