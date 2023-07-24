@@ -33,19 +33,20 @@ struct CollapsibleRoomTimelineView: View {
                 ForEach(timelineViewModels) { viewModel in
                     RoomTimelineItemView(viewModel: viewModel)
                 }
-            }.transition(.opacity.animation(.elementDefault))
+            }
         }
         .disclosureGroupStyle(CollapsibleRoomTimelineItemDisclosureGroupStyle())
-        .transaction { transaction in
-            transaction.animation = .noAnimation // Fixes weird animations on the disclosure indicator
-        }
     }
 }
 
 private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 0.0) {
-            Button { configuration.isExpanded.toggle() } label: {
+            Button {
+                withAnimation {
+                    configuration.isExpanded.toggle()
+                }
+            } label: {
                 HStack(alignment: .center) {
                     configuration.label
                     Text(Image(systemName: "chevron.forward"))

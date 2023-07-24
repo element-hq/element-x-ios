@@ -21,12 +21,9 @@ struct TimelineItemStatusView: View {
     @Environment(\.timelineStyle) private var style
     @Environment(\.readReceiptsEnabled) private var readReceiptsEnabled
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    
-    // Required since the timelineViewState is a reference and its changes are not observed by the context
-    @ObservedObject var timelineViewState: TimelineViewState
 
     private var isLastOutgoingMessage: Bool {
-        timelineItem.isOutgoing && timelineViewState.timelineIDs.last == timelineItem.id.timelineID
+        timelineItem.isOutgoing && context.viewState.timelineViewState.timelineIDs.last == timelineItem.id.timelineID
     }
 
     var body: some View {

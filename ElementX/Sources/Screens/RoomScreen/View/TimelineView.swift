@@ -20,7 +20,7 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct TimelineView: View {
-    @ObservedObject var viewState: TimelineViewState
+    let viewState: TimelineViewState
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "bottomID"

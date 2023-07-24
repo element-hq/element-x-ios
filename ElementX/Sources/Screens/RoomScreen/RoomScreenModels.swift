@@ -90,7 +90,7 @@ struct RoomScreenViewState: BindableState {
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
-    let timelineViewState: TimelineViewState
+    var timelineViewState: TimelineViewState
 
     var composerMode: RoomScreenComposerMode = .default
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
@@ -174,10 +174,10 @@ struct RoomMemberState {
     let avatarURL: URL?
 }
 
-final class TimelineViewState: ObservableObject {
-    @Published var canBackPaginate = false
-    @Published var isBackPaginating = false
-    @Published var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
+struct TimelineViewState {
+    var canBackPaginate = false
+    var isBackPaginating = false
+    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
 
     var timelineIDs: [String] {
         itemsDictionary.keys.elements
