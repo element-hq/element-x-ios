@@ -17,7 +17,6 @@
 import Combine
 import SwiftUI
 
-import OrderedCollections
 import SwiftUIIntrospect
 
 struct TimelineView: View {
@@ -40,14 +39,12 @@ struct TimelineView: View {
                     .hidden()
                     .frame(height: 0)
 
-                VStack(spacing: 0) {
-                    ForEach(viewState.timelineIDs.reversed(), id: \.self) { id in
-                        if let viewModel = viewState.itemsDictionary[id] {
-                            RoomTimelineItemView(viewModel: viewModel)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .scaleEffect(x: 1, y: -1)
-                                .padding(timelineStyle.rowInsets)
-                        }
+                LazyVStack(spacing: 0) {
+                    ForEach(viewState.itemViewModels.reversed()) { viewModel in
+                        RoomTimelineItemView(viewModel: viewModel)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(timelineStyle.rowInsets)
+                            .scaleEffect(x: 1, y: -1)
                     }
                 }
             }
@@ -55,7 +52,7 @@ struct TimelineView: View {
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
-            .animation(.elementDefault, value: viewState.timelineIDs)
+            .animation(.elementDefault, value: viewState.itemViewModels)
             .scaleEffect(x: 1, y: -1)
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 guard let scrollView = scrollViewAdapter.scrollView else {
