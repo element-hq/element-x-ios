@@ -19,39 +19,17 @@ import SwiftUI
 typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
 
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
-    private let appSettings: AppSettings
-    
     var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
     
-    init(appSettings: AppSettings) {
-        self.appSettings = appSettings
-        
-        let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: appSettings.shouldCollapseRoomStateEvents,
-                                                               userSuggestionsEnabled: appSettings.userSuggestionsEnabled,
-                                                               readReceiptsEnabled: appSettings.readReceiptsEnabled,
-                                                               isEncryptionSyncEnabled: appSettings.isEncryptionSyncEnabled,
-                                                               notificationSettingsEnabled: appSettings.notificationSettingsEnabled)
+    init(developerOptions: DeveloperOptionsProtocol) {
+        let bindings = DeveloperOptionsScreenViewStateBindings(developerOptions: developerOptions)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
         super.init(initialViewState: state)
-        
-        appSettings.$shouldCollapseRoomStateEvents
-            .weakAssign(to: \.state.bindings.shouldCollapseRoomStateEvents, on: self)
-            .store(in: &cancellables)
     }
     
     override func process(viewAction: DeveloperOptionsScreenViewAction) {
         switch viewAction {
-        case .changedShouldCollapseRoomStateEvents:
-            appSettings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
-        case .changedUserSuggestionsEnabled:
-            appSettings.userSuggestionsEnabled = state.bindings.userSuggestionsEnabled
-        case .changedReadReceiptsEnabled:
-            appSettings.readReceiptsEnabled = state.bindings.readReceiptsEnabled
-        case .changedIsEncryptionSyncEnabled:
-            appSettings.isEncryptionSyncEnabled = state.bindings.isEncryptionSyncEnabled
-        case .changedNotificationSettingsEnabled:
-            appSettings.notificationSettingsEnabled = state.bindings.notificationSettingsEnabled
         case .clearCache:
             callback?(.clearCache)
         }

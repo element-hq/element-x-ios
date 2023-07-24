@@ -26,7 +26,7 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     var callback: ((DeveloperOptionsScreenCoordinatorAction) -> Void)?
     
     init() {
-        viewModel = DeveloperOptionsScreenViewModel(appSettings: ServiceLocator.shared.settings)
+        viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings)
         viewModel.callback = { [weak self] action in
             switch action {
             case .clearCache:
