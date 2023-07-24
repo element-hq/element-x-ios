@@ -22,17 +22,15 @@ struct PollRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Text("Poll: \(poll.question)")
-            ForEach(poll.answer, id: \.id) { answer in
-                Text(answer.text)
-                if let votes = poll.votes[answer.id] {
-                    ForEach(votes, id: \.self) { voter in
-                        Text("- \(voter)")
-                            .padding(.leading, 10)
-                    }
+            questionView
+                .padding(.bottom, 16)
+
+            ForEach(poll.options, id: \.id) { option in
+                Button { } label: {
+                    PollOptionView(pollOption: option)
+                        .padding(.bottom, 16)
                 }
             }
-            Text("Ended: \(poll.endTime.map(String.init) ?? "Never")")
         }
     }
 
@@ -41,9 +39,20 @@ struct PollRoomTimelineView: View {
     private var poll: Poll {
         timelineItem.poll
     }
+
+    private var questionView: some View {
+        HStack(spacing: 4) {
+            Image(Asset.Images.equalizer.name)
+
+            Text(poll.question)
+                .font(.compound.bodyLGSemibold)
+        }
+    }
 }
 
 struct PollRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+
     static var previews: some View {
         PollRoomTimelineView(timelineItem: .init(id: .random,
                                                  poll: .mock,
@@ -52,6 +61,8 @@ struct PollRoomTimelineView_Previews: PreviewProvider {
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  sender: .init(id: "Bob")))
+            .environment(\.timelineStyle, .bubbles)
+            .environmentObject(viewModel.context)
     }
 }
 
@@ -59,7 +70,7 @@ private extension Poll {
     static let mock: Self = .init(question: "Do you like polls?",
                                   pollKind: .disclosed,
                                   maxSelections: 1,
-                                  answer: [.init(id: "1", text: "Yes"), .init(id: "2", text: "No")],
+                                  options: [.init(id: "1", text: "Yes", votes: 1, allVotes: 3, isSelected: true), .init(id: "2", text: "No", votes: 2, allVotes: 3, isSelected: false)],
                                   votes: [:],
                                   endTime: nil)
 }

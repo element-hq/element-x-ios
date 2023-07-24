@@ -91,10 +91,20 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
+            let allVotes = votes.reduce(0) { count, tuple in
+                count + tuple.value.count
+            }
+            let options: [PollOption] = answers.map { answer in
+                .init(id: answer.id,
+                      text: answer.text,
+                      votes: votes[answer.id]?.count ?? 0,
+                      allVotes: allVotes,
+                      isSelected: votes[answer.id]?.contains(userID) ?? false)
+            }
             let poll = Poll(question: question,
                             pollKind: kind,
                             maxSelections: maxSelections,
-                            answer: answers,
+                            options: options,
                             votes: votes,
                             endTime: endTime)
             return buildPollTimelineItem(poll, eventItemProxy, isOutgoing)

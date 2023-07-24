@@ -32,7 +32,7 @@ struct Poll: Equatable {
     let question: String
     let pollKind: PollKind
     let maxSelections: UInt64
-    let answer: [PollAnswer]
+    let options: [PollOption]
     let votes: [String: [String]]
     let endTime: UInt64?
 }
