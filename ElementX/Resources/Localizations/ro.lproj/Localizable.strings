@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Încărcarea mesajelor a eșuat";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
 "report_content_explanation" = "Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat.";
 "report_content_hint" = "Motivul raportării acestui conținut";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Comutați lista cu puncte";
 "rich_text_editor_code_block" = "Comutați blocul de cod";
 "rich_text_editor_composer_placeholder" = "Mesaj…";
@@ -363,7 +364,7 @@
 "screen_waitlist_message_success" = "Bun venit la %1$@";
 "screen_waitlist_title" = "Sunteți pe lista de așteptare";
 "screen_waitlist_title_success" = "Sunteți conectat!";
-"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
 "screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";

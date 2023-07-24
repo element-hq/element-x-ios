@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Caricamento dei messaggi non riuscito";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "Non è stata trovata alcuna app compatibile per gestire questa azione.";
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "report_content_explanation" = "Questo messaggio verrà segnalato all'amministratore dell'homeserver. Questi non sarà in grado di leggere i messaggi criptati.";
 "report_content_hint" = "Motivo della segnalazione di questo contenuto";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Attiva/disattiva l'elenco puntato";
 "rich_text_editor_code_block" = "Attiva/disattiva il blocco di codice";
 "rich_text_editor_composer_placeholder" = "Messaggio…";
@@ -363,7 +364,7 @@
 "screen_waitlist_message_success" = "Welcome to %1$@!";
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
-"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
 "screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";

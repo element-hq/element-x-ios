@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Načítání zpráv se nezdařilo";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Zdá se, že jste frustrovaně třásli telefonem. Chcete otevřít obrazovku pro nahlášení chyby?";
 "report_content_explanation" = "Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy.";
 "report_content_hint" = "Důvod nahlášení tohoto obsahu";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Přepnout seznam s odrážkami";
 "rich_text_editor_code_block" = "Přepnout blok kódu";
 "rich_text_editor_composer_placeholder" = "Zpráva...";
@@ -363,7 +364,7 @@
 "screen_waitlist_message_success" = "Vítá vás %1$@";
 "screen_waitlist_title" = "Jste v pořadníku!";
 "screen_waitlist_title_success" = "Jdete do toho!";
-"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
 "screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";

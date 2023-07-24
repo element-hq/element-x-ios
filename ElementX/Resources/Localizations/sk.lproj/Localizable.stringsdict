@@ -175,7 +175,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string></string>
+			<string>%1$d ďalší</string>
 			<key>few</key>
 			<string>%1$d ďalšie</string>
 			<key>other</key>

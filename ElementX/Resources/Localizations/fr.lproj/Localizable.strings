@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ n’a pas pu charger la carte. Veuillez réessayer plus tard.";
 "error_failed_loading_messages" = "Échec du chargement des messages";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "Aucune application compatible n'a été trouvée pour gérer cette action.";
 "error_some_messages_have_not_been_sent" = "Certains messages n'ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur est survenue.";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Vous semblez secouer le téléphone de frustration. Voulez-vous ouvrir le formulaire de rapport de problème ?";
 "report_content_explanation" = "Ce message sera signalé à l’administrateur de votre serveur d'accueil. Ils ne pourront lire aucun message chiffré.";
 "report_content_hint" = "Raison du signalement de ce contenu";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Afficher une liste à puces";
 "rich_text_editor_code_block" = "Afficher le bloc de code";
 "rich_text_editor_composer_placeholder" = "Envoyer un message…";
@@ -363,7 +364,7 @@
 "screen_waitlist_message_success" = "Bienvenue sur %1$@ !";
 "screen_waitlist_title" = "Vous y êtes presque.";
 "screen_waitlist_title_success" = "Vous y êtes.";
-"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
 "screen_welcome_bullet_2" = "L’historique des messages pour les salons chiffrés ne sera pas disponible dans cette mise à jour.";
 "screen_welcome_bullet_3" = "Nous serions ravis d’avoir votre avis, n’hésitez pas à nous le partager via la page des paramètres.";
 "screen_welcome_button" = "C’est parti !";
