@@ -19,8 +19,15 @@ import XCTest
 
 @MainActor
 class RoomNotificationSettingsScreenUITests: XCTestCase {
-    func testInitialStateComponents() async throws {
-        let app = Application.launch(.roomNotificationSettings)
-        try await app.assertScreenshot(.roomNotificationSettings)
+    func testDefaultSetting() async throws {
+        let app = Application.launch(.roomNotificationSettingsDefaultSetting)
+        XCTAssertFalse(app.switches[A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting].isOn)
+        try await app.assertScreenshot(.roomNotificationSettingsDefaultSetting)
+    }
+    
+    func testCustomSettings() async throws {
+        let app = Application.launch(.roomNotificationSettingsCustomSetting)
+        XCTAssert(app.switches[A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting].isOn)
+        try await app.assertScreenshot(.roomNotificationSettingsCustomSetting)
     }
 }

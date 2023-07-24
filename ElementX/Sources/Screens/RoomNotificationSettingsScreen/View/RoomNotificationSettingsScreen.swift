@@ -45,10 +45,11 @@ struct RoomNotificationSettingsScreen: View {
                 Text(L10n.screenRoomNotificationSettingsAllowCustom)
             }
             .toggleStyle(.compoundForm)
+            .accessibilityIdentifier(A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting)
+            .disabled(context.viewState.notificationSettingsState.isLoading)
             .onChange(of: context.allowCustomSetting) { _ in
                 context.send(viewAction: .changedAllowCustomSettings)
             }
-            .disabled(context.viewState.notificationSettingsState.isLoading)
         } footer: {
             Text(L10n.screenRoomNotificationSettingsAllowCustomFootnote)
                 .compoundFormSectionFooter()
@@ -100,8 +101,7 @@ struct RoomNotificationSettingsScreen: View {
 
 struct RoomNotificationSettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
-        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(roomMode: .init(with: .init(mode: .mentionsAndKeywordsOnly,
-                                                                                                              isDefault: true))))
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .mentionsAndKeywordsOnly, roomMode: .mentionsAndKeywordsOnly))
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
@@ -112,8 +112,7 @@ struct RoomNotificationSettingsScreen_Previews: PreviewProvider {
     }()
 
     static let viewModelCustom = {
-        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(roomMode: .init(with: .init(mode: .mentionsAndKeywordsOnly,
-                                                                                                              isDefault: false))))
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly))
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
