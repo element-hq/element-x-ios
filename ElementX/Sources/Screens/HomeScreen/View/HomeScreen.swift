@@ -126,8 +126,6 @@ struct HomeScreen: View {
         ToolbarItemGroup(placement: .bottomBar) {
             Spacer()
             newRoomButton
-                // Fix position animating on loop by getting caught up in the shimmer effect somehow.
-                .animation(.noAnimation, value: context.viewState.roomListMode)
         }
     }
     

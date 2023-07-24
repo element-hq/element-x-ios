@@ -94,6 +94,8 @@ public enum L10n {
   public static var actionQuickReply: String { return L10n.tr("Localizable", "action_quick_reply") }
   /// Quote
   public static var actionQuote: String { return L10n.tr("Localizable", "action_quote") }
+  /// React
+  public static var actionReact: String { return L10n.tr("Localizable", "action_react") }
   /// Remove
   public static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Reply

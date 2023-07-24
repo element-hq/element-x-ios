@@ -139,6 +139,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             } action: {
                 context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
             }
+            .contextMenu {
+                TimelineItemMacContextMenu(item: timelineItem,
+                                           actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
+                    context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
+                }
+            }
             .padding(.top, messageBubbleTopPadding)
     }
 

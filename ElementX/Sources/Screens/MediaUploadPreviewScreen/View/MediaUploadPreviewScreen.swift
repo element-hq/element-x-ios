@@ -20,13 +20,19 @@ import SwiftUI
 struct MediaUploadPreviewScreen: View {
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
+    var title: String {
+        ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
+    }
+    
     var body: some View {
         PreviewView(context: context,
                     fileURL: context.viewState.url,
                     title: context.viewState.title)
             .id(UUID())
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
             .disabled(context.viewState.shouldDisableInteraction)
-            .ignoresSafeArea(edges: .bottom)
+            .ignoresSafeArea(edges: [.horizontal, .bottom])
             .toolbar { toolbar }
             .interactiveDismissDisabled()
     }
@@ -52,15 +58,19 @@ private struct PreviewView: UIViewControllerRepresentable {
     let fileURL: URL
     let title: String?
 
-    func makeUIViewController(context: Context) -> UINavigationController {
+    func makeUIViewController(context: Context) -> UIViewController {
         let previewController = QLPreviewController()
         previewController.dataSource = context.coordinator
         previewController.delegate = context.coordinator
-
-        return UINavigationController(rootViewController: previewController)
+        
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return previewController
+        } else {
+            return UINavigationController(rootViewController: previewController)
+        }
     }
 
-    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(view: self)

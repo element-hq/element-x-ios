@@ -79,7 +79,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:
@@ -129,8 +129,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .tappedOnUser(userID: let userID):
             Task { await handleTappedUser(userID: userID) }
         case .displayEmojiPicker(let itemID):
-            guard let item = state.itemsDictionary[itemID.timelineID], item.isReactable else { return }
-            callback?(.displayEmojiPicker(itemID: itemID))
+            showEmojiPicker(for: itemID)
         case .reactionSummary(let itemID, let key):
             showReactionSummary(for: itemID, selectedKey: key)
         case .retrySend(let itemID):
@@ -501,6 +500,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .report:
             callback?(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
+        case .react:
+            showEmojiPicker(for: itemID)
         }
         
         if action.switchToDefaultComposer {
@@ -662,7 +663,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    // MARK: - Reaction summary
+    // MARK: - Reactions
+    
+    private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
+        guard let item = state.itemsDictionary[itemID.timelineID], item.isReactable else { return }
+        callback?(.displayEmojiPicker(itemID: itemID))
+    }
     
     private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
