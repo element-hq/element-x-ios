@@ -96,7 +96,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .viewSource: return Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
         case .retryDecryption: return Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report: return Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
-        case .react: return Label(L10n.screenRoomTimelineAddReaction, systemImage: "hand.thumbsup")
+        case .react: return Label(L10n.actionReact, systemImage: "hand.thumbsup")
         }
     }
 }
