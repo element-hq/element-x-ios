@@ -21,7 +21,7 @@ typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOpt
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
     var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
     
-    init(developerOptions: DeveloperOptions) {
+    init(developerOptions: DeveloperOptionsProtocol) {
         let bindings = DeveloperOptionsScreenViewStateBindings(developerOptions: developerOptions)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         

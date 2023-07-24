@@ -26,13 +26,13 @@ struct DeveloperOptionsScreenViewState: BindableState {
 
 @dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
-    private let developerOptions: DeveloperOptions
+    private let developerOptions: DeveloperOptionsProtocol
 
-    init(developerOptions: DeveloperOptions) {
+    init(developerOptions: DeveloperOptionsProtocol) {
         self.developerOptions = developerOptions
     }
 
-    subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<DeveloperOptions, Setting>) -> Setting {
+    subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<DeveloperOptionsProtocol, Setting>) -> Setting {
         get { developerOptions[keyPath: keyPath] }
         set { developerOptions[keyPath: keyPath] = newValue }
     }
@@ -42,7 +42,7 @@ enum DeveloperOptionsScreenViewAction {
     case clearCache
 }
 
-protocol DeveloperOptions: AnyObject {
+protocol DeveloperOptionsProtocol: AnyObject {
     var shouldCollapseRoomStateEvents: Bool { get set }
     var userSuggestionsEnabled: Bool { get set }
     var readReceiptsEnabled: Bool { get set }
@@ -50,4 +50,4 @@ protocol DeveloperOptions: AnyObject {
     var notificationSettingsEnabled: Bool { get set }
 }
 
-extension AppSettings: DeveloperOptions { }
+extension AppSettings: DeveloperOptionsProtocol { }
