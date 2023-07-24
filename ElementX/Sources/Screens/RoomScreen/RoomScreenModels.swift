@@ -103,30 +103,6 @@ struct RoomScreenViewState: BindableState {
     /// A closure providing the actions to show when long pressing on an item in the timeline.
     var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
-    /// Builds the contents of the context menu shown when right clicking an item in the timeline on a Mac.
-    @MainActor @ViewBuilder
-    func macContextMenu(item: RoomTimelineItemProtocol, send: @escaping (TimelineItemMenuAction) -> Void) -> some View {
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            if let menu = timelineItemMenuActionProvider?(item.id) {
-                Section {
-                    if item.isReactable {
-                        Button { send(.react) } label: {
-                            TimelineItemMenuAction.react.label
-                        }
-                    }
-                    ForEach(menu.actions) { action in
-                        Button { send(action) } label: { action.label }
-                    }
-                }
-                Section {
-                    ForEach(menu.debugActions) { action in
-                        Button { send(action) } label: { action.label }
-                    }
-                }
-            }
-        }
-    }
-    
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }

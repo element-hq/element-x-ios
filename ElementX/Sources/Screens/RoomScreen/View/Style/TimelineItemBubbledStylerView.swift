@@ -140,7 +140,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
             }
             .contextMenu {
-                context.viewState.macContextMenu(item: timelineItem) { action in
+                TimelineItemMacContextMenu(item: timelineItem,
+                                           actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
                     context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
                 }
             }
