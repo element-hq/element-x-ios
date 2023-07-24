@@ -57,7 +57,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         timelineViewState: .init(),
                                                          bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
 

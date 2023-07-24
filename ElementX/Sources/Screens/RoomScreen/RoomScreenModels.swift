@@ -90,7 +90,7 @@ struct RoomScreenViewState: BindableState {
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
-    var timelineViewState: TimelineViewState
+    var timelineViewState = TimelineViewState()
 
     var composerMode: RoomScreenComposerMode = .default
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
