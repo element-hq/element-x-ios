@@ -86,14 +86,13 @@ struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
     var roomAvatarURL: URL?
-    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
     var members: [String: RoomMemberState] = [:]
-    var canBackPaginate = true
-    var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
+    let timelineViewState: TimelineViewState
+
     
     var composerMode: RoomScreenComposerMode = .default
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
@@ -105,14 +104,6 @@ struct RoomScreenViewState: BindableState {
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
-    }
-
-    var timelineIDs: [String] {
-        itemsDictionary.keys.elements
-    }
-
-    var itemViewModels: [RoomTimelineItemViewModel] {
-        itemsDictionary.values.elements
     }
 }
 
@@ -183,4 +174,20 @@ enum RoomScreenErrorType: Hashable {
 struct RoomMemberState {
     let displayName: String?
     let avatarURL: URL?
+}
+
+final class TimelineViewState: ObservableObject {
+    @Published var canBackPaginate = false
+    @Published var isBackPaginating = false
+    @Published var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
+
+    var timelineIDs: [String] {
+        itemsDictionary.keys.elements
+    }
+
+    var itemViewModels: [RoomTimelineItemViewModel] {
+        itemsDictionary.values.elements
+    }
+
+    var paginateAction: (() -> Void)?
 }

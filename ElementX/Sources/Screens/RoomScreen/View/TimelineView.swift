@@ -17,16 +17,19 @@
 import Combine
 import SwiftUI
 
-import Introspect
+import OrderedCollections
+import SwiftUIIntrospect
 
 struct TimelineView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @ObservedObject var viewState: TimelineViewState
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "bottomID"
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
+    @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    @State private var scrollToBottomButtonVisible = false
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -38,12 +41,13 @@ struct TimelineView: View {
                     .frame(height: 0)
 
                 LazyVStack(spacing: 0) {
-                    ForEach(context.viewState.itemViewModels.reversed()) { viewModel in
-                        RoomTimelineItemView(viewModel: viewModel)
-                            .environmentObject(context)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(timelineStyle.rowInsets)
-                            .scaleEffect(x: 1, y: -1)
+                    ForEach(viewState.timelineIDs.reversed(), id: \.self) { id in
+                        if let viewModel = viewState.itemsDictionary[id] {
+                            RoomTimelineItemView(viewModel: viewModel)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(timelineStyle.rowInsets)
+                                .scaleEffect(x: 1, y: -1)
+                        }
                     }
                 }
             }
@@ -52,16 +56,19 @@ struct TimelineView: View {
                 scrollViewAdapter.scrollView = scrollView
             }
             .scaleEffect(x: 1, y: -1)
-            .animation(.elementDefault, value: context.viewState.itemViewModels)
+            .animation(.elementDefault, value: viewState.itemsDictionary)
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 guard let scrollView = scrollViewAdapter.scrollView else {
                     return
                 }
                 let offset = scrollView.contentOffset.y + scrollView.contentInset.top
-                context.scrollToBottomButtonVisible = offset > 0
+                let scrollToBottomButtonVisibleValue = offset > 0
+                if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
+                    scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
+                }
                 paginateBackwardsPublisher.send()
             }
-            .onReceive(context.viewState.scrollToBottomPublisher) { _ in
+            .onReceive(scrollToBottomPublisher) { _ in
                 withAnimation {
                     scrollView.scrollTo(bottomID)
                 }
@@ -70,12 +77,37 @@ struct TimelineView: View {
                 tryPaginateBackwards()
             }
         }
+        .overlay(scrollToBottomButton, alignment: .bottomTrailing)
+    }
+
+    private var scrollToBottomButton: some View {
+        Button {
+            scrollToBottomPublisher.send()
+        } label: {
+            Image(systemName: "chevron.down")
+                .font(.compound.bodyLG)
+                .fontWeight(.semibold)
+                .foregroundColor(.compound.iconSecondary)
+                .padding(13)
+                .offset(y: 1)
+                .background {
+                    Circle()
+                        .fill(Color.compound.iconOnSolidPrimary)
+                        // Intentionally using system primary colour to get white/black.
+                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
+                }
+                .padding()
+        }
+        .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!scrollToBottomButtonVisible)
+        .animation(.elementDefault, value: scrollToBottomButtonVisible)
     }
 
     private func tryPaginateBackwards() {
-        guard let scrollView = scrollViewAdapter.scrollView,
-              context.viewState.canBackPaginate,
-              !context.viewState.isBackPaginating else {
+        guard let paginateAction = viewState.paginateAction,
+              let scrollView = scrollViewAdapter.scrollView,
+              viewState.canBackPaginate,
+              !viewState.isBackPaginating else {
             return
         }
 
@@ -88,31 +120,7 @@ struct TimelineView: View {
             return
         }
 
-        context.send(viewAction: .paginateBackwards)
-    }
-}
-
-private struct ScrollViewOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
-
-private struct ContentHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
-
-private struct VisibleHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat?
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
+        paginateAction()
     }
 }
 

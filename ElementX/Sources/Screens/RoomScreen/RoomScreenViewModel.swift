@@ -36,6 +36,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let notificationCenterProtocol: NotificationCenterProtocol
 
     private var canCurrentUserRedact = false
+
+    private var paginateBackwards: Task<Void, Never>?
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -50,16 +52,27 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
-        
+
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
+                                                         timelineViewState: .init(),
                                                          bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
 
+        state.timelineViewState.paginateAction = { [weak self] in
+            guard let self,
+                  paginateBackwards == nil else {
+                return
+            }
+            paginateBackwards = Task {
+                await self.paginateBackwards()
+            }
+        }
+        
         setupSubscriptions()
         
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
@@ -151,12 +164,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .updatedTimelineItems:
                     self.buildTimelineViews()
                 case .canBackPaginate(let canBackPaginate):
-                    if self.state.canBackPaginate != canBackPaginate {
-                        self.state.canBackPaginate = canBackPaginate
+                    if self.state.timelineViewState.canBackPaginate != canBackPaginate {
+                        self.state.timelineViewState.canBackPaginate = canBackPaginate
                     }
                 case .isBackPaginating(let isBackPaginating):
-                    if self.state.isBackPaginating != isBackPaginating {
-                        self.state.isBackPaginating = isBackPaginating
+                    if self.state.timelineViewState.isBackPaginating != isBackPaginating {
+                        self.state.timelineViewState.isBackPaginating = isBackPaginating
                     }
                 }
             }
@@ -222,6 +235,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             break
         }
+        paginateBackwards = nil
     }
     
     private func markRoomAsRead() async {
@@ -278,7 +292,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
         
-        state.itemsDictionary = timelineItemsDictionary
+        state.timelineViewState.itemsDictionary = timelineItemsDictionary
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {

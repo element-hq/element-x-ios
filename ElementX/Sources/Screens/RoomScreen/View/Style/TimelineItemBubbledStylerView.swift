@@ -328,7 +328,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var mockTimeline: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.state.itemViewModels) { itemViewModel in
+                ForEach(viewModel.state.timelineViewState.itemViewModels) { itemViewModel in
                     RoomTimelineItemView(viewModel: itemViewModel)
                         .padding(TimelineStyle.bubbles.rowInsets)
                     // Insets added in the table view cells

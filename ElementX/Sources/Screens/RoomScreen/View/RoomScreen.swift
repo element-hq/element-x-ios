@@ -81,14 +81,14 @@ struct RoomScreen: View {
                 }
             }
     }
-    
+
+    @ViewBuilder
     private var timeline: some View {
-        TimelineView()
+        TimelineView(viewState: context.viewState.timelineViewState)
             .id(context.viewState.roomId)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
             .environment(\.readReceiptsEnabled, context.viewState.readReceiptsEnabled)
-            .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     
     private var messageComposer: some View {
@@ -107,27 +107,6 @@ struct RoomScreen: View {
         .onChange(of: context.actionMenuInfo) { _ in
             context.composerFocused = false
         }
-    }
-    
-    private var scrollToBottomButton: some View {
-        Button { context.viewState.scrollToBottomPublisher.send(()) } label: {
-            Image(systemName: "chevron.down")
-                .font(.compound.bodyLG)
-                .fontWeight(.semibold)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(13)
-                .offset(y: 1)
-                .background {
-                    Circle()
-                        .fill(Color.compound.iconOnSolidPrimary)
-                        // Intentionally using system primary colour to get white/black.
-                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
-                }
-                .padding()
-        }
-        .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
-        .accessibilityHidden(!context.scrollToBottomButtonVisible)
-        .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
     
     @ViewBuilder
