@@ -164,8 +164,10 @@ struct SettingsScreen: View {
             VStack {
                 versionText
                     .frame(maxWidth: .infinity)
+                    .textSelection(.enabled)
                 
                 context.viewState.deviceID.map(Text.init)
+                    .textSelection(.enabled)
             }
             .compoundFormSectionFooter()
             .padding(.top, 24)
