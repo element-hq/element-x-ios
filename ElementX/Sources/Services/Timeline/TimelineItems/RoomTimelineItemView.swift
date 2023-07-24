@@ -17,14 +17,12 @@ import SwiftUI
 
 struct RoomTimelineItemView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @ObservedObject var viewModel: RoomTimelineItemViewModel
+    var viewModel: RoomTimelineItemViewModel
 
     var body: some View {
         timelineView
             .environmentObject(context)
             .environment(\.timelineGroupStyle, viewModel.groupStyle)
-            .animation(.elementDefault, value: viewModel.type)
-            .animation(.elementDefault, value: viewModel.groupStyle)
             .onAppear {
                 context.send(viewAction: .itemAppeared(itemID: viewModel.identifier))
             }

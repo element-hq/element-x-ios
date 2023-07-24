@@ -51,7 +51,6 @@ enum RoomScreenComposerMode: Equatable {
 
 enum RoomScreenViewAction {
     case displayRoomDetails
-    case paginateBackwards
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     case itemTapped(itemID: TimelineItemIdentifier)

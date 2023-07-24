@@ -24,6 +24,7 @@ struct TimelineView: View {
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "bottomID"
+    private let topID = "topID"
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
@@ -33,11 +34,7 @@ struct TimelineView: View {
     var body: some View {
         ScrollViewReader { scrollView in
             ScrollView {
-                // Only used ton get to the bottom of the scroll view
-                Divider()
-                    .id(bottomID)
-                    .hidden()
-                    .frame(height: 0)
+                bottomPin
 
                 LazyVStack(spacing: 0) {
                     ForEach(viewState.itemViewModels.reversed()) { viewModel in
@@ -47,34 +44,71 @@ struct TimelineView: View {
                             .scaleEffect(x: 1, y: -1)
                     }
                 }
+
+                topPin
             }
-            .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
+            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                guard uiScrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = uiScrollView
+                scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                    withAnimation {
+                        scrollView.scrollTo(topID)
+                    }
+                    return false
+                }
+
+                // Allows the scroll to top to work properly
+                uiScrollView.contentOffset.y -= 1
             }
-            .animation(.elementDefault, value: viewState.itemViewModels)
             .scaleEffect(x: 1, y: -1)
-            .onReceive(scrollViewAdapter.didScroll) { _ in
-                guard let scrollView = scrollViewAdapter.scrollView else {
-                    return
-                }
-                let offset = scrollView.contentOffset.y + scrollView.contentInset.top
-                let scrollToBottomButtonVisibleValue = offset > 0
-                if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
-                    scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
-                }
-                paginateBackwardsPublisher.send()
-            }
             .onReceive(scrollToBottomPublisher) { _ in
                 withAnimation {
                     scrollView.scrollTo(bottomID)
                 }
             }
-            .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
-                tryPaginateBackwards()
-            }
+            .scrollDismissesKeyboard(.interactively)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
+        .animation(.elementDefault, value: viewState.itemViewModels)
+        .onReceive(scrollViewAdapter.didScroll) { _ in
+            guard let scrollView = scrollViewAdapter.scrollView else {
+                return
+            }
+            let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+            let scrollToBottomButtonVisibleValue = offset > 0
+            if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
+                scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
+            }
+            paginateBackwardsPublisher.send()
+
+            // Allows the scroll to top to work properly
+            if offset == 0 {
+                scrollView.contentOffset.y -= 1
+            }
+        }
+        .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
+            tryPaginateBackwards()
+        }
+        .onAppear {
+            paginateBackwardsPublisher.send()
+            guard let scrollView = scrollViewAdapter.scrollView else {
+                return
+            }
+        }
+    }
+
+    private var topPin: some View {
+        Divider()
+            .id(topID)
+            .hidden()
+            .frame(height: 0)
+    }
+
+    private var bottomPin: some View {
+        Divider()
+            .id(bottomID)
+            .hidden()
+            .frame(height: 0)
     }
 
     private var scrollToBottomButton: some View {

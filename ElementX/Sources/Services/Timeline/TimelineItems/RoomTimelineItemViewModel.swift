@@ -16,13 +16,9 @@
 
 import Foundation
 
-final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject {
-    static func == (lhs: RoomTimelineItemViewModel, rhs: RoomTimelineItemViewModel) -> Bool {
-        lhs.type == rhs.type && lhs.groupStyle == rhs.groupStyle
-    }
-
-    @Published var type: RoomTimelineItemType
-    @Published var groupStyle: TimelineGroupStyle
+struct RoomTimelineItemViewModel: Identifiable, Equatable {
+    var type: RoomTimelineItemType
+    var groupStyle: TimelineGroupStyle
 
     var identifier: TimelineItemIdentifier {
         type.id
@@ -32,17 +28,14 @@ final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject
         identifier.timelineID
     }
 
-    convenience init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
-        self.init(type: .init(item: item), groupStyle: groupStyle)
-    }
-
-    init(type: RoomTimelineItemType, groupStyle: TimelineGroupStyle) {
-        self.type = type
-        self.groupStyle = groupStyle
-    }
-
     var isReactable: Bool {
         type.isReactable
+    }
+}
+
+extension RoomTimelineItemViewModel {
+    init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+        self.init(type: .init(item: item), groupStyle: groupStyle)
     }
 }
 
