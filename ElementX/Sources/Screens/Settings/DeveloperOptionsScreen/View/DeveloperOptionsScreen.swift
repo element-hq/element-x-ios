@@ -50,6 +50,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
 
+            Section("Polls") {
+                Toggle(isOn: $context.pollsInTimelineEnabled) {
+                    Text("View polls in timeline")
+                }
+            }
+
             Section {
                 Button {
                     showConfetti = true

@@ -91,6 +91,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
+            guard ServiceLocator.shared.settings.pollsInTimelineEnabled else {
+                return nil
+            }
+
             let allVotes = votes.reduce(0) { count, tuple in
                 count + tuple.value.count
             }
@@ -108,7 +112,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                             votes: votes,
                             endTime: endTime)
             return buildPollTimelineItem(poll, eventItemProxy, isOutgoing)
-        case .pollEnd(startEvent: let startEvent):
+        case .pollEnd:
+            guard ServiceLocator.shared.settings.pollsInTimelineEnabled else {
+                return nil
+            }
+
             return buildPollEndTimelineItem(eventItemProxy, isOutgoing)
         }
     }
