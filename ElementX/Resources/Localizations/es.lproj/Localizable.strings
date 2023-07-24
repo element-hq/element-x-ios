@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Error al cargar mensajes";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No se encontró ninguna aplicación compatible con esta acción.";
 "error_some_messages_have_not_been_sent" = "Algunos mensajes no se han enviado";
 "error_unknown" = "Lo siento, se ha producido un error";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Parece que sacudes el teléfono con frustración. ¿Quieres abrir la pantalla de informe de errores?";
 "report_content_explanation" = "Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado.";
 "report_content_hint" = "Motivo para denunciar este contenido";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Lista de puntos";
 "rich_text_editor_code_block" = "Bloque de código";
 "rich_text_editor_composer_placeholder" = "Mensaje…";
@@ -363,7 +364,7 @@
 "screen_waitlist_message_success" = "Welcome to %1$@!";
 "screen_waitlist_title" = "You’re almost there.";
 "screen_waitlist_title_success" = "You're in.";
-"screen_welcome_bullet_1" = "Calls, location sharing, search and more will be added later this year.";
+"screen_welcome_bullet_1" = "Calls, polls, search and more will be added later this year.";
 "screen_welcome_bullet_2" = "Message history for encrypted rooms won’t be available in this update.";
 "screen_welcome_bullet_3" = "We’d love to hear from you, let us know what you think via the settings page.";
 "screen_welcome_button" = "Let's go!";

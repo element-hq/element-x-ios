@@ -142,7 +142,7 @@
 "error_failed_loading_map" = "%1$@ konnte die Karte nicht laden. Bitte versuche es später erneut.";
 "error_failed_loading_messages" = "Fehler beim Laden der Nachrichten";
 "error_failed_locating_user" = "%1$@ konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut.";
-"error_missing_location_auth" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
+"error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "Keine kompatible App für diese Aktion gefunden.";
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, ein Fehler ist aufgetreten.";
@@ -175,6 +175,7 @@
 "rageshake_dialog_content" = "Du scheinst frustriert das Telefon zu schütteln. Möchtest du den Fehlerberichtsbildschirm öffnen?";
 "report_content_explanation" = "Diese Nachricht wird an deinen Heimserver-Admin gemeldet werden. Er wird nicht in der Lage sein, verschlüsselte Nachrichten zu lesen.";
 "report_content_hint" = "Grund für die Meldung dieses Inhalts";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Aufzählungsliste ein-/ausschalten";
 "rich_text_editor_code_block" = "Codeblock umschalten";
 "rich_text_editor_composer_placeholder" = "Nachricht…";
