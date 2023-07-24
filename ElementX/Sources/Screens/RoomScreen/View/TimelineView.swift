@@ -40,13 +40,13 @@ struct TimelineView: View {
                     .hidden()
                     .frame(height: 0)
 
-                LazyVStack(spacing: 0) {
+                VStack(spacing: 0) {
                     ForEach(viewState.timelineIDs.reversed(), id: \.self) { id in
                         if let viewModel = viewState.itemsDictionary[id] {
                             RoomTimelineItemView(viewModel: viewModel)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(timelineStyle.rowInsets)
                                 .scaleEffect(x: 1, y: -1)
+                                .padding(timelineStyle.rowInsets)
                         }
                     }
                 }
@@ -55,8 +55,8 @@ struct TimelineView: View {
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
+            .animation(.elementDefault, value: viewState.timelineIDs)
             .scaleEffect(x: 1, y: -1)
-            .animation(.elementDefault, value: viewState.itemsDictionary)
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 guard let scrollView = scrollViewAdapter.scrollView else {
                     return

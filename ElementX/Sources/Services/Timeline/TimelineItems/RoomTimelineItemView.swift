@@ -17,7 +17,7 @@ import SwiftUI
 
 struct RoomTimelineItemView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    let viewModel: RoomTimelineItemViewModel
+    @ObservedObject var viewModel: RoomTimelineItemViewModel
 
     var body: some View {
         timelineView
@@ -26,10 +26,10 @@ struct RoomTimelineItemView: View {
             .animation(.elementDefault, value: viewModel.type)
             .animation(.elementDefault, value: viewModel.groupStyle)
             .onAppear {
-                context.send(viewAction: .itemAppeared(itemID: viewModel.identifiers))
+                context.send(viewAction: .itemAppeared(itemID: viewModel.identifier))
             }
             .onDisappear {
-                context.send(viewAction: .itemDisappeared(itemID: viewModel.identifiers))
+                context.send(viewAction: .itemDisappeared(itemID: viewModel.identifier))
             }
             .environment(\.openURL, OpenURLAction { url in
                 context.send(viewAction: .linkClicked(url: url))
