@@ -117,7 +117,7 @@ struct MediaUploadingPreprocessor {
         // Process unknown types as plain files
         guard let type = UTType(filenameExtension: newURL.pathExtension),
               let mimeType = type.preferredMIMEType else {
-            return await processFile(at: newURL, mimeType: nil)
+            return await processFile(at: newURL, mimeType: "application/octet-stream")
         }
         
         if type.conforms(to: .image) {
