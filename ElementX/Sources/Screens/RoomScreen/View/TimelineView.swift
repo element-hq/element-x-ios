@@ -33,43 +33,30 @@ struct TimelineView: View {
 
     var body: some View {
         ScrollViewReader { scrollView in
-            ScrollView {
-                bottomPin
-
-                LazyVStack(spacing: 0) {
-                    ForEach(viewState.itemViewStates.reversed()) { viewState in
-                        RoomTimelineItemView(viewState: viewState)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(timelineStyle.rowInsets)
-                            .scaleEffect(x: 1, y: -1)
+            timelineScrollView
+                .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                    guard uiScrollView != scrollViewAdapter.scrollView else {
+                        return
                     }
-                }
 
-                topPin
-            }
-            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
-                guard uiScrollView != scrollViewAdapter.scrollView else {
-                    return
+                    scrollViewAdapter.scrollView = uiScrollView
+                    scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                        withElementAnimation {
+                            scrollView.scrollTo(topID)
+                        }
+                        return false
+                    }
+
+                    // Allows the scroll to top to work properly
+                    uiScrollView.contentOffset.y -= 1
                 }
-                
-                scrollViewAdapter.scrollView = uiScrollView
-                scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                .scaleEffect(x: 1, y: -1)
+                .onReceive(scrollToBottomPublisher) { _ in
                     withElementAnimation {
-                        scrollView.scrollTo(topID)
+                        scrollView.scrollTo(bottomID)
                     }
-                    return false
                 }
-
-                // Allows the scroll to top to work properly
-                uiScrollView.contentOffset.y -= 1
-            }
-            .scaleEffect(x: 1, y: -1)
-            .onReceive(scrollToBottomPublisher) { _ in
-                withElementAnimation {
-                    scrollView.scrollTo(bottomID)
-                }
-            }
-            .scrollDismissesKeyboard(.immediately)
+                .scrollDismissesKeyboard(.immediately)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
         .animation(.elementDefault, value: viewState.itemViewStates)
@@ -97,6 +84,21 @@ struct TimelineView: View {
         }
         .onAppear {
             paginateBackwardsPublisher.send()
+        }
+    }
+
+    private var timelineScrollView: some View {
+        ScrollView {
+            bottomPin
+            LazyVStack(spacing: 0) {
+                ForEach(viewState.itemViewStates.reversed()) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(timelineStyle.rowInsets)
+                        .scaleEffect(x: 1, y: -1)
+                }
+            }
+            topPin
         }
     }
 
