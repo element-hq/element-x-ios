@@ -21,6 +21,7 @@ struct SettingsScreenCoordinatorParameters {
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
+    let notificationSettings: NotificationSettingsProxyProtocol
 }
 
 enum SettingsScreenCoordinatorAction {
@@ -140,9 +141,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentNotificationSettings() {
-        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(
-            userNotificationCenter: UNUserNotificationCenter.current()
-        )
+        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: UNUserNotificationCenter.current(),
+                                                                                     notificationSettings: parameters.notificationSettings)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
         parameters.navigationStackCoordinator?.push(coordinator)
     }

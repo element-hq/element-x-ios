@@ -23,14 +23,24 @@ struct NotificationSettingsScreenViewState: BindableState {
     var bindings: NotificationSettingsScreenViewStateBindings
     var strings = NotificationSettingsScreenStrings()
     var isUserPermissionGranted: Bool?
+    var allowedNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly]
     
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
     }
+    
+    var groupChatNotificationSettingsState: NotificationSettingsScreenModeState = .loading
+    var directChatNotificationSettingsState: NotificationSettingsScreenModeState = .loading
+    var applyingChange = false
+    var inconsistentGroupChatsSettings = false
+    var inconsistentDirectChatsSettings = false
 }
 
 struct NotificationSettingsScreenViewStateBindings {
     var enableNotifications = false
+    var enableRoomMention = false
+    var enableCalls = false
+    var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
 }
 
 struct NotificationSettingsScreenStrings {
@@ -45,9 +55,58 @@ struct NotificationSettingsScreenStrings {
         
         return text
     }()
+    
+    func string(for mode: RoomNotificationModeProxy) -> String {
+        switch mode {
+        case .allMessages:
+            return L10n.screenNotificationSettingsModeAll
+        case .mentionsAndKeywordsOnly:
+            return L10n.screenNotificationSettingsModeMentions
+        case .mute:
+            return L10n.commonMute
+        }
+    }
 }
 
 enum NotificationSettingsScreenViewAction {
     case linkClicked(url: URL)
     case changedEnableNotifications
+    case processTapGroupChats
+    case processTapDirectChats
+    case processToggleRoomMention
+    case processToggleCalls
+}
+
+enum NotificationSettingsScreenModeState {
+    case loading
+    case loaded(mode: RoomNotificationModeProxy)
+    case error
+}
+
+extension NotificationSettingsScreenModeState {
+    var isLoading: Bool {
+        if case .loading = self {
+            return true
+        }
+        return false
+    }
+    
+    var isLoaded: Bool {
+        if case .loaded = self {
+            return true
+        }
+        return false
+    }
+    
+    var isError: Bool {
+        if case .error = self {
+            return true
+        }
+        return false
+    }
+}
+
+enum NotificationSettingsScreenErrorType: Hashable {
+    /// A specific error message shown in an alert.
+    case alert
 }
