@@ -32,6 +32,7 @@ struct LocationRoomTimelineView: View {
                     }
                     .frame(maxHeight: mapMaxHeight)
                     .aspectRatio(mapAspectRatio, contentMode: .fit)
+                    .clipped()
                 }
                 .background(backgroundView)
             } else {
