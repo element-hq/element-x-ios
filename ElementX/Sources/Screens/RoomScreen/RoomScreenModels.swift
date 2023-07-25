@@ -175,7 +175,7 @@ struct RoomMemberState {
 }
 
 struct TimelineViewState {
-    var canBackPaginate = false
+    var canBackPaginate = true
     var isBackPaginating = false
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 

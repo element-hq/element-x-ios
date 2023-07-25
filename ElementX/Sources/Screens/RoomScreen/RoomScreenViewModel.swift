@@ -219,7 +219,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private var paginateBackwardsTask: Task<Void, Never>?
 
-    func paginateBackwards() {
+    private func paginateBackwards() {
         guard paginateBackwardsTask == nil else {
             return
         }
