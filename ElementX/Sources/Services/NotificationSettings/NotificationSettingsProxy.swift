@@ -65,7 +65,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
             roomNotificationMode = .mute
         }
         try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: roomNotificationMode)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationModeProxy {
@@ -78,7 +78,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     func containsKeywordsRules() async -> Bool {
@@ -90,7 +90,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, membersCount: activeMembersCount)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     func isRoomMentionEnabled() async throws -> Bool {
@@ -102,7 +102,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     func isUserMentionEnabled() async throws -> Bool {
@@ -114,7 +114,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setUserMentionEnabled(enabled: enabled)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     func isCallEnabled() async throws -> Bool {
@@ -126,20 +126,13 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setCallEnabled(enabled: enabled)
-        await waitForSettingsDidChange()
+        await updatedSettings()
     }
     
     // MARK: - Private
     
-    func waitForSettingsDidChange(timeout duration: Duration = .seconds(2.0)) async {
-        await withCheckedContinuation { continuation in
-            self.callbacks
-                .timeout(.seconds(duration.seconds), scheduler: DispatchQueue.main)
-                .first(where: { $0 == .settingsDidChange })
-                .subscribe(Subscribers.Sink(receiveCompletion: { _ in
-                    continuation.resume()
-                }, receiveValue: { _ in }))
-        }
+    func updatedSettings() async {
+        _ = await callbacks.values.first(where: { $0 == .settingsDidChange })
     }
     
     @MainActor

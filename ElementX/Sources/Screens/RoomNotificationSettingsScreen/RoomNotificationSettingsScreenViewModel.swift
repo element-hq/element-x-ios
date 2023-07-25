@@ -20,9 +20,9 @@ import SwiftUI
 typealias RoomNotificationSettingsScreenViewModelType = StateStoreViewModel<RoomNotificationSettingsScreenViewState, RoomNotificationSettingsScreenViewAction>
 
 class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenViewModelType, RoomNotificationSettingsScreenViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenViewModelAction, Never> = .init()
-    private var notificationSettingsProxy: NotificationSettingsProxyProtocol!
-    private var roomProxy: RoomProxyProtocol!
+    private let actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenViewModelAction, Never> = .init()
+    private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let roomProxy: RoomProxyProtocol
     
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -30,9 +30,9 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
 
     init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol) {
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
-        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings))
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy
+        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings))
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
@@ -108,14 +108,14 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func setCustomMode(_ mode: RoomNotificationModeProxy) {
-        state.applyingCustomMode = mode
+        state.pendingCustomMode = mode
         Task {
             do {
                 try await notificationSettingsProxy.setNotificationMode(roomId: roomProxy.id, mode: mode)
             } catch {
                 displayError(.setModeFailed)
             }
-            state.applyingCustomMode = nil
+            state.pendingCustomMode = nil
         }
     }
     

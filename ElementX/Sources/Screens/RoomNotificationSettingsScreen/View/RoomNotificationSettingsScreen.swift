@@ -86,13 +86,24 @@ struct RoomNotificationSettingsScreen: View {
                     Text(context.viewState.strings.string(for: mode))
                 }
                 .disabled(context.viewState.isApplyingCustomMode)
-                .buttonStyle(context.viewState.customModeButtonStyle(mode: mode))
+                .buttonStyle(customModeButtonStyle(mode: mode))
             }
         } header: {
             Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle.uppercased())
                 .foregroundColor(.compound.textSecondary)
         }
         .compoundFormSection()
+    }
+    
+    private func customModeButtonStyle(mode: RoomNotificationModeProxy) -> FormButtonStyle {
+        let accessory: FormRowAccessory
+        
+        if context.viewState.isApplyingCustomMode, context.viewState.isSelected(mode) {
+            accessory = .progressView
+        } else {
+            accessory = .singleSelection(isSelected: context.viewState.isSelected(mode))
+        }
+        return FormButtonStyle(accessory: accessory)
     }
 }
 

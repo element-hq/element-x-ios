@@ -53,30 +53,19 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var notificationSettingsState: RoomNotificationSettingsState = .loading
     var availableCustomRoomNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
         
-    func isCurrentMode(_ mode: RoomNotificationModeProxy) -> Bool {
+    func isSelected(_ mode: RoomNotificationModeProxy) -> Bool {
         if case .loaded(let settings) = notificationSettingsState {
             return mode == settings.mode
         }
         return false
     }
     
-    var applyingCustomMode: RoomNotificationModeProxy?
+    var pendingCustomMode: RoomNotificationModeProxy?
     var isApplyingCustomMode: Bool {
-        applyingCustomMode != nil
+        pendingCustomMode != nil
     }
     
     var isRestoringDefautSetting = false
-        
-    func customModeButtonStyle(mode: RoomNotificationModeProxy) -> FormButtonStyle {
-        let accessory: FormRowAccessory
-        
-        if isApplyingCustomMode, isCurrentMode(mode) {
-            accessory = .progressView
-        } else {
-            accessory = .singleSelection(isSelected: isCurrentMode(mode))
-        }
-        return FormButtonStyle(accessory: accessory)
-    }
 }
 
 struct RoomNotificationSettingsScreenViewStateBindings {

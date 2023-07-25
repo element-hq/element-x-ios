@@ -99,7 +99,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             .first(where: \.isLoaded))
         try await deferred.fulfill()
         
-        let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.applyingCustomMode)
+        let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
             .removeDuplicates()
             .collect(3).first())
         viewModel.state.bindings.allowCustomSetting = true
@@ -121,7 +121,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.applyingCustomMode)
+            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
                 .removeDuplicates()
                 .collect(3).first())
             context.send(viewAction: .setCustomMode(.allMessages))
@@ -134,7 +134,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.applyingCustomMode)
+            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
                 .removeDuplicates()
                 .collect(3).first())
             context.send(viewAction: .setCustomMode(.mute))
@@ -147,7 +147,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.applyingCustomMode)
+            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
                 .removeDuplicates()
                 .collect(3).first())
             context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
