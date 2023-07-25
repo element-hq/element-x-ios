@@ -24,6 +24,8 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let roomProxy: RoomProxyProtocol
     
+    @CancellableTask private var fetchNotificationSettingsTask: Task<Void, Error>?
+    
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -66,7 +68,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func fetchNotificationSettings() {
-        Task {
+        fetchNotificationSettingsTask = Task {
             await fetchRoomNotificationSettings()
         }
     }
