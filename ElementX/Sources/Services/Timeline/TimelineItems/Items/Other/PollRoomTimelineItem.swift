@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+import Foundation
+
 struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
     let poll: Poll
@@ -25,14 +27,24 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     var properties: RoomTimelineItemProperties = .init()
 }
 
-#warning("AG: remove sdk dependency")
-import MatrixRustSDK
-
 struct Poll: Equatable {
     let question: String
-    let pollKind: PollKind
-    let maxSelections: UInt64
-    let options: [PollOption]
+    let pollKind: Kind
+    let maxSelections: Int
+    let options: [Option]
     let votes: [String: [String]]
-    let endTime: UInt64?
+    let endDate: Date?
+
+    enum Kind: Equatable {
+        case disclosed
+        case undisclosed
+    }
+
+    struct Option: Equatable {
+        let id: String
+        let text: String
+        let votes: Int
+        let allVotes: Int
+        let isSelected: Bool
+    }
 }

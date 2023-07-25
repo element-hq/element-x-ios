@@ -72,5 +72,5 @@ private extension Poll {
                                   maxSelections: 1,
                                   options: [.init(id: "1", text: "Yes", votes: 1, allVotes: 3, isSelected: true), .init(id: "2", text: "No", votes: 2, allVotes: 3, isSelected: false)],
                                   votes: [:],
-                                  endTime: nil)
+                                  endDate: nil)
 }

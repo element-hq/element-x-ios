@@ -321,32 +321,33 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                         orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
 
-    #warning("AG: refine mapping")
     // swiftlint:disable:next function_parameter_count
     private func buildPollTimelineItem(_ question: String,
-                                       _ kind: PollKind,
+                                       _ pollKind: PollKind,
                                        _ maxSelections: UInt64,
                                        _ answers: [PollAnswer],
                                        _ votes: [String: [String]],
                                        _ endTime: UInt64?,
                                        _ eventItemProxy: EventTimelineItemProxy,
                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        let allVotes = votes.reduce(0) { count, tuple in
-            count + tuple.value.count
+        let allVotes = votes.reduce(0) { count, pair in
+            count + pair.value.count
         }
+
         let options = answers.map { answer in
-            PollOption(id: answer.id,
-                       text: answer.text,
-                       votes: votes[answer.id]?.count ?? 0,
-                       allVotes: allVotes,
-                       isSelected: votes[answer.id]?.contains(userID) ?? false)
+            Poll.Option(id: answer.id,
+                        text: answer.text,
+                        votes: votes[answer.id]?.count ?? 0,
+                        allVotes: allVotes,
+                        isSelected: votes[answer.id]?.contains(userID) ?? false)
         }
+
         let poll = Poll(question: question,
-                        pollKind: kind,
-                        maxSelections: maxSelections,
+                        pollKind: .init(pollKind: pollKind),
+                        maxSelections: Int(maxSelections),
                         options: options,
                         votes: votes,
-                        endTime: endTime)
+                        endDate: endTime.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) })
 
         return PollRoomTimelineItem(id: eventItemProxy.id,
                                     poll: poll,
@@ -596,6 +597,17 @@ private extension LocationRoomTimelineItemContent.AssetType {
             self = .sender
         case .pin:
             self = .pin
+        }
+    }
+}
+
+private extension Poll.Kind {
+    init(pollKind: MatrixRustSDK.PollKind) {
+        switch pollKind {
+        case .disclosed:
+            self = .disclosed
+        case .undisclosed:
+            self = .undisclosed
         }
     }
 }

@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct PollOptionView: View {
-    let pollOption: PollOption
+    let pollOption: Poll.Option
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -50,14 +50,6 @@ struct PollOptionView: View {
         ProgressView(value: Double(pollOption.votes) / Double(pollOption.allVotes))
             .progressViewStyle(LinearProgressViewStyle(tint: .compound.textPrimary))
     }
-}
-
-struct PollOption: Equatable {
-    let id: String
-    let text: String
-    let votes: Int
-    let allVotes: Int
-    let isSelected: Bool
 }
 
 struct PollOptionView_Previews: PreviewProvider {
