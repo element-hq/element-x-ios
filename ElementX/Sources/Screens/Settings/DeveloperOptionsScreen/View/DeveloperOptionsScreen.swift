@@ -34,11 +34,6 @@ struct DeveloperOptionsScreen: View {
             }
 
             Section("Notifications") {
-                Toggle(isOn: $context.isEncryptionSyncEnabled) {
-                    Text("Use notification encryption sync")
-                    Text("Requires app reboot")
-                }
-                
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")
                 }

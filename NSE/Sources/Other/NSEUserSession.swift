@@ -25,7 +25,7 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
-    init(credentials: KeychainCredentials, isEncryptionSyncEnabled: Bool) throws {
+    init(credentials: KeychainCredentials) throws {
         userID = credentials.userID
         baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
@@ -36,7 +36,7 @@ final class NSEUserSession {
 
         notificationClient = baseClient
             .notificationClient()
-            .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
+            .retryDecryption(withCrossProcessLock: true)
             .finish()
     }
 

@@ -406,7 +406,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let syncService = try await client
                 .syncService()
-                .withEncryptionSync(withCrossProcessLock: appSettings.isEncryptionSyncEnabled,
+                .withEncryptionSync(withCrossProcessLock: true,
                                     appIdentifier: "MainApp")
                 .finish()
             let roomListService = syncService.roomListService()
