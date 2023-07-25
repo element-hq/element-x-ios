@@ -15,7 +15,6 @@
 //
 
 import Foundation
-import MatrixRustSDK
 
 enum RoomNotificationSettingsScreenViewModelAction { }
 
@@ -52,23 +51,23 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var bindings: RoomNotificationSettingsScreenViewStateBindings
     let strings = RoomNotificationSettingsScreenStrings()
     var notificationSettingsState: RoomNotificationSettingsState = .loading
-    var availableCustomRoomNotificationModes: [RoomNotificationMode] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
+    var availableCustomRoomNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
         
-    func isCurrentMode(_ mode: RoomNotificationMode) -> Bool {
+    func isCurrentMode(_ mode: RoomNotificationModeProxy) -> Bool {
         if case .loaded(let settings) = notificationSettingsState {
             return mode == settings.mode
         }
         return false
     }
     
-    var applyingCustomMode: RoomNotificationMode?
+    var applyingCustomMode: RoomNotificationModeProxy?
     var isApplyingCustomMode: Bool {
         applyingCustomMode != nil
     }
     
     var isRestoringDefautSetting = false
         
-    func customModeButtonStyle(mode: RoomNotificationMode) -> FormButtonStyle {
+    func customModeButtonStyle(mode: RoomNotificationModeProxy) -> FormButtonStyle {
         let accessory: FormRowAccessory
         
         if isApplyingCustomMode, isCurrentMode(mode) {
@@ -89,7 +88,7 @@ struct RoomNotificationSettingsScreenViewStateBindings {
 
 enum RoomNotificationSettingsScreenViewAction {
     case changedAllowCustomSettings
-    case setCustomMode(RoomNotificationMode)
+    case setCustomMode(RoomNotificationModeProxy)
 }
 
 struct RoomNotificationSettingsScreenStrings {
@@ -105,7 +104,7 @@ struct RoomNotificationSettingsScreenStrings {
         self.customSettingFootnote = customSettingFootnote
     }
     
-    func string(for mode: RoomNotificationMode) -> String {
+    func string(for mode: RoomNotificationModeProxy) -> String {
         switch mode {
         case .allMessages:
             return L10n.screenRoomNotificationSettingsModeAllMessages

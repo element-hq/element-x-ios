@@ -15,7 +15,6 @@
 //
 
 import Combine
-import MatrixRustSDK
 import SwiftUI
 
 typealias RoomNotificationSettingsScreenViewModelType = StateStoreViewModel<RoomNotificationSettingsScreenViewState, RoomNotificationSettingsScreenViewAction>
@@ -108,7 +107,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         }
     }
     
-    private func setCustomMode(_ mode: RoomNotificationMode) {
+    private func setCustomMode(_ mode: RoomNotificationModeProxy) {
         state.applyingCustomMode = mode
         Task {
             do {

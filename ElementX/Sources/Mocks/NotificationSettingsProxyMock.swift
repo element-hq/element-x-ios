@@ -20,10 +20,10 @@ import MatrixRustSDK
 
 struct NotificationSettingsProxyMockConfiguration {
     var callback = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
-    var defaultRoomMode: RoomNotificationMode
+    var defaultRoomMode: RoomNotificationModeProxy
     var roomMode: RoomNotificationSettingsProxyMock
     
-    init(defaultRoomMode: RoomNotificationMode = .allMessages, roomMode: RoomNotificationMode = .allMessages) {
+    init(defaultRoomMode: RoomNotificationModeProxy = .allMessages, roomMode: RoomNotificationModeProxy = .allMessages) {
         self.defaultRoomMode = defaultRoomMode
         self.roomMode = RoomNotificationSettingsProxyMock(with: RoomNotificationSettingsProxyMockConfiguration(mode: roomMode, isDefault: defaultRoomMode == roomMode))
     }
