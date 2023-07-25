@@ -47,12 +47,12 @@ struct TimelineView: View {
 
                 topPin
             }
-            .introspect(.scrollView, on: .iOS(.v16)) { uiKitScrollView in
-                guard uiKitScrollView != scrollViewAdapter.scrollView else {
+            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                guard uiScrollView != scrollViewAdapter.scrollView else {
                     return
                 }
                 
-                scrollViewAdapter.scrollView = uiKitScrollView
+                scrollViewAdapter.scrollView = uiScrollView
                 scrollViewAdapter.shouldScrollToTopClosure = { _ in
                     withAnimation {
                         scrollView.scrollTo(topID)
@@ -61,7 +61,7 @@ struct TimelineView: View {
                 }
 
                 // Allows the scroll to top to work properly
-                uiKitScrollView.contentOffset.y -= 1
+                uiScrollView.contentOffset.y -= 1
             }
             .scaleEffect(x: 1, y: -1)
             .onReceive(scrollToBottomPublisher) { _ in
@@ -90,14 +90,14 @@ struct TimelineView: View {
             }
         }
         .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
-            tryPaginateBackwards()
+            paginateBackwardsIfNeeded()
         }
         .onAppear {
             paginateBackwardsPublisher.send()
         }
     }
 
-    // Used to mark the top of the scroll view and easily scroll to it
+    /// Used to mark the top of the scroll view and easily scroll to it
     private var topPin: some View {
         Divider()
             .id(topID)
@@ -105,7 +105,7 @@ struct TimelineView: View {
             .frame(height: 0)
     }
 
-    // Used to mark the bottom of the scroll view and easily scroll to it
+    /// Used to mark the bottom of the scroll view and easily scroll to it
     private var bottomPin: some View {
         Divider()
             .id(bottomID)
@@ -136,7 +136,7 @@ struct TimelineView: View {
         .animation(.elementDefault, value: scrollToBottomButtonVisible)
     }
 
-    private func tryPaginateBackwards() {
+    private func paginateBackwardsIfNeeded() {
         guard let paginateAction = viewState.paginateAction,
               let scrollView = scrollViewAdapter.scrollView,
               viewState.canBackPaginate,
