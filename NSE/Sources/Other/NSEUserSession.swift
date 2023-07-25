@@ -35,7 +35,7 @@ final class NSEUserSession {
         baseClient = try builder.build()
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = baseClient
+        notificationClient = try baseClient
             .notificationClient()
             .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
             .finish()

@@ -87,6 +87,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.senderInfo.displayName
     }
 
+    var senderID: String {
+        notificationItem.senderInfo.userId
+    }
+
     var roomDisplayName: String {
         notificationItem.roomInfo.displayName
     }

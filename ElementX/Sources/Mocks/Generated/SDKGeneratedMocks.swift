@@ -378,17 +378,21 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - `notificationClient`
 
+    public var notificationClientThrowableError: Error?
     public var notificationClientCallsCount = 0
     public var notificationClientCalled: Bool {
         return notificationClientCallsCount > 0
     }
     public var notificationClientReturnValue: NotificationClientBuilder!
-    public var notificationClientClosure: (() -> NotificationClientBuilder)?
+    public var notificationClientClosure: (() throws -> NotificationClientBuilder)?
 
-    public func `notificationClient`() -> NotificationClientBuilder {
+    public func `notificationClient`() throws -> NotificationClientBuilder {
+        if let error = notificationClientThrowableError {
+            throw error
+        }
         notificationClientCallsCount += 1
         if let notificationClientClosure = notificationClientClosure {
-            return notificationClientClosure()
+            return try notificationClientClosure()
         } else {
             return notificationClientReturnValue
         }
