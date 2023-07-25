@@ -111,14 +111,12 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func setCustomMode(_ mode: RoomNotificationModeProxy) {
-        state.pendingCustomMode = mode
         Task {
             do {
                 try await notificationSettingsProxy.setNotificationMode(roomId: roomProxy.id, mode: mode)
             } catch {
                 displayError(.setModeFailed)
             }
-            state.pendingCustomMode = nil
         }
     }
     

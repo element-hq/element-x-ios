@@ -99,13 +99,9 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             .first(where: \.isLoaded))
         try await deferred.fulfill()
         
-        let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
-            .removeDuplicates()
-            .collect(3).first())
         viewModel.state.bindings.allowCustomSetting = true
         context.send(viewAction: .changedAllowCustomSettings)
-        let states = try await deferredApplyingCustomMode.fulfill()
-        XCTAssertEqual(states, [nil, .mentionsAndKeywordsOnly, nil])
+        await context.nextViewState()
         
         XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
         XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mentionsAndKeywordsOnly)
@@ -121,12 +117,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
 
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
-                .removeDuplicates()
-                .collect(3).first())
             context.send(viewAction: .setCustomMode(.allMessages))
-            let states = try await deferredApplyingCustomMode.fulfill()
-            XCTAssertEqual(states, [nil, .allMessages, nil])
+            await context.nextViewState()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .allMessages)
@@ -134,12 +126,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
-                .removeDuplicates()
-                .collect(3).first())
             context.send(viewAction: .setCustomMode(.mute))
-            let states = try await deferredApplyingCustomMode.fulfill()
-            XCTAssertEqual(states, [nil, .mute, nil])
+            await context.nextViewState()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mute)
@@ -147,12 +135,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            let deferredApplyingCustomMode = deferFulfillment(context.$viewState.map(\.pendingCustomMode)
-                .removeDuplicates()
-                .collect(3).first())
             context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
-            let states = try await deferredApplyingCustomMode.fulfill()
-            XCTAssertEqual(states, [nil, .mentionsAndKeywordsOnly, nil])
+            await context.nextViewState()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mentionsAndKeywordsOnly)
