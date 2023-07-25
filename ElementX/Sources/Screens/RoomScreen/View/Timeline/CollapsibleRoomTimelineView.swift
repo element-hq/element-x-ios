@@ -18,20 +18,20 @@ import SwiftUI
 
 struct CollapsibleRoomTimelineView: View {
     private let timelineItem: CollapsibleTimelineItem
-    private let timelineViewModels: [RoomTimelineItemViewModel]
+    private let groupedViewStates: [RoomTimelineItemViewState]
     
     @State private var isExpanded = false
 
     init(timelineItem: CollapsibleTimelineItem) {
         self.timelineItem = timelineItem
-        timelineViewModels = timelineItem.items.map { .init(item: $0, groupStyle: .single) }
+        groupedViewStates = timelineItem.items.map { .init(item: $0, groupStyle: .single) }
     }
     
     var body: some View {
         DisclosureGroup(L10n.roomTimelineStateChanges(timelineItem.items.count), isExpanded: $isExpanded) {
             Group {
-                ForEach(timelineViewModels) { viewModel in
-                    RoomTimelineItemView(viewModel: viewModel)
+                ForEach(groupedViewStates) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
                 }
             }
         }

@@ -328,8 +328,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var mockTimeline: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.state.timelineViewState.itemViewModels) { itemViewModel in
-                    RoomTimelineItemView(viewModel: itemViewModel)
+                ForEach(viewModel.state.timelineViewState.itemViewStates) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
                         .padding(TimelineStyle.bubbles.rowInsets)
                     // Insets added in the table view cells
                 }
@@ -341,7 +341,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
 
     static var replies: some View {
         VStack {
-            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -350,7 +350,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                                    contentType: .text(.init(body: "Short")))), groupStyle: .single))
 
-            RoomTimelineItemView(viewModel: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,

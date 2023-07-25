@@ -177,13 +177,13 @@ struct RoomMemberState {
 struct TimelineViewState {
     var canBackPaginate = false
     var isBackPaginating = false
-    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
+    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 
     var timelineIDs: [String] {
         itemsDictionary.keys.elements
     }
 
-    var itemViewModels: [RoomTimelineItemViewModel] {
+    var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
     }
 

@@ -37,8 +37,8 @@ struct TimelineView: View {
                 bottomPin
 
                 LazyVStack(spacing: 0) {
-                    ForEach(viewState.itemViewModels.reversed()) { viewModel in
-                        RoomTimelineItemView(viewModel: viewModel)
+                    ForEach(viewState.itemViewStates.reversed()) { viewState in
+                        RoomTimelineItemView(viewState: viewState)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(timelineStyle.rowInsets)
                             .scaleEffect(x: 1, y: -1)
@@ -47,9 +47,12 @@ struct TimelineView: View {
 
                 topPin
             }
-            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
-                guard uiScrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = uiScrollView
+            .introspect(.scrollView, on: .iOS(.v16)) { uiKitScrollView in
+                guard uiKitScrollView != scrollViewAdapter.scrollView else {
+                    return
+                }
+                
+                scrollViewAdapter.scrollView = uiKitScrollView
                 scrollViewAdapter.shouldScrollToTopClosure = { _ in
                     withAnimation {
                         scrollView.scrollTo(topID)
@@ -58,7 +61,7 @@ struct TimelineView: View {
                 }
 
                 // Allows the scroll to top to work properly
-                uiScrollView.contentOffset.y -= 1
+                uiKitScrollView.contentOffset.y -= 1
             }
             .scaleEffect(x: 1, y: -1)
             .onReceive(scrollToBottomPublisher) { _ in
@@ -69,7 +72,7 @@ struct TimelineView: View {
             .scrollDismissesKeyboard(.interactively)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
-        .animation(.elementDefault, value: viewState.itemViewModels)
+        .animation(.elementDefault, value: viewState.itemViewStates)
         .onReceive(scrollViewAdapter.didScroll) { _ in
             guard let scrollView = scrollViewAdapter.scrollView else {
                 return
@@ -91,12 +94,10 @@ struct TimelineView: View {
         }
         .onAppear {
             paginateBackwardsPublisher.send()
-            guard let scrollView = scrollViewAdapter.scrollView else {
-                return
-            }
         }
     }
 
+    // Used to mark the top of the scroll view and easily scroll to it
     private var topPin: some View {
         Divider()
             .id(topID)
@@ -104,6 +105,7 @@ struct TimelineView: View {
             .frame(height: 0)
     }
 
+    // Used to mark the bottom of the scroll view and easily scroll to it
     private var bottomPin: some View {
         Divider()
             .id(bottomID)

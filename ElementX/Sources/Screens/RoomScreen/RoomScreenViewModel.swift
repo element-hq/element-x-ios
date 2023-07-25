@@ -256,7 +256,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
         
     private func buildTimelineViews() {
-        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
+        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 
         let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
@@ -270,19 +270,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(RoomTimelineItemViewModel(item: firstItem, groupStyle: .single),
+                    timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: firstItem, groupStyle: .single),
                                                         forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewModel(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewModel(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewModel(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }

@@ -144,7 +144,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineItemView(viewModel: .init(item: item, groupStyle: .single))
+                RoomTimelineItemView(viewState: .init(item: item, groupStyle: .single))
                     .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }

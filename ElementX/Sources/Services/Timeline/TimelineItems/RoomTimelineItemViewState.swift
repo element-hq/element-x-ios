@@ -16,9 +16,9 @@
 
 import Foundation
 
-struct RoomTimelineItemViewModel: Identifiable, Equatable {
-    var type: RoomTimelineItemType
-    var groupStyle: TimelineGroupStyle
+struct RoomTimelineItemViewState: Identifiable, Equatable {
+    let type: RoomTimelineItemType
+    let groupStyle: TimelineGroupStyle
 
     var identifier: TimelineItemIdentifier {
         type.id
@@ -33,7 +33,7 @@ struct RoomTimelineItemViewModel: Identifiable, Equatable {
     }
 }
 
-extension RoomTimelineItemViewModel {
+extension RoomTimelineItemViewState {
     init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
         self.init(type: .init(item: item), groupStyle: groupStyle)
     }
