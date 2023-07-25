@@ -69,7 +69,7 @@ struct TimelineView: View {
                     scrollView.scrollTo(bottomID)
                 }
             }
-            .scrollDismissesKeyboard(.interactively)
+            .scrollDismissesKeyboard(.immediately)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
         .animation(.elementDefault, value: viewState.itemViewStates)
@@ -78,16 +78,19 @@ struct TimelineView: View {
                 return
             }
             let offset = scrollView.contentOffset.y + scrollView.contentInset.top
-            let scrollToBottomButtonVisibleValue = offset > 0
+
+            // We give it a bit of tollerance which solves the issue when of it being displayed when the keyboard appears
+            let scrollToBottomButtonVisibleValue = offset > 5
             if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
                 scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
             }
-            paginateBackwardsPublisher.send()
 
             // Allows the scroll to top to work properly
             if offset == 0 {
                 scrollView.contentOffset.y -= 1
             }
+
+            paginateBackwardsPublisher.send()
         }
         .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
             paginateBackwardsIfNeeded()
