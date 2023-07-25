@@ -23,7 +23,7 @@ class UserSession: UserSessionProtocol {
     private var authErrorCancellable: AnyCancellable?
     
     var userID: String { clientProxy.userID }
-    var deviceID: String? { clientProxy.deviceId }
+    var deviceID: String? { clientProxy.deviceID }
     var homeserver: String { clientProxy.homeserver }
 
     let clientProxy: ClientProxyProtocol

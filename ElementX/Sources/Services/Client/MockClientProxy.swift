@@ -22,7 +22,7 @@ class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
-    let deviceId: String? = nil
+    let deviceID: String?
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
     
@@ -34,8 +34,9 @@ class MockClientProxy: ClientProxyProtocol {
 
     var isSyncing: Bool { false }
     
-    internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+    internal init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
+        self.deviceID = deviceID
         self.roomSummaryProvider = roomSummaryProvider
     }
 

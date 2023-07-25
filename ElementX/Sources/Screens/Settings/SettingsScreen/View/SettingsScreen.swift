@@ -165,9 +165,12 @@ struct SettingsScreen: View {
                 versionText
                     .frame(maxWidth: .infinity)
                 
-                context.viewState.deviceID.map(Text.init)
+                if let deviceID = context.viewState.deviceID {
+                    Text(deviceID)
+                }
             }
             .compoundFormSectionFooter()
+            .textSelection(.enabled)
             .padding(.top, 24)
         }
         .compoundFormSection()
@@ -201,7 +204,8 @@ private extension TimelineStyle {
 
 struct SettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com",
+                                                                       deviceID: "AAAAAAAAAAA"),
                                           mediaProvider: MockMediaProvider())
         ServiceLocator.shared.settings.notificationSettingsEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
