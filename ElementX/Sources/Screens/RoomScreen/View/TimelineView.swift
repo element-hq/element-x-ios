@@ -23,8 +23,8 @@ struct TimelineView: View {
     let viewState: TimelineViewState
     @Environment(\.timelineStyle) private var timelineStyle
 
-    private let bottomID = "bottomID"
-    private let topID = "topID"
+    private let bottomID = "RoomTimelineBottomPinIdentifier"
+    private let topID = "RoomTimelineTopPinIdentifier"
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
