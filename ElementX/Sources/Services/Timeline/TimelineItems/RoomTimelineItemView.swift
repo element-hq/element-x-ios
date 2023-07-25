@@ -16,17 +16,27 @@
 import SwiftUI
 
 struct RoomTimelineItemView: View {
-    @ObservedObject var viewModel: RoomTimelineItemViewModel
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    let viewState: RoomTimelineItemViewState
 
     var body: some View {
         timelineView
-            .environment(\.timelineGroupStyle, viewModel.groupStyle)
-            .animation(.elementDefault, value: viewModel.type)
-            .animation(.elementDefault, value: viewModel.groupStyle)
+            .environmentObject(context)
+            .environment(\.timelineGroupStyle, viewState.groupStyle)
+            .onAppear {
+                context.send(viewAction: .itemAppeared(itemID: viewState.identifier))
+            }
+            .onDisappear {
+                context.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
+            }
+            .environment(\.openURL, OpenURLAction { url in
+                context.send(viewAction: .linkClicked(url: url))
+                return .systemAction
+            })
     }
 
     @ViewBuilder private var timelineView: some View {
-        switch viewModel.type {
+        switch viewState.type {
         case .text(let item):
             TextRoomTimelineView(timelineItem: item)
         case .separator(let item):
@@ -69,6 +79,6 @@ struct RoomTimelineItemView: View {
     }
 
     var timelineGroupStyle: TimelineGroupStyle {
-        viewModel.groupStyle
+        viewState.groupStyle
     }
 }

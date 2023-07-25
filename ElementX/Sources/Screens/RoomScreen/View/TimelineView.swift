@@ -14,68 +14,146 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
-/// A table view wrapper that displays the timeline of a room.
-struct TimelineView: UIViewControllerRepresentable {
-    @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
+import SwiftUIIntrospect
+
+struct TimelineView: View {
+    let viewState: TimelineViewState
     @Environment(\.timelineStyle) private var timelineStyle
-    
-    func makeUIViewController(context: Context) -> TimelineTableViewController {
-        let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
-                                                              timelineStyle: timelineStyle,
-                                                              scrollToBottomButtonVisible: $viewModelContext.scrollToBottomButtonVisible,
-                                                              scrollToBottomPublisher: viewModelContext.viewState.scrollToBottomPublisher)
-        return tableViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: TimelineTableViewController, context: Context) {
-        context.coordinator.update(tableViewController: uiViewController, timelineStyle: timelineStyle)
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(viewModelContext: viewModelContext)
-    }
-    
-    // MARK: - Coordinator
-    
-    @MainActor
-    class Coordinator {
-        let context: RoomScreenViewModel.Context
-        
-        init(viewModelContext: RoomScreenViewModel.Context) {
-            context = viewModelContext
-            
-            if viewModelContext.viewState.itemViewModels.isEmpty {
-                viewModelContext.send(viewAction: .paginateBackwards)
+
+    private let bottomID = "RoomTimelineBottomPinIdentifier"
+    private let topID = "RoomTimelineTopPinIdentifier"
+
+    @State private var scrollViewAdapter = ScrollViewAdapter()
+    @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
+    @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    @State private var scrollToBottomButtonVisible = false
+
+    var body: some View {
+        ScrollViewReader { scrollView in
+            ScrollView {
+                bottomPin
+
+                LazyVStack(spacing: 0) {
+                    ForEach(viewState.itemViewStates.reversed()) { viewState in
+                        RoomTimelineItemView(viewState: viewState)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(timelineStyle.rowInsets)
+                            .scaleEffect(x: 1, y: -1)
+                    }
+                }
+
+                topPin
+            }
+            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                guard uiScrollView != scrollViewAdapter.scrollView else {
+                    return
+                }
+                
+                scrollViewAdapter.scrollView = uiScrollView
+                scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                    withElementAnimation {
+                        scrollView.scrollTo(topID)
+                    }
+                    return false
+                }
+
+                // Allows the scroll to top to work properly
+                uiScrollView.contentOffset.y -= 1
+            }
+            .scaleEffect(x: 1, y: -1)
+            .onReceive(scrollToBottomPublisher) { _ in
+                withElementAnimation {
+                    scrollView.scrollTo(bottomID)
+                }
+            }
+            .scrollDismissesKeyboard(.interactively)
+        }
+        .overlay(scrollToBottomButton, alignment: .bottomTrailing)
+        .animation(.elementDefault, value: viewState.itemViewStates)
+        .onReceive(scrollViewAdapter.didScroll) { _ in
+            guard let scrollView = scrollViewAdapter.scrollView else {
+                return
+            }
+            let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+            let scrollToBottomButtonVisibleValue = offset > 0
+            if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
+                scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
+            }
+            paginateBackwardsPublisher.send()
+
+            // Allows the scroll to top to work properly
+            if offset == 0 {
+                scrollView.contentOffset.y -= 1
             }
         }
-        
-        /// Updates the specified table view's properties from the current view state.
-        func update(tableViewController: TimelineTableViewController, timelineStyle: TimelineStyle) {
-            if tableViewController.timelineStyle != timelineStyle {
-                tableViewController.timelineStyle = timelineStyle
-            }
-            if tableViewController.timelineItemsDictionary != context.viewState.itemsDictionary {
-                tableViewController.timelineItemsDictionary = context.viewState.itemsDictionary
-            }
-            if tableViewController.canBackPaginate != context.viewState.canBackPaginate {
-                tableViewController.canBackPaginate = context.viewState.canBackPaginate
-            }
-            if tableViewController.isBackPaginating != context.viewState.isBackPaginating {
-                tableViewController.isBackPaginating = context.viewState.isBackPaginating
-            }
-            if tableViewController.composerMode != context.viewState.composerMode {
-                tableViewController.composerMode = context.viewState.composerMode
-            }
-            
-            // Doesn't have an equatable conformance :(
-            tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider
+        .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
+            paginateBackwardsIfNeeded()
         }
-        
-        func send(viewAction: RoomScreenViewAction) {
-            context.send(viewAction: viewAction)
+        .onAppear {
+            paginateBackwardsPublisher.send()
         }
+    }
+
+    /// Used to mark the top of the scroll view and easily scroll to it
+    private var topPin: some View {
+        Divider()
+            .id(topID)
+            .hidden()
+            .frame(height: 0)
+    }
+
+    /// Used to mark the bottom of the scroll view and easily scroll to it
+    private var bottomPin: some View {
+        Divider()
+            .id(bottomID)
+            .hidden()
+            .frame(height: 0)
+    }
+
+    private var scrollToBottomButton: some View {
+        Button {
+            scrollToBottomPublisher.send()
+        } label: {
+            Image(systemName: "chevron.down")
+                .font(.compound.bodyLG)
+                .fontWeight(.semibold)
+                .foregroundColor(.compound.iconSecondary)
+                .padding(13)
+                .offset(y: 1)
+                .background {
+                    Circle()
+                        .fill(Color.compound.iconOnSolidPrimary)
+                        // Intentionally using system primary colour to get white/black.
+                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
+                }
+                .padding()
+        }
+        .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!scrollToBottomButtonVisible)
+        .animation(.elementDefault, value: scrollToBottomButtonVisible)
+    }
+
+    private func paginateBackwardsIfNeeded() {
+        guard let paginateAction = viewState.paginateAction,
+              let scrollView = scrollViewAdapter.scrollView,
+              viewState.canBackPaginate,
+              !viewState.isBackPaginating else {
+            return
+        }
+
+        let visibleHeight = scrollView.visibleSize.height
+        let contentHeight = scrollView.contentSize.height
+        let offset = scrollView.contentOffset.y + scrollView.contentInset.top
+        let threshold = contentHeight - visibleHeight * 2
+
+        guard offset > threshold else {
+            return
+        }
+
+        paginateAction()
     }
 }
 

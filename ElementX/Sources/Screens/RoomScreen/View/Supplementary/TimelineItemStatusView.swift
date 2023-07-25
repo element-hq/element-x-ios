@@ -23,11 +23,15 @@ struct TimelineItemStatusView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
-        context.viewState.timelineIDs.last == timelineItem.id.timelineID &&
-            timelineItem.isOutgoing
+        timelineItem.isOutgoing && context.viewState.timelineViewState.timelineIDs.last == timelineItem.id.timelineID
     }
 
     var body: some View {
+        mainContent
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
         if !timelineItem.properties.orderedReadReceipts.isEmpty, readReceiptsEnabled {
             readReceipts
         } else {

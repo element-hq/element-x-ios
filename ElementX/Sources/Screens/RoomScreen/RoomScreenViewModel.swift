@@ -37,6 +37,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private var canCurrentUserRedact = false
     
+    private var paginateBackwardsTask: Task<Void, Never>?
+    
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
@@ -59,6 +61,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
+
+        state.timelineViewState.paginateAction = { [weak self] in
+            self?.paginateBackwards()
+        }
 
         setupSubscriptions()
         
@@ -84,8 +90,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch viewAction {
         case .displayRoomDetails:
             callback?(.displayRoomDetails)
-        case .paginateBackwards:
-            Task { await paginateBackwards() }
         case .itemAppeared(let id):
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
@@ -151,12 +155,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .updatedTimelineItems:
                     self.buildTimelineViews()
                 case .canBackPaginate(let canBackPaginate):
-                    if self.state.canBackPaginate != canBackPaginate {
-                        self.state.canBackPaginate = canBackPaginate
+                    if self.state.timelineViewState.canBackPaginate != canBackPaginate {
+                        self.state.timelineViewState.canBackPaginate = canBackPaginate
                     }
                 case .isBackPaginating(let isBackPaginating):
-                    if self.state.isBackPaginating != isBackPaginating {
-                        self.state.isBackPaginating = isBackPaginating
+                    if self.state.timelineViewState.isBackPaginating != isBackPaginating {
+                        self.state.timelineViewState.isBackPaginating = isBackPaginating
                     }
                 }
             }
@@ -215,12 +219,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
     }
 
-    private func paginateBackwards() async {
-        switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
-        case .failure:
-            displayError(.toast(L10n.errorFailedLoadingMessages))
-        default:
-            break
+    private func paginateBackwards() {
+        guard paginateBackwardsTask == nil else {
+            return
+        }
+
+        paginateBackwardsTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+
+            switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
+            case .failure:
+                displayError(.toast(L10n.errorFailedLoadingMessages))
+            default:
+                break
+            }
+            paginateBackwardsTask = nil
         }
     }
     
@@ -245,7 +260,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
         
     private func buildTimelineViews() {
-        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
+        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 
         let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
             canGroupItem(timelineItem: current, with: next)
@@ -259,36 +274,26 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(updateViewModel(item: firstItem, groupStyle: .single),
+                    timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: firstItem, groupStyle: .single),
                                                         forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewModel(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }
             }
         }
         
-        state.itemsDictionary = timelineItemsDictionary
-    }
-
-    private func updateViewModel(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewModel {
-        if let timelineItemViewModel = state.itemsDictionary[item.id.timelineID] {
-            timelineItemViewModel.groupStyle = groupStyle
-            timelineItemViewModel.type = .init(item: item)
-            return timelineItemViewModel
-        } else {
-            return RoomTimelineItemViewModel(item: item, groupStyle: groupStyle)
-        }
+        state.timelineViewState.itemsDictionary = timelineItemsDictionary
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
@@ -666,7 +671,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Reactions
     
     private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let item = state.itemsDictionary[itemID.timelineID], item.isReactable else { return }
+        guard let item = state.timelineViewState.itemsDictionary[itemID.timelineID], item.isReactable else { return }
         callback?(.displayEmojiPicker(itemID: itemID))
     }
     

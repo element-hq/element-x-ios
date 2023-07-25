@@ -18,34 +18,35 @@ import SwiftUI
 
 struct CollapsibleRoomTimelineView: View {
     private let timelineItem: CollapsibleTimelineItem
-    private let timelineViewModels: [RoomTimelineItemViewModel]
+    private let groupedViewStates: [RoomTimelineItemViewState]
     
     @State private var isExpanded = false
 
     init(timelineItem: CollapsibleTimelineItem) {
         self.timelineItem = timelineItem
-        timelineViewModels = timelineItem.items.map { .init(item: $0, groupStyle: .single) }
+        groupedViewStates = timelineItem.items.map { .init(item: $0, groupStyle: .single) }
     }
     
     var body: some View {
         DisclosureGroup(L10n.roomTimelineStateChanges(timelineItem.items.count), isExpanded: $isExpanded) {
             Group {
-                ForEach(timelineViewModels) { viewModel in
-                    RoomTimelineItemView(viewModel: viewModel)
+                ForEach(groupedViewStates) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
                 }
-            }.transition(.opacity.animation(.elementDefault))
+            }
         }
         .disclosureGroupStyle(CollapsibleRoomTimelineItemDisclosureGroupStyle())
-        .transaction { transaction in
-            transaction.animation = .noAnimation // Fixes weird animations on the disclosure indicator
-        }
     }
 }
 
 private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 0.0) {
-            Button { configuration.isExpanded.toggle() } label: {
+            Button {
+                withElementAnimation {
+                    configuration.isExpanded.toggle()
+                }
+            } label: {
                 HStack(alignment: .center) {
                     configuration.label
                     Text(Image(systemName: "chevron.forward"))

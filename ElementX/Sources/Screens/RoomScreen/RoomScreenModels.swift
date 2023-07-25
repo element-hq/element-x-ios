@@ -51,7 +51,6 @@ enum RoomScreenComposerMode: Equatable {
 
 enum RoomScreenViewAction {
     case displayRoomDetails
-    case paginateBackwards
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     case itemTapped(itemID: TimelineItemIdentifier)
@@ -86,18 +85,14 @@ struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
     var roomAvatarURL: URL?
-    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewModel>()
     var members: [String: RoomMemberState] = [:]
-    var canBackPaginate = true
-    var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
-    
+    var timelineViewState = TimelineViewState() // check the doc before changing this
     var composerMode: RoomScreenComposerMode = .default
-    let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-    
+
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
@@ -105,14 +100,6 @@ struct RoomScreenViewState: BindableState {
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
-    }
-
-    var timelineIDs: [String] {
-        itemsDictionary.keys.elements
-    }
-
-    var itemViewModels: [RoomTimelineItemViewModel] {
-        itemsDictionary.values.elements
     }
 }
 
@@ -183,4 +170,22 @@ enum RoomScreenErrorType: Hashable {
 struct RoomMemberState {
     let displayName: String?
     let avatarURL: URL?
+}
+
+/// Used as the state for the TimelineView, to avoid having the context continuously refresh the list of items on each small change.
+/// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
+struct TimelineViewState {
+    var canBackPaginate = true
+    var isBackPaginating = false
+    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+
+    var timelineIDs: [String] {
+        itemsDictionary.keys.elements
+    }
+
+    var itemViewStates: [RoomTimelineItemViewState] {
+        itemsDictionary.values.elements
+    }
+
+    var paginateAction: (() -> Void)?
 }

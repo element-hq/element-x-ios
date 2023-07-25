@@ -16,29 +16,28 @@
 
 import Foundation
 
-final class RoomTimelineItemViewModel: Identifiable, Equatable, ObservableObject {
-    static func == (lhs: RoomTimelineItemViewModel, rhs: RoomTimelineItemViewModel) -> Bool {
-        lhs.type == rhs.type && lhs.groupStyle == rhs.groupStyle
-    }
+struct RoomTimelineItemViewState: Identifiable, Equatable {
+    let type: RoomTimelineItemType
+    let groupStyle: TimelineGroupStyle
 
-    @Published var type: RoomTimelineItemType
-    @Published var groupStyle: TimelineGroupStyle
-
-    var id: TimelineItemIdentifier {
+    /// Contains all the identification info of the item, `timelineID`, `eventID` and `transactionID`
+    var identifier: TimelineItemIdentifier {
         type.id
     }
 
-    convenience init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
-        self.init(type: .init(item: item), groupStyle: groupStyle)
-    }
-
-    init(type: RoomTimelineItemType, groupStyle: TimelineGroupStyle) {
-        self.type = type
-        self.groupStyle = groupStyle
+    /// The `timelineID` of the item, used for the timeline view level identification, do not use for any business logic use `identifier` instead
+    var id: String {
+        identifier.timelineID
     }
 
     var isReactable: Bool {
         type.isReactable
+    }
+}
+
+extension RoomTimelineItemViewState {
+    init(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+        self.init(type: .init(item: item), groupStyle: groupStyle)
     }
 }
 

@@ -42,8 +42,8 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RoomTimelineItemView(viewModel: .init(type: .separator(.init(id: .init(timelineID: "Separator"), text: "Today")), groupStyle: .single))
-            RoomTimelineItemView(viewModel: .init(type: .text(.init(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(timelineID: "Separator"), text: "Today")), groupStyle: .single))
+            RoomTimelineItemView(viewState: .init(type: .text(.init(id: .init(timelineID: ""),
                                                                     timestamp: "",
                                                                     isOutgoing: true,
                                                                     isEditable: false,
@@ -52,8 +52,8 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
 
             ReadMarkerRoomTimelineView(timelineItem: item)
 
-            RoomTimelineItemView(viewModel: .init(type: .separator(.init(id: .init(timelineID: "Separator"), text: "Today")), groupStyle: .single))
-            RoomTimelineItemView(viewModel: .init(type: .text(.init(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(timelineID: "Separator"), text: "Today")), groupStyle: .single))
+            RoomTimelineItemView(viewState: .init(type: .text(.init(id: .init(timelineID: ""),
                                                                     timestamp: "",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
