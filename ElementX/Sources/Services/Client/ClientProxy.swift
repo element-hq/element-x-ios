@@ -87,7 +87,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    var deviceId: String? {
+    var deviceID: String? {
         do {
             return try client.deviceId()
         } catch {

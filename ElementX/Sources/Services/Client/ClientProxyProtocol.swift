@@ -68,7 +68,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var userID: String { get }
 
-    var deviceId: String? { get }
+    var deviceID: String? { get }
 
     var homeserver: String { get }
 
