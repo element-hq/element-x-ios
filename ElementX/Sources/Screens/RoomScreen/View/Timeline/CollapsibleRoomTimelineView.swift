@@ -43,7 +43,7 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
     func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 0.0) {
             Button {
-                withAnimation {
+                withElementAnimation {
                     configuration.isExpanded.toggle()
                 }
             } label: {

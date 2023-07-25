@@ -37,6 +37,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private var canCurrentUserRedact = false
     
+    private var paginateBackwardsTask: Task<Void, Never>?
+    
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
@@ -217,14 +219,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
     }
 
-    private var paginateBackwardsTask: Task<Void, Never>?
-
     private func paginateBackwards() {
         guard paginateBackwardsTask == nil else {
             return
         }
 
-        paginateBackwardsTask = Task {
+        paginateBackwardsTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+
             switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
             case .failure:
                 displayError(.toast(L10n.errorFailedLoadingMessages))

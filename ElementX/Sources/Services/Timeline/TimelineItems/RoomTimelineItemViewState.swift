@@ -20,10 +20,12 @@ struct RoomTimelineItemViewState: Identifiable, Equatable {
     let type: RoomTimelineItemType
     let groupStyle: TimelineGroupStyle
 
+    /// Contains all the identification info of the item, `timelineID`, `eventID` and `transactionID`
     var identifier: TimelineItemIdentifier {
         type.id
     }
 
+    /// The `timelineID` of the item, used for the timeline view level identification, do not use for any business logic use `identifier` instead
     var id: String {
         identifier.timelineID
     }

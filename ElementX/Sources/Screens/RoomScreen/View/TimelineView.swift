@@ -54,7 +54,7 @@ struct TimelineView: View {
                 
                 scrollViewAdapter.scrollView = uiScrollView
                 scrollViewAdapter.shouldScrollToTopClosure = { _ in
-                    withAnimation {
+                    withElementAnimation {
                         scrollView.scrollTo(topID)
                     }
                     return false
@@ -65,7 +65,7 @@ struct TimelineView: View {
             }
             .scaleEffect(x: 1, y: -1)
             .onReceive(scrollToBottomPublisher) { _ in
-                withAnimation {
+                withElementAnimation {
                     scrollView.scrollTo(bottomID)
                 }
             }

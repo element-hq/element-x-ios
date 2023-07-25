@@ -90,11 +90,9 @@ struct RoomScreenViewState: BindableState {
     var timelineStyle: TimelineStyle
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
-    var timelineViewState = TimelineViewState()
-
+    var timelineViewState = TimelineViewState() // check the doc before changing this
     var composerMode: RoomScreenComposerMode = .default
-    let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-    
+
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
@@ -174,6 +172,8 @@ struct RoomMemberState {
     let avatarURL: URL?
 }
 
+/// Used as the state for the TimelineView, to avoid having the context continuously refresh the list of items on each small change.
+/// Is also nice to have this as a wrapper for any state that is directly connected to the timeline.
 struct TimelineViewState {
     var canBackPaginate = true
     var isBackPaginating = false
