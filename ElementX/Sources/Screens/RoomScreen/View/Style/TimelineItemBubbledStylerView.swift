@@ -29,7 +29,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     @State private var showItemActionMenu = false
 
-    private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     
     /// The base padding applied to bubbles on either side.
@@ -157,13 +156,19 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        if isTextItem || shouldFillBubble {
-            ZStack(alignment: .bottomTrailing) {
+        switch timelineItem.bubbleTimestampLayout {
+        case .horizontal:
+            HStack(alignment: .bottom, spacing: 4) {
                 contentWithReply
                 interactiveLocalizedSendInfo
             }
-        } else {
-            HStack(alignment: .bottom, spacing: 4) {
+        case .vertical:
+            VStack(alignment: .leading, spacing: 4) {
+                contentWithReply
+                interactiveLocalizedSendInfo
+            }
+        case .overlay:
+            ZStack(alignment: .bottomTrailing) {
                 contentWithReply
                 interactiveLocalizedSendInfo
             }
@@ -184,7 +189,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var backgroundedLocalizedSendInfo: some View {
-        if shouldFillBubble {
+        switch timelineItem.bubbleTimestampLayout {
+        case .overlay(capsuleStyle: true):
             localizedSendInfo
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
@@ -192,9 +198,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
-
-        } else {
+        default:
             localizedSendInfo
+                .padding(.bottom, -4)
         }
     }
 
@@ -213,7 +219,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .font(.compound.bodyXS)
         .foregroundColor(timelineItem.hasFailedToSend ? .compound.textCriticalPrimary : .compound.textSecondary)
-        .padding(.bottom, shouldFillBubble ? 0 : -4)
     }
     
     @ViewBuilder
@@ -247,19 +252,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var messageBubbleTopPadding: CGFloat {
         guard timelineItem.isOutgoing || isEncryptedOneToOneRoom else { return 0 }
         return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
-    }
-
-    private var shouldFillBubble: Bool {
-        switch timelineItem {
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
-            return true
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI != nil
-        default:
-            return false
-        }
     }
     
     private var alignment: HorizontalAlignment {
@@ -300,6 +292,12 @@ private extension View {
     }
 }
 
+enum BubbleTimestampLayout {
+    case horizontal
+    case vertical
+    case overlay(capsuleStyle: Bool)
+}
+
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
         let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
@@ -328,6 +326,23 @@ private extension EventBasedTimelineItemProtocol {
             return locationTimelineItem.content.geoURI == nil ? defaultPadding : 0
         default:
             return defaultPadding
+        }
+    }
+
+    var bubbleTimestampLayout: BubbleTimestampLayout {
+        let defaultTimestampLayout: BubbleTimestampLayout = .horizontal
+
+        switch self {
+        case is TextBasedRoomTimelineItem:
+            return .overlay(capsuleStyle: false)
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return .overlay(capsuleStyle: true)
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI == nil ? defaultTimestampLayout : .overlay(capsuleStyle: true)
+        default:
+            return defaultTimestampLayout
         }
     }
 }
