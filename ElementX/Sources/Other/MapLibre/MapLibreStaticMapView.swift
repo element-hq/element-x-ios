@@ -65,7 +65,6 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                     }
                 }
                 .id(fetchAttempt)
-                .clipped()
             } else {
                 Image("mapBlurred")
             }
