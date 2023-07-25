@@ -80,7 +80,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     }
     
     /// The color of the placeholder text inside the text field.
-    private var placeholderColor: Color {
+    private var placeholderColor: UIColor {
         .compound.textPlaceholder
     }
     
@@ -134,7 +134,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 .introspect(.textField, on: .iOS(.v16)) { textField in
                     textField.clearButtonMode = .whileEditing
                     textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
-                                                                         attributes: [NSAttributedString.Key.foregroundColor: UIColor(placeholderColor)])
+                                                                         attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
                     textField.accessibilityIdentifier = accessibilityIdentifier
                 }
  
