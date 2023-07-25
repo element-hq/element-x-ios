@@ -21,37 +21,24 @@ struct CollapsibleRoomTimelineView: View {
     private let groupedViewStates: [RoomTimelineItemViewState]
     
     @State private var isExpanded = false
-
+    
     init(timelineItem: CollapsibleTimelineItem) {
         self.timelineItem = timelineItem
         groupedViewStates = timelineItem.items.map { .init(item: $0, groupStyle: .single) }
     }
     
     var body: some View {
-        DisclosureGroup(L10n.roomTimelineStateChanges(timelineItem.items.count), isExpanded: $isExpanded) {
-            Group {
-                ForEach(groupedViewStates) { viewState in
-                    RoomTimelineItemView(viewState: viewState)
-                }
-            }
-        }
-        .disclosureGroupStyle(CollapsibleRoomTimelineItemDisclosureGroupStyle())
-    }
-}
-
-private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupStyle {
-    func makeBody(configuration: Configuration) -> some View {
         VStack(spacing: 0.0) {
             Button {
                 withElementAnimation {
-                    configuration.isExpanded.toggle()
+                    isExpanded.toggle()
                 }
             } label: {
                 HStack(alignment: .center) {
-                    configuration.label
+                    Text(L10n.roomTimelineStateChanges(timelineItem.items.count))
                     Text(Image(systemName: "chevron.forward"))
-                        .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
-                        .animation(.elementDefault, value: configuration.isExpanded)
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                        .animation(.elementDefault, value: isExpanded)
                 }
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
@@ -63,8 +50,10 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
             .frame(maxWidth: .infinity)
             .padding(.top, 8.0)
             
-            if configuration.isExpanded {
-                configuration.content
+            if isExpanded {
+                ForEach(groupedViewStates) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
+                }
             }
         }
     }
