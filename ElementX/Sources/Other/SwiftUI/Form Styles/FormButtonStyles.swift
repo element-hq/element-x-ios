@@ -55,7 +55,7 @@ struct FormRowAccessory: View {
             ProgressView()
         case .singleSelection(let isSelected):
             if isSelected {
-                Image(systemName: "checkmark")
+                Image(systemName: "checkmark.circle.fill")
                     .font(.compound.bodyLG)
                     .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
             }

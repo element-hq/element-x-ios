@@ -21,7 +21,7 @@ struct RoomNotificationSettingsScreen: View {
     
     var body: some View {
         Form {
-            headerSection
+            allowCustomSettingSection
 
             if !context.allowCustomSetting {
                 defaultSettingSection
@@ -38,7 +38,7 @@ struct RoomNotificationSettingsScreen: View {
     // MARK: - Private
 
     @ViewBuilder
-    private var headerSection: some View {
+    private var allowCustomSettingSection: some View {
         Section {
             Toggle(isOn: $context.allowCustomSetting) {
                 Text(L10n.screenRoomNotificationSettingsAllowCustom)
@@ -67,8 +67,8 @@ struct RoomNotificationSettingsScreen: View {
                     .foregroundColor(.compound.textPrimary)
             }
         } header: {
-            Text(L10n.screenRoomNotificationSettingsDefaultSettingTitle.uppercased())
-                .foregroundColor(.compound.textSecondary)
+            Text(L10n.screenRoomNotificationSettingsDefaultSettingTitle)
+                .compoundFormSectionHeader()
         } footer: {
             Text(context.viewState.strings.customSettingFootnote)
                 .compoundFormSectionFooter()
@@ -79,31 +79,22 @@ struct RoomNotificationSettingsScreen: View {
     @ViewBuilder
     private var customSettingsSection: some View {
         Section {
-            ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
-                Button {
-                    context.send(viewAction: .setCustomMode(mode))
-                } label: {
+            Picker("", selection: $context.customMode) {
+                ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
                     Text(context.viewState.strings.string(for: mode))
+                        .tag(mode)
                 }
-                .disabled(context.viewState.isApplyingCustomMode)
-                .buttonStyle(customModeButtonStyle(mode: mode))
             }
+            .onChange(of: context.customMode) { mode in
+                context.send(viewAction: .setCustomMode(mode))
+            }
+            .labelsHidden()
+            .pickerStyle(.inline)
         } header: {
-            Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle.uppercased())
-                .foregroundColor(.compound.textSecondary)
+            Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle)
+                .compoundFormSectionHeader()
         }
         .compoundFormSection()
-    }
-    
-    private func customModeButtonStyle(mode: RoomNotificationModeProxy) -> FormButtonStyle {
-        let accessory: FormRowAccessory
-        
-        if context.viewState.isApplyingCustomMode, context.viewState.isSelected(mode) {
-            accessory = .progressView
-        } else {
-            accessory = .singleSelection(isSelected: context.viewState.isSelected(mode))
-        }
-        return FormButtonStyle(accessory: accessory)
     }
 }
 

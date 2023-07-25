@@ -80,6 +80,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
                                                                                        activeMembersCount: UInt64(roomProxy.activeMembersCount))
             state.notificationSettingsState = .loaded(settings: settings)
             state.bindings.allowCustomSetting = !settings.isDefault
+            state.bindings.customMode = settings.mode
         } catch {
             state.notificationSettingsState = .error
             displayError(.loadingSettingsFailed)
