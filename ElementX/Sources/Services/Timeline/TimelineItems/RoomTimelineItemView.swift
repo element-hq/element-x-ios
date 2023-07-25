@@ -79,8 +79,6 @@ struct RoomTimelineItemView: View {
             LocationRoomTimelineView(timelineItem: item)
         case .poll(let item):
             PollRoomTimelineView(timelineItem: item)
-        case .pollEnd(let item):
-            PollEndRoomTimelineView(timelineItem: item)
         }
     }
 

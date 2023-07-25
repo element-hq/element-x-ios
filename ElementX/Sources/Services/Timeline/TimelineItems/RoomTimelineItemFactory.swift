@@ -75,11 +75,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
             return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing)
         case .pollEnd:
-            guard ServiceLocator.shared.settings.pollsInTimelineEnabled else {
-                return nil
-            }
-
-            return buildPollEndTimelineItem(eventItemProxy, isOutgoing)
+            return nil
         }
     }
     
@@ -359,17 +355,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
                                     sender: eventItemProxy.sender)
-    }
-
-    #warning("AG: refine mapping")
-    private func buildPollEndTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
-                                          _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        PollEndRoomTimelineItem(id: eventItemProxy.id,
-                                body: "TBD",
-                                timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
-                                isOutgoing: isOutgoing,
-                                isEditable: eventItemProxy.isEditable,
-                                sender: eventItemProxy.sender)
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
