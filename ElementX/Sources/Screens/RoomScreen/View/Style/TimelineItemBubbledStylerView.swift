@@ -26,7 +26,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @ScaledMetric private var senderNameVerticalPadding = 3
-    private let cornerRadius: CGFloat = 12
     
     @State private var showItemActionMenu = false
 
@@ -150,18 +149,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContent: some View {
-        if shouldFillBubble {
-            contentWithTimestamp
-                .bubbleStyle(inset: false,
-                             cornerRadius: cornerRadius,
-                             corners: roundedCorners)
-        } else {
-            contentWithTimestamp
-                .bubbleStyle(inset: true,
-                             color: timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming,
-                             cornerRadius: cornerRadius,
-                             corners: roundedCorners)
-        }
+        contentWithTimestamp
+            .bubbleStyle(insets: timelineItem.bubbleInsets,
+                         color: timelineItem.bubbleBackgroundColor,
+                         corners: roundedCorners)
     }
 
     @ViewBuilder
@@ -302,10 +293,42 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 }
 
 private extension View {
-    func bubbleStyle(inset: Bool, color: Color? = nil, cornerRadius: CGFloat, corners: UIRectCorner) -> some View {
-        padding(inset ? 8 : 0)
-            .background(inset ? color : nil)
+    func bubbleStyle(insets: CGFloat, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
+        padding(insets)
+            .background(color)
             .cornerRadius(cornerRadius, corners: corners)
+    }
+}
+
+private extension EventBasedTimelineItemProtocol {
+    var bubbleBackgroundColor: Color? {
+        let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
+
+        switch self {
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return nil
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI == nil ? defaultColor : nil
+        default:
+            return defaultColor
+        }
+    }
+
+    var bubbleInsets: CGFloat {
+        let defaultPadding: CGFloat = 8
+
+        switch self {
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return 0
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI == nil ? defaultPadding : 0
+        default:
+            return defaultPadding
+        }
     }
 }
 
