@@ -48,9 +48,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
-                        Image("mapBlurred")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
+                        defaultImage
                     case .success(let image):
                         ZStack {
                             image
@@ -64,24 +62,31 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                         EmptyView()
                     }
                 }
+                .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
                 .id(fetchAttempt)
             } else {
-                Image("mapBlurred")
+                defaultImage
             }
         }
     }
-    
+
+    private var defaultImage: some View {
+        Image("mapBlurred")
+            .resizable()
+            .scaledToFill()
+    }
+
     private var errorView: some View {
         Button {
             fetchAttempt += 1
         } label: {
-            ZStack {
-                Image("mapBlurred")
-                VStack {
-                    Image(systemName: "arrow.clockwise")
-                    Text(L10n.actionStaticMapLoad)
+            defaultImage
+                .overlay {
+                    VStack {
+                        Image(systemName: "arrow.clockwise")
+                        Text(L10n.actionStaticMapLoad)
+                    }
                 }
-            }
         }
     }
 }
