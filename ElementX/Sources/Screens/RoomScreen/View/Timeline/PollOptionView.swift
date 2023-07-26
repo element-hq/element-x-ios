@@ -21,7 +21,7 @@ struct PollOptionView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            selectionView
+            FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
 
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline) {
@@ -40,11 +40,6 @@ struct PollOptionView: View {
     }
 
     // MARK: - Private
-
-    private var selectionView: some View {
-        Image(systemName: pollOption.isSelected ? "checkmark.circle.fill" : "circle")
-            .foregroundColor(pollOption.isSelected ? .compound.iconPrimary : .compound.borderInteractiveSecondary)
-    }
 
     private var progressView: some View {
         ProgressView(value: Double(pollOption.votes) / Double(pollOption.allVotes))

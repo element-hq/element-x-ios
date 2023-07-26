@@ -66,7 +66,7 @@ struct FormRowAccessory: View {
         }
     }
     
-    private init(kind: Kind) {
+    init(kind: Kind) {
         self.kind = kind
     }
 }
