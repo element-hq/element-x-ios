@@ -34,7 +34,7 @@ final class NSEUserSession {
 
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = baseClient
+        notificationClient = try baseClient
             .notificationClient()
             .retryDecryption(withCrossProcessLock: true)
             .finish()
@@ -43,7 +43,8 @@ final class NSEUserSession {
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
         await Task.dispatch(on: .global()) {
             do {
-                guard let notification = try self.notificationClient.getNotification(roomId: roomID, eventId: eventID) else {
+                #warning("Review me")
+                guard let notification = try self.notificationClient.legacyGetNotification(roomId: roomID, eventId: eventID) else {
                     return nil
                 }
                 return NotificationItemProxy(notificationItem: notification, receiverID: self.userID, roomID: roomID)

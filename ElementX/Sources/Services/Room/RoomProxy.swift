@@ -666,7 +666,7 @@ class RoomProxy: RoomProxyProtocol {
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {
         await Task.dispatch(on: .global()) {
-            self.room.fetchMembers()
+            try? self.room.fetchMembers()
         }
     }
         
