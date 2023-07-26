@@ -352,11 +352,11 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
     var setNotificationModeRoomIdModeCalled: Bool {
         return setNotificationModeRoomIdModeCallsCount > 0
     }
-    var setNotificationModeRoomIdModeReceivedArguments: (roomId: String, mode: RoomNotificationMode)?
-    var setNotificationModeRoomIdModeReceivedInvocations: [(roomId: String, mode: RoomNotificationMode)] = []
-    var setNotificationModeRoomIdModeClosure: ((String, RoomNotificationMode) async throws -> Void)?
+    var setNotificationModeRoomIdModeReceivedArguments: (roomId: String, mode: RoomNotificationModeProxy)?
+    var setNotificationModeRoomIdModeReceivedInvocations: [(roomId: String, mode: RoomNotificationModeProxy)] = []
+    var setNotificationModeRoomIdModeClosure: ((String, RoomNotificationModeProxy) async throws -> Void)?
 
-    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws {
+    func setNotificationMode(roomId: String, mode: RoomNotificationModeProxy) async throws {
         if let error = setNotificationModeRoomIdModeThrowableError {
             throw error
         }
@@ -373,10 +373,10 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
     }
     var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedArguments: (isEncrypted: Bool, activeMembersCount: UInt64)?
     var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedInvocations: [(isEncrypted: Bool, activeMembersCount: UInt64)] = []
-    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue: RoomNotificationMode!
-    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure: ((Bool, UInt64) async -> RoomNotificationMode)?
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue: RoomNotificationModeProxy!
+    var getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure: ((Bool, UInt64) async -> RoomNotificationModeProxy)?
 
-    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
+    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationModeProxy {
         getDefaultNotificationRoomModeIsEncryptedActiveMembersCountCallsCount += 1
         getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedArguments = (isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
         getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReceivedInvocations.append((isEncrypted: isEncrypted, activeMembersCount: activeMembersCount))
@@ -668,11 +668,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
     }
 }
 class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
-    var mode: RoomNotificationMode {
+    var mode: RoomNotificationModeProxy {
         get { return underlyingMode }
         set(value) { underlyingMode = value }
     }
-    var underlyingMode: RoomNotificationMode!
+    var underlyingMode: RoomNotificationModeProxy!
     var isDefault: Bool {
         get { return underlyingIsDefault }
         set(value) { underlyingIsDefault = value }

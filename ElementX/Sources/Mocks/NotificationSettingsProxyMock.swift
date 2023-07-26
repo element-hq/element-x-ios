@@ -20,8 +20,13 @@ import MatrixRustSDK
 
 struct NotificationSettingsProxyMockConfiguration {
     var callback = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
-    var defaultRoomMode: RoomNotificationMode = .mentionsAndKeywordsOnly
-    var roomMode = RoomNotificationSettingsProxyMock(with: RoomNotificationSettingsProxyMockConfiguration(mode: .allMessages, isDefault: true))
+    var defaultRoomMode: RoomNotificationModeProxy
+    var roomMode: RoomNotificationSettingsProxyMock
+    
+    init(defaultRoomMode: RoomNotificationModeProxy = .allMessages, roomMode: RoomNotificationModeProxy = .allMessages) {
+        self.defaultRoomMode = defaultRoomMode
+        self.roomMode = RoomNotificationSettingsProxyMock(with: RoomNotificationSettingsProxyMockConfiguration(mode: roomMode, isDefault: defaultRoomMode == roomMode))
+    }
 }
 
 extension NotificationSettingsProxyMock {
@@ -31,5 +36,20 @@ extension NotificationSettingsProxyMock {
         callbacks = configuration.callback
         getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = configuration.roomMode
         getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue = configuration.defaultRoomMode
+        
+        setNotificationModeRoomIdModeClosure = { [weak self] _, mode in
+            guard let self else { return }
+            self.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
+        restoreDefaultNotificationModeRoomIdClosure = { [weak self] _ in
+            guard let self else { return }
+            self.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: configuration.defaultRoomMode, isDefault: true))
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
     }
 }

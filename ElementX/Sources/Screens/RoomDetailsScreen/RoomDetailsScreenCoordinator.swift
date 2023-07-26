@@ -188,7 +188,12 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         }
     }
     
-    private func presentNotificationSettings() { }
+    private func presentNotificationSettings() {
+        let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(notificationSettingsProxy: parameters.notificationSettings,
+                                                                                                     roomProxy: parameters.roomProxy)
+        let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
+        navigationStackCoordinator?.push(roomNotificationSettingsCoordinator)
+    }
 }
 
 private extension Result {

@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,19 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
-import MatrixRustSDK
+import Combine
 
-struct RoomNotificationSettingsProxyMockConfiguration {
-    var mode: RoomNotificationModeProxy = .allMessages
-    var isDefault = true
-}
-
-extension RoomNotificationSettingsProxyMock {
-    convenience init(with configuration: RoomNotificationSettingsProxyMockConfiguration) {
-        self.init()
-
-        isDefault = configuration.isDefault
-        mode = configuration.mode
-    }
+@MainActor
+protocol RoomNotificationSettingsScreenViewModelProtocol {
+    var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> { get }
+    var context: RoomNotificationSettingsScreenViewModelType.Context { get }
 }

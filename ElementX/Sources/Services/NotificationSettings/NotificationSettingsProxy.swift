@@ -51,15 +51,26 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         return RoomNotificationSettingsProxy(roomNotificationSettings: roomMotificationSettings)
     }
     
-    func setNotificationMode(roomId: String, mode: RoomNotificationMode) async throws {
+    func setNotificationMode(roomId: String, mode: RoomNotificationModeProxy) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
         defer { backgroundTask?.stop() }
         
-        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode)
+        let roomNotificationMode: RoomNotificationMode
+        switch mode {
+        case .allMessages:
+            roomNotificationMode = .allMessages
+        case .mentionsAndKeywordsOnly:
+            roomNotificationMode = .mentionsAndKeywordsOnly
+        case .mute:
+            roomNotificationMode = .mute
+        }
+        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: roomNotificationMode)
+        await updatedSettings()
     }
     
-    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationMode {
-        await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationModeProxy {
+        let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+        return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
     }
     
     func restoreDefaultNotificationMode(roomId: String) async throws {
@@ -67,6 +78,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
+        await updatedSettings()
     }
     
     func containsKeywordsRules() async -> Bool {
@@ -78,6 +90,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, membersCount: activeMembersCount)
+        await updatedSettings()
     }
     
     func isRoomMentionEnabled() async throws -> Bool {
@@ -89,6 +102,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setRoomMentionEnabled(enabled: enabled)
+        await updatedSettings()
     }
     
     func isUserMentionEnabled() async throws -> Bool {
@@ -100,6 +114,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setUserMentionEnabled(enabled: enabled)
+        await updatedSettings()
     }
     
     func isCallEnabled() async throws -> Bool {
@@ -111,9 +126,14 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         defer { backgroundTask?.stop() }
 
         try await notificationSettings.setCallEnabled(enabled: enabled)
+        await updatedSettings()
     }
     
     // MARK: - Private
+    
+    func updatedSettings() async {
+        _ = await callbacks.values.first(where: { $0 == .settingsDidChange })
+    }
     
     @MainActor
     func settingsDidChange() {

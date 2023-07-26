@@ -17,16 +17,21 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomNotificationSettingsProxyMockConfiguration {
-    var mode: RoomNotificationModeProxy = .allMessages
-    var isDefault = true
+enum RoomNotificationModeProxy {
+    case allMessages
+    case mentionsAndKeywordsOnly
+    case mute
 }
 
-extension RoomNotificationSettingsProxyMock {
-    convenience init(with configuration: RoomNotificationSettingsProxyMockConfiguration) {
-        self.init()
-
-        isDefault = configuration.isDefault
-        mode = configuration.mode
+extension RoomNotificationModeProxy {
+    static func from(roomNotificationMode: RoomNotificationMode) -> Self {
+        switch roomNotificationMode {
+        case .allMessages:
+            return .allMessages
+        case .mentionsAndKeywordsOnly:
+            return .mentionsAndKeywordsOnly
+        case .mute:
+            return .mute
+        }
     }
 }
