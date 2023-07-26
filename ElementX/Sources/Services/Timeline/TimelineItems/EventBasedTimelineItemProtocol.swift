@@ -53,4 +53,31 @@ extension EventBasedTimelineItemProtocol {
     var hasFailedDecryption: Bool {
         self is EncryptedRoomTimelineItem
     }
+
+    func additionalWhitespaces(timelineStyle: TimelineStyle) -> Int {
+        guard timelineStyle == .bubbles else {
+            return 0
+        }
+        var whiteSpaces = 1
+        localizedSendInfo.forEach { _ in
+            whiteSpaces += 1
+        }
+
+        // To account for the extra spacing created by the alert icon
+        if hasFailedToSend {
+            whiteSpaces += 3
+        }
+
+        return whiteSpaces
+    }
+
+    /// contains the timestamp and an optional edited localised prefix
+    /// example: (edited) 12:17 PM
+    var localizedSendInfo: String {
+        var start = ""
+        if properties.isEdited {
+            start = "\(L10n.commonEditedSuffix) "
+        }
+        return start + timestamp
+    }
 }

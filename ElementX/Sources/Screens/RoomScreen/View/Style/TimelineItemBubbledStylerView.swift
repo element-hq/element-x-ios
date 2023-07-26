@@ -26,11 +26,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @ScaledMetric private var senderNameVerticalPadding = 3
-    private let cornerRadius: CGFloat = 12
     
     @State private var showItemActionMenu = false
 
-    private var isTextItem: Bool { timelineItem is TextBasedRoomTimelineItem }
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     
     /// The base padding applied to bubbles on either side.
@@ -65,7 +63,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         messageBubbleWithReactions
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
-                    
+
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
                             Spacer()
@@ -150,50 +148,37 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContent: some View {
-        if shouldFillBubble {
-            contentWithTimestamp
-                .bubbleStyle(inset: false,
-                             cornerRadius: cornerRadius,
-                             corners: roundedCorners)
-        } else {
-            contentWithTimestamp
-                .bubbleStyle(inset: true,
-                             color: timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming,
-                             cornerRadius: cornerRadius,
-                             corners: roundedCorners)
-        }
+        contentWithTimestamp
+            .bubbleStyle(insets: timelineItem.bubbleInsets,
+                         color: timelineItem.bubbleBackgroundColor,
+                         corners: roundedCorners)
     }
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        if isTextItem || shouldFillBubble {
-            ZStack(alignment: .bottomTrailing) {
+        timelineItem.bubbleSendInfoLayoutType
+            .layout {
                 contentWithReply
                 interactiveLocalizedSendInfo
             }
-        } else {
-            HStack(alignment: .bottom, spacing: 4) {
-                contentWithReply
-                interactiveLocalizedSendInfo
-            }
-        }
     }
 
     @ViewBuilder
     var interactiveLocalizedSendInfo: some View {
         if timelineItem.hasFailedToSend {
-            backgroundedLocalizedSendInfo
+            layoutedLocalizedSendInfo
                 .onTapGesture {
                     context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                 }
         } else {
-            backgroundedLocalizedSendInfo
+            layoutedLocalizedSendInfo
         }
     }
 
     @ViewBuilder
-    var backgroundedLocalizedSendInfo: some View {
-        if shouldFillBubble {
+    var layoutedLocalizedSendInfo: some View {
+        switch timelineItem.bubbleSendInfoLayoutType {
+        case .overlay(capsuleStyle: true):
             localizedSendInfo
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
@@ -201,9 +186,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
-
-        } else {
+        case .overlay(capsuleStyle: false):
             localizedSendInfo
+                .padding(.bottom, -4)
+        case .horizontal:
+            localizedSendInfo
+                .padding(.bottom, 4)
+                .padding(.trailing, 4)
+        case .vertical:
+            GridRow {
+                localizedSendInfo
+                    .padding(.bottom, 4)
+                    .padding(.trailing, 4)
+                    .gridColumnAlignment(.trailing)
+            }
         }
     }
 
@@ -222,7 +218,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .font(.compound.bodyXS)
         .foregroundColor(timelineItem.hasFailedToSend ? .compound.textCriticalPrimary : .compound.textSecondary)
-        .padding(.bottom, shouldFillBubble ? 0 : -4)
     }
     
     @ViewBuilder
@@ -257,19 +252,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         guard timelineItem.isOutgoing || isEncryptedOneToOneRoom else { return 0 }
         return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
-
-    private var shouldFillBubble: Bool {
-        switch timelineItem {
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
-            return true
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI != nil
-        default:
-            return false
-        }
-    }
     
     private var alignment: HorizontalAlignment {
         timelineItem.isOutgoing ? .trailing : .leading
@@ -302,10 +284,81 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 }
 
 private extension View {
-    func bubbleStyle(inset: Bool, color: Color? = nil, cornerRadius: CGFloat, corners: UIRectCorner) -> some View {
-        padding(inset ? 8 : 0)
-            .background(inset ? color : nil)
+    func bubbleStyle(insets: CGFloat, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
+        padding(insets)
+            .background(color)
             .cornerRadius(cornerRadius, corners: corners)
+    }
+}
+
+// Describes how the content and the send info should be arranged inside a bubble
+private enum BubbleSendInfoLayoutType {
+    case horizontal
+    case vertical
+    case overlay(capsuleStyle: Bool)
+
+    var layout: AnyLayout {
+        let layout: any Layout
+
+        switch self {
+        case .horizontal:
+            layout = HStackLayout(alignment: .bottom, spacing: 4)
+        case .vertical:
+            layout = GridLayout(alignment: .leading, verticalSpacing: 4)
+        case .overlay:
+            layout = ZStackLayout(alignment: .bottomTrailing)
+        }
+
+        return AnyLayout(layout)
+    }
+}
+
+private extension EventBasedTimelineItemProtocol {
+    var bubbleBackgroundColor: Color? {
+        let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
+
+        switch self {
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return nil
+        default:
+            return defaultColor
+        }
+    }
+
+    // The insets for the full bubble content.
+    // Padding affecting just the "send info" should be added inside `layoutedLocalizedSendInfo`
+    var bubbleInsets: CGFloat {
+        let defaultPadding: CGFloat = 8
+
+        switch self {
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return 0
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI == nil ? defaultPadding : 0
+        default:
+            return defaultPadding
+        }
+    }
+
+    var bubbleSendInfoLayoutType: BubbleSendInfoLayoutType {
+        let defaultTimestampLayout: BubbleSendInfoLayoutType = .horizontal
+
+        switch self {
+        case is TextBasedRoomTimelineItem:
+            return .overlay(capsuleStyle: false)
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem,
+             is StickerRoomTimelineItem:
+            return .overlay(capsuleStyle: true)
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+        default:
+            return defaultTimestampLayout
+        }
     }
 }
 
