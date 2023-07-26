@@ -329,9 +329,12 @@ private class RoomListEntriesListenerProxy: RoomListEntriesListener {
     init(_ onUpdateClosure: @escaping (RoomListEntriesUpdate) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
-    
-    func onUpdate(roomEntriesUpdate: RoomListEntriesUpdate) {
-        onUpdateClosure(roomEntriesUpdate)
+
+    func onUpdate(roomEntriesUpdate: [RoomListEntriesUpdate]) {
+        #warning("Review me")
+        for update in roomEntriesUpdate {
+            onUpdateClosure(update)
+        }
     }
 }
 

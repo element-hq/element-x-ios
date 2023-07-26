@@ -90,6 +90,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        avatarURLString: avatarUrl,
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
+        case .poll, .pollEnd:
+            return nil
         }
     }
     
@@ -498,7 +500,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return .notLoaded(eventID: details.eventId)
         case .pending:
             return .loading(eventID: details.eventId)
-        case let .ready(message, senderID, senderProfile):
+        case let .ready(timelineItem, senderID, senderProfile):
             let sender: TimelineItemSender
             switch senderProfile {
             case let .ready(displayName, _, avatarUrl):
@@ -512,7 +514,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
             
             let replyContent: EventBasedMessageTimelineItemContentType
-            switch message.msgtype() {
+            switch timelineItem.asMessage()?.msgtype() {
             case .audio(let content):
                 replyContent = .audio(buildAudioTimelineItemContent(content))
             case .emote(let content):
