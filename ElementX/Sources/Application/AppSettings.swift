@@ -34,6 +34,7 @@ final class AppSettings {
         case readReceiptsEnabled
         case hasShownWelcomeScreen
         case notificationSettingsEnabled
+        case swiftUITimelineEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -213,4 +214,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var notificationSettingsEnabled
+
+    @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
+    var swiftUITimelineEnabled
 }

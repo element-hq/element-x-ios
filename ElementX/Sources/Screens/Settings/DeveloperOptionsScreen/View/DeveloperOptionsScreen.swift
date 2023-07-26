@@ -31,6 +31,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Show read receipts")
                     Text("Requires app reboot")
                 }
+
+                Toggle(isOn: $context.swiftUITimelineEnabled) {
+                    Text("SwiftUI Timeline")
+                    Text("Resets on reboot")
+                }
             }
 
             Section("Notifications") {

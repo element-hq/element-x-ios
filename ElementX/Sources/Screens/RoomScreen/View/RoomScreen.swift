@@ -83,11 +83,47 @@ struct RoomScreen: View {
     }
 
     private var timeline: some View {
-        TimelineView(viewState: context.viewState.timelineViewState)
+        timelineSwitch
             .id(context.viewState.roomId)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
             .environment(\.readReceiptsEnabled, context.viewState.readReceiptsEnabled)
+    }
+
+    @ViewBuilder
+    private var timelineSwitch: some View {
+        if context.viewState.swiftUITimelineEnabled {
+            TimelineView(viewState: context.viewState.timelineViewState,
+                         scrollToBottomButtonVisible: $context.scrollToBottomButtonVisible) {
+                context.send(viewAction: .paginateBackwards)
+            }
+        } else {
+            UITimelineView()
+                .overlay(alignment: .bottomTrailing) {
+                    scrollToBottomButton
+                }
+        }
+    }
+
+    private var scrollToBottomButton: some View {
+        Button { context.viewState.timelineViewState.scrollToBottomPublisher.send(()) } label: {
+            Image(systemName: "chevron.down")
+                .font(.compound.bodyLG)
+                .fontWeight(.semibold)
+                .foregroundColor(.compound.iconSecondary)
+                .padding(13)
+                .offset(y: 1)
+                .background {
+                    Circle()
+                        .fill(Color.compound.iconOnSolidPrimary)
+                        // Intentionally using system primary colour to get white/black.
+                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
+                }
+                .padding()
+        }
+        .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!context.scrollToBottomButtonVisible)
+        .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
     
     private var messageComposer: some View {

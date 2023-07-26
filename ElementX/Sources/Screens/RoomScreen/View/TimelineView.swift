@@ -21,6 +21,9 @@ import SwiftUIIntrospect
 
 struct TimelineView: View {
     let viewState: TimelineViewState
+    @Binding var scrollToBottomButtonVisible: Bool
+    let paginationAction: () -> Void
+
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "RoomTimelineBottomPinIdentifier"
@@ -28,8 +31,6 @@ struct TimelineView: View {
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
-    @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-    @State private var scrollToBottomButtonVisible = false
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -49,9 +50,10 @@ struct TimelineView: View {
 
                     // Allows the scroll to top to work properly
                     uiScrollView.contentOffset.y -= 1
+                    paginateBackwardsPublisher.send()
                 }
                 .scaleEffect(x: 1, y: -1)
-                .onReceive(scrollToBottomPublisher) { _ in
+                .onReceive(viewState.scrollToBottomPublisher) { _ in
                     withElementAnimation {
                         scrollView.scrollTo(bottomID)
                     }
@@ -59,7 +61,7 @@ struct TimelineView: View {
                 .scrollDismissesKeyboard(.immediately)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
-        .animation(.elementDefault, value: viewState.itemViewStates)
+        .animation(.elementDefault, value: viewState.timelineIDs)
         .onReceive(scrollViewAdapter.didScroll) { _ in
             guard let scrollView = scrollViewAdapter.scrollView else {
                 return
@@ -120,7 +122,7 @@ struct TimelineView: View {
 
     private var scrollToBottomButton: some View {
         Button {
-            scrollToBottomPublisher.send()
+            viewState.scrollToBottomPublisher.send()
         } label: {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
@@ -142,8 +144,7 @@ struct TimelineView: View {
     }
 
     private func paginateBackwardsIfNeeded() {
-        guard let paginateAction = viewState.paginateAction,
-              let scrollView = scrollViewAdapter.scrollView,
+        guard let scrollView = scrollViewAdapter.scrollView,
               viewState.canBackPaginate,
               !viewState.isBackPaginating else {
             return
@@ -158,20 +159,20 @@ struct TimelineView: View {
             return
         }
 
-        paginateAction()
+        paginationAction()
     }
 }
 
 // MARK: - Previews
 
-struct TimelineTableView_Previews: PreviewProvider {
+struct TimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    
+
     static var previews: some View {
         NavigationStack {
             RoomScreen(context: viewModel.context)
