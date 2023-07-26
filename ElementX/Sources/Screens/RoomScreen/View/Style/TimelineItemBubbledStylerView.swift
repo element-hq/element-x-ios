@@ -291,7 +291,8 @@ private extension View {
     }
 }
 
-enum BubbleSendInfoLayoutType {
+// Describes how the content and the send info should be arranged inside a bubble
+private enum BubbleSendInfoLayoutType {
     case horizontal
     case vertical
     case overlay(capsuleStyle: Bool)
@@ -328,6 +329,8 @@ private extension EventBasedTimelineItemProtocol {
         }
     }
 
+    // The insets for the full bubble content.
+    // Padding affecting just the "send info" should be added inside `layoutedLocalizedSendInfo`
     var bubbleInsets: CGFloat {
         let defaultPadding: CGFloat = 8
 
