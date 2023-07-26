@@ -95,7 +95,9 @@ struct RoomScreen: View {
     private var timelineSwitch: some View {
         if context.viewState.swiftUITimelineEnabled {
             TimelineView(viewState: context.viewState.timelineViewState,
-                         scrollToBottomButtonVisible: $context.scrollToBottomButtonVisible)
+                         scrollToBottomButtonVisible: $context.scrollToBottomButtonVisible) {
+                context.send(viewAction: .paginateBackwards)
+            }
         } else {
             UITimelineView()
                 .overlay(alignment: .bottomTrailing) {

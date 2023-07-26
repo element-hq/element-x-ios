@@ -179,6 +179,10 @@ struct RoomMemberState {
 struct TimelineViewState {
     var canBackPaginate = true
     var isBackPaginating = false
+
+    // These can be removed when we have full swiftUI and moved as @State values in the view
+    var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
 
     var timelineIDs: [String] {
@@ -188,9 +192,4 @@ struct TimelineViewState {
     var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
     }
-
-    var paginateAction: (() -> Void)?
-
-    // These can be removed when we have full swiftUI and moved as @State values in the view
-    var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
 }

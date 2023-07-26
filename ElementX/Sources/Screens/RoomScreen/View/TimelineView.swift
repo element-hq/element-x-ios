@@ -21,6 +21,9 @@ import SwiftUIIntrospect
 
 struct TimelineView: View {
     let viewState: TimelineViewState
+    @Binding var scrollToBottomButtonVisible: Bool
+    let paginationAction: () -> Void
+
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "RoomTimelineBottomPinIdentifier"
@@ -28,7 +31,6 @@ struct TimelineView: View {
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
-    @Binding var scrollToBottomButtonVisible: Bool
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -142,8 +144,7 @@ struct TimelineView: View {
     }
 
     private func paginateBackwardsIfNeeded() {
-        guard let paginateAction = viewState.paginateAction,
-              let scrollView = scrollViewAdapter.scrollView,
+        guard let scrollView = scrollViewAdapter.scrollView,
               viewState.canBackPaginate,
               !viewState.isBackPaginating else {
             return
@@ -158,7 +159,7 @@ struct TimelineView: View {
             return
         }
 
-        paginateAction()
+        paginationAction()
     }
 }
 

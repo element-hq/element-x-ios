@@ -61,11 +61,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
-
-        state.timelineViewState.paginateAction = { [weak self] in
-            self?.paginateBackwards()
-        }
-
+        
         setupSubscriptions()
         
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
