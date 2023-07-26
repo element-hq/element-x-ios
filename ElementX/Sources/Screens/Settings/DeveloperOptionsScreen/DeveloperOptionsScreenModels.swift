@@ -46,7 +46,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var shouldCollapseRoomStateEvents: Bool { get set }
     var userSuggestionsEnabled: Bool { get set }
     var readReceiptsEnabled: Bool { get set }
-    var isEncryptionSyncEnabled: Bool { get set }
     var notificationSettingsEnabled: Bool { get set }
 }
 
