@@ -166,17 +166,17 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var interactiveLocalizedSendInfo: some View {
         if timelineItem.hasFailedToSend {
-            backgroundedLocalizedSendInfo
+            layoutedLocalizedSendInfo
                 .onTapGesture {
                     context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                 }
         } else {
-            backgroundedLocalizedSendInfo
+            layoutedLocalizedSendInfo
         }
     }
 
     @ViewBuilder
-    var backgroundedLocalizedSendInfo: some View {
+    var layoutedLocalizedSendInfo: some View {
         switch timelineItem.bubbleTimestampLayoutType {
         case .overlay(capsuleStyle: true):
             localizedSendInfo
@@ -186,9 +186,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
-        default:
+        case .overlay(capsuleStyle: false):
             localizedSendInfo
                 .padding(.bottom, -4)
+        case .horizontal:
+            localizedSendInfo
+                .padding(.bottom, 4)
+                .padding(.trailing, 4)
+        case .vertical:
+            GridRow {
+                localizedSendInfo
+                    .padding(.bottom, 4)
+                    .padding(.trailing, 4)
+                    .gridColumnAlignment(.trailing)
+            }
         }
     }
 
@@ -292,7 +303,7 @@ enum BubbleTimestampLayoutType {
         case .horizontal:
             layout = HStackLayout(alignment: .bottom, spacing: 4)
         case .vertical:
-            layout = VStackLayout(alignment: .leading, spacing: 4)
+            layout = GridLayout(alignment: .leading, verticalSpacing: 4)
         case .overlay:
             layout = ZStackLayout(alignment: .bottomTrailing)
         }
