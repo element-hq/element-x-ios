@@ -215,6 +215,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var notificationSettingsEnabled
 
-    @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
 }
