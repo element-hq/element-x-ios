@@ -156,7 +156,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        timelineItem.bubbleTimestampLayoutType
+        timelineItem.bubbleSendInfoLayoutType
             .layout {
                 contentWithReply
                 interactiveLocalizedSendInfo
@@ -177,7 +177,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var layoutedLocalizedSendInfo: some View {
-        switch timelineItem.bubbleTimestampLayoutType {
+        switch timelineItem.bubbleSendInfoLayoutType {
         case .overlay(capsuleStyle: true):
             localizedSendInfo
                 .padding(.horizontal, 4)
@@ -291,7 +291,7 @@ private extension View {
     }
 }
 
-enum BubbleTimestampLayoutType {
+enum BubbleSendInfoLayoutType {
     case horizontal
     case vertical
     case overlay(capsuleStyle: Bool)
@@ -343,8 +343,8 @@ private extension EventBasedTimelineItemProtocol {
         }
     }
 
-    var bubbleTimestampLayoutType: BubbleTimestampLayoutType {
-        let defaultTimestampLayout: BubbleTimestampLayoutType = .horizontal
+    var bubbleSendInfoLayoutType: BubbleSendInfoLayoutType {
+        let defaultTimestampLayout: BubbleSendInfoLayoutType = .horizontal
 
         switch self {
         case is TextBasedRoomTimelineItem:
