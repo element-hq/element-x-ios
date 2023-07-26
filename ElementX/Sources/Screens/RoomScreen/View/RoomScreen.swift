@@ -82,7 +82,6 @@ struct RoomScreen: View {
             }
     }
 
-    @ViewBuilder
     private var timeline: some View {
         timelineSwitch
             .id(context.viewState.roomId)

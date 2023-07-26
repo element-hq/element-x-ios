@@ -81,7 +81,7 @@ struct UITimelineView: UIViewControllerRepresentable {
 
 // MARK: - Previews
 
-struct TimelineTableView_Previews: PreviewProvider {
+struct UITimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
