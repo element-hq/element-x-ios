@@ -63,7 +63,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         messageBubbleWithReactions
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
-                    
+
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
                             Spacer()
@@ -156,23 +156,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var contentWithTimestamp: some View {
-        switch timelineItem.bubbleTimestampLayout {
-        case .horizontal:
-            HStack(alignment: .bottom, spacing: 4) {
+        timelineItem.bubbleTimestampLayoutType
+            .layout {
                 contentWithReply
                 interactiveLocalizedSendInfo
             }
-        case .vertical:
-            VStack(alignment: .leading, spacing: 4) {
-                contentWithReply
-                interactiveLocalizedSendInfo
-            }
-        case .overlay:
-            ZStack(alignment: .bottomTrailing) {
-                contentWithReply
-                interactiveLocalizedSendInfo
-            }
-        }
     }
 
     @ViewBuilder
@@ -189,7 +177,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var backgroundedLocalizedSendInfo: some View {
-        switch timelineItem.bubbleTimestampLayout {
+        switch timelineItem.bubbleTimestampLayoutType {
         case .overlay(capsuleStyle: true):
             localizedSendInfo
                 .padding(.horizontal, 4)
@@ -292,10 +280,25 @@ private extension View {
     }
 }
 
-enum BubbleTimestampLayout {
+enum BubbleTimestampLayoutType {
     case horizontal
     case vertical
     case overlay(capsuleStyle: Bool)
+
+    var layout: AnyLayout {
+        let layout: any Layout
+
+        switch self {
+        case .horizontal:
+            layout = HStackLayout(alignment: .bottom, spacing: 4)
+        case .vertical:
+            layout = VStackLayout(alignment: .leading, spacing: 4)
+        case .overlay:
+            layout = ZStackLayout(alignment: .bottomTrailing)
+        }
+
+        return AnyLayout(layout)
+    }
 }
 
 private extension EventBasedTimelineItemProtocol {
@@ -329,8 +332,8 @@ private extension EventBasedTimelineItemProtocol {
         }
     }
 
-    var bubbleTimestampLayout: BubbleTimestampLayout {
-        let defaultTimestampLayout: BubbleTimestampLayout = .horizontal
+    var bubbleTimestampLayoutType: BubbleTimestampLayoutType {
+        let defaultTimestampLayout: BubbleTimestampLayoutType = .horizontal
 
         switch self {
         case is TextBasedRoomTimelineItem:
