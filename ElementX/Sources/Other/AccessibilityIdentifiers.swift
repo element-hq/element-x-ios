@@ -26,6 +26,7 @@ struct A11yIdentifiers {
     static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
+    static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
@@ -109,6 +110,10 @@ struct A11yIdentifiers {
     struct RoomMemberDetailsScreen {
         let ignore = "room_member_details-ignore"
         let unignore = "room_member_details-unignore"
+    }
+    
+    struct RoomNotificationSettingsScreen {
+        let allowCustomSetting = "room_notification_settings-allow_custom"
     }
     
     struct ServerConfirmationScreen {

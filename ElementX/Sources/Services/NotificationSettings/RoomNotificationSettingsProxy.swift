@@ -20,8 +20,8 @@ import MatrixRustSDK
 struct RoomNotificationSettingsProxy: RoomNotificationSettingsProxyProtocol {
     private let roomNotificationSettings: RoomNotificationSettings
     
-    var mode: RoomNotificationMode {
-        roomNotificationSettings.mode
+    var mode: RoomNotificationModeProxy {
+        RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationSettings.mode)
     }
     
     var isDefault: Bool {

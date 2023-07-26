@@ -478,6 +478,20 @@ class MockScreen: Identifiable {
                                                                                  roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomNotificationSettingsDefaultSetting:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
+            let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .allMessages)),
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomNotificationSettingsCustomSetting:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
+            let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly)),
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .reportContent:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ReportContentScreenCoordinator(parameters: .init(eventID: "test",

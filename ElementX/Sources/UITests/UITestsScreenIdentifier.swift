@@ -60,6 +60,8 @@ enum UITestsScreenIdentifier: String {
     case roomMemberDetailsAccountOwner
     case roomMemberDetails
     case roomMemberDetailsIgnoredUser
+    case roomNotificationSettingsDefaultSetting
+    case roomNotificationSettingsCustomSetting
     case reportContent
     case startChat
     case startChatWithSearchResults
