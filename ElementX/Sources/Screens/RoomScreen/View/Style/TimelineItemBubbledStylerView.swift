@@ -356,6 +356,8 @@ private extension EventBasedTimelineItemProtocol {
             return .overlay(capsuleStyle: true)
         case let locationTimelineItem as LocationRoomTimelineItem:
             return .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+        case is PollRoomTimelineItem:
+            return .vertical
         default:
             return defaultTimestampLayout
         }

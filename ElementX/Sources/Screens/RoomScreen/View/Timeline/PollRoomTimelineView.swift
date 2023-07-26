@@ -22,15 +22,16 @@ struct PollRoomTimelineView: View {
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            questionView
-                .padding(.bottom, 16)
+            VStack(alignment: .leading, spacing: 16) {
+                questionView
 
-            ForEach(poll.options, id: \.id) { option in
-                Button { } label: {
-                    PollOptionView(pollOption: option)
-                        .padding(.bottom, 16)
+                ForEach(poll.options, id: \.id) { option in
+                    Button { } label: {
+                        PollOptionView(pollOption: option)
+                    }
                 }
             }
+            .frame(maxWidth: 450)
         }
     }
 
