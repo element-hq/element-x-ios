@@ -33,9 +33,9 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                     .foregroundColor(.compound.iconSecondary)
                 
                 if let attributedString = timelineItem.content.formattedBody {
-                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: additionalWhitespaces)
+                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
                 } else {
-                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: additionalWhitespaces)
+                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
                 }
             }
             .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText

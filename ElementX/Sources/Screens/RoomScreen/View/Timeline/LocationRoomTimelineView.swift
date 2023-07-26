@@ -36,7 +36,7 @@ struct LocationRoomTimelineView: View {
                 }
                 .background(backgroundView)
             } else {
-                FormattedBodyText(text: timelineItem.body)
+                FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
             }
         }
     }

@@ -357,7 +357,7 @@ private extension EventBasedTimelineItemProtocol {
              is StickerRoomTimelineItem:
             return .overlay(capsuleStyle: true)
         case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI == nil ? defaultTimestampLayout : .overlay(capsuleStyle: true)
+            return .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
         default:
             return defaultTimestampLayout
         }
