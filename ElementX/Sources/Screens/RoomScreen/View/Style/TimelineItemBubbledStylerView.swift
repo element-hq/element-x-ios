@@ -322,8 +322,6 @@ private extension EventBasedTimelineItemProtocol {
              is VideoRoomTimelineItem,
              is StickerRoomTimelineItem:
             return nil
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI == nil ? defaultColor : nil
         default:
             return defaultColor
         }

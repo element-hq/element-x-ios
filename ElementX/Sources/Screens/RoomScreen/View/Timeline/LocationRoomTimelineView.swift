@@ -34,7 +34,6 @@ struct LocationRoomTimelineView: View {
                     .aspectRatio(mapAspectRatio, contentMode: .fit)
                     .clipped()
                 }
-                .background(backgroundView)
             } else {
                 FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
             }
@@ -49,16 +48,6 @@ struct LocationRoomTimelineView: View {
             FormattedBodyText(text: description)
                 .padding(.vertical, 8)
                 .padding(.horizontal, timelineStyle.isBubbles ? 8 : 0)
-        }
-    }
-
-    @ViewBuilder
-    private var backgroundView: some View {
-        switch timelineStyle {
-        case .bubbles:
-            timelineItem.isOutgoing ? Color.compound._bgBubbleOutgoing : Color.compound._bgBubbleIncoming
-        case .plain:
-            EmptyView()
         }
     }
 
