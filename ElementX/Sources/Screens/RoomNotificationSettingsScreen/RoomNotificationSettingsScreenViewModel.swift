@@ -78,9 +78,14 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             let settings = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                        isEncrypted: roomProxy.isEncrypted,
                                                                                        activeMembersCount: UInt64(roomProxy.activeMembersCount))
+            guard !Task.isCancelled else { return }
             state.notificationSettingsState = .loaded(settings: settings)
-            state.bindings.allowCustomSetting = !settings.isDefault
-            state.bindings.customMode = settings.mode
+            if !state.isRestoringDefautSetting {
+                state.bindings.allowCustomSetting = !settings.isDefault
+            }
+            if state.pendingCustomMode == nil {
+                state.bindings.customMode = settings.mode
+            }
         } catch {
             state.notificationSettingsState = .error
             displayError(.loadingSettingsFailed)
@@ -111,12 +116,21 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func setCustomMode(_ mode: RoomNotificationModeProxy) {
+        // Check if the new mode is already the current one
+        if case .loaded(let currentSettings) = state.notificationSettingsState {
+            if !currentSettings.isDefault, currentSettings.mode == mode {
+                return
+            }
+        }
+        
+        state.pendingCustomMode = mode
         Task {
             do {
                 try await notificationSettingsProxy.setNotificationMode(roomId: roomProxy.id, mode: mode)
             } catch {
                 displayError(.setModeFailed)
             }
+            state.pendingCustomMode = nil
         }
     }
     
