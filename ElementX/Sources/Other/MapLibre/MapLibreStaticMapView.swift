@@ -48,7 +48,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
-                        defaultImage
+                        placeholderImage
                     case .success(let image):
                         ZStack {
                             image
@@ -65,12 +65,12 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                 .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
                 .id(fetchAttempt)
             } else {
-                defaultImage
+                placeholderImage
             }
         }
     }
 
-    private var defaultImage: some View {
+    private var placeholderImage: some View {
         Image("mapBlurred")
             .resizable()
             .scaledToFill()
@@ -80,7 +80,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
         Button {
             fetchAttempt += 1
         } label: {
-            defaultImage
+            placeholderImage
                 .overlay {
                     VStack {
                         Image(systemName: "arrow.clockwise")
