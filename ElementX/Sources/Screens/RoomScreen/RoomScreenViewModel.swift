@@ -140,12 +140,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await handleRetrySend(itemID: itemID) }
         case .cancelSend(let itemID):
             Task { await handleCancelSend(itemID: itemID) }
+        case .paginateBackwards:
+            paginateBackwards()
         }
     }
     
     // MARK: - Private
 
     private func setupSubscriptions() {
+        appSettings.$swiftUITimelineEnabled
+            .weakAssign(to: \.state.swiftUITimelineEnabled, on: self)
+            .store(in: &cancellables)
+
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
@@ -274,19 +280,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: firstItem, groupStyle: .single),
+                    timelineItemsDictionary.updateValue(updateViewstate(item: firstItem, groupStyle: .single),
                                                         forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(RoomTimelineItemViewState(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }
@@ -294,6 +300,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.timelineViewState.itemsDictionary = timelineItemsDictionary
+    }
+
+    private func updateViewstate(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
+        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.timelineID] {
+            timelineItemViewState.groupStyle = groupStyle
+            timelineItemViewState.type = .init(item: item)
+            return timelineItemViewState
+        } else {
+            return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
+        }
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {

@@ -61,6 +61,7 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
+    case paginateBackwards
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
@@ -92,6 +93,7 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var composerMode: RoomScreenComposerMode = .default
+    var swiftUITimelineEnabled = false
 
     var bindings: RoomScreenViewStateBindings
     
@@ -188,4 +190,7 @@ struct TimelineViewState {
     }
 
     var paginateAction: (() -> Void)?
+
+    // These can be removed when we have full swiftUI and moved as @State values in the view
+    var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
 }
