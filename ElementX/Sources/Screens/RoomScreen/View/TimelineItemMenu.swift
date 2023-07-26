@@ -84,7 +84,17 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         }
     }
     
-    /// The item's label.
+    /// Whether or not the action is destructive.
+    var isDestructive: Bool {
+        switch self {
+        case .redact, .report:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    /// The action's label.
     var label: some View {
         switch self {
         case .copy: return Label(L10n.actionCopy, systemImage: "doc.on.doc")
@@ -232,7 +242,9 @@ public struct TimelineItemMenu: View {
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {
         ForEach(actions, id: \.self) { action in
-            Button { send(action) } label: {
+            Button(role: action.isDestructive ? .destructive : nil) {
+                send(action)
+            } label: {
                 action.label
                     .labelStyle(FixedIconSizeLabelStyle())
                     .multilineTextAlignment(.leading)

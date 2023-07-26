@@ -31,13 +31,23 @@ struct TimelineItemMacContextMenu: View {
                             TimelineItemMenuAction.react.label
                         }
                     }
+                    
                     ForEach(menuActions.actions) { action in
-                        Button { send(action) } label: { action.label }
+                        Button(role: action.isDestructive ? .destructive : nil) {
+                            send(action)
+                        } label: {
+                            action.label
+                        }
                     }
                 }
+                
                 Section {
                     ForEach(menuActions.debugActions) { action in
-                        Button { send(action) } label: { action.label }
+                        Button(role: action.isDestructive ? .destructive : nil) {
+                            send(action)
+                        } label: {
+                            action.label
+                        }
                     }
                 }
             }

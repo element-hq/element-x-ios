@@ -5,7 +5,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-design-tokens.git",
       "state" : {
-        "revision" : "cc950d575f8536ff5bebbd02e28c0b8ab541aa29"
+        "revision" : "aa55111d94486acbfd3344cf4d08b64723bd6703"
       }
     },
     {
@@ -13,7 +13,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-ios.git",
       "state" : {
-        "revision" : "d9e119fbef20857eb790dd4aafbe16ff46011eca"
+        "revision" : "1f3eb60c4f87249d95addf84ce1aef22c2968763"
       }
     },
     {

@@ -69,7 +69,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
-        textView.textColor = UIColor(.compound.textPrimary)
+        textView.textColor = .compound.textPrimary
         textView.isEditable = true
         textView.font = font
         textView.isSelectable = true
