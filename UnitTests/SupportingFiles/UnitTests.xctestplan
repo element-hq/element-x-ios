@@ -16,6 +16,7 @@
         "value" : "1"
       }
     ],
+    "testExecutionOrdering" : "random",
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [

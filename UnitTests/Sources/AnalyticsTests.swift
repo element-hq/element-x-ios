@@ -19,12 +19,13 @@ import AnalyticsEvents
 import XCTest
 
 class AnalyticsTests: XCTestCase {
-    private var appSettings: AppSettings { ServiceLocator.shared.settings }
+    private var appSettings: AppSettings!
     private var analyticsClient: AnalyticsClientMock!
     private var bugReportService: BugReportServiceMock!
     
     override func setUp() {
         AppSettings.reset()
+        appSettings = AppSettings()
         
         bugReportService = BugReportServiceMock()
         bugReportService.isRunning = false
@@ -32,7 +33,7 @@ class AnalyticsTests: XCTestCase {
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
         ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
-                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   appSettings: appSettings,
                                                                    bugReportService: ServiceLocator.shared.bugReportService))
     }
     
@@ -69,7 +70,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsPromptNotDisplayed() {
         // Given a fresh install of the app both Analytics and BugReportService should be disabled
-        XCTAssertEqual(ServiceLocator.shared.settings.analyticsConsentState, .unknown)
+        XCTAssertEqual(appSettings.analyticsConsentState, .unknown)
         XCTAssertFalse(ServiceLocator.shared.analytics.isEnabled)
         XCTAssertFalse(ServiceLocator.shared.analytics.isRunning)
         XCTAssertFalse(analyticsClient.startAnalyticsConfigurationCalled)
@@ -174,7 +175,7 @@ class AnalyticsTests: XCTestCase {
                                                                   numFavouriteRooms: nil,
                                                                   numSpaces: nil,
                                                                   allChatsActiveFilter: nil))
-        client.start(analyticsConfiguration: ServiceLocator.shared.settings.analyticsConfiguration)
+        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
         XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")

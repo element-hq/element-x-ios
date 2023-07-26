@@ -248,7 +248,7 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
     }
 
-    func testGoToUserDetailsFailure() async {
+    func testGoToUserDetailsFailure() async throws {
         // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
@@ -269,14 +269,16 @@ class RoomScreenViewModelTests: XCTestCase {
         }
 
         // Test
+        let deferred = deferFulfillment(viewModel.context.$viewState.collect(2).first(),
+                                        message: "The existing view state plus one new one should be published.")
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
-        await viewModel.context.nextViewState()
+        try await deferred.fulfill()
         XCTAssertFalse(viewModel.state.bindings.alertInfo.isNil)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
     }
 
-    func testRetrySend() async {
+    func testRetrySend() async throws {
         // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))

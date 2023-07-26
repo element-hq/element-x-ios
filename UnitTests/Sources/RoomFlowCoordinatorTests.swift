@@ -44,87 +44,90 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
-    func testRoomPresentation() async {
-        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testRoomPresentation() async throws {
+        try await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        await process(route: .roomList, expectedAction: .dismissedRoom)
+        try await process(route: .roomList, expectedAction: .dismissedRoom)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
         
-        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+        try await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        await process(route: .room(roomID: "2"), expectedAction: .presentedRoom("2"))
+        try await process(route: .room(roomID: "2"), expectedAction: .presentedRoom("2"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        await process(route: .roomList, expectedAction: .dismissedRoom)
+        try await process(route: .roomList, expectedAction: .dismissedRoom)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
     }
     
-    func testRoomDetailsPresentation() async {
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testRoomDetailsPresentation() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        await process(route: .roomList, expectedAction: .dismissedRoom)
+        try await process(route: .roomList, expectedAction: .dismissedRoom)
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
     }
     
-    func testStackUnwinding() async {
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testStackUnwinding() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        await process(route: .room(roomID: "2"), expectedAction: .presentedRoom("2"))
+        try await process(route: .room(roomID: "2"), expectedAction: .presentedRoom("2"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
     }
     
-    func testNoOp() async {
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testNoOp() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         await Task.yield()
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
     }
     
-    func testSwitchToDifferentDetails() async {
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testSwitchToDifferentDetails() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        await process(route: .roomDetails(roomID: "2"), expectedAction: .presentedRoom("2"))
+        try await process(route: .roomDetails(roomID: "2"), expectedAction: .presentedRoom("2"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
     }
     
-    func testPushDetails() async {
-        await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testPushDetails() async throws {
+        try await process(route: .room(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
-    func testReplaceDetailsWithTimeline() async {
-        await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
+    func testReplaceDetailsWithTimeline() async throws {
+        try await process(route: .roomDetails(roomID: "1"), expectedAction: .presentedRoom("1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
-        await process(route: .room(roomID: "1"), expectedActions: [.dismissedRoom, .presentedRoom("1")])
+        try await process(route: .room(roomID: "1"), expectedActions: [.dismissedRoom, .presentedRoom("1")])
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
     }
     
     // MARK: - Private
     
-    private func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async {
-        await process(route: route, expectedActions: [expectedAction])
+    private func process(route: AppRoute, expectedAction: RoomFlowCoordinatorAction) async throws {
+        try await process(route: route, expectedActions: [expectedAction])
     }
     
-    private func process(route: AppRoute, expectedActions: [RoomFlowCoordinatorAction]) async {
+    private func process(route: AppRoute, expectedActions: [RoomFlowCoordinatorAction]) async throws {
+        let deferred = deferFulfillment(roomFlowCoordinator.actions.collect(expectedActions.count).first(),
+                                        message: "The expected number of actions should be published.")
+        
         Task {
             await Task.yield()
             self.roomFlowCoordinator.handleAppRoute(route, animated: true)
         }
         
         if !expectedActions.isEmpty {
-            let actions = await roomFlowCoordinator.actions.collect(expectedActions.count).values.first()
+            let actions = try await deferred.fulfill()
             XCTAssertEqual(actions, expectedActions)
         }
     }
