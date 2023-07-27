@@ -35,7 +35,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
     private let countSubject = CurrentValueSubject<UInt, Never>(0)
     
-    private let diffPublisher = PassthroughSubject<RoomListEntriesUpdate, Never>()
+    private let diffsPublisher = PassthroughSubject<[RoomListEntriesUpdate], Never>()
     
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         roomListSubject.asCurrentValuePublisher()
@@ -59,8 +59,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         
-        diffPublisher
-            .collect(.byTime(serialDispatchQueue, 0.025))
+        diffsPublisher
+            .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
     }
@@ -73,10 +73,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
 
         do {
-            let listUpdatesSubscriptionResult = try roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] update in
+            let listUpdatesSubscriptionResult = try roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
                 MXLog.verbose("\(name): Received list update")
-                diffPublisher.send(update)
+                diffsPublisher.send(updates)
             })
 
             listUpdatesTaskHandle = listUpdatesSubscriptionResult.entriesStream
@@ -324,13 +324,13 @@ extension MatrixRustSDK.RoomListEntry {
 }
 
 private class RoomListEntriesListenerProxy: RoomListEntriesListener {
-    private let onUpdateClosure: (RoomListEntriesUpdate) -> Void
+    private let onUpdateClosure: ([RoomListEntriesUpdate]) -> Void
    
-    init(_ onUpdateClosure: @escaping (RoomListEntriesUpdate) -> Void) {
+    init(_ onUpdateClosure: @escaping ([RoomListEntriesUpdate]) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(roomEntriesUpdate: RoomListEntriesUpdate) {
+    func onUpdate(roomEntriesUpdate: [RoomListEntriesUpdate]) {
         onUpdateClosure(roomEntriesUpdate)
     }
 }

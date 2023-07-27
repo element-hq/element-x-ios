@@ -76,6 +76,8 @@ struct RoomEventStringBuilder {
                                           member: sender.id,
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
+        case .poll, .pollEnd:
+            return nil
         }
     }
     

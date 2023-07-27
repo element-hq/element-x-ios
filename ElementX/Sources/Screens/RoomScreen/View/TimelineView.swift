@@ -21,6 +21,9 @@ import SwiftUIIntrospect
 
 struct TimelineView: View {
     let viewState: TimelineViewState
+    @Binding var scrollToBottomButtonVisible: Bool
+    let paginationAction: () -> Void
+
     @Environment(\.timelineStyle) private var timelineStyle
 
     private let bottomID = "RoomTimelineBottomPinIdentifier"
@@ -28,72 +31,76 @@ struct TimelineView: View {
 
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
-    @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-    @State private var scrollToBottomButtonVisible = false
 
     var body: some View {
         ScrollViewReader { scrollView in
-            ScrollView {
-                bottomPin
-
-                LazyVStack(spacing: 0) {
-                    ForEach(viewState.itemViewStates.reversed()) { viewState in
-                        RoomTimelineItemView(viewState: viewState)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(timelineStyle.rowInsets)
-                            .scaleEffect(x: 1, y: -1)
+            timelineScrollView
+                .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                    guard uiScrollView != scrollViewAdapter.scrollView else {
+                        return
                     }
-                }
 
-                topPin
-            }
-            .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
-                guard uiScrollView != scrollViewAdapter.scrollView else {
-                    return
+                    scrollViewAdapter.scrollView = uiScrollView
+                    scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                        withElementAnimation {
+                            scrollView.scrollTo(topID)
+                        }
+                        return false
+                    }
+
+                    // Allows the scroll to top to work properly
+                    uiScrollView.contentOffset.y -= 1
+                    paginateBackwardsPublisher.send()
                 }
-                
-                scrollViewAdapter.scrollView = uiScrollView
-                scrollViewAdapter.shouldScrollToTopClosure = { _ in
+                .scaleEffect(x: 1, y: -1)
+                .onReceive(viewState.scrollToBottomPublisher) { _ in
                     withElementAnimation {
-                        scrollView.scrollTo(topID)
+                        scrollView.scrollTo(bottomID)
                     }
-                    return false
                 }
-
-                // Allows the scroll to top to work properly
-                uiScrollView.contentOffset.y -= 1
-            }
-            .scaleEffect(x: 1, y: -1)
-            .onReceive(scrollToBottomPublisher) { _ in
-                withElementAnimation {
-                    scrollView.scrollTo(bottomID)
-                }
-            }
-            .scrollDismissesKeyboard(.interactively)
+                .scrollDismissesKeyboard(.immediately)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
-        .animation(.elementDefault, value: viewState.itemViewStates)
+        .animation(.elementDefault, value: viewState.timelineIDs)
         .onReceive(scrollViewAdapter.didScroll) { _ in
             guard let scrollView = scrollViewAdapter.scrollView else {
                 return
             }
             let offset = scrollView.contentOffset.y + scrollView.contentInset.top
-            let scrollToBottomButtonVisibleValue = offset > 0
+
+            // We give it a bit of tollerance which solves the issue when of it being displayed when the keyboard appears
+            let scrollToBottomButtonVisibleValue = offset > 5
             if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
                 scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
             }
-            paginateBackwardsPublisher.send()
 
             // Allows the scroll to top to work properly
             if offset == 0 {
                 scrollView.contentOffset.y -= 1
             }
+
+            paginateBackwardsPublisher.send()
         }
         .onReceive(paginateBackwardsPublisher.collect(.byTime(DispatchQueue.main, 0.1))) { _ in
             paginateBackwardsIfNeeded()
         }
         .onAppear {
             paginateBackwardsPublisher.send()
+        }
+    }
+
+    private var timelineScrollView: some View {
+        ScrollView {
+            bottomPin
+            LazyVStack(spacing: 0) {
+                ForEach(viewState.itemViewStates.reversed()) { viewState in
+                    RoomTimelineItemView(viewState: viewState)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(timelineStyle.rowInsets)
+                        .scaleEffect(x: 1, y: -1)
+                }
+            }
+            topPin
         }
     }
 
@@ -115,7 +122,7 @@ struct TimelineView: View {
 
     private var scrollToBottomButton: some View {
         Button {
-            scrollToBottomPublisher.send()
+            viewState.scrollToBottomPublisher.send()
         } label: {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
@@ -137,8 +144,7 @@ struct TimelineView: View {
     }
 
     private func paginateBackwardsIfNeeded() {
-        guard let paginateAction = viewState.paginateAction,
-              let scrollView = scrollViewAdapter.scrollView,
+        guard let scrollView = scrollViewAdapter.scrollView,
               viewState.canBackPaginate,
               !viewState.isBackPaginating else {
             return
@@ -153,20 +159,20 @@ struct TimelineView: View {
             return
         }
 
-        paginateAction()
+        paginationAction()
     }
 }
 
 // MARK: - Previews
 
-struct TimelineTableView_Previews: PreviewProvider {
+struct TimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    
+
     static var previews: some View {
         NavigationStack {
             RoomScreen(context: viewModel.context)

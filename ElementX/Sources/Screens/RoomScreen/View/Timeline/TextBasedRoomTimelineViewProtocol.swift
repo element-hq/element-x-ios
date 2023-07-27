@@ -20,22 +20,3 @@ protocol TextBasedRoomTimelineViewProtocol {
     var timelineItem: TimelineItemType { get }
     var timelineStyle: TimelineStyle { get }
 }
-
-extension TextBasedRoomTimelineViewProtocol {
-    var additionalWhitespaces: Int {
-        guard timelineStyle == .bubbles else {
-            return 0
-        }
-        var whiteSpaces = 1
-        timelineItem.localizedSendInfo.forEach { _ in
-            whiteSpaces += 1
-        }
-
-        // To account for the extra spacing created by the alert icon
-        if timelineItem.hasFailedToSend {
-            whiteSpaces += 3
-        }
-
-        return whiteSpaces
-    }
-}
