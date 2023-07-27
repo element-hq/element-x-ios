@@ -64,6 +64,18 @@ struct PollRoomTimelineView_Previews: PreviewProvider {
                                                  sender: .init(id: "Bob")))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
+            .previewDisplayName("Poll bubble style")
+
+        PollRoomTimelineView(timelineItem: .init(id: .random,
+                                                 poll: .mock,
+                                                 body: "Foo",
+                                                 timestamp: "Now",
+                                                 isOutgoing: false,
+                                                 isEditable: false,
+                                                 sender: .init(id: "Bob")))
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Poll plain style")
     }
 }
 
