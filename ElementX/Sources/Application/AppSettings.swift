@@ -190,7 +190,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
 
-    /// Alows notifications to he filtered based on the push context of the room
+    /// Allows notifications to be filtered based on the push context of the room
     @UserPreference(key: SharedUserDefaultsKeys.filterNotificationsByPushRulesEnabled, defaultValue: false, storageType: .userDefaults(store))
     var filterNotificationsByPushRulesEnabled
         
