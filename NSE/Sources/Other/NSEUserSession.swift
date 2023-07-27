@@ -18,7 +18,6 @@ import Foundation
 import MatrixRustSDK
 
 final class NSEUserSession {
-    private let isEncryptionSyncEnabled: Bool
     private let baseClient: Client
     private let notificationClient: NotificationClient
     private let userID: String
@@ -26,29 +25,25 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
-    init(credentials: KeychainCredentials, isEncryptionSyncEnabled: Bool) throws {
+    init(credentials: KeychainCredentials) throws {
         userID = credentials.userID
-        let builder = ClientBuilder()
+        baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
+            .build()
 
-        baseClient = try builder.build()
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
         notificationClient = try baseClient
             .notificationClient()
-            .retryDecryption(withCrossProcessLock: isEncryptionSyncEnabled)
+            .retryDecryption(withCrossProcessLock: true)
             .finish()
-
-        self.isEncryptionSyncEnabled = isEncryptionSyncEnabled
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
         await Task.dispatch(on: .global()) {
             do {
-                let notification = try self.isEncryptionSyncEnabled ?
-                    self.notificationClient.getNotificationWithSlidingSync(roomId: roomID, eventId: eventID) :
-                    self.notificationClient.getNotificationWithContext(roomId: roomID, eventId: eventID)
+                let notification = try self.notificationClient.getNotificationWithSlidingSync(roomId: roomID, eventId: eventID)
 
                 guard let notification else {
                     return nil
