@@ -24,7 +24,7 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let isOutgoing: Bool
     let isEditable: Bool
     let sender: TimelineItemSender
-    var properties: RoomTimelineItemProperties = .init()
+    var properties: RoomTimelineItemProperties
 }
 
 struct Poll: Equatable {

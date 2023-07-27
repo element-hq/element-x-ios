@@ -355,7 +355,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
-                                    sender: eventItemProxy.sender)
+                                    sender: eventItemProxy.sender,
+                                    properties: RoomTimelineItemProperties(isEdited: false,
+                                                                           reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                           deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                           orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
