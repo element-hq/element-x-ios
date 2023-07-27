@@ -21,7 +21,11 @@ import UserNotifications
 import MatrixRustSDK
 
 protocol NotificationItemProxyProtocol {
-    var event: TimelineEventProxyProtocol { get }
+    var event: NotificationEvent? { get }
+
+    var eventID: String { get }
+
+    var senderID: String { get }
 
     var roomID: String { get }
 
@@ -46,16 +50,21 @@ protocol NotificationItemProxyProtocol {
 
 extension NotificationItemProxyProtocol {
     var isEncrypted: Bool {
-        switch event.type {
-        case .messageLike(let content):
-            switch content {
-            case .roomEncrypted:
-                return true
+        switch event {
+        case .none, .invite:
+            return false
+        case .timeline(let event):
+            switch try? event.eventType() {
+            case .messageLike(let content):
+                switch content {
+                case .roomEncrypted:
+                    return true
+                default:
+                    return false
+                }
             default:
                 return false
             }
-        default:
-            return false
         }
     }
 
@@ -66,15 +75,20 @@ extension NotificationItemProxyProtocol {
 
 struct NotificationItemProxy: NotificationItemProxyProtocol {
     let notificationItem: NotificationItem
+    let eventID: String
     let receiverID: String
     let roomID: String
 
-    var event: TimelineEventProxyProtocol {
-        TimelineEventProxy(timelineEvent: notificationItem.event)
+    var event: NotificationEvent? {
+        notificationItem.event
     }
 
     var senderDisplayName: String? {
         notificationItem.senderInfo.displayName
+    }
+
+    var senderID: String {
+        notificationItem.senderInfo.userId
     }
 
     var roomDisplayName: String {
@@ -94,7 +108,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var isNoisy: Bool {
-        notificationItem.isNoisy
+        notificationItem.isNoisy ?? false
     }
 
     var senderAvatarMediaSource: MediaSourceProxy? {
@@ -117,13 +131,15 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
 struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     let eventID: String
 
-    var event: TimelineEventProxyProtocol {
-        MockTimelineEventProxy(eventID: eventID)
+    var event: NotificationEvent? {
+        nil
     }
 
     let roomID: String
 
     let receiverID: String
+
+    var senderID: String { "" }
 
     var senderDisplayName: String? { nil }
 
@@ -155,7 +171,7 @@ extension NotificationItemProxyProtocol {
         let notification = UNMutableNotificationContent()
         notification.receiverID = receiverID
         notification.roomID = roomID
-        notification.eventID = event.eventID
+        notification.eventID = eventID
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         // So that the UI groups notification that are received for the same room but also for the same user
         notification.threadIdentifier = "\(receiverID)\(roomID)"
@@ -167,20 +183,25 @@ extension NotificationItemProxyProtocol {
             (!isDM && roomAvatarMediaSource != nil) {
             return true
         }
-        switch event.type {
-        case .state, .none:
+        switch event {
+        case .invite, .none:
             return false
-        case let .messageLike(content):
-            switch content {
-            case let .roomMessage(messageType):
-                switch messageType {
-                case .image, .video, .audio:
-                    return true
+        case .timeline(let event):
+            switch try? event.eventType() {
+            case .state, .none:
+                return false
+            case let .messageLike(content):
+                switch content {
+                case let .roomMessage(messageType):
+                    switch messageType {
+                    case .image, .video, .audio:
+                        return true
+                    default:
+                        return false
+                    }
                 default:
                     return false
                 }
-            default:
-                return false
             }
         }
     }
@@ -201,14 +222,13 @@ extension NotificationItemProxyProtocol {
     ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
     func process(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        if self is EmptyNotificationItemProxy {
+        switch event {
+        case .none:
             return processEmpty()
-        } else {
-            switch event.type {
-            case .none:
-                return processEmpty()
-            case let .state(content):
-                return try await processStateEvent(content: content, mediaProvider: mediaProvider)
+        case .invite:
+            return try await processInvited(mediaProvider: mediaProvider)
+        case .timeline(let event):
+            switch try? event.eventType() {
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(messageType: let messageType):
@@ -216,29 +236,13 @@ extension NotificationItemProxyProtocol {
                 default:
                     return processEmpty()
                 }
+            default:
+                return processEmpty()
             }
         }
     }
 
     // MARK: - Private
-
-    private func processStateEvent(content: StateEventContent, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        switch content {
-        case let .roomMemberContent(userId, membershipState):
-            switch membershipState {
-            case .invite:
-                if userId == receiverID {
-                    return try await processInvited(mediaProvider: mediaProvider)
-                } else {
-                    return processEmpty()
-                }
-            default:
-                return processEmpty()
-            }
-        default:
-            return processEmpty()
-        }
-    }
 
     private func processInvited(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = baseMutableContent
@@ -253,7 +257,7 @@ extension NotificationItemProxyProtocol {
         }
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: event.senderID,
+                                                            senderID: senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
                                                             icon: icon)
         notification.body = body
@@ -299,7 +303,7 @@ extension NotificationItemProxyProtocol {
         notification.categoryIdentifier = NotificationConstants.Category.message
 
         notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: event.senderID,
+                                                            senderID: senderID,
                                                             senderName: senderDisplayName ?? roomDisplayName,
                                                             icon: icon)
         return notification

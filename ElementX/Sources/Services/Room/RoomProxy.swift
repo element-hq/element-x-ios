@@ -666,7 +666,11 @@ class RoomProxy: RoomProxyProtocol {
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {
         await Task.dispatch(on: .global()) {
-            self.room.fetchMembers()
+            do {
+                _ = try self.room.fetchMembers()
+            } catch {
+                MXLog.error("Failed fetching members: \(error)")
+            }
         }
     }
         
