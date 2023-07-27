@@ -77,6 +77,8 @@ struct RoomTimelineItemView: View {
             CollapsibleRoomTimelineView(timelineItem: item)
         case .location(let item):
             LocationRoomTimelineView(timelineItem: item)
+        case .poll(let item):
+            PollRoomTimelineView(timelineItem: item)
         }
     }
 

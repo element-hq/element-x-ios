@@ -57,28 +57,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .message:
-            guard let messageTimelineItem = eventItemProxy.content.asMessage() else { fatalError("Invalid message timeline item: \(eventItemProxy)") }
-            
-            switch messageTimelineItem.msgtype() {
-            case .text(content: let content):
-                return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .image(content: let content):
-                return buildImageTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .video(let content):
-                return buildVideoTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .file(let content):
-                return buildFileTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .notice(content: let content):
-                return buildNoticeTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .emote(content: let content):
-                return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .audio(let content):
-                return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .location(let content):
-                return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
-            case .none:
-                return nil
-            }
+            return buildMessageTimelineItem(eventItemProxy, isOutgoing)
         case .state(let stateKey, let content):
             return buildStateTimelineItem(for: eventItemProxy, state: content, stateKey: stateKey, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, change: let change):
@@ -90,12 +69,44 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        avatarURLString: avatarUrl,
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
-        case .poll, .pollEnd:
+        case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
+            guard ServiceLocator.shared.settings.pollsInTimelineEnabled else {
+                return nil
+            }
+            return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing)
+        case .pollEnd:
             return nil
         }
     }
     
     // MARK: - Message Events
+
+    private func buildMessageTimelineItem(_ eventItemProxy: EventTimelineItemProxy, _ isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let messageTimelineItem = eventItemProxy.content.asMessage() else {
+            fatalError("Invalid message timeline item: \(eventItemProxy)")
+        }
+
+        switch messageTimelineItem.msgtype() {
+        case .text(content: let content):
+            return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .image(content: let content):
+            return buildImageTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .video(let content):
+            return buildVideoTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .file(let content):
+            return buildFileTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .notice(content: let content):
+            return buildNoticeTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .emote(content: let content):
+            return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .audio(let content):
+            return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .location(let content):
+            return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+        case .none:
+            return nil
+        }
+    }
     
     private func buildUnsupportedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                               _ eventType: String,
@@ -308,6 +319,47 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                         reactions: aggregateReactions(eventItemProxy.reactions),
                                                                         deliveryStatus: eventItemProxy.deliveryStatus,
                                                                         orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+    }
+
+    // swiftlint:disable:next function_parameter_count
+    private func buildPollTimelineItem(_ question: String,
+                                       _ pollKind: PollKind,
+                                       _ maxSelections: UInt64,
+                                       _ answers: [PollAnswer],
+                                       _ votes: [String: [String]],
+                                       _ endTime: UInt64?,
+                                       _ eventItemProxy: EventTimelineItemProxy,
+                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        let allVotes = votes.reduce(0) { count, pair in
+            count + pair.value.count
+        }
+
+        let options = answers.map { answer in
+            Poll.Option(id: answer.id,
+                        text: answer.text,
+                        votes: votes[answer.id]?.count ?? 0,
+                        allVotes: allVotes,
+                        isSelected: votes[answer.id]?.contains(userID) ?? false)
+        }
+
+        let poll = Poll(question: question,
+                        pollKind: .init(pollKind: pollKind),
+                        maxSelections: Int(maxSelections),
+                        options: options,
+                        votes: votes,
+                        endDate: endTime.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) })
+
+        return PollRoomTimelineItem(id: eventItemProxy.id,
+                                    poll: poll,
+                                    body: poll.question,
+                                    timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                                    isOutgoing: isOutgoing,
+                                    isEditable: eventItemProxy.isEditable,
+                                    sender: eventItemProxy.sender,
+                                    properties: RoomTimelineItemProperties(isEdited: false,
+                                                                           reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                           deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                           orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
@@ -549,6 +601,17 @@ private extension LocationRoomTimelineItemContent.AssetType {
             self = .sender
         case .pin:
             self = .pin
+        }
+    }
+}
+
+private extension Poll.Kind {
+    init(pollKind: MatrixRustSDK.PollKind) {
+        switch pollKind {
+        case .disclosed:
+            self = .disclosed
+        case .undisclosed:
+            self = .undisclosed
         }
     }
 }

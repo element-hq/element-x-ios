@@ -23,7 +23,7 @@ struct RoomEventStringBuilder {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
@@ -77,6 +77,7 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll, .pollEnd:
+            // The Rust SDK doesn't support poll events as room summaries yet
             return nil
         }
     }

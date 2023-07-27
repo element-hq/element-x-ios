@@ -196,8 +196,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         case .vertical:
             GridRow {
                 localizedSendInfo
-                    .padding(.bottom, 4)
-                    .padding(.trailing, 4)
                     .gridColumnAlignment(.trailing)
             }
         }
@@ -284,7 +282,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 }
 
 private extension View {
-    func bubbleStyle(insets: CGFloat, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
+    func bubbleStyle(insets: EdgeInsets, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
         padding(insets)
             .background(color)
             .cornerRadius(cornerRadius, corners: corners)
@@ -293,18 +291,18 @@ private extension View {
 
 // Describes how the content and the send info should be arranged inside a bubble
 private enum BubbleSendInfoLayoutType {
-    case horizontal
-    case vertical
+    case horizontal(spacing: CGFloat = 4)
+    case vertical(spacing: CGFloat = 4)
     case overlay(capsuleStyle: Bool)
 
     var layout: AnyLayout {
         let layout: any Layout
 
         switch self {
-        case .horizontal:
-            layout = HStackLayout(alignment: .bottom, spacing: 4)
-        case .vertical:
-            layout = GridLayout(alignment: .leading, verticalSpacing: 4)
+        case .horizontal(let spacing):
+            layout = HStackLayout(alignment: .bottom, spacing: spacing)
+        case .vertical(let spacing):
+            layout = GridLayout(alignment: .leading, verticalSpacing: spacing)
         case .overlay:
             layout = ZStackLayout(alignment: .bottomTrailing)
         }
@@ -329,23 +327,25 @@ private extension EventBasedTimelineItemProtocol {
 
     // The insets for the full bubble content.
     // Padding affecting just the "send info" should be added inside `layoutedLocalizedSendInfo`
-    var bubbleInsets: CGFloat {
-        let defaultPadding: CGFloat = 8
+    var bubbleInsets: EdgeInsets {
+        let defaultInsets: EdgeInsets = .init(around: 8)
 
         switch self {
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem,
              is StickerRoomTimelineItem:
-            return 0
+            return .zero
+        case is PollRoomTimelineItem:
+            return .init(top: 12, leading: 12, bottom: 4, trailing: 12)
         case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI == nil ? defaultPadding : 0
+            return locationTimelineItem.content.geoURI == nil ? defaultInsets : .zero
         default:
-            return defaultPadding
+            return defaultInsets
         }
     }
 
     var bubbleSendInfoLayoutType: BubbleSendInfoLayoutType {
-        let defaultTimestampLayout: BubbleSendInfoLayoutType = .horizontal
+        let defaultTimestampLayout: BubbleSendInfoLayoutType = .horizontal()
 
         switch self {
         case is TextBasedRoomTimelineItem:
@@ -356,6 +356,8 @@ private extension EventBasedTimelineItemProtocol {
             return .overlay(capsuleStyle: true)
         case let locationTimelineItem as LocationRoomTimelineItem:
             return .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+        case is PollRoomTimelineItem:
+            return .vertical(spacing: 16)
         default:
             return defaultTimestampLayout
         }
@@ -414,4 +416,12 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
         }
         .environmentObject(viewModel.context)
     }
+}
+
+private extension EdgeInsets {
+    init(around: CGFloat) {
+        self.init(top: around, leading: around, bottom: around, trailing: around)
+    }
+
+    static var zero: Self = .init(around: 0)
 }

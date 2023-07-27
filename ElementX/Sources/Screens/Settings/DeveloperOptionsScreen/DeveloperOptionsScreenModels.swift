@@ -48,6 +48,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var readReceiptsEnabled: Bool { get set }
     var notificationSettingsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
+    var pollsInTimelineEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

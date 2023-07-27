@@ -35,6 +35,7 @@ final class AppSettings {
         case hasShownWelcomeScreen
         case notificationSettingsEnabled
         case swiftUITimelineEnabled
+        case pollsInTimeline
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -217,4 +218,7 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
+
+    @UserPreference(key: UserDefaultsKeys.pollsInTimeline, defaultValue: false, storageType: .userDefaults(store))
+    var pollsInTimelineEnabled
 }
