@@ -28,8 +28,7 @@ struct PollOptionView: View {
                     Text(pollOption.text)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    #warning("AG: localize")
-                    Text("\(pollOption.votes) votes")
+                    Text(L10n.commonPollVotesCount(pollOption.votes))
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
                 }
