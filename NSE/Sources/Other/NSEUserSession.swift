@@ -25,7 +25,7 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
-    init(credentials: KeychainCredentials) throws {
+    init(credentials: KeychainCredentials, filterByPushRulesEnabled: Bool) throws {
         userID = credentials.userID
         baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
@@ -34,10 +34,15 @@ final class NSEUserSession {
 
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
-        notificationClient = try baseClient
+        var notificationClientBuilder = try baseClient
             .notificationClient()
             .retryDecryption(withCrossProcessLock: true)
-            .finish()
+
+        if filterByPushRulesEnabled {
+            notificationClientBuilder = notificationClientBuilder.filterByPushRules()
+        }
+
+        notificationClient = notificationClientBuilder.finish()
     }
 
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
