@@ -378,6 +378,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canEdit)
     }
     
+    // MARK: - Notifications
+    
     func testNotificationLoadingSettingsFailure() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
@@ -389,6 +391,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .filter(\.isError)
             .first())
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
         let expectedAlertInfo = AlertInfo(id: RoomDetailsScreenErrorType.alert,
@@ -401,8 +404,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testNotificationDefaultMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
+        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationSettingsState.label, "Default")
@@ -410,8 +413,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testNotificationCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
+        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isCustom))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationSettingsState.label, "Custom")
@@ -419,8 +422,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testNotificationRoomMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
+        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
@@ -429,8 +432,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testNotificationRoomNotMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
+        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonMute)
@@ -438,12 +441,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testUnmuteTappedFailure() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
-        try await deferred.fulfill()
-
-        XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
+        try await testNotificationRoomMuted()
         
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure = { _, _, _ in
@@ -468,12 +466,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testMuteTappedFailure() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
-        try await deferred.fulfill()
-        
-        XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonMute)
+        try await testNotificationRoomNotMuted()
         
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { _, _ in
@@ -498,10 +491,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testMuteTapped() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
-        try await deferred.fulfill()
+        try await testNotificationRoomNotMuted()
 
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { [weak notificationSettingsProxyMock] _, mode in
@@ -528,10 +518,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testUnmuteTapped() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
-        try await deferred.fulfill()
+        try await testNotificationRoomMuted()
 
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure = { [weak notificationSettingsProxyMock] _, _, _ in

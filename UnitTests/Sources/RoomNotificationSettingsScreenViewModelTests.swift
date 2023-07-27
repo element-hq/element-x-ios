@@ -39,6 +39,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
                                                             roomProxy: roomProxyMock)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertFalse(context.allowCustomSetting)
@@ -50,6 +51,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
                                                             roomProxy: roomProxyMock)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertTrue(context.allowCustomSetting)
@@ -61,6 +63,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
                                                             roomProxy: roomProxyMock)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isError))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         let expectedAlertInfo = AlertInfo(id: RoomNotificationSettingsScreenErrorType.loadingSettingsFailed,
@@ -77,6 +80,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
                                                             roomProxy: roomProxyMock)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
         let deferredIsRestoringDefaultSettings = deferFulfillment(context.$viewState.map(\.isRestoringDefautSetting)
@@ -95,13 +99,14 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
                                                             roomProxy: roomProxyMock)
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
+        var deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
+        deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         viewModel.state.bindings.allowCustomSetting = true
         context.send(viewAction: .changedAllowCustomSettings)
-        await context.nextViewState()
+        try await deferred.fulfill()
         
         XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
         XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mentionsAndKeywordsOnly)
@@ -112,13 +117,14 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
                                                             roomProxy: roomProxyMock)
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .first(where: \.isLoaded))
-        try await deferred.fulfill()
+        let deferredState = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferredState.fulfill()
 
         do {
+            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.allMessages))
-            await context.nextViewState()
+            try await deferredViewState.fulfill()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .allMessages)
@@ -126,8 +132,9 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
+            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.mute))
-            await context.nextViewState()
+            try await deferredViewState.fulfill()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mute)
@@ -135,8 +142,9 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
+            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
-            await context.nextViewState()
+            try await deferredViewState.fulfill()
             
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.0, roomProxyMock.id)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mentionsAndKeywordsOnly)

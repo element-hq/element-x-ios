@@ -99,6 +99,7 @@ lane :unit_tests do
   run_tests(
     scheme: "UnitTests",
     result_bundle: true,
+    number_of_retries: 3,
   )
 
   slather(
