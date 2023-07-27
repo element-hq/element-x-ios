@@ -189,6 +189,10 @@ final class AppSettings {
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference(key: UserDefaultsKeys.pusherProfileTag, storageType: .userDefaults(store))
     var pusherProfileTag: String?
+
+    /// Allows notifications to be filtered based on the push context of the room
+    @UserPreference(key: SharedUserDefaultsKeys.filterNotificationsByPushRulesEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var filterNotificationsByPushRulesEnabled
         
     // MARK: - Other
     

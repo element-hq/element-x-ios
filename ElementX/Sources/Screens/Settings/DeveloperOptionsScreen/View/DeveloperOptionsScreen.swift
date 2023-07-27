@@ -42,6 +42,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")
                 }
+
+                Toggle(isOn: $context.filterNotificationsByPushRulesEnabled) {
+                    Text("Filter notifications by push rules")
+                }
             }
 
             Section("Room creation") {
