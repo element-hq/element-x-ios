@@ -9,6 +9,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ElementX.xcodeproj",
+          "identifier" : "C0FAEB81CFD9776CD78CE489",
+          "name" : "ElementX"
+        }
+      ]
+    },
     "environmentVariableEntries" : [
       {
         "key" : "INTEGRATION_TESTS_HOST",

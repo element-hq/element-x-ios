@@ -154,6 +154,8 @@ end
 
 
 lane :integration_tests do
+  clear_derived_data()
+  
   create_simulator_if_necessary(
     name: "iPhone 14 Pro",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro"
@@ -173,6 +175,7 @@ lane :integration_tests do
     output_directory: "./fastlane/test_output",
     proj: "ElementX.xcodeproj",
     scheme: "IntegrationTests",
+    binary_basename: "ElementX.app"
   )
 end
 
