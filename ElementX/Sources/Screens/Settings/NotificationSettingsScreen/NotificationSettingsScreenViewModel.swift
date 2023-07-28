@@ -47,7 +47,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         setupNotificationSettingsSubscription()
     }
     
-    func start() {
+    func fetchInitialContent() {
         fetchSettings()
     }
         
@@ -59,14 +59,20 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             MXLog.warning("Link clicked: \(url)")
         case .changedEnableNotifications:
             toggleNotifications()
-        case .processTapGroupChats:
+        case .groupChatsTapped:
             break
-        case .processTapDirectChats:
+        case .directChatsTapped:
             break
-        case .processToggleRoomMention:
-            toggleRoomMention()
-        case .processToggleCalls:
-            toggleCalls()
+        case .roomMentionChanged:
+            guard let settings = state.settings, settings.roomMentionsEnabled != state.bindings.roomMentionsEnabled else {
+                return
+            }
+            Task { await enableRoomMention(state.bindings.roomMentionsEnabled) }
+        case .callsChanged:
+            guard let settings = state.settings, settings.callsEnabled != state.bindings.callsEnabled else {
+                return
+            }
+            Task { await enableCalls(state.bindings.callsEnabled) }
         }
     }
     
@@ -109,104 +115,73 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             .store(in: &cancellables)
     }
     
-    private struct Settings {
-        var groupChatsMode: RoomNotificationModeProxy = .allMessages
-        var encryptedGroupChatsMode: RoomNotificationModeProxy = .allMessages
-        var directChatsMode: RoomNotificationModeProxy = .allMessages
-        var encryptedDirectChatsMode: RoomNotificationModeProxy = .allMessages
-        var roomMentionState: Result<Bool, Error> = .success(false)
-        var callState: Result<Bool, Error> = .success(false)
-    }
-
     private func fetchSettings() {
         fetchSettingsTask = Task {
-            var settings = Settings()
-            
             // Group chats
-            settings.groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: 3)
-            settings.encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: 3)
+            // A group chat is a chat having more than 2 active members
+            let groupChatActiveMembers: UInt64 = 3
+            var groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: groupChatActiveMembers)
+            let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: groupChatActiveMembers)
 
             // Direct chats
-            settings.directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: 2)
-            settings.encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: 2)
-
-            // Room mentions
-            do {
-                settings.roomMentionState = try await .success(notificationSettingsProxy.isRoomMentionEnabled())
-            } catch {
-                settings.roomMentionState = .failure(error)
+            // A direct chat is a chat having exactly 2 active members
+            let directChatActiveMembers: UInt64 = 2
+            var directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: directChatActiveMembers)
+            let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: directChatActiveMembers)
+                        
+            // Old clients were having specific settings for encrypted and unencrypted rooms,
+            // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
+            var inconsistencyDetected = false
+            if groupChatsMode != encryptedGroupChatsMode {
+                groupChatsMode = .allMessages
+                inconsistencyDetected = true
+            }
+            if directChatsMode != encryptedDirectChatsMode {
+                directChatsMode = .allMessages
+                inconsistencyDetected = true
             }
             
-            // Calls
-            do {
-                settings.callState = try await .success(notificationSettingsProxy.isCallEnabled())
-            } catch {
-                settings.callState = .failure(error)
-            }
-            
+            // The following calls may fail if the associated push rule doesn't exist
+            let roomMentionsEnabled = try? await notificationSettingsProxy.isRoomMentionEnabled()
+            let callEnabled = try? await notificationSettingsProxy.isCallEnabled()
+                        
             guard !Task.isCancelled else { return }
-            
-            applySettings(settings)
+
+            let notificationSettings = NotificationSettingsScreenSettings(groupChatsMode: groupChatsMode,
+                                                                          directChatsMode: directChatsMode,
+                                                                          roomMentionsEnabled: roomMentionsEnabled,
+                                                                          callsEnabled: callEnabled,
+                                                                          inconsistentSettings: inconsistencyDetected)
+
+            state.settings = notificationSettings
+            state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
+            state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
         }
     }
     
-    private func applySettings(_ settings: Settings) {
-        if settings.groupChatsMode == settings.encryptedGroupChatsMode {
-            state.groupChatNotificationSettingsState = .loaded(mode: settings.groupChatsMode)
-            state.inconsistentGroupChatsSettings = false
-        } else {
-            state.groupChatNotificationSettingsState = .loaded(mode: .allMessages)
-            state.inconsistentGroupChatsSettings = true
+    private func enableRoomMention(_ enable: Bool) async {
+        guard let notificationSettings = state.settings else { return }
+        do {
+            state.applyingChange = true
+            MXLog.info("[NotificationSettingsScreenViewMode] setRoomMentionEnabled(\(enable))")
+            try await notificationSettingsProxy.setRoomMentionEnabled(enabled: enable)
+        } catch {
+            state.bindings.alertInfo = AlertInfo(id: .alert)
+            state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
         }
-        
-        if settings.directChatsMode == settings.encryptedDirectChatsMode {
-            state.directChatNotificationSettingsState = .loaded(mode: settings.directChatsMode)
-            state.inconsistentDirectChatsSettings = false
-        } else {
-            state.directChatNotificationSettingsState = .loaded(mode: .allMessages)
-            state.inconsistentDirectChatsSettings = true
-        }
-        
-        if case .success(let enabled) = settings.roomMentionState {
-            state.bindings.enableRoomMention = enabled
-        } else {
-            state.bindings.enableRoomMention = false
-        }
-        
-        if case .success(let enabled) = settings.callState {
-            state.bindings.enableCalls = enabled
-        } else {
-            state.bindings.enableCalls = false
-        }
-    }
-    
-    private func toggleRoomMention() {
-        Task {
-            do {
-                let currentValue = try await notificationSettingsProxy.isRoomMentionEnabled()
-                let newValue = state.bindings.enableRoomMention
-                guard currentValue != newValue else { return }
-                state.applyingChange = true
-                try await notificationSettingsProxy.setRoomMentionEnabled(enabled: newValue)
-            } catch {
-                state.bindings.alertInfo = AlertInfo(id: .alert)
-            }
-            state.applyingChange = false
-        }
+        state.applyingChange = false
     }
         
-    func toggleCalls() {
-        Task {
-            do {
-                let currentValue = try await notificationSettingsProxy.isCallEnabled()
-                let newValue = state.bindings.enableCalls
-                guard currentValue != newValue else { return }
-                state.applyingChange = true
-                try await notificationSettingsProxy.setCallEnabled(enabled: newValue)
-            } catch {
-                state.bindings.alertInfo = AlertInfo(id: .alert)
-            }
-            state.applyingChange = false
+    func enableCalls(_ enable: Bool) async {
+        guard let notificationSettings = state.settings else { return }
+        do {
+            state.applyingChange = true
+            MXLog.info("[NotificationSettingsScreenViewMode] setCallEnabled(\(enable))")
+            try await notificationSettingsProxy.setCallEnabled(enabled: enable)
+        } catch {
+            state.bindings.alertInfo = AlertInfo(id: .alert)
+            state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
         }
+        state.applyingChange = false
     }
 }

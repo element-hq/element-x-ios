@@ -27,8 +27,12 @@ struct NotificationSettingsScreen: View {
             enableNotificationSection
             if context.enableNotifications {
                 roomsNotificationSection
-                mentionsSection
-                callsSection
+                if context.viewState.settings?.roomMentionsEnabled != nil {
+                    mentionsSection
+                }
+                if context.viewState.settings?.callsEnabled != nil {
+                    callsSection
+                }
             }
         }
         .compoundForm()
@@ -76,85 +80,83 @@ struct NotificationSettingsScreen: View {
         .compoundFormSection()
     }
     
-    @ViewBuilder
     private var roomsNotificationSection: some View {
         Section {
             // Group chats
             Button {
-                context.send(viewAction: .processTapGroupChats)
+                context.send(viewAction: .groupChatsTapped)
             } label: {
                 LabeledContent {
-                    notificationModeStateView(context.viewState.groupChatNotificationSettingsState)
+                    if let settings = context.viewState.settings {
+                        Text(context.viewState.strings.string(for: settings.groupChatsMode))
+                    } else {
+                        ProgressView()
+                    }
                 } label: {
                     Text(L10n.screenNotificationSettingsGroupChats)
                 }
             }
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
-            .buttonStyle(.compoundForm(accessory: context.viewState.groupChatNotificationSettingsState.isLoaded ? .navigationLink : nil))
-            .disabled(context.viewState.groupChatNotificationSettingsState.isLoading)
+            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
+            .disabled(context.viewState.settings == nil)
             
             // Direct chats
             Button {
-                context.send(viewAction: .processTapDirectChats)
+                context.send(viewAction: .directChatsTapped)
             } label: {
                 LabeledContent {
-                    notificationModeStateView(context.viewState.directChatNotificationSettingsState)
+                    if let settings = context.viewState.settings {
+                        Text(context.viewState.strings.string(for: settings.directChatsMode))
+                    } else {
+                        ProgressView()
+                    }
                 } label: {
                     Text(L10n.screenNotificationSettingsDirectChats)
                 }
             }
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
-            .buttonStyle(.compoundForm(accessory: context.viewState.groupChatNotificationSettingsState.isLoaded ? .navigationLink : nil))
-            .disabled(context.viewState.groupChatNotificationSettingsState.isLoading)
+            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
+            .disabled(context.viewState.settings == nil)
             
         } header: {
             Text(L10n.screenNotificationSettingsNotificationSectionTitle)
+                .compoundFormSectionHeader()
         }
         .compoundFormSection()
     }
         
-    @ViewBuilder
-    private func notificationModeStateView(_ state: NotificationSettingsScreenModeState) -> some View {
-        switch state {
-        case .loading:
-            ProgressView()
-        case .loaded(let mode):
-            Text(context.viewState.strings.string(for: mode))
-        case .error:
-            Image(systemName: "exclamationmark.circle")
-        }
-    }
-    
-    @ViewBuilder
     private var mentionsSection: some View {
         Section {
-            Toggle(isOn: $context.enableRoomMention) {
+            Toggle(isOn: $context.roomMentionsEnabled) {
                 Text(L10n.screenNotificationSettingsRoomMentionLabel)
             }
             .toggleStyle(.compoundForm)
-            .onChange(of: context.enableRoomMention) { _ in
-                context.send(viewAction: .processToggleRoomMention)
+            .onChange(of: context.roomMentionsEnabled) { _ in
+                context.send(viewAction: .roomMentionChanged)
             }
+            .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
             .allowsHitTesting(!context.viewState.applyingChange)
         } header: {
             Text(L10n.screenNotificationSettingsMentionsSectionTitle)
+                .compoundFormSectionHeader()
         }
         .compoundFormSection()
     }
     
-    @ViewBuilder
     private var callsSection: some View {
         Section {
-            Toggle(isOn: $context.enableCalls) {
+            Toggle(isOn: $context.callsEnabled) {
                 Text(L10n.screenNotificationSettingsCallsLabel)
             }
             .toggleStyle(.compoundForm)
-            .onChange(of: context.enableCalls) { _ in
-                context.send(viewAction: .processToggleCalls)
+            .onChange(of: context.callsEnabled) { _ in
+                context.send(viewAction: .callsChanged)
             }
+            .disabled(context.viewState.settings?.callsEnabled == nil)
             .allowsHitTesting(!context.viewState.applyingChange)
         } header: {
             Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
+                .compoundFormSectionHeader()
         }
         .compoundFormSection()
     }
@@ -168,15 +170,21 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure = { isEncrypted, activeMembersCount in
+            switch (isEncrypted, activeMembersCount) {
+            case (_, 2):
+                return .allMessages
+            default:
+                return .mentionsAndKeywordsOnly
+            }
+        }
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
-        notificationSettingsProxy.isCallEnabledReturnValue = true
+        notificationSettingsProxy.isCallEnabledReturnValue = false
 
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy)
-        viewModel.state.groupChatNotificationSettingsState = .loaded(mode: .allMessages)
-        viewModel.state.directChatNotificationSettingsState = .loaded(mode: .mentionsAndKeywordsOnly)
-        viewModel.state.bindings.enableRoomMention = true
+        viewModel.fetchInitialContent()
         return viewModel
     }()
 

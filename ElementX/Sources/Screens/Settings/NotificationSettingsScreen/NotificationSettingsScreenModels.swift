@@ -28,19 +28,26 @@ struct NotificationSettingsScreenViewState: BindableState {
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
     }
-    
-    var groupChatNotificationSettingsState: NotificationSettingsScreenModeState = .loading
-    var directChatNotificationSettingsState: NotificationSettingsScreenModeState = .loading
+
+    var settings: NotificationSettingsScreenSettings?
     var applyingChange = false
-    var inconsistentGroupChatsSettings = false
-    var inconsistentDirectChatsSettings = false
 }
 
 struct NotificationSettingsScreenViewStateBindings {
     var enableNotifications = false
-    var enableRoomMention = false
-    var enableCalls = false
+    var roomMentionsEnabled = false
+    var callsEnabled = false
     var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
+}
+
+struct NotificationSettingsScreenSettings {
+    let groupChatsMode: RoomNotificationModeProxy
+    let directChatsMode: RoomNotificationModeProxy
+    let roomMentionsEnabled: Bool?
+    let callsEnabled: Bool?
+    // Old clients were having specific settings for encrypted and unencrypted rooms,
+    // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
+    let inconsistentSettings: Bool
 }
 
 struct NotificationSettingsScreenStrings {
@@ -71,39 +78,10 @@ struct NotificationSettingsScreenStrings {
 enum NotificationSettingsScreenViewAction {
     case linkClicked(url: URL)
     case changedEnableNotifications
-    case processTapGroupChats
-    case processTapDirectChats
-    case processToggleRoomMention
-    case processToggleCalls
-}
-
-enum NotificationSettingsScreenModeState {
-    case loading
-    case loaded(mode: RoomNotificationModeProxy)
-    case error
-}
-
-extension NotificationSettingsScreenModeState {
-    var isLoading: Bool {
-        if case .loading = self {
-            return true
-        }
-        return false
-    }
-    
-    var isLoaded: Bool {
-        if case .loaded = self {
-            return true
-        }
-        return false
-    }
-    
-    var isError: Bool {
-        if case .error = self {
-            return true
-        }
-        return false
-    }
+    case groupChatsTapped
+    case directChatsTapped
+    case roomMentionChanged
+    case callsChanged
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {

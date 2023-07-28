@@ -43,7 +43,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.start()
+        viewModel.fetchInitialContent()
     }
         
     func toPresentable() -> AnyView {
