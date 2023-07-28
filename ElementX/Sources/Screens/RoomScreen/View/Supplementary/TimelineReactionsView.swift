@@ -146,6 +146,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
                 // matches the height of the text based buttons.
                 .padding(.horizontal, 10)
                 .frame(maxHeight: .infinity, alignment: .center)
+                .foregroundColor(.compound.iconSecondary)
         }
     }
 }
