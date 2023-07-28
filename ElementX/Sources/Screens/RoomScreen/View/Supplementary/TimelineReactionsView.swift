@@ -157,11 +157,15 @@ struct TimelineReactionViewPreviewsContainer: View {
 
     var body: some View {
         VStack {
-            TimelineReactionsView(itemID: .init(timelineID: "1"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            TimelineReactionsView(itemID: .init(timelineID: "1"), reactions: [
+                AggregatedReaction.mockReactionWithLongText,
+                AggregatedReaction.mockReactionWithLongTextRTL
+            ], collapsed: .constant(true))
+            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
+            TimelineReactionsView(itemID: .init(timelineID: "4"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
                 .environment(\.layoutDirection, .rightToLeft)
         }
         .background(Color.red)
