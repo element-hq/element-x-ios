@@ -386,6 +386,26 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
             return getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue
         }
     }
+    //MARK: - setDefaultRoomNotificationMode
+
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError: Error?
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount = 0
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCalled: Bool {
+        return setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount > 0
+    }
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedArguments: (isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy)?
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations: [(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy)] = []
+    var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeClosure: ((Bool, Bool, RoomNotificationModeProxy) async throws -> Void)?
+
+    func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
+        if let error = setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError {
+            throw error
+        }
+        setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount += 1
+        setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedArguments = (isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode)
+        setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations.append((isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode))
+        try await setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeClosure?(isEncrypted, isOneToOne, mode)
+    }
     //MARK: - restoreDefaultNotificationMode
 
     var restoreDefaultNotificationModeRoomIdThrowableError: Error?

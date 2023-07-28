@@ -34,4 +34,15 @@ extension RoomNotificationModeProxy {
             return .mute
         }
     }
+    
+    var roomNotificationMode: RoomNotificationMode {
+        switch self {
+        case .allMessages:
+            return .allMessages
+        case .mentionsAndKeywordsOnly:
+            return .mentionsAndKeywordsOnly
+        case .mute:
+            return .mute
+        }
+    }
 }

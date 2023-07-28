@@ -55,22 +55,21 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
         defer { backgroundTask?.stop() }
         
-        let roomNotificationMode: RoomNotificationMode
-        switch mode {
-        case .allMessages:
-            roomNotificationMode = .allMessages
-        case .mentionsAndKeywordsOnly:
-            roomNotificationMode = .mentionsAndKeywordsOnly
-        case .mute:
-            roomNotificationMode = .mute
-        }
-        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: roomNotificationMode)
+        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode.roomNotificationMode)
         await updatedSettings()
     }
     
     func getDefaultNotificationRoomMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy {
         let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
+    }
+    
+    func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setDefaultRoomNotificationMode")
+        defer { backgroundTask?.stop() }
+        
+        try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
+        await updatedSettings()
     }
     
     func restoreDefaultNotificationMode(roomId: String) async throws {

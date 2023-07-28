@@ -640,7 +640,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentNotificationSettingsScreen(animated: Bool) async {
         let navigationCoordinator = NavigationStackCoordinator()
-        let parameters = await NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: UNUserNotificationCenter.current(),
+        let parameters = await NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
+                                                                               userNotificationCenter: UNUserNotificationCenter.current(),
                                                                                notificationSettings: userSession.clientProxy.notificationSettings(),
                                                                                isModallyPresented: true)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: parameters)

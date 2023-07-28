@@ -29,6 +29,7 @@ protocol NotificationSettingsProxyProtocol {
     func getNotificationSettings(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws -> RoomNotificationSettingsProxyProtocol
     func setNotificationMode(roomId: String, mode: RoomNotificationModeProxy) async throws
     func getDefaultNotificationRoomMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy
+    func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws
     func restoreDefaultNotificationMode(roomId: String) async throws
     func containsKeywordsRules() async -> Bool
     func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws

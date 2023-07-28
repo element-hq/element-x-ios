@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct NotificationSettingsScreenCoordinatorParameters {
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userNotificationCenter: UserNotificationCenterProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let isModallyPresented: Bool
@@ -32,7 +33,11 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<NotificationSettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
-        
+    
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
+    
     var actions: AnyPublisher<NotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -50,15 +55,27 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         viewModel.fetchInitialContent()
         
         viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
             case .close:
-                self?.actionsSubject.send(.close)
+                self.actionsSubject.send(.close)
+            case .editDefaultMode(let oneToOne):
+                self.presentEditScreen(oneToOne: oneToOne)
             }
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(NotificationSettingsScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func presentEditScreen(oneToOne: Bool) {
+        let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(isDirect: oneToOne,
+                                                                                         notificationSettings: parameters.notificationSettings)
+        let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
+        navigationStackCoordinator?.push(editSettingsCoordinator)
     }
 }

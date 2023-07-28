@@ -44,6 +44,15 @@ extension NotificationSettingsProxyMock {
                 self.callbacks.send(.settingsDidChange)
             }
         }
+        
+        setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeClosure = { [weak self] _, _, mode in
+            guard let self else { return }
+            self.getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue = mode
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
+
         restoreDefaultNotificationModeRoomIdClosure = { [weak self] _ in
             guard let self else { return }
             self.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: configuration.defaultRoomMode, isDefault: true))
@@ -51,6 +60,7 @@ extension NotificationSettingsProxyMock {
                 self.callbacks.send(.settingsDidChange)
             }
         }
+        
         setRoomMentionEnabledEnabledClosure = { [weak self] enabled in
             guard let self else { return }
             self.isRoomMentionEnabledReturnValue = enabled
@@ -58,6 +68,7 @@ extension NotificationSettingsProxyMock {
                 self.callbacks.send(.settingsDidChange)
             }
         }
+        
         setCallEnabledEnabledClosure = { [weak self] enabled in
             guard let self else { return }
             self.isCallEnabledReturnValue = enabled
