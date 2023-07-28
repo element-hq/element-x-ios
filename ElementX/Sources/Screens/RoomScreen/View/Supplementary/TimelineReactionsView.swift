@@ -146,7 +146,6 @@ struct TimelineReactionAddMoreButtonLabel: View {
                 // matches the height of the text based buttons.
                 .padding(.horizontal, 10)
                 .frame(maxHeight: .infinity, alignment: .center)
-                .foregroundColor(.white)
         }
     }
 }
@@ -176,6 +175,5 @@ struct TimelineReactionViewPreviewsContainer: View {
 struct TimelineReactionView_Previews: PreviewProvider {
     static var previews: some View {
         TimelineReactionViewPreviewsContainer()
-            .colorScheme(.dark)
     }
 }
