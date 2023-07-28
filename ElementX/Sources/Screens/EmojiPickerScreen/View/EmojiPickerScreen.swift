@@ -25,6 +25,8 @@ struct EmojiPickerScreen: View {
     
     @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 64
     
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -33,6 +35,7 @@ struct EmojiPickerScreen: View {
                         Section {
                             ForEach(category.emojis) { emoji in
                                 Button {
+                                    feedbackGenerator.impactOccurred()
                                     context.send(viewAction: .emojiTapped(emoji: emoji))
                                 } label: {
                                     Text(emoji.value)

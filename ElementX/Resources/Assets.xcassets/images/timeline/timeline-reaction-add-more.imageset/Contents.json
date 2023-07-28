@@ -3,6 +3,16 @@
     {
       "filename" : "timeline-reaction-add-more.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "timeline-reaction-add-more-dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

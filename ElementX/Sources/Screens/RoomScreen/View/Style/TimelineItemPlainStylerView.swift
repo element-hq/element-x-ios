@@ -21,8 +21,6 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
     

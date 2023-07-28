@@ -40,7 +40,7 @@ struct ReactionsSummaryView: View {
     private var reactionButtons: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
-                HStack {
+                HStack(spacing: 8) {
                     ForEach(reactions, id: \.self) { reaction in
                         ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
                             selectedReactionKey = key
@@ -50,7 +50,9 @@ struct ReactionsSummaryView: View {
                 }
                 .padding(.horizontal, 20)
                 .onAppear {
-                    scrollView.scrollTo(selectedReactionKey, anchor: .leading)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        scrollView.scrollTo(selectedReactionKey)
+                    }
                 }
                 .onChange(of: selectedReactionKey) { _ in
                     scrollView.scrollTo(selectedReactionKey)
@@ -91,7 +93,7 @@ private struct ReactionSummaryButton: View {
     
     var label: some View {
         HStack(spacing: 4) {
-            Text(reaction.key)
+            Text(reaction.displayKey)
                 .font(.compound.headingSM)
             if reaction.count > 1 {
                 Text(String(reaction.count))
@@ -99,8 +101,8 @@ private struct ReactionSummaryButton: View {
                     .foregroundColor(highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary)
             }
         }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 12)
         .background(highlighted ? Color.compound.bgActionPrimaryRest : .clear, in: Capsule())
         .accessibilityElement(children: .combine)
     }
@@ -124,19 +126,20 @@ private struct ReactionSummarySenderView: View {
                                 imageProvider: imageProvider)
             
             VStack(alignment: .leading) {
-                Text(displayName)
-                    .font(.compound.bodyMDSemibold)
+                HStack {
+                    Text(displayName)
+                        .font(.compound.bodyMDSemibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(sender.timestamp.formattedMinimal())
+                        .font(.compound.bodyXS)
+                        .foregroundColor(.compound.textSecondary)
+                }
                 Text(sender.senderID)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Text(sender.timestamp.formattedMinimal())
-                .font(.compound.bodyXS)
-                .foregroundColor(.compound.textSecondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        
         .padding(.vertical, 8)
     }
 }

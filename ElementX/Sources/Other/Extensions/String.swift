@@ -78,3 +78,12 @@ extension String {
         return whiteSpaces + "\u{2800}"
     }
 }
+
+extension String {
+    func ellipsize(length: Int) -> String {
+        guard count > length else {
+            return self
+        }
+        return "\(prefix(length))…"
+    }
+}
