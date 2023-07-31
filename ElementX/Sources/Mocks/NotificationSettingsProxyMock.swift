@@ -51,5 +51,19 @@ extension NotificationSettingsProxyMock {
                 self.callbacks.send(.settingsDidChange)
             }
         }
+        setRoomMentionEnabledEnabledClosure = { [weak self] enabled in
+            guard let self else { return }
+            self.isRoomMentionEnabledReturnValue = enabled
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
+        setCallEnabledEnabledClosure = { [weak self] enabled in
+            guard let self else { return }
+            self.isCallEnabledReturnValue = enabled
+            Task {
+                self.callbacks.send(.settingsDidChange)
+            }
+        }
     }
 }

@@ -95,6 +95,7 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async throws {
+        notificationCenter.requestAuthorizationOptionsReturnValue = true
         appSettings.pusherProfileTag = "12345"
         _ = await notificationManager.register(with: Data())
         XCTAssertEqual(appSettings.pusherProfileTag, "12345")

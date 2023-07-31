@@ -148,7 +148,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var avatarURL: URL? {
-        room.avatarUrl().flatMap(URL.init(string:))
+        roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
 
     var encryptionBadgeImage: UIImage? {
