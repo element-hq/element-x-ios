@@ -80,6 +80,11 @@ struct RoomScreen: View {
                     context.send(viewAction: .cancelSend(itemID: info.itemID))
                 }
             }
+            .onChange(of: context.isScrolledToBottom) { isScrolledToBottom in
+                if isScrolledToBottom {
+                    context.send(viewAction: .scrolledToBottom)
+                }
+            }
     }
 
     private var timeline: some View {
@@ -94,7 +99,7 @@ struct RoomScreen: View {
     private var timelineSwitch: some View {
         if context.viewState.swiftUITimelineEnabled {
             TimelineView(viewState: context.viewState.timelineViewState,
-                         scrollToBottomButtonVisible: $context.scrollToBottomButtonVisible) {
+                         isScrolledToBottom: $context.isScrolledToBottom) {
                 context.send(viewAction: .paginateBackwards)
             }
         } else {
@@ -121,9 +126,9 @@ struct RoomScreen: View {
                 }
                 .padding()
         }
-        .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
-        .accessibilityHidden(!context.scrollToBottomButtonVisible)
-        .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
+        .opacity(context.isScrolledToBottom ? 0.0 : 1.0)
+        .accessibilityHidden(context.isScrolledToBottom)
+        .animation(.elementDefault, value: context.isScrolledToBottom)
     }
     
     private var messageComposer: some View {

@@ -18,7 +18,7 @@ import SwiftUI
 struct RoomTimelineItemView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @ObservedObject var viewState: RoomTimelineItemViewState
-
+    
     var body: some View {
         timelineView
             .animation(.elementDefault, value: viewState.groupStyle)

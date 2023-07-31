@@ -68,7 +68,7 @@ class TimelineTableViewController: UIViewController {
         
     var contextMenuActionProvider: (@MainActor (_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
-    @Binding private var scrollToBottomButtonVisible: Bool
+    @Binding private var isScrolledToBottom: Bool
 
     private var timelineItemsIDs: [String] {
         timelineItemsDictionary.keys.elements.reversed()
@@ -90,11 +90,11 @@ class TimelineTableViewController: UIViewController {
     
     init(coordinator: UITimelineView.Coordinator,
          timelineStyle: TimelineStyle,
-         scrollToBottomButtonVisible: Binding<Bool>,
+         isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         self.timelineStyle = timelineStyle
-        _scrollToBottomButtonVisible = scrollToBottomButtonVisible
+        _isScrolledToBottom = isScrolledToBottom
         
         super.init(nibName: nil, bundle: nil)
         
@@ -253,11 +253,11 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let scrollToBottomButtonVisible = scrollView.contentOffset.y > 0
+            let isScrolledToBottom = scrollView.contentOffset.y <= 0
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
-            if self.scrollToBottomButtonVisible != scrollToBottomButtonVisible {
-                self.scrollToBottomButtonVisible = scrollToBottomButtonVisible
+            if self.isScrolledToBottom != isScrolledToBottom {
+                self.isScrolledToBottom = isScrolledToBottom
             }
         }
 

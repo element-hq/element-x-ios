@@ -24,7 +24,7 @@ struct UITimelineView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
                                                               timelineStyle: timelineStyle,
-                                                              scrollToBottomButtonVisible: $viewModelContext.scrollToBottomButtonVisible,
+                                                              isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                                               scrollToBottomPublisher: viewModelContext.viewState.timelineViewState.scrollToBottomPublisher)
         return tableViewController
     }
