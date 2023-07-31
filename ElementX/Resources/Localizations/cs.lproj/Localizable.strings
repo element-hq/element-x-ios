@@ -39,6 +39,7 @@
 "action_open_with" = "Otevřít v aplikaci";
 "action_quick_reply" = "Rychlá odpověď";
 "action_quote" = "Citovat";
+"action_react" = "React";
 "action_remove" = "Odstranit";
 "action_reply" = "Odpovědět";
 "action_report_bug" = "Nahlásit chybu";
@@ -259,7 +260,16 @@
 "screen_media_upload_preview_error_failed_sending" = "Nahrání média se nezdařilo, zkuste to prosím znovu.";
 "screen_migration_message" = "Toto je jednorázový proces, děkujeme za čekání.";
 "screen_migration_title" = "Nastavení vašeho účtu";
+"screen_notification_settings_additional_settings_section_title" = "Additional settings";
+"screen_notification_settings_calls_label" = "Audio and video calls";
+"screen_notification_settings_direct_chats" = "Direct chats";
 "screen_notification_settings_enable_notifications" = "Enable notifications on this device";
+"screen_notification_settings_group_chats" = "Group chats";
+"screen_notification_settings_mentions_section_title" = "Mentions";
+"screen_notification_settings_mode_all" = "All";
+"screen_notification_settings_mode_mentions" = "Mentions";
+"screen_notification_settings_notification_section_title" = "Notify me for";
+"screen_notification_settings_room_mention_label" = "Notify me on @room";
 "screen_notification_settings_system_notifications_action_required" = "To receive notifications, please change your %1$@.";
 "screen_notification_settings_system_notifications_action_required_content_link" = "system settings";
 "screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
