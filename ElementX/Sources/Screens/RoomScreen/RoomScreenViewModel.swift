@@ -41,7 +41,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     weak var composerActionHandler: RoomScreenComposerActionHandler? {
         didSet {
-            setupDirectRoomSubscriptionsIfNeeded()
+            setupComposerSubscriptions()
         }
     }
     
@@ -190,6 +190,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
+    }
+
+    private func setupComposerSubscriptions() {
+        guard let composerActionHandler else { return }
+
+        composerActionHandler.publisher
+            .map(\.composerMode)
+            .removeDuplicates()
+            .sink { [weak self] mode in
+                self?.state.composerMode = mode
+                self?.trackComposerMode()
+            }
+            .store(in: &cancellables)
+
+        setupDirectRoomSubscriptionsIfNeeded()
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -407,7 +422,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let currentComposerState = state.composerMode
 
-        setComposerMode(.default)
         composerActionHandler?.process(composerAction: .clear)
 
         switch currentComposerState {
@@ -418,13 +432,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             await timelineController.sendMessage(currentMessage)
         }
-    }
-    
-    private func setComposerMode(_ mode: RoomScreenComposerMode) {
-        guard mode != state.composerMode else { return }
-        state.composerMode = mode
-        composerActionHandler?.process(composerAction: .setMode(mode: mode))
-        trackComposerMode()
     }
     
     private func trackComposerMode() {
@@ -549,7 +556,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
 
             composerActionHandler?.process(composerAction: .setText(text: messageTimelineItem.body))
-            setComposerMode(.edit(originalItemId: messageTimelineItem.id))
+            composerActionHandler?.process(composerAction: .setMode(mode: .edit(originalItemId: messageTimelineItem.id)))
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
@@ -573,8 +580,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .reply:
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
-            
-            setComposerMode(.reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))
+
+            composerActionHandler?.process(composerAction: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)))
         case .forward(let itemID):
             callback?(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -592,7 +599,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if action.switchToDefaultComposer {
-            setComposerMode(.default)
+            composerActionHandler?.process(composerAction: .setMode(mode: .default))
         }
     }
     
@@ -798,9 +805,8 @@ extension RoomScreenViewModel: ComposerToolbarViewActionHandler {
         case .sendMessage(let message):
             Task { await sendCurrentMessage(message) }
         case .cancelReply:
-            setComposerMode(.default)
+            composerActionHandler?.process(composerAction: .setMode(mode: .default))
         case .cancelEdit:
-            setComposerMode(.default)
             composerActionHandler?.process(composerAction: .clear)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
