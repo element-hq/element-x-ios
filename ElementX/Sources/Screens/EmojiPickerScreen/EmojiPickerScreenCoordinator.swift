@@ -19,6 +19,7 @@ import SwiftUI
 struct EmojiPickerScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
     let itemID: TimelineItemIdentifier
+    let selectedEmojis: Set<String>
 }
 
 enum EmojiPickerScreenCoordinatorAction {
@@ -52,6 +53,6 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(EmojiPickerScreen(context: viewModel.context))
+        AnyView(EmojiPickerScreen(context: viewModel.context, selectedEmojis: parameters.selectedEmojis))
     }
 }
