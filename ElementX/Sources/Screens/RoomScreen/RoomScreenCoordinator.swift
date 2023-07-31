@@ -38,6 +38,7 @@ enum RoomScreenCoordinatorAction {
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
+    private let composerToolbarCoordinator: ComposerToolbarCoordinator
 
     private var viewModel: RoomScreenViewModelProtocol
 
@@ -48,13 +49,21 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
+
+        composerToolbarCoordinator = ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters())
         
-        viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
-                                        mediaProvider: parameters.mediaProvider,
-                                        roomProxy: parameters.roomProxy,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        analytics: ServiceLocator.shared.analytics,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        let roomScreenViewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
+                                                      mediaProvider: parameters.mediaProvider,
+                                                      roomProxy: parameters.roomProxy,
+                                                      appSettings: ServiceLocator.shared.settings,
+                                                      analytics: ServiceLocator.shared.analytics,
+                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                      composerToolbar: composerToolbarCoordinator.toPresentable())
+        
+        viewModel = roomScreenViewModel
+
+        composerToolbarCoordinator.set(actionHandler: roomScreenViewModel)
+        viewModel.composerActionHandler = composerToolbarCoordinator.getComposerActionHandler()
     }
     
     // MARK: - Public

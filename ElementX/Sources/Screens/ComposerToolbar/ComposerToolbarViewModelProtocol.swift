@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,11 @@
 // limitations under the License.
 //
 
-import Combine
-import Foundation
-
-@MainActor
-protocol RoomScreenViewModelProtocol {
-    var composerActionHandler: RoomScreenComposerActionHandler? { get set }
-    var callback: ((RoomScreenViewModelAction) -> Void)? { get set }
-    var context: RoomScreenViewModelType.Context { get }
+protocol ComposerToolbarViewModelProtocol {
+    var actionHandler: ComposerToolbarViewActionHandler? { get set }
+    var context: ComposerToolbarViewModelType.Context { get }
 }
 
-protocol RoomScreenComposerActionHandler: AnyObject {
-    var publisher: Published<ComposerToolbarViewState>.Publisher { get }
-    func process(composerAction: RoomScreenComposerAction)
+protocol ComposerToolbarViewActionHandler: AnyObject {
+    func process(viewAction: ComposerToolbarViewAction)
 }

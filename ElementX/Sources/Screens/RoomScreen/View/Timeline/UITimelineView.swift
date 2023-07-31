@@ -87,7 +87,8 @@ struct UITimelineView_Previews: PreviewProvider {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               composerToolbar: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()).toPresentable())
     
     static var previews: some View {
         NavigationStack {

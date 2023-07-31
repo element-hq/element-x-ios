@@ -26,17 +26,12 @@ struct RoomScreen: View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                HStack(alignment: .bottom, spacing: attachmentButtonPadding) {
-                    RoomAttachmentPicker(context: context)
-                        .padding(.bottom, 5) // centre align with the send button
-                    messageComposer
-                        .environmentObject(context)
-                }
-                .padding(.leading, attachmentButtonPadding)
-                .padding(.trailing, 12)
-                .padding(.top, 8)
-                .padding(.bottom)
-                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                context.viewState.composerToolbar
+                    .padding(.leading, attachmentButtonPadding)
+                    .padding(.trailing, 12)
+                    .padding(.top, 8)
+                    .padding(.bottom)
+                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
@@ -124,24 +119,6 @@ struct RoomScreen: View {
         .animation(.elementDefault, value: context.isScrolledToBottom)
     }
     
-    private var messageComposer: some View {
-        MessageComposer(text: $context.composerText,
-                        focused: $context.composerFocused,
-                        sendingDisabled: context.viewState.sendButtonDisabled,
-                        mode: context.viewState.composerMode) {
-            sendMessage()
-        } pasteAction: { provider in
-            context.send(viewAction: .handlePasteOrDrop(provider: provider))
-        } replyCancellationAction: {
-            context.send(viewAction: .cancelReply)
-        } editCancellationAction: {
-            context.send(viewAction: .cancelEdit)
-        }
-        .onChange(of: context.actionMenuInfo) { _ in
-            context.composerFocused = false
-        }
-    }
-    
     @ViewBuilder
     private var loadingIndicator: some View {
         if context.viewState.showLoading {
@@ -162,11 +139,6 @@ struct RoomScreen: View {
             RoomHeaderView(context: context)
         }
     }
-    
-    private func sendMessage() {
-        guard !context.viewState.sendButtonDisabled else { return }
-        context.send(viewAction: .sendMessage)
-    }
 }
 
 // MARK: - Previews
@@ -177,7 +149,8 @@ struct RoomScreen_Previews: PreviewProvider {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               composerToolbar: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()).toPresentable())
     
     static var previews: some View {
         NavigationStack {

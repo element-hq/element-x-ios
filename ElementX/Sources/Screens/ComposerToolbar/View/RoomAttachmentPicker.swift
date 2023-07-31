@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomAttachmentPicker: View {
-    @ObservedObject var context: RoomScreenViewModel.Context
+    @ObservedObject var context: ComposerToolbarViewModel.Context
     @Environment(\.isPresented) var isPresented
     
     @State private var sheetContentHeight = CGFloat(0)
@@ -102,12 +102,8 @@ struct RoomAttachmentPicker: View {
 }
 
 struct RoomAttachmentPicker_Previews: PreviewProvider {
-    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                               mediaProvider: MockMediaProvider(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "")),
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    static let viewModel = ComposerToolbarViewModel()
+
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
     }

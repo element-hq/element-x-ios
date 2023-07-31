@@ -38,6 +38,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private var canCurrentUserRedact = false
     
     private var paginateBackwardsTask: Task<Void, Never>?
+
+    weak var composerActionHandler: RoomScreenComposerActionHandler? {
+        didSet {
+            setupDirectRoomSubscriptionsIfNeeded()
+        }
+    }
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -45,7 +51,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
+         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default,
+         composerToolbar: AnyView) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
@@ -59,7 +66,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
+                                                         composerToolbar: composerToolbar,
+                                                         bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
         setupSubscriptions()
@@ -93,15 +101,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await itemTapped(with: id) }
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
-        case .sendMessage:
-            Task { await sendCurrentMessage() }
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
-        case .cancelReply:
-            setComposerMode(.default)
-        case .cancelEdit:
-            setComposerMode(.default)
-            state.bindings.composerText = ""
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
@@ -115,14 +116,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .timelineItemMenuAction(let itemID, let action):
             processTimelineItemMenuAction(action, itemID: itemID)
-        case .displayCameraPicker:
-            callback?(.displayCameraPicker)
-        case .displayMediaPicker:
-            callback?(.displayMediaPicker)
-        case .displayDocumentPicker:
-            callback?(.displayDocumentPicker)
-        case .displayLocationPicker:
-            callback?(.displayLocationPicker)
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
@@ -197,16 +190,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
-
-        setupDirectRoomSubscriptionsIfNeeded()
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
-        guard roomProxy.isDirect else {
+        guard roomProxy.isDirect, let composerActionHandler else {
             return
         }
 
-        let shouldShowInviteAlert = context.$viewState
+        let shouldShowInviteAlert = composerActionHandler.publisher
             .map(\.bindings.composerFocused)
             .removeDuplicates()
             .map { [weak self] isFocused in
@@ -409,16 +400,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage() async {
-        guard !state.bindings.composerText.isEmpty else {
+    private func sendCurrentMessage(_ currentMessage: String) async {
+        guard !currentMessage.isEmpty else {
             fatalError("This message should never be empty")
         }
         
-        let currentMessage = state.bindings.composerText
         let currentComposerState = state.composerMode
 
-        state.bindings.composerText = ""
         setComposerMode(.default)
+        composerActionHandler?.process(composerAction: .clear)
 
         switch currentComposerState {
         case .reply(let itemId, _):
@@ -433,6 +423,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func setComposerMode(_ mode: RoomScreenComposerMode) {
         guard mode != state.composerMode else { return }
         state.composerMode = mode
+        composerActionHandler?.process(composerAction: .setMode(mode: mode))
         trackComposerMode()
     }
     
@@ -473,7 +464,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             // Don't show a menu for non-event based items.
             return
         }
-        
+
+        composerActionHandler?.process(composerAction: .removeFocus)
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
     
@@ -555,9 +547,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return
             }
-            
-            state.bindings.composerFocused = true
-            state.bindings.composerText = messageTimelineItem.body
+
+            composerActionHandler?.process(composerAction: .setText(text: messageTimelineItem.body))
             setComposerMode(.edit(originalItemId: messageTimelineItem.id))
         case .copyPermalink:
             do {
@@ -581,8 +572,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
         case .reply:
-            state.bindings.composerFocused = true
-            
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
             
             setComposerMode(.reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))
@@ -803,13 +792,40 @@ extension RoomScreenViewModel.Context {
     }
 }
 
+extension RoomScreenViewModel: ComposerToolbarViewActionHandler {
+    func process(viewAction: ComposerToolbarViewAction) {
+        switch viewAction {
+        case .sendMessage(let message):
+            Task { await sendCurrentMessage(message) }
+        case .cancelReply:
+            setComposerMode(.default)
+        case .cancelEdit:
+            setComposerMode(.default)
+            composerActionHandler?.process(composerAction: .clear)
+        case .displayCameraPicker:
+            callback?(.displayCameraPicker)
+        case .displayMediaPicker:
+            callback?(.displayMediaPicker)
+        case .displayDocumentPicker:
+            callback?(.displayDocumentPicker)
+        case .displayLocationPicker:
+            callback?(.displayLocationPicker)
+        case .handlePasteOrDrop(let provider):
+            handlePasteOrDrop(provider)
+        }
+    }
+}
+
 // MARK: - Mocks
 
 extension RoomScreenViewModel {
+    private static let composerToolbarCoordinator = ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters())
+
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          composerToolbar: composerToolbarCoordinator.toPresentable())
 }
