@@ -299,7 +299,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
         
-        // The SwiftUI scroll view needs special handling, see `selectivellyUpdateTimelineItems`
+        // The SwiftUI scroll view needs special handling, see `selectivelyUpdateTimelineItems`
         if state.swiftUITimelineEnabled {
             selectivelyUpdateTimelineItems(timelineItemsDictionary: timelineItemsDictionary)
         } else {
