@@ -91,10 +91,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
     }
     
-    func stop() {
-        viewModel.context.send(viewAction: .markRoomAsRead)
-    }
-    
     func toPresentable() -> AnyView {
         AnyView(RoomScreen(context: viewModel.context))
     }

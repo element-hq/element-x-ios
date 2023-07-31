@@ -28,6 +28,8 @@ class RoomScreenViewModelTests: XCTestCase {
     override func tearDown() async throws {
         userIndicatorControllerMock = nil
     }
+    
+    // MARK: - Message Grouping
 
     func testMessageGrouping() {
         // Given 3 messages from Bob.
@@ -175,6 +177,8 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .middle, "Nothing should prevent the second message from being grouped.")
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
     }
+    
+    // MARK: - User Details
 
     func testGoToUserDetailsSuccessNoDelay() async {
         // Setup
@@ -277,6 +281,8 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
     }
+    
+    // MARK: - Sending
 
     func testRetrySend() async throws {
         // Setup
@@ -352,26 +358,139 @@ class RoomScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
-
-    func testMarkAsRead() async throws {
-        // Setup
-        let notificationCenterMock = NotificationCenterMock()
+    
+    // MARK: - Read Receipts
+    
+    // swiftlint:disable force_unwrapping
+    
+    func testSendReadReceipt() async throws {
+        // Given a room with only text items in the timeline
+        let items = [TextRoomTimelineItem(eventID: "t1"),
+                     TextRoomTimelineItem(eventID: "t2"),
+                     TextRoomTimelineItem(eventID: "t3")]
+        let (viewModel, roomProxy, _, notificationCenter) = readReceiptsConfiguration(with: items)
+        
+        // When sending a read receipt for the last item.
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then the receipt should be sent.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCalled, true)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t3")
+        
+        // And the notifications should be cleared.
+        XCTAssertEqual(notificationCenter.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
+        let roomID = notificationCenter.postNameObjectReceivedArguments?.anObject as? String
+        XCTAssertEqual(roomID, roomProxy.id)
+    }
+    
+    func testSendMoreReadReceipts() async throws {
+        // Given a room with only text items in the timeline that are all read.
+        let items = [TextRoomTimelineItem(eventID: "t1"),
+                     TextRoomTimelineItem(eventID: "t2"),
+                     TextRoomTimelineItem(eventID: "t3")]
+        let (viewModel, roomProxy, timelineController, _) = readReceiptsConfiguration(with: items)
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t3")
+        
+        // When sending a receipt for the first item in the timeline.
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then the request should be ignored.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t3")
+        
+        // When a new message is received and marked as read.
+        let newMessage = TextRoomTimelineItem(eventID: "t4")
+        timelineController.timelineItems.append(newMessage)
+        timelineController.callbacks.send(.updatedTimelineItems)
+        try await Task.sleep(for: .microseconds(500))
+        
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then the request should be made.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 2)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t4")
+    }
+    
+    func testSendReadReceiptWithoutEvents() async throws {
+        // Given a room with only virtual items.
+        let items = [SeparatorRoomTimelineItem(timelineID: "v1"),
+                     SeparatorRoomTimelineItem(timelineID: "v2"),
+                     SeparatorRoomTimelineItem(timelineID: "v3")]
+        let (viewModel, roomProxy, _, _) = readReceiptsConfiguration(with: items)
+        
+        // When sending a read receipt for the last item.
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then nothing should be sent.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCalled, false)
+    }
+    
+    func testSendReadReceiptVirtualLast() async throws {
+        // Given a room where the last event is a virtual item.
+        let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
+                                                 TextRoomTimelineItem(eventID: "t2"),
+                                                 SeparatorRoomTimelineItem(timelineID: "v3")]
+        let (viewModel, roomProxy, _, _) = readReceiptsConfiguration(with: items)
+        
+        // When sending a read receipt for the last item.
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then a read receipt should be sent for the item before it.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCalled, true)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t2")
+    }
+    
+    func testSendReadReceiptMultipleRequests() async throws {
+        // Given a room where the last event is a virtual item which was already read.
+        let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
+                                                 TextRoomTimelineItem(eventID: "t2"),
+                                                 SeparatorRoomTimelineItem(timelineID: "v3")]
+        let (viewModel, roomProxy, _, _) = readReceiptsConfiguration(with: items)
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
+        XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t2")
+        
+        // When sending the same receipt again
+        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
+        try await Task.sleep(for: .microseconds(100))
+        
+        // Then the second call should be ignored.
+        XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
+    }
+    
+    // swiftlint:enable force_unwrapping
+    // swiftlint:disable:next large_tuple
+    private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (RoomScreenViewModel,
+                                                                                       RoomProxyMock,
+                                                                                       MockRoomTimelineController,
+                                                                                       NotificationCenterMock) {
+        let notificationCenter = NotificationCenterMock()
+        let roomProxy = RoomProxyMock(with: .init(displayName: ""))
         let timelineController = MockRoomTimelineController()
-        let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
+        
+        roomProxy.sendReadReceiptForReturnValue = .success(())
+        roomProxy.underlyingHasUnreadNotifications = true
+        timelineController.timelineItems = items
+        timelineController.roomProxy = roomProxy
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
-                                            roomProxy: roomProxyMock,
+                                            roomProxy: roomProxy,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            notificationCenterProtocol: notificationCenterMock)
-
-        viewModel.context.send(viewAction: .markRoomAsRead)
-        try await Task.sleep(for: .microseconds(100))
-        XCTAssertEqual(notificationCenterMock.postNameObjectReceivedArguments?.aName, .roomMarkedAsRead)
-        let roomID = notificationCenterMock.postNameObjectReceivedArguments?.anObject as? String
-        XCTAssertEqual(roomID, roomProxyMock.id)
+                                            notificationCenterProtocol: notificationCenter)
+        
+        return (viewModel, roomProxy, timelineController, notificationCenter)
     }
 }
 
@@ -385,5 +504,22 @@ private extension TextRoomTimelineItem {
                   sender: .init(id: "@\(sender):server.com", displayName: sender),
                   content: .init(body: text),
                   properties: RoomTimelineItemProperties(reactions: reactions))
+    }
+}
+
+private extension SeparatorRoomTimelineItem {
+    init(timelineID: String) {
+        self.init(id: .init(timelineID: timelineID), text: "")
+    }
+}
+
+private extension TextRoomTimelineItem {
+    init(eventID: String) {
+        self.init(id: .init(timelineID: UUID().uuidString, eventID: eventID),
+                  timestamp: "",
+                  isOutgoing: false,
+                  isEditable: false,
+                  sender: .init(id: ""),
+                  content: .init(body: "Hello, World!"))
     }
 }

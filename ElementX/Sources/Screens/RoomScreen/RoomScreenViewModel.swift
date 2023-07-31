@@ -53,7 +53,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
         
-        super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
+        super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
                                                          roomAvatarURL: roomProxy.avatarURL,
                                                          timelineStyle: appSettings.timelineStyle,
@@ -103,8 +103,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .cancelEdit:
             setComposerMode(.default)
             state.bindings.composerText = ""
-        case .markRoomAsRead:
-            Task { await markRoomAsRead() }
+        case .sendReadReceiptIfNeeded(let lastVisibleItemID):
+            Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
             Task {
                 if case let .success(value) = await roomProxy.canUserRedact(userID: roomProxy.ownUserID) {
@@ -245,9 +245,46 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func markRoomAsRead() async {
-        notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
-        _ = await timelineController.markRoomAsRead()
+    /// The ID of the newest item in the room that the user has seen.
+    /// This includes both event based items and virtual items.
+    private var lastReadItemID: TimelineItemIdentifier?
+    private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
+        guard lastReadItemID != lastVisibleItemID,
+              let eventItemID = eventBasedItem(nearest: lastVisibleItemID)
+        else { return .success(()) }
+        
+        // Make sure the item is newer than the item that was last marked as read.
+        if let lastReadItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: lastReadItemID?.timelineID ?? ""),
+           let lastVisibleItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: eventItemID.timelineID),
+           lastReadItemIndex > lastVisibleItemIndex {
+            return .success(())
+        }
+        
+        // Update the last read item ID to avoid attempting duplicate requests.
+        lastReadItemID = lastVisibleItemID
+        
+        // Clear any notifications from notification center.
+        if lastVisibleItemID.timelineID == state.timelineViewState.timelineIDs.last {
+            notificationCenterProtocol.post(name: .roomMarkedAsRead, object: roomProxy.id)
+        }
+        
+        switch await timelineController.sendReadReceipt(for: eventItemID) {
+        case .success:
+            return .success(())
+        case .failure:
+            return .failure(.generic)
+        }
+    }
+    
+    /// Returns the first item ID that contains an `eventID` starting from the supplied ID, working backwards through the timeline.
+    private func eventBasedItem(nearest itemID: TimelineItemIdentifier) -> TimelineItemIdentifier? {
+        guard itemID.eventID == nil else { return itemID }
+        
+        let timelineIDs = state.timelineViewState.itemViewStates.map(\.identifier)
+        guard let index = timelineIDs.firstIndex(of: itemID) else { return nil }
+        
+        let nearestItemID = timelineIDs[..<index].last(where: { $0.eventID != nil })
+        return nearestItemID
     }
 
     private func itemTapped(with itemID: TimelineItemIdentifier) async {

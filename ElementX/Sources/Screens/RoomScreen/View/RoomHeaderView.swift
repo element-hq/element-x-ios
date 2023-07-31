@@ -40,7 +40,7 @@ struct RoomHeaderView: View {
     @ViewBuilder private var roomAvatar: some View {
         LoadableAvatarImage(url: context.viewState.roomAvatarURL,
                             name: context.viewState.roomTitle,
-                            contentID: context.viewState.roomId,
+                            contentID: context.viewState.roomID,
                             avatarSize: .room(on: .timeline),
                             imageProvider: context.imageProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)

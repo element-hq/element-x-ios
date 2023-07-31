@@ -82,9 +82,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> {
+    func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
         guard roomProxy.hasUnreadNotifications,
-              let eventID = timelineItems.last?.id.eventID
+              let eventID = itemID.eventID
         else { return .success(()) }
         
         switch await roomProxy.sendReadReceipt(for: eventID) {

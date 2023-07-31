@@ -48,6 +48,8 @@ class TimelineTableViewController: UIViewController {
             if timelineItemsDictionary.isEmpty {
                 paginateBackwardsPublisher.send()
             }
+            
+            sendReadReceiptIfNeeded()
         }
     }
 
@@ -241,6 +243,15 @@ class TimelineTableViewController: UIViewController {
         
         coordinator.send(viewAction: .paginateBackwards)
     }
+    
+    private func sendReadReceiptIfNeeded() {
+        guard let lastVisibleItemIndexPath = tableView.indexPathsForVisibleRows?.first,
+              let lastVisibleItemTimelineID = dataSource?.itemIdentifier(for: lastVisibleItemIndexPath),
+              let lastVisibleItemID = timelineItemsDictionary[lastVisibleItemTimelineID]?.identifier
+        else { return }
+        
+        coordinator.send(viewAction: .sendReadReceiptIfNeeded(lastVisibleItemID))
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -270,6 +281,18 @@ extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         scrollToTop(animated: true)
         return false
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        sendReadReceiptIfNeeded()
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        sendReadReceiptIfNeeded()
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        sendReadReceiptIfNeeded()
     }
 }
 
