@@ -21,7 +21,7 @@ import SwiftUIIntrospect
 
 struct TimelineView: View {
     let viewState: TimelineViewState
-    @Binding var scrollToBottomButtonVisible: Bool
+    @Binding var isScrolledToBottom: Bool
     let paginationAction: () -> Void
 
     @Environment(\.timelineStyle) private var timelineStyle
@@ -61,17 +61,17 @@ struct TimelineView: View {
                 .scrollDismissesKeyboard(.immediately)
         }
         .overlay(scrollToBottomButton, alignment: .bottomTrailing)
-        .animation(.elementDefault, value: viewState.timelineIDs)
         .onReceive(scrollViewAdapter.didScroll) { _ in
             guard let scrollView = scrollViewAdapter.scrollView else {
                 return
             }
             let offset = scrollView.contentOffset.y + scrollView.contentInset.top
 
-            // We give it a bit of tollerance which solves the issue when of it being displayed when the keyboard appears
-            let scrollToBottomButtonVisibleValue = offset > 5
-            if scrollToBottomButtonVisibleValue != scrollToBottomButtonVisible {
-                scrollToBottomButtonVisible = scrollToBottomButtonVisibleValue
+            let isScrolledToBottom = offset <= 0
+            
+            // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
+            if self.isScrolledToBottom != isScrolledToBottom {
+                self.isScrolledToBottom = isScrolledToBottom
             }
 
             // Allows the scroll to top to work properly
@@ -100,6 +100,7 @@ struct TimelineView: View {
                         .scaleEffect(x: 1, y: -1)
                 }
             }
+            .animation(.elementDefault, value: viewState.itemViewStates)
             topPin
         }
     }
@@ -138,9 +139,9 @@ struct TimelineView: View {
                 }
                 .padding()
         }
-        .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
-        .accessibilityHidden(!scrollToBottomButtonVisible)
-        .animation(.elementDefault, value: scrollToBottomButtonVisible)
+        .opacity(isScrolledToBottom ? 0.0 : 1.0)
+        .accessibilityHidden(isScrolledToBottom)
+        .animation(.elementDefault, value: isScrolledToBottom)
     }
 
     private func paginateBackwardsIfNeeded() {

@@ -80,6 +80,8 @@ enum RoomScreenViewAction {
 
     case retrySend(itemID: TimelineItemIdentifier)
     case cancelSend(itemID: TimelineItemIdentifier)
+    
+    case scrolledToBottom
 }
 
 struct RoomScreenViewState: BindableState {
@@ -94,7 +96,7 @@ struct RoomScreenViewState: BindableState {
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var composerMode: RoomScreenComposerMode = .default
     var swiftUITimelineEnabled = false
-
+    
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
@@ -109,7 +111,7 @@ struct RoomScreenViewStateBindings {
     var composerText: String
     var composerFocused: Bool
     
-    var scrollToBottomButtonVisible = false
+    var isScrolledToBottom = true
     var showAttachmentPopover = false {
         didSet {
             composerFocused = false
@@ -184,12 +186,15 @@ struct TimelineViewState {
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
 
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+    
+    var renderedTimelineIDs = [String]()
+    var pendingTimelineIDs = [String]()
 
     var timelineIDs: [String] {
         itemsDictionary.keys.elements
     }
 
     var itemViewStates: [RoomTimelineItemViewState] {
-        itemsDictionary.values.elements
+        renderedTimelineIDs.compactMap { itemsDictionary[$0] }
     }
 }

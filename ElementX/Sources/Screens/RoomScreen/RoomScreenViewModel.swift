@@ -138,6 +138,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await handleCancelSend(itemID: itemID) }
         case .paginateBackwards:
             paginateBackwards()
+        case .scrolledToBottom:
+            if state.swiftUITimelineEnabled {
+                renderPendingTimelineItems()
+            }
         }
     }
     
@@ -276,29 +280,34 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(updateViewstate(item: firstItem, groupStyle: .single),
+                    timelineItemsDictionary.updateValue(updateViewState(item: firstItem, groupStyle: .single),
                                                         forKey: firstItem.id.timelineID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewstate(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }
             }
         }
         
-        state.timelineViewState.itemsDictionary = timelineItemsDictionary
+        // The SwiftUI scroll view needs special handling, see `selectivellyUpdateTimelineItems`
+        if state.swiftUITimelineEnabled {
+            selectivelyUpdateTimelineItems(timelineItemsDictionary: timelineItemsDictionary)
+        } else {
+            state.timelineViewState.itemsDictionary = timelineItemsDictionary
+        }
     }
 
-    private func updateViewstate(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
+    private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
         if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.timelineID] {
             timelineItemViewState.groupStyle = groupStyle
             timelineItemViewState.type = .init(item: item)
@@ -306,6 +315,41 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         } else {
             return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
         }
+    }
+    
+    /// With the timeline scroll being reversed, introducing items at it's top (i.e. bottom now) will make the content move upwards, which is unwanted when
+    /// reading history. Delay rendering new items until it reaches the bottom again.
+    private func selectivelyUpdateTimelineItems(timelineItemsDictionary: OrderedDictionary<String, RoomTimelineItemViewState>) {
+        var timelineViewState = state.timelineViewState
+        
+        let newItemIdentifiers = Array(timelineItemsDictionary.keys)
+        
+        if !state.bindings.isScrolledToBottom,
+           let lastItemIdentifier = state.timelineViewState.renderedTimelineIDs.last,
+           let newLastItemIdentifierIndex = newItemIdentifiers.firstIndex(where: { $0 == lastItemIdentifier }) {
+            timelineViewState.pendingTimelineIDs = Array(newItemIdentifiers.dropFirst(newLastItemIdentifierIndex + 1))
+            timelineViewState.renderedTimelineIDs = Array(newItemIdentifiers.dropLast(newItemIdentifiers.count - (newLastItemIdentifierIndex + 1)))
+        } else {
+            // Otherwise just render everything normally
+            timelineViewState.renderedTimelineIDs = Array(timelineItemsDictionary.keys)
+        }
+        
+        timelineViewState.itemsDictionary = timelineItemsDictionary
+        
+        state.timelineViewState = timelineViewState
+    }
+    
+    private func renderPendingTimelineItems() {
+        // Render pending timeline items when the scroll view reaches the bottom again
+        guard state.bindings.isScrolledToBottom,
+              state.timelineViewState.pendingTimelineIDs.count > 0 else {
+            return
+        }
+        
+        var newTimelineViewState = state.timelineViewState
+        newTimelineViewState.renderedTimelineIDs = state.timelineViewState.renderedTimelineIDs + state.timelineViewState.pendingTimelineIDs
+        newTimelineViewState.pendingTimelineIDs = []
+        state.timelineViewState = newTimelineViewState
     }
 
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
