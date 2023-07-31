@@ -80,4 +80,12 @@ class StringTests: XCTestCase {
         result = ""
         XCTAssertEqual(String.generateBreakableWhitespaceEnd(whitespaceCount: count, layoutDirection: .rightToLeft), result)
     }
+    
+    func testEllipsizeWorks() {
+        XCTAssertEqual("ellipsize".ellipsize(length: 5), "ellip…")
+    }
+    
+    func testEllipsizeNotNeeded() {
+        XCTAssertEqual("ellipsize".ellipsize(length: 15), "ellipsize")
+    }
 }

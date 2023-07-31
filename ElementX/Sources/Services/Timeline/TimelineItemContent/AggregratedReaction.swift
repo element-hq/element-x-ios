@@ -18,6 +18,11 @@ import Foundation
 
 /// Represents all reactions of the same type for a single event.
 struct AggregatedReaction: Hashable {
+    /// Length at which we ellipsize a reaction key for display
+    /// Reactions can be free text, so we need to limit the length
+    /// displayed on screen.
+    private static let maxDisplayChars = 16
+    
     /// The id of the account owner
     let accountOwnerID: String
     /// The reaction that was sent.
@@ -43,5 +48,10 @@ extension AggregatedReaction {
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
         senders.contains(where: { $0.senderID == accountOwnerID })
+    }
+    
+    /// The key to be displayed on screen. See `maxDisplayChars`.
+    var displayKey: String {
+        key.ellipsize(length: Self.maxDisplayChars)
     }
 }

@@ -124,6 +124,7 @@ public struct TimelineItemMenu: View {
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     public var body: some View {
         VStack {
@@ -218,6 +219,7 @@ public struct TimelineItemMenu: View {
     
     private func reactionButton(for emoji: String) -> some View {
         Button {
+            feedbackGenerator.impactOccurred()
             dismiss()
             context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {

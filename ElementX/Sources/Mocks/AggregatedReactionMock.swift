@@ -69,4 +69,12 @@ extension AggregatedReaction {
             mockReaction(key: "🐼", senderIDs: mockIds(1))
         ]
     }
+    
+    static var mockReactionWithLongText: AggregatedReaction {
+        mockReaction(key: "Matrix defines a set of open APIs for decentralised communication.", senderIDs: [alice])
+    }
+    
+    static var mockReactionWithLongTextRTL: AggregatedReaction {
+        mockReaction(key: "تحدد المصفوفة مجموعة من واجهات برمجة التطبيقات المفتوحة للتواصل اللامركزي.", senderIDs: [alice])
+    }
 }

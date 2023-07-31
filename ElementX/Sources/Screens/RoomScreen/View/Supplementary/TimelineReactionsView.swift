@@ -17,11 +17,9 @@
 import SwiftUI
 
 struct TimelineReactionsView: View {
-    /// We use a coordinate space for measuring the reactions within their container.
-    /// For some reason when using .local the origin of reactions always shown as (0, 0)
-    private static let flowCoordinateSpace = "flowCoordinateSpace"
     private static let horizontalSpacing: CGFloat = 4
     private static let verticalSpacing: CGFloat = 4
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.layoutDirection) private var layoutDirection: LayoutDirection
     @Namespace private var animation
@@ -34,6 +32,7 @@ struct TimelineReactionsView: View {
         CollapsibleReactionLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(reaction: reaction) { key in
+                    feedbackGenerator.impactOccurred()
                     context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
                 } showReactionSummary: { key in
                     context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
@@ -44,18 +43,18 @@ struct TimelineReactionsView: View {
                 collapsed.toggle()
             } label: {
                 TimelineCollapseButtonLabel(collapsed: collapsed)
+                    .transaction { $0.animation = nil }
             }
             .reactionLayoutItem(.expandCollapse)
-            .animation(.easeOut, value: collapsed)
             Button {
                 context.send(viewAction: .displayEmojiPicker(itemID: itemID))
             } label: {
                 TimelineReactionAddMoreButtonLabel()
             }
-            .animation(.easeOut, value: collapsed)
             .reactionLayoutItem(.addMore)
         }
-        .coordinateSpace(name: Self.flowCoordinateSpace)
+        .animation(.easeInOut(duration: 0.1), value: reactions)
+        .padding(.leading, 4)
     }
 }
 
@@ -92,9 +91,7 @@ struct TimelineCollapseButtonLabel: View {
         TimelineReactionButtonLabel {
             Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
                 .padding(.vertical, 6)
-                .padding(.horizontal, 8)
-                .layoutPriority(1)
-                .drawingGroup()
+                .padding(.horizontal, 12)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
         }
@@ -119,7 +116,7 @@ struct TimelineReactionButton: View {
     var label: some View {
         TimelineReactionButtonLabel(isHighlighted: reaction.isHighlighted) {
             HStack(spacing: 4) {
-                Text(reaction.key)
+                Text(reaction.displayKey)
                     .font(.compound.bodyMD)
                 if reaction.count > 1 {
                     Text(String(reaction.count))
@@ -128,7 +125,7 @@ struct TimelineReactionButton: View {
                 }
             }
             .padding(.vertical, 6)
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 12)
         }
     }
     
@@ -149,6 +146,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
                 // matches the height of the text based buttons.
                 .padding(.horizontal, 10)
                 .frame(maxHeight: .infinity, alignment: .center)
+                .foregroundColor(.compound.iconSecondary)
         }
     }
 }
@@ -159,11 +157,15 @@ struct TimelineReactionViewPreviewsContainer: View {
 
     var body: some View {
         VStack {
-            TimelineReactionsView(itemID: .init(timelineID: "1"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
+            TimelineReactionsView(itemID: .init(timelineID: "1"), reactions: [
+                AggregatedReaction.mockReactionWithLongText,
+                AggregatedReaction.mockReactionWithLongTextRTL
+            ], collapsed: .constant(true))
+            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: Array(AggregatedReaction.mockReactions.prefix(3)), collapsed: .constant(true))
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "2"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
+            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState1)
             Divider()
-            TimelineReactionsView(itemID: .init(timelineID: "3"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
+            TimelineReactionsView(itemID: .init(timelineID: "4"), reactions: AggregatedReaction.mockReactions, collapsed: $collapseState2)
                 .environment(\.layoutDirection, .rightToLeft)
         }
         .background(Color.red)
