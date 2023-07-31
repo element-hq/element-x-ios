@@ -304,6 +304,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             selectivelyUpdateTimelineItems(timelineItemsDictionary: timelineItemsDictionary)
         } else {
             state.timelineViewState.itemsDictionary = timelineItemsDictionary
+            state.timelineViewState.renderedTimelineIDs = Array(timelineItemsDictionary.keys)
         }
     }
 

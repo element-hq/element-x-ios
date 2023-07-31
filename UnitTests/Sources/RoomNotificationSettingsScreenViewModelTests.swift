@@ -122,7 +122,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferredState.fulfill()
 
         do {
-            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
+            let deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.allMessages))
             try await deferredViewState.fulfill()
             
@@ -132,7 +132,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
+            let deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.mute))
             try await deferredViewState.fulfill()
             
@@ -142,7 +142,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         }
         
         do {
-            var deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
+            let deferredViewState = deferFulfillment(context.$viewState.collect(2).first())
             context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
             try await deferredViewState.fulfill()
             
