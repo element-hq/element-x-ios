@@ -71,10 +71,10 @@ extension AggregatedReaction {
     }
     
     static var mockReactionWithLongText: AggregatedReaction {
-        mockReaction(key: "Matrix defines a set of open APIs for decentralised communication, suitable for securely publishing, persisting and subscribing to data over a global open federation of servers with no single point of control.", senderIDs: [alice])
+        mockReaction(key: "Matrix defines a set of open APIs for decentralised communication.", senderIDs: [alice])
     }
     
     static var mockReactionWithLongTextRTL: AggregatedReaction {
-        mockReaction(key: "تحدد المصفوفة مجموعة من واجهات برمجة التطبيقات المفتوحة للاتصال اللامركزي ، وهي مناسبة للنشر الآمن والاستمرار والاشتراك في البيانات عبر اتحاد عالمي مفتوح للخوادم بدون نقطة تحكم واحدة.", senderIDs: [alice])
+        mockReaction(key: "تحدد المصفوفة مجموعة من واجهات برمجة التطبيقات المفتوحة للتواصل اللامركزي.", senderIDs: [alice])
     }
 }
