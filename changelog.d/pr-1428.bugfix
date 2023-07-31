@@ -1,0 +1,1 @@
+Fix a bug where media previews would sometimes dismiss to show the timeline with a big empty space at the bottom.
