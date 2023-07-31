@@ -54,7 +54,7 @@ struct TimelineReactionsView: View {
             .reactionLayoutItem(.addMore)
         }
         .animation(.easeInOut(duration: 0.1), value: reactions)
-        .padding(.horizontal, 4)
+        .padding(.leading, 4)
     }
 }
 
@@ -91,7 +91,7 @@ struct TimelineCollapseButtonLabel: View {
         TimelineReactionButtonLabel {
             Text(collapsed ? L10n.screenRoomReactionsShowMore : L10n.screenRoomReactionsShowLess)
                 .padding(.vertical, 6)
-                .padding(.horizontal, 8)
+                .padding(.horizontal, 12)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
         }
@@ -125,7 +125,7 @@ struct TimelineReactionButton: View {
                 }
             }
             .padding(.vertical, 6)
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 12)
         }
     }
     
