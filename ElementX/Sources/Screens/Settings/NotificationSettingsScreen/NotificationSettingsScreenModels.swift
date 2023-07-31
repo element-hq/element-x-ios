@@ -23,14 +23,31 @@ struct NotificationSettingsScreenViewState: BindableState {
     var bindings: NotificationSettingsScreenViewStateBindings
     var strings = NotificationSettingsScreenStrings()
     var isUserPermissionGranted: Bool?
+    var allowedNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly]
     
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
     }
+
+    var settings: NotificationSettingsScreenSettings?
+    var applyingChange = false
 }
 
 struct NotificationSettingsScreenViewStateBindings {
     var enableNotifications = false
+    var roomMentionsEnabled = false
+    var callsEnabled = false
+    var alertInfo: AlertInfo<NotificationSettingsScreenErrorType>?
+}
+
+struct NotificationSettingsScreenSettings {
+    let groupChatsMode: RoomNotificationModeProxy
+    let directChatsMode: RoomNotificationModeProxy
+    let roomMentionsEnabled: Bool?
+    let callsEnabled: Bool?
+    // Old clients were having specific settings for encrypted and unencrypted rooms,
+    // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
+    let inconsistentSettings: Bool
 }
 
 struct NotificationSettingsScreenStrings {
@@ -45,9 +62,29 @@ struct NotificationSettingsScreenStrings {
         
         return text
     }()
+    
+    func string(for mode: RoomNotificationModeProxy) -> String {
+        switch mode {
+        case .allMessages:
+            return L10n.screenNotificationSettingsModeAll
+        case .mentionsAndKeywordsOnly:
+            return L10n.screenNotificationSettingsModeMentions
+        case .mute:
+            return L10n.commonMute
+        }
+    }
 }
 
 enum NotificationSettingsScreenViewAction {
     case linkClicked(url: URL)
     case changedEnableNotifications
+    case groupChatsTapped
+    case directChatsTapped
+    case roomMentionChanged
+    case callsChanged
+}
+
+enum NotificationSettingsScreenErrorType: Hashable {
+    /// A specific error message shown in an alert.
+    case alert
 }

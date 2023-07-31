@@ -25,9 +25,19 @@ struct NotificationSettingsScreen: View {
                 userPermissionSection
             }
             enableNotificationSection
+            if context.enableNotifications {
+                roomsNotificationSection
+                if context.viewState.settings?.roomMentionsEnabled != nil {
+                    mentionsSection
+                }
+                if context.viewState.settings?.callsEnabled != nil {
+                    callsSection
+                }
+            }
         }
         .compoundForm()
         .navigationTitle(L10n.screenNotificationSettingsTitle)
+        .alert(item: $context.alertInfo)
         .track(screen: .settingsNotifications)
     }
     
@@ -69,6 +79,87 @@ struct NotificationSettingsScreen: View {
         }
         .compoundFormSection()
     }
+    
+    private var roomsNotificationSection: some View {
+        Section {
+            // Group chats
+            Button {
+                context.send(viewAction: .groupChatsTapped)
+            } label: {
+                LabeledContent {
+                    if let settings = context.viewState.settings {
+                        Text(context.viewState.strings.string(for: settings.groupChatsMode))
+                    } else {
+                        ProgressView()
+                    }
+                } label: {
+                    Text(L10n.screenNotificationSettingsGroupChats)
+                }
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
+            .disabled(context.viewState.settings == nil)
+            
+            // Direct chats
+            Button {
+                context.send(viewAction: .directChatsTapped)
+            } label: {
+                LabeledContent {
+                    if let settings = context.viewState.settings {
+                        Text(context.viewState.strings.string(for: settings.directChatsMode))
+                    } else {
+                        ProgressView()
+                    }
+                } label: {
+                    Text(L10n.screenNotificationSettingsDirectChats)
+                }
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
+            .disabled(context.viewState.settings == nil)
+            
+        } header: {
+            Text(L10n.screenNotificationSettingsNotificationSectionTitle)
+                .compoundFormSectionHeader()
+        }
+        .compoundFormSection()
+    }
+        
+    private var mentionsSection: some View {
+        Section {
+            Toggle(isOn: $context.roomMentionsEnabled) {
+                Text(L10n.screenNotificationSettingsRoomMentionLabel)
+            }
+            .toggleStyle(.compoundForm)
+            .onChange(of: context.roomMentionsEnabled) { _ in
+                context.send(viewAction: .roomMentionChanged)
+            }
+            .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
+            .allowsHitTesting(!context.viewState.applyingChange)
+        } header: {
+            Text(L10n.screenNotificationSettingsMentionsSectionTitle)
+                .compoundFormSectionHeader()
+        }
+        .compoundFormSection()
+    }
+    
+    private var callsSection: some View {
+        Section {
+            Toggle(isOn: $context.callsEnabled) {
+                Text(L10n.screenNotificationSettingsCallsLabel)
+            }
+            .toggleStyle(.compoundForm)
+            .onChange(of: context.callsEnabled) { _ in
+                context.send(viewAction: .callsChanged)
+            }
+            .disabled(context.viewState.settings?.callsEnabled == nil)
+            .allowsHitTesting(!context.viewState.applyingChange)
+        } header: {
+            Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
+                .compoundFormSectionHeader()
+        }
+        .compoundFormSection()
+    }
 }
 
 // MARK: - Previews
@@ -78,7 +169,22 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
         let appSettings = AppSettings()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
-        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings, userNotificationCenter: notificationCenter)
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure = { isEncrypted, activeMembersCount in
+            switch (isEncrypted, activeMembersCount) {
+            case (_, 2):
+                return .allMessages
+            default:
+                return .mentionsAndKeywordsOnly
+            }
+        }
+        notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
+        notificationSettingsProxy.isCallEnabledReturnValue = false
+
+        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+                                                            userNotificationCenter: notificationCenter,
+                                                            notificationSettingsProxy: notificationSettingsProxy)
+        viewModel.fetchInitialContent()
         return viewModel
     }()
 

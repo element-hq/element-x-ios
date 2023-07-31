@@ -169,7 +169,8 @@ class MockScreen: Identifiable {
                                                                           userIndicatorController: nil,
                                                                           userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                                                        mediaProvider: MockMediaProvider()),
-                                                                          bugReportService: BugReportServiceMock()))
+                                                                          bugReportService: BugReportServiceMock(),
+                                                                          notificationSettings: NotificationSettingsProxyMock(with: .init())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .bugReport:
@@ -195,7 +196,8 @@ class MockScreen: Identifiable {
         case .notificationSettingsScreen:
             let userNotificationCenter = UserNotificationCenterMock()
             userNotificationCenter.authorizationStatusReturnValue = .denied
-            let parameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: userNotificationCenter)
+            let parameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: userNotificationCenter,
+                                                                             notificationSettings: NotificationSettingsProxyMock(with: .init()))
             return NotificationSettingsScreenCoordinator(parameters: parameters)
         case .onboarding:
             return OnboardingCoordinator()

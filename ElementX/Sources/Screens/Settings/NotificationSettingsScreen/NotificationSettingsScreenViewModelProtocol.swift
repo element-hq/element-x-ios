@@ -20,4 +20,6 @@ import Combine
 protocol NotificationSettingsScreenViewModelProtocol {
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> { get }
     var context: NotificationSettingsScreenViewModelType.Context { get }
+    
+    func fetchInitialContent()
 }

@@ -19,6 +19,7 @@ import SwiftUI
 
 struct NotificationSettingsScreenCoordinatorParameters {
     let userNotificationCenter: UserNotificationCenterProtocol
+    let notificationSettings: NotificationSettingsProxyProtocol
 }
 
 enum NotificationSettingsScreenCoordinatorAction { }
@@ -37,10 +38,13 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
-                                                        userNotificationCenter: parameters.userNotificationCenter)
+                                                        userNotificationCenter: parameters.userNotificationCenter,
+                                                        notificationSettingsProxy: parameters.notificationSettings)
     }
     
-    func start() { }
+    func start() {
+        viewModel.fetchInitialContent()
+    }
         
     func toPresentable() -> AnyView {
         AnyView(NotificationSettingsScreen(context: viewModel.context))
