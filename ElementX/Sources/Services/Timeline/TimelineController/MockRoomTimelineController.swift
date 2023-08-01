@@ -26,7 +26,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
     
-    let roomID = "MockRoomIdentifier"
+    var roomProxy: RoomProxyProtocol?
+    var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -49,7 +50,15 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         return .success(())
     }
     
-    func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> { .success(()) }
+    func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
+        guard let roomProxy, let eventID = itemID.eventID else { return .failure(.generic) }
+        switch await roomProxy.sendReadReceipt(for: eventID) {
+        case .success:
+            return .success(())
+        case .failure:
+            return .failure(.generic)
+        }
+    }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     

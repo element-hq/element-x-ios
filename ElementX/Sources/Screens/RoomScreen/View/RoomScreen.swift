@@ -56,13 +56,6 @@ struct RoomScreen: View {
             }
             .interactiveQuickLook(item: $context.mediaPreviewItem)
             .track(screen: .room)
-            .task(id: context.viewState.roomId) {
-                // Give a couple of seconds for items to load and to see them.
-                try? await Task.sleep(for: .seconds(2))
-                
-                guard !Task.isCancelled else { return }
-                context.send(viewAction: .markRoomAsRead)
-            }
             .onDrop(of: ["public.item"], isTargeted: $dragOver) { providers -> Bool in
                 guard let provider = providers.first,
                       provider.isSupportedForPasteOrDrop else {
@@ -89,7 +82,7 @@ struct RoomScreen: View {
 
     private var timeline: some View {
         timelineSwitch
-            .id(context.viewState.roomId)
+            .id(context.viewState.roomID)
             .environmentObject(context)
             .environment(\.timelineStyle, context.viewState.timelineStyle)
             .environment(\.readReceiptsEnabled, context.viewState.readReceiptsEnabled)

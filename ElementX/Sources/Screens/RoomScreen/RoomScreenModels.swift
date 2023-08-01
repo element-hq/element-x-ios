@@ -59,8 +59,7 @@ enum RoomScreenViewAction {
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case cancelReply
     case cancelEdit
-    /// Mark the entire room as read - this is heavy handed as a starting point for now.
-    case markRoomAsRead
+    case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
@@ -85,7 +84,7 @@ enum RoomScreenViewAction {
 }
 
 struct RoomScreenViewState: BindableState {
-    var roomId: String
+    var roomID: String
     var roomTitle = ""
     var roomAvatarURL: URL?
     var members: [String: RoomMemberState] = [:]
