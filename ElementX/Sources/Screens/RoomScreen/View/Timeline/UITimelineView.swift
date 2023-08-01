@@ -65,9 +65,6 @@ struct UITimelineView: UIViewControllerRepresentable {
             if tableViewController.isBackPaginating != context.viewState.timelineViewState.isBackPaginating {
                 tableViewController.isBackPaginating = context.viewState.timelineViewState.isBackPaginating
             }
-            if tableViewController.composerMode != context.viewState.composerMode {
-                tableViewController.composerMode = context.viewState.composerMode
-            }
             
             // Doesn't have an equatable conformance :(
             tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider

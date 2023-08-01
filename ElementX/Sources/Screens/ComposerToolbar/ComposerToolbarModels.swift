@@ -17,7 +17,7 @@
 import UIKit
 
 enum ComposerToolbarViewAction {
-    case sendMessage(message: String)
+    case sendMessage(message: String, mode: RoomScreenComposerMode)
     case cancelReply
     case cancelEdit
 

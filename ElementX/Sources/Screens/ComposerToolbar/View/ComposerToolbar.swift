@@ -45,6 +45,6 @@ struct ComposerToolbar: View {
 
     private func sendMessage() {
         guard !context.viewState.sendButtonDisabled else { return }
-        context.send(viewAction: .sendMessage(message: context.composerText))
+        context.send(viewAction: .sendMessage(message: context.composerText, mode: context.viewState.composerMode))
     }
 }

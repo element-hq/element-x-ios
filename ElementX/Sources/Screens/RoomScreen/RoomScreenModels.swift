@@ -92,7 +92,6 @@ struct RoomScreenViewState: BindableState {
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
-    var composerMode: RoomScreenComposerMode = .default
     var swiftUITimelineEnabled = false
     var composerToolbar: AnyView
 

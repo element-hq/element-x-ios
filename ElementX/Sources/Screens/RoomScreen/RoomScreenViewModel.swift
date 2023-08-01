@@ -77,8 +77,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         buildTimelineViews()
-        
-        trackComposerMode()
+
+        // Note: beware if we get to e.g. restore a reply / edit,
+        // maybe we are tracking a non-needed first initial state
+        trackComposerMode(.default)
     }
     
     // MARK: - Public
@@ -136,8 +138,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
-        case .sendMessage(let message):
-            Task { await sendCurrentMessage(message) }
+        case .sendMessage(let message, let mode):
+            Task { await sendCurrentMessage(message, mode: mode) }
         case .cancelReply:
             composerActionCallback?(.setMode(mode: .default))
         case .cancelEdit:
@@ -153,8 +155,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
-            state.composerMode = mode
-            trackComposerMode()
+            trackComposerMode(mode)
         case .focusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
         }
@@ -422,16 +423,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage(_ currentMessage: String) async {
+    private func sendCurrentMessage(_ currentMessage: String, mode: RoomScreenComposerMode) async {
         guard !currentMessage.isEmpty else {
             fatalError("This message should never be empty")
         }
-        
-        let currentComposerState = state.composerMode
 
         composerActionCallback?(.clear)
 
-        switch currentComposerState {
+        switch mode {
         case .reply(let itemId, _):
             await timelineController.sendMessage(currentMessage, inReplyTo: itemId)
         case .edit(let originalItemId):
@@ -441,10 +440,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func trackComposerMode() {
+    private func trackComposerMode(_ mode: RoomScreenComposerMode) {
         var isEdit = false
         var isReply = false
-        switch state.composerMode {
+        switch mode {
         case .edit:
             isEdit = true
         case .reply:
