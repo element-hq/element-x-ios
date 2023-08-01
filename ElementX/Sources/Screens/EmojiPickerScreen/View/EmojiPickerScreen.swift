@@ -20,6 +20,7 @@ import SwiftUI
 struct EmojiPickerScreen: View {
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
     
+    var selectedEmojis = Set<String>()
     @State var searchString = ""
     @State private var isSearching = false
     
@@ -39,7 +40,10 @@ struct EmojiPickerScreen: View {
                                     context.send(viewAction: .emojiTapped(emoji: emoji))
                                 } label: {
                                     Text(emoji.value)
+                                        .padding(9.0)
                                         .font(.compound.headingXL)
+                                        .background(Circle()
+                                            .foregroundColor(emojiBackgroundColor(for: emoji.value)))
                                 }
                             }
                         } header: {
@@ -62,6 +66,14 @@ struct EmojiPickerScreen: View {
         .presentationDragIndicator(isSearching ? .hidden : .visible)
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))
+        }
+    }
+    
+    private func emojiBackgroundColor(for emoji: String) -> Color {
+        if selectedEmojis.contains(emoji) {
+            return .compound.bgActionPrimaryRest
+        } else {
+            return .clear
         }
     }
     
@@ -92,12 +104,12 @@ struct EmojiPickerScreen_Previews: PreviewProvider {
     static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
     
     static var previews: some View {
-        EmojiPickerScreen(context: viewModel.context)
+        EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
             .previewDisplayName("Screen")
         
         Text("Timeline view")
             .sheet(isPresented: .constant(true)) {
-                EmojiPickerScreen(context: viewModel.context)
+                EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
             }
             .previewDisplayName("Sheet")
     }

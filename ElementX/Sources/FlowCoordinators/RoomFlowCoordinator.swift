@@ -136,9 +136,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.dismissMediaUploadPreview, .mediaUploadPreview(let roomID, _)):
                 return .room(roomID: roomID)
                 
-            case (.presentEmojiPicker(let itemID), .room(let roomID)):
-                return .emojiPicker(roomID: roomID, itemID: itemID)
-            case (.dismissEmojiPicker, .emojiPicker(let roomID, _)):
+            case (.presentEmojiPicker(let itemID, let selectedEmoji), .room(let roomID)):
+                return .emojiPicker(roomID: roomID, itemID: itemID, selectedEmojis: selectedEmoji)
+            case (.dismissEmojiPicker, .emojiPicker(let roomID, _, _)):
                 return .room(roomID: roomID)
 
             case (.presentMessageForwarding(let itemID), .room(let roomID)):
@@ -197,8 +197,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
                 break
                 
-            case (.room, .presentEmojiPicker, .emojiPicker(_, let itemID)):
-                presentEmojiPicker(for: itemID)
+            case (.room, .presentEmojiPicker, .emojiPicker(_, let itemID, let selectedEmoji)):
+                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
             case (.emojiPicker, .dismissEmojiPicker, .room):
                 break
 
@@ -303,8 +303,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMediaUploadPicker(source: source))
                 case .presentMediaUploadPreviewScreen(let url):
                     stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
-                case .presentEmojiPicker(let itemID):
-                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID))
+                case .presentEmojiPicker(let itemID, let selectedEmojis):
+                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
                 case .presentLocationViewer(_, let geoURI, let description):
@@ -480,9 +480,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentEmojiPicker(for itemID: TimelineItemIdentifier) {
+    private func presentEmojiPicker(for itemID: TimelineItemIdentifier, selectedEmoji: Set<String>) {
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
-                                                            itemID: itemID)
+                                                            itemID: itemID, selectedEmojis: selectedEmoji)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
@@ -632,7 +632,7 @@ private extension RoomFlowCoordinator {
         case roomDetails(roomID: String, isRoot: Bool)
         case mediaUploadPicker(roomID: String, source: MediaPickerScreenSource)
         case mediaUploadPreview(roomID: String, fileURL: URL)
-        case emojiPicker(roomID: String, itemID: TimelineItemIdentifier)
+        case emojiPicker(roomID: String, itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case mapNavigator(roomID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
@@ -659,7 +659,7 @@ private extension RoomFlowCoordinator {
         case presentMediaUploadPreview(fileURL: URL)
         case dismissMediaUploadPreview
         
-        case presentEmojiPicker(itemID: TimelineItemIdentifier)
+        case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case dismissEmojiPicker
 
         case presentMapNavigator(interactionMode: StaticLocationInteractionMode)

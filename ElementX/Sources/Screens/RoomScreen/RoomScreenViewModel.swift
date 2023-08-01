@@ -728,8 +728,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Reactions
     
     private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let item = state.timelineViewState.itemsDictionary[itemID.timelineID], item.isReactable else { return }
-        callback?(.displayEmojiPicker(itemID: itemID))
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+              timelineItem.isReactable,
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+            return
+        }
+        let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
+        callback?(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
     private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {

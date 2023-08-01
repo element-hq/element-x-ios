@@ -22,7 +22,7 @@ import OrderedCollections
 
 enum RoomScreenViewModelAction {
     case displayRoomDetails
-    case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayCameraPicker
     case displayMediaPicker

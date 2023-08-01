@@ -121,6 +121,7 @@ extension RoomTimelineItemProtocol {
 public struct TimelineItemMenu: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.dismiss) private var dismiss
+    @ScaledMetric private var addMoreButtonIconSize = 24
     
     let item: EventBasedTimelineItemProtocol
     let actions: TimelineItemMenuActions
@@ -209,8 +210,12 @@ public struct TimelineItemMenu: View {
                     context.send(viewAction: .displayEmojiPicker(itemID: item.id))
                 }
             } label: {
-                Image(systemName: "plus.circle")
-                    .font(.compound.headingLG)
+                Image(asset: Asset.Images.timelineReactionAddMore)
+                    .resizable()
+                    .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
+                    .frame(maxHeight: .infinity, alignment: .center)
+                    .foregroundColor(.compound.iconSecondary)
+                    .padding(10)
             }
         }
         .padding(.horizontal)
@@ -224,11 +229,10 @@ public struct TimelineItemMenu: View {
             context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {
             Text(emoji)
-                .padding(8.0)
+                .padding(8)
                 .font(.compound.headingLG)
                 .background(Circle()
                     .foregroundColor(reactionBackgroundColor(for: emoji)))
-            
             Spacer()
         }
     }
