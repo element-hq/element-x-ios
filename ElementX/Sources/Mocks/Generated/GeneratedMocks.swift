@@ -747,11 +747,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingActiveMembersCount = value }
     }
     var underlyingActiveMembersCount: Int!
-    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
+    var updatesPublisher: AnyPublisher<[TimelineDiff], Never> {
         get { return underlyingUpdatesPublisher }
         set(value) { underlyingUpdatesPublisher = value }
     }
-    var underlyingUpdatesPublisher: AnyPublisher<TimelineDiff, Never>!
+    var underlyingUpdatesPublisher: AnyPublisher<[TimelineDiff], Never>!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }

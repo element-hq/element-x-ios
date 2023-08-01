@@ -88,7 +88,12 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var senderID: String {
-        notificationItem.senderInfo.userId
+        switch notificationItem.event {
+        case .timeline(let event):
+            return event.senderId()
+        case .invite(let senderID):
+            return senderID
+        }
     }
 
     var roomDisplayName: String {

@@ -27,7 +27,7 @@ struct InvitesScreenCell: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-            LoadableAvatarImage(url: mainAvatarURL,
+            LoadableAvatarImage(url: invite.roomDetails.avatarURL,
                                 name: title,
                                 contentID: invite.roomDetails.id,
                                 avatarSize: .custom(52),
@@ -119,12 +119,7 @@ struct InvitesScreenCell: View {
             .fill(Color.compound.borderDisabled)
             .frame(height: 1 / UIScreen.main.scale)
     }
-    
-    #warning("Return just `roomDetails.avatarURL` when this logic is implemented in the rust sdk")
-    private var mainAvatarURL: URL? {
-        invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
-    }
-    
+        
     private var title: String {
         invite.roomDetails.name
     }

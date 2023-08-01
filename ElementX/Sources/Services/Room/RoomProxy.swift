@@ -45,8 +45,8 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     private var timelineListener: RoomTimelineListener?
-    private let updatesSubject = PassthroughSubject<TimelineDiff, Never>()
-    var updatesPublisher: AnyPublisher<TimelineDiff, Never> {
+    private let updatesSubject = PassthroughSubject<[TimelineDiff], Never>()
+    var updatesPublisher: AnyPublisher<[TimelineDiff], Never> {
         updatesSubject.eraseToAnyPublisher()
     }
     
@@ -80,8 +80,8 @@ class RoomProxy: RoomProxyProtocol {
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
         roomListItem.subscribe(settings: settings)
 
-        let timelineListener = RoomTimelineListener { [weak self] timelineDiff in
-            self?.updatesSubject.send(timelineDiff)
+        let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
+            self?.updatesSubject.send(timelineDiffs)
         }
 
         self.timelineListener = timelineListener
@@ -691,13 +691,13 @@ class RoomProxy: RoomProxyProtocol {
 }
 
 private final class RoomTimelineListener: TimelineListener {
-    private let onUpdateClosure: (TimelineDiff) -> Void
+    private let onUpdateClosure: ([TimelineDiff]) -> Void
    
-    init(_ onUpdateClosure: @escaping (TimelineDiff) -> Void) {
+    init(_ onUpdateClosure: @escaping ([TimelineDiff]) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(diff: TimelineDiff) {
+    func onUpdate(diff: [TimelineDiff]) {
         onUpdateClosure(diff)
     }
 }

@@ -74,7 +74,7 @@ protocol RoomProxyProtocol {
     
     /// Publishes the room's updates.
     /// The thread on which this publisher sends the output isn't defined.
-    var updatesPublisher: AnyPublisher<TimelineDiff, Never> { get }
+    var updatesPublisher: AnyPublisher<[TimelineDiff], Never> { get }
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
 

@@ -40,7 +40,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
 
     init(currentItems: [TimelineItem],
-         updatePublisher: AnyPublisher<TimelineDiff, Never>,
+         updatePublisher: AnyPublisher<[TimelineDiff], Never>,
          backPaginationStatePublisher: AnyPublisher<BackPaginationStatus, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>(currentItems.map(TimelineItemProxy.init))
@@ -49,7 +49,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         itemProxiesSubject.send(itemProxies)
 
         updatePublisher
-            .collect(.byTime(serialDispatchQueue, 0.1))
+            .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateItemsWithDiffs($0) }
             .store(in: &cancellables)
 
