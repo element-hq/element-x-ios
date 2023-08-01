@@ -39,7 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
 
-    private weak var composerActionHandler: RoomScreenComposerActionHandler?
+    private weak var composerActionHandler: RoomScreenComposerActionHandlerProtocol?
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -48,7 +48,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default,
-         composerProvider: RoomScreenComposerProvider) {
+         composerProvider: RoomScreenComposerProviderProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
@@ -195,8 +195,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func setupComposerSubscriptions() {
         guard let composerActionHandler else { return }
 
-        composerActionHandler.publisher
-            .map(\.composerMode)
+        composerActionHandler.composerMode
             .removeDuplicates()
             .sink { [weak self] mode in
                 self?.state.composerMode = mode
@@ -210,8 +209,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        let shouldShowInviteAlert = composerActionHandler.publisher
-            .map(\.bindings.composerFocused)
+        let shouldShowInviteAlert = composerActionHandler.focused
             .removeDuplicates()
             .map { [weak self] isFocused in
                 guard let self else { return false }

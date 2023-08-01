@@ -21,8 +21,21 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     weak var actionHandler: ComposerToolbarViewActionHandler?
 
+    private var focusedSubject = PassthroughSubject<Bool, Never>()
+    private var composerModeSubject = PassthroughSubject<RoomScreenComposerMode, Never>()
+
     init() {
         super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerText: "", composerFocused: false)))
+
+        context.$viewState
+            .map(\.composerMode)
+            .sink { [weak self] in self?.composerModeSubject.send($0) }
+            .store(in: &cancellables)
+
+        context.$viewState
+            .map(\.bindings.composerFocused)
+            .sink { [weak self] in self?.focusedSubject.send($0) }
+            .store(in: &cancellables)
     }
 
     override func process(viewAction: ComposerToolbarViewAction) {
@@ -30,9 +43,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 }
 
-extension ComposerToolbarViewModel: RoomScreenComposerActionHandler {
-    var publisher: Published<ComposerToolbarViewState>.Publisher {
-        context.$viewState
+extension ComposerToolbarViewModel: RoomScreenComposerActionHandlerProtocol {
+    var focused: PassthroughSubject<Bool, Never> {
+        focusedSubject
+    }
+
+    var composerMode: PassthroughSubject<RoomScreenComposerMode, Never> {
+        composerModeSubject
     }
 
     func process(composerAction: RoomScreenComposerAction) {

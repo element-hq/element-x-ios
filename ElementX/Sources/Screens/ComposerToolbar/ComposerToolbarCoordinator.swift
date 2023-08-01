@@ -34,9 +34,9 @@ final class ComposerToolbarCoordinator: CoordinatorProtocol {
     }
 }
 
-extension ComposerToolbarCoordinator: RoomScreenComposerProvider {
-    var handler: RoomScreenComposerActionHandler? {
-        viewModel as? RoomScreenComposerActionHandler
+extension ComposerToolbarCoordinator: RoomScreenComposerProviderProtocol {
+    var handler: RoomScreenComposerActionHandlerProtocol? {
+        viewModel as? RoomScreenComposerActionHandlerProtocol
     }
 
     var view: AnyView {

@@ -24,12 +24,13 @@ protocol RoomScreenViewModelProtocol {
     var context: RoomScreenViewModelType.Context { get }
 }
 
-protocol RoomScreenComposerActionHandler: AnyObject {
-    var publisher: Published<ComposerToolbarViewState>.Publisher { get }
+protocol RoomScreenComposerActionHandlerProtocol: AnyObject {
+    var focused: PassthroughSubject<Bool, Never> { get }
+    var composerMode: PassthroughSubject<RoomScreenComposerMode, Never> { get }
     func process(composerAction: RoomScreenComposerAction)
 }
 
-protocol RoomScreenComposerProvider {
-    var handler: RoomScreenComposerActionHandler? { get }
+protocol RoomScreenComposerProviderProtocol {
+    var handler: RoomScreenComposerActionHandlerProtocol? { get }
     var view: AnyView { get }
 }
