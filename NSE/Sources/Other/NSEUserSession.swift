@@ -48,7 +48,7 @@ final class NSEUserSession {
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
         await Task.dispatch(on: .global()) {
             do {
-                let notification = try self.notificationClient.getNotificationWithSlidingSync(roomId: roomID, eventId: eventID)
+                let notification = try self.notificationClient.getNotification(roomId: roomID, eventId: eventID)
 
                 guard let notification else {
                     return nil
