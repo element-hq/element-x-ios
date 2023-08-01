@@ -19,7 +19,7 @@ import Combine
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
-    weak var actionHandler: ComposerToolbarViewActionHandler?
+    var callback: ((ComposerToolbarViewAction) -> Void)?
 
     private var focusedSubject = PassthroughSubject<Bool, Never>()
     private var composerModeSubject = PassthroughSubject<RoomScreenComposerMode, Never>()
@@ -39,7 +39,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     override func process(viewAction: ComposerToolbarViewAction) {
-        actionHandler?.process(viewAction: viewAction)
+        callback?(viewAction)
     }
 }
 

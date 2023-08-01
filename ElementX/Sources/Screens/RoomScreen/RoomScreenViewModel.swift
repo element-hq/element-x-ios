@@ -795,7 +795,7 @@ extension RoomScreenViewModel.Context {
     }
 }
 
-extension RoomScreenViewModel: ComposerToolbarViewActionHandler {
+extension RoomScreenViewModel {
     func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
         case .sendMessage(let message):
@@ -821,7 +821,7 @@ extension RoomScreenViewModel: ComposerToolbarViewActionHandler {
 // MARK: - Mocks
 
 extension RoomScreenViewModel {
-    private static let composerToolbarCoordinator = ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters())
+    private static let composerToolbarCoordinator = ComposerToolbarCoordinator()
 
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),

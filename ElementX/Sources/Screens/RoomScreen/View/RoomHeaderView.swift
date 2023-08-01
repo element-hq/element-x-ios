@@ -61,7 +61,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            composerProvider: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()))
+                                            composerProvider: ComposerToolbarCoordinator())
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -76,7 +76,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            composerProvider: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()))
+                                            composerProvider: ComposerToolbarCoordinator())
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

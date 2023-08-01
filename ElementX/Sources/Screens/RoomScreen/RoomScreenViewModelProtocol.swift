@@ -22,6 +22,7 @@ import SwiftUI
 protocol RoomScreenViewModelProtocol {
     var callback: ((RoomScreenViewModelAction) -> Void)? { get set }
     var context: RoomScreenViewModelType.Context { get }
+    func process(viewAction: ComposerToolbarViewAction)
 }
 
 protocol RoomScreenComposerActionHandlerProtocol: AnyObject {

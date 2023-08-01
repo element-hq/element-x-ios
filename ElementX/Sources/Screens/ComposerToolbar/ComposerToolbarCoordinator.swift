@@ -14,19 +14,27 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
-
-struct ComposerToolbarCoordinatorParameters { }
 
 final class ComposerToolbarCoordinator: CoordinatorProtocol {
     private var viewModel: ComposerToolbarViewModelProtocol
 
-    func set(actionHandler: ComposerToolbarViewActionHandler) {
-        viewModel.actionHandler = actionHandler
+    private let actionsSubject = PassthroughSubject<ComposerToolbarViewAction, Never>()
+    var actions: AnyPublisher<ComposerToolbarViewAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
     }
 
-    init(parameters: ComposerToolbarCoordinatorParameters) {
+    init() {
         viewModel = ComposerToolbarViewModel()
+    }
+
+    func start() {
+        viewModel.callback = { [weak self] action in
+            guard let self else { return }
+
+            self.actionsSubject.send(action)
+        }
     }
 
     func toPresentable() -> AnyView {

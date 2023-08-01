@@ -15,10 +15,6 @@
 //
 
 protocol ComposerToolbarViewModelProtocol {
-    var actionHandler: ComposerToolbarViewActionHandler? { get set }
+    var callback: ((ComposerToolbarViewAction) -> Void)? { get set }
     var context: ComposerToolbarViewModelType.Context { get }
-}
-
-protocol ComposerToolbarViewActionHandler: AnyObject {
-    func process(viewAction: ComposerToolbarViewAction)
 }

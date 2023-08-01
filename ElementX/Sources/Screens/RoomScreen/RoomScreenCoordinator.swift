@@ -39,6 +39,7 @@ enum RoomScreenCoordinatorAction {
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
     private let composerToolbarCoordinator: ComposerToolbarCoordinator
+    private var cancellables = Set<AnyCancellable>()
 
     private var viewModel: RoomScreenViewModelProtocol
 
@@ -50,7 +51,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
 
-        composerToolbarCoordinator = ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters())
+        composerToolbarCoordinator = ComposerToolbarCoordinator()
         
         let roomScreenViewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                                       mediaProvider: parameters.mediaProvider,
@@ -62,7 +63,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         viewModel = roomScreenViewModel
 
-        composerToolbarCoordinator.set(actionHandler: roomScreenViewModel)
+        composerToolbarCoordinator.actions
+            .sink { [weak self] action in
+                self?.viewModel.process(viewAction: action)
+            }
+            .store(in: &cancellables)
+
+        composerToolbarCoordinator.start()
     }
     
     // MARK: - Public

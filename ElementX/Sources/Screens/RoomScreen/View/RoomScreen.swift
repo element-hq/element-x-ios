@@ -150,7 +150,7 @@ struct RoomScreen_Previews: PreviewProvider {
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               composerProvider: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()))
+                                               composerProvider: ComposerToolbarCoordinator())
     
     static var previews: some View {
         NavigationStack {

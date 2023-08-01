@@ -65,7 +65,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider {
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               composerProvider: ComposerToolbarCoordinator(parameters: ComposerToolbarCoordinatorParameters()))
+                                               composerProvider: ComposerToolbarCoordinator())
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),
