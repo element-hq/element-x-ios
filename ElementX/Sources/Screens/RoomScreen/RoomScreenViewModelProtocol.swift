@@ -16,10 +16,10 @@
 
 import Combine
 import Foundation
+import SwiftUI
 
 @MainActor
 protocol RoomScreenViewModelProtocol {
-    var composerActionHandler: RoomScreenComposerActionHandler? { get set }
     var callback: ((RoomScreenViewModelAction) -> Void)? { get set }
     var context: RoomScreenViewModelType.Context { get }
 }
@@ -27,4 +27,9 @@ protocol RoomScreenViewModelProtocol {
 protocol RoomScreenComposerActionHandler: AnyObject {
     var publisher: Published<ComposerToolbarViewState>.Publisher { get }
     func process(composerAction: RoomScreenComposerAction)
+}
+
+protocol RoomScreenComposerProvider {
+    var handler: RoomScreenComposerActionHandler? { get }
+    var view: AnyView { get }
 }

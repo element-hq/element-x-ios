@@ -39,11 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private var paginateBackwardsTask: Task<Void, Never>?
 
-    weak var composerActionHandler: RoomScreenComposerActionHandler? {
-        didSet {
-            setupComposerSubscriptions()
-        }
-    }
+    private weak var composerActionHandler: RoomScreenComposerActionHandler?
     
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -52,7 +48,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default,
-         composerToolbar: AnyView) {
+         composerProvider: RoomScreenComposerProvider) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
@@ -66,11 +62,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         composerToolbar: composerToolbar,
+                                                         composerToolbar: composerProvider.view,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
+
+        composerActionHandler = composerProvider.handler
         
         setupSubscriptions()
+        setupComposerSubscriptions()
+        setupDirectRoomSubscriptionsIfNeeded()
         
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
@@ -203,8 +203,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 self?.trackComposerMode()
             }
             .store(in: &cancellables)
-
-        setupDirectRoomSubscriptionsIfNeeded()
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -298,7 +296,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch action {
         case .displayMediaFile(let file, let title):
-            state.bindings.composerFocused = false // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
+            composerActionHandler?.process(composerAction: .removeFocus) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
         case .displayLocation(let body, let geoURI, let description):
             callback?(.displayLocation(body: body, geoURI: geoURI, description: description))
@@ -833,5 +831,5 @@ extension RoomScreenViewModel {
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          composerToolbar: composerToolbarCoordinator.toPresentable())
+                                          composerProvider: composerToolbarCoordinator)
 }

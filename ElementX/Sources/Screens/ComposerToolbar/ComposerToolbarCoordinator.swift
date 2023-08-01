@@ -21,10 +21,6 @@ struct ComposerToolbarCoordinatorParameters { }
 final class ComposerToolbarCoordinator: CoordinatorProtocol {
     private var viewModel: ComposerToolbarViewModelProtocol
 
-    func getComposerActionHandler() -> RoomScreenComposerActionHandler? {
-        viewModel as? RoomScreenComposerActionHandler
-    }
-
     func set(actionHandler: ComposerToolbarViewActionHandler) {
         viewModel.actionHandler = actionHandler
     }
@@ -35,5 +31,15 @@ final class ComposerToolbarCoordinator: CoordinatorProtocol {
 
     func toPresentable() -> AnyView {
         AnyView(ComposerToolbar(context: viewModel.context))
+    }
+}
+
+extension ComposerToolbarCoordinator: RoomScreenComposerProvider {
+    var handler: RoomScreenComposerActionHandler? {
+        viewModel as? RoomScreenComposerActionHandler
+    }
+
+    var view: AnyView {
+        toPresentable()
     }
 }

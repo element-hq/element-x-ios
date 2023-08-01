@@ -58,12 +58,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                       appSettings: ServiceLocator.shared.settings,
                                                       analytics: ServiceLocator.shared.analytics,
                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                      composerToolbar: composerToolbarCoordinator.toPresentable())
+                                                      composerProvider: composerToolbarCoordinator)
         
         viewModel = roomScreenViewModel
 
         composerToolbarCoordinator.set(actionHandler: roomScreenViewModel)
-        viewModel.composerActionHandler = composerToolbarCoordinator.getComposerActionHandler()
     }
     
     // MARK: - Public
