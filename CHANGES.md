@@ -1,3 +1,33 @@
+## Changes in 1.2.1 (2023-08-01)
+
+✨ Features
+
+- Location sharing: view and send static locations. ([#1358](https://github.com/vector-im/element-x-ios/pull/1358))
+- Timeline animations. ([#1371](https://github.com/vector-im/element-x-ios/pull/1371))
+- Send current user location ([#1272](https://github.com/vector-im/element-x-ios/issues/1272))
+- Contact Me switch added to the Bug Report screen. ([#1299](https://github.com/vector-im/element-x-ios/issues/1299))
+
+🙌 Improvements
+
+- Update Room Details to use compound styles everywhere. ([#1369](https://github.com/vector-im/element-x-ios/pull/1369))
+- Tweaks for macOS only: Fix Create Room button animation bug / Restore the timeline context menu / Fix media upload preview obscuring send button. ([#1383](https://github.com/vector-im/element-x-ios/pull/1383))
+- Make the app version and the device ID copyable in the Settings screen. ([#623](https://github.com/vector-im/element-x-ios/issues/623))
+
+🐛 Bugfixes
+
+- Fix for UI not retaining blocked/unlocked user state after dismissing and re-entering the details from the room member list. ([#910](https://github.com/vector-im/element-x-ios/issues/910))
+- Added an FF to enable push rules filtering. Also invitation notifications will now be always displayed reliably. ([#1172](https://github.com/vector-im/element-x-ios/issues/1172))
+- Compute correct sizes for portrait videos ([#1262](https://github.com/vector-im/element-x-ios/issues/1262))
+- Push notifications for a room are cleared from the notification centre when opening its timeline. Same for invitations when opening the invite screen. ([#1277](https://github.com/vector-im/element-x-ios/issues/1277))
+- Fixed wrong icon for files in replies. ([#1319](https://github.com/vector-im/element-x-ios/issues/1319))
+- Moderators can now remove other people messages if they have permission in non direct rooms. ([#1321](https://github.com/vector-im/element-x-ios/issues/1321))
+
+🧱 Build
+
+- Don't upgrade more homebrew deps than needed on GitHub runners. ([#1374](https://github.com/vector-im/element-x-ios/pull/1374))
+- Specify the target for code coverage in the Integration Tests plan. ([#1398](https://github.com/vector-im/element-x-ios/pull/1398))
+
+
 ## Changes in 1.1.8 (2023-07-05)
 
 ✨ Features

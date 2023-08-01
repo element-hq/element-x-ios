@@ -1,1 +1,0 @@
-Send current user location
