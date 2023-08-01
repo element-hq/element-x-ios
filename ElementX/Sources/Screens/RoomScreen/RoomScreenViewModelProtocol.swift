@@ -21,17 +21,7 @@ import SwiftUI
 @MainActor
 protocol RoomScreenViewModelProtocol {
     var callback: ((RoomScreenViewModelAction) -> Void)? { get set }
+    var composerActionCallback: ((RoomScreenComposerAction) -> Void)? { get set }
     var context: RoomScreenViewModelType.Context { get }
     func process(viewAction: ComposerToolbarViewAction)
-}
-
-protocol RoomScreenComposerActionHandlerProtocol: AnyObject {
-    var focused: PassthroughSubject<Bool, Never> { get }
-    var composerMode: PassthroughSubject<RoomScreenComposerMode, Never> { get }
-    func process(composerAction: RoomScreenComposerAction)
-}
-
-protocol RoomScreenComposerProviderProtocol {
-    var handler: RoomScreenComposerActionHandlerProtocol? { get }
-    var view: AnyView { get }
 }

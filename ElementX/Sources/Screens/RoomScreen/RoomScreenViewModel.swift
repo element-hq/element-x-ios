@@ -34,13 +34,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
+    private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
 
     private var canCurrentUserRedact = false
     
     private var paginateBackwardsTask: Task<Void, Never>?
 
-    private weak var composerActionHandler: RoomScreenComposerActionHandlerProtocol?
-    
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
@@ -48,7 +47,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default,
-         composerProvider: RoomScreenComposerProviderProtocol) {
+         composerToolbar: AnyView) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
@@ -62,16 +61,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         composerToolbar: composerProvider.view,
+                                                         composerToolbar: composerToolbar,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
-
-        composerActionHandler = composerProvider.handler
         
         setupSubscriptions()
-        setupComposerSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
-        
+
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
@@ -88,6 +84,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Public
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
+    var composerActionCallback: ((RoomScreenComposerAction) -> Void)?
     
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
@@ -192,24 +189,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
     }
 
-    private func setupComposerSubscriptions() {
-        guard let composerActionHandler else { return }
-
-        composerActionHandler.composerMode
-            .removeDuplicates()
-            .sink { [weak self] mode in
-                self?.state.composerMode = mode
-                self?.trackComposerMode()
-            }
-            .store(in: &cancellables)
-    }
-
     private func setupDirectRoomSubscriptionsIfNeeded() {
-        guard roomProxy.isDirect, let composerActionHandler else {
+        guard roomProxy.isDirect else {
             return
         }
 
-        let shouldShowInviteAlert = composerActionHandler.focused
+        let shouldShowInviteAlert = composerFocusedSubject
             .removeDuplicates()
             .map { [weak self] isFocused in
                 guard let self else { return false }
@@ -294,7 +279,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch action {
         case .displayMediaFile(let file, let title):
-            composerActionHandler?.process(composerAction: .removeFocus) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
+            composerActionCallback?(.removeFocus) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
         case .displayLocation(let body, let geoURI, let description):
             callback?(.displayLocation(body: body, geoURI: geoURI, description: description))
@@ -418,7 +403,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let currentComposerState = state.composerMode
 
-        composerActionHandler?.process(composerAction: .clear)
+        composerActionCallback?(.clear)
 
         switch currentComposerState {
         case .reply(let itemId, _):
@@ -468,7 +453,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        composerActionHandler?.process(composerAction: .removeFocus)
+        composerActionCallback?(.removeFocus)
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
     
@@ -551,8 +536,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
 
-            composerActionHandler?.process(composerAction: .setText(text: messageTimelineItem.body))
-            composerActionHandler?.process(composerAction: .setMode(mode: .edit(originalItemId: messageTimelineItem.id)))
+            composerActionCallback?(.setText(text: messageTimelineItem.body))
+            composerActionCallback?(.setMode(mode: .edit(originalItemId: messageTimelineItem.id)))
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
@@ -577,7 +562,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .reply:
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
 
-            composerActionHandler?.process(composerAction: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)))
+            composerActionCallback?(.setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)))
         case .forward(let itemID):
             callback?(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -595,7 +580,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if action.switchToDefaultComposer {
-            composerActionHandler?.process(composerAction: .setMode(mode: .default))
+            composerActionCallback?(.setMode(mode: .default))
         }
     }
     
@@ -801,9 +786,9 @@ extension RoomScreenViewModel {
         case .sendMessage(let message):
             Task { await sendCurrentMessage(message) }
         case .cancelReply:
-            composerActionHandler?.process(composerAction: .setMode(mode: .default))
+            composerActionCallback?(.setMode(mode: .default))
         case .cancelEdit:
-            composerActionHandler?.process(composerAction: .clear)
+            composerActionCallback?(.clear)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
         case .displayMediaPicker:
@@ -814,6 +799,11 @@ extension RoomScreenViewModel {
             callback?(.displayLocationPicker)
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
+        case .composerModeChanged(mode: let mode):
+            state.composerMode = mode
+            trackComposerMode()
+        case .focusedChanged(isFocused: let isFocused):
+            composerFocusedSubject.send(isFocused)
         }
     }
 }
@@ -829,5 +819,5 @@ extension RoomScreenViewModel {
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          composerProvider: composerToolbarCoordinator)
+                                          composerToolbar: composerToolbarCoordinator.toPresentable())
 }

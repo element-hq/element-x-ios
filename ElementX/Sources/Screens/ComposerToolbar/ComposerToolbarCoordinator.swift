@@ -19,10 +19,21 @@ import SwiftUI
 
 final class ComposerToolbarCoordinator: CoordinatorProtocol {
     private var viewModel: ComposerToolbarViewModelProtocol
+    private var cancellables = Set<AnyCancellable>()
 
     private let actionsSubject = PassthroughSubject<ComposerToolbarViewAction, Never>()
     var actions: AnyPublisher<ComposerToolbarViewAction, Never> {
         actionsSubject.eraseToAnyPublisher()
+    }
+
+    func set(composerActions: AnyPublisher<RoomScreenComposerAction, Never>) {
+        composerActions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                viewModel.process(composerAction: action)
+            }
+            .store(in: &cancellables)
     }
 
     init() {
@@ -39,15 +50,5 @@ final class ComposerToolbarCoordinator: CoordinatorProtocol {
 
     func toPresentable() -> AnyView {
         AnyView(ComposerToolbar(context: viewModel.context))
-    }
-}
-
-extension ComposerToolbarCoordinator: RoomScreenComposerProviderProtocol {
-    var handler: RoomScreenComposerActionHandlerProtocol? {
-        viewModel as? RoomScreenComposerActionHandlerProtocol
-    }
-
-    var view: AnyView {
-        toPresentable()
     }
 }

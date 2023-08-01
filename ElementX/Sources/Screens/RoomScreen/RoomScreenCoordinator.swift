@@ -47,22 +47,26 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+
+    private let composerActionsSubject = PassthroughSubject<RoomScreenComposerAction, Never>()
+    var composerActions: AnyPublisher<RoomScreenComposerAction, Never> {
+        composerActionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
 
         composerToolbarCoordinator = ComposerToolbarCoordinator()
-        
-        let roomScreenViewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
-                                                      mediaProvider: parameters.mediaProvider,
-                                                      roomProxy: parameters.roomProxy,
-                                                      appSettings: ServiceLocator.shared.settings,
-                                                      analytics: ServiceLocator.shared.analytics,
-                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                      composerProvider: composerToolbarCoordinator)
-        
-        viewModel = roomScreenViewModel
 
+        viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
+                                        mediaProvider: parameters.mediaProvider,
+                                        roomProxy: parameters.roomProxy,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        analytics: ServiceLocator.shared.analytics,
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                        composerToolbar: composerToolbarCoordinator.toPresentable())
+
+        composerToolbarCoordinator.set(composerActions: composerActions)
         composerToolbarCoordinator.actions
             .sink { [weak self] action in
                 self?.viewModel.process(viewAction: action)
@@ -102,6 +106,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             case .displayLocation(let body, let geoURI, let description):
                 actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
             }
+        }
+
+        viewModel.composerActionCallback = { [weak self] action in
+            guard let self else { return }
+
+            composerActionsSubject.send(action)
         }
     }
     

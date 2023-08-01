@@ -27,6 +27,9 @@ enum ComposerToolbarViewAction {
     case displayLocationPicker
 
     case handlePasteOrDrop(provider: NSItemProvider)
+
+    case composerModeChanged(mode: RoomScreenComposerMode)
+    case focusedChanged(isFocused: Bool)
 }
 
 struct ComposerToolbarViewState: BindableState {

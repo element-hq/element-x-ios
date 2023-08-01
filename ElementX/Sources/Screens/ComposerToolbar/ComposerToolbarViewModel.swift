@@ -21,20 +21,19 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     var callback: ((ComposerToolbarViewAction) -> Void)?
 
-    private var focusedSubject = PassthroughSubject<Bool, Never>()
-    private var composerModeSubject = PassthroughSubject<RoomScreenComposerMode, Never>()
-
     init() {
         super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerText: "", composerFocused: false)))
 
         context.$viewState
             .map(\.composerMode)
-            .sink { [weak self] in self?.composerModeSubject.send($0) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.context.send(viewAction: .composerModeChanged(mode: $0)) }
             .store(in: &cancellables)
 
         context.$viewState
             .map(\.bindings.composerFocused)
-            .sink { [weak self] in self?.focusedSubject.send($0) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.context.send(viewAction: .focusedChanged(isFocused: $0)) }
             .store(in: &cancellables)
     }
 
@@ -43,15 +42,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 }
 
-extension ComposerToolbarViewModel: RoomScreenComposerActionHandlerProtocol {
-    var focused: PassthroughSubject<Bool, Never> {
-        focusedSubject
-    }
-
-    var composerMode: PassthroughSubject<RoomScreenComposerMode, Never> {
-        composerModeSubject
-    }
-
+extension ComposerToolbarViewModel {
     func process(composerAction: RoomScreenComposerAction) {
         switch composerAction {
         case .setMode(mode: let mode):
