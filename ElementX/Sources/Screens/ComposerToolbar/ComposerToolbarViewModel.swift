@@ -37,12 +37,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
     }
 
+    // MARK: - Public
+
     override func process(viewAction: ComposerToolbarViewAction) {
         callback?(viewAction)
     }
-}
 
-extension ComposerToolbarViewModel {
     func process(composerAction: RoomScreenComposerAction) {
         switch composerAction {
         case .setMode(mode: let mode):
@@ -56,6 +56,8 @@ extension ComposerToolbarViewModel {
             set(text: "")
         }
     }
+
+    // MARK: - Private
 
     private func set(mode: RoomScreenComposerMode) {
         guard mode != state.composerMode else { return }

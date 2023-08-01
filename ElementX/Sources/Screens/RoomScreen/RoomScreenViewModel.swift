@@ -133,6 +133,32 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
     }
+
+    func process(viewAction: ComposerToolbarViewAction) {
+        switch viewAction {
+        case .sendMessage(let message):
+            Task { await sendCurrentMessage(message) }
+        case .cancelReply:
+            composerActionCallback?(.setMode(mode: .default))
+        case .cancelEdit:
+            composerActionCallback?(.clear)
+        case .displayCameraPicker:
+            callback?(.displayCameraPicker)
+        case .displayMediaPicker:
+            callback?(.displayMediaPicker)
+        case .displayDocumentPicker:
+            callback?(.displayDocumentPicker)
+        case .displayLocationPicker:
+            callback?(.displayLocationPicker)
+        case .handlePasteOrDrop(let provider):
+            handlePasteOrDrop(provider)
+        case .composerModeChanged(mode: let mode):
+            state.composerMode = mode
+            trackComposerMode()
+        case .focusedChanged(isFocused: let isFocused):
+            composerFocusedSubject.send(isFocused)
+        }
+    }
     
     // MARK: - Private
 
@@ -777,34 +803,6 @@ extension RoomScreenViewModel.Context {
         }, set: {
             self.reactionsCollapsed[itemID] = $0
         })
-    }
-}
-
-extension RoomScreenViewModel {
-    func process(viewAction: ComposerToolbarViewAction) {
-        switch viewAction {
-        case .sendMessage(let message):
-            Task { await sendCurrentMessage(message) }
-        case .cancelReply:
-            composerActionCallback?(.setMode(mode: .default))
-        case .cancelEdit:
-            composerActionCallback?(.clear)
-        case .displayCameraPicker:
-            callback?(.displayCameraPicker)
-        case .displayMediaPicker:
-            callback?(.displayMediaPicker)
-        case .displayDocumentPicker:
-            callback?(.displayDocumentPicker)
-        case .displayLocationPicker:
-            callback?(.displayLocationPicker)
-        case .handlePasteOrDrop(let provider):
-            handlePasteOrDrop(provider)
-        case .composerModeChanged(mode: let mode):
-            state.composerMode = mode
-            trackComposerMode()
-        case .focusedChanged(isFocused: let isFocused):
-            composerFocusedSubject.send(isFocused)
-        }
     }
 }
 
