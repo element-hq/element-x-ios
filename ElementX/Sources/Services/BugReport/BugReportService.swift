@@ -24,6 +24,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryURL: URL
     private let applicationId: String
+    private let sdkGitSHA: String
     private let maxUploadSize: Int
     private let session: URLSession
     private var lastCrashEventId: String?
@@ -33,11 +34,13 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
          applicationId: String,
+         sdkGitSHA: String,
          maxUploadSize: Int,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryURL = sentryURL
         self.applicationId = applicationId
+        self.sdkGitSHA = sdkGitSHA
         self.maxUploadSize = maxUploadSize
         self.session = session
         super.init()
@@ -198,6 +201,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "app", type: .text(value: applicationId)),
             MultipartFormData(key: "version", type: .text(value: InfoPlistReader.main.bundleShortVersionString)),
             MultipartFormData(key: "build", type: .text(value: InfoPlistReader.main.bundleVersion)),
+            MultipartFormData(key: "sdk_sha", type: .text(value: sdkGitSHA)),
             MultipartFormData(key: "os", type: .text(value: os)),
             MultipartFormData(key: "resolved_languages", type: .text(value: Bundle.app.preferredLocalizations.joined(separator: ", "))),
             MultipartFormData(key: "user_languages", type: .text(value: Locale.preferredLanguages.joined(separator: ", "))),

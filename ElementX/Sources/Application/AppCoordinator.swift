@@ -206,6 +206,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
                                                                           sentryURL: ServiceLocator.shared.settings.bugReportSentryURL,
                                                                           applicationId: ServiceLocator.shared.settings.bugReportApplicationId,
+                                                                          sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: PostHogAnalyticsClient(),
                                                                    appSettings: ServiceLocator.shared.settings,
