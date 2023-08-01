@@ -16,7 +16,9 @@
 
 import Foundation
 
-enum RoomNotificationSettingsScreenViewModelAction { }
+enum RoomNotificationSettingsScreenViewModelAction {
+    case openGlobalSettings
+}
 
 enum RoomNotificationSettingsState {
     case loading
@@ -66,6 +68,7 @@ struct RoomNotificationSettingsScreenViewStateBindings {
 enum RoomNotificationSettingsScreenViewAction {
     case changedAllowCustomSettings
     case setCustomMode(RoomNotificationModeProxy)
+    case globalSettingsTapped
 }
 
 struct RoomNotificationSettingsScreenStrings {

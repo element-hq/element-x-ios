@@ -71,6 +71,9 @@ struct RoomNotificationSettingsScreen: View {
                 .compoundFormSectionHeader()
         } footer: {
             Text(context.viewState.strings.customSettingFootnote)
+                .onTapGesture {
+                    context.send(viewAction: .globalSettingsTapped)
+                }
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()

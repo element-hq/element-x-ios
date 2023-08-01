@@ -40,7 +40,8 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                         userNotificationCenter: userNotificationCenter,
-                                                        notificationSettingsProxy: notificationSettingsProxy)
+                                                        notificationSettingsProxy: notificationSettingsProxy,
+                                                        isModallyPresented: false)
         context = viewModel.context
     }
     

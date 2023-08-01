@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 struct RoomNotificationSettingsScreenCoordinatorParameters {
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let notificationSettingsProxy: NotificationSettingsProxyProtocol
     let roomProxy: RoomProxyProtocol
 }
@@ -25,6 +26,11 @@ struct RoomNotificationSettingsScreenCoordinatorParameters {
 final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomNotificationSettingsScreenCoordinatorParameters
     private var viewModel: RoomNotificationSettingsScreenViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
         
     init(parameters: RoomNotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -32,9 +38,31 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
                                                             roomProxy: parameters.roomProxy)
     }
     
-    func start() { }
+    func start() {
+        viewModel.actions.sink { [weak self] action in
+            switch action {
+            case .openGlobalSettings:
+                self?.openGlobalSettings()
+            }
+        }.store(in: &cancellables)
+    }
         
     func toPresentable() -> AnyView {
         AnyView(RoomNotificationSettingsScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func openGlobalSettings() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let notificationSettingsScreenParameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: UNUserNotificationCenter.current(),
+                                                                                                   notificationSettings: parameters.notificationSettingsProxy,
+                                                                                                   isModallyPresented: true)
+        let notificationSettingsScreenCoordinator = NotificationSettingsScreenCoordinator(parameters: notificationSettingsScreenParameters)
+        notificationSettingsScreenCoordinator.completion = { [weak self] _ in
+            self?.navigationStackCoordinator?.setSheetCoordinator(nil)
+        }
+        navigationStackCoordinator.setRootCoordinator(notificationSettingsScreenCoordinator)
+        self.navigationStackCoordinator?.setSheetCoordinator(navigationStackCoordinator)
     }
 }

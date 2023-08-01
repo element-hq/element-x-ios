@@ -37,12 +37,25 @@ struct NotificationSettingsScreen: View {
         }
         .compoundForm()
         .navigationTitle(L10n.screenNotificationSettingsTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .track(screen: .settingsNotifications)
     }
     
     // MARK: - Private
-
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.isModallyPresented {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(L10n.actionClose) {
+                    context.send(viewAction: .close)
+                }
+            }
+        }
+    }
+    
     private var userPermissionSection: some View {
         Section {
             HStack(alignment: .firstTextBaseline, spacing: 13) {
@@ -183,7 +196,8 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
 
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
-                                                            notificationSettingsProxy: notificationSettingsProxy)
+                                                            notificationSettingsProxy: notificationSettingsProxy,
+                                                            isModallyPresented: true)
         viewModel.fetchInitialContent()
         return viewModel
     }()
