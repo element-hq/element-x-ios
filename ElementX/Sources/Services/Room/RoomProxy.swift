@@ -86,7 +86,7 @@ class RoomProxy: RoomProxyProtocol {
 
         self.timelineListener = timelineListener
         
-        let result = await room.addTimelineListener(listener: timelineListener)
+        let result = room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
 
         subscribeToBackpagination()
@@ -304,7 +304,7 @@ class RoomProxy: RoomProxyProtocol {
         requestHandle(handle)
         
         do {
-            try await handle.join()
+            try handle.join()
         } catch {
             return .failure(.failedSendingMedia)
         }
@@ -329,7 +329,7 @@ class RoomProxy: RoomProxyProtocol {
         requestHandle(handle)
         
         do {
-            try await handle.join()
+            try handle.join()
         } catch {
             return .failure(.failedSendingMedia)
         }
@@ -353,7 +353,7 @@ class RoomProxy: RoomProxyProtocol {
         requestHandle(handle)
         
         do {
-            try await handle.join()
+            try handle.join()
         } catch {
             return .failure(.failedSendingMedia)
         }
@@ -377,7 +377,7 @@ class RoomProxy: RoomProxyProtocol {
         requestHandle(handle)
         
         do {
-            try await handle.join()
+            try handle.join()
         } catch {
             return .failure(.failedSendingMedia)
         }
