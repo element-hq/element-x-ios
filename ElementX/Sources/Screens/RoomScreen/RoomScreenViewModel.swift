@@ -136,8 +136,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
 
-    func process(viewAction: ComposerToolbarViewAction) {
-        switch viewAction {
+    func process(composerAction: ComposerToolbarViewAction) {
+        switch composerAction {
         case .sendMessage(let message, let mode):
             Task { await sendCurrentMessage(message, mode: mode) }
         case .cancelReply:

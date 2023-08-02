@@ -69,7 +69,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         composerToolbarCoordinator.set(composerActions: composerActions)
         composerToolbarCoordinator.actions
             .sink { [weak self] action in
-                self?.viewModel.process(viewAction: action)
+                self?.viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
 
