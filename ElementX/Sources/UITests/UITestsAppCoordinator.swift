@@ -148,10 +148,8 @@ class MockScreen: Identifiable {
                                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .simpleRegular:
-            return TemplateScreenCoordinator(parameters: .init(promptType: .regular))
-        case .simpleUpgrade:
-            return TemplateScreenCoordinator(parameters: .init(promptType: .upgrade))
+        case .templateScreen:
+            return TemplateScreenCoordinator(parameters: .init())
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),

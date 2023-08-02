@@ -26,22 +26,22 @@ class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(promptType: TemplateScreenPromptType, initialCount: Int = 0) {
-        super.init(initialViewState: TemplateScreenViewState(promptType: promptType, count: 0))
+    init() {
+        super.init(initialViewState: TemplateScreenViewState(title: "Template title",
+                                                             placeholder: "Enter something here",
+                                                             bindings: .init(composerText: "Initial composer text")))
     }
     
     // MARK: - Public
     
     override func process(viewAction: TemplateScreenViewAction) {
+        MXLog.info("View model: received view action: \(viewAction)")
+        
         switch viewAction {
-        case .accept:
-            actionsSubject.send(.accept)
-        case .cancel:
-            actionsSubject.send(.cancel)
-        case .incrementCount:
-            state.count += 1
-        case .decrementCount:
-            state.count -= 1
+        case .done:
+            actionsSubject.send(.done)
+        case .textChanged:
+            MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
         }
     }
 }
