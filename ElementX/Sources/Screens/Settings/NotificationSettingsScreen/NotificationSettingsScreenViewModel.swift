@@ -30,13 +30,13 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, isModallyPresented: Bool) {
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
-        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings))
+        super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings, isModallyPresented: isModallyPresented))
                 
         // Listen for changes to AppSettings.enableNotifications
         appSettings.$enableNotifications
@@ -73,6 +73,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 return
             }
             Task { await enableCalls(state.bindings.callsEnabled) }
+        case .close:
+            actionsSubject.send(.close)
         }
     }
     

@@ -17,11 +17,14 @@
 import Foundation
 import UIKit
 
-enum NotificationSettingsScreenViewModelAction { }
+enum NotificationSettingsScreenViewModelAction {
+    case close
+}
 
 struct NotificationSettingsScreenViewState: BindableState {
     var bindings: NotificationSettingsScreenViewStateBindings
     var strings = NotificationSettingsScreenStrings()
+    let isModallyPresented: Bool
     var isUserPermissionGranted: Bool?
     var allowedNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly]
     
@@ -82,6 +85,7 @@ enum NotificationSettingsScreenViewAction {
     case directChatsTapped
     case roomMentionChanged
     case callsChanged
+    case close
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {

@@ -71,6 +71,11 @@ struct RoomNotificationSettingsScreen: View {
                 .compoundFormSectionHeader()
         } footer: {
             Text(context.viewState.strings.customSettingFootnote)
+                .environment(\.openURL, OpenURLAction { url in
+                    guard url == context.viewState.strings.customSettingFootnoteLink else { return .discarded }
+                    context.send(viewAction: .customSettingFootnoteLinkTapped)
+                    return .handled
+                })
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()

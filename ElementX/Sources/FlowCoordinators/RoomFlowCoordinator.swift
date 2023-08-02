@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 import SwiftState
+import UserNotifications
 
 enum RoomFlowCoordinatorAction: Equatable {
     case presentedRoom(String)
@@ -149,6 +150,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .mapNavigator(roomID: roomID)
             case (.dismissMapNavigator, .mapNavigator(let roomID)):
                 return .room(roomID: roomID)
+            
+            case (.presentNotificationSettingsScreen, .roomDetails(let roomID, _)):
+                return .notificationSettingsScreen(roomID: roomID)
+            case (.dismissNotificationSettingsScreen, .notificationSettingsScreen(let roomID)):
+                return .roomDetails(roomID: roomID, isRoot: false)
             default:
                 return nil
             }
@@ -215,6 +221,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMapNavigator(interactionMode: mode)
             case (.mapNavigator, .dismissMapNavigator, .room):
                 break
+            
+            case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettingsScreen):
+                asyncPresentNotificationSettingsScreen(animated: animated)
+            case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
+                break
+
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -372,12 +384,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   userIndicatorController: userIndicatorController,
                                                                   notificationSettings: userSession.clientProxy.notificationSettings())
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] action in
+        coordinator.actions.sink { [weak self] action in
             switch action {
             case .leftRoom:
                 self?.dismissRoom(animated: animated)
+            case .presentNotificationSettingsScreen:
+                self?.stateMachine.tryEvent(.presentNotificationSettingsScreen)
             }
         }
+        .store(in: &cancellables)
         
         if isRoot {
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
@@ -610,6 +625,32 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: true, destinationRoomProxy: targetRoomProxy))
     }
+    
+    private func asyncPresentNotificationSettingsScreen(animated: Bool) {
+        Task {
+            await presentNotificationSettingsScreen(animated: animated)
+        }
+    }
+    
+    private func presentNotificationSettingsScreen(animated: Bool) async {
+        let navigationCoordinator = NavigationStackCoordinator()
+        let parameters = await NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: UNUserNotificationCenter.current(),
+                                                                               notificationSettings: userSession.clientProxy.notificationSettings(),
+                                                                               isModallyPresented: true)
+        let coordinator = NotificationSettingsScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] action in
+            switch action {
+            case .close:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissNotificationSettingsScreen)
+        }
+    }
 }
 
 private extension RoomFlowCoordinator {
@@ -636,6 +677,7 @@ private extension RoomFlowCoordinator {
         case mapNavigator(roomID: String)
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
+        case notificationSettingsScreen(roomID: String)
     }
     
     struct EventUserInfo {
@@ -670,6 +712,9 @@ private extension RoomFlowCoordinator {
         
         case presentMessageForwarding(itemID: TimelineItemIdentifier)
         case dismissMessageForwarding
+        
+        case presentNotificationSettingsScreen
+        case dismissNotificationSettingsScreen
     }
 }
 

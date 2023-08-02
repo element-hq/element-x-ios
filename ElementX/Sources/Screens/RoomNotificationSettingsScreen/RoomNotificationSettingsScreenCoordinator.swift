@@ -18,13 +18,29 @@ import Combine
 import SwiftUI
 
 struct RoomNotificationSettingsScreenCoordinatorParameters {
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let notificationSettingsProxy: NotificationSettingsProxyProtocol
     let roomProxy: RoomProxyProtocol
+}
+
+enum RoomNotificationSettingsScreenCoordinatorAction {
+    case presentNotificationSettingsScreen
 }
 
 final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomNotificationSettingsScreenCoordinatorParameters
     private var viewModel: RoomNotificationSettingsScreenViewModelProtocol
+    
+    private let actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+        
+    var actions: AnyPublisher<RoomNotificationSettingsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    private var navigationStackCoordinator: NavigationStackCoordinator? {
+        parameters.navigationStackCoordinator
+    }
         
     init(parameters: RoomNotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -32,7 +48,14 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
                                                             roomProxy: parameters.roomProxy)
     }
     
-    func start() { }
+    func start() {
+        viewModel.actions.sink { [weak self] action in
+            switch action {
+            case .openGlobalSettings:
+                self?.actionsSubject.send(.presentNotificationSettingsScreen)
+            }
+        }.store(in: &cancellables)
+    }
         
     func toPresentable() -> AnyView {
         AnyView(RoomNotificationSettingsScreen(context: viewModel.context))

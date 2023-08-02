@@ -16,7 +16,9 @@
 
 import Foundation
 
-enum RoomNotificationSettingsScreenViewModelAction { }
+enum RoomNotificationSettingsScreenViewModelAction {
+    case openGlobalSettings
+}
 
 enum RoomNotificationSettingsState {
     case loading
@@ -66,15 +68,20 @@ struct RoomNotificationSettingsScreenViewStateBindings {
 enum RoomNotificationSettingsScreenViewAction {
     case changedAllowCustomSettings
     case setCustomMode(RoomNotificationModeProxy)
+    case customSettingFootnoteLinkTapped
 }
 
 struct RoomNotificationSettingsScreenStrings {
     let customSettingFootnote: AttributedString
+    let customSettingFootnoteLink: URL?
     
     init() {
+        customSettingFootnoteLink = URL(string: "element://openGlobalSettings")
+        
         let linkPlaceholder = "{link}"
         var customSettingFootnote = AttributedString(L10n.screenRoomNotificationSettingsDefaultSettingFootnote(linkPlaceholder))
         var linkString = AttributedString(L10n.screenRoomNotificationSettingsDefaultSettingFootnoteContentLink)
+        linkString.link = customSettingFootnoteLink
         linkString.bold()
         customSettingFootnote.replace(linkPlaceholder, with: linkString)
         

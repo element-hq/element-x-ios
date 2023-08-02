@@ -20,16 +20,19 @@ import SwiftUI
 struct NotificationSettingsScreenCoordinatorParameters {
     let userNotificationCenter: UserNotificationCenterProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
+    let isModallyPresented: Bool
 }
 
-enum NotificationSettingsScreenCoordinatorAction { }
+enum NotificationSettingsScreenCoordinatorAction {
+    case close
+}
 
 final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: NotificationSettingsScreenCoordinatorParameters
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<NotificationSettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
-    
+        
     var actions: AnyPublisher<NotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -39,11 +42,20 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
-                                                        notificationSettingsProxy: parameters.notificationSettings)
+                                                        notificationSettingsProxy: parameters.notificationSettings,
+                                                        isModallyPresented: parameters.isModallyPresented)
     }
     
     func start() {
         viewModel.fetchInitialContent()
+        
+        viewModel.actions.sink { [weak self] action in
+            switch action {
+            case .close:
+                self?.actionsSubject.send(.close)
+            }
+        }
+        .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
