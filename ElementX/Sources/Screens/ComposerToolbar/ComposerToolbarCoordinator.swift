@@ -26,14 +26,8 @@ final class ComposerToolbarCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    func set(composerActions: AnyPublisher<RoomScreenComposerAction, Never>) {
-        composerActions
-            .sink { [weak self] action in
-                guard let self else { return }
-
-                viewModel.process(composerAction: action)
-            }
-            .store(in: &cancellables)
+    func process(composerAction: RoomScreenComposerAction) {
+        viewModel.process(composerAction: composerAction)
     }
 
     init() {

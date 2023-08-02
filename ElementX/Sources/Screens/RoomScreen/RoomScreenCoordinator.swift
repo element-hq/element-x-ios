@@ -47,11 +47,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    private let composerActionsSubject = PassthroughSubject<RoomScreenComposerAction, Never>()
-    var composerActions: AnyPublisher<RoomScreenComposerAction, Never> {
-        composerActionsSubject.eraseToAnyPublisher()
-    }
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -66,7 +61,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                         composerToolbar: composerToolbarCoordinator.toPresentable())
 
-        composerToolbarCoordinator.set(composerActions: composerActions)
         composerToolbarCoordinator.actions
             .sink { [weak self] action in
                 self?.viewModel.process(composerAction: action)
@@ -111,7 +105,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         viewModel.composerActionCallback = { [weak self] action in
             guard let self else { return }
 
-            composerActionsSubject.send(action)
+            composerToolbarCoordinator.process(composerAction: action)
         }
     }
     
