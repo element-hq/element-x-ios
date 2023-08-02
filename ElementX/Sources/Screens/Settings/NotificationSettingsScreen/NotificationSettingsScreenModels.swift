@@ -17,6 +17,10 @@
 import Foundation
 import UIKit
 
+enum NotificationSettingsScreenViewModelAction {
+    case close
+}
+
 struct NotificationSettingsScreenViewState: BindableState {
     var bindings: NotificationSettingsScreenViewStateBindings
     var strings = NotificationSettingsScreenStrings()
@@ -81,10 +85,6 @@ enum NotificationSettingsScreenViewAction {
     case directChatsTapped
     case roomMentionChanged
     case callsChanged
-    case close
-}
-
-enum NotificationSettingsScreenViewModelAction {
     case close
 }
 
