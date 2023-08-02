@@ -48,7 +48,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             toogleCustomSetting()
         case .setCustomMode(let mode):
             setCustomMode(mode)
-        case .globalSettingsTapped:
+        case .customSettingFootnoteLinkTapped:
             actionsSubject.send(.openGlobalSettings)
         }
     }
