@@ -20,10 +20,6 @@ import XCTest
 
 @MainActor
 class TemplateScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
     var viewModel: TemplateScreenViewModelProtocol!
     
     var context: TemplateScreenViewModelType.Context {
@@ -31,21 +27,17 @@ class TemplateScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        viewModel = TemplateScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
+        viewModel = TemplateScreenViewModel()
     }
 
     func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
+        XCTAssertFalse(context.viewState.placeholder.isEmpty)
+        XCTAssertFalse(context.composerText.isEmpty)
     }
 
     func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
+        context.composerText = "123"
+        context.send(viewAction: .textChanged)
+        XCTAssertEqual(context.composerText, "123")
     }
 }

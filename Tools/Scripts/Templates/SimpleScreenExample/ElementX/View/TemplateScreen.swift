@@ -17,75 +17,30 @@
 import SwiftUI
 
 struct TemplateScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .compound.textSecondary : .compound.textInfoPrimary
-    }
-    
     @ObservedObject var context: TemplateScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal)
-                .readableFrame()
-        }
-        .safeAreaInset(edge: .bottom) {
-            buttons
-                .padding(.horizontal)
-                .padding(.vertical)
-                .readableFrame()
-                .background(Color.compound.bgSubtleSecondary)
-        }
-    }
-    
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(spacing: 36) {
-            Text(context.viewState.promptType.title)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-                .accessibilityIdentifier("title")
-            
-            Image(systemName: context.viewState.promptType.imageSystemName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
-            
-            HStack {
-                Text("Counter: \(context.viewState.count)")
-                    .font(.compound.bodyLG)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(counterColor)
-                
-                Button("−") {
-                    context.send(viewAction: .decrementCount)
+        Form {
+            Section {
+                TextField(text: $context.composerText) {
+                    Text(context.viewState.placeholder)
+                        .compoundFormTextFieldPlaceholder()
                 }
-                .buttonStyle(.elementGhost())
+                .textFieldStyle(.compoundForm)
                 
-                Button("+") {
-                    context.send(viewAction: .incrementCount)
+                Button {
+                    context.send(viewAction: .done)
+                } label: {
+                    Label("Done", systemImage: "door.left.hand.closed")
                 }
-                .buttonStyle(.elementGhost())
+                .buttonStyle(.compoundFormCentred())
             }
+            .compoundFormSection()
         }
-    }
-    
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .accept) } label: {
-                Text("Accept")
-            }
-            .buttonStyle(.elementAction(.xLarge))
-            
-            Button { context.send(viewAction: .cancel) } label: {
-                Text("Cancel")
-                    .padding(.vertical, 12)
-            }
+        .compoundForm()
+        .navigationTitle(context.viewState.title)
+        .onChange(of: context.composerText) { _ in
+            context.send(viewAction: .textChanged)
         }
     }
 }
@@ -93,12 +48,10 @@ struct TemplateScreen: View {
 // MARK: - Previews
 
 struct TemplateScreen_Previews: PreviewProvider {
-    static let regularViewModel = TemplateScreenViewModel(promptType: .regular)
-    static let upgradeViewModel = TemplateScreenViewModel(promptType: .upgrade)
+    static let viewModel = TemplateScreenViewModel()
     static var previews: some View {
-        TemplateScreen(context: regularViewModel.context)
-            .previewDisplayName("Regular")
-        TemplateScreen(context: upgradeViewModel.context)
-            .previewDisplayName("Upgrade")
+        NavigationStack {
+            TemplateScreen(context: viewModel.context)
+        }
     }
 }

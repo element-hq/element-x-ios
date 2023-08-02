@@ -19,25 +19,12 @@ import XCTest
 
 @MainActor
 class TemplateScreenUITests: XCTestCase {
-    func testRegularScreen() async throws {
-        let app = Application.launch(.simpleRegular)
+    func testScreen() async throws {
+        let app = Application.launch(.templateScreen)
         
-        let title = app.staticTexts["title"]
+        let title = app.staticTexts["Template title"]
         XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Make this chat public?")
 
-        try await app.assertScreenshot(.simpleRegular)
-    }
-    
-    func testUpgradeScreen() async throws {
-        let app = Application.launch(.simpleUpgrade)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Privacy warning")
-
-        try await app.assertScreenshot(.simpleUpgrade)
+        try await app.assertScreenshot(.templateScreen)
     }
 }

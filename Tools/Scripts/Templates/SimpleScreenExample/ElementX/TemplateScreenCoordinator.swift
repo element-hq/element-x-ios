@@ -17,13 +17,10 @@
 import Combine
 import SwiftUI
 
-struct TemplateScreenCoordinatorParameters {
-    let promptType: TemplateScreenPromptType
-}
+struct TemplateScreenCoordinatorParameters { }
 
 enum TemplateScreenCoordinatorAction {
-    case accept
-    case cancel
+    case done
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
@@ -41,18 +38,17 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
     init(parameters: TemplateScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = TemplateScreenViewModel(promptType: parameters.promptType)
+        viewModel = TemplateScreenViewModel()
     }
     
     func start() {
         viewModel.actions.sink { [weak self] action in
+            MXLog.info("Coordinator: received view model action: \(action)")
+            
             guard let self else { return }
             switch action {
-            case .accept:
-                MXLog.info("User accepted the prompt.")
-                self.actionsSubject.send(.accept)
-            case .cancel:
-                self.actionsSubject.send(.cancel)
+            case .done:
+                self.actionsSubject.send(.done)
             }
         }
         .store(in: &cancellables)

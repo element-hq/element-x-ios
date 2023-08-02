@@ -16,50 +16,25 @@
 
 import Foundation
 
-enum TemplateScreenPromptType {
-    case regular
-    case upgrade
-}
-
-extension TemplateScreenPromptType: Identifiable, CaseIterable {
-    var id: Self { self }
-    
-    var title: String {
-        switch self {
-        case .regular:
-            return "Make this chat public?"
-        case .upgrade:
-            return "Privacy warning"
-        }
-    }
-    
-    var imageSystemName: String {
-        switch self {
-        case .regular:
-            return "app.gift"
-        case .upgrade:
-            return "shield"
-        }
-    }
-}
-
 enum TemplateScreenViewModelAction {
-    case accept
-    case cancel
+    case done
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 struct TemplateScreenViewState: BindableState {
-    var promptType: TemplateScreenPromptType
-    var count: Int
+    var title: String
+    var placeholder: String
+    var bindings: TemplateScreenViewStateBindings
+}
+
+struct TemplateScreenViewStateBindings {
+    var composerText: String
 }
 
 enum TemplateScreenViewAction {
-    case incrementCount
-    case decrementCount
-    case accept
-    case cancel
+    case done
+    case textChanged
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
