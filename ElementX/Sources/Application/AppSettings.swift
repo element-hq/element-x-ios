@@ -203,6 +203,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: true, storageType: .userDefaults(store))
     var richTextEditorEnabled
     
+    // MARK: - Element Call
+    
+    let elementCallBaseURL: URL = "https://call.element.io"
+    
     // MARK: - Notifications
 
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))

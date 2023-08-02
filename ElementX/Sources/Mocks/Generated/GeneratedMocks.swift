@@ -1173,6 +1173,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsTombstoned = value }
     }
     var underlyingIsTombstoned: Bool!
+    var isCallOngoing: Bool {
+        get { return underlyingIsCallOngoing }
+        set(value) { underlyingIsCallOngoing = value }
+    }
+    var underlyingIsCallOngoing: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications: Bool {
@@ -1942,6 +1947,23 @@ class RoomProxyMock: RoomProxyProtocol {
             return await endPollPollStartIDTextClosure(pollStartID, text)
         } else {
             return endPollPollStartIDTextReturnValue
+        }
+    }
+    //MARK: - elementCallWidgetDriver
+
+    var elementCallWidgetDriverCallsCount = 0
+    var elementCallWidgetDriverCalled: Bool {
+        return elementCallWidgetDriverCallsCount > 0
+    }
+    var elementCallWidgetDriverReturnValue: ElementCallWidgetDriver!
+    var elementCallWidgetDriverClosure: (() -> ElementCallWidgetDriver)?
+
+    func elementCallWidgetDriver() -> ElementCallWidgetDriver {
+        elementCallWidgetDriverCallsCount += 1
+        if let elementCallWidgetDriverClosure = elementCallWidgetDriverClosure {
+            return elementCallWidgetDriverClosure()
+        } else {
+            return elementCallWidgetDriverReturnValue
         }
     }
 }

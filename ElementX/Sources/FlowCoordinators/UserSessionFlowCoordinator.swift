@@ -85,6 +85,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .dismissedRoom:
                 stateMachine.processEvent(.deselectRoom)
                 analytics.signpost.endRoomFlow()
+            case .presentCallScreen(let roomProxy):
+                self.presentCallScreen(roomProxy: roomProxy)
             }
         }
         .store(in: &cancellables)
@@ -452,5 +454,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.closedInvitesScreen)
         }
+    }
+    
+    // MARK: Calls
+    
+    private func presentCallScreen(roomProxy: RoomProxyProtocol) {
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                            callBaseURL: appSettings.elementCallBaseURL,
+                                                                            clientID: InfoPlistReader.main.bundleIdentifier))
+        
+        callScreenCoordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .dismiss:
+                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
     }
 }

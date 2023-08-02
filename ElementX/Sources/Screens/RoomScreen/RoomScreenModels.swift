@@ -34,6 +34,7 @@ enum RoomScreenViewModelAction {
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: RoomScreenComposerAction)
+    case displayCallScreen
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -78,11 +79,14 @@ enum RoomScreenViewAction {
     case cancelSend(itemID: TimelineItemIdentifier)
     
     case scrolledToBottom
-    
+
     case enableLongPress(itemID: TimelineItemIdentifier)
     case disableLongPress(itemID: TimelineItemIdentifier)
+
     case playPauseAudio(itemID: TimelineItemIdentifier)
     case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
+    
+    case presentCall
 }
 
 enum RoomScreenComposerAction {
@@ -103,8 +107,11 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
+
     var longPressDisabledItemID: TimelineItemIdentifier?
     var ownUserID: String
+
+    var isCallOngoing = false
 
     var bindings: RoomScreenViewStateBindings
     

@@ -39,6 +39,7 @@ enum RoomScreenCoordinatorAction {
     case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case presentRoomMemberDetails(member: RoomMemberProxyProtocol)
     case presentMessageForwarding(itemID: TimelineItemIdentifier)
+    case presentCallScreen
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -109,6 +110,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .composer(let action):
                     composerViewModel.process(roomAction: action)
+                case .displayCallScreen:
+                    actionsSubject.send(.presentCallScreen)
                 }
             }
             .store(in: &cancellables)

@@ -19,9 +19,10 @@ import Foundation
 import SwiftState
 import UserNotifications
 
-enum RoomFlowCoordinatorAction: Equatable {
+enum RoomFlowCoordinatorAction {
     case presentedRoom(String)
     case dismissedRoom
+    case presentCallScreen(roomProxy: RoomProxyProtocol)
 }
 
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
@@ -372,6 +373,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
                 case .presentMessageForwarding(let itemID):
                     stateMachine.tryEvent(.presentMessageForwarding(itemID: itemID))
+                case .presentCallScreen:
+                    guard let roomProxy = self.roomProxy else {
+                        fatalError()
+                    }
+                    
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 }
             }
             .store(in: &cancellables)
