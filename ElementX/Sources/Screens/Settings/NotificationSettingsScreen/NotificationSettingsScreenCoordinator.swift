@@ -23,20 +23,16 @@ struct NotificationSettingsScreenCoordinatorParameters {
     let isModallyPresented: Bool
 }
 
-enum NotificationSettingsScreenCoordinatorResult {
+enum NotificationSettingsScreenCoordinatorAction {
     case close
 }
-
-enum NotificationSettingsScreenCoordinatorAction { }
 
 final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: NotificationSettingsScreenCoordinatorParameters
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<NotificationSettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
-    
-    var completion: ((NotificationSettingsScreenCoordinatorResult) -> Void)?
-    
+        
     var actions: AnyPublisher<NotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
@@ -53,9 +49,13 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.fetchInitialContent()
         
-        viewModel.actions.sink { [weak self] _ in
-            self?.completion?(.close)
-        }.store(in: &cancellables)
+        viewModel.actions.sink { [weak self] action in
+            switch action {
+            case .close:
+                self?.actionsSubject.send(.close)
+            }
+        }
+        .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {

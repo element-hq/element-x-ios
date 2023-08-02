@@ -29,19 +29,24 @@ struct RoomDetailsScreenCoordinatorParameters {
 
 enum RoomDetailsScreenCoordinatorAction {
     case leftRoom
+    case presentNotificationSettingsScreen
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsScreenCoordinatorParameters
     private var viewModel: RoomDetailsScreenViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = .init()
     private let selectedUsers: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
     private var navigationStackCoordinator: NavigationStackCoordinator? {
         parameters.navigationStackCoordinator
     }
     
-    var callback: ((RoomDetailsScreenCoordinatorAction) -> Void)?
-    
+    private let actionsSubject: PassthroughSubject<RoomDetailsScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+        
+    var actions: AnyPublisher<RoomDetailsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+        
     init(parameters: RoomDetailsScreenCoordinatorParameters) {
         self.parameters = parameters
         
@@ -65,7 +70,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
             case .requestInvitePeoplePresentation:
                 self.presentInviteUsersScreen()
             case .leftRoom:
-                self.callback?(.leftRoom)
+                self.actionsSubject.send(.leftRoom)
             case .requestEditDetailsPresentation(let accountOwner):
                 self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
             case .requestNotificationSettingsPresentation:
@@ -193,6 +198,13 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                                                                      notificationSettingsProxy: parameters.notificationSettings,
                                                                                                      roomProxy: parameters.roomProxy)
         let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
+        roomNotificationSettingsCoordinator.actions.sink { [weak self] actions in
+            switch actions {
+            case .presentNotificationSettingsScreen:
+                self?.actionsSubject.send(.presentNotificationSettingsScreen)
+            }
+        }
+        .store(in: &cancellables)
         navigationStackCoordinator?.push(roomNotificationSettingsCoordinator)
     }
 }
