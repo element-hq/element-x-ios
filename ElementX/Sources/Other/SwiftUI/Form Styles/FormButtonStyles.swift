@@ -58,11 +58,13 @@ struct FormRowAccessory: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.compound.bodyLG)
                     .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
+                    .accessibilityAddTraits(.isSelected)
             }
         case .multipleSelection(let isSelected):
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .font(.compound.bodyLG)
                 .foregroundColor(isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
         }
     }
     
