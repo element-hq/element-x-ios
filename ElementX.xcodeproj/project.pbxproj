@@ -3670,7 +3670,7 @@
 			path = Timeline;
 			sourceTree = "<group>";
 		};
-		"TEMP_2C2AE7A1-DD19-41AC-BCFD-C9FE3F5EC278" /* element-x-ios */ = {
+		"TEMP_F85F8A84-6E1F-4213-A180-41C5B49354D2" /* element-x-ios */ = {
 			isa = PBXGroup;
 			children = (
 				41553551C55AD59885840F0E /* secrets.xcconfig */,
@@ -5405,7 +5405,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 1f3eb60c4f87249d95addf84ce1aef22c2968763;
+				revision = 89e3ed5adef33be7eb65137b861833ffae64f961;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
