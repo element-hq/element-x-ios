@@ -60,11 +60,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         emojiCategories.compactMap { emojiCategory in
             
             let emojisViewData: [EmojiPickerEmojiViewData] = emojiCategory.emojis.compactMap { emojiItem in
-                
-                guard let firstSkin = emojiItem.skins.first else {
-                    return nil
-                }
-                return EmojiPickerEmojiViewData(id: emojiItem.id, value: firstSkin)
+                EmojiPickerEmojiViewData(id: emojiItem.id, value: emojiItem.unicode)
             }
             
             return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)

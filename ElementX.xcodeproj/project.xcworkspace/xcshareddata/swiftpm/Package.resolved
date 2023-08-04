@@ -53,6 +53,14 @@
       }
     },
     {
+      "identity" : "emojibase-bindings",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matrix-org/emojibase-bindings",
+      "state" : {
+        "revision" : "5a14b51ccfd7f44625036469a56dc9aa6b786f6f"
+      }
+    },
+    {
       "identity" : "gzip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/GZIP",

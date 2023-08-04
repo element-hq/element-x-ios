@@ -104,3 +104,7 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
+  Emojibase:
+    url: https://github.com/matrix-org/emojibase-bindings
+    revision: 5a14b51ccfd7f44625036469a56dc9aa6b786f6f
+
