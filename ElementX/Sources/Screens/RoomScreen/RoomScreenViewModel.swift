@@ -134,14 +134,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
 
-    func process(composerAction: ComposerToolbarViewAction) {
+    func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
         case .sendMessage(let message, let mode):
             Task { await sendCurrentMessage(message, mode: mode) }
-        case .cancelReply:
-            composerActionCallback?(.setMode(mode: .default))
-        case .cancelEdit:
-            composerActionCallback?(.clear)
         case .displayCameraPicker:
             callback?(.displayCameraPicker)
         case .displayMediaPicker:

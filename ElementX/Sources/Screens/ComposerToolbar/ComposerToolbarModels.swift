@@ -16,10 +16,8 @@
 
 import UIKit
 
-enum ComposerToolbarViewAction {
+enum ComposerToolbarViewModelAction {
     case sendMessage(message: String, mode: RoomScreenComposerMode)
-    case cancelReply
-    case cancelEdit
 
     case displayCameraPicker
     case displayMediaPicker
@@ -30,6 +28,17 @@ enum ComposerToolbarViewAction {
 
     case composerModeChanged(mode: RoomScreenComposerMode)
     case focusedChanged(isFocused: Bool)
+}
+
+enum ComposerToolbarViewAction {
+    case sendMessage(message: String, mode: RoomScreenComposerMode)
+    case cancelReply
+    case cancelEdit
+    case displayCameraPicker
+    case displayMediaPicker
+    case displayDocumentPicker
+    case displayLocationPicker
+    case handlePasteOrDrop(provider: NSItemProvider)
 }
 
 struct ComposerToolbarViewState: BindableState {

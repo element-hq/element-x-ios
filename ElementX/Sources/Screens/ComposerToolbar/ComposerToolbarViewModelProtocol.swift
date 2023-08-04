@@ -15,7 +15,7 @@
 //
 
 protocol ComposerToolbarViewModelProtocol {
-    var callback: ((ComposerToolbarViewAction) -> Void)? { get set }
+    var callback: ((ComposerToolbarViewModelAction) -> Void)? { get set }
     var context: ComposerToolbarViewModelType.Context { get }
     func process(composerAction: RoomScreenComposerAction)
 }

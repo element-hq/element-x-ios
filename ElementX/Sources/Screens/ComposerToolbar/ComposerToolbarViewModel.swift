@@ -19,7 +19,7 @@ import Combine
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
-    var callback: ((ComposerToolbarViewAction) -> Void)?
+    var callback: ((ComposerToolbarViewModelAction) -> Void)?
 
     init() {
         super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerText: "", composerFocused: false)))
@@ -27,20 +27,38 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         context.$viewState
             .map(\.composerMode)
             .removeDuplicates()
-            .sink { [weak self] in self?.context.send(viewAction: .composerModeChanged(mode: $0)) }
+            .sink { [weak self] in self?.callback?(.composerModeChanged(mode: $0)) }
             .store(in: &cancellables)
 
         context.$viewState
             .map(\.bindings.composerFocused)
             .removeDuplicates()
-            .sink { [weak self] in self?.context.send(viewAction: .focusedChanged(isFocused: $0)) }
+            .sink { [weak self] in self?.callback?(.focusedChanged(isFocused: $0)) }
             .store(in: &cancellables)
     }
 
     // MARK: - Public
 
     override func process(viewAction: ComposerToolbarViewAction) {
-        callback?(viewAction)
+        switch viewAction {
+        case .sendMessage(let message, let mode):
+            callback?(.sendMessage(message: message, mode: mode))
+        case .cancelReply:
+            set(mode: .default)
+        case .cancelEdit:
+            set(mode: .default)
+            set(text: "")
+        case .displayCameraPicker:
+            callback?(.displayCameraPicker)
+        case .displayMediaPicker:
+            callback?(.displayMediaPicker)
+        case .displayDocumentPicker:
+            callback?(.displayDocumentPicker)
+        case .displayLocationPicker:
+            callback?(.displayLocationPicker)
+        case .handlePasteOrDrop(let provider):
+            callback?(.handlePasteOrDrop(provider: provider))
+        }
     }
 
     func process(composerAction: RoomScreenComposerAction) {
@@ -69,9 +87,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    private func set(text: String?) {
-        guard let text else { return }
-
+    private func set(text: String) {
         state.bindings.composerText = text
     }
 }
