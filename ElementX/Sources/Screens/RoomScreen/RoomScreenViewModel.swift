@@ -84,7 +84,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Public
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
-    var composerActionCallback: ((RoomScreenComposerAction) -> Void)?
     
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
@@ -300,7 +299,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch action {
         case .displayMediaFile(let file, let title):
-            composerActionCallback?(.removeFocus) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
+            callback?(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
         case .displayLocation(let body, let geoURI, let description):
             callback?(.displayLocation(body: body, geoURI: geoURI, description: description))
@@ -422,7 +421,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             fatalError("This message should never be empty")
         }
 
-        composerActionCallback?(.clear)
+        callback?(.composer(action: .clear))
 
         switch mode {
         case .reply(let itemId, _):
@@ -472,7 +471,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        composerActionCallback?(.removeFocus)
+        callback?(.composer(action: .removeFocus))
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
     
@@ -555,8 +554,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
 
-            composerActionCallback?(.setText(text: messageTimelineItem.body))
-            composerActionCallback?(.setMode(mode: .edit(originalItemId: messageTimelineItem.id)))
+            callback?(.composer(action: .setText(text: messageTimelineItem.body)))
+            callback?(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
@@ -581,7 +580,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .reply:
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
 
-            composerActionCallback?(.setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails)))
+            callback?(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))))
         case .forward(let itemID):
             callback?(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -599,7 +598,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if action.switchToDefaultComposer {
-            composerActionCallback?(.setMode(mode: .default))
+            callback?(.composer(action: .setMode(mode: .default)))
         }
     }
     

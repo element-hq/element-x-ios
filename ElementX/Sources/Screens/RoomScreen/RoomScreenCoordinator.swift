@@ -88,13 +88,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.presentMessageForwarding(itemID: itemID))
             case .displayLocation(let body, let geoURI, let description):
                 actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
+            case .composer(let action):
+                composerViewModel.process(composerAction: action)
             }
-        }
-
-        viewModel.composerActionCallback = { [weak self] composerAction in
-            guard let self else { return }
-
-            composerViewModel.process(composerAction: composerAction)
         }
 
         composerViewModel.callback = { [weak self] composerAction in

@@ -32,6 +32,7 @@ enum RoomScreenViewModelAction {
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
+    case composer(action: RoomScreenComposerAction)
 }
 
 enum RoomScreenComposerMode: Equatable {
