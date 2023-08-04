@@ -19,14 +19,15 @@ import SwiftUI
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var dragOver = false
-    
+    let composerToolbar: ComposerToolbar
+
     private let attachmentButtonPadding = 10.0
     
     var body: some View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                context.viewState.composerToolbar
+                composerToolbar
                     .padding(.leading, attachmentButtonPadding)
                     .padding(.trailing, 12)
                     .padding(.top, 8)
@@ -149,12 +150,13 @@ struct RoomScreen_Previews: PreviewProvider {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               composerToolbar: ComposerToolbarCoordinator().toPresentable())
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+    static let composerViewModel = ComposerToolbarViewModel()
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context)
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
     }
 }

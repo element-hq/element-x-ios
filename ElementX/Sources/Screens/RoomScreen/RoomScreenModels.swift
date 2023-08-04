@@ -93,7 +93,6 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
-    var composerToolbar: AnyView
 
     var bindings: RoomScreenViewStateBindings
     

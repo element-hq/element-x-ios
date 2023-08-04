@@ -38,10 +38,8 @@ enum RoomScreenCoordinatorAction {
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
-    private let composerToolbarCoordinator: ComposerToolbarCoordinator
-    private var cancellables = Set<AnyCancellable>()
-
     private var viewModel: RoomScreenViewModelProtocol
+    private var composerViewModel: ComposerToolbarViewModel
 
     private let actionsSubject: PassthroughSubject<RoomScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
@@ -51,23 +49,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
 
-        composerToolbarCoordinator = ComposerToolbarCoordinator()
-
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         roomProxy: parameters.roomProxy,
                                         appSettings: ServiceLocator.shared.settings,
                                         analytics: ServiceLocator.shared.analytics,
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        composerToolbar: composerToolbarCoordinator.toPresentable())
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-        composerToolbarCoordinator.actions
-            .sink { [weak self] action in
-                self?.viewModel.process(composerAction: action)
-            }
-            .store(in: &cancellables)
-
-        composerToolbarCoordinator.start()
+        composerViewModel = ComposerToolbarViewModel()
     }
     
     // MARK: - Public
@@ -102,14 +91,20 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
         }
 
-        viewModel.composerActionCallback = { [weak self] action in
+        viewModel.composerActionCallback = { [weak self] composerAction in
             guard let self else { return }
 
-            composerToolbarCoordinator.process(composerAction: action)
+            composerViewModel.process(composerAction: composerAction)
+        }
+
+        composerViewModel.callback = { [weak self] composerAction in
+            guard let self else { return }
+
+            viewModel.process(composerAction: composerAction)
         }
     }
     
     func toPresentable() -> AnyView {
-        AnyView(RoomScreen(context: viewModel.context))
+        AnyView(RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context)))
     }
 }

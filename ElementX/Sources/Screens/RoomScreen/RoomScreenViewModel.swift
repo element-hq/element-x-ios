@@ -46,8 +46,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default,
-         composerToolbar: AnyView) {
+         notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.appSettings = appSettings
@@ -61,7 +60,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         composerToolbar: composerToolbar,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
@@ -808,13 +806,10 @@ extension RoomScreenViewModel.Context {
 // MARK: - Mocks
 
 extension RoomScreenViewModel {
-    private static let composerToolbarCoordinator = ComposerToolbarCoordinator()
-
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          composerToolbar: composerToolbarCoordinator.toPresentable())
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
 }

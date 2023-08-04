@@ -84,12 +84,13 @@ struct UITimelineView_Previews: PreviewProvider {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               composerToolbar: ComposerToolbarCoordinator().toPresentable())
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+    static let composerViewModel = ComposerToolbarViewModel()
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context)
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
     }
 }
