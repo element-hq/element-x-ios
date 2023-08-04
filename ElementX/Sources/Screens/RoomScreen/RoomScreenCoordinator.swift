@@ -64,41 +64,43 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .displayRoomDetails:
-                actionsSubject.send(.presentRoomDetails)
-            case .displayEmojiPicker(let itemID, let selectedEmojis):
-                actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
-            case .displayReportContent(let itemID, let senderID):
-                actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
-            case .displayCameraPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.camera))
-            case .displayMediaPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
-            case .displayDocumentPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.documents))
-            case .displayLocationPicker:
-                actionsSubject.send(.presentLocationPicker)
-            case .displayMediaUploadPreviewScreen(let url):
-                actionsSubject.send(.presentMediaUploadPreviewScreen(url))
-            case .displayRoomMemberDetails(let member):
-                actionsSubject.send(.presentRoomMemberDetails(member: member))
-            case .displayMessageForwarding(let itemID):
-                actionsSubject.send(.presentMessageForwarding(itemID: itemID))
-            case .displayLocation(let body, let geoURI, let description):
-                actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
-            case .composer(let action):
-                composerViewModel.process(composerAction: action)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .displayRoomDetails:
+                    actionsSubject.send(.presentRoomDetails)
+                case .displayEmojiPicker(let itemID, let selectedEmojis):
+                    actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayReportContent(let itemID, let senderID):
+                    actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
+                case .displayCameraPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.camera))
+                case .displayMediaPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
+                case .displayDocumentPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.documents))
+                case .displayLocationPicker:
+                    actionsSubject.send(.presentLocationPicker)
+                case .displayMediaUploadPreviewScreen(let url):
+                    actionsSubject.send(.presentMediaUploadPreviewScreen(url))
+                case .displayRoomMemberDetails(let member):
+                    actionsSubject.send(.presentRoomMemberDetails(member: member))
+                case .displayMessageForwarding(let itemID):
+                    actionsSubject.send(.presentMessageForwarding(itemID: itemID))
+                case .displayLocation(let body, let geoURI, let description):
+                    actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
+                case .composer(let action):
+                    composerViewModel.process(composerAction: action)
+                }
             }
-        }
+            .store(in: &cancellables)
 
         composerViewModel.actions
             .sink { [weak self] composerAction in
                 guard let self else { return }
-                
+
                 viewModel.process(composerAction: composerAction)
             }
             .store(in: &cancellables)
