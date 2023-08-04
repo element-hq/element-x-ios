@@ -31,79 +31,73 @@ struct HomeScreen: View {
     @State private var isSearching = false
     
     var bottomBarVisibility: Visibility {
-        if lastScrollDirection == .up, context.viewState.roomListMode == .rooms {
-            return .automatic
-        } else {
-            return .hidden
+        switch context.viewState.roomListMode {
+        case .skeletons: return .hidden
+        case .empty: return .visible
+        case .rooms: return lastScrollDirection == .up ? .automatic : .hidden
         }
     }
     
     var body: some View {
-        ScrollView {
-            if context.viewState.showSessionVerificationBanner {
-                sessionVerificationBanner
-            }
-            
-            if context.viewState.hasPendingInvitations, !isSearching {
-                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
-                    context.send(viewAction: .selectInvites)
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.vertical, -8.0)
-            }
-            
-            if context.viewState.roomListMode == .skeletons {
-                LazyVStack(spacing: 0) {
-                    ForEach(context.viewState.visibleRooms) { room in
-                        HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                            .redacted(reason: .placeholder)
+        GeometryReader { geometry in
+            ScrollView {
+                switch context.viewState.roomListMode {
+                case .skeletons:
+                    LazyVStack(spacing: 0) {
+                        ForEach(context.viewState.visibleRooms) { room in
+                            HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                                .redacted(reason: .placeholder)
+                        }
                     }
-                }
-                .shimmer()
-                .disabled(true)
-            } else {
-                LazyVStack(spacing: 0) {
-                    HomeScreenRoomList(context: context, isSearching: $isSearching)
-                }
-                .searchable(text: $context.searchQuery)
-                .compoundSearchField()
-                .disableAutocorrection(true)
-            }
-        }
-        .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
-            guard scrollView != scrollViewAdapter.scrollView else { return }
-            scrollViewAdapter.scrollView = scrollView
-        }
-        .onReceive(scrollViewAdapter.didScroll) { _ in
-            updateVisibleRange()
-        }
-        .onReceive(scrollViewAdapter.isScrolling) { _ in
-            updateVisibleRange()
-        }
-        .onChange(of: context.searchQuery) { searchQuery in
-            if searchQuery.isEmpty {
-                // Allow the view to update after changing the query
-                DispatchQueue.main.async {
-                    updateVisibleRange()
+                    .shimmer()
+                    .disabled(true)
+                case .empty:
+                    HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
+                        topSection
+                        
+                        HomeScreenEmptyStateView(context: context)
+                            .layoutPriority(1)
+                    }
+                case .rooms:
+                    topSection
+                    
+                    LazyVStack(spacing: 0) {
+                        HomeScreenRoomList(context: context, isSearching: $isSearching)
+                    }
+                    .searchable(text: $context.searchQuery)
+                    .compoundSearchField()
+                    .disableAutocorrection(true)
                 }
             }
-        }
-        .onReceive(scrollViewAdapter.scrollDirection) { direction in
-            withAnimation(.elementDefault) {
-                lastScrollDirection = direction
+            .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
             }
-        }
-        .onChange(of: context.viewState.visibleRooms) { _ in
-            // Give the view a chance to update
-            DispatchQueue.main.async {
+            .onReceive(scrollViewAdapter.didScroll) { _ in
                 updateVisibleRange()
             }
+            .onReceive(scrollViewAdapter.isScrolling) { _ in
+                updateVisibleRange()
+            }
+            .onChange(of: context.searchQuery) { searchQuery in
+                guard searchQuery.isEmpty else { return }
+                // Dispatch allows the view to update after changing the query
+                DispatchQueue.main.async { updateVisibleRange() }
+            }
+            .onReceive(scrollViewAdapter.scrollDirection) { direction in
+                withAnimation(.elementDefault) { lastScrollDirection = direction }
+            }
+            .onChange(of: context.viewState.visibleRooms) { _ in
+                // Dispatch gives the view a chance to update
+                DispatchQueue.main.async { updateVisibleRange() }
+            }
+            .scrollDismissesKeyboard(.immediately)
+            .scrollDisabled(context.viewState.roomListMode == .skeletons)
+            .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)
+            .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
+            .animation(.elementDefault, value: context.viewState.roomListMode)
+            .animation(.none, value: context.viewState.visibleRooms)
         }
-        .scrollDismissesKeyboard(.immediately)
-        .scrollDisabled(context.viewState.roomListMode == .skeletons)
-        .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
-        .animation(.elementDefault, value: context.viewState.roomListMode)
-        .animation(.none, value: context.viewState.visibleRooms)
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -117,23 +111,19 @@ struct HomeScreen: View {
     
     // MARK: - Private
     
-    @ToolbarContentBuilder
-    private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            HomeScreenUserMenuButton(context: context)
+    @ViewBuilder
+    /// The session verification banner and invites button if either are needed.
+    private var topSection: some View {
+        if context.viewState.showSessionVerificationBanner {
+            sessionVerificationBanner
         }
         
-        ToolbarItemGroup(placement: .bottomBar) {
-            Spacer()
-            newRoomButton
-        }
-    }
-    
-    private var newRoomButton: some View {
-        Button {
-            context.send(viewAction: .startChat)
-        } label: {
-            Image(systemName: "square.and.pencil")
+        if context.viewState.hasPendingInvitations, !isSearching {
+            HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
+                context.send(viewAction: .selectInvites)
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.vertical, -8.0)
         }
     }
     
@@ -171,6 +161,26 @@ struct HomeScreen: View {
         .background(Color.compound.bgSubtleSecondary)
         .cornerRadius(14)
         .padding(.horizontal, 16)
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            HomeScreenUserMenuButton(context: context)
+        }
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            Spacer()
+            newRoomButton
+        }
+    }
+    
+    private var newRoomButton: some View {
+        Button {
+            context.send(viewAction: .startChat)
+        } label: {
+            Image(systemName: "square.and.pencil")
+        }
     }
     
     private func updateVisibleRange() {
@@ -213,25 +223,37 @@ struct HomeScreen: View {
 // MARK: - Previews
 
 struct HomeScreen_Previews: PreviewProvider {
+    static let loadingViewModel = viewModel(.loading)
+    static let loadedViewModel = viewModel(.loaded(.mockRooms))
+    static let emptyViewModel = viewModel(.loaded([]))
+    
     static var previews: some View {
-        body(.loading)
-        body(.loaded(.mockRooms))
+        NavigationStack {
+            HomeScreen(context: loadingViewModel.context)
+        }
+        .previewDisplayName("Loading")
+        
+        NavigationStack {
+            HomeScreen(context: loadedViewModel.context)
+        }
+        .previewDisplayName("Loaded")
+        
+        NavigationStack {
+            HomeScreen(context: emptyViewModel.context)
+        }
+        .previewDisplayName("Empty")
     }
     
-    static func body(_ state: MockRoomSummaryProviderState) -> some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe",
+    static func viewModel(_ state: MockRoomSummaryProviderState) -> HomeScreenViewModel {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
                                                                        roomSummaryProvider: MockRoomSummaryProvider(state: state)),
                                           mediaProvider: MockMediaProvider())
         
-        let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
-                                            selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        
-        return NavigationStack {
-            HomeScreen(context: viewModel.context)
-        }
+        return HomeScreenViewModel(userSession: userSession,
+                                   attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

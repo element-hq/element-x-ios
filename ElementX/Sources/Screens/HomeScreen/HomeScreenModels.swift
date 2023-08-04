@@ -51,14 +51,17 @@ enum HomeScreenViewAction {
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
     case skeletons
+    case empty
     case rooms
     
     var description: String {
         switch self {
-        case .rooms:
-            return "Showing rooms"
         case .skeletons:
             return "Showing placeholders"
+        case .empty:
+            return "Showing empty state"
+        case .rooms:
+            return "Showing rooms"
         }
     }
 }

@@ -92,7 +92,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if isLoadingData {
                     roomListMode = .skeletons
                 } else if hasNoRooms {
-                    roomListMode = .skeletons
+                    roomListMode = .empty
                 } else {
                     roomListMode = .rooms
                 }
