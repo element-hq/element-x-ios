@@ -22,6 +22,7 @@ typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreen
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let accountUserID: String
     private let roomProxy: RoomProxyProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
 
@@ -41,6 +42,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          appSettings: AppSettings) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
+        self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         
@@ -104,6 +106,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         case .processToogleMuteNotifications:
             Task { await toggleMuteNotifications() }
+        case .displayAvatar:
+            displayFullScreenAvatar()
         }
     }
     
@@ -258,6 +262,26 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.dmRecipient?.isIgnored = false
         case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
+        }
+    }
+    
+    private func displayFullScreenAvatar() {
+        guard let avatarURL = roomProxy.avatarURL else {
+            return
+        }
+        
+        let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task {
+            defer {
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+            }
+            
+            // We don't actually know the mime type here, assume it's an image.
+            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
+            }
         }
     }
 }

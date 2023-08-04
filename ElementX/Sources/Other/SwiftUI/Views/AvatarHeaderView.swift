@@ -23,15 +23,20 @@ struct AvatarHeaderView<Footer: View>: View {
     let avatarSize: AvatarSize
     let imageProvider: ImageProviderProtocol?
     let subtitle: String?
+    var onAvatarTap: (() -> Void)?
     @ViewBuilder var footer: () -> Footer
 
     var body: some View {
         VStack(spacing: 8.0) {
-            LoadableAvatarImage(url: avatarUrl,
-                                name: name,
-                                contentID: id,
-                                avatarSize: avatarSize,
-                                imageProvider: imageProvider)
+            Button {
+                onAvatarTap?()
+            } label: {
+                LoadableAvatarImage(url: avatarUrl,
+                                    name: name,
+                                    contentID: id,
+                                    avatarSize: avatarSize,
+                                    imageProvider: imageProvider)
+            }
 
             Text(name ?? id)
                 .foregroundColor(.compound.textPrimary)

@@ -21,14 +21,23 @@ typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberD
 class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
     private let roomMemberProxy: RoomMemberProxyProtocol
+    private let mediaProvider: MediaProviderProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     var callback: ((RoomMemberDetailsScreenViewModelAction) -> Void)?
     
-    init(roomProxy: RoomProxyProtocol, roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(roomProxy: RoomProxyProtocol,
+         roomMemberProxy: RoomMemberProxyProtocol,
+         mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.roomMemberProxy = roomMemberProxy
+        self.mediaProvider = mediaProvider
+        self.userIndicatorController = userIndicatorController
+        
         let initialViewState = RoomMemberDetailsScreenViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
                                                                 bindings: .init())
+        
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
     
@@ -44,6 +53,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await ignoreUser() }
         case .unignoreConfirmed:
             Task { await unignoreUser() }
+        case .displayAvatar:
+            displayFullScreenAvatar()
         }
     }
 
@@ -80,6 +91,26 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private func updateMembers() {
         Task.detached {
             await self.roomProxy.updateMembers()
+        }
+    }
+    
+    private func displayFullScreenAvatar() {
+        guard let avatarURL = roomMemberProxy.avatarURL else {
+            return
+        }
+        
+        let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task {
+            defer {
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+            }
+            
+            // We don't actually know the mime type here, assume it's an image.
+            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
+            }
         }
     }
 }
