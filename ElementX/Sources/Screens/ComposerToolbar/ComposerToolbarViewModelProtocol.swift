@@ -14,8 +14,10 @@
 // limitations under the License.
 //
 
+import Combine
+
 protocol ComposerToolbarViewModelProtocol {
-    var callback: ((ComposerToolbarViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }
     func process(composerAction: RoomScreenComposerAction)
 }

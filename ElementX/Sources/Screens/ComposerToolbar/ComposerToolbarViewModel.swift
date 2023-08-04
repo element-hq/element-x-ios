@@ -19,7 +19,10 @@ import Combine
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
-    var callback: ((ComposerToolbarViewModelAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
+    var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init() {
         super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerText: "", composerFocused: false)))
@@ -27,13 +30,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         context.$viewState
             .map(\.composerMode)
             .removeDuplicates()
-            .sink { [weak self] in self?.callback?(.composerModeChanged(mode: $0)) }
+            .sink { [weak self] in self?.actionsSubject.send(.composerModeChanged(mode: $0)) }
             .store(in: &cancellables)
 
         context.$viewState
             .map(\.bindings.composerFocused)
             .removeDuplicates()
-            .sink { [weak self] in self?.callback?(.focusedChanged(isFocused: $0)) }
+            .sink { [weak self] in self?.actionsSubject.send(.focusedChanged(isFocused: $0)) }
             .store(in: &cancellables)
     }
 
@@ -42,22 +45,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     override func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
         case .sendMessage(let message, let mode):
-            callback?(.sendMessage(message: message, mode: mode))
+            actionsSubject.send(.sendMessage(message: message, mode: mode))
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
             set(mode: .default)
             set(text: "")
         case .displayCameraPicker:
-            callback?(.displayCameraPicker)
+            actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
-            callback?(.displayMediaPicker)
+            actionsSubject.send(.displayMediaPicker)
         case .displayDocumentPicker:
-            callback?(.displayDocumentPicker)
+            actionsSubject.send(.displayDocumentPicker)
         case .displayLocationPicker:
-            callback?(.displayLocationPicker)
+            actionsSubject.send(.displayLocationPicker)
         case .handlePasteOrDrop(let provider):
-            callback?(.handlePasteOrDrop(provider: provider))
+            actionsSubject.send(.handlePasteOrDrop(provider: provider))
         }
     }
 

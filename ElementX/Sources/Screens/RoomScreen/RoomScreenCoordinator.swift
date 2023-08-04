@@ -41,6 +41,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var viewModel: RoomScreenViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModel
 
+    private var cancellables = Set<AnyCancellable>()
+
     private let actionsSubject: PassthroughSubject<RoomScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -93,11 +95,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
         }
 
-        composerViewModel.callback = { [weak self] composerAction in
-            guard let self else { return }
-
-            viewModel.process(composerAction: composerAction)
-        }
+        composerViewModel.actions
+            .sink { [weak self] composerAction in
+                guard let self else { return }
+                
+                viewModel.process(composerAction: composerAction)
+            }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {
