@@ -33,7 +33,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -48,7 +49,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
@@ -74,7 +76,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
@@ -99,7 +102,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -125,7 +129,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         }
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
@@ -147,7 +152,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
@@ -158,7 +164,8 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                      roomMemberProxy: roomMemberProxyMock,
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MockMediaProvider(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
         XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)

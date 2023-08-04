@@ -31,6 +31,7 @@ struct RoomMemberDetailsScreen: View {
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
         .track(screen: .user)
+        .interactiveQuickLook(item: $context.mediaPreviewItem)
     }
     
     // MARK: - Private
@@ -43,6 +44,8 @@ struct RoomMemberDetailsScreen: View {
                          avatarSize: .user(on: .memberDetails),
                          imageProvider: context.imageProvider,
                          subtitle: context.viewState.details.id) {
+            context.send(viewAction: .displayAvatar)
+        } footer: {
             if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
@@ -101,17 +104,26 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider {
     static let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
-        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                roomMemberProxy: member,
+                                                mediaProvider: MockMediaProvider(),
+                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
 
     static let accountOwnerViewModel = {
         let member = RoomMemberProxyMock.mockMe
-        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                roomMemberProxy: member,
+                                                mediaProvider: MockMediaProvider(),
+                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
 
     static let ignoredUserViewModel = {
         let member = RoomMemberProxyMock.mockIgnored
-        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock, roomMemberProxy: member, mediaProvider: MockMediaProvider())
+        return RoomMemberDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                                roomMemberProxy: member,
+                                                mediaProvider: MockMediaProvider(),
+                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }()
     
     static var previews: some View {

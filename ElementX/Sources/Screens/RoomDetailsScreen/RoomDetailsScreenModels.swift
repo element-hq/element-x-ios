@@ -137,6 +137,9 @@ struct RoomDetailsScreenViewStateBindings {
     var alertInfo: AlertInfo<RoomDetailsScreenErrorType>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     var ignoreUserRoomAlertItem: IgnoreUserAlertItem?
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: MediaPreviewItem?
 }
 
 struct LeaveRoomAlertItem: AlertProtocol {
@@ -174,6 +177,7 @@ enum RoomDetailsScreenViewAction {
     case unignoreConfirmed
     case processTapNotifications
     case processToogleMuteNotifications
+    case displayAvatar
 }
 
 enum RoomDetailsScreenViewShortcut {

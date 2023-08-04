@@ -66,6 +66,9 @@ struct RoomMemberDetailsScreenViewStateBindings {
     
     var ignoreUserAlert: IgnoreUserAlertItem?
     var alertInfo: AlertInfo<RoomMemberDetailsScreenError>?
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: MediaPreviewItem?
 }
 
 enum RoomMemberDetailsScreenViewAction {
@@ -73,6 +76,7 @@ enum RoomMemberDetailsScreenViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
+    case displayAvatar
 }
 
 enum RoomMemberDetailsScreenError: Hashable {
