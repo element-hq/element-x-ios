@@ -14,4 +14,4 @@ elif [ "$CI_WORKFLOW" = "Nightly" ]; then
 fi
 
 # Upload dsyms no matter the workflow
-bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
+# bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
