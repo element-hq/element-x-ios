@@ -46,5 +46,6 @@ struct Poll: Equatable {
         let votes: Int
         let allVotes: Int
         let isSelected: Bool
+        let isWinning: Bool
     }
 }

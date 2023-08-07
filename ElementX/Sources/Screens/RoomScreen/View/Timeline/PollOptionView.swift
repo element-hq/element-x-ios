@@ -19,14 +19,18 @@ import SwiftUI
 struct PollOptionView: View {
     let pollOption: Poll.Option
     let showVotes: Bool
+    let isFinalResult: Bool
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
+            if !isFinalResult {
+                FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
+            }
 
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline) {
                     Text(pollOption.text)
+                        .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     if showVotes {
@@ -45,10 +49,32 @@ struct PollOptionView: View {
 
     @ViewBuilder
     private var progressView: some View {
-        let progress = showVotes ? Double(pollOption.votes) / Double(pollOption.allVotes) : 0
+        PollProgressView(progress: progress)
+    }
 
-        ProgressView(value: progress)
-            .progressViewStyle(LinearProgressViewStyle(tint: .compound.textPrimary))
+    private var progress: Double {
+        guard showVotes, pollOption.allVotes > 0 else {
+            return 0
+        }
+
+        return Double(pollOption.votes) / Double(pollOption.allVotes)
+    }
+}
+
+private struct PollProgressView: View {
+    let progress: Double
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .foregroundColor(.compound.borderDisabled)
+
+                Capsule()
+                    .frame(maxWidth: progress * geometry.size.width)
+            }
+        }
+        .frame(height: 6)
     }
 }
 
@@ -60,15 +86,19 @@ struct PollOptionView_Previews: PreviewProvider {
                                                  text: "Italian 🇮🇹",
                                                  votes: 1,
                                                  allVotes: 10,
-                                                 isSelected: true),
-                               showVotes: false)
+                                                 isSelected: true,
+                                                 isWinning: false),
+                               showVotes: false,
+                               isFinalResult: false)
 
                 PollOptionView(pollOption: .init(id: "2",
                                                  text: "Chinese 🇨🇳",
                                                  votes: 9,
                                                  allVotes: 10,
-                                                 isSelected: false),
-                               showVotes: true)
+                                                 isSelected: false,
+                                                 isWinning: true),
+                               showVotes: true,
+                               isFinalResult: false)
             }
             .padding()
         }

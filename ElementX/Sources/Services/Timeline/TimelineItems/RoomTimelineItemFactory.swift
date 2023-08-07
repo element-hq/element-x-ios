@@ -333,12 +333,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             count + pair.value.count
         }
 
+        let maxOptionVotes = votes.map(\.value.count).max()
+
         let options = answers.map { answer in
-            Poll.Option(id: answer.id,
-                        text: answer.text,
-                        votes: votes[answer.id]?.count ?? 0,
-                        allVotes: allVotes,
-                        isSelected: votes[answer.id]?.contains(userID) ?? false)
+            let optionVotesCount = votes[answer.id]?.count
+            
+            return Poll.Option(id: answer.id,
+                               text: answer.text,
+                               votes: optionVotesCount ?? 0,
+                               allVotes: allVotes,
+                               isSelected: votes[answer.id]?.contains(userID) ?? false,
+                               isWinning: optionVotesCount.map { $0 == maxOptionVotes } ?? false)
         }
 
         let poll = Poll(question: question,
