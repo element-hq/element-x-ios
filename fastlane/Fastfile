@@ -73,28 +73,6 @@ lane :alpha do
   upload_to_browserstack()
 end
 
-lane :app_store_release do
-  build_release()
-
-  release_to_github()
-
-  prepare_next_release()
-
-  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
-end
-
-lane :build_release do
-  bump_build_number()
-
-  build_ios_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "app-store",
-    output_directory: "build",
-    xcargs: "-allowProvisioningUpdates",
-  )
-end
-
 lane :unit_tests do
   run_tests(
     scheme: "UnitTests",
