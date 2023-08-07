@@ -46,8 +46,8 @@ targets:
     platform: iOS
 
     configFiles:
-      Debug: ../../secrets.xcconfig
-      Release: ../../secrets.xcconfig
+      Debug: ../SupportingFiles/secrets.xcconfig
+      Release: ../SupportingFiles/secrets.xcconfig
 
     info:
       path: ../SupportingFiles/Info.plist

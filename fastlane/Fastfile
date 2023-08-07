@@ -428,7 +428,7 @@ private_lane :config_maplibre do
   UI.user_error!("Invalid Map Libre API key.") unless !api_key.to_s.empty?
 
   set_xcconfig_value(
-    path: './secrets.xcconfig',
+    path: './ElementX/SupportingFiles/secrets.xcconfig',
     name: 'MAPLIBRE_API_KEY',
     value: api_key
   )
