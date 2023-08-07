@@ -31,7 +31,7 @@ struct PollRoomTimelineView: View {
                         context.send(viewAction: .selectedPollOption(poll: poll, optionID: option.id))
                     } label: {
                         PollOptionView(pollOption: option,
-                                       showVotes: poll.hasEnded || poll.kind == .disclosed,
+                                       showVotes: showVotes,
                                        isFinalResult: poll.hasEnded)
                             .foregroundColor(progressBarColor(for: option))
                     }
@@ -63,9 +63,9 @@ struct PollRoomTimelineView: View {
     private var summaryView: some View {
         if let summaryText = poll.summaryText {
             Text(summaryText)
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity, alignment: poll.kind == .undisclosed ? .leading : .trailing)
+                .font(poll.hasEnded ? .compound.bodyXSSemibold : .compound.bodyXS)
+                .foregroundColor(poll.hasEnded ? .compound.textPrimary : .compound.textSecondary)
+                .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
         }
     }
 
@@ -76,10 +76,20 @@ struct PollRoomTimelineView: View {
             return .compound.textPrimary
         }
     }
+
+    private var showVotes: Bool {
+        poll.hasEnded || poll.kind == .disclosed
+    }
 }
 
 private extension Poll {
     var summaryText: String? {
+        guard !hasEnded else {
+            return options.first.map {
+                L10n.commonPollFinalVotes($0.allVotes)
+            }
+        }
+
         switch kind {
         case .disclosed:
             return options.first.map {

@@ -30,13 +30,14 @@ struct PollOptionView: View {
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline) {
                     Text(pollOption.text)
+                        .font(isFinalWinningOption ? .compound.bodyLGSemibold : .compound.bodyLG)
                         .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     if showVotes {
                         Text(L10n.commonPollVotesCount(pollOption.votes))
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
+                            .font(isFinalWinningOption ? .compound.bodySMSemibold : .compound.bodySM)
+                            .foregroundColor(isFinalWinningOption ? .compound.textPrimary : .compound.textSecondary)
                     }
                 }
 
@@ -58,6 +59,10 @@ struct PollOptionView: View {
         }
 
         return Double(pollOption.votes) / Double(pollOption.allVotes)
+    }
+
+    private var isFinalWinningOption: Bool {
+        pollOption.isWinning && isFinalResult
     }
 }
 
@@ -99,6 +104,15 @@ struct PollOptionView_Previews: PreviewProvider {
                                                  isWinning: true),
                                showVotes: true,
                                isFinalResult: false)
+
+                PollOptionView(pollOption: .init(id: "2",
+                                                 text: "Chinese 🇨🇳",
+                                                 votes: 9,
+                                                 allVotes: 10,
+                                                 isSelected: false,
+                                                 isWinning: true),
+                               showVotes: true,
+                               isFinalResult: true)
             }
             .padding()
         }
