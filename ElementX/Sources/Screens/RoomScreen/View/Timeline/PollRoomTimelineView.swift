@@ -30,6 +30,8 @@ struct PollRoomTimelineView: View {
                         PollOptionView(pollOption: option)
                     }
                 }
+
+                summaryView
             }
             .frame(maxWidth: 450)
         }
@@ -47,6 +49,16 @@ struct PollRoomTimelineView: View {
 
             Text(poll.question)
                 .font(.compound.bodyLGSemibold)
+        }
+    }
+
+    @ViewBuilder
+    private var summaryView: some View {
+        if let allVotes = poll.options.first?.allVotes {
+            Text(L10n.commonPollTotalVotes(allVotes))
+                .font(.compound.bodySM)
+                .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 }
