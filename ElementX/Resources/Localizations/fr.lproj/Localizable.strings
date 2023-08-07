@@ -338,6 +338,8 @@
 "screen_room_timeline_add_reaction" = "Ajouter un emoji";
 "screen_room_timeline_less_reactions" = "Montrer moins";
 "screen_roomlist_a11y_create_message" = "Créer une nouvelle conversation ou un nouveau salon";
+"screen_roomlist_empty_message" = "Get started by messaging someone.";
+"screen_roomlist_empty_title" = "No chats yet.";
 "screen_roomlist_main_space_title" = "Tous les chats";
 "screen_server_confirmation_change_server" = "Changer de fournisseur de compte";
 "screen_server_confirmation_message_login_element_dot_io" = "Un serveur privé pour les employés d’Element.";
