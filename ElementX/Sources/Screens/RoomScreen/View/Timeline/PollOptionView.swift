@@ -18,6 +18,7 @@ import SwiftUI
 
 struct PollOptionView: View {
     let pollOption: Poll.Option
+    let showVotes: Bool
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -28,9 +29,11 @@ struct PollOptionView: View {
                     Text(pollOption.text)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text(L10n.commonPollVotesCount(pollOption.votes))
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
+                    if showVotes {
+                        Text(L10n.commonPollVotesCount(pollOption.votes))
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                    }
                 }
 
                 progressView
@@ -40,8 +43,11 @@ struct PollOptionView: View {
 
     // MARK: - Private
 
+    @ViewBuilder
     private var progressView: some View {
-        ProgressView(value: Double(pollOption.votes) / Double(pollOption.allVotes))
+        let progress = showVotes ? Double(pollOption.votes) / Double(pollOption.allVotes) : 0
+
+        ProgressView(value: progress)
             .progressViewStyle(LinearProgressViewStyle(tint: .compound.textPrimary))
     }
 }
@@ -54,13 +60,15 @@ struct PollOptionView_Previews: PreviewProvider {
                                                  text: "Italian 🇮🇹",
                                                  votes: 1,
                                                  allVotes: 10,
-                                                 isSelected: true))
+                                                 isSelected: true),
+                               showVotes: false)
 
                 PollOptionView(pollOption: .init(id: "2",
                                                  text: "Chinese 🇨🇳",
                                                  votes: 9,
                                                  allVotes: 10,
-                                                 isSelected: false))
+                                                 isSelected: false),
+                               showVotes: true)
             }
             .padding()
         }

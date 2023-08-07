@@ -342,7 +342,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
 
         let poll = Poll(question: question,
-                        pollKind: .init(pollKind: pollKind),
+                        kind: .init(pollKind: pollKind),
                         maxSelections: Int(maxSelections),
                         options: options,
                         votes: votes,
