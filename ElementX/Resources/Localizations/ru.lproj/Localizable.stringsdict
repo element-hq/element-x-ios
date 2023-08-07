@@ -13,11 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d člen</string>
+			<string>%1$d участник</string>
 			<key>few</key>
-			<string>%1$d členovia</string>
-			<key>other</key>
-			<string>%1$d členov</string>
+			<string>%1$d участников</string>
+			<key>many</key>
+			<string>%1$d участников</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -31,11 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 hlas</string>
+			<string>1 голос</string>
 			<key>few</key>
-			<string>%d hlasy</string>
-			<key>other</key>
-			<string>%d hlasov</string>
+			<string>%d голоса</string>
+			<key>many</key>
+			<string>%d голосов</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d správa</string>
+			<string>%1$@: %2$d сообщение</string>
 			<key>few</key>
-			<string>%1$@: %2$d správy</string>
-			<key>other</key>
-			<string>%1$@: %2$d správ</string>
+			<string>%1$@: %2$d сообщения</string>
+			<key>many</key>
+			<string>%1$@: %2$d сообщений</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -67,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d oznámenie</string>
+			<string>%d уведомление</string>
 			<key>few</key>
-			<string>%d oznámenia</string>
-			<key>other</key>
-			<string>%d oznámení</string>
+			<string>%d уведомления</string>
+			<key>many</key>
+			<string>%d уведомлений</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -85,11 +85,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d pozvánka</string>
+			<string>%d приглашение</string>
 			<key>few</key>
-			<string>%d pozvánky</string>
-			<key>other</key>
-			<string>%d pozvánok</string>
+			<string>%d приглашения</string>
+			<key>many</key>
+			<string>%d приглашений</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -103,11 +103,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d nová správa</string>
+			<string>%d новое сообщение</string>
 			<key>few</key>
-			<string>%d nové správy</string>
-			<key>other</key>
-			<string>%d nových správ</string>
+			<string>%d новых сообщения</string>
+			<key>many</key>
+			<string>%d новых сообщений</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -121,11 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d neprečítaná oznámená správa</string>
+			<string>%d непрочитанное уведомление</string>
 			<key>few</key>
-			<string>%d neprečítané oznámené správy</string>
-			<key>other</key>
-			<string>%d neprečítaných oznámených správ</string>
+			<string>%d непрочитанных уведомления</string>
+			<key>many</key>
+			<string>%d непрочитанных уведомлений</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -139,11 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d miestnosť</string>
+			<string>%d комната</string>
 			<key>few</key>
-			<string>%d miestnosti</string>
-			<key>other</key>
-			<string>%d miestností</string>
+			<string>%d комнаты</string>
+			<key>many</key>
+			<string>%d комнат</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -157,11 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d zmena miestnosti</string>
+			<string>%1$d изменение в комнате</string>
 			<key>few</key>
-			<string>%1$d zmeny miestnosti</string>
-			<key>other</key>
-			<string>%1$d zmien miestnosti</string>
+			<string>%1$d изменения в комнате</string>
+			<key>many</key>
+			<string>%1$d изменений в комнате</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -175,11 +175,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 osoba</string>
+			<string>1 пользователь</string>
 			<key>few</key>
-			<string>%1$d ľudia</string>
-			<key>other</key>
-			<string>%1$d ľudí</string>
+			<string>%1$d пользователя</string>
+			<key>many</key>
+			<string>%1$d пользователей</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_more_reactions</key>
@@ -193,11 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d ďalší</string>
+			<string>одно</string>
 			<key>few</key>
-			<string>%1$d ďalšie</string>
-			<key>other</key>
-			<string>%1$d ďalších</string>
+			<string>%1$d</string>
+			<key>many</key>
+			<string>более %1$d</string>
 		</dict>
 	</dict>
 </dict>
