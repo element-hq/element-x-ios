@@ -19,6 +19,7 @@ import SwiftUI
 struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -26,7 +27,9 @@ struct PollRoomTimelineView: View {
                 questionView
 
                 ForEach(poll.options, id: \.id) { option in
-                    Button { } label: {
+                    Button {
+                        context.send(viewAction: .selectedPollOption(poll: poll, optionID: option.id))
+                    } label: {
                         PollOptionView(pollOption: option)
                     }
                 }
