@@ -120,12 +120,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private func fetchSettings() {
         fetchSettingsTask = Task {
             // Group chats
-            // A group chat is a chat having more than 2 active members
             var groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: false)
             let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: false)
 
             // Direct chats
-            // A direct chat is a chat having exactly 2 active members
             var directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: true)
             let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: true)
                         

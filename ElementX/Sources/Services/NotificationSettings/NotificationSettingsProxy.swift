@@ -63,7 +63,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
     }
-    
+
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setDefaultRoomNotificationMode")
         defer { backgroundTask?.stop() }
