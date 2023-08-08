@@ -92,7 +92,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayLocation(let body, let geoURI, let description):
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .composer(let action):
-                    composerViewModel.process(composerAction: action)
+                    composerViewModel.process(roomAction: action)
                 }
             }
             .store(in: &cancellables)

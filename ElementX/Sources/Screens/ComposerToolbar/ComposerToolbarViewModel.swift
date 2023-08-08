@@ -64,8 +64,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    func process(composerAction: RoomScreenComposerAction) {
-        switch composerAction {
+    func process(roomAction: RoomScreenComposerAction) {
+        switch roomAction {
         case .setMode(mode: let mode):
             set(mode: mode)
         case .setText(text: let text):

@@ -19,5 +19,5 @@ import Combine
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }
-    func process(composerAction: RoomScreenComposerAction)
+    func process(roomAction: RoomScreenComposerAction)
 }
