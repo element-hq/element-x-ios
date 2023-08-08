@@ -21,18 +21,18 @@ import XCTest
 class ComposerToolbarViewModelTests: XCTestCase {
     func testComposerFocus() {
         let viewModel = ComposerToolbarViewModel()
-        viewModel.process(composerAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
+        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
-        viewModel.process(composerAction: .removeFocus)
+        viewModel.process(roomAction: .removeFocus)
         XCTAssertFalse(viewModel.state.bindings.composerFocused)
     }
 
     func testComposerMode() {
         let viewModel = ComposerToolbarViewModel()
         let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
-        viewModel.process(composerAction: .setMode(mode: mode))
+        viewModel.process(roomAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
-        viewModel.process(composerAction: .clear)
+        viewModel.process(roomAction: .clear)
         XCTAssertEqual(viewModel.state.composerMode, .default)
     }
 
@@ -51,7 +51,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                 expectation.fulfill()
             })
 
-        viewModel.process(composerAction: .setMode(mode: mode))
+        viewModel.process(roomAction: .setMode(mode: mode))
 
         wait(for: [expectation], timeout: 2.0)
         cancellable.cancel()
