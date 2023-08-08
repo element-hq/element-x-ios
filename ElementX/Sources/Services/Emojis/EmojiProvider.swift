@@ -84,7 +84,9 @@ extension EmojibaseDatasource: EmojiLoaderProtocol {
                 let emojis = store.categories[category.rawValue] ?? []
                 return EmojiCategory(id: category.rawValue, emojis: emojis.compactMap(EmojiItem.init(from:)))
             }
-        } catch { }
+        } catch {
+            MXLog.error("Failed retrieving emojis from the emojibase datasource: \(error)")
+        }
         return []
     }
 }
