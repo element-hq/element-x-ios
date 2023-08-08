@@ -135,7 +135,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     // MARK: - Private
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -241,7 +240,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),

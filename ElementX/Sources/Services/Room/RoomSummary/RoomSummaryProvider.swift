@@ -206,7 +206,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         

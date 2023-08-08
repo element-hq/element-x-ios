@@ -20,7 +20,6 @@ import UIKit
 struct RoomStateEventStringBuilder {
     let userID: String
     
-    // swiftlint:disable:next cyclomatic_complexity
     func buildString(for change: MembershipChange?, member: String, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         guard let change else {
             MXLog.verbose("Filtering timeline item for membership change that is nil")
@@ -76,7 +75,7 @@ struct RoomStateEventStringBuilder {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_parameter_count
+    // swiftlint:disable:next function_parameter_count
     func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
                                   avatarURLString: String?, previousAvatarURLString: String?,
                                   member: String, memberIsYou: Bool) -> String? {
@@ -122,7 +121,6 @@ struct RoomStateEventStringBuilder {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func buildString(for state: OtherState, stateKey: String?, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         let senderName = sender.displayName ?? sender.id
         

@@ -248,7 +248,6 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(lastMessage))
     }
     
-    // swiftlint:disable:next function_body_length
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"

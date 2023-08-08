@@ -69,7 +69,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     // MARK: - Public
     
-    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:

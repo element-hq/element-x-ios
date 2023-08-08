@@ -70,7 +70,6 @@ enum RoomTimelineItemType: Equatable {
     case location(LocationRoomTimelineItem)
     case poll(PollRoomTimelineItem)
 
-    // swiftlint:disable:next cyclomatic_complexity
     init(item: RoomTimelineItemProtocol) {
         switch item {
         case let item as TextRoomTimelineItem:

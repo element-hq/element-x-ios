@@ -101,7 +101,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
         var params = [
