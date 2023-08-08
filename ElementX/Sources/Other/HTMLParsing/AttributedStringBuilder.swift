@@ -56,13 +56,19 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard let htmlString,
-              let data = htmlString.data(using: .utf8) else {
+        guard let htmlString else {
             return nil
         }
         
         if let cached = Self.cache.value(forKey: htmlString) {
             return cached
+        }
+        
+        // Trick DTCoreText into preserving newlines
+        let adjustedHTMLString = htmlString.replacingOccurrences(of: "\n", with: "<br>")
+        
+        guard let data = adjustedHTMLString.data(using: .utf8) else {
+            return nil
         }
         
         let defaultFont = UIFont.preferredFont(forTextStyle: .body)
