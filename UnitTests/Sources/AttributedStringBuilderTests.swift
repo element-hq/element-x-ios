@@ -396,6 +396,17 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
     }
     
+    func testNewLinesArePreserved() {
+        let htmlString = "Bob's\nyour\nuncle\nand\nFanny's\nyour\naunt"
+    
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), htmlString.replacingOccurrences(of: "\n", with: "\u{2028}"))
+    }
+    
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
