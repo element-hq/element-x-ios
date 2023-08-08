@@ -178,6 +178,7 @@ targets:
     - package: URLRouting
     - package: Version
     - package: Emojibase
+    - package: WysiwygComposer
 
     sources:
     - path: ../Sources

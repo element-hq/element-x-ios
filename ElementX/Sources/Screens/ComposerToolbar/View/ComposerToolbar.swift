@@ -15,9 +15,13 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
+    let wysiwygViewModel: WysiwygComposerViewModel
+    let keyCommandHandler: KeyCommandHandler
+
     @FocusState private var composerFocused: Bool
 
     var body: some View {
@@ -25,33 +29,51 @@ struct ComposerToolbar: View {
             RoomAttachmentPicker(context: context)
                 .padding(.bottom, 5) // centre align with the send button
             messageComposer
+                .clipped()
                 .environmentObject(context)
-        }
-        .onChange(of: context.composerFocused) { newValue in
-            composerFocused = newValue
-        }
-        .onChange(of: composerFocused) { newValue in
-            context.composerFocused = newValue
         }
     }
     
     private var messageComposer: some View {
-        MessageComposer(text: $context.composerText,
-                        focused: $composerFocused,
+        MessageComposer(composerView: composerView,
+                        idealHeight: wysiwygViewModel.idealHeight,
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         mode: context.viewState.composerMode) {
-            sendMessage()
+            context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
         } replyCancellationAction: {
             context.send(viewAction: .cancelReply)
         } editCancellationAction: {
             context.send(viewAction: .cancelEdit)
+        } onAppearAction: {
+            context.send(viewAction: .composerAppeared)
+        }
+        .focused($composerFocused, equals: true)
+        .onChange(of: context.composerFocused) { newValue in
+            guard composerFocused != newValue else { return }
+
+            composerFocused = newValue
+        }
+        .onChange(of: composerFocused) { newValue in
+            context.composerFocused = newValue
         }
     }
 
-    private func sendMessage() {
-        guard !context.viewState.sendButtonDisabled else { return }
-        context.send(viewAction: .sendMessage(message: context.composerText, mode: context.viewState.composerMode))
+    private var composerView: AnyView {
+        let view = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                       viewModel: wysiwygViewModel,
+                                       itemProviderHelper: ItemProviderHelper(),
+                                       keyCommandHandler: keyCommandHandler) { provider in
+            context.send(viewAction: .handlePasteOrDrop(provider: provider))
+        }
+
+        return AnyView(view)
+    }
+
+    private class ItemProviderHelper: WysiwygItemProviderHelper {
+        func isPasteSupported(for itemProvider: NSItemProvider) -> Bool {
+            itemProvider.isSupportedForPasteOrDrop
+        }
     }
 }

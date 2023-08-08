@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
@@ -22,6 +23,7 @@ struct RoomScreen: View {
     let composerToolbar: ComposerToolbar
 
     private let attachmentButtonPadding = 10.0
+    @FocusState private var composerFocused: Bool
     
     var body: some View {
         timeline
@@ -33,6 +35,7 @@ struct RoomScreen: View {
                     .padding(.top, 8)
                     .padding(.bottom)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                    .focused($composerFocused, equals: true)
                     .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -74,6 +77,14 @@ struct RoomScreen: View {
                 if isScrolledToBottom {
                     context.send(viewAction: .scrolledToBottom)
                 }
+            }
+            .onChange(of: context.composerFocused) { newValue in
+                guard newValue != composerFocused else { return }
+
+                composerFocused = newValue
+            }
+            .onChange(of: composerFocused) { newValue in
+                context.composerFocused = newValue
             }
     }
 
@@ -153,11 +164,15 @@ struct RoomScreen_Previews: PreviewProvider {
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-    static let composerViewModel = ComposerToolbarViewModel()
+    static let wysiwygViewModel = WysiwygComposerViewModel()
+    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+    static let composerToolbar = ComposerToolbar(context: composerViewModel.context,
+                                                 wysiwygViewModel: wysiwygViewModel,
+                                                 keyCommandHandler: { _ in false })
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
+            RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
         }
     }
 }

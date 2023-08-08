@@ -34,7 +34,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
-    private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
 
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
 
@@ -62,7 +61,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         bindings: .init(reactionsCollapsed: [:])),
+                                                         bindings: .init(composerFocused: false, reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
         setupSubscriptions()
@@ -160,8 +159,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             handlePasteOrDrop(provider)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
-        case .focusedChanged(isFocused: let isFocused):
-            composerFocusedSubject.send(isFocused)
         }
     }
     
@@ -225,7 +222,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        let shouldShowInviteAlert = composerFocusedSubject
+        let shouldShowInviteAlert = context.$viewState
+            .map(\.bindings.composerFocused)
             .removeDuplicates()
             .map { [weak self] isFocused in
                 guard let self else { return false }

@@ -27,11 +27,11 @@ enum ComposerToolbarViewModelAction {
     case handlePasteOrDrop(provider: NSItemProvider)
 
     case composerModeChanged(mode: RoomScreenComposerMode)
-    case focusedChanged(isFocused: Bool)
 }
 
 enum ComposerToolbarViewAction {
-    case sendMessage(message: String, mode: RoomScreenComposerMode)
+    case composerAppeared
+    case sendMessage
     case cancelReply
     case cancelEdit
     case displayCameraPicker
@@ -43,21 +43,23 @@ enum ComposerToolbarViewAction {
 
 struct ComposerToolbarViewState: BindableState {
     var composerMode: RoomScreenComposerMode = .default
+    var composerEmpty = true
 
     var bindings: ComposerToolbarViewStateBindings
 
     var sendButtonDisabled: Bool {
-        bindings.composerText.count == 0
+        composerEmpty
     }
 }
 
 struct ComposerToolbarViewStateBindings {
-    var composerText: String
     var composerFocused: Bool
 
     var showAttachmentPopover = false {
         didSet {
-            composerFocused = false
+            if showAttachmentPopover {
+                composerFocused = false
+            }
         }
     }
 }

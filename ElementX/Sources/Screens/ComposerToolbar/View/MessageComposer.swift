@@ -15,18 +15,23 @@
 //
 
 import SwiftUI
+import WysiwygComposer
+
+typealias EnterKeyHandler = () -> Void
+typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
-    @Binding var text: String
-    var focused: FocusState<Bool>.Binding
+    let composerView: AnyView
+    var idealHeight: CGFloat
     let sendingDisabled: Bool
     let mode: RoomScreenComposerMode
-    
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
-    
+    let onAppearAction: () -> Void
+    @FocusState private var focused: Bool
+
     @State private var isMultiline = false
     @ScaledMetric private var sendButtonIconSize = 16
     
@@ -35,15 +40,15 @@ struct MessageComposer: View {
         VStack(alignment: .leading, spacing: -6) {
             header
             HStack(alignment: .bottom) {
-                MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                         text: $text,
-                                         focused: focused,
-                                         isMultiline: $isMultiline,
-                                         maxHeight: 300,
-                                         enterKeyHandler: sendAction,
-                                         pasteHandler: pasteAction)
+                composerView
                     .tint(.compound.iconAccentTertiary)
+                    .frame(height: idealHeight)
+                    .padding(.horizontal, 12)
                     .padding(.vertical, 10)
+                    .focused($focused, equals: true)
+                    .onAppear {
+                        onAppearAction()
+                    }
                 
                 Button {
                     sendAction()
@@ -70,7 +75,7 @@ struct MessageComposer: View {
                     .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
                     .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
-                    .opacity(focused.wrappedValue ? 1 : 0)
+                    .opacity(focused ? 1 : 0)
             }
         }
         // Explicitly disable all animations to fix weirdness with the header immediately
@@ -174,63 +179,40 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 struct MessageComposer_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
+    static func messageComposer(_ content: String = "",
+                                sendingDisabled: Bool = false,
+                                mode: RoomScreenComposerMode = .default) -> MessageComposer {
+        let viewModel = WysiwygComposerViewModel(minHeight: 22,
+                                                 maxExpandedHeight: 250)
+        viewModel.setMarkdownContent(content)
+
+        let composerView = AnyView(WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                                       viewModel: viewModel,
+                                                       itemProviderHelper: nil,
+                                                       keyCommandHandler: nil,
+                                                       pasteHandler: nil))
+
+        return MessageComposer(composerView: composerView,
+                               idealHeight: viewModel.idealHeight,
+                               sendingDisabled: sendingDisabled,
+                               mode: mode,
+                               sendAction: { },
+                               pasteAction: { _ in },
+                               replyCancellationAction: { },
+                               editCancellationAction: { },
+                               onAppearAction: { viewModel.setup() })
+    }
+
     static var previews: some View {
         VStack {
-            MessageComposer(text: .constant(""),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: true,
-                            mode: .default,
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
+            messageComposer(sendingDisabled: true)
 
-            MessageComposer(text: .constant("This is a short message."),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: false,
-                            mode: .default,
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
+            messageComposer("Some message",
+                            mode: .edit(originalItemId: .random))
 
-            MessageComposer(text: .constant("This is a very long message that will wrap to 2 lines on an iPhone 14."),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: false,
-                            mode: .default,
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
-
-            MessageComposer(text: .constant("This is an even longer message that will wrap to 3 lines on an iPhone 14, just to see the difference it makes."),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: false,
-                            mode: .default,
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
-
-            MessageComposer(text: .constant("Some message"),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: false,
-                            mode: .edit(originalItemId: .random),
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
-
-            MessageComposer(text: .constant(""),
-                            focused: FocusState<Bool>().projectedValue,
-                            sendingDisabled: false,
-                            mode: .reply(itemID: .random,
+            messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
-                                                               contentType: .text(.init(body: "Text: Where the wild things are")))),
-                            sendAction: { },
-                            pasteAction: { _ in },
-                            replyCancellationAction: { },
-                            editCancellationAction: { })
+                                                               contentType: .text(.init(body: "Text: Where the wild things are")))))
         }
         .padding(.horizontal)
 
@@ -253,15 +235,8 @@ struct MessageComposer_Previews: PreviewProvider {
                 ]
 
                 ForEach(replyTypes, id: \.self) { replyDetails in
-                    MessageComposer(text: .constant(""),
-                                    focused: FocusState<Bool>().projectedValue,
-                                    sendingDisabled: false,
-                                    mode: .reply(itemID: .random,
-                                                 replyDetails: replyDetails),
-                                    sendAction: { },
-                                    pasteAction: { _ in },
-                                    replyCancellationAction: { },
-                                    editCancellationAction: { })
+                    messageComposer(mode: .reply(itemID: .random,
+                                                 replyDetails: replyDetails))
                 }
             }
         }

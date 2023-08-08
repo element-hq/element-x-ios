@@ -134,6 +134,15 @@
       }
     },
     {
+      "identity" : "matrix-wysiwyg-composer-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
+      "state" : {
+        "revision" : "055893d6d82a1ce84b3b3a4df5abe34b3f6402e6",
+        "version" : "2.6.1"
+      }
+    },
+    {
       "identity" : "posthog-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",

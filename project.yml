@@ -112,3 +112,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
+  WysiwygComposer:
+    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
+    exactVersion: 2.6.1
