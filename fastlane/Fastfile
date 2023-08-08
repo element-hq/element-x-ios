@@ -6,6 +6,7 @@ before_all do
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
+  ENV["SENTRY_LOG_LEVEL"] = "DEBUG"
 end
 
 lane :alpha do
