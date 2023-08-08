@@ -469,7 +469,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: TimelineItemActionMenu
     
     private func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a menu for non-event based items.
             return
@@ -479,7 +479,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
             return nil
@@ -541,7 +541,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
@@ -766,7 +766,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Reactions
     
     private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -776,7 +776,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
