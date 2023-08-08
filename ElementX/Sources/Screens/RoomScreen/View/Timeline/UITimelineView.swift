@@ -65,9 +65,6 @@ struct UITimelineView: UIViewControllerRepresentable {
             if tableViewController.isBackPaginating != context.viewState.timelineViewState.isBackPaginating {
                 tableViewController.isBackPaginating = context.viewState.timelineViewState.isBackPaginating
             }
-            if tableViewController.composerMode != context.viewState.composerMode {
-                tableViewController.composerMode = context.viewState.composerMode
-            }
             
             // Doesn't have an equatable conformance :(
             tableViewController.contextMenuActionProvider = context.viewState.timelineItemMenuActionProvider
@@ -88,10 +85,12 @@ struct UITimelineView_Previews: PreviewProvider {
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+    static let composerViewModel = ComposerToolbarViewModel()
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context)
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
     }
 }

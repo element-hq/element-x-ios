@@ -15,11 +15,14 @@
 //
 
 @testable import ElementX
+
+import Combine
 import XCTest
 
 @MainActor
 class RoomScreenViewModelTests: XCTestCase {
     var userIndicatorControllerMock: UserIndicatorControllerMock!
+    var cancellables = Set<AnyCancellable>()
 
     override func setUp() async throws {
         userIndicatorControllerMock = UserIndicatorControllerMock.default
@@ -195,15 +198,17 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
-        viewModel.callback = { action in
-            switch action {
-            case .displayRoomMemberDetails(let member):
-                XCTAssert(member === roomMemberMock)
-            default:
-                XCTFail("Did not received the expected action")
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .displayRoomMemberDetails(let member):
+                    XCTAssert(member === roomMemberMock)
+                default:
+                    XCTFail("Did not received the expected action")
+                }
+                expectation.fulfill()
             }
-            expectation.fulfill()
-        }
+            .store(in: &cancellables)
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
@@ -232,15 +237,17 @@ class RoomScreenViewModelTests: XCTestCase {
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
                                             
-        viewModel.callback = { action in
-            switch action {
-            case .displayRoomMemberDetails(let member):
-                XCTAssert(member === roomMemberMock)
-                expectation.fulfill()
-            default:
-                XCTFail("Did not received the expected action")
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .displayRoomMemberDetails(let member):
+                    XCTAssert(member === roomMemberMock)
+                    expectation.fulfill()
+                default:
+                    XCTFail("Did not received the expected action")
+                }
             }
-        }
+            .store(in: &cancellables)
 
         // Test
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
@@ -268,9 +275,11 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
-        viewModel.callback = { _ in
-            XCTFail("Should not receive any action")
-        }
+        viewModel.actions
+            .sink { _ in
+                XCTFail("Should not receive any action")
+            }
+            .store(in: &cancellables)
 
         // Test
         let deferred = deferFulfillment(viewModel.context.$viewState.collect(2).first(),
