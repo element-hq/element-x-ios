@@ -59,7 +59,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Public
     
-    // swiftlint:disable:next cyclomatic_complexity
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }

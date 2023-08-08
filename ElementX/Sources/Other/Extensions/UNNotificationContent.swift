@@ -101,7 +101,6 @@ extension UNMutableNotificationContent {
         return self
     }
 
-    // swiftlint:disable:next function_body_length
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderID: String,
                        senderName: String,

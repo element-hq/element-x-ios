@@ -36,7 +36,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
         
@@ -543,7 +542,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Reply details
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func buildReplyToDetailsFrom(details: InReplyToDetails?) -> TimelineItemReplyDetails? {
         guard let details else { return nil }
         

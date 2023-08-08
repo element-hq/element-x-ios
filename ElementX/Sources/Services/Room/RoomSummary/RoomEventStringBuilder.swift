@@ -23,7 +23,6 @@ struct RoomEventStringBuilder {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn

@@ -33,7 +33,7 @@ struct LongPressWithFeedback: ViewModifier {
             .animation(isLongPressing ? .spring(response: 0.5).delay(0.1) : .spring(response: 0.5),
                        value: isLongPressing)
             // The minimum duration here doesn't actually invoke the perform block when elapsed (thus
-            // the implementation bellow) but it does cancel other system gestures e.g. swipe to reply
+            // the implementation below) but it does cancel other system gestures e.g. swipe to reply
             .onLongPressGesture(minimumDuration: 0.25) { } onPressingChanged: { isPressing in
                 isLongPressing = isPressing
                 

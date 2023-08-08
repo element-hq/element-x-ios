@@ -81,7 +81,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:
@@ -539,7 +538,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         item.isOutgoing || (canCurrentUserRedact && !roomProxy.isDirect)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {

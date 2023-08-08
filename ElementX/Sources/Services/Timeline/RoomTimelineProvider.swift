@@ -89,7 +89,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         MXLog.verbose("Finished applying diffs, current items (\(itemProxies.count)) : \(itemProxies.map(\.debugIdentifier))")
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
