@@ -57,7 +57,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/emojibase-bindings",
       "state" : {
-        "revision" : "5a14b51ccfd7f44625036469a56dc9aa6b786f6f"
+        "revision" : "f0ffea47157f99008402faec7211bea1dd3e83e7",
+        "version" : "0.0.1"
       }
     },
     {
