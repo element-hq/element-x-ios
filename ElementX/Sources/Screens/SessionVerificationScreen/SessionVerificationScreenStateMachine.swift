@@ -83,7 +83,6 @@ class SessionVerificationScreenStateMachine {
         configure()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
         stateMachine.addRoutes(event: .requestVerification, transitions: [.initial => .requestingVerification])
         stateMachine.addRoutes(event: .didAcceptVerificationRequest, transitions: [.requestingVerification => .verificationRequestAccepted])

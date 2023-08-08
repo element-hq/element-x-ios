@@ -241,7 +241,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         userSessionStore.reset()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -476,10 +475,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         networkMonitorObserver = ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
             .removeDuplicates()
-            .sink { reachable in
-                MXLog.info("Reachability changed to \(reachable)")
+            .sink { reachability in
+                MXLog.info("Reachability changed to \(reachability)")
                 
-                if reachable {
+                if reachability == .reachable {
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
                 } else {
                     ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
@@ -567,7 +566,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
         }
         
-        showLoadingIndicator()
+        // Prevent the syncing indicator from showing over the offline one
+        if ServiceLocator.shared.networkMonitor.reachabilityPublisher.value == .reachable {
+            showLoadingIndicator()
+        }
         
         clientProxyObserver = userSession.clientProxy
             .callbacks

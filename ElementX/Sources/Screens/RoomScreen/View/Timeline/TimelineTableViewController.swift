@@ -52,10 +52,6 @@ class TimelineTableViewController: UIViewController {
             sendReadReceiptIfNeeded()
         }
     }
-
-    /// The mode of the message composer. This is used to render selected
-    /// items in the timeline when replying, editing etc.
-    var composerMode: RoomScreenComposerMode = .default
     
     /// Whether or not the timeline has more messages to back paginate.
     var canBackPaginate = true

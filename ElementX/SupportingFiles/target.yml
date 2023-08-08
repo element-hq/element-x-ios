@@ -46,8 +46,8 @@ targets:
     platform: iOS
 
     configFiles:
-      Debug: ../../secrets.xcconfig
-      Release: ../../secrets.xcconfig
+      Debug: ../SupportingFiles/secrets.xcconfig
+      Release: ../SupportingFiles/secrets.xcconfig
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -155,6 +155,7 @@ targets:
     - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers
+    - package: LRUCache
     - package: Mapbox
     - package: PostHog
     - package: SwiftState

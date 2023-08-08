@@ -67,3 +67,9 @@ extension Array {
         return newItems
     }
 }
+
+extension Array where Element == RoomTimelineItemProtocol {
+    func firstUsingStableID(_ id: TimelineItemIdentifier) -> Element? {
+        first { $0.id.timelineID == id.timelineID }
+    }
+}

@@ -174,9 +174,11 @@ struct TimelineView_Previews: PreviewProvider {
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
+    static let composerViewModel = ComposerToolbarViewModel()
+
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context)
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
     }
 }

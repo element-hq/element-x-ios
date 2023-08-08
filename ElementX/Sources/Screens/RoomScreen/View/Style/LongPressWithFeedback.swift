@@ -19,6 +19,7 @@ import SwiftUI
 struct LongPressWithFeedback: ViewModifier {
     let action: () -> Void
     
+    @State private var triggerTask: Task<Void, Never>?
     @State private var isLongPressing = false
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
@@ -29,15 +30,27 @@ struct LongPressWithFeedback: ViewModifier {
             .shadow(color: .black.opacity(isLongPressing ? 0.1 : 0.0), radius: isLongPressing ? 3 : 0)
             .scaleEffect(x: isLongPressing ? 1.05 : 1,
                          y: isLongPressing ? 1.05 : 1)
-            .animation(isLongPressing ? .spring(response: 1.5).delay(0.2) : .spring(response: 0.5),
+            .animation(isLongPressing ? .spring(response: 0.5).delay(0.1) : .spring(response: 0.5),
                        value: isLongPressing)
-            .onLongPressGesture(minimumDuration: 0.25) {
-                action()
-                feedbackGenerator.impactOccurred()
-            } onPressingChanged: { isPressing in
+            // The minimum duration here doesn't actually invoke the perform block when elapsed (thus
+            // the implementation below) but it does cancel other system gestures e.g. swipe to reply
+            .onLongPressGesture(minimumDuration: 0.25) { } onPressingChanged: { isPressing in
                 isLongPressing = isPressing
-                if isPressing {
-                    feedbackGenerator.prepare()
+                
+                guard isPressing else {
+                    triggerTask?.cancel()
+                    return
+                }
+                
+                feedbackGenerator.prepare()
+                
+                triggerTask = Task {
+                    try? await Task.sleep(for: .seconds(0.35))
+                    
+                    if Task.isCancelled { return }
+                    
+                    action()
+                    feedbackGenerator.impactOccurred()
                 }
             }
     }

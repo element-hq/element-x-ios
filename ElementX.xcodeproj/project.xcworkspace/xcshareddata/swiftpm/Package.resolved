@@ -97,6 +97,15 @@
       }
     },
     {
+      "identity" : "lrucache",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/LRUCache",
+      "state" : {
+        "revision" : "6d2b5246c9c98dcd498552bb22f08d55b12a8371",
+        "version" : "1.0.4"
+      }
+    },
+    {
       "identity" : "maplibre-gl-native-distribution",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
@@ -216,7 +225,7 @@
     {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
         "version" : "0.9.2"

@@ -1,3 +1,19 @@
+## Changes in 1.2.2 (2023-08-08)
+
+✨ Features
+
+- Display avatars full screen when tapping on them from the room or member detail screens ([#1448](https://github.com/vector-im/element-x-ios/pull/1448))
+
+🐛 Bugfixes
+
+- Fix a bug where media previews would sometimes dismiss to show the timeline with a big empty space at the bottom. ([#1428](https://github.com/vector-im/element-x-ios/pull/1428))
+- Send read receipts as messages are displayed instead of on opening/closing rooms. ([#639](https://github.com/vector-im/element-x-ios/issues/639))
+
+🧱 Build
+
+- Make CI upload dSyms to Sentry before releasing to GitHub to avoid tagging failed runs. ([#1457](https://github.com/vector-im/element-x-ios/pull/1457))
+
+
 ## Changes in 1.2.1 (2023-08-01)
 
 ✨ Features

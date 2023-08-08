@@ -16,12 +16,15 @@
 
 import DTCoreText
 import Foundation
+import LRUCache
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
+    
+    private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
     
     init(permalinkBaseURL: URL) {
         self.permalinkBaseURL = permalinkBaseURL
@@ -31,12 +34,18 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         guard let string else {
             return nil
         }
+        
+        if let cached = Self.cache.value(forKey: string) {
+            return cached
+        }
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         
-        return try? AttributedString(mutableAttributedString, including: \.elementX)
+        let result = try? AttributedString(mutableAttributedString, including: \.elementX)
+        Self.cache.setValue(result, forKey: string)
+        return result
     }
         
     // Do not use the default HTML renderer of NSAttributedString because this method
@@ -47,8 +56,18 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard let htmlString,
-              let data = htmlString.data(using: .utf8) else {
+        guard let htmlString else {
+            return nil
+        }
+        
+        if let cached = Self.cache.value(forKey: htmlString) {
+            return cached
+        }
+        
+        // Trick DTCoreText into preserving newlines
+        let adjustedHTMLString = htmlString.replacingOccurrences(of: "\n", with: "<br>")
+        
+        guard let data = adjustedHTMLString.data(using: .utf8) else {
             return nil
         }
         
@@ -83,7 +102,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         replaceMarkedCodeBlocks(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
-        return try? AttributedString(mutableAttributedString, including: \.elementX)
+        let result = try? AttributedString(mutableAttributedString, including: \.elementX)
+        Self.cache.setValue(result, forKey: htmlString)
+        return result
     }
     
     // MARK: - Private

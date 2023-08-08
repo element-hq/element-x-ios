@@ -21,22 +21,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### app_store_release
-
-```sh
-[bundle exec] fastlane app_store_release
-```
-
-
-
-### build_release
-
-```sh
-[bundle exec] fastlane build_release
-```
-
-
-
 ### unit_tests
 
 ```sh

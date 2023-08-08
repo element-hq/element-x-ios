@@ -34,7 +34,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
     init(userSession: UserSessionProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
@@ -92,7 +91,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if isLoadingData {
                     roomListMode = .skeletons
                 } else if hasNoRooms {
-                    roomListMode = .skeletons
+                    roomListMode = .empty
                 } else {
                     roomListMode = .rooms
                 }
@@ -156,7 +155,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
-    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .selectRoom(let roomIdentifier):

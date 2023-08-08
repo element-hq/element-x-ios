@@ -34,11 +34,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
+    private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
+
+    private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
 
     private var canCurrentUserRedact = false
     
     private var paginateBackwardsTask: Task<Void, Never>?
-    
+
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          roomProxy: RoomProxyProtocol,
@@ -59,11 +62,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          timelineStyle: appSettings.timelineStyle,
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                         bindings: .init(composerText: "", composerFocused: false, reactionsCollapsed: [:])),
+                                                         bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
         setupSubscriptions()
-        
+        setupDirectRoomSubscriptionsIfNeeded()
+
         state.timelineItemMenuActionProvider = { [weak self] itemId -> TimelineItemMenuActions? in
             guard let self else {
                 return nil
@@ -73,19 +77,22 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         buildTimelineViews()
-        
-        trackComposerMode()
+
+        // Note: beware if we get to e.g. restore a reply / edit,
+        // maybe we are tracking a non-needed first initial state
+        trackComposerMode(.default)
     }
     
     // MARK: - Public
 
-    var callback: ((RoomScreenViewModelAction) -> Void)?
+    var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:
-            callback?(.displayRoomDetails)
+            actionsSubject.send(.displayRoomDetails)
         case .itemAppeared(let id):
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
@@ -94,15 +101,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await itemTapped(with: id) }
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
-        case .sendMessage:
-            Task { await sendCurrentMessage() }
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
-        case .cancelReply:
-            setComposerMode(.default)
-        case .cancelEdit:
-            setComposerMode(.default)
-            state.bindings.composerText = ""
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
@@ -116,14 +116,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .timelineItemMenuAction(let itemID, let action):
             processTimelineItemMenuAction(action, itemID: itemID)
-        case .displayCameraPicker:
-            callback?(.displayCameraPicker)
-        case .displayMediaPicker:
-            callback?(.displayMediaPicker)
-        case .displayDocumentPicker:
-            callback?(.displayDocumentPicker)
-        case .displayLocationPicker:
-            callback?(.displayLocationPicker)
         case .handlePasteOrDrop(let provider):
             handlePasteOrDrop(provider)
         case .tappedOnUser(userID: let userID):
@@ -142,6 +134,27 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if state.swiftUITimelineEnabled {
                 renderPendingTimelineItems()
             }
+        }
+    }
+
+    func process(composerAction: ComposerToolbarViewModelAction) {
+        switch composerAction {
+        case .sendMessage(let message, let mode):
+            Task { await sendCurrentMessage(message, mode: mode) }
+        case .displayCameraPicker:
+            actionsSubject.send(.displayCameraPicker)
+        case .displayMediaPicker:
+            actionsSubject.send(.displayMediaPicker)
+        case .displayDocumentPicker:
+            actionsSubject.send(.displayDocumentPicker)
+        case .displayLocationPicker:
+            actionsSubject.send(.displayLocationPicker)
+        case .handlePasteOrDrop(let provider):
+            handlePasteOrDrop(provider)
+        case .composerModeChanged(mode: let mode):
+            trackComposerMode(mode)
+        case .focusedChanged(isFocused: let isFocused):
+            composerFocusedSubject.send(isFocused)
         }
     }
     
@@ -198,8 +211,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
-
-        setupDirectRoomSubscriptionsIfNeeded()
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -207,8 +218,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
 
-        let shouldShowInviteAlert = context.$viewState
-            .map(\.bindings.composerFocused)
+        let shouldShowInviteAlert = composerFocusedSubject
             .removeDuplicates()
             .map { [weak self] isFocused in
                 guard let self else { return false }
@@ -293,10 +303,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch action {
         case .displayMediaFile(let file, let title):
-            state.bindings.composerFocused = false // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
+            actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
         case .displayLocation(let body, let geoURI, let description):
-            callback?(.displayLocation(body: body, geoURI: geoURI, description: description))
+            actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
         case .none:
             break
         }
@@ -410,18 +420,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage() async {
-        guard !state.bindings.composerText.isEmpty else {
+    private func sendCurrentMessage(_ currentMessage: String, mode: RoomScreenComposerMode) async {
+        guard !currentMessage.isEmpty else {
             fatalError("This message should never be empty")
         }
-        
-        let currentMessage = state.bindings.composerText
-        let currentComposerState = state.composerMode
 
-        state.bindings.composerText = ""
-        setComposerMode(.default)
+        actionsSubject.send(.composer(action: .clear))
 
-        switch currentComposerState {
+        switch mode {
         case .reply(let itemId, _):
             await timelineController.sendMessage(currentMessage, inReplyTo: itemId)
         case .edit(let originalItemId):
@@ -431,16 +437,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func setComposerMode(_ mode: RoomScreenComposerMode) {
-        guard mode != state.composerMode else { return }
-        state.composerMode = mode
-        trackComposerMode()
-    }
-    
-    private func trackComposerMode() {
+    private func trackComposerMode(_ mode: RoomScreenComposerMode) {
         var isEdit = false
         var isReply = false
-        switch state.composerMode {
+        switch mode {
         case .edit:
             isEdit = true
         case .reply:
@@ -469,17 +469,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: TimelineItemActionMenu
     
     private func showTimelineItemActionMenu(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a menu for non-event based items.
             return
         }
-        
+
+        actionsSubject.send(.composer(action: .removeFocus))
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
     
     private func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
             return nil
@@ -539,9 +540,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         item.isOutgoing || (canCurrentUserRedact && !roomProxy.isDirect)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func processTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
@@ -557,10 +557,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return
             }
-            
-            state.bindings.composerFocused = true
-            state.bindings.composerText = messageTimelineItem.body
-            setComposerMode(.edit(originalItemId: messageTimelineItem.id))
+
+            actionsSubject.send(.composer(action: .setText(text: messageTimelineItem.body)))
+            actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
             do {
                 guard let eventID = eventTimelineItem.id.eventID else {
@@ -583,13 +582,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
         case .reply:
-            state.bindings.composerFocused = true
-            
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
-            
-            setComposerMode(.reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))
+
+            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))))
         case .forward(let itemID):
-            callback?(.displayMessageForwarding(itemID: itemID))
+            actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
             let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
             MXLog.info(debugInfo)
@@ -599,13 +596,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            callback?(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
+            actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
             showEmojiPicker(for: itemID)
         }
         
         if action.switchToDefaultComposer {
-            setComposerMode(.default)
+            actionsSubject.send(.composer(action: .setMode(mode: .default)))
         }
     }
     
@@ -654,7 +651,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                         }
                     }.value
 
-                    self.callback?(.displayMediaUploadPreviewScreen(url: url))
+                    self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
                 } catch {
                     self.displayError(.toast(L10n.screenRoomErrorFailedProcessingMedia))
                     MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
@@ -680,7 +677,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         switch result {
         case .success(let member):
-            callback?(.displayRoomMemberDetails(member: member))
+            actionsSubject.send(.displayRoomMemberDetails(member: member))
         case .failure(let error):
             displayError(.alert(L10n.screenRoomErrorFailedRetrievingUserDetails))
             MXLog.error("Failed retrieving the user given the following id \(userID) with error: \(error)")
@@ -766,17 +763,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Reactions
     
     private func showEmojiPicker(for itemID: TimelineItemIdentifier) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
         let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
-        callback?(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+        actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
     private func showReactionSummary(for itemID: TimelineItemIdentifier, selectedKey: String) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }

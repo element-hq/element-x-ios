@@ -20,6 +20,7 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
     let roomMemberProxy: RoomMemberProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomMemberDetailsScreenCoordinatorAction { }
@@ -35,7 +36,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
 
         viewModel = RoomMemberDetailsScreenViewModel(roomProxy: parameters.roomProxy,
                                                      roomMemberProxy: parameters.roomMemberProxy,
-                                                     mediaProvider: parameters.mediaProvider)
+                                                     mediaProvider: parameters.mediaProvider,
+                                                     userIndicatorController: parameters.userIndicatorController)
     }
 
     func start() { }

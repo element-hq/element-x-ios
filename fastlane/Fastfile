@@ -6,6 +6,7 @@ before_all do
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
+  ENV["SENTRY_LOG_LEVEL"] = "DEBUG"
 end
 
 lane :alpha do
@@ -71,28 +72,6 @@ lane :alpha do
   upload_to_diawi()
 
   upload_to_browserstack()
-end
-
-lane :app_store_release do
-  build_release()
-
-  release_to_github()
-
-  prepare_next_release()
-
-  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
-end
-
-lane :build_release do
-  bump_build_number()
-
-  build_ios_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "app-store",
-    output_directory: "build",
-    xcargs: "-allowProvisioningUpdates",
-  )
 end
 
 lane :unit_tests do
@@ -205,6 +184,7 @@ lane :config_production do
   xcodegen(spec: "project.yml")
 end
 
+$sentry_retry=0
 lane :upload_dsyms_to_sentry do |options|
   auth_token = ENV["SENTRY_AUTH_TOKEN"]
   UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
@@ -212,13 +192,24 @@ lane :upload_dsyms_to_sentry do |options|
   dsym_path = options[:dsym_path]
   UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
 
-  sentry_upload_dif(
-    auth_token: auth_token,
-    org_slug: 'element',
-    project_slug: 'element-x-ios',
-    url: 'https://sentry.tools.element.io/',
-    path: dsym_path,
-  )
+  begin
+    sentry_upload_dif(
+      auth_token: auth_token,
+      org_slug: 'element',
+      project_slug: 'element-x-ios',
+      url: 'https://sentry.tools.element.io/',
+      path: dsym_path,
+    )
+  rescue => exception
+    $sentry_retry += 1
+
+    if $sentry_retry <= 5
+      UI.message "Sentry failed, retrying."
+      upload_dsyms_to_sentry options
+    else
+      raise exception
+    end
+  end
 end
 
 lane :release_to_github do
@@ -428,7 +419,7 @@ private_lane :config_maplibre do
   UI.user_error!("Invalid Map Libre API key.") unless !api_key.to_s.empty?
 
   set_xcconfig_value(
-    path: './secrets.xcconfig',
+    path: './ElementX/SupportingFiles/secrets.xcconfig',
     name: 'MAPLIBRE_API_KEY',
     value: api_key
   )

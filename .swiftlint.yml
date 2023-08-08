@@ -24,7 +24,7 @@ line_length:
   error: 1000
 
 file_length:
-  warning: 800
+  warning: 1000
   error: 1000
 
 type_name:
@@ -38,8 +38,11 @@ type_body_length:
   error: 1000
 
 function_body_length:
-  warning: 50
+  warning: 100
   error: 100
+
+cyclomatic_complexity:
+  ignores_case_statements: true
 
 nesting:
   type_level:

@@ -65,6 +65,7 @@ struct RoomDetailsScreen: View {
             }
         }
         .track(screen: .roomDetails)
+        .interactiveQuickLook(item: $context.mediaPreviewItem)
     }
     
     // MARK: - Private
@@ -76,6 +77,8 @@ struct RoomDetailsScreen: View {
                          avatarSize: .room(on: .details),
                          imageProvider: context.imageProvider,
                          subtitle: context.viewState.canonicalAlias) {
+            context.send(viewAction: .displayAvatar)
+        } footer: {
             if !context.viewState.shortcuts.isEmpty {
                 headerSectionShortcuts
             }
@@ -90,6 +93,8 @@ struct RoomDetailsScreen: View {
                          avatarSize: .user(on: .memberDetails),
                          imageProvider: context.imageProvider,
                          subtitle: recipient.id) {
+            context.send(viewAction: .displayAvatar)
+        } footer: {
             if !context.viewState.shortcuts.isEmpty {
                 headerSectionShortcuts
             }

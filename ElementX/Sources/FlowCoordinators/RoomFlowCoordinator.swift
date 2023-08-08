@@ -95,7 +95,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next function_body_length
     private func setupStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
@@ -258,7 +258,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func asyncPresentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) async {
         if let roomProxy, roomProxy.id == roomID {
             navigationStackCoordinator.popToRoot()
@@ -558,7 +557,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         guard let roomProxy else {
             fatalError()
         }
-        let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy, roomMemberProxy: member, mediaProvider: userSession.mediaProvider)
+        let params = RoomMemberDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                  roomMemberProxy: member,
+                                                                  mediaProvider: userSession.mediaProvider,
+                                                                  userIndicatorController: userIndicatorController)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
 
         navigationStackCoordinator.push(coordinator) { [weak self] in

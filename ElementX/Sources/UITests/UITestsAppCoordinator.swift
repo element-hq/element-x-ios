@@ -525,17 +525,26 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomMemberDetailsAccountOwner:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")), roomMemberProxy: RoomMemberProxyMock.mockMe, mediaProvider: MockMediaProvider()))
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                                                                   roomMemberProxy: RoomMemberProxyMock.mockMe,
+                                                                                   mediaProvider: MockMediaProvider(),
+                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetails:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")), roomMemberProxy: RoomMemberProxyMock.mockAlice, mediaProvider: MockMediaProvider()))
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                                                                   roomMemberProxy: RoomMemberProxyMock.mockAlice,
+                                                                                   mediaProvider: MockMediaProvider(),
+                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsIgnoredUser:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")), roomMemberProxy: RoomMemberProxyMock.mockIgnored, mediaProvider: MockMediaProvider()))
+            let coordinator = RoomMemberDetailsScreenCoordinator(parameters: .init(roomProxy: RoomProxyMock(with: .init(displayName: "")),
+                                                                                   roomMemberProxy: RoomMemberProxyMock.mockIgnored,
+                                                                                   mediaProvider: MockMediaProvider(),
+                                                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .invitesWithBadges:

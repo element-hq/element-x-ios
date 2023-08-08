@@ -32,6 +32,7 @@ enum RoomScreenViewModelAction {
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
+    case composer(action: RoomScreenComposerAction)
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -55,10 +56,7 @@ enum RoomScreenViewAction {
     case itemDisappeared(itemID: TimelineItemIdentifier)
     case itemTapped(itemID: TimelineItemIdentifier)
     case linkClicked(url: URL)
-    case sendMessage
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
-    case cancelReply
-    case cancelEdit
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     
@@ -66,11 +64,6 @@ enum RoomScreenViewAction {
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
-    
-    case displayCameraPicker
-    case displayMediaPicker
-    case displayDocumentPicker
-    case displayLocationPicker
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case tappedOnUser(userID: String)
@@ -83,6 +76,13 @@ enum RoomScreenViewAction {
     case scrolledToBottom
 }
 
+enum RoomScreenComposerAction {
+    case setMode(mode: RoomScreenComposerMode)
+    case setText(text: String)
+    case removeFocus
+    case clear
+}
+
 struct RoomScreenViewState: BindableState {
     var roomID: String
     var roomTitle = ""
@@ -93,29 +93,16 @@ struct RoomScreenViewState: BindableState {
     var readReceiptsEnabled: Bool
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
-    var composerMode: RoomScreenComposerMode = .default
     var swiftUITimelineEnabled = false
-    
+
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
     var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
-    
-    var sendButtonDisabled: Bool {
-        bindings.composerText.count == 0
-    }
 }
 
 struct RoomScreenViewStateBindings {
-    var composerText: String
-    var composerFocused: Bool
-    
     var isScrolledToBottom = true
-    var showAttachmentPopover = false {
-        didSet {
-            composerFocused = false
-        }
-    }
     
     /// The state of wether reactions listed on the timeline are expanded/collapsed.
     /// Key is itemID, value is the collapsed state.

@@ -4,7 +4,6 @@ attributes:
 
 fileGroups:
     - project.yml
-    - secrets.xcconfig
 
 options:
   groupSortPosition: bottom
@@ -30,7 +29,7 @@ settings:
   APP_NAME: ElementX
   APP_DISPLAY_NAME: Element X
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.2.2
+  MARKETING_VERSION: 1.2.3
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
 
@@ -80,6 +79,9 @@ packages:
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
+  LRUCache:
+    url: https://github.com/nicklockwood/LRUCache
+    minorVersion: 1.0.4
   SwiftUIIntrospect:
     url: https://github.com/siteline/SwiftUI-Introspect
     minorVersion: 0.9.0

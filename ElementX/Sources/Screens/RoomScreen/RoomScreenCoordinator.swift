@@ -38,8 +38,10 @@ enum RoomScreenCoordinatorAction {
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
-
     private var viewModel: RoomScreenViewModelProtocol
+    private var composerViewModel: ComposerToolbarViewModel
+
+    private var cancellables = Set<AnyCancellable>()
 
     private let actionsSubject: PassthroughSubject<RoomScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenCoordinatorAction, Never> {
@@ -48,50 +50,63 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
-        
+
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         roomProxy: parameters.roomProxy,
                                         appSettings: ServiceLocator.shared.settings,
                                         analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
+
+        composerViewModel = ComposerToolbarViewModel()
     }
     
     // MARK: - Public
     
-    // swiftlint:disable:next cyclomatic_complexity
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .displayRoomDetails:
-                actionsSubject.send(.presentRoomDetails)
-            case .displayEmojiPicker(let itemID, let selectedEmojis):
-                actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
-            case .displayReportContent(let itemID, let senderID):
-                actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
-            case .displayCameraPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.camera))
-            case .displayMediaPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
-            case .displayDocumentPicker:
-                actionsSubject.send(.presentMediaUploadPicker(.documents))
-            case .displayLocationPicker:
-                actionsSubject.send(.presentLocationPicker)
-            case .displayMediaUploadPreviewScreen(let url):
-                actionsSubject.send(.presentMediaUploadPreviewScreen(url))
-            case .displayRoomMemberDetails(let member):
-                actionsSubject.send(.presentRoomMemberDetails(member: member))
-            case .displayMessageForwarding(let itemID):
-                actionsSubject.send(.presentMessageForwarding(itemID: itemID))
-            case .displayLocation(let body, let geoURI, let description):
-                actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .displayRoomDetails:
+                    actionsSubject.send(.presentRoomDetails)
+                case .displayEmojiPicker(let itemID, let selectedEmojis):
+                    actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayReportContent(let itemID, let senderID):
+                    actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
+                case .displayCameraPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.camera))
+                case .displayMediaPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
+                case .displayDocumentPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.documents))
+                case .displayLocationPicker:
+                    actionsSubject.send(.presentLocationPicker)
+                case .displayMediaUploadPreviewScreen(let url):
+                    actionsSubject.send(.presentMediaUploadPreviewScreen(url))
+                case .displayRoomMemberDetails(let member):
+                    actionsSubject.send(.presentRoomMemberDetails(member: member))
+                case .displayMessageForwarding(let itemID):
+                    actionsSubject.send(.presentMessageForwarding(itemID: itemID))
+                case .displayLocation(let body, let geoURI, let description):
+                    actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
+                case .composer(let action):
+                    composerViewModel.process(roomAction: action)
+                }
             }
-        }
+            .store(in: &cancellables)
+
+        composerViewModel.actions
+            .sink { [weak self] composerAction in
+                guard let self else { return }
+
+                viewModel.process(composerAction: composerAction)
+            }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {
-        AnyView(RoomScreen(context: viewModel.context))
+        AnyView(RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context)))
     }
 }
