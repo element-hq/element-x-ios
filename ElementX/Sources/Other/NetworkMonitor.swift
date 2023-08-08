@@ -18,10 +18,19 @@ import Combine
 import Foundation
 import Network
 
+enum NetworkMonitorReachability {
+    case reachable
+    case unreachable
+}
+
 class NetworkMonitor {
     private let pathMonitor: NWPathMonitor
     private let queue: DispatchQueue
-    let reachabilityPublisher: CurrentValueSubject<Bool, Never>
+    
+    private let reachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never>
+    var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        reachabilitySubject.asCurrentValuePublisher()
+    }
     
     var isCurrentConnectionExpensive: Bool {
         pathMonitor.currentPath.isExpensive
@@ -34,14 +43,14 @@ class NetworkMonitor {
     init() {
         queue = DispatchQueue(label: "io.element.elementx.networkmonitor", qos: .background)
         pathMonitor = NWPathMonitor()
-        reachabilityPublisher = CurrentValueSubject<Bool, Never>(true)
+        reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
         
         pathMonitor.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {
                 if path.status == .satisfied {
-                    self?.reachabilityPublisher.send(true)
+                    self?.reachabilitySubject.send(.reachable)
                 } else {
-                    self?.reachabilityPublisher.send(false)
+                    self?.reachabilitySubject.send(.unreachable)
                 }
             }
         }
