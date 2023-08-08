@@ -1,1 +1,0 @@
-Make CI upload dSyms to Sentry before releasing to GitHub to avoid tagging failed runs.
