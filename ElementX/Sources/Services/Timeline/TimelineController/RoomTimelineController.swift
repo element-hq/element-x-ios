@@ -96,7 +96,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
             return
         }
         
@@ -108,7 +108,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
 
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
             return .none
         }
         
@@ -158,7 +158,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func editMessage(_ newMessage: String, original itemID: TimelineItemIdentifier) async {
         MXLog.info("Edit message in \(roomID)")
-        if let timelineItem = timelineItems.first(where: { $0.id == itemID }),
+        if let timelineItem = timelineItems.firstUsingStableID(itemID),
            let item = timelineItem as? EventBasedTimelineItemProtocol,
            item.hasFailedToSend {
             MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
