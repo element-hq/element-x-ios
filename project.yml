@@ -79,6 +79,9 @@ packages:
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
+  LRUCache:
+    url: https://github.com/nicklockwood/LRUCache
+    minorVersion: 1.0.4
   SwiftUIIntrospect:
     url: https://github.com/siteline/SwiftUI-Introspect
     minorVersion: 0.9.0

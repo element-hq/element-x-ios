@@ -155,6 +155,7 @@ targets:
     - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers
+    - package: LRUCache
     - package: Mapbox
     - package: PostHog
     - package: SwiftState

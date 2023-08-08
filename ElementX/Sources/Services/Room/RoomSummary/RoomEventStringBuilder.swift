@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 struct RoomEventStringBuilder {
     private let stateEventStringBuilder: RoomStateEventStringBuilder
@@ -37,15 +38,28 @@ struct RoomEventStringBuilder {
         case .failedToParseMessageLike, .failedToParseState:
             return prefix(L10n.commonUnsupportedEvent, with: sender)
         case .message:
-            guard let messageContent = eventItemProxy.content.asMessage() else { fatalError("Invalid message timeline item: \(eventItemProxy)") }
+            guard let messageContent = eventItemProxy.content.asMessage() else {
+                fatalError("Invalid message timeline item: \(eventItemProxy)")
+            }
+            
+            guard let messageType = messageContent.msgtype() else {
+                return prefix(messageContent.body(), with: sender)
+            }
             
             let message: String
-            switch messageContent.msgtype() {
+            switch messageType {
             // Message types that don't need a prefix.
             case .emote(content: let content):
                 let senderDisplayName = sender.displayName ?? sender.id
-                return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
+                
+                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
+                    return AttributedString(L10n.commonEmote(senderDisplayName, String(attributedMessage.characters)))
+                } else {
+                    return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
+                }
             // Message types that should be prefixed with the sender's name.
+            case .audio:
+                message = L10n.commonAudio
             case .image:
                 message = L10n.commonImage
             case .video:
@@ -54,8 +68,19 @@ struct RoomEventStringBuilder {
                 message = L10n.commonFile
             case .location:
                 message = L10n.commonSharedLocation
-            default:
-                message = messageContent.body()
+            case .notice(content: let content):
+                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
+                    message = String(attributedMessage.characters)
+                } else {
+                    message = content.body
+                }
+            case .text(content: let content):
+                
+                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
+                    message = String(attributedMessage.characters)
+                } else {
+                    message = content.body
+                }
             }
             return prefix(message, with: sender)
         case .state(let stateKey, let state):
@@ -81,7 +106,7 @@ struct RoomEventStringBuilder {
         }
     }
     
-    func prefix(_ eventSummary: String, with sender: TimelineItemSender) -> AttributedString {
+    private func prefix(_ eventSummary: String, with sender: TimelineItemSender) -> AttributedString {
         let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         if let senderDisplayName = sender.displayName,
            let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
@@ -90,5 +115,9 @@ struct RoomEventStringBuilder {
         } else {
             return attributedEventSummary
         }
+    }
+    
+    private func attributedMessageFrom(formattedBody: FormattedBody?) -> AttributedString? {
+        formattedBody.flatMap { AttributedStringBuilder(permalinkBaseURL: .homeDirectory).fromHTML($0.body) }
     }
 }
