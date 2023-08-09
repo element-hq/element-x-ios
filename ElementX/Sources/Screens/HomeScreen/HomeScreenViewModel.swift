@@ -79,13 +79,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        roomSummaryProvider.statePublisher
+        // Combine together the state and the room list to correctly compute the view state if
+        // data is present in the room list "cold cache"
+        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
+                                 roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] state, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = !state.isLoaded
-                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0)
+                let isLoadingData = !state.isLoaded && rooms.isEmpty
+                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty)
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {

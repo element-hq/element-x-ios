@@ -85,6 +85,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 buildSummaryForRoomListEntry(roomListEntry)
             }
             
+            // Manually call it here as the didSet doesn't work from constructors
+            roomListSubject.send(rooms)
+            
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
                 guard let self else { return }
                 MXLog.info("\(name): Received state update: \(state)")
