@@ -60,9 +60,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .changedEnableNotifications:
             toggleNotifications()
         case .groupChatsTapped:
-            actionsSubject.send(.editDefaultMode(oneToOne: false))
+            actionsSubject.send(.editDefaultMode(isDirect: false))
         case .directChatsTapped:
-            actionsSubject.send(.editDefaultMode(oneToOne: true))
+            actionsSubject.send(.editDefaultMode(isDirect: true))
         case .roomMentionChanged:
             guard let settings = state.settings, settings.roomMentionsEnabled != state.bindings.roomMentionsEnabled else {
                 return

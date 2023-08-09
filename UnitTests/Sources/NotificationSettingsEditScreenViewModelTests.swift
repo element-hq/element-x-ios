@@ -83,7 +83,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
         
-        // setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode must have been called twice (for encrypted and unencrypted group chats)
+        // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
         XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
         // First call for encrypted group chats
@@ -123,6 +123,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(pendingModes, [nil, .mentionsAndKeywordsOnly, nil])
         
+        // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
         XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
         // First call for encrypted group chats
@@ -163,6 +164,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
         
+        // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted direct chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
         XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
         // First call for encrypted direct chats

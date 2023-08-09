@@ -19,7 +19,7 @@ import UIKit
 
 enum NotificationSettingsScreenViewModelAction {
     case close
-    case editDefaultMode(oneToOne: Bool)
+    case editDefaultMode(isDirect: Bool)
 }
 
 struct NotificationSettingsScreenViewState: BindableState {

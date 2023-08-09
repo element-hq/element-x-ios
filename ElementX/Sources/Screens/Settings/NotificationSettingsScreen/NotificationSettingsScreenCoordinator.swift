@@ -59,8 +59,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 self.actionsSubject.send(.close)
-            case .editDefaultMode(let oneToOne):
-                self.presentEditScreen(oneToOne: oneToOne)
+            case .editDefaultMode(let isDirect):
+                self.presentEditScreen(isDirect: isDirect)
             }
         }
         .store(in: &cancellables)
@@ -72,8 +72,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func presentEditScreen(oneToOne: Bool) {
-        let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(isDirect: oneToOne,
+    private func presentEditScreen(isDirect: Bool) {
+        let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(isDirect: isDirect,
                                                                                          notificationSettings: parameters.notificationSettings)
         let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
         navigationStackCoordinator?.push(editSettingsCoordinator)

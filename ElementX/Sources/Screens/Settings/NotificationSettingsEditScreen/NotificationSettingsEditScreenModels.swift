@@ -28,9 +28,9 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     var strings: NotificationSettingsEditScreenStrings
     var isDirect: Bool
     var availableDefaultModes: [NotificationSettingsEditScreenDefaultMode] = [.allMessages, .mentionsAndKeywordsOnly]
-    var pendingMode: NotificationSettingsEditScreenDefaultMode?
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
-    
+    var pendingMode: NotificationSettingsEditScreenDefaultMode?
+
     func isSelected(mode: NotificationSettingsEditScreenDefaultMode) -> Bool {
         pendingMode == nil && defaultMode == mode
     }
@@ -45,7 +45,6 @@ enum NotificationSettingsEditScreenViewAction {
 }
 
 enum NotificationSettingsEditScreenErrorType: Hashable {
-    case loadingModeFailed
     case setModeFailed
 }
 
