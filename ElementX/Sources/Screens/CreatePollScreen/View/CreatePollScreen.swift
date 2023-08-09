@@ -18,23 +18,42 @@ import SwiftUI
 
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
+
+    // TODO: delete me
     @State var text = ""
+    @State var isOn = false
     
     var body: some View {
         Form {
-            Section("Question or topic") {
+            Section("Question or topic*") {
+                TextField(text: $text) {
+                    Text("Placeholder*")
+                        .compoundFormTextFieldPlaceholder()
+                }
+                .textFieldStyle(.compoundForm)
+            }
+            .compoundFormSection()
+
+            Section {
                 ForEach(context.options, id: \.self) { _ in
                     TextField(text: $text) {
-                        Text("Placeholder")
+                        Text("Placeholder*")
                             .compoundFormTextFieldPlaceholder()
                     }
                     .textFieldStyle(.compoundForm)
                 }
+            } footer: {
+                Button("Add option*") { }
+            }
+            .compoundFormSection()
+
+            Section {
+                Toggle("Show results only after poll ends*", isOn: $isOn)
             }
             .compoundFormSection()
         }
         .compoundForm()
-        .navigationTitle("Nav title")
+        .navigationTitle("Create Poll*")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
