@@ -70,6 +70,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.pollsInTimelineEnabled) {
                     Text("View polls in timeline")
                 }
+
+                Toggle(isOn: $context.pollsCreationEnabled) {
+                    Text("View polls creation flow")
+                }
             }
 
             Section {

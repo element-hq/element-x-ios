@@ -61,11 +61,13 @@ struct RoomAttachmentPicker: View {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
                 }
 
-                Button {
-                    context.showAttachmentPopover = false
-                    context.send(viewAction: .displayPollForm)
-                } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.equalizer))
+                if ServiceLocator.shared.settings.pollsCreationEnabled {
+                    Button {
+                        context.showAttachmentPopover = false
+                        context.send(viewAction: .displayPollForm)
+                    } label: {
+                        PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.equalizer))
+                    }
                 }
             }
             .padding(.top, isPresented ? 20 : 0)
