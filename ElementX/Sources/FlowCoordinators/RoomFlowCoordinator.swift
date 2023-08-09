@@ -576,18 +576,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentCreatePollForm() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = CreatePollScreenCoordinator(parameters: .init())
+        navigationStackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
             .sink { [weak self] action in
                 switch action {
-                case .done:
+                case .cancel:
                     self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .create:
+                    break
                 }
             }
             .store(in: &cancellables)
 
-        navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissCreatePollForm)
         }
     }

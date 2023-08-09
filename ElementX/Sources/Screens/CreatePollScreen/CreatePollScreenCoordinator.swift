@@ -20,9 +20,8 @@ import SwiftUI
 struct CreatePollScreenCoordinatorParameters { }
 
 enum CreatePollScreenCoordinatorAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case cancel
+    case create
 }
 
 final class CreatePollScreenCoordinator: CoordinatorProtocol {
@@ -47,8 +46,10 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .done:
-                self.actionsSubject.send(.done)
+            case .create:
+                self.actionsSubject.send(.create)
+            case .cancel:
+                self.actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)

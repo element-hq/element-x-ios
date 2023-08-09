@@ -27,9 +27,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     }
 
     init() {
-        super.init(initialViewState: CreatePollScreenViewState(title: "CreatePoll title",
-                                                               placeholder: "Enter something here",
-                                                               bindings: .init(composerText: "Initial composer text")))
+        super.init(initialViewState: CreatePollScreenViewState(bindings: .init(options: ["A", "B"])))
     }
     
     // MARK: - Public
@@ -38,10 +36,10 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .done:
-            actionsSubject.send(.done)
-        case .textChanged:
-            MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
+        case .create:
+            actionsSubject.send(.create)
+        case .cancel:
+            actionsSubject.send(.cancel)
         }
     }
 }
