@@ -72,8 +72,8 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private func fetchSettings() {
         fetchSettingsTask = Task {
             let mode: RoomNotificationModeProxy
-            let encrypted_mode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: isDirect)
-            let unencrypted_mode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: isDirect)
+            let encrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect)
+            let unencrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect)
             mode = encrypted_mode != unencrypted_mode ? .allMessages : encrypted_mode
             
             guard !Task.isCancelled else { return }

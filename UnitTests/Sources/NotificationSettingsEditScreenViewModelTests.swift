@@ -30,11 +30,11 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     @MainActor override func setUpWithError() throws {
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = .allMessages
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
     }
     
     func testFetchSettings() async throws {
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (_, true):
                 return .allMessages
@@ -50,8 +50,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         viewModel.fetchInitialContent()
         try await deferred.fulfill()
         
-        // getDefaultNotificationRoomModeIsEncryptedIsOneToOne must have been called twice (for encrypted and unencrypted group chats)
-        let invocations = notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReceivedInvocations
+        // `getDefaultRoomNotificationModeIsEncryptedIsOneToOne` must have been called twice (for encrypted and unencrypted group chats)
+        let invocations = notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReceivedInvocations
         
         XCTAssertEqual(invocations.count, 2)
         // First call for encrypted group chats

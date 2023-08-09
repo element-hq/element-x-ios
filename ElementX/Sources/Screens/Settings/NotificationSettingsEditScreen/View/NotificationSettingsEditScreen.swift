@@ -63,7 +63,7 @@ struct NotificationSettingsEditScreen: View {
 struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     static let viewModelGroupChats: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = .allMessages
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
@@ -72,7 +72,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     
     static let viewModelDirectChats: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
@@ -81,7 +81,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     
     static let viewModelDirectApplyingChange: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.state.pendingMode = .mentionsAndKeywordsOnly
