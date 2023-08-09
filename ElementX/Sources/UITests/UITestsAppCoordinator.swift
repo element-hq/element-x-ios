@@ -197,7 +197,10 @@ class MockScreen: Identifiable {
         case .notificationSettingsScreen:
             let userNotificationCenter = UserNotificationCenterMock()
             userNotificationCenter.authorizationStatusReturnValue = .denied
-            let parameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: userNotificationCenter,
+            let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
+                                          mediaProvider: MockMediaProvider())
+            let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
+                                                                             userNotificationCenter: userNotificationCenter,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)

@@ -18,10 +18,15 @@ import SwiftUI
 
 struct NotificationSettingsEditScreen: View {
     @ObservedObject var context: NotificationSettingsEditScreenViewModel.Context
+    @State var isSearching = false
     
     var body: some View {
         Form {
             notificationModeSection
+            
+            if context.viewState.displayRoomsWithCustomSettings {
+                roomsWithCustomSettingsSection
+            }
         }
         .compoundForm()
         .navigationTitle(context.viewState.strings.navigationTitle)
@@ -56,6 +61,18 @@ struct NotificationSettingsEditScreen: View {
         }
         .compoundFormSection()
     }
+    
+    private var roomsWithCustomSettingsSection: some View {
+        Section {
+            ForEach(context.viewState.roomsWithCustomSettings, id: \.id) { room in
+                NotificationSettingsEditScreenRoomCell(room: room, context: context)
+            }
+        } header: {
+            Text(UntranslatedL10n.screenNotificationSettingsEditCustomSettingsSectionTitle)
+                .compoundFormSectionHeader()
+        }
+        .compoundFormSection()
+    }
 }
 
 // MARK: - Previews
@@ -64,7 +81,13 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     static let viewModelGroupChats: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
+        
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = [RoomSummary].mockRooms.compactMap(\.id)
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
+                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+                                          mediaProvider: MockMediaProvider())
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+                                                                userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
         return viewModel
@@ -73,7 +96,11 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     static let viewModelDirectChats: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
+        
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+                                                                userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
         return viewModel
@@ -82,7 +109,11 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
     static let viewModelDirectApplyingChange: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
+
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+                                                                userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.state.pendingMode = .mentionsAndKeywordsOnly
         viewModel.fetchInitialContent()

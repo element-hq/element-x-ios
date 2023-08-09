@@ -16,7 +16,9 @@
 
 import Foundation
 
-enum NotificationSettingsEditScreenViewModelAction { }
+enum NotificationSettingsEditScreenViewModelAction {
+    case requestRoomNotificationSettingsPresentation(roomID: String)
+}
 
 enum NotificationSettingsEditScreenDefaultMode {
     case allMessages
@@ -30,18 +32,25 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     var availableDefaultModes: [NotificationSettingsEditScreenDefaultMode] = [.allMessages, .mentionsAndKeywordsOnly]
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
     var pendingMode: NotificationSettingsEditScreenDefaultMode?
+    var roomsWithCustomSettings: [NotificationSettingsEditScreenRoom] = []
 
     func isSelected(mode: NotificationSettingsEditScreenDefaultMode) -> Bool {
         pendingMode == nil && defaultMode == mode
     }
+    
+    var displayRoomsWithCustomSettings: Bool {
+        !roomsWithCustomSettings.isEmpty
+    }
 }
 
 struct NotificationSettingsEditScreenViewStateBindings {
+    var searchQuery = ""
     var alertInfo: AlertInfo<NotificationSettingsEditScreenErrorType>?
 }
 
 enum NotificationSettingsEditScreenViewAction {
     case setMode(NotificationSettingsEditScreenDefaultMode)
+    case selectRoom(roomIdentifier: String)
 }
 
 enum NotificationSettingsEditScreenErrorType: Hashable {
@@ -69,5 +78,42 @@ struct NotificationSettingsEditScreenStrings {
         case .mentionsAndKeywordsOnly:
             return L10n.screenNotificationSettingsModeMentions
         }
+    }
+    
+    func string(for mode: RoomNotificationModeProxy) -> String {
+        switch mode {
+        case .allMessages:
+            return L10n.screenNotificationSettingsModeAll
+        case .mentionsAndKeywordsOnly:
+            return L10n.screenNotificationSettingsModeMentions
+        case .mute:
+            return L10n.commonMute
+        }
+    }
+}
+
+struct NotificationSettingsEditScreenRoom: Identifiable, Equatable {
+    static let placeholderLastMessage = AttributedString("Hidden last message")
+    
+    /// The list item identifier can be a real room identifier, a custom one for invalidated entries
+    /// or a completely unique one for empty items and skeletons
+    let id: String
+    
+    /// The real room identifier this item points to
+    let roomId: String?
+    
+    var name = ""
+        
+    var avatarURL: URL?
+    
+    var notificationMode: RoomNotificationModeProxy?
+    
+    var isPlaceholder = false
+    
+    static func placeholder() -> NotificationSettingsEditScreenRoom {
+        NotificationSettingsEditScreenRoom(id: UUID().uuidString,
+                                           roomId: nil,
+                                           name: "Placeholder room name",
+                                           isPlaceholder: true)
     }
 }

@@ -365,6 +365,31 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         setNotificationModeRoomIdModeReceivedInvocations.append((roomId: roomId, mode: mode))
         try await setNotificationModeRoomIdModeClosure?(roomId, mode)
     }
+    //MARK: - getUserDefinedRoomNotificationMode
+
+    var getUserDefinedRoomNotificationModeRoomIdThrowableError: Error?
+    var getUserDefinedRoomNotificationModeRoomIdCallsCount = 0
+    var getUserDefinedRoomNotificationModeRoomIdCalled: Bool {
+        return getUserDefinedRoomNotificationModeRoomIdCallsCount > 0
+    }
+    var getUserDefinedRoomNotificationModeRoomIdReceivedRoomId: String?
+    var getUserDefinedRoomNotificationModeRoomIdReceivedInvocations: [String] = []
+    var getUserDefinedRoomNotificationModeRoomIdReturnValue: RoomNotificationModeProxy?
+    var getUserDefinedRoomNotificationModeRoomIdClosure: ((String) async throws -> RoomNotificationModeProxy?)?
+
+    func getUserDefinedRoomNotificationMode(roomId: String) async throws -> RoomNotificationModeProxy? {
+        if let error = getUserDefinedRoomNotificationModeRoomIdThrowableError {
+            throw error
+        }
+        getUserDefinedRoomNotificationModeRoomIdCallsCount += 1
+        getUserDefinedRoomNotificationModeRoomIdReceivedRoomId = roomId
+        getUserDefinedRoomNotificationModeRoomIdReceivedInvocations.append(roomId)
+        if let getUserDefinedRoomNotificationModeRoomIdClosure = getUserDefinedRoomNotificationModeRoomIdClosure {
+            return try await getUserDefinedRoomNotificationModeRoomIdClosure(roomId)
+        } else {
+            return getUserDefinedRoomNotificationModeRoomIdReturnValue
+        }
+    }
     //MARK: - getDefaultRoomNotificationMode
 
     var getDefaultRoomNotificationModeIsEncryptedIsOneToOneCallsCount = 0
@@ -585,6 +610,27 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         setCallEnabledEnabledReceivedEnabled = enabled
         setCallEnabledEnabledReceivedInvocations.append(enabled)
         try await setCallEnabledEnabledClosure?(enabled)
+    }
+    //MARK: - getRoomsWithUserDefinedRules
+
+    var getRoomsWithUserDefinedRulesThrowableError: Error?
+    var getRoomsWithUserDefinedRulesCallsCount = 0
+    var getRoomsWithUserDefinedRulesCalled: Bool {
+        return getRoomsWithUserDefinedRulesCallsCount > 0
+    }
+    var getRoomsWithUserDefinedRulesReturnValue: [String]!
+    var getRoomsWithUserDefinedRulesClosure: (() async throws -> [String])?
+
+    func getRoomsWithUserDefinedRules() async throws -> [String] {
+        if let error = getRoomsWithUserDefinedRulesThrowableError {
+            throw error
+        }
+        getRoomsWithUserDefinedRulesCallsCount += 1
+        if let getRoomsWithUserDefinedRulesClosure = getRoomsWithUserDefinedRulesClosure {
+            return try await getRoomsWithUserDefinedRulesClosure()
+        } else {
+            return getRoomsWithUserDefinedRulesReturnValue
+        }
     }
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol {

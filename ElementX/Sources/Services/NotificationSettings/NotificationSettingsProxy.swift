@@ -59,6 +59,11 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         await updatedSettings()
     }
     
+    func getUserDefinedRoomNotificationMode(roomId: String) async throws -> RoomNotificationModeProxy? {
+        let roomNotificationMode = try await notificationSettings.getUserDefinedRoomNotificationMode(roomId: roomId)
+        return roomNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+    }
+    
     func getDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy {
         let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
@@ -126,6 +131,10 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
 
         try await notificationSettings.setCallEnabled(enabled: enabled)
         await updatedSettings()
+    }
+    
+    func getRoomsWithUserDefinedRules() async throws -> [String] {
+        await notificationSettings.getRoomsWithUserDefinedRules(enabled: true)
     }
     
     // MARK: - Private

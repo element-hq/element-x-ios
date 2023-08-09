@@ -23,12 +23,15 @@ import XCTest
 class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     private var viewModel: NotificationSettingsEditScreenViewModelProtocol!
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
+    private var userSession: UserSessionProtocol!
     
     private var context: NotificationSettingsEditScreenViewModelType.Context {
         viewModel.context
     }
     
     @MainActor override func setUpWithError() throws {
+        let clientProxy = MockClientProxy(userID: "@a:b.com")
+        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
     }
@@ -43,6 +46,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
             }
         }
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
 
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -68,6 +72,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     func testSetModeAllMessages() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -108,6 +113,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     func testSetModeMentions() async throws {
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -150,6 +156,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         // Initialize for direct chats
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -183,6 +190,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))

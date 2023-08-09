@@ -24,6 +24,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     private var viewModel: NotificationSettingsScreenViewModelProtocol!
     private var context: NotificationSettingsScreenViewModelType.Context!
     private var appSettings: AppSettings!
+    private var userSession: UserSessionProtocol!
     private var userNotificationCenter: UserNotificationCenterMock!
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
     
@@ -38,7 +39,11 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = true
         
-        viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        let clientProxy = MockClientProxy(userID: "@a:b.com")
+        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        
+        viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
+                                                        appSettings: appSettings,
                                                         userNotificationCenter: userNotificationCenter,
                                                         notificationSettingsProxy: notificationSettingsProxy,
                                                         isModallyPresented: false)

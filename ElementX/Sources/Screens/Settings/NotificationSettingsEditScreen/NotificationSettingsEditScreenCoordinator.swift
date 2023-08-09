@@ -18,7 +18,9 @@ import Combine
 import SwiftUI
 
 struct NotificationSettingsEditScreenCoordinatorParameters {
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let isDirect: Bool
+    let userSession: UserSessionProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
 }
 
@@ -38,14 +40,36 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = NotificationSettingsEditScreenViewModel(isDirect: parameters.isDirect,
+                                                            userSession: parameters.userSession,
                                                             notificationSettingsProxy: parameters.notificationSettings)
     }
     
     func start() {
         viewModel.fetchInitialContent()
+        
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .requestRoomNotificationSettingsPresentation(let roomID):
+                Task { await self.presentRoomNotificationSettings(roomID: roomID) }
+            }
+        }
+        .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
         AnyView(NotificationSettingsEditScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func presentRoomNotificationSettings(roomID: String) async {
+        guard let roomProxy = await parameters.userSession.clientProxy.roomForIdentifier(roomID) else { return }
+         
+        let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                                                     notificationSettingsProxy: parameters.notificationSettings,
+                                                                                                     roomProxy: roomProxy)
+        let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
+        parameters.navigationStackCoordinator?.push(roomNotificationSettingsCoordinator)
     }
 }

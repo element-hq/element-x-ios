@@ -23,25 +23,52 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private var actionsSubject: PassthroughSubject<NotificationSettingsEditScreenViewModelAction, Never> = .init()
     private let isDirect: Bool
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let userSession: UserSessionProtocol
+    private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
+    @CancellableTask private var fetchRoomsTask: Task<Void, Error>?
     
     var actions: AnyPublisher<NotificationSettingsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(isDirect: Bool, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+    init(isDirect: Bool, userSession: UserSessionProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
         let bindings = NotificationSettingsEditScreenViewStateBindings()
         self.isDirect = isDirect
+        self.userSession = userSession
         self.notificationSettingsProxy = notificationSettingsProxy
+        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
+        
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
                                                                              strings: NotificationSettingsEditScreenStrings(isDirect: isDirect),
-                                                                             isDirect: isDirect))
+                                                                             isDirect: isDirect),
+                   imageProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()
     }
     
     func fetchInitialContent() {
         fetchSettings()
+        
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
+        roomSummaryProvider.roomListPublisher
+            .dropFirst(1) // We don't care about its initial value
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateRooms()
+                
+                // Wait for the all rooms view to receive its first update before installing
+                // dynamic timeline modifiers
+//                self?.installListRangeModifiers()
+            }
+            .store(in: &cancellables)
+        
+        updateRooms()
     }
     
     // MARK: - Public
@@ -50,6 +77,8 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         switch viewAction {
         case .setMode(let mode):
             setMode(mode)
+        case .selectRoom(let roomIdentifier):
+            actionsSubject.send(.requestRoomNotificationSettingsPresentation(roomID: roomIdentifier))
         }
     }
     
@@ -64,6 +93,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 switch callback {
                 case .settingsDidChange:
                     self.fetchSettings()
+                    self.updateRooms()
                 }
             }
             .store(in: &cancellables)
@@ -88,6 +118,55 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 state.defaultMode = nil
             }
         }
+    }
+    
+    private func updateRooms() {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
+        fetchRoomsTask = Task {
+            MXLog.info("Updating rooms")
+            
+            let roomsWithUserDefinedRules = try await notificationSettingsProxy.getRoomsWithUserDefinedRules()
+            guard !Task.isCancelled else { return }
+            
+            let filteredRoomsSummary = roomSummaryProvider.roomListPublisher.value.filter { summary in
+                roomsWithUserDefinedRules.contains(where: { summary.id == $0 })
+            }
+            
+            var roomsWithCustomMode: [NotificationSettingsEditScreenRoom] = []
+            
+            for roomSummary in filteredRoomsSummary {
+                switch roomSummary {
+                case .empty:
+                    roomsWithCustomMode.append(NotificationSettingsEditScreenRoom.placeholder())
+                case .invalidated(let details):
+                    await roomsWithCustomMode.append(buildRoom(with: details, invalidated: true))
+                case .filled(let details):
+                    await roomsWithCustomMode.append(buildRoom(with: details, invalidated: false))
+                }
+            }
+            
+            // Sort the room list
+            roomsWithCustomMode.sort(by: { $0.name.localizedCompare($1.name) == .orderedAscending })
+            
+            state.roomsWithCustomSettings = roomsWithCustomMode
+            
+            MXLog.info("Finished updating rooms")
+        }
+    }
+    
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) async -> NotificationSettingsEditScreenRoom {
+        let identifier = invalidated ? "invalidated-" + details.id : details.id
+        
+        let notificationMode = try? await notificationSettingsProxy.getUserDefinedRoomNotificationMode(roomId: details.id)
+        return NotificationSettingsEditScreenRoom(id: identifier,
+                                                  roomId: details.id,
+                                                  name: details.name,
+                                                  avatarURL: details.avatarURL,
+                                                  notificationMode: notificationMode)
     }
     
     private func setMode(_ mode: NotificationSettingsEditScreenDefaultMode) {
