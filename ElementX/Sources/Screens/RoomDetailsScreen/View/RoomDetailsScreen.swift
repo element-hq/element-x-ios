@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomDetailsScreen: View {
@@ -47,7 +48,7 @@ struct RoomDetailsScreen: View {
             
             leaveRoomSection
         }
-        .compoundForm()
+        .compoundList()
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -125,74 +126,55 @@ struct RoomDetailsScreen: View {
         if context.viewState.hasTopicSection {
             Section {
                 if let topic = context.viewState.topic, !topic.isEmpty {
-                    Text(topic)
-                        .compoundFormSecondaryTextRow()
+                    ListRow(label: .description(topic), kind: .label)
                         .lineLimit(isTopicExpanded ? nil : 3)
                         .onTapGesture { isTopicExpanded.toggle() }
                 } else {
-                    Button {
-                        context.send(viewAction: .processTapAddTopic)
-                    } label: {
-                        Text(L10n.screenRoomDetailsAddTopicTitle)
-                    }
-                    .buttonStyle(.compoundForm())
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
+                    ListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
+                            kind: .button { context.send(viewAction: .processTapAddTopic) })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
                 }
             } header: {
                 Text(L10n.commonTopic)
-                    .compoundFormSectionHeader()
+                    .compoundListSectionHeader()
             }
-            .compoundFormSection()
         }
     }
 
     private var aboutSection: some View {
         Section {
-            Button {
-                context.send(viewAction: .processTapPeople)
-            } label: {
-                LabeledContent {
-                    Text(String(context.viewState.joinedMembersCount))
-                } label: {
-                    Label(L10n.commonPeople, systemImage: "person")
-                }
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+            ListRow(label: .default(title: L10n.commonPeople, systemIcon: .person),
+                    details: .title(String(context.viewState.joinedMembersCount)),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapPeople)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             
             if context.viewState.canInviteUsers {
-                Button {
-                    context.send(viewAction: .processTapInvite)
-                } label: {
-                    Label(L10n.screenRoomDetailsInvitePeopleTitle, systemImage: "person.badge.plus")
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
+                ListRow(label: .default(title: L10n.screenRoomDetailsInvitePeopleTitle,
+                                        systemIcon: .personBadgePlus),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapInvite)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.invite)
             }
         }
-        .buttonStyle(.compoundForm(accessory: .navigationLink))
-        .compoundFormSection()
     }
     
     @ViewBuilder
     private var notificationSection: some View {
         Section {
-            Button {
-                context.send(viewAction: .processTapNotifications)
-            } label: {
-                LabeledContent {
-                    if context.viewState.notificationSettingsState.isLoading {
-                        ProgressView()
-                    } else if context.viewState.notificationSettingsState.isError {
-                        Image(systemName: "exclamationmark.circle")
-                    } else {
-                        Text(context.viewState.notificationSettingsState.label)
-                    }
-                } label: {
-                    Label(L10n.screenRoomDetailsNotificationTitle, systemImage: "bell")
-                }
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+            ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
+                                    systemIcon: .bell),
+                    details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
+                        : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
+                        : .title(context.viewState.notificationSettingsState.label),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapNotifications)
+                    })
+                    .disabled(context.viewState.notificationSettingsState.isLoading)
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
         }
-        .buttonStyle(.compoundForm(accessory: context.viewState.notificationSettingsState.isLoaded ? .navigationLink : nil))
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
@@ -215,51 +197,38 @@ struct RoomDetailsScreen: View {
     private var securitySection: some View {
         if context.viewState.isEncrypted {
             Section {
-                Label {
-                    Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
-                } icon: {
-                    Image(systemName: "lock.shield")
-                }
-                .labelStyle(.compoundFormRow(secondaryText: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                             alignment: .top))
+                ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
+                                        description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                        systemIcon: .lockShield,
+                                        iconAlignment: .top),
+                        kind: .label)
             } header: {
                 Text(L10n.commonSecurity)
-                    .compoundFormSectionHeader()
+                    .compoundListSectionHeader()
             }
-            .compoundFormSection()
         }
     }
 
     private var leaveRoomSection: some View {
         Section {
-            Button(role: .destructive) {
-                context.send(viewAction: .processTapLeave)
-            } label: {
-                Label(L10n.actionLeaveRoom, systemImage: "door.right.hand.open")
-            }
-            .buttonStyle(.compoundForm())
+            ListRow(label: .default(title: L10n.actionLeaveRoom,
+                                    systemIcon: .doorRightHandOpen,
+                                    role: .destructive),
+                    kind: .button { context.send(viewAction: .processTapLeave) })
         }
-        .compoundFormSection()
     }
     
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
-            Button(role: user.isIgnored ? nil : .destructive) {
-                context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
-            } label: {
-                LabeledContent {
-                    if context.viewState.isProcessingIgnoreRequest {
-                        ProgressView()
-                    }
-                } label: {
-                    Label(user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                          systemImage: "slash.circle")
-                }
-            }
-            .buttonStyle(.compoundForm())
-            .disabled(context.viewState.isProcessingIgnoreRequest)
+            ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
+                                    systemIcon: .slashCircle,
+                                    role: user.isIgnored ? nil : .destructive),
+                    details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
+                    kind: .button {
+                        context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
+                    })
+                    .disabled(context.viewState.isProcessingIgnoreRequest)
         }
-        .compoundFormSection()
     }
 
     @ViewBuilder

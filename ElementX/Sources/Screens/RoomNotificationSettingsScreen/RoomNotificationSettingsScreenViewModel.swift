@@ -82,7 +82,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
                                                                                        isOneToOne: roomProxy.activeMembersCount == 2)
             guard !Task.isCancelled else { return }
             state.notificationSettingsState = .loaded(settings: settings)
-            if !state.isRestoringDefautSetting {
+            if !state.isRestoringDefaultSetting {
                 state.bindings.allowCustomSetting = !settings.isDefault
             }
             if state.pendingCustomMode == nil {
@@ -106,14 +106,14 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func restoreDefaultSetting() {
-        state.isRestoringDefautSetting = true
+        state.isRestoringDefaultSetting = true
         Task {
             do {
                 try await notificationSettingsProxy.restoreDefaultNotificationMode(roomId: roomProxy.id)
             } catch {
                 displayError(.restoreDefaultFailed)
             }
-            state.isRestoringDefautSetting = false
+            state.isRestoringDefaultSetting = false
         }
     }
     

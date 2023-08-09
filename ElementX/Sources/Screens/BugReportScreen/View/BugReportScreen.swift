@@ -23,6 +23,8 @@ struct BugReportScreen: View {
     
     @ObservedObject var context: BugReportScreenViewModel.Context
     
+    var photosPickerTitle: String { context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot }
+    
     var body: some View {
         Form {
             textFieldSection
@@ -31,7 +33,7 @@ struct BugReportScreen: View {
             canContactSection
         }
         .scrollDismissesKeyboard(.immediately)
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonReportABug)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -50,53 +52,48 @@ struct BugReportScreen: View {
     
     private var textFieldSection: some View {
         Section {
-            TextField(L10n.screenBugReportEditorPlaceholder,
-                      text: $context.reportText,
-                      prompt: Text(L10n.screenBugReportEditorPlaceholder).compoundFormTextFieldPlaceholder(),
-                      axis: .vertical)
+            ListRow(label: .plain(title: L10n.screenBugReportEditorPlaceholder),
+                    kind: .textField(text: $context.reportText))
                 .lineLimit(4, reservesSpace: true)
-                .textFieldStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
             Text(L10n.screenBugReportEditorDescription)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
     
     private var sendLogsSection: some View {
         Section {
-            Toggle(L10n.screenBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
-                .toggleStyle(.compoundForm)
+            ListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
+                    kind: .toggle($context.sendingLogsEnabled))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
             Text(L10n.screenBugReportLogsDescription)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
 
     private var canContactSection: some View {
         Section {
-            Toggle(L10n.screenBugReportContactMeTitle, isOn: $context.canContact)
-                .toggleStyle(.compoundForm)
+            ListRow(label: .plain(title: L10n.screenBugReportContactMeTitle),
+                    kind: .toggle($context.canContact))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.canContact)
         } footer: {
             Text(L10n.screenBugReportContactMe)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
 
     @ViewBuilder
     private var attachScreenshotSection: some View {
         Section {
-            PhotosPicker(selection: $selectedScreenshot,
-                         matching: .screenshots,
-                         photoLibrary: .shared()) {
-                Label(context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot, systemImage: "camera")
-            }
-            .buttonStyle(.compoundForm())
+            ListRow(kind: .custom {
+                PhotosPicker(selection: $selectedScreenshot,
+                             matching: .screenshots,
+                             photoLibrary: .shared()) {
+                    ListLabel.default(title: photosPickerTitle, systemIcon: .camera)
+                }
+            })
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
         } footer: {
             if let screenshot = context.viewState.screenshot {
@@ -117,7 +114,6 @@ struct BugReportScreen: View {
                     .padding(.horizontal, 16)
             }
         }
-        .compoundFormSection()
     }
     
     @ToolbarContentBuilder

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct LegalInformationScreen: View {
@@ -23,20 +24,15 @@ struct LegalInformationScreen: View {
     var body: some View {
         Form {
             Section {
-                Button(L10n.commonCopyright) {
-                    openURL("https://element.io/copyright")
-                }
-                Button(L10n.commonAcceptableUsePolicy) {
-                    openURL("https://element.io/acceptable-use-policy-terms")
-                }
-                Button(L10n.commonPrivacyPolicy) {
-                    openURL("https://element.io/privacy")
-                }
+                ListRow(label: .plain(title: L10n.commonCopyright),
+                        kind: .navigationLink { openURL("https://element.io/copyright") })
+                ListRow(label: .plain(title: L10n.commonAcceptableUsePolicy),
+                        kind: .navigationLink { openURL("https://element.io/acceptable-use-policy-terms") })
+                ListRow(label: .plain(title: L10n.commonPrivacyPolicy),
+                        kind: .navigationLink { openURL("https://element.io/privacy") })
             }
-            .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .compoundFormSection()
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonAbout)
         .navigationBarTitleDisplayMode(.inline)
     }

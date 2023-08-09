@@ -83,7 +83,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
-        let deferredIsRestoringDefaultSettings = deferFulfillment(context.$viewState.map(\.isRestoringDefautSetting)
+        let deferredIsRestoringDefaultSettings = deferFulfillment(context.$viewState.map(\.isRestoringDefaultSetting)
             .removeDuplicates()
             .collect(3).first())
         viewModel.state.bindings.allowCustomSetting = false

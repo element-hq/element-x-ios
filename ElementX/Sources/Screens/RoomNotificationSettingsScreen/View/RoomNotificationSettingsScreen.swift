@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomNotificationSettingsScreen: View {
@@ -29,7 +30,7 @@ struct RoomNotificationSettingsScreen: View {
                 customSettingsSection
             }
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.screenRoomDetailsNotificationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .roomNotifications)
@@ -40,35 +41,28 @@ struct RoomNotificationSettingsScreen: View {
     @ViewBuilder
     private var allowCustomSettingSection: some View {
         Section {
-            Toggle(isOn: $context.allowCustomSetting) {
-                Text(L10n.screenRoomNotificationSettingsAllowCustom)
-            }
-            .toggleStyle(.compoundForm)
-            .accessibilityIdentifier(A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting)
-            .disabled(context.viewState.notificationSettingsState.isLoading)
-            .onChange(of: context.allowCustomSetting) { _ in
-                context.send(viewAction: .changedAllowCustomSettings)
-            }
+            ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsAllowCustom),
+                    kind: .toggle($context.allowCustomSetting))
+                .accessibilityIdentifier(A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting)
+                .disabled(context.viewState.notificationSettingsState.isLoading)
+                .onChange(of: context.allowCustomSetting) { _ in
+                    context.send(viewAction: .changedAllowCustomSettings)
+                }
         } footer: {
             Text(L10n.screenRoomNotificationSettingsAllowCustomFootnote)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
     
     @ViewBuilder
     private var defaultSettingSection: some View {
         Section {
-            if context.viewState.isRestoringDefautSetting {
-                Text(L10n.commonLoading)
-                    .foregroundColor(.compound.textPlaceholder)
-            } else {
-                Text(context.viewState.strings.string(for: context.viewState.notificationSettingsState))
-                    .foregroundColor(.compound.textPrimary)
-            }
+            ListRow(label: .plain(title: context.viewState.isRestoringDefaultSetting ? L10n.commonLoading : context.viewState.strings.string(for: context.viewState.notificationSettingsState)),
+                    kind: .label)
+                .disabled(context.viewState.isRestoringDefaultSetting)
         } header: {
             Text(L10n.screenRoomNotificationSettingsDefaultSettingTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         } footer: {
             Text(context.viewState.strings.customSettingFootnote)
                 .environment(\.openURL, OpenURLAction { url in
@@ -76,30 +70,25 @@ struct RoomNotificationSettingsScreen: View {
                     context.send(viewAction: .customSettingFootnoteLinkTapped)
                     return .handled
                 })
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
     
     @ViewBuilder
     private var customSettingsSection: some View {
         Section {
-            Picker("", selection: $context.customMode) {
-                ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
-                    Text(context.viewState.strings.string(for: mode))
-                        .tag(mode)
-                }
-            }
-            .onChange(of: context.customMode) { mode in
-                context.send(viewAction: .setCustomMode(mode))
-            }
-            .labelsHidden()
-            .pickerStyle(.inline)
+            ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsCustomSettingsTitle),
+                    kind: .inlinePicker(selection: $context.customMode,
+                                        items: context.viewState.availableCustomRoomNotificationModes.map {
+                                            (title: context.viewState.strings.string(for: $0), tag: $0)
+                                        }))
+                                        .onChange(of: context.customMode) { mode in
+                                            context.send(viewAction: .setCustomMode(mode))
+                                        }
         } header: {
             Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
 }
 

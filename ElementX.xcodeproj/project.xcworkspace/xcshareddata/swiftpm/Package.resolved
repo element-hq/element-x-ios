@@ -5,7 +5,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-design-tokens.git",
       "state" : {
-        "revision" : "aa55111d94486acbfd3344cf4d08b64723bd6703"
+        "revision" : "387d2b7211f07761c67e849c59414a1bb803defa"
       }
     },
     {
@@ -13,7 +13,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-ios",
       "state" : {
-        "revision" : "89e3ed5adef33be7eb65137b861833ffae64f961"
+        "revision" : "236bf094fec660be747c915406090c2ffd19c21e"
       }
     },
     {
@@ -149,6 +149,15 @@
       "state" : {
         "revision" : "e6dcfba32f2861438b82c7ad34e058b23c83daf6",
         "version" : "8.6.0"
+      }
+    },
+    {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols.git",
+      "state" : {
+        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+        "version" : "4.1.1"
       }
     },
     {

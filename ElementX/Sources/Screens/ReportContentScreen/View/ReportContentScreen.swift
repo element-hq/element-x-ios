@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct ReportContentScreen: View {
@@ -32,7 +33,7 @@ struct ReportContentScreen: View {
             ignoreUserSection
         }
         .scrollDismissesKeyboard(.immediately)
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.actionReportContent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -41,27 +42,23 @@ struct ReportContentScreen: View {
 
     private var reasonSection: some View {
         Section {
-            TextField(L10n.reportContentHint,
-                      text: $context.reasonText,
-                      prompt: Text(L10n.reportContentHint).compoundFormTextFieldPlaceholder(),
-                      axis: .vertical)
+            ListRow(label: .plain(title: L10n.reportContentHint),
+                    kind: .textField(text: $context.reasonText))
                 .lineLimit(4, reservesSpace: true)
-                .textFieldStyle(.compoundForm)
         } footer: {
             Text(L10n.reportContentExplanation)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
     
     private var ignoreUserSection: some View {
         Section {
-            Toggle(L10n.screenReportContentBlockUser, isOn: $context.ignoreUser)
-                .toggleStyle(.compoundForm)
+            ListRow(label: .plain(title: L10n.screenReportContentBlockUser),
+                    kind: .toggle($context.ignoreUser))
                 .accessibilityIdentifier(A11yIdentifiers.reportContent.ignoreUser)
         } footer: {
             Text(L10n.screenReportContentBlockUserHint)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
     }
 
