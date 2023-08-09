@@ -28,6 +28,7 @@ enum RoomScreenViewModelAction {
     case displayMediaPicker
     case displayDocumentPicker
     case displayLocationPicker
+    case displayPollForm
     case displayMediaUploadPreviewScreen(url: URL)
     case displayRoomMemberDetails(member: RoomMemberProxyProtocol)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
