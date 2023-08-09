@@ -61,23 +61,34 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     
     func start() {
         guard !isRunning else { return }
+        
         SentrySDK.start { options in
             #if DEBUG
             options.enabled = false
             #endif
+            
             options.dsn = self.sentryURL.absoluteString
+            
+            // Disabled as it seems to report a lot of false positives
+            options.enableAppHangTracking = false
+            
+            // Most of the network requests are made Rust side, this is useless
+            options.enableNetworkBreadcrumbs = false
+            
+            // Doesn't seem to work at all well with SwiftUI
+            options.enableAutoBreadcrumbTracking = false
+            
+            // Experimental. Stitches stack traces of asynchronous code together
+            options.stitchAsyncCode = true
 
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
             options.tracesSampleRate = 1.0
-
-            options.beforeSend = { event in
-                MXLog.error("Sentry detected crash: \(event.eventId.sentryIdString)")
-                return event
-            }
-
+            
+            // This callback is only executed once during the entire run of the program to avoid
+            // multiple callbacks if there are multiple crash events to send (see method documentation)
             options.onCrashedLastRun = { [weak self] event in
-                MXLog.error("Sentry detected application was crashed: \(event.eventId.sentryIdString)")
+                MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
                 self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
