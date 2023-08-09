@@ -17,24 +17,19 @@
 import Foundation
 
 enum CreatePollScreenViewModelAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case create
+    case cancel
 }
 
 struct CreatePollScreenViewState: BindableState {
-    var title: String
-    var placeholder: String
     var bindings: CreatePollScreenViewStateBindings
 }
 
 struct CreatePollScreenViewStateBindings {
-    var composerText: String
+    var options: [String]
 }
 
 enum CreatePollScreenViewAction {
-    case done
-    case textChanged
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case cancel
+    case create
 }

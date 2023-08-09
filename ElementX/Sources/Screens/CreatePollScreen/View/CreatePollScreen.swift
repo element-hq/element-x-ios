@@ -18,29 +18,41 @@ import SwiftUI
 
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
+    @State var text = ""
     
     var body: some View {
         Form {
-            Section {
-                TextField(text: $context.composerText) {
-                    Text(context.viewState.placeholder)
-                        .compoundFormTextFieldPlaceholder()
+            Section("Question or topic") {
+                ForEach(context.options, id: \.self) { _ in
+                    TextField(text: $text) {
+                        Text("Placeholder")
+                            .compoundFormTextFieldPlaceholder()
+                    }
+                    .textFieldStyle(.compoundForm)
                 }
-                .textFieldStyle(.compoundForm)
-                
-                Button {
-                    context.send(viewAction: .done)
-                } label: {
-                    Label("Done", systemImage: "door.left.hand.closed")
-                }
-                .buttonStyle(.compoundFormCentred())
             }
             .compoundFormSection()
         }
         .compoundForm()
-        .navigationTitle(context.viewState.title)
-        .onChange(of: context.composerText) { _ in
-            context.send(viewAction: .textChanged)
+        .navigationTitle("Nav title")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+    }
+
+    // MARK: - Private
+
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
+
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(L10n.actionCreate) {
+                context.send(viewAction: .create)
+            }
         }
     }
 }
