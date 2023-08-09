@@ -52,6 +52,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var swiftUITimelineEnabled: Bool { get set }
     var pollsInTimelineEnabled: Bool { get set }
     var richTextEditorEnabled: Bool { get set }
+    var pollsCreationEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
