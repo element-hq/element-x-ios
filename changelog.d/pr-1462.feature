@@ -1,0 +1,1 @@
+Re-enabled background app refreshes

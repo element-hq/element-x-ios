@@ -1,0 +1,1 @@
+Re-enabled the room list cache and offline mode support
