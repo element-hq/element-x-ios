@@ -106,6 +106,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
     }
     
+    func stop() {
+        viewModel.stop()
+    }
+    
     func toPresentable() -> AnyView {
         AnyView(RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context)))
     }

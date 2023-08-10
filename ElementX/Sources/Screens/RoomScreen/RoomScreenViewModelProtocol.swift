@@ -23,4 +23,5 @@ protocol RoomScreenViewModelProtocol {
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> { get }
     var context: RoomScreenViewModelType.Context { get }
     func process(composerAction: ComposerToolbarViewModelAction)
+    func stop()
 }
