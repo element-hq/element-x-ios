@@ -33,6 +33,7 @@ struct RoomScreen: View {
                     .padding(.top, 8)
                     .padding(.bottom)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                    .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
