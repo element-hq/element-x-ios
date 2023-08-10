@@ -22,43 +22,9 @@ struct CreatePollScreen: View {
 
     var body: some View {
         Form {
-            Section("Question or topic*") {
-                TextField(text: $context.question) {
-                    Text("Question placeholder*")
-                        .compoundFormTextFieldPlaceholder()
-                }
-                .introspect(.textField, on: .iOS(.v16)) { textField in
-                    textField.clearButtonMode = .whileEditing
-                }
-                .textFieldStyle(.compoundForm)
-            }
-            .compoundFormSection()
-
-            Section {
-                ForEach(0..<context.options.count, id: \.self) { index in
-                    CreatePollOptionView(text: $context.options[index],
-                                         placeholder: "Option \(index + 1) placeholder*",
-                                         canDeleteItem: context.options.count > 2) {
-                        if focusedOption == index {
-                            focusedOption = nil
-                        }
-
-                        context.send(viewAction: .deleteOption(index: index))
-                    }
-                    .focused($focusedOption, equals: index)
-                }
-
-                Button("Add option*") {
-                    context.send(viewAction: .addOption)
-                }
-                .disabled(context.options.count >= 20)
-            }
-            .compoundFormSection()
-
-            Section {
-                Toggle("Show results only after poll ends*", isOn: $context.isDisclosed)
-            }
-            .compoundFormSection()
+            questionSection
+            optionsSection
+            showResultsSection
         }
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
@@ -69,6 +35,50 @@ struct CreatePollScreen: View {
     }
 
     // MARK: - Private
+
+    private var questionSection: some View {
+        Section("Question or topic*") {
+            TextField(text: $context.question) {
+                Text("Question placeholder*")
+                    .compoundFormTextFieldPlaceholder()
+            }
+            .introspect(.textField, on: .iOS(.v16)) { textField in
+                textField.clearButtonMode = .whileEditing
+            }
+            .textFieldStyle(.compoundForm)
+        }
+        .compoundFormSection()
+    }
+
+    private var optionsSection: some View {
+        Section {
+            ForEach(0..<context.options.count, id: \.self) { index in
+                CreatePollOptionView(text: $context.options[index],
+                                     placeholder: "Option \(index + 1) placeholder*",
+                                     canDeleteItem: context.options.count > 2) {
+                    if focusedOption == index {
+                        focusedOption = nil
+                    }
+
+                    context.send(viewAction: .deleteOption(index: index))
+                }
+                .focused($focusedOption, equals: index)
+            }
+
+            Button("Add option*") {
+                context.send(viewAction: .addOption)
+            }
+            .disabled(context.options.count >= 20)
+        }
+        .compoundFormSection()
+    }
+
+    private var showResultsSection: some View {
+        Section {
+            Toggle("Show results only after poll ends*", isOn: $context.isUndisclosed)
+        }
+        .compoundFormSection()
+    }
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
