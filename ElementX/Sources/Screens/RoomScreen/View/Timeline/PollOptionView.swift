@@ -53,11 +53,14 @@ struct PollOptionView: View {
     }
 
     private var progress: Double {
-        guard showVotes, pollOption.allVotes > 0 else {
+        switch (showVotes, pollOption.allVotes, pollOption.isSelected) {
+        case (true, let allVotes, _) where allVotes > 0:
+            return Double(pollOption.votes) / Double(allVotes)
+        case (false, _, true):
+            return 1
+        default:
             return 0
         }
-
-        return Double(pollOption.votes) / Double(pollOption.allVotes)
     }
 
     private var isFinalWinningOption: Bool {
