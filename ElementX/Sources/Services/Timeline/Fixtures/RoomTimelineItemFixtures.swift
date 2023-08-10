@@ -212,6 +212,16 @@ enum RoomTimelineItemFixtures {
          TextRoomTimelineItem(text: "Pork buffalo mollit culpa strip steak in leberkas flank cow.",
                               senderDisplayName: "Alice")]
     }
+
+    static var disclosedPolls: [RoomTimelineItemProtocol] {
+        [PollRoomTimelineItem.mock(poll: .disclosed),
+         PollRoomTimelineItem.mock(poll: .endedDisclosed)]
+    }
+
+    static var undisclosedPolls: [RoomTimelineItemProtocol] {
+        [PollRoomTimelineItem.mock(poll: .undisclosed),
+         PollRoomTimelineItem.mock(poll: .endedUndisclosed)]
+    }
 }
 
 private extension TextRoomTimelineItem {

@@ -112,114 +112,44 @@ struct PollRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Disclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(pollKind: .undisclosed),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Undisclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(ended: true),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .endedDisclosed))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Disclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(pollKind: .undisclosed, ended: true),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .endedUndisclosed))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Undisclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Disclosed, Plain")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(pollKind: .undisclosed),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Undisclosed, Plain")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(ended: true),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .endedDisclosed))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Disclosed, Plain")
 
-        PollRoomTimelineView(timelineItem: .init(id: .random,
-                                                 poll: .mock(pollKind: .undisclosed, ended: true),
-                                                 body: "Foo",
-                                                 timestamp: "Now",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "Bob"),
-                                                 properties: .init()))
+        PollRoomTimelineView(timelineItem: .mock(poll: .endedUndisclosed))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Undisclosed, Plain")
-    }
-}
-
-private extension Poll {
-    static func mock(pollKind: Poll.Kind = .disclosed, ended: Bool = false) -> Self {
-        .init(question: "Do you like polls?",
-              kind: pollKind,
-              maxSelections: 1,
-              options: [
-                  .init(id: "1", text: "Yes", votes: 1, allVotes: 3, isSelected: true, isWinning: false),
-                  .init(id: "2", text: "No", votes: 2, allVotes: 3, isSelected: false, isWinning: true)
-              ],
-              votes: [:],
-              endDate: ended ? Date() : nil)
     }
 }

@@ -324,6 +324,20 @@ class MockScreen: Identifiable {
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomWithDisclosedPolls, .roomWithUndisclosedPolls:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = id == .roomWithDisclosedPolls ? RoomTimelineItemFixtures.disclosedPolls : RoomTimelineItemFixtures.undisclosedPolls
+            timelineController.incomingItems = []
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .sessionVerification:
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
