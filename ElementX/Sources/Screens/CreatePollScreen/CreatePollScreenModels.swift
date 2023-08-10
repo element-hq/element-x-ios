@@ -22,11 +22,13 @@ enum CreatePollScreenViewModelAction {
 }
 
 struct CreatePollScreenViewState: BindableState {
-    var bindings: CreatePollScreenViewStateBindings
+    var bindings: CreatePollScreenViewStateBindings = .init()
 }
 
 struct CreatePollScreenViewStateBindings {
-    var options: [String]
+    var question = ""
+    var options = ["", ""]
+    var isDisclosed = true
 }
 
 enum CreatePollScreenViewAction {

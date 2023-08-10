@@ -27,7 +27,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     }
 
     init() {
-        super.init(initialViewState: CreatePollScreenViewState(bindings: .init(options: ["A", "B"])))
+        super.init(initialViewState: .init())
     }
     
     // MARK: - Public

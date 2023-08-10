@@ -19,15 +19,11 @@ import SwiftUI
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
 
-    // TODO: delete me
-    @State var text = ""
-    @State var isOn = false
-    
     var body: some View {
         Form {
             Section("Question or topic*") {
-                TextField(text: $text) {
-                    Text("Placeholder*")
+                TextField(text: $context.question) {
+                    Text("Question placeholder*")
                         .compoundFormTextFieldPlaceholder()
                 }
                 .textFieldStyle(.compoundForm)
@@ -35,9 +31,9 @@ struct CreatePollScreen: View {
             .compoundFormSection()
 
             Section {
-                ForEach(context.options, id: \.self) { _ in
-                    TextField(text: $text) {
-                        Text("Placeholder*")
+                ForEach(0..<context.options.count, id: \.self) { index in
+                    TextField(text: $context.options[index]) {
+                        Text("Option \(index + 1) placeholder*")
                             .compoundFormTextFieldPlaceholder()
                     }
                     .textFieldStyle(.compoundForm)
@@ -48,7 +44,7 @@ struct CreatePollScreen: View {
             .compoundFormSection()
 
             Section {
-                Toggle("Show results only after poll ends*", isOn: $isOn)
+                Toggle("Show results only after poll ends*", isOn: $context.isDisclosed)
             }
             .compoundFormSection()
         }
