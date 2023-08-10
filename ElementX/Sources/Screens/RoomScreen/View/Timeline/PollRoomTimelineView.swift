@@ -64,8 +64,8 @@ struct PollRoomTimelineView: View {
     private var summaryView: some View {
         if let summaryText = poll.summaryText {
             Text(summaryText)
-                .font(poll.hasEnded ? .compound.bodyXSSemibold : .compound.bodyXS)
-                .foregroundColor(poll.hasEnded ? .compound.textPrimary : .compound.textSecondary)
+                .font(.compound.bodySM)
+                .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
         }
     }

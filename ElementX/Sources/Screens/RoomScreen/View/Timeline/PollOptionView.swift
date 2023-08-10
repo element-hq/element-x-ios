@@ -23,14 +23,13 @@ struct PollOptionView: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
-            if !isFinalResult {
-                FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
-            }
+            FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
 
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline) {
                     Text(pollOption.text)
                         .font(isFinalWinningOption ? .compound.bodyLGSemibold : .compound.bodyLG)
+                        .multilineTextAlignment(.leading)
                         .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
