@@ -40,6 +40,13 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
             actionsSubject.send(.create)
         case .cancel:
             actionsSubject.send(.cancel)
+        case .deleteOption(let index):
+            guard state.bindings.options.indices.contains(index) else {
+                return
+            }
+            state.bindings.options.remove(at: index)
+        case .addOption:
+            state.bindings.options.append("")
         }
     }
 }

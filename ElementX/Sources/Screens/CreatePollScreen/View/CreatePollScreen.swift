@@ -18,6 +18,7 @@ import SwiftUI
 
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
+    @FocusState var focusedOption: Int?
 
     var body: some View {
         Form {
@@ -26,20 +27,31 @@ struct CreatePollScreen: View {
                     Text("Question placeholder*")
                         .compoundFormTextFieldPlaceholder()
                 }
+                .introspect(.textField, on: .iOS(.v16)) { textField in
+                    textField.clearButtonMode = .whileEditing
+                }
                 .textFieldStyle(.compoundForm)
             }
             .compoundFormSection()
 
             Section {
                 ForEach(0..<context.options.count, id: \.self) { index in
-                    TextField(text: $context.options[index]) {
-                        Text("Option \(index + 1) placeholder*")
-                            .compoundFormTextFieldPlaceholder()
+                    CreatePollOptionView(text: $context.options[index],
+                                         placeholder: "Option \(index + 1) placeholder*",
+                                         canDeleteItem: context.options.count > 2) {
+                        if focusedOption == index {
+                            focusedOption = nil
+                        }
+
+                        context.send(viewAction: .deleteOption(index: index))
                     }
-                    .textFieldStyle(.compoundForm)
+                    .focused($focusedOption, equals: index)
                 }
-            } footer: {
-                Button("Add option*") { }
+
+                Button("Add option*") {
+                    context.send(viewAction: .addOption)
+                }
+                .disabled(context.options.count >= 20)
             }
             .compoundFormSection()
 
@@ -49,6 +61,8 @@ struct CreatePollScreen: View {
             .compoundFormSection()
         }
         .compoundForm()
+        .scrollDismissesKeyboard(.immediately)
+        .environment(\.editMode, .constant(.active))
         .navigationTitle("Create Poll*")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -64,10 +78,38 @@ struct CreatePollScreen: View {
             }
         }
 
-        ToolbarItem(placement: .navigationBarTrailing) {
+        ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionCreate) {
                 context.send(viewAction: .create)
             }
+        }
+    }
+}
+
+private struct CreatePollOptionView: View {
+    @Environment(\.editMode) var editMode
+    @Binding var text: String
+    let placeholder: String
+    let canDeleteItem: Bool
+    let deleteAction: () -> Void
+
+    var body: some View {
+        HStack {
+            if editMode?.wrappedValue == .active {
+                Button(action: deleteAction) {
+                    Image(Asset.Images.delete.name)
+                }
+                .disabled(!canDeleteItem)
+                .buttonStyle(PlainButtonStyle())
+            }
+            TextField(text: $text) {
+                Text(placeholder)
+                    .compoundFormTextFieldPlaceholder()
+            }
+            .introspect(.textField, on: .iOS(.v16)) { textField in
+                textField.clearButtonMode = .whileEditing
+            }
+            .textFieldStyle(.compoundForm)
         }
     }
 }
