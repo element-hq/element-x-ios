@@ -46,28 +46,11 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                    imageProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()
+        setupRoomSummaryProviderSubscription()
     }
     
     func fetchInitialContent() {
         fetchSettings()
-        
-        guard let roomSummaryProvider else {
-            MXLog.error("Room summary provider unavailable")
-            return
-        }
-        
-        roomSummaryProvider.roomListPublisher
-            .dropFirst(1) // We don't care about its initial value
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateRooms()
-                
-                // Wait for the all rooms view to receive its first update before installing
-                // dynamic timeline modifiers
-//                self?.installListRangeModifiers()
-            }
-            .store(in: &cancellables)
-        
         updateRooms()
     }
     
@@ -120,6 +103,20 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         }
     }
     
+    private func setupRoomSummaryProviderSubscription() {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
+        roomSummaryProvider.roomListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateRooms()
+            }
+            .store(in: &cancellables)
+    }
+    
     private func updateRooms() {
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -140,12 +137,14 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             
             for roomSummary in filteredRoomsSummary {
                 switch roomSummary {
-                case .empty:
-                    roomsWithCustomMode.append(NotificationSettingsEditScreenRoom.placeholder())
-                case .invalidated(let details):
-                    await roomsWithCustomMode.append(buildRoom(with: details, invalidated: true))
+                case .empty, .invalidated:
+                    break
                 case .filled(let details):
-                    await roomsWithCustomMode.append(buildRoom(with: details, invalidated: false))
+                    guard let roomProxy = await userSession.clientProxy.roomForIdentifier(details.id) else { continue }
+                    let isOneToOneRoom = roomProxy.activeMembersCount == 2
+                    if isDirect == isOneToOneRoom {
+                        await roomsWithCustomMode.append(buildRoom(with: details))
+                    }
                 }
             }
             
@@ -158,11 +157,9 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         }
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) async -> NotificationSettingsEditScreenRoom {
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
-        
+    private func buildRoom(with details: RoomSummaryDetails) async -> NotificationSettingsEditScreenRoom {
         let notificationMode = try? await notificationSettingsProxy.getUserDefinedRoomNotificationMode(roomId: details.id)
-        return NotificationSettingsEditScreenRoom(id: identifier,
+        return NotificationSettingsEditScreenRoom(id: details.id,
                                                   roomId: details.id,
                                                   name: details.name,
                                                   avatarURL: details.avatarURL,

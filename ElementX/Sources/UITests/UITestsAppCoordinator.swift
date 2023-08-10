@@ -504,7 +504,8 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .allMessages)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members)),
+                                                                                          displayAsGlobalCustomRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomNotificationSettingsCustomSetting:
@@ -512,7 +513,8 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members)),
+                                                                                          displayAsGlobalCustomRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .reportContent:

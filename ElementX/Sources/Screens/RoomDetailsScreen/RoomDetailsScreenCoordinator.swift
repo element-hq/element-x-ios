@@ -200,7 +200,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     private func presentNotificationSettings() {
         let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                                      notificationSettingsProxy: parameters.notificationSettings,
-                                                                                                     roomProxy: parameters.roomProxy)
+                                                                                                     roomProxy: parameters.roomProxy,
+                                                                                                     displayAsGlobalCustomRoomSettings: false)
         let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
         roomNotificationSettingsCoordinator.actions.sink { [weak self] actions in
             switch actions {

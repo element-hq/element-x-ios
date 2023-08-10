@@ -30,11 +30,16 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol) {
+    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol, displayAsGlobalCustomRoomSettings: Bool) {
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy
-        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings))
+        let navigationTitle = displayAsGlobalCustomRoomSettings ? roomProxy.roomTitle : L10n.screenRoomDetailsNotificationTitle
+        let customSettingsSectionHeader = displayAsGlobalCustomRoomSettings ? UntranslatedL10n.screenRoomNotificationSettingsRoomCustomSettingsTitle : L10n.screenRoomNotificationSettingsCustomSettingsTitle
+        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings,
+                                                                             displayAsGlobalCustomRoomSettings: displayAsGlobalCustomRoomSettings,
+                                                                             navigationTitle: navigationTitle,
+                                                                             customSettingsSectionHeader: customSettingsSectionHeader))
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
@@ -50,6 +55,8 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             setCustomMode(mode)
         case .customSettingFootnoteLinkTapped:
             actionsSubject.send(.openGlobalSettings)
+        case .deleteCustomSettingTapped:
+            Task { await deleteCustomSetting() }
         }
     }
     
@@ -152,5 +159,16 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
                                                  title: L10n.commonError,
                                                  message: L10n.screenRoomNotificationSettingsErrorRestoringDefault)
         }
+    }
+    
+    private func deleteCustomSetting() async {
+        state.deletingCustomSetting = true
+        do {
+            try await notificationSettingsProxy.restoreDefaultNotificationMode(roomId: roomProxy.id)
+            actionsSubject.send(.dismiss)
+        } catch {
+            displayError(.restoreDefaultFailed)
+        }
+        state.deletingCustomSetting = false
     }
 }

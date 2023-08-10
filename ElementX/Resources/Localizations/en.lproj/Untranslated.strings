@@ -17,3 +17,5 @@
 
 // MARK: - Notifications
 "screen_notification_settings_edit_custom_settings_section_title" = "Custom setting per chat";
+"screen_room_notification_settings_edit_remove_setting" = "Remove custom setting";
+"screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
