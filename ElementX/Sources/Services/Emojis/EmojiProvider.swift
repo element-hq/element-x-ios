@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Emojibase
 import Foundation
 
 @MainActor
@@ -31,7 +32,7 @@ class EmojiProvider: EmojiProviderProtocol {
     private let loader: EmojiLoaderProtocol
     private var state: EmojiProviderState = .notLoaded
     
-    init(loader: EmojiLoaderProtocol = EmojiMartJSONLoader()) {
+    init(loader: EmojiLoaderProtocol = EmojibaseDatasource()) {
         self.loader = loader
         Task {
             await loadIfNeeded()
@@ -50,7 +51,7 @@ class EmojiProvider: EmojiProviderProtocol {
     private func search(searchString: String, emojiCategories: [EmojiCategory]) -> [EmojiCategory] {
         emojiCategories.compactMap { category in
             let emojis = category.emojis.filter { emoji in
-                let searchArray = [emoji.id, emoji.name] + emoji.keywords
+                let searchArray = [emoji.label + emoji.unicode] + emoji.shortcodes + emoji.keywords
                 return searchArray.description.range(of: searchString, options: .caseInsensitive) != nil
             }
             return emojis.isEmpty ? nil : EmojiCategory(id: category.id, emojis: emojis)
@@ -72,5 +73,30 @@ class EmojiProvider: EmojiProviderProtocol {
         case .inProgress(let task):
             return await task.value
         }
+    }
+}
+
+extension EmojibaseDatasource: EmojiLoaderProtocol {
+    func load() async -> [EmojiCategory] {
+        do {
+            let store: EmojibaseStore = try await load()
+            return EmojibaseCategory.allCases.map { category in
+                let emojis = store.categories[category.rawValue] ?? []
+                return EmojiCategory(id: category.rawValue, emojis: emojis.compactMap(EmojiItem.init(from:)))
+            }
+        } catch {
+            MXLog.error("Failed retrieving emojis from the emojibase datasource: \(error)")
+        }
+        return []
+    }
+}
+
+extension EmojiItem {
+    init?(from emojibase: Emoji) {
+        unicode = emojibase.unicode
+        label = emojibase.label
+        shortcodes = emojibase.shortcodes
+        keywords = emojibase.tags ?? []
+        skins = emojibase.skins?.map(\.unicode) ?? []
     }
 }

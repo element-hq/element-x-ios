@@ -163,6 +163,7 @@ targets:
     - package: Sentry
     - package: URLRouting
     - package: Version
+    - package: Emojibase
 
     sources:
     - path: ../Sources

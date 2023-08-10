@@ -17,19 +17,13 @@
 import Foundation
 
 struct EmojiItem: Equatable, Identifiable {
-    var id: String
-    let name: String
-    let keywords: [String]
-    let skins: [String]
-}
-
-extension EmojiItem {
-    init?(from emojiMart: EmojiMartEmoji) {
-        id = emojiMart.id
-        name = emojiMart.name
-        keywords = emojiMart.keywords
-        skins = emojiMart.skins.map { emojiMartEmojiSkin in
-            emojiMartEmojiSkin.native
-        }
+    var id: String {
+        label
     }
+
+    let label: String
+    let unicode: String
+    let keywords: [String]
+    let shortcodes: [String]
+    let skins: [String]
 }
