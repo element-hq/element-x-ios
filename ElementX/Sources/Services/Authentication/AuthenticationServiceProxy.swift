@@ -31,17 +31,17 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
                                                   loginMode: .unknown))
         
-        // let oidcConfiguration = OidcConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
-        //                                           redirectUri: settings.oidcRedirectURL.absoluteString,
-        //                                           clientUri: appSettings.oidcClientURL.absoluteString,
-        //                                           tosUri: appSettings.oidcTermsURL.absoluteString,
-        //                                           policyUri: appSettings.oidcPolicyURL.absoluteString,
-        //                                           staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
+        let oidcConfiguration = OidcConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+                                                  redirectUri: appSettings.oidcRedirectURL.absoluteString,
+                                                  clientUri: appSettings.oidcClientURL.absoluteString,
+                                                  tosUri: appSettings.oidcTermsURL.absoluteString,
+                                                  policyUri: appSettings.oidcPolicyURL.absoluteString,
+                                                  staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: nil,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
-                                                      // oidcConfiguration: oidcConfiguration,
+                                                      oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString)
     }
     
@@ -56,7 +56,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             }
             
             if let details = authenticationService.homeserverDetails() {
-                if details.authenticationIssuer() != nil {
+                if details.supportsOidcLogin() {
                     homeserver.loginMode = .oidc
                 } else if details.supportsPasswordLogin() {
                     homeserver.loginMode = .password
@@ -77,31 +77,29 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     }
     
     func urlForOIDCLogin() async -> Result<OIDCAuthenticationDataProxy, AuthenticationServiceError> {
-        .failure(.oidcError(.notSupported))
-//        do {
-//            let oidcData = try await Task.dispatch(on: .global()) {
-//                try self.authenticationService.urlForOidcLogin()
-//            }
-//            return .success(OIDCAuthenticationDataProxy(underlyingData: oidcData))
-//        } catch {
-//            MXLog.error("Failed to get URL for OIDC login: \(error)")
-//            return .failure(.oidcError(.urlFailure))
-//        }
+        do {
+            let oidcData = try await Task.dispatch(on: .global()) {
+                try self.authenticationService.urlForOidcLogin()
+            }
+            return .success(OIDCAuthenticationDataProxy(underlyingData: oidcData))
+        } catch {
+            MXLog.error("Failed to get URL for OIDC login: \(error)")
+            return .failure(.oidcError(.urlFailure))
+        }
     }
     
     func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthenticationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        .failure(.oidcError(.notSupported))
-//        do {
-//            let client = try await Task.dispatch(on: .global()) {
-//                try self.authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
-//            }
-//            return await userSession(for: client)
-//        } catch AuthenticationError.OidcCancelled {
-//            return .failure(.oidcError(.userCancellation))
-//        } catch {
-//            MXLog.error("Login with OIDC failed: \(error)")
-//            return .failure(.failedLoggingIn)
-//        }
+        do {
+            let client = try await Task.dispatch(on: .global()) {
+                try self.authenticationService.loginWithOidcCallback(authenticationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
+            }
+            return await userSession(for: client)
+        } catch AuthenticationError.OidcCancelled {
+            return .failure(.oidcError(.userCancellation))
+        } catch {
+            MXLog.error("Login with OIDC failed: \(error)")
+            return .failure(.failedLoggingIn)
+        }
     }
     
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
