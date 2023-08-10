@@ -51,10 +51,11 @@ struct PollRoomTimelineView: View {
     }
 
     private var questionView: some View {
-        HStack(spacing: 4) {
-            Image(Asset.Images.equalizer.name)
+        HStack(alignment: .top, spacing: 12) {
+            Image(Asset.Images.timelinePoll.name)
 
             Text(poll.question)
+                .multilineTextAlignment(.leading)
                 .font(.compound.bodyLGSemibold)
         }
     }

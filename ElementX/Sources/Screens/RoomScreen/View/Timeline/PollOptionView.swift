@@ -22,7 +22,7 @@ struct PollOptionView: View {
     let isFinalResult: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
             if !isFinalResult {
                 FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
             }
