@@ -41,6 +41,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     }
 
     func start() { }
+    
+    func stop() { viewModel.stop() }
 
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))

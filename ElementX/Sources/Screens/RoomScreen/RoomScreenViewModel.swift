@@ -89,6 +89,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    func stop() {
+        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewItem = nil
+    }
+    
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:

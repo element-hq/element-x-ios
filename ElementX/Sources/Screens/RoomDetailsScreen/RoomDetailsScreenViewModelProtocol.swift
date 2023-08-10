@@ -20,4 +20,5 @@ import Foundation
 protocol RoomDetailsScreenViewModelProtocol {
     var callback: ((RoomDetailsScreenViewModelAction) -> Void)? { get set }
     var context: RoomDetailsScreenViewModelType.Context { get }
+    func stop()
 }
