@@ -20,6 +20,7 @@ struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @ScaledMetric private var summaryPadding = 32
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -65,6 +66,7 @@ struct PollRoomTimelineView: View {
         if let summaryText = poll.summaryText {
             Text(summaryText)
                 .font(.compound.bodySM)
+                .padding(.leading, showVotes ? 0 : summaryPadding)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
         }
