@@ -34,4 +34,6 @@ struct CreatePollScreenViewStateBindings {
 enum CreatePollScreenViewAction {
     case cancel
     case create
+    case deleteOption(index: Int)
+    case addOption
 }

@@ -32,6 +32,7 @@ internal enum Asset {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
     internal static let closeCircle = ImageAsset(name: "images/close-circle")
+    internal static let delete = ImageAsset(name: "images/delete")
     internal static let encryptionNormal = ImageAsset(name: "images/encryption-normal")
     internal static let encryptionTrusted = ImageAsset(name: "images/encryption-trusted")
     internal static let encryptionWarning = ImageAsset(name: "images/encryption-warning")
