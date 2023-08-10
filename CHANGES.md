@@ -1,3 +1,17 @@
+## Changes in 1.2.3 (2023-08-10)
+
+✨ Features
+
+- Re-enabled background app refreshes ([#1462](https://github.com/vector-im/element-x-ios/pull/1462))
+- Re-enabled the room list cache and offline mode support ([#1461](https://github.com/vector-im/element-x-ios/issues/1461))
+
+🐛 Bugfixes
+
+- Fixed crash when trying to reply to media files ([#1472](https://github.com/vector-im/element-x-ios/pull/1472))
+- Prevent inconsistent view hierarchies when opening rooms from push notifications ([#1140](https://github.com/vector-im/element-x-ios/issues/1140))
+- Preserve new lines within the same paragraph when parsing html strings ([#1463](https://github.com/vector-im/element-x-ios/issues/1463))
+
+
 ## Changes in 1.2.2 (2023-08-08)
 
 ✨ Features
