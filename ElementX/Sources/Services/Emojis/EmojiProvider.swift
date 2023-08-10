@@ -51,7 +51,7 @@ class EmojiProvider: EmojiProviderProtocol {
     private func search(searchString: String, emojiCategories: [EmojiCategory]) -> [EmojiCategory] {
         emojiCategories.compactMap { category in
             let emojis = category.emojis.filter { emoji in
-                let searchArray = [emoji.label] + emoji.shortcodes + emoji.keywords
+                let searchArray = [emoji.label + emoji.unicode] + emoji.shortcodes + emoji.keywords
                 return searchArray.description.range(of: searchString, options: .caseInsensitive) != nil
             }
             return emojis.isEmpty ? nil : EmojiCategory(id: category.id, emojis: emojis)
