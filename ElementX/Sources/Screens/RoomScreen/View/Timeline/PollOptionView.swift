@@ -47,7 +47,6 @@ struct PollOptionView: View {
 
     // MARK: - Private
 
-    @ViewBuilder
     private var progressView: some View {
         PollProgressView(progress: progress)
     }
