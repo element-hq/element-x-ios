@@ -77,14 +77,23 @@ struct RoomNotificationSettingsScreen: View {
     @ViewBuilder
     private var customSettingsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsCustomSettingsTitle),
-                    kind: .inlinePicker(selection: $context.customMode,
-                                        items: context.viewState.availableCustomRoomNotificationModes.map {
-                                            (title: context.viewState.strings.string(for: $0), tag: $0)
-                                        }))
-                                        .onChange(of: context.customMode) { mode in
-                                            context.send(viewAction: .setCustomMode(mode))
-                                        }
+            ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
+                Button {
+                    context.send(viewAction: .setCustomMode(mode))
+                } label: {
+                    LabeledContent {
+                        if context.viewState.pendingCustomMode == mode {
+                            ProgressView()
+                        } else {
+                            EmptyView()
+                        }
+                    } label: {
+                        Text(context.viewState.strings.string(for: mode))
+                    }
+                }
+                .buttonStyle(.compoundForm(accessory: .selected(context.viewState.isSelected(mode: mode))))
+                .disabled(context.viewState.pendingCustomMode != nil)
+            }
         } header: {
             Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle)
                 .compoundListSectionHeader()

@@ -56,6 +56,13 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var availableCustomRoomNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
     var isRestoringDefaultSetting = false
     var pendingCustomMode: RoomNotificationModeProxy?
+    
+    func isSelected(mode: RoomNotificationModeProxy) -> Bool {
+        if case .loaded(let settings) = notificationSettingsState, settings.mode == mode, pendingCustomMode == nil {
+            return true
+        }
+        return false
+    }
 }
 
 struct RoomNotificationSettingsScreenViewStateBindings {
