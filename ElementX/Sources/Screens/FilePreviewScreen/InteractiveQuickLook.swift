@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import QuickLook
 import SwiftUI
 
@@ -28,10 +29,15 @@ extension View {
 private struct InteractiveQuickLookModifier: ViewModifier {
     @Binding var item: MediaPreviewItem?
     
+    @State private var dismissalPublisher = PassthroughSubject<Void, Never>()
+    
     func body(content: Content) -> some View {
         content.background {
             if let item {
-                MediaPreviewViewController(previewItem: item) { self.item = nil }
+                MediaPreviewViewController(previewItem: item, dismissalPublisher: dismissalPublisher) { self.item = nil }
+            } else {
+                // Work around QLPreviewController dismissal issues, see below.
+                let _ = dismissalPublisher.send(())
             }
         }
     }
@@ -39,10 +45,11 @@ private struct InteractiveQuickLookModifier: ViewModifier {
 
 private struct MediaPreviewViewController: UIViewControllerRepresentable {
     let previewItem: MediaPreviewItem
+    let dismissalPublisher: PassthroughSubject<Void, Never>
     let onDismiss: () -> Void
 
     func makeUIViewController(context: Context) -> PreviewHostingController {
-        PreviewHostingController(previewItem: previewItem, onDismiss: onDismiss)
+        PreviewHostingController(previewItem: previewItem, dismissalPublisher: dismissalPublisher, onDismiss: onDismiss)
     }
 
     func updateUIViewController(_ uiViewController: PreviewHostingController, context: Context) { }
@@ -53,15 +60,26 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     /// animations and interactions which don't work if you represent it directly to SwiftUI 🤷‍♂️
     class PreviewHostingController: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let previewItem: MediaPreviewItem
+        let dismissalPublisher: PassthroughSubject<Void, Never>
         let onDismiss: () -> Void
+        
+        private var dismissalObserver: AnyCancellable?
         
         var previewController: QLPreviewController?
 
-        init(previewItem: MediaPreviewItem, onDismiss: @escaping () -> Void) {
+        init(previewItem: MediaPreviewItem, dismissalPublisher: PassthroughSubject<Void, Never>, onDismiss: @escaping () -> Void) {
             self.previewItem = previewItem
+            self.dismissalPublisher = dismissalPublisher
             self.onDismiss = onDismiss
-            
+
             super.init(nibName: nil, bundle: nil)
+            
+            // The QLPreviewController will not automatically dismiss itself when the underlying view is removed
+            // (e.g. switching rooms from a notification) and it continues to hold on to the whole hierarcy.
+            // Manually tell it to dismiss itself here.
+            dismissalObserver = dismissalPublisher.sink { _ in
+                self.dismiss(animated: true)
+            }
         }
         
         @available(*, unavailable)
@@ -125,6 +143,6 @@ struct PreviewView_Previews: PreviewProvider {
                                               title: "Important Document")
     
     static var previews: some View {
-        MediaPreviewViewController(previewItem: previewItem) { }
+        MediaPreviewViewController(previewItem: previewItem, dismissalPublisher: .init()) { }
     }
 }

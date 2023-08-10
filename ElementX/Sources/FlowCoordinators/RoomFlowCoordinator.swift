@@ -259,6 +259,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func asyncPresentRoom(_ roomID: String, animated: Bool, destinationRoomProxy: RoomProxyProtocol? = nil) async {
+        // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
+        // through the correct states before presenting the room
+        navigationStackCoordinator.setSheetCoordinator(nil)
+        
         if let roomProxy, roomProxy.id == roomID {
             navigationStackCoordinator.popToRoot()
             return

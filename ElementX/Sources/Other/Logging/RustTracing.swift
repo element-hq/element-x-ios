@@ -88,5 +88,5 @@ struct TracingConfiguration {
 }
 
 func setupTracing(configuration: TracingConfiguration) {
-    setupTracing(filter: configuration.filter)
+    setupTracing(config: .init(filter: configuration.filter, writeToStdoutOrSystem: true, writeToFiles: nil))
 }

@@ -24,13 +24,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
-    /// Common background task to resume long-running tasks in the background.
-    /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
+    
+    /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: BackgroundTaskProtocol?
 
-    /// Task used while processing background app refreshes
-    private var backgroundAppRefreshTask: BGAppRefreshTask?
-    
     private var isSuspended = false
     
     private var userSession: UserSessionProtocol? {
@@ -54,7 +51,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var userSessionObserver: AnyCancellable?
     private var clientProxyObserver: AnyCancellable?
     private var networkMonitorObserver: AnyCancellable?
-    private var backgroundRefreshSyncObserver: AnyCancellable?
     
     let notificationManager: NotificationManagerProtocol
 
@@ -543,10 +539,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     private func stopSync() {
         userSession?.clientProxy.pauseSync()
-        
-        backgroundAppRefreshTask?.setTaskCompleted(success: true)
-        backgroundAppRefreshTask = nil
-        
         clientProxyObserver = nil
     }
 
@@ -557,8 +549,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
         
         userSession.clientProxy.startSync()
-        
-        installBackgroundAppRefreshMonitor()
         
         let identifier = "StaleDataIndicator"
         
@@ -623,17 +613,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             
             backgroundTask?.stop()
             backgroundTask = nil
-            
-            backgroundAppRefreshTask?.setTaskCompleted(success: true)
-            backgroundAppRefreshTask = nil
         }
 
         isSuspended = true
 
-        #warning("Intentionally disabled until we understand certain deadlocks")
         // This does seem to work if scheduled from the background task above
         // Schedule it here instead but with an earliest being date of 30 seconds
-        // scheduleBackgroundAppRefresh()
+        scheduleBackgroundAppRefresh()
     }
 
     @objc
@@ -679,33 +665,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
     }
     
+    private var backgroundRefreshSyncObserver: AnyCancellable?
     private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
         MXLog.info("Started background app refresh")
-        
-        backgroundAppRefreshTask = task
         
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        task.expirationHandler = { [weak self] in
+        task.expirationHandler = {
             MXLog.info("Background app refresh task expired")
-            self?.stopSync()
+            task.setTaskCompleted(success: true)
         }
         
-        guard let userSession, !userSession.clientProxy.isSyncing else {
-            return
-        }
-        
-        startSync()
-    }
-    
-    private func installBackgroundAppRefreshMonitor() {
         guard let userSession else {
-            fatalError("User session not setup")
+            return
         }
         
-        guard backgroundAppRefreshTask != nil else {
-            return
+        if !userSession.clientProxy.isSyncing {
+            startSync()
         }
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
@@ -715,9 +692,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             .filter(\.isSyncUpdate)
             .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
             .sink(receiveValue: { [weak self] _ in
+                guard let self else { return }
+                
                 MXLog.info("Background app refresh finished")
-                self?.backgroundRefreshSyncObserver?.cancel()
-                self?.stopSync()
+                backgroundRefreshSyncObserver?.cancel()
+                
+                task.setTaskCompleted(success: true)
             })
     }
 }
