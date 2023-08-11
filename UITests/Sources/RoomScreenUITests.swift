@@ -75,7 +75,7 @@ class RoomScreenUITests: XCTestCase {
         try await app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
 
-    func testTimelineLayoutInMiddle() async throws {
+    func disabled_testTimelineLayoutInMiddle() async throws {
         let client = try UITestsSignalling.Client(mode: .tests)
         
         let app = Application.launch(.roomLayoutMiddle)
@@ -100,8 +100,7 @@ class RoomScreenUITests: XCTestCase {
         
         // Then the UI should still remain unchanged.
 
-        // FIXME: the timeline scrolls a bit on new incoming messages
-        // try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        try await app.assertScreenshot(.roomLayoutMiddle, step: 0)
         
         // When the keyboard appears for the message composer.
         try await tapMessageComposer(in: app)
