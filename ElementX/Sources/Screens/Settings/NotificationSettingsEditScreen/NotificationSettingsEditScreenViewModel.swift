@@ -71,11 +71,12 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     
     private func fetchSettings() {
         fetchSettingsTask = Task {
-            let mode: RoomNotificationModeProxy
+            var mode: RoomNotificationModeProxy?
             let encrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect)
             let unencrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect)
-            mode = encrypted_mode != unencrypted_mode ? .allMessages : encrypted_mode
-            
+            if encrypted_mode == unencrypted_mode {
+                mode = encrypted_mode
+            }
             guard !Task.isCancelled else { return }
             
             switch mode {
@@ -90,7 +91,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     }
     
     private func setMode(_ mode: NotificationSettingsEditScreenDefaultMode) {
-        guard state.pendingMode == nil else { return }
+        guard state.pendingMode == nil, !state.isSelected(mode: mode) else { return }
         let roomNotificationModeProxy: RoomNotificationModeProxy
         switch mode {
         case .allMessages:
@@ -104,7 +105,14 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect, mode: roomNotificationModeProxy)
                 try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect, mode: roomNotificationModeProxy)
             } catch {
-                state.bindings.alertInfo = AlertInfo(id: .setModeFailed)
+                let retryAction: () -> Void = { [weak self] in
+                    self?.setMode(mode)
+                }
+                state.bindings.alertInfo = AlertInfo(id: .setModeFailed,
+                                                     title: L10n.commonError,
+                                                     message: L10n.screenNotificationSettingsEditFailedUpdatingDefaultMode,
+                                                     primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                     secondaryButton: .init(title: L10n.actionRetry, action: retryAction))
             }
             state.pendingMode = nil
         }

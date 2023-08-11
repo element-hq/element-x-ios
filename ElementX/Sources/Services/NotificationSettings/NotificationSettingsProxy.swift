@@ -131,7 +131,11 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     // MARK: - Private
     
     func updatedSettings() async {
-        _ = await callbacks.values.first(where: { $0 == .settingsDidChange })
+        // The timeout avoids having to wait indefinitely. This can happen when setting a mode that is already the current mode,
+        // as in this case no API call is made by the RustSDK and the push rules are therefore not updated.
+        _ = await callbacks
+            .timeout(.seconds(2.0), scheduler: DispatchQueue.main, options: nil, customError: nil)
+            .values.first(where: { $0 == .settingsDidChange })
     }
     
     @MainActor
