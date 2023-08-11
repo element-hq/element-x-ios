@@ -79,8 +79,9 @@ struct HomeScreen: View {
             .onReceive(scrollViewAdapter.isScrolling) { _ in
                 updateVisibleRange()
             }
-            .onChange(of: context.searchQuery) { searchQuery in
-                guard searchQuery.isEmpty else { return }
+            .onChange(of: context.searchQuery) { _ in
+                context.send(viewAction: .updatedSearchQuery)
+                
                 // Dispatch allows the view to update after changing the query
                 DispatchQueue.main.async { updateVisibleRange() }
             }

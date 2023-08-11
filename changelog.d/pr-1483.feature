@@ -1,0 +1,1 @@
+Allow fuzzy searching for room list rooms
