@@ -93,6 +93,9 @@
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
+"common_poll_final_votes" = "Final votes: %1$@";
+"common_poll_total_votes" = "Total votes: %1$@";
+"common_poll_undisclosed_text" = "Results will show after the poll has ended";
 "common_privacy_policy" = "Privacy policy";
 "common_reactions" = "Reactions";
 "common_refreshing" = "Refreshing…";

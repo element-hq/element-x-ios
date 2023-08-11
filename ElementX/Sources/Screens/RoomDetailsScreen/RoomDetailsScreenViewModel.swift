@@ -195,7 +195,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         do {
             let notificationMode = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                                isEncrypted: roomProxy.isEncrypted,
-                                                                                               activeMembersCount: UInt64(roomProxy.activeMembersCount))
+                                                                                               isOneToOne: roomProxy.activeMembersCount == 2)
             state.notificationSettingsState = .loaded(settings: notificationMode)
         } catch {
             state.notificationSettingsState = .error
@@ -213,7 +213,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             do {
                 try await notificationSettingsProxy.unmuteRoom(roomId: roomProxy.id,
                                                                isEncrypted: roomProxy.isEncrypted,
-                                                               activeMembersCount: UInt64(roomProxy.activeMembersCount))
+                                                               isOneToOne: roomProxy.activeMembersCount == 2)
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,
