@@ -426,6 +426,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
+        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
         XCTAssertEqual(context.viewState.notificationShortcutButtonImage, Image(systemName: "bell.slash.fill"))
     }

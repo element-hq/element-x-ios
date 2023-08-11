@@ -141,7 +141,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentNotificationSettings() {
-        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: UNUserNotificationCenter.current(),
+        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                                     userNotificationCenter: UNUserNotificationCenter.current(),
                                                                                      notificationSettings: parameters.notificationSettings,
                                                                                      isModallyPresented: false)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)

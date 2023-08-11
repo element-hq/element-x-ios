@@ -55,22 +55,21 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setNotificationMode")
         defer { backgroundTask?.stop() }
         
-        let roomNotificationMode: RoomNotificationMode
-        switch mode {
-        case .allMessages:
-            roomNotificationMode = .allMessages
-        case .mentionsAndKeywordsOnly:
-            roomNotificationMode = .mentionsAndKeywordsOnly
-        case .mute:
-            roomNotificationMode = .mute
-        }
-        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: roomNotificationMode)
+        try await notificationSettings.setRoomNotificationMode(roomId: roomId, mode: mode.roomNotificationMode)
         await updatedSettings()
     }
     
-    func getDefaultNotificationRoomMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy {
+    func getDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy {
         let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
+    }
+
+    func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
+        let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setDefaultRoomNotificationMode")
+        defer { backgroundTask?.stop() }
+        
+        try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
+        await updatedSettings()
     }
     
     func restoreDefaultNotificationMode(roomId: String) async throws {
@@ -132,7 +131,11 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     // MARK: - Private
     
     func updatedSettings() async {
-        _ = await callbacks.values.first(where: { $0 == .settingsDidChange })
+        // The timeout avoids having to wait indefinitely. This can happen when setting a mode that is already the current mode,
+        // as in this case no API call is made by the RustSDK and the push rules are therefore not updated.
+        _ = await callbacks
+            .timeout(.seconds(2.0), scheduler: DispatchQueue.main, options: nil, customError: nil)
+            .values.first(where: { $0 == .settingsDidChange })
     }
     
     @MainActor
