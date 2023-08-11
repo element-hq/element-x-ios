@@ -121,15 +121,13 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         fetchSettingsTask = Task {
             // Group chats
             // A group chat is a chat having more than 2 active members
-            let groupChatActiveMembers: UInt64 = 3
-            var groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: groupChatActiveMembers)
-            let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: groupChatActiveMembers)
+            var groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: false)
+            let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: false)
 
             // Direct chats
             // A direct chat is a chat having exactly 2 active members
-            let directChatActiveMembers: UInt64 = 2
-            var directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, activeMembersCount: directChatActiveMembers)
-            let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, activeMembersCount: directChatActiveMembers)
+            var directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: true)
+            let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: true)
                         
             // Old clients were having specific settings for encrypted and unencrypted rooms,
             // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)

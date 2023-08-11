@@ -381,7 +381,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     // MARK: - Notifications
     
     func testNotificationLoadingSettingsFailure() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountThrowableError = NotificationSettingsError.Generic(message: "error")
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -403,7 +403,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testNotificationDefaultMode() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -412,7 +412,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testNotificationCustomMode() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isCustom))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -421,7 +421,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testNotificationRoomMuted() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -431,7 +431,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
     
     func testNotificationRoomNotMuted() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -444,7 +444,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         try await testNotificationRoomMuted()
         
         let expectation = expectation(description: #function)
-        notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure = { _, _, _ in
+        notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { _, _, _ in
             defer {
                 expectation.fulfill()
             }
@@ -495,7 +495,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
 
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { [weak notificationSettingsProxyMock] _, mode in
-            notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
+            notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
             expectation.fulfill()
         }
         context.send(viewAction: .processToogleMuteNotifications)
@@ -521,8 +521,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         try await testNotificationRoomMuted()
 
         let expectation = expectation(description: #function)
-        notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedActiveMembersCountClosure = { [weak notificationSettingsProxyMock] _, _, _ in
-            notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
+        notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { [weak notificationSettingsProxyMock] _, _, _ in
+            notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
             expectation.fulfill()
         }
         context.send(viewAction: .processToogleMuteNotifications)
