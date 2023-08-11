@@ -33,8 +33,6 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     // MARK: - Public
     
     override func process(viewAction: CreatePollScreenViewAction) {
-        MXLog.info("View model: received view action: \(viewAction)")
-        
         switch viewAction {
         case .create:
             actionsSubject.send(.create)
@@ -46,7 +44,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
             }
             state.bindings.options.remove(at: index)
         case .addOption:
-            state.bindings.options.append("")
+            state.bindings.options.append(.init())
         }
     }
 }

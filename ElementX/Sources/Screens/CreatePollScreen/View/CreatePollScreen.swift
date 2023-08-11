@@ -18,7 +18,6 @@ import SwiftUI
 
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
-    @FocusState var focusedOption: Int?
 
     var body: some View {
         Form {
@@ -52,17 +51,14 @@ struct CreatePollScreen: View {
 
     private var optionsSection: some View {
         Section {
-            ForEach(0..<context.options.count, id: \.self) { index in
-                CreatePollOptionView(text: $context.options[index],
-                                     placeholder: "Option \(index + 1) placeholder*",
-                                     canDeleteItem: context.options.count > 2) {
-                    if focusedOption == index {
-                        focusedOption = nil
+            ForEach(context.options) { option in
+                if let index = context.options.firstIndex(of: option) {
+                    CreatePollOptionView(text: $context.options[index].text,
+                                         placeholder: "Option \(index + 1) placeholder*",
+                                         canDeleteItem: context.options.count > 2) {
+                        context.send(viewAction: .deleteOption(index: index))
                     }
-
-                    context.send(viewAction: .deleteOption(index: index))
                 }
-                .focused($focusedOption, equals: index)
             }
 
             Button("Add option*") {

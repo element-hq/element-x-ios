@@ -27,8 +27,13 @@ struct CreatePollScreenViewState: BindableState {
 
 struct CreatePollScreenViewStateBindings {
     var question = ""
-    var options = ["", ""]
+    var options: [Option] = [.init(), .init()]
     var isUndisclosed = false
+
+    struct Option: Identifiable, Equatable {
+        let id = UUID()
+        var text = ""
+    }
 }
 
 enum CreatePollScreenViewAction {
