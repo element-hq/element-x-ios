@@ -73,7 +73,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
 
         do {
-            let listUpdatesSubscriptionResult = try roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] updates in
+            let listUpdatesSubscriptionResult = roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
                 MXLog.info("\(name): Received list update")
                 diffsPublisher.send(updates)

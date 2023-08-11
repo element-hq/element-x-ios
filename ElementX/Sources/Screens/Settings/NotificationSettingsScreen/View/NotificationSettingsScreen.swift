@@ -183,9 +183,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedActiveMembersCountClosure = { isEncrypted, activeMembersCount in
-            switch (isEncrypted, activeMembersCount) {
-            case (_, 2):
+        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+            switch (isEncrypted, isOneToOne) {
+            case (_, true):
                 return .allMessages
             default:
                 return .mentionsAndKeywordsOnly

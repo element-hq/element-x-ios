@@ -34,19 +34,19 @@ extension NotificationSettingsProxyMock {
         self.init()
         
         callbacks = configuration.callback
-        getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = configuration.roomMode
-        getDefaultNotificationRoomModeIsEncryptedActiveMembersCountReturnValue = configuration.defaultRoomMode
+        getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = configuration.roomMode
+        getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = configuration.defaultRoomMode
         
         setNotificationModeRoomIdModeClosure = { [weak self] _, mode in
             guard let self else { return }
-            self.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
+            self.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: mode, isDefault: false))
             Task {
                 self.callbacks.send(.settingsDidChange)
             }
         }
         restoreDefaultNotificationModeRoomIdClosure = { [weak self] _ in
             guard let self else { return }
-            self.getNotificationSettingsRoomIdIsEncryptedActiveMembersCountReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: configuration.defaultRoomMode, isDefault: true))
+            self.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: configuration.defaultRoomMode, isDefault: true))
             Task {
                 self.callbacks.send(.settingsDidChange)
             }
