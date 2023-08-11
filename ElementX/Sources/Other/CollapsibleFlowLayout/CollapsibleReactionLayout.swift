@@ -141,13 +141,21 @@ struct CollapsibleReactionLayout: Layout {
     ///   - rows: The list of rows
     /// - Returns: The size render the rows
     private func sizeThatFits(proposal: ProposedViewSize, rows: [[FlowLayoutSubview]]) -> CGSize {
-        rows.enumerated().reduce(CGSize.zero) { partialResult, rowItem in
+        let sizes = rows.map { row in
+            row.map { subview in
+                subview.sizeThatFits(.unspecified)
+            }
+        }
+        let maxHeight = sizes.joined().reduce(0) { partialResult, size in
+            max(partialResult, size.height)
+        }
+        
+        return sizes.enumerated().reduce(CGSize.zero) { partialResult, rowItem in
             let (rowIndex, row) = rowItem
             let rowSize = row.enumerated().reduce(CGSize.zero) { partialResult, subviewItem in
-                let (subviewIndex, subview) = subviewItem
-                let size = subview.sizeThatFits(.unspecified)
+                let (subviewIndex, size) = subviewItem
                 let horizontalSpacing = subviewIndex == 0 ? 0 : itemSpacing
-                return CGSize(width: partialResult.width + size.width + horizontalSpacing, height: max(partialResult.height, size.height))
+                return CGSize(width: partialResult.width + size.width + horizontalSpacing, height: maxHeight)
             }
             let verticalSpacing = rowIndex == 0 ? 0 : rowSpacing
             return CGSize(width: max(partialResult.width, rowSize.width), height: partialResult.height + rowSize.height + verticalSpacing)

@@ -95,16 +95,21 @@ private struct ReactionSummaryButton: View {
         HStack(spacing: 4) {
             Text(reaction.displayKey)
                 .font(.compound.headingSM)
+                .foregroundColor(textColor)
             if reaction.count > 1 {
                 Text(String(reaction.count))
                     .font(.compound.headingSM)
-                    .foregroundColor(highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary)
+                    .foregroundColor(textColor)
             }
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
         .background(highlighted ? Color.compound.bgActionPrimaryRest : .clear, in: Capsule())
         .accessibilityElement(children: .combine)
+    }
+    
+    var textColor: Color {
+        highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary
     }
 }
 
