@@ -60,9 +60,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .changedEnableNotifications:
             toggleNotifications()
         case .groupChatsTapped:
-            break
+            actionsSubject.send(.editDefaultMode(isDirect: false))
         case .directChatsTapped:
-            break
+            actionsSubject.send(.editDefaultMode(isDirect: true))
         case .roomMentionChanged:
             guard let settings = state.settings, settings.roomMentionsEnabled != state.bindings.roomMentionsEnabled else {
                 return
@@ -120,14 +120,12 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private func fetchSettings() {
         fetchSettingsTask = Task {
             // Group chats
-            // A group chat is a chat having more than 2 active members
-            var groupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: false)
-            let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: false)
+            var groupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: false)
+            let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: false)
 
             // Direct chats
-            // A direct chat is a chat having exactly 2 active members
-            var directChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: false, isOneToOne: true)
-            let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultNotificationRoomMode(isEncrypted: true, isOneToOne: true)
+            var directChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: true)
+            let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: true)
                         
             // Old clients were having specific settings for encrypted and unencrypted rooms,
             // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)

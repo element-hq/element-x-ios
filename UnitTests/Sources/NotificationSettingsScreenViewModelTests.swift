@@ -34,7 +34,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         userNotificationCenter.authorizationStatusReturnValue = .authorized
         appSettings = AppSettings()
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneReturnValue = .allMessages
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = true
         
@@ -58,7 +58,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     }
     
     func testFetchSettings() async throws {
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (_, true):
                 return .allMessages
@@ -71,7 +71,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxy.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
-        XCTAssertEqual(notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneCallsCount, 4)
+        XCTAssertEqual(notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneCallsCount, 4)
         XCTAssert(notificationSettingsProxy.isRoomMentionEnabledCalled)
         XCTAssert(notificationSettingsProxy.isCallEnabledCalled)
         
@@ -82,7 +82,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     }
         
     func testInconsistentGroupChatsSettings() async throws {
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (true, false):
                 return .allMessages
@@ -103,7 +103,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     }
     
     func testInconsistentDirectChatsSettings() async throws {
-        notificationSettingsProxy.getDefaultNotificationRoomModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
             switch (isEncrypted, isOneToOne) {
             case (true, true):
                 return .allMessages
