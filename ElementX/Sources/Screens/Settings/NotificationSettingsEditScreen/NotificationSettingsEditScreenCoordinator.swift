@@ -69,7 +69,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
         let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                                      notificationSettingsProxy: parameters.notificationSettings,
                                                                                                      roomProxy: roomProxy,
-                                                                                                     displayAsGlobalCustomRoomSettings: true)
+                                                                                                     displayAsUserDefinedRoomSettings: true)
         let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
         parameters.navigationStackCoordinator?.push(roomNotificationSettingsCoordinator)
     }

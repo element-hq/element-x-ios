@@ -21,7 +21,7 @@ struct RoomNotificationSettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let notificationSettingsProxy: NotificationSettingsProxyProtocol
     let roomProxy: RoomProxyProtocol
-    let displayAsGlobalCustomRoomSettings: Bool
+    let displayAsUserDefinedRoomSettings: Bool
 }
 
 enum RoomNotificationSettingsScreenCoordinatorAction {
@@ -47,7 +47,7 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: parameters.notificationSettingsProxy,
                                                             roomProxy: parameters.roomProxy,
-                                                            displayAsGlobalCustomRoomSettings: parameters.displayAsGlobalCustomRoomSettings)
+                                                            displayAsUserDefinedRoomSettings: parameters.displayAsUserDefinedRoomSettings)
     }
     
     func start() {
@@ -62,8 +62,8 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        if parameters.displayAsGlobalCustomRoomSettings {
-            return AnyView(RoomNotificationSettingsCustomModeScreen(context: viewModel.context))
+        if parameters.displayAsUserDefinedRoomSettings {
+            return AnyView(RoomNotificationSettingsUserDefinedScreen(context: viewModel.context))
         } else {
             return AnyView(RoomNotificationSettingsScreen(context: viewModel.context))
         }

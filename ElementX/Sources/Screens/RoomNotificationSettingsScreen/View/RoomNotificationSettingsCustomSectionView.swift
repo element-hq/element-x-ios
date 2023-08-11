@@ -52,11 +52,9 @@ struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider {
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
-        let model = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
-                                                            roomProxy: roomProxy,
-                                                            displayAsGlobalCustomRoomSettings: false)
-        
-        return model
+        return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
+                                                       roomProxy: roomProxy,
+                                                       displayAsUserDefinedRoomSettings: false)
     }()
     
     static var previews: some View {

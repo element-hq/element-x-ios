@@ -23,8 +23,6 @@ struct NotificationSettingsEditScreenRoomCell: View {
     let room: NotificationSettingsEditScreenRoom
     let context: NotificationSettingsEditScreenViewModel.Context
     
-    private let verticalInsets = 4.0
-    
     var body: some View {
         Button {
             if let roomId = room.roomId {
@@ -42,7 +40,6 @@ struct NotificationSettingsEditScreenRoomCell: View {
                     content
                 }
             }
-            .padding(.vertical, verticalInsets)
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(.compoundForm(accessory: .navigationLink))
@@ -71,17 +68,6 @@ struct NotificationSettingsEditScreenRoomCell: View {
     }
 }
 
-struct NotificationSettingsEditScreenRoomCellButtonStyle: ButtonStyle {
-    let isSelected: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(isSelected ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
-            .contentShape(Rectangle())
-            .animation(.elementDefault, value: isSelected)
-    }
-}
-
 struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider {
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
@@ -90,15 +76,16 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider {
                                           mediaProvider: MockMediaProvider())
 
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         let viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         
         let rooms: [NotificationSettingsEditScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> NotificationSettingsEditScreenRoom? in
             switch summary {
-            case .empty:
+            case .empty, .invalidated:
                 return nil
-            case .invalidated(let details), .filled(let details):
+            case .filled(let details):
                 return NotificationSettingsEditScreenRoom(id: UUID().uuidString,
                                                           roomId: details.id,
                                                           name: details.name)

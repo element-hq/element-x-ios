@@ -26,8 +26,8 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private let userSession: UserSessionProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
-    @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
-    @CancellableTask private var fetchRoomsTask: Task<Void, Error>?
+    @CancellableTask private var fetchDefaultRoomNotificationModesTask: Task<Void, Error>?
+    @CancellableTask private var updateRoomsWithUserDefinedModeTask: Task<Void, Error>?
     
     var actions: AnyPublisher<NotificationSettingsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -50,8 +50,8 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     }
     
     func fetchInitialContent() {
-        fetchSettings()
-        updateRooms()
+        fetchDefaultRoomNotificationModes()
+        updateRoomsWithUserDefinedMode()
     }
     
     // MARK: - Public
@@ -75,15 +75,15 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 
                 switch callback {
                 case .settingsDidChange:
-                    self.fetchSettings()
-                    self.updateRooms()
+                    self.fetchDefaultRoomNotificationModes()
+                    self.updateRoomsWithUserDefinedMode()
                 }
             }
             .store(in: &cancellables)
     }
     
-    private func fetchSettings() {
-        fetchSettingsTask = Task {
+    private func fetchDefaultRoomNotificationModes() {
+        fetchDefaultRoomNotificationModesTask = Task {
             var mode: RoomNotificationModeProxy?
             let encrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect)
             let unencrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect)
@@ -112,20 +112,18 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.updateRooms()
+                self?.updateRoomsWithUserDefinedMode()
             }
             .store(in: &cancellables)
     }
     
-    private func updateRooms() {
+    private func updateRoomsWithUserDefinedMode() {
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
-        fetchRoomsTask = Task {
-            MXLog.info("Updating rooms")
-            
+        updateRoomsWithUserDefinedModeTask = Task {
             let roomsWithUserDefinedRules = try await notificationSettingsProxy.getRoomsWithUserDefinedRules()
             guard !Task.isCancelled else { return }
             
@@ -133,7 +131,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                 roomsWithUserDefinedRules.contains(where: { summary.id == $0 })
             }
             
-            var roomsWithCustomMode: [NotificationSettingsEditScreenRoom] = []
+            var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
             
             for roomSummary in filteredRoomsSummary {
                 switch roomSummary {
@@ -141,19 +139,18 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                     break
                 case .filled(let details):
                     guard let roomProxy = await userSession.clientProxy.roomForIdentifier(details.id) else { continue }
+                    // `isOneToOneRoom` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
                     let isOneToOneRoom = roomProxy.activeMembersCount == 2
                     if isDirect == isOneToOneRoom {
-                        await roomsWithCustomMode.append(buildRoom(with: details))
+                        await roomsWithUserDefinedMode.append(buildRoom(with: details))
                     }
                 }
             }
             
             // Sort the room list
-            roomsWithCustomMode.sort(by: { $0.name.localizedCompare($1.name) == .orderedAscending })
+            roomsWithUserDefinedMode.sort(by: { $0.name.localizedCompare($1.name) == .orderedAscending })
             
-            state.roomsWithCustomSettings = roomsWithCustomMode
-            
-            MXLog.info("Finished updating rooms")
+            state.roomsWithUserDefinedMode = roomsWithUserDefinedMode
         }
     }
     
@@ -178,9 +175,11 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         state.pendingMode = mode
         Task {
             do {
+                // On modern clients, we don't have different settings for encrypted and non-encrypted rooms.
                 try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect, mode: roomNotificationModeProxy)
                 try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect, mode: roomNotificationModeProxy)
             } catch {
+                // In case of failure, we let the user retry
                 let retryAction: () -> Void = { [weak self] in
                     self?.setMode(mode)
                 }

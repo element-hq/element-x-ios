@@ -201,7 +201,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                                      notificationSettingsProxy: parameters.notificationSettings,
                                                                                                      roomProxy: parameters.roomProxy,
-                                                                                                     displayAsGlobalCustomRoomSettings: false)
+                                                                                                     displayAsUserDefinedRoomSettings: false)
         let roomNotificationSettingsCoordinator = RoomNotificationSettingsScreenCoordinator(parameters: roomNotificationSettingsParameters)
         roomNotificationSettingsCoordinator.actions.sink { [weak self] actions in
             switch actions {

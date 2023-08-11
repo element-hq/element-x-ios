@@ -64,7 +64,7 @@ struct NotificationSettingsEditScreen: View {
     
     private var roomsWithCustomSettingsSection: some View {
         Section {
-            ForEach(context.viewState.roomsWithCustomSettings, id: \.id) { room in
+            ForEach(context.viewState.roomsWithUserDefinedMode, id: \.id) { room in
                 NotificationSettingsEditScreenRoomCell(room: room, context: context)
             }
         } header: {
@@ -97,8 +97,9 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
-        
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
+                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
+                                          mediaProvider: MockMediaProvider())
         var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)

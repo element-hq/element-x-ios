@@ -57,7 +57,7 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var availableCustomRoomNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
     var isRestoringDefaultSetting = false
     var pendingCustomMode: RoomNotificationModeProxy?
-    var displayAsGlobalCustomRoomSettings = false
+    var displayAsUserDefinedRoomSettings = false
     var navigationTitle: String
     var customSettingsSectionHeader: String
     var deletingCustomSetting = false

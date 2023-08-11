@@ -16,52 +16,56 @@
 
 import SwiftUI
 
-struct RoomNotificationSettingsCustomModeScreen: View {
+struct RoomNotificationSettingsUserDefinedScreen: View {
     @ObservedObject var context: RoomNotificationSettingsScreenViewModel.Context
     
     var body: some View {
         Form {
             RoomNotificationSettingsCustomSectionView(context: context)
             
-            Button(role: .destructive) {
-                context.send(viewAction: .deleteCustomSettingTapped)
-            } label: {
-                LabeledContent {
-                    if context.viewState.deletingCustomSetting {
-                        ProgressView()
-                    } else {
-                        EmptyView()
-                    }
-                } label: {
-                    Label(UntranslatedL10n.screenRoomNotificationSettingsEditRemoveSetting, systemImage: "trash")
-                }
-            }
-            .buttonStyle(.compoundForm())
-            .disabled(context.viewState.deletingCustomSetting)
+            deleteButton
         }
         .compoundForm()
         .navigationTitle(context.viewState.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .roomNotifications)
     }
+    
+    // MARK: - Private
+    
+    private var deleteButton: some View {
+        Button(role: .destructive) {
+            context.send(viewAction: .deleteCustomSettingTapped)
+        } label: {
+            LabeledContent {
+                if context.viewState.deletingCustomSetting {
+                    ProgressView()
+                } else {
+                    EmptyView()
+                }
+            } label: {
+                Label(UntranslatedL10n.screenRoomNotificationSettingsEditRemoveSetting, systemImage: "trash")
+            }
+        }
+        .buttonStyle(.compoundForm())
+        .disabled(context.viewState.deletingCustomSetting)
+    }
 }
 
 // MARK: - Previews
 
-struct RoomNotificationSettingsCustomModeScreen_Previews: PreviewProvider {
+struct RoomNotificationSettingsUserDefinedScreen_Previews: PreviewProvider {
     static let viewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .mentionsAndKeywordsOnly, roomMode: .mentionsAndKeywordsOnly))
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
-        let model = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
-                                                            roomProxy: roomProxy,
-                                                            displayAsGlobalCustomRoomSettings: true)
-        
-        return model
+        return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
+                                                       roomProxy: roomProxy,
+                                                       displayAsUserDefinedRoomSettings: true)
     }()
 
     static var previews: some View {
-        RoomNotificationSettingsCustomModeScreen(context: viewModel.context)
+        RoomNotificationSettingsUserDefinedScreen(context: viewModel.context)
     }
 }

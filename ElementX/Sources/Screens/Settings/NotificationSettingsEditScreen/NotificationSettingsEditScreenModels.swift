@@ -32,14 +32,14 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     var availableDefaultModes: [NotificationSettingsEditScreenDefaultMode] = [.allMessages, .mentionsAndKeywordsOnly]
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
     var pendingMode: NotificationSettingsEditScreenDefaultMode?
-    var roomsWithCustomSettings: [NotificationSettingsEditScreenRoom] = []
+    var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
 
     func isSelected(mode: NotificationSettingsEditScreenDefaultMode) -> Bool {
         pendingMode == nil && defaultMode == mode
     }
     
     var displayRoomsWithCustomSettings: Bool {
-        !roomsWithCustomSettings.isEmpty
+        !roomsWithUserDefinedMode.isEmpty
     }
 }
 
