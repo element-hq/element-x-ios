@@ -59,6 +59,7 @@ enum RoomScreenViewAction {
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
+    case selectedPollOption(poll: Poll, optionID: String)
     
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)

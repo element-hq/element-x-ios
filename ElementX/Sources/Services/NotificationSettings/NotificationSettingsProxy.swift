@@ -46,8 +46,8 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
     }
     
-    func getNotificationSettings(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws -> RoomNotificationSettingsProxyProtocol {
-        let roomMotificationSettings = try await notificationSettings.getRoomNotificationSettings(roomId: roomId, isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+    func getNotificationSettings(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws -> RoomNotificationSettingsProxyProtocol {
+        let roomMotificationSettings = try await notificationSettings.getRoomNotificationSettings(roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationSettingsProxy(roomNotificationSettings: roomMotificationSettings)
     }
     
@@ -68,8 +68,8 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         await updatedSettings()
     }
     
-    func getDefaultNotificationRoomMode(isEncrypted: Bool, activeMembersCount: UInt64) async -> RoomNotificationModeProxy {
-        let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, activeMembersCount: activeMembersCount)
+    func getDefaultNotificationRoomMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy {
+        let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
     }
     
@@ -85,11 +85,11 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         await notificationSettings.containsKeywordsRules()
     }
        
-    func unmuteRoom(roomId: String, isEncrypted: Bool, activeMembersCount: UInt64) async throws {
+    func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "unmuteRoom")
         defer { backgroundTask?.stop() }
 
-        try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, membersCount: activeMembersCount)
+        try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         await updatedSettings()
     }
     

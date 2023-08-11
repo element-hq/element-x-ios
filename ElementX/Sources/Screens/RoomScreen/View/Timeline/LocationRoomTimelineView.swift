@@ -27,7 +27,7 @@ struct LocationRoomTimelineView: View {
                     descriptionView
                         .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
 
-                    MapLibreStaticMapView(geoURI: geoURI) {
+                    MapLibreStaticMapView(geoURI: geoURI, mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
                         LocationMarkerView()
                     }
                     .frame(maxHeight: mapMaxHeight)
@@ -56,12 +56,13 @@ struct LocationRoomTimelineView: View {
 }
 
 private extension MapLibreStaticMapView {
-    init(geoURI: GeoURI, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+    init(geoURI: GeoURI, mapSize: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
                   attributionPlacement: .bottomLeft,
                   mapTilerStatic: MapTilerStaticMap(baseURL: ServiceLocator.shared.settings.mapTilerBaseURL,
                                                     key: ServiceLocator.shared.settings.mapTilerApiKey),
+                  mapSize: mapSize,
                   pinAnnotationView: pinAnnotationView)
     }
 }

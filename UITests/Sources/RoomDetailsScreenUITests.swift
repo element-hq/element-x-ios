@@ -30,7 +30,7 @@ class RoomDetailsScreenUITests: XCTestCase {
     func testInitialStateComponentsWithRoomAvatar() async throws {
         let app = Application.launch(.roomDetailsScreenWithRoomAvatar)
 
-        XCTAssert(app.images[A11yIdentifiers.roomDetailsScreen.avatar].waitForExistence(timeout: 1))
+        XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.avatar].waitForExistence(timeout: 1))
         XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.people].waitForExistence(timeout: 1))
         try await app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
     }
@@ -52,7 +52,7 @@ class RoomDetailsScreenUITests: XCTestCase {
     func testInitialStateComponentsDmDetails() async throws {
         let app = Application.launch(.roomDetailsScreenDmDetails)
 
-        XCTAssert(app.images[A11yIdentifiers.roomDetailsScreen.dmAvatar].waitForExistence(timeout: 1))
+        XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.dmAvatar].waitForExistence(timeout: 1))
         XCTAssertFalse(app.buttons[A11yIdentifiers.roomDetailsScreen.people].exists)
         try await app.assertScreenshot(.roomDetailsScreenDmDetails)
     }

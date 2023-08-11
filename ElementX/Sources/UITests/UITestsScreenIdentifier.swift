@@ -45,6 +45,8 @@ enum UITestsScreenIdentifier: String {
     case roomLayoutTop
     case roomLayoutMiddle
     case roomLayoutBottom
+    case roomWithDisclosedPolls
+    case roomWithUndisclosedPolls
     case sessionVerification
     case userSessionScreen
     case roomDetailsScreen

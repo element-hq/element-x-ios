@@ -79,7 +79,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         do {
             let settings = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                        isEncrypted: roomProxy.isEncrypted,
-                                                                                       activeMembersCount: UInt64(roomProxy.activeMembersCount))
+                                                                                       isOneToOne: roomProxy.activeMembersCount == 2)
             guard !Task.isCancelled else { return }
             state.notificationSettingsState = .loaded(settings: settings)
             if !state.isRestoringDefautSetting {
