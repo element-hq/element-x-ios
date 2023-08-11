@@ -22,7 +22,9 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     private let zoomLevel: Double
     private let mapTilerStatic: MapTilerStaticMapProtocol
     private let mapTilerAttributionPlacement: MapTilerAttributionPlacement
+    private let mapSize: CGSize
     private let pinAnnotationView: PinAnnotation
+
     @Environment(\.colorScheme) private var colorScheme
     @State private var fetchAttempt = 0
     
@@ -30,11 +32,13 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
          zoomLevel: Double,
          attributionPlacement: MapTilerAttributionPlacement,
          mapTilerStatic: MapTilerStaticMapProtocol,
+         mapSize: CGSize,
          @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.coordinates = coordinates
         self.zoomLevel = zoomLevel
         self.mapTilerStatic = mapTilerStatic
         mapTilerAttributionPlacement = attributionPlacement
+        self.mapSize = mapSize
         self.pinAnnotationView = pinAnnotationView()
     }
     
@@ -43,7 +47,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
             if let url = mapTilerStatic.staticMapURL(for: colorScheme.mapStyle,
                                                      coordinates: coordinates,
                                                      zoomLevel: zoomLevel,
-                                                     size: geometry.size,
+                                                     size: mapSize, // temporary using a fixed size since the refresh doesn't work properly on the UITableView based timeline
                                                      attribution: mapTilerAttributionPlacement) {
                 AsyncImage(url: url) { phase in
                     switch phase {
@@ -109,7 +113,7 @@ struct MapLibreStaticMapView_Previews: PreviewProvider {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,
                               attributionPlacement: .bottomLeft,
-                              mapTilerStatic: MapTilerStaticMapMock()) {
+                              mapTilerStatic: MapTilerStaticMapMock(), mapSize: .init(width: 300, height: 200)) {
             Image(systemName: "mappin.circle.fill")
                 .padding(.bottom, 35)
         }
