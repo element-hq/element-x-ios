@@ -101,6 +101,37 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
         XCTAssertEqual(placedViews, targetPlacements)
     }
     
+    func testHeightIsCorrectGivenASmallerAddButton() {
+        let containerSize = CGSize(width: 250, height: 400)
+        let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
+        
+        var placedViews: [CGRect] = []
+        let placedViewsCallback = { rect in
+            placedViews.append(rect)
+        }
+        
+        // Add more button with smaller initial height
+        let subviews = createReactionLayoutSubviews(with: Array(repeating: CGSize(width: 100, height: 50), count: 2),
+                                                    addMoreSize: CGSize(width: 100, height: 20),
+                                                    placedPositionCallback: placedViewsCallback)
+        let subviewsMock = LayoutSubviewsMock(subviews: subviews)
+        var a: () = ()
+        let size = flowLayout.sizeThatFits(proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
+        
+        XCTAssertEqual(size, CGSize(width: 205, height: 105))
+        flowLayout.placeSubviews(in: CGRect(origin: .zero, size: size), proposal: ProposedViewSize(containerSize), subviews: subviewsMock, cache: &a)
+        
+        let targetPlacements: [CGRect] = [
+            CGRect(x: 0, y: 25, width: 100, height: 50),
+            CGRect(x: 105, y: 25, width: 100, height: 50),
+            // Add more button with matching height
+            CGRect(x: 0, y: 80, width: 100, height: 50),
+            // Expand/Collapse button is hidden
+            CGRect(x: -10000, y: -10000, width: 0, height: 0)
+        ]
+        XCTAssertEqual(placedViews, targetPlacements)
+    }
+    
     func testFlowLayoutEmptyState() {
         let containerSize = CGSize(width: 250, height: 400)
         let flowLayout = CollapsibleReactionLayout(itemSpacing: 5, rowSpacing: 5, rowsBeforeCollapsible: 2)
@@ -125,16 +156,19 @@ final class CollapsibleFlowLayoutTests: XCTestCase {
         XCTAssertEqual(placedViews, targetPlacements)
     }
     
-    func createReactionLayoutSubviews(with sizes: [CGSize], placedPositionCallback: @escaping (CGRect) -> Void) -> [LayoutSubviewMock] {
+    func createReactionLayoutSubviews(with sizes: [CGSize],
+                                      expandCollapseSize: CGSize = CGSize(width: 100, height: 50),
+                                      addMoreSize: CGSize = CGSize(width: 100, height: 50),
+                                      placedPositionCallback: @escaping (CGRect) -> Void) -> [LayoutSubviewMock] {
         sizes.map { size in
             LayoutSubviewMock(size: size,
                               layoutValues: [String(describing: ReactionLayoutItemType.self): ReactionLayoutItem.reaction],
                               placedPositionCallback: placedPositionCallback)
         } + [
-            LayoutSubviewMock(size: CGSize(width: 100, height: 50),
+            LayoutSubviewMock(size: expandCollapseSize,
                               layoutValues: [String(describing: ReactionLayoutItemType.self): ReactionLayoutItem.expandCollapse],
                               placedPositionCallback: placedPositionCallback),
-            LayoutSubviewMock(size: CGSize(width: 100, height: 50),
+            LayoutSubviewMock(size: addMoreSize,
                               layoutValues: [String(describing: ReactionLayoutItemType.self): ReactionLayoutItem.addMore],
                               placedPositionCallback: placedPositionCallback)
         ]
