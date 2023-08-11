@@ -71,7 +71,7 @@ struct RoomAttachmentPicker: View {
                         context.showAttachmentPopover = false
                         context.send(viewAction: .displayPollForm)
                     } label: {
-                        PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.equalizer))
+                        PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.timelineReactionAddMore))
                     }
                 }
             }
