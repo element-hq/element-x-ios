@@ -139,6 +139,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if state.swiftUITimelineEnabled {
                 renderPendingTimelineItems()
             }
+        case .selectedPollOption:
+            break
         }
     }
 

@@ -29,7 +29,7 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
 
 struct Poll: Equatable {
     let question: String
-    let pollKind: Kind
+    let kind: Kind
     let maxSelections: Int
     let options: [Option]
     let votes: [String: [String]]
@@ -46,5 +46,6 @@ struct Poll: Equatable {
         let votes: Int
         let allVotes: Int
         let isSelected: Bool
+        let isWinning: Bool
     }
 }

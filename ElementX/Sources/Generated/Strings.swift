@@ -208,6 +208,16 @@ public enum L10n {
   public static var commonPeople: String { return L10n.tr("Localizable", "common_people") }
   /// Permalink
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
+  /// Final votes: %1$@
+  public static func commonPollFinalVotes(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_poll_final_votes", String(describing: p1))
+  }
+  /// Total votes: %1$@
+  public static func commonPollTotalVotes(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_poll_total_votes", String(describing: p1))
+  }
+  /// Results will show after the poll has ended
+  public static var commonPollUndisclosedText: String { return L10n.tr("Localizable", "common_poll_undisclosed_text") }
   /// Plural format key: "%#@COUNT@"
   public static func commonPollVotesCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_poll_votes_count", p1)

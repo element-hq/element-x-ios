@@ -160,7 +160,19 @@ class RoomScreenUITests: XCTestCase {
         // The messages should be bottom aligned.
         try await app.assertScreenshot(.roomSmallTimelineWithReadReceipts)
     }
-    
+
+    func testTimelineDisclosedPolls() async throws {
+        let app = Application.launch(.roomWithDisclosedPolls)
+
+        try await app.assertScreenshot(.roomWithDisclosedPolls)
+    }
+
+    func testTimelineUndisclosedPolls() async throws {
+        let app = Application.launch(.roomWithUndisclosedPolls)
+
+        try await app.assertScreenshot(.roomWithUndisclosedPolls)
+    }
+
     // MARK: - Helper Methods
     
     private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {

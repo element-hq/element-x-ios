@@ -18,19 +18,26 @@ import SwiftUI
 
 struct PollOptionView: View {
     let pollOption: Poll.Option
+    let showVotes: Bool
+    let isFinalResult: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
             FormRowAccessory(kind: .multipleSelection(isSelected: pollOption.isSelected))
 
             VStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline) {
                     Text(pollOption.text)
+                        .font(isFinalWinningOption ? .compound.bodyLGSemibold : .compound.bodyLG)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text(L10n.commonPollVotesCount(pollOption.votes))
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
+                    if showVotes {
+                        Text(L10n.commonPollVotesCount(pollOption.votes))
+                            .font(isFinalWinningOption ? .compound.bodySMSemibold : .compound.bodySM)
+                            .foregroundColor(isFinalWinningOption ? .compound.textPrimary : .compound.textSecondary)
+                    }
                 }
 
                 progressView
@@ -41,8 +48,39 @@ struct PollOptionView: View {
     // MARK: - Private
 
     private var progressView: some View {
-        ProgressView(value: Double(pollOption.votes) / Double(pollOption.allVotes))
-            .progressViewStyle(LinearProgressViewStyle(tint: .compound.textPrimary))
+        PollProgressView(progress: progress)
+    }
+
+    private var progress: Double {
+        switch (showVotes, pollOption.allVotes, pollOption.isSelected) {
+        case (true, let allVotes, _) where allVotes > 0:
+            return Double(pollOption.votes) / Double(allVotes)
+        case (false, _, true):
+            return 1
+        default:
+            return 0
+        }
+    }
+
+    private var isFinalWinningOption: Bool {
+        pollOption.isWinning && isFinalResult
+    }
+}
+
+private struct PollProgressView: View {
+    let progress: Double
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .foregroundColor(.compound.borderDisabled)
+
+                Capsule()
+                    .frame(maxWidth: progress * geometry.size.width)
+            }
+        }
+        .frame(height: 6)
     }
 }
 
@@ -54,13 +92,28 @@ struct PollOptionView_Previews: PreviewProvider {
                                                  text: "Italian 🇮🇹",
                                                  votes: 1,
                                                  allVotes: 10,
-                                                 isSelected: true))
+                                                 isSelected: true,
+                                                 isWinning: false),
+                               showVotes: false,
+                               isFinalResult: false)
 
                 PollOptionView(pollOption: .init(id: "2",
                                                  text: "Chinese 🇨🇳",
                                                  votes: 9,
                                                  allVotes: 10,
-                                                 isSelected: false))
+                                                 isSelected: false,
+                                                 isWinning: true),
+                               showVotes: true,
+                               isFinalResult: false)
+
+                PollOptionView(pollOption: .init(id: "2",
+                                                 text: "Chinese 🇨🇳",
+                                                 votes: 9,
+                                                 allVotes: 10,
+                                                 isSelected: false,
+                                                 isWinning: true),
+                               showVotes: true,
+                               isFinalResult: true)
             }
             .padding()
         }
