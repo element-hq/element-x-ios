@@ -42,6 +42,7 @@ enum RoomProxyError: Error, Equatable {
     case failedRemovingAvatar
     case failedUploadingAvatar
     case failedCheckingPermission
+    case failedCreatingPoll
 }
 
 // sourcery: AutoMockable
@@ -165,6 +166,8 @@ protocol RoomProxyProtocol {
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError>
 
     func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

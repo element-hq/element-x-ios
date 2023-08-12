@@ -606,7 +606,7 @@ private extension LocationRoomTimelineItemContent.AssetType {
     }
 }
 
-private extension Poll.Kind {
+extension Poll.Kind {
     init(pollKind: MatrixRustSDK.PollKind) {
         switch pollKind {
         case .disclosed:

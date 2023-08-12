@@ -17,7 +17,7 @@
 import Foundation
 
 enum CreatePollScreenViewModelAction {
-    case create
+    case create(question: String, options: [String], pollKind: Poll.Kind)
     case cancel
 }
 
@@ -33,6 +33,10 @@ struct CreatePollScreenViewStateBindings {
     struct Option: Identifiable, Equatable {
         let id = UUID()
         var text = ""
+    }
+
+    var isCreateButtonDisabled: Bool {
+        question.isEmpty || options.count < 2 || options.contains { $0.text.isEmpty }
     }
 }
 

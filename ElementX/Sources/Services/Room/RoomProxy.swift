@@ -684,6 +684,17 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), txnId: genTransactionId()))
+            } catch {
+                MXLog.error("Failed creating a poll: \(error)")
+                return .failure(.failedCreatingPoll)
+            }
+        }
+    }
+
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
@@ -768,5 +779,16 @@ private final class RoomInfoUpdateListener: RoomInfoListener {
     
     func call(roomInfo: RoomInfo) {
         onUpdateClosure()
+    }
+}
+
+private extension MatrixRustSDK.PollKind {
+    init(pollKind: Poll.Kind) {
+        switch pollKind {
+        case .disclosed:
+            self = .disclosed
+        case .undisclosed:
+            self = .undisclosed
+        }
     }
 }

@@ -35,7 +35,9 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
     override func process(viewAction: CreatePollScreenViewAction) {
         switch viewAction {
         case .create:
-            actionsSubject.send(.create)
+            actionsSubject.send(.create(question: state.bindings.question,
+                                        options: state.bindings.options.map(\.text),
+                                        pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
         case .cancel:
             actionsSubject.send(.cancel)
         case .deleteOption(let index):
