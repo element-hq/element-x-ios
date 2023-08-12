@@ -28,7 +28,7 @@ struct CreatePollScreen: View {
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
-        .navigationTitle("Create Poll*")
+        .navigationTitle("Create Poll")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
@@ -36,9 +36,9 @@ struct CreatePollScreen: View {
     // MARK: - Private
 
     private var questionSection: some View {
-        Section("Question or topic*") {
+        Section("Question or topic") {
             TextField(text: $context.question) {
-                Text("Question placeholder*")
+                Text("Question placeholder")
                     .compoundFormTextFieldPlaceholder()
             }
             .introspect(.textField, on: .iOS(.v16)) { textField in
@@ -54,15 +54,22 @@ struct CreatePollScreen: View {
             ForEach(context.options) { option in
                 if let index = context.options.firstIndex(of: option) {
                     CreatePollOptionView(text: $context.options[index].text,
-                                         placeholder: "Option \(index + 1) placeholder*",
+                                         placeholder: "Option \(index + 1)",
                                          canDeleteItem: context.options.count > 2) {
-                        context.send(viewAction: .deleteOption(index: index))
+                        withAnimation(.elementDefault) {
+                            context.send(viewAction: .deleteOption(index: index))
+                        }
                     }
                 }
             }
+            .onMove { offsets, toOffset in
+                context.options.move(fromOffsets: offsets, toOffset: toOffset)
+            }
 
-            Button("Add option*") {
-                context.send(viewAction: .addOption)
+            Button("Add option") {
+                withAnimation(.elementDefault) {
+                    context.send(viewAction: .addOption)
+                }
             }
             .disabled(context.options.count >= 20)
         }
@@ -71,7 +78,7 @@ struct CreatePollScreen: View {
 
     private var showResultsSection: some View {
         Section {
-            Toggle("Show results only after poll ends*", isOn: $context.isUndisclosed)
+            Toggle("Show results only after poll ends", isOn: $context.isUndisclosed)
         }
         .compoundFormSection()
     }
@@ -88,6 +95,7 @@ struct CreatePollScreen: View {
             Button(L10n.actionCreate) {
                 context.send(viewAction: .create)
             }
+            .disabled(context.viewState.bindings.isCreateButtonDisabled)
         }
     }
 }

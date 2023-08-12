@@ -585,8 +585,28 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-                case .create:
-                    break
+                case let .create(question, options, pollKind):
+                    Task {
+                        guard let self else {
+                            return
+                        }
+
+                        self.navigationSplitCoordinator.setSheetCoordinator(nil)
+
+                        guard let roomProxy = self.roomProxy else {
+                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                            return
+                        }
+
+                        let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+
+                        switch result {
+                        case .success:
+                            break
+                        case .failure:
+                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                        }
+                    }
                 }
             }
             .store(in: &cancellables)

@@ -21,7 +21,7 @@ struct CreatePollScreenCoordinatorParameters { }
 
 enum CreatePollScreenCoordinatorAction {
     case cancel
-    case create
+    case create(question: String, options: [String], pollKind: Poll.Kind)
 }
 
 final class CreatePollScreenCoordinator: CoordinatorProtocol {
@@ -46,8 +46,8 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .create:
-                self.actionsSubject.send(.create)
+            case let .create(question, options, pollKind):
+                self.actionsSubject.send(.create(question: question, options: options, pollKind: pollKind))
             case .cancel:
                 self.actionsSubject.send(.cancel)
             }
