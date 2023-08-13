@@ -187,8 +187,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentStartChatScreen)
         case .selectInvites:
             callback?(.presentInvitesScreen)
-        case .updatedSearchQuery:
-            roomSummaryProvider?.updateFilterPattern(state.bindings.searchQuery)
         }
     }
     
