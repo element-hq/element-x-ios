@@ -93,6 +93,9 @@
 "common_password" = "Heslo";
 "common_people" = "Ľudia";
 "common_permalink" = "Trvalý odkaz";
+"common_poll_final_votes" = "Výsledné hlasovanie: %1$@";
+"common_poll_total_votes" = "Celkový počet hlasov: %1$@";
+"common_poll_undisclosed_text" = "Výsledky sa zobrazia po ukončení ankety";
 "common_privacy_policy" = "Zásady ochrany osobných údajov";
 "common_reactions" = "Reakcie";
 "common_refreshing" = "Obnovuje sa…";
@@ -263,6 +266,9 @@
 "screen_notification_settings_additional_settings_section_title" = "Ďalšie nastavenia";
 "screen_notification_settings_calls_label" = "Audio a video hovory";
 "screen_notification_settings_direct_chats" = "Priame konverzácie";
+"screen_notification_settings_edit_failed_updating_default_mode" = "An error occurred while updating the notification setting.";
+"screen_notification_settings_edit_screen_direct_section_header" = "Pri priamych rozhovoroch ma upozorniť na";
+"screen_notification_settings_edit_screen_group_section_header" = "Pri skupinových rozhovoroch ma upozorniť na";
 "screen_notification_settings_enable_notifications" = "Povoliť oznámenia na tomto zariadení";
 "screen_notification_settings_group_chats" = "Skupinové rozhovory";
 "screen_notification_settings_mentions_section_title" = "Zmienky";
@@ -288,6 +294,7 @@
 "screen_room_attachment_source_files" = "Príloha";
 "screen_room_attachment_source_gallery" = "Knižnica fotografií a videí";
 "screen_room_attachment_source_location" = "Poloha";
+"screen_room_attachment_source_poll" = "Poll";
 "screen_room_details_add_topic_title" = "Pridať tému";
 "screen_room_details_already_a_member" = "Už ste členom";
 "screen_room_details_already_invited" = "Už ste pozvaní";
@@ -338,8 +345,8 @@
 "screen_room_timeline_add_reaction" = "Pridať emoji";
 "screen_room_timeline_less_reactions" = "Zobraziť menej";
 "screen_roomlist_a11y_create_message" = "Vytvorte novú konverzáciu alebo miestnosť";
-"screen_roomlist_empty_message" = "Get started by messaging someone.";
-"screen_roomlist_empty_title" = "No chats yet.";
+"screen_roomlist_empty_message" = "Začnite tým, že niekomu pošlete správu.";
+"screen_roomlist_empty_title" = "Zatiaľ žiadne konverzácie.";
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
 "screen_server_confirmation_change_server" = "Zmeniť poskytovateľa účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";

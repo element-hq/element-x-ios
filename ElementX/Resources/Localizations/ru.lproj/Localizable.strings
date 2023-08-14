@@ -93,6 +93,9 @@
 "common_password" = "Пароль";
 "common_people" = "Пользователи";
 "common_permalink" = "Постоянная ссылка";
+"common_poll_final_votes" = "Итоговые голоса: %1$@";
+"common_poll_total_votes" = "Всего голосов: %1$@";
+"common_poll_undisclosed_text" = "Результаты будут показаны после завершения опроса";
 "common_privacy_policy" = "Политика конфиденциальности";
 "common_reactions" = "Реакции";
 "common_refreshing" = "Обновление...";
@@ -263,6 +266,9 @@
 "screen_notification_settings_additional_settings_section_title" = "Дополнительные параметры";
 "screen_notification_settings_calls_label" = "Аудио и видео звонки";
 "screen_notification_settings_direct_chats" = "Прямые чаты";
+"screen_notification_settings_edit_failed_updating_default_mode" = "При обновлении настроек уведомления произошла ошибка.";
+"screen_notification_settings_edit_screen_direct_section_header" = "Уведомлять меня в личных чатах";
+"screen_notification_settings_edit_screen_group_section_header" = "Уведомлять меня в групповых чатах";
 "screen_notification_settings_enable_notifications" = "Включить уведомления на данном устройстве";
 "screen_notification_settings_group_chats" = "Групповые чаты";
 "screen_notification_settings_mentions_section_title" = "Упоминания";
@@ -286,8 +292,9 @@
 "screen_room_attachment_source_camera_photo" = "Сделать фото";
 "screen_room_attachment_source_camera_video" = "Записать видео";
 "screen_room_attachment_source_files" = "Вложение";
-"screen_room_attachment_source_gallery" = "Фото и Видео библиотека";
+"screen_room_attachment_source_gallery" = "Фото и Видео";
 "screen_room_attachment_source_location" = "Местоположение";
+"screen_room_attachment_source_poll" = "Опрос";
 "screen_room_details_add_topic_title" = "Добавить тему";
 "screen_room_details_already_a_member" = "Уже зарегистрирован";
 "screen_room_details_already_invited" = "Уже приглашены";

@@ -31,7 +31,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 голос</string>
+			<string>%d голос</string>
 			<key>few</key>
 			<string>%d голоса</string>
 			<key>many</key>
@@ -175,7 +175,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 пользователь</string>
+			<string>%1$d пользователь</string>
 			<key>few</key>
 			<string>%1$d пользователя</string>
 			<key>many</key>
@@ -192,12 +192,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>одно</string>
-			<key>few</key>
-			<string>%1$d</string>
-			<key>many</key>
-			<string>более %1$d</string>
+			<key>other</key>
+			<string>%1$d more</string>
 		</dict>
 	</dict>
 </dict>

@@ -12,10 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d member</string>
 			<key>other</key>
-			<string>%1$d members</string>
+			<string>%1$d 位成員</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -28,10 +26,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d vote</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d 票</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -44,10 +40,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d message</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@：%2$d 則訊息</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -60,10 +54,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d notification</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d 個通知</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -76,10 +68,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d invitation</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d 個邀請</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -92,10 +82,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d new message</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d 則新訊息</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -124,10 +112,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d room</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d 個聊天室</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -140,10 +126,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d room change</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d 個聊天室變更</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -156,10 +140,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d 位夥伴</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_more_reactions</key>
@@ -173,7 +155,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d more</string>
+			<string>還有 %1$d 個</string>
 		</dict>
 	</dict>
 </dict>

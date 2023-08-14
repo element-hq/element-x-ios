@@ -93,6 +93,9 @@
 "common_password" = "Mot de passe";
 "common_people" = "Personnes";
 "common_permalink" = "Permalien";
+"common_poll_final_votes" = "Final votes: %1$@";
+"common_poll_total_votes" = "Total votes: %1$@";
+"common_poll_undisclosed_text" = "Results will show after the poll has ended";
 "common_privacy_policy" = "Politique de confidentialité";
 "common_reactions" = "Réactions";
 "common_refreshing" = "Actualisation…";
@@ -236,7 +239,7 @@
 "screen_create_room_action_invite_people" = "Inviter des amis sur Element";
 "screen_create_room_add_people_title" = "Inviter des personnes";
 "screen_create_room_error_creating_room" = "Une erreur s'est produite lors de la création du salon";
-"screen_create_room_private_option_description" = "Les messages dans ce salon sont chiffrés. Une fopis activé, le chiffrement ne peut pas être désactivé.";
+"screen_create_room_private_option_description" = "Les messages dans ce salon sont chiffrés. Une fois activé, le chiffrement ne peut pas être désactivé.";
 "screen_create_room_private_option_title" = "Salon privé (sur invitation uniquement)";
 "screen_create_room_public_option_description" = "Les messages ne sont pas chiffrés et n'importe qui peut les lire. Vous pouvez activer le chiffrement ultérieurement.";
 "screen_create_room_public_option_title" = "Salon public (n’importe qui)";
@@ -263,6 +266,9 @@
 "screen_notification_settings_additional_settings_section_title" = "Additional settings";
 "screen_notification_settings_calls_label" = "Audio and video calls";
 "screen_notification_settings_direct_chats" = "Direct chats";
+"screen_notification_settings_edit_failed_updating_default_mode" = "An error occurred while updating the notification setting.";
+"screen_notification_settings_edit_screen_direct_section_header" = "On direct chats, notify me for";
+"screen_notification_settings_edit_screen_group_section_header" = "On group chats, notify me for";
 "screen_notification_settings_enable_notifications" = "Activer les notifications sur cet appareil";
 "screen_notification_settings_group_chats" = "Group chats";
 "screen_notification_settings_mentions_section_title" = "Mentions";
@@ -288,6 +294,7 @@
 "screen_room_attachment_source_files" = "Pièce-jointe";
 "screen_room_attachment_source_gallery" = "Gallerie photo et vidéo";
 "screen_room_attachment_source_location" = "Location";
+"screen_room_attachment_source_poll" = "Poll";
 "screen_room_details_add_topic_title" = "Définir un sujet";
 "screen_room_details_already_a_member" = "Déjà membre";
 "screen_room_details_already_invited" = "Déjà invité(e)";

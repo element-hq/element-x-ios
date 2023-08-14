@@ -294,6 +294,7 @@
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_attachment_source_location" = "Location";
+"screen_room_attachment_source_poll" = "Poll";
 "screen_room_details_add_topic_title" = "Add topic";
 "screen_room_details_already_a_member" = "Already a member";
 "screen_room_details_already_invited" = "Already invited";
