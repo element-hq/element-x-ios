@@ -112,8 +112,8 @@ private extension UIApplication {
     /// Application instance extension-safe. Will be `nil` on app extensions.
     static var extensionSafeShared: UIApplication? {
         let selector = NSSelectorFromString("sharedApplication")
-        guard Self.responds(to: selector) else { return nil }
-        return Self.perform(selector).takeUnretainedValue() as? UIApplication
+        guard responds(to: selector) else { return nil }
+        return perform(selector).takeUnretainedValue() as? UIApplication
     }
 }
 

@@ -34,7 +34,7 @@ class MockClientProxy: ClientProxyProtocol {
 
     var isSyncing: Bool { false }
     
-    internal init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+    init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         self.deviceID = deviceID
         self.roomSummaryProvider = roomSummaryProvider
