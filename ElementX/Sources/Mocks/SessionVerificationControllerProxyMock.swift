@@ -48,7 +48,7 @@ extension SessionVerificationControllerProxyMock {
 
                 Task.detached {
                     try await Task.sleep(for: requestDelay)
-                    mock.callbacks.send(.receivedVerificationData(Self.emojis))
+                    mock.callbacks.send(.receivedVerificationData(emojis))
                 }
             }
 

@@ -60,7 +60,7 @@ struct InviteUsersScreenSelectedItem_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 28) {
-                ForEach(Self.people, id: \.userID) { user in
+                ForEach(people, id: \.userID) { user in
                     InviteUsersScreenSelectedItem(user: user, imageProvider: MockMediaProvider(), dismissAction: { })
                         .frame(width: 72)
                 }
