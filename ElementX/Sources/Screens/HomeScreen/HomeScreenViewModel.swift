@@ -49,7 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, fuzzySearchEnabled: appSettings.fuzzySearchEnabled),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -72,6 +72,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         selectedRoomPublisher
             .weakAssign(to: \.state.selectedRoomID, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$fuzzySearchEnabled
+            .weakAssign(to: \.state.fuzzySearchEnabled, on: self)
             .store(in: &cancellables)
         
         guard let roomSummaryProvider, let inviteSummaryProvider else {
@@ -187,6 +191,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentStartChatScreen)
         case .selectInvites:
             callback?(.presentInvitesScreen)
+        case .updatedSearchQuery:
+            roomSummaryProvider?.updateFilterPattern(state.bindings.searchQuery)
         }
     }
     

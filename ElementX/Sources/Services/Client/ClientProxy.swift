@@ -414,11 +414,13 @@ class ClientProxy: ClientProxyProtocol {
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
-                                                      name: "AllRooms")
+                                                      name: "AllRooms",
+                                                      appSettings: appSettings)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
-                                                        name: "Invites")
+                                                        name: "Invites",
+                                                        appSettings: appSettings)
 
             self.syncService = syncService
             self.roomListService = roomListService

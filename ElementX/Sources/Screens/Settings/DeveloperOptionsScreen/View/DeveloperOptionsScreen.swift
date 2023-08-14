@@ -37,6 +37,13 @@ struct DeveloperOptionsScreen: View {
                     Text("Resets on reboot")
                 }
             }
+            
+            Section("Room list") {
+                Toggle(isOn: $context.fuzzySearchEnabled) {
+                    Text("Fuzzy search")
+                    Text("Requires app reboot")
+                }
+            }
 
             Section("Notifications") {
                 Toggle(isOn: $context.notificationSettingsEnabled) {

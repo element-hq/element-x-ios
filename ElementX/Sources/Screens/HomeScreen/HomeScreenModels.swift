@@ -47,6 +47,7 @@ enum HomeScreenViewAction {
     case skipSessionVerification
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
+    case updatedSearchQuery
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -79,12 +80,14 @@ struct HomeScreenViewState: BindableState {
     
     var selectedRoomID: String?
     
+    var fuzzySearchEnabled: Bool
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
         }
         
-        if bindings.searchQuery.isEmpty {
+        if fuzzySearchEnabled || bindings.searchQuery.isEmpty {
             return rooms
         }
         
