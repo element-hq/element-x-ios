@@ -57,7 +57,8 @@ extension Array where Element == RoomSummary {
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
                                             lastMessageFormattedTimestamp: "Now",
                                             unreadNotificationCount: 4,
-                                            canonicalAlias: nil)),
+                                            canonicalAlias: nil,
+                                            inviter: nil)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
                                             isDirect: true,
@@ -65,7 +66,8 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 1,
-                                            canonicalAlias: nil)),
+                                            canonicalAlias: nil,
+                                            inviter: nil)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Third room",
                                             isDirect: true,
@@ -73,7 +75,8 @@ extension Array where Element == RoomSummary {
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
                                             lastMessageFormattedTimestamp: "Later",
                                             unreadNotificationCount: 0,
-                                            canonicalAlias: nil)),
+                                            canonicalAlias: nil,
+                                            inviter: nil)),
         .empty
     ]
     
@@ -84,7 +87,8 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 0,
-                                            canonicalAlias: "#footest:somewhere.org")),
+                                            canonicalAlias: "#footest:somewhere.org",
+                                            inviter: nil)),
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
                                             name: "Second room",
                                             isDirect: true,
@@ -92,6 +96,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 0,
-                                            canonicalAlias: nil))
+                                            canonicalAlias: nil,
+                                            inviter: nil))
     ]
 }

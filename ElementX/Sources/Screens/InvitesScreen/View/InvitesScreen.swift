@@ -20,17 +20,11 @@ struct InvitesScreen: View {
     @ObservedObject var context: InvitesScreenViewModel.Context
     
     var body: some View {
-        Group {
-            if context.viewState.isLoading {
-                ProgressView()
-            } else {
-                mainContent
-            }
-        }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .navigationTitle(L10n.actionInvitesList)
-        .alert(item: $context.alertInfo)
-        .track(screen: .invites)
+        mainContent
+            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .navigationTitle(L10n.actionInvitesList)
+            .alert(item: $context.alertInfo)
+            .track(screen: .invites)
     }
     
     // MARK: - Private

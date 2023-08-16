@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 struct RoomSummaryDetails {
     let id: String
@@ -25,6 +26,7 @@ struct RoomSummaryDetails {
     let lastMessageFormattedTimestamp: String?
     let unreadNotificationCount: UInt
     let canonicalAlias: String?
+    let inviter: RoomMemberProxyProtocol?
 }
 
 extension RoomSummaryDetails: CustomStringConvertible {
