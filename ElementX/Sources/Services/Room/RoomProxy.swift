@@ -72,6 +72,18 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.backgroundTaskService = backgroundTaskService
         
+        Task {
+            await fetchMembers()
+            await updateMembers()
+        }
+    }
+    
+    func subscribeForUpdates() async {
+        guard innerTimelineProvider == nil else {
+            MXLog.warning("Room already subscribed for updates")
+            return
+        }
+        
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.name", value: ""),
                                                         RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.avatar", value: ""),
@@ -79,26 +91,21 @@ class RoomProxy: RoomProxyProtocol {
                                                         RequiredState(key: "m.room.join_rules", value: "")],
                                         timelineLimit: UInt32(SlidingSyncConstants.defaultTimelineLimit))
         roomListItem.subscribe(settings: settings)
-
+        
         let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
             self?.updatesSubject.send(timelineDiffs)
         }
-
+        
         self.timelineListener = timelineListener
         
         let result = await room.addTimelineListener(listener: timelineListener)
         roomTimelineObservationToken = result.itemsStream
-
+        
         subscribeToBackpagination()
         
         innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
                                                            updatePublisher: updatesPublisher,
                                                            backPaginationStatePublisher: backPaginationStateSubject.eraseToAnyPublisher())
-        
-        Task {
-            await fetchMembers()
-            await updateMembers()
-        }
     }
 
     lazy var id: String = room.id()

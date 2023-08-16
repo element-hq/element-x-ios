@@ -77,6 +77,8 @@ protocol RoomProxyProtocol {
     var updatesPublisher: AnyPublisher<[TimelineDiff], Never> { get }
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
+    
+    func subscribeForUpdates() async
 
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     

@@ -778,6 +778,18 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var underlyingTimelineProvider: RoomTimelineProviderProtocol!
 
+    //MARK: - subscribeForUpdates
+
+    var subscribeForUpdatesCallsCount = 0
+    var subscribeForUpdatesCalled: Bool {
+        return subscribeForUpdatesCallsCount > 0
+    }
+    var subscribeForUpdatesClosure: (() async -> Void)?
+
+    func subscribeForUpdates() async {
+        subscribeForUpdatesCallsCount += 1
+        await subscribeForUpdatesClosure?()
+    }
     //MARK: - loadAvatarURLForUserId
 
     var loadAvatarURLForUserIdCallsCount = 0
