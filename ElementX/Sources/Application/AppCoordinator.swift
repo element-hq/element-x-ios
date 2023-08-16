@@ -538,7 +538,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     // MARK: - Application State
 
     private func stopSync() {
-        userSession?.clientProxy.pauseSync()
+        userSession?.clientProxy.stopSync()
         clientProxyObserver = nil
     }
 
@@ -595,7 +595,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     @objc
     private func applicationWillTerminate() {
-        userSession?.clientProxy.pauseSync()
+        userSession?.clientProxy.stopSync()
     }
 
     @objc
@@ -609,7 +609,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             guard let self else { return }
             
-            userSession?.clientProxy.pauseSync()
+            userSession?.clientProxy.stopSync()
             
             backgroundTask?.stop()
             backgroundTask = nil
@@ -629,7 +629,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask?.stop()
         backgroundTask = nil
 
-        if isSuspended, userSession?.clientProxy.isSyncing == false {
+        if isSuspended {
             startSync()
         }
 
@@ -681,9 +681,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         
-        if !userSession.clientProxy.isSyncing {
-            startSync()
-        }
+        startSync()
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
