@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomDetailsEditScreen: View {
@@ -31,7 +32,7 @@ struct RoomDetailsEditScreen: View {
             nameSection
             topicSection
         }
-        .compoundForm()
+        .compoundList()
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
@@ -85,42 +86,39 @@ struct RoomDetailsEditScreen: View {
 
     private var nameSection: some View {
         Section {
-            let canEditName = context.viewState.canEditName
-            
-            TextField(L10n.commonRoomName,
-                      text: $context.name,
-                      prompt: canEditName ? Text(L10n.commonRoomNamePlaceholder) : nil,
-                      axis: .horizontal)
-                .focused($focus, equals: .name)
-                .textFieldStyle(.compoundForm)
-                .disabled(!canEditName)
-                .listRowBackground(canEditName ? Color.element.formRowBackground : .clear)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+            if context.viewState.canEditName {
+                ListRow(label: .plain(title: L10n.commonRoomNamePlaceholder),
+                        kind: .textField(text: $context.name, axis: .horizontal))
+                    .focused($focus, equals: .name)
+            } else {
+                ListRow(kind: .custom {
+                    ListLabel.plain(title: context.viewState.nameRowTitle)
+                        .listRowBackground(Color.clear)
+                })
+            }
         } header: {
             Text(L10n.commonRoomName)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
     
     private var topicSection: some View {
         Section {
-            let canEditTopic = context.viewState.canEditTopic
-            
-            TextField(L10n.commonTopic,
-                      text: $context.topic,
-                      prompt: canEditTopic ? Text(L10n.commonTopicPlaceholder).foregroundColor(.compound.textPlaceholder) : nil,
-                      axis: .vertical)
-                .focused($focus, equals: .topic)
-                .textFieldStyle(.compoundForm)
-                .disabled(!canEditTopic)
-                .listRowBackground(canEditTopic ? Color.element.formRowBackground : .clear)
-                .lineLimit(3...)
+            if context.viewState.canEditTopic {
+                ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+                        kind: .textField(text: $context.topic, axis: .vertical))
+                    .focused($focus, equals: .topic)
+                    .lineLimit(3...)
+            } else {
+                ListRow(kind: .custom {
+                    ListLabel.plain(title: context.viewState.topicRowTitle)
+                        .listRowBackground(Color.clear)
+                })
+            }
         } header: {
             Text(L10n.commonTopic)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
     
     private var avatarOverlayIcon: some View {
@@ -166,9 +164,23 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider {
                                                           roomProxy: RoomProxyMock(with: .init(name: "Room", displayName: "Room")),
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
+    static let readOnlyViewModel = {
+        let accountOwner = RoomMemberProxyMock.mockOwner(allowedStateEvents: [])
+        return RoomDetailsEditScreenViewModel(accountOwner: accountOwner,
+                                              mediaProvider: MockMediaProvider(),
+                                              roomProxy: RoomProxyMock(with: .init(name: "Room", displayName: "Room")),
+                                              userIndicatorController: UserIndicatorControllerMock.default)
+    }()
+    
     static var previews: some View {
         NavigationStack {
             RoomDetailsEditScreen(context: viewModel.context)
         }
+        .previewDisplayName("Normal")
+        
+        NavigationStack {
+            RoomDetailsEditScreen(context: readOnlyViewModel.context)
+        }
+        .previewDisplayName("Read only")
     }
 }

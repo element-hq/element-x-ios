@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct NotificationSettingsScreen: View {
@@ -35,7 +36,7 @@ struct NotificationSettingsScreen: View {
                 }
             }
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.screenNotificationSettingsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -58,120 +59,98 @@ struct NotificationSettingsScreen: View {
     
     private var userPermissionSection: some View {
         Section {
-            HStack(alignment: .firstTextBaseline, spacing: 13) {
-                Image(systemName: "exclamationmark.circle.fill")
-                    .foregroundColor(.compound.iconTertiaryAlpha)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(L10n.screenNotificationSettingsSystemNotificationsTurnedOff)
-                        .font(.compound.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                    Text(context.viewState.strings.changeYourSystemSettings)
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
-                        .tint(.compound.textPrimary)
-                        .environment(\.openURL, OpenURLAction { url in
-                            context.send(viewAction: .linkClicked(url: url))
-                            return .systemAction
-                        })
+            ListRow(kind: .custom {
+                HStack(alignment: .firstTextBaseline, spacing: 13) {
+                    Image(systemSymbol: .exclamationmarkCircleFill)
+                        .foregroundColor(.compound.iconTertiaryAlpha)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(L10n.screenNotificationSettingsSystemNotificationsTurnedOff)
+                            .font(.compound.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                        Text(context.viewState.strings.changeYourSystemSettings)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                            .tint(.compound.textPrimary)
+                    }
                 }
-                .padding(.vertical, 5)
-            }
+                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.vertical, 8)
+                .environment(\.openURL, OpenURLAction { url in
+                    context.send(viewAction: .linkClicked(url: url))
+                    return .systemAction
+                })
+            })
         }
-        .compoundFormSection()
     }
     
     private var enableNotificationSection: some View {
         Section {
-            Toggle(isOn: $context.enableNotifications) {
-                Text(L10n.screenNotificationSettingsEnableNotifications)
-            }
-            .toggleStyle(.compoundForm)
-            .onChange(of: context.enableNotifications) { _ in
-                context.send(viewAction: .changedEnableNotifications)
-            }
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
+                    kind: .toggle($context.enableNotifications))
+                .onChange(of: context.enableNotifications) { _ in
+                    context.send(viewAction: .changedEnableNotifications)
+                }
         }
-        .compoundFormSection()
     }
     
     private var roomsNotificationSection: some View {
         Section {
             // Group chats
-            Button {
-                context.send(viewAction: .groupChatsTapped)
-            } label: {
-                LabeledContent {
-                    if let settings = context.viewState.settings {
-                        Text(context.viewState.strings.string(for: settings.groupChatsMode))
-                    } else {
-                        ProgressView()
-                    }
-                } label: {
-                    Text(L10n.screenNotificationSettingsGroupChats)
-                }
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
-            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
-            .disabled(context.viewState.settings == nil)
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsGroupChats),
+                    details: context.viewState.settings.map {
+                        ListDetailsLabel.title(context.viewState.strings.string(for: $0.groupChatsMode))
+                    } ?? .isWaiting(true),
+                    kind: .navigationLink {
+                        context.send(viewAction: .groupChatsTapped)
+                    })
+                    .disabled(context.viewState.settings == nil)
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
             // Direct chats
-            Button {
-                context.send(viewAction: .directChatsTapped)
-            } label: {
-                LabeledContent {
-                    if let settings = context.viewState.settings {
-                        Text(context.viewState.strings.string(for: settings.directChatsMode))
-                    } else {
-                        ProgressView()
-                    }
-                } label: {
-                    Text(L10n.screenNotificationSettingsDirectChats)
-                }
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
-            .buttonStyle(.compoundForm(accessory: context.viewState.settings.flatMap { _ in .navigationLink }))
-            .disabled(context.viewState.settings == nil)
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsDirectChats),
+                    details: context.viewState.settings.map {
+                        ListDetailsLabel.title(context.viewState.strings.string(for: $0.directChatsMode))
+                    } ?? .isWaiting(true),
+                    kind: .navigationLink {
+                        context.send(viewAction: .directChatsTapped)
+                    })
+                    .disabled(context.viewState.settings == nil)
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
         } header: {
             Text(L10n.screenNotificationSettingsNotificationSectionTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
         
     private var mentionsSection: some View {
         Section {
-            Toggle(isOn: $context.roomMentionsEnabled) {
-                Text(L10n.screenNotificationSettingsRoomMentionLabel)
-            }
-            .toggleStyle(.compoundForm)
-            .onChange(of: context.roomMentionsEnabled) { _ in
-                context.send(viewAction: .roomMentionChanged)
-            }
-            .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
-            .allowsHitTesting(!context.viewState.applyingChange)
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
+                    kind: .toggle($context.roomMentionsEnabled))
+                .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
+                .allowsHitTesting(!context.viewState.applyingChange)
+                .onChange(of: context.roomMentionsEnabled) { _ in
+                    context.send(viewAction: .roomMentionChanged)
+                }
         } header: {
             Text(L10n.screenNotificationSettingsMentionsSectionTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
     
     private var callsSection: some View {
         Section {
-            Toggle(isOn: $context.callsEnabled) {
-                Text(L10n.screenNotificationSettingsCallsLabel)
-            }
-            .toggleStyle(.compoundForm)
-            .onChange(of: context.callsEnabled) { _ in
-                context.send(viewAction: .callsChanged)
-            }
-            .disabled(context.viewState.settings?.callsEnabled == nil)
-            .allowsHitTesting(!context.viewState.applyingChange)
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsCallsLabel),
+                    kind: .toggle($context.callsEnabled))
+                .disabled(context.viewState.settings?.callsEnabled == nil)
+                .allowsHitTesting(!context.viewState.applyingChange)
+                .onChange(of: context.callsEnabled) { _ in
+                    context.send(viewAction: .callsChanged)
+                }
         } header: {
             Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
 }
 

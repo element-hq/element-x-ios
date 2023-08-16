@@ -38,7 +38,7 @@ struct SettingsScreen: View {
             
             signOutSection
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -48,118 +48,118 @@ struct SettingsScreen: View {
         }
     }
 
-    private var versionText: some View {
+    private var versionText: Text {
         Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
     }
 
     private var userSection: some View {
         Section {
-            HStack(spacing: 12) {
-                LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                    name: context.viewState.userDisplayName,
-                                    contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .settings),
-                                    imageProvider: context.imageProvider)
-                    .accessibilityHidden(true)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(context.viewState.userDisplayName ?? "")
-                        .font(.compound.headingMD)
-                        .foregroundColor(.compound.textPrimary)
-                    Text(context.viewState.userID)
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
+            ListRow(kind: .custom {
+                HStack(spacing: 12) {
+                    LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                        name: context.viewState.userDisplayName,
+                                        contentID: context.viewState.userID,
+                                        avatarSize: .user(on: .settings),
+                                        imageProvider: context.imageProvider)
+                        .accessibilityHidden(true)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(context.viewState.userDisplayName ?? "")
+                            .font(.compound.headingMD)
+                            .foregroundColor(.compound.textPrimary)
+                        Text(context.viewState.userID)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                    }
+                    .accessibilityElement(children: .combine)
                 }
-                .accessibilityElement(children: .combine)
-            }
+                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.vertical, 8)
+            })
         }
-        .compoundFormSection()
     }
     
     private var sessionVerificationSection: some View {
         Section {
-            Button { context.send(viewAction: .sessionVerification) } label: {
-                Label(L10n.actionCompleteVerification, systemImage: "checkmark.shield")
-            }
-            .buttonStyle(.compoundForm())
+            ListRow(label: .default(title: L10n.actionCompleteVerification,
+                                    systemIcon: .checkmarkShield),
+                    kind: .button { context.send(viewAction: .sessionVerification) })
         }
-        .compoundFormSection()
     }
     
     private var developerOptionsSection: some View {
         Section {
-            Button { context.send(viewAction: .developerOptions) } label: {
-                Label(L10n.commonDeveloperOptions, systemImage: "hammer.circle")
-            }
-            .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .accessibilityIdentifier("developerOptionsButton")
+            ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                                    systemIcon: .hammerCircle),
+                    kind: .navigationLink {
+                        context.send(viewAction: .developerOptions)
+                    })
+                    .accessibilityIdentifier("developerOptionsButton")
         }
-        .compoundFormSection()
     }
     
     private var simplifiedSection: some View {
         Section {
-            Picker(selection: $context.timelineStyle) {
-                ForEach(TimelineStyle.allCases, id: \.self) { style in
-                    Text(style.name)
-                        .tag(style)
+            ListRow(label: .default(title: L10n.commonMessageLayout,
+                                    systemIcon: .rectangleGrid1x2),
+                    kind: .picker(selection: $context.timelineStyle,
+                                  items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
+                .accessibilityIdentifier("timelineStylePicker")
+                .onChange(of: context.timelineStyle) { _ in
+                    context.send(viewAction: .changedTimelineStyle)
                 }
-            } label: {
-                Label(L10n.commonMessageLayout, systemImage: "rectangle.grid.1x2")
-            }
-            .labelStyle(.compoundFormRow())
-            .accessibilityIdentifier("timelineStylePicker")
-            .onChange(of: context.timelineStyle) { _ in
-                context.send(viewAction: .changedTimelineStyle)
-            }
             
             // Notifications
             if context.viewState.showNotificationSettings {
-                Button { context.send(viewAction: .notifications) } label: {
-                    Label(L10n.screenNotificationSettingsTitle, systemImage: "bell")
-                }
-                .buttonStyle(.compoundForm(accessory: .navigationLink))
-                .accessibilityIdentifier("notificationsButton")
+                ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
+                                        systemIcon: .bell),
+                        kind: .navigationLink {
+                            context.send(viewAction: .notifications)
+                        })
+                        .accessibilityIdentifier("notificationsButton")
             }
             
             // Analytics
-            Button { context.send(viewAction: .analytics) } label: {
-                Label(L10n.commonAnalytics, systemImage: "chart.bar")
-            }
-            .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .accessibilityIdentifier("analyticsButton")
+            ListRow(label: .default(title: L10n.commonAnalytics,
+                                    systemIcon: .chartBar),
+                    kind: .navigationLink {
+                        context.send(viewAction: .analytics)
+                    })
+                    .accessibilityIdentifier("analyticsButton")
             
             // Report Bug
-            Button { context.send(viewAction: .reportBug) } label: {
-                Label(L10n.commonReportABug, systemImage: "ladybug")
-            }
-            .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .accessibilityIdentifier("reportBugButton")
+            ListRow(label: .default(title: L10n.commonReportABug,
+                                    systemIcon: .ladybug),
+                    kind: .navigationLink {
+                        context.send(viewAction: .reportBug)
+                    })
+                    .accessibilityIdentifier("reportBugButton")
             
             // About
-            Button { context.send(viewAction: .about) } label: {
-                Label(L10n.commonAbout, systemImage: "questionmark.circle")
-            }
-            .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .accessibilityIdentifier("aboutButton")
+            ListRow(label: .default(title: L10n.commonAbout,
+                                    systemIcon: .questionmarkCircle),
+                    kind: .navigationLink {
+                        context.send(viewAction: .about)
+                    })
+                    .accessibilityIdentifier("aboutButton")
         }
-        .compoundFormSection()
     }
     
     private var signOutSection: some View {
         Section {
-            Button { showingLogoutConfirmation = true } label: {
-                Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
-            }
-            .buttonStyle(.compoundForm())
-            .accessibilityIdentifier("logoutButton")
-            .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
-                Button(L10n.screenSignoutConfirmationDialogSubmit,
-                       role: .destructive,
-                       action: logout)
-            } message: {
-                Text(L10n.screenSignoutConfirmationDialogContent)
-            }
+            ListRow(label: .default(title: L10n.screenSignoutPreferenceItem,
+                                    systemIcon: .rectanglePortraitAndArrowRight),
+                    kind: .button {
+                        showingLogoutConfirmation = true
+                    })
+                    .accessibilityIdentifier("logoutButton")
+                    .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
+                        Button(L10n.screenSignoutConfirmationDialogSubmit,
+                               role: .destructive,
+                               action: logout)
+                    } message: {
+                        Text(L10n.screenSignoutConfirmationDialogContent)
+                    }
         } footer: {
             VStack {
                 versionText
@@ -169,11 +169,10 @@ struct SettingsScreen: View {
                     Text(deviceID)
                 }
             }
-            .compoundFormSectionFooter()
+            .compoundListSectionFooter()
             .textSelection(.enabled)
             .padding(.top, 24)
         }
-        .compoundFormSection()
     }
 
     private var doneButton: some View {
@@ -204,7 +203,10 @@ private extension TimelineStyle {
 
 struct SettingsScreen_Previews: PreviewProvider {
     static let viewModel = {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com",
+        let verificationController = SessionVerificationControllerProxyMock()
+        verificationController.isVerified = false
+        let userSession = MockUserSession(sessionVerificationController: verificationController,
+                                          clientProxy: MockClientProxy(userID: "@userid:example.com",
                                                                        deviceID: "AAAAAAAAAAA"),
                                           mediaProvider: MockMediaProvider())
         ServiceLocator.shared.settings.notificationSettingsEnabled = true

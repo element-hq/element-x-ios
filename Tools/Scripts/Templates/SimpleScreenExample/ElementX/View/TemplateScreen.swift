@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct TemplateScreen: View {
@@ -22,22 +23,15 @@ struct TemplateScreen: View {
     var body: some View {
         Form {
             Section {
-                TextField(text: $context.composerText) {
-                    Text(context.viewState.placeholder)
-                        .compoundFormTextFieldPlaceholder()
-                }
-                .textFieldStyle(.compoundForm)
+                ListRow(label: .plain(title: context.viewState.placeholder),
+                        kind: .textField(text: $context.composerText))
                 
-                Button {
-                    context.send(viewAction: .done)
-                } label: {
-                    Label("Done", systemImage: "door.left.hand.closed")
-                }
-                .buttonStyle(.compoundFormCentred())
+                ListRow(label: .centeredAction(title: L10n.actionDone,
+                                               systemIcon: .doorLeftHandClosed),
+                        kind: .button { context.send(viewAction: .done) })
             }
-            .compoundFormSection()
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(context.viewState.title)
         .onChange(of: context.composerText) { _ in
             context.send(viewAction: .textChanged)

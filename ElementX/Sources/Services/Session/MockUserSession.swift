@@ -18,7 +18,7 @@ import Combine
 
 struct MockUserSession: UserSessionProtocol {
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
+    var sessionVerificationController: SessionVerificationControllerProxyProtocol?
     var userID: String { clientProxy.userID }
     var deviceID: String? { clientProxy.deviceID }
     var homeserver: String { clientProxy.homeserver }

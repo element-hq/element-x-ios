@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct AnalyticsSettingsScreen: View {
@@ -23,25 +24,23 @@ struct AnalyticsSettingsScreen: View {
         Form {
             analyticsSection
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonAnalytics)
         .navigationBarTitleDisplayMode(.inline)
     }
     
     var analyticsSection: some View {
         Section {
-            Toggle(isOn: $context.enableAnalytics) {
-                Label(L10n.screenAnalyticsSettingsShareData, systemImage: "chart.bar")
-            }
-            .toggleStyle(.compoundForm)
-            .onChange(of: context.enableAnalytics) { _ in
-                context.send(viewAction: .toggleAnalytics)
-            }
+            ListRow(label: .default(title: L10n.screenAnalyticsSettingsShareData,
+                                    systemIcon: .chartBar),
+                    kind: .toggle($context.enableAnalytics))
+                .onChange(of: context.enableAnalytics) { _ in
+                    context.send(viewAction: .toggleAnalytics)
+                }
         } footer: {
             Text(context.viewState.strings.sectionFooter)
-                .compoundFormSectionFooter()
+                .compoundListSectionFooter()
         }
-        .compoundFormSection()
     }
 }
 
