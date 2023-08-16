@@ -23,6 +23,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
     private var appSettings: AppSettings
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private let serialDispatchQueue: DispatchQueue
     
@@ -56,12 +57,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.appSettings = appSettings
+        self.backgroundTaskService = backgroundTaskService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -155,20 +158,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
 
-    private func fetchLastMessage(roomListItem: RoomListItemProtocol) -> EventTimelineItem? {
+    private func fetchRoomInfo(roomListItem: RoomListItemProtocol) -> RoomInfo? {
         class FetchResult {
-            var latestRoomEvent: EventTimelineItem?
+            var roomInfo: RoomInfo?
         }
 
         let semaphore = DispatchSemaphore(value: 0)
         let result = FetchResult()
 
         Task {
-            result.latestRoomEvent = await roomListItem.latestEvent()
+            do {
+                result.roomInfo = try await roomListItem.roomInfo()
+            } catch {
+                MXLog.error("Failed fetching room info with error: \(error)")
+            }
             semaphore.signal()
         }
         semaphore.wait()
-        return result.latestRoomEvent
+        return result.roomInfo
     }
 
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
@@ -177,24 +184,34 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return .empty
         }
         
+        guard let roomInfo = fetchRoomInfo(roomListItem: roomListItem) else {
+            return .empty
+        }
+        
         var attributedLastMessage: AttributedString?
         var lastMessageFormattedTimestamp: String?
-
-        if let latestRoomMessage = fetchLastMessage(roomListItem: roomListItem) {
+        
+        if let latestRoomMessage = roomInfo.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, id: 0)
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
         }
-
-        let details = RoomSummaryDetails(id: roomListItem.id(),
-                                         name: roomListItem.name() ?? roomListItem.id(),
-                                         isDirect: roomListItem.isDirect(),
-                                         avatarURL: roomListItem.avatarUrl().flatMap(URL.init(string:)),
+        
+        var inviterProxy: RoomMemberProxyProtocol?
+        if let inviter = roomInfo.inviter {
+            inviterProxy = RoomMemberProxy(member: inviter, backgroundTaskService: backgroundTaskService)
+        }
+        
+        let details = RoomSummaryDetails(id: roomInfo.id,
+                                         name: roomInfo.name ?? roomInfo.id,
+                                         isDirect: roomInfo.isDirect,
+                                         avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadNotificationCount: UInt(roomListItem.unreadNotifications().notificationCount()),
-                                         canonicalAlias: roomListItem.canonicalAlias())
-
+                                         unreadNotificationCount: UInt(roomInfo.notificationCount),
+                                         canonicalAlias: roomInfo.canonicalAlias,
+                                         inviter: inviterProxy)
+        
         return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
     

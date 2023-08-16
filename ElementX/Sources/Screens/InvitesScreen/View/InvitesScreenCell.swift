@@ -71,9 +71,9 @@ struct InvitesScreenCell: View {
 
     @ViewBuilder
     private var inviterView: some View {
-        if let invitedText = attributedInviteText, let name = invite.inviter?.displayName {
+        if let invitedText = attributedInviteText, let name = invite.roomDetails.inviter?.displayName {
             HStack(alignment: .firstTextBaseline) {
-                LoadableAvatarImage(url: invite.inviter?.avatarURL,
+                LoadableAvatarImage(url: invite.roomDetails.inviter?.avatarURL,
                                     name: name,
                                     contentID: name,
                                     avatarSize: .custom(16),
@@ -125,14 +125,14 @@ struct InvitesScreenCell: View {
     }
     
     private var subtitle: String? {
-        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.canonicalAlias
+        invite.isDirect ? invite.roomDetails.inviter?.userID : invite.roomDetails.canonicalAlias
     }
     
     private var attributedInviteText: AttributedString? {
         guard
             invite.roomDetails.isDirect == false,
-            let inviterName = invite.inviter?.displayName,
-            let inviterID = invite.inviter?.userID
+            let inviterName = invite.roomDetails.inviter?.displayName,
+            let inviterID = invite.roomDetails.inviter?.userID
         else {
             return nil
         }
@@ -178,6 +178,10 @@ struct InvitesScreenCell_Previews: PreviewProvider {
 @MainActor
 private extension InvitesScreenRoomDetails {
     static var dm: InvitesScreenRoomDetails {
+        let inviter = RoomMemberProxyMock()
+        inviter.displayName = "Jack"
+        inviter.userID = "@jack:somewhere.com"
+        
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Some Guy",
                                         isDirect: true,
@@ -185,15 +189,17 @@ private extension InvitesScreenRoomDetails {
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
                                         unreadNotificationCount: 0,
-                                        canonicalAlias: "#footest:somewhere.org")
-        let inviter = RoomMemberProxyMock()
-        inviter.displayName = "Jack"
-        inviter.userID = "@jack:somewhere.com"
-        
-        return .init(roomDetails: dmRoom, inviter: inviter, isUnread: false)
+                                        canonicalAlias: "#footest:somewhere.org",
+                                        inviter: inviter)
+        return .init(roomDetails: dmRoom, isUnread: false)
     }
     
     static func room(alias: String? = nil, avatarURL: URL? = nil, isUnread: Bool = true) -> InvitesScreenRoomDetails {
+        let inviter = RoomMemberProxyMock()
+        inviter.displayName = "Luca"
+        inviter.userID = "@jack:somewhi.nl"
+        inviter.avatarURL = avatarURL
+        
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Awesome Room",
                                         isDirect: false,
@@ -201,12 +207,8 @@ private extension InvitesScreenRoomDetails {
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
                                         unreadNotificationCount: 0,
-                                        canonicalAlias: alias)
-        let inviter = RoomMemberProxyMock()
-        inviter.displayName = "Luca"
-        inviter.userID = "@jack:somewhi.nl"
-        inviter.avatarURL = avatarURL
-        
-        return .init(roomDetails: dmRoom, inviter: inviter, isUnread: isUnread)
+                                        canonicalAlias: alias,
+                                        inviter: inviter)
+        return .init(roomDetails: dmRoom, isUnread: isUnread)
     }
 }
