@@ -26,8 +26,9 @@ class RoomProxy: RoomProxyProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
     
-    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.userinitiated", qos: .userInitiated)
-    private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.lowpriority", qos: .utility)
+    private let messageSendingDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.message_sending", qos: .userInitiated)
+    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.user_initiated", qos: .userInitiated)
+    private let lowPriorityDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.low_priority", qos: .utility)
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
@@ -227,7 +228,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
                 try self.room.sendReadReceipt(eventId: eventID)
                 return .success(())
@@ -249,7 +250,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.room.send(msg: messageContent, txnId: transactionId)
             return .success(())
         }
@@ -263,7 +264,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
@@ -404,7 +405,7 @@ class RoomProxy: RoomProxyProtocol {
 
         let transactionId = genTransactionId()
 
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             .success(self.room.sendLocation(body: body,
                                             geoUri: geoURI.string,
                                             description: description,
@@ -420,7 +421,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.room.retrySend(txnId: transactionID)
         }
     }
@@ -431,7 +432,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             self.room.cancelSend(txnId: transactionID)
         }
     }
@@ -444,7 +445,7 @@ class RoomProxy: RoomProxyProtocol {
 
         let transactionId = genTransactionId()
 
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 try self.room.edit(newMsg: newMessage, originalEventId: eventID, txnId: transactionId)
                 return .success(())
@@ -508,7 +509,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
-        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+        return await Task.dispatch(on: lowPriorityDispatchQueue) {
             do {
                 let member = try self.room.member(userId: userID)
                 return .success(RoomMemberProxy(member: member, backgroundTaskService: self.backgroundTaskService))
