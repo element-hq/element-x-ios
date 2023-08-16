@@ -282,6 +282,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             roomProxy = proxy
         }
         
+        await roomProxy.subscribeForUpdates()
+        
         actionsSubject.send(.presentedRoom(roomID))
         
         self.roomProxy = roomProxy
@@ -369,6 +371,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func asyncPresentRoomDetails(roomID: String, isRoot: Bool, animated: Bool) async {
         if isRoot {
             roomProxy = await userSession.clientProxy.roomForIdentifier(roomID)
+            await roomProxy?.subscribeForUpdates()
         } else {
             await asyncPresentRoom(roomID, animated: animated)
         }
