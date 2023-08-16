@@ -32,8 +32,6 @@ class MockClientProxy: ClientProxyProtocol {
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
 
-    var isSyncing: Bool { false }
-    
     init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         self.deviceID = deviceID
@@ -46,7 +44,7 @@ class MockClientProxy: ClientProxyProtocol {
     
     func stopSync(completionHandler: () -> Void) { }
 
-    func pauseSync() { }
+    func stopSync() { }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         .failure(.failedRetrievingDirectRoom)
