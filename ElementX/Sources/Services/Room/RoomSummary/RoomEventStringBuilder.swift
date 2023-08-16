@@ -108,8 +108,11 @@ struct RoomEventStringBuilder {
     
     private func prefix(_ eventSummary: String, with sender: TimelineItemSender) -> AttributedString {
         let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
-        if let senderDisplayName = sender.displayName,
-           let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
+        
+        if let senderDisplayName = sender.displayName {
+            var attributedSenderDisplayName = AttributedString(senderDisplayName)
+            attributedSenderDisplayName.bold()
+            
             // Don't include the message body in the markdown otherwise it makes tappable links.
             return attributedSenderDisplayName + ": " + attributedEventSummary
         } else {
