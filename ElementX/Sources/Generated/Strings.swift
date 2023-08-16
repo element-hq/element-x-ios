@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
+  /// Plural format key: "%#@COUNT@"
+  public static func countSRoomsWeb(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "%(count)s rooms_web", p1)
+  }
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Send files
@@ -750,6 +754,8 @@ public enum L10n {
   public static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
   /// Location
   public static var screenRoomAttachmentSourceLocation: String { return L10n.tr("Localizable", "screen_room_attachment_source_location") }
+  /// Poll
+  public static var screenRoomAttachmentSourcePoll: String { return L10n.tr("Localizable", "screen_room_attachment_source_poll") }
   /// Add topic
   public static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Already a member
@@ -1188,6 +1194,13 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+
+  public enum UseAnIdentityServerToInviteByEmail {
+    public enum DefaultUseTheDefaultDefaultIdentityServerNameSDefaultOrManageInSettingsSettingsSettings {
+      /// Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.
+      public static var web: String { return L10n.tr("Localizable", "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>._web") }
+    }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
