@@ -13,7 +13,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-ios",
       "state" : {
-        "revision" : "236bf094fec660be747c915406090c2ffd19c21e"
+        "revision" : "50bb7cf313bd1ad17201fc7e4c1184737a0f44c2"
       }
     },
     {
