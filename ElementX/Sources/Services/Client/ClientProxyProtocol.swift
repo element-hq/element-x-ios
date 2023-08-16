@@ -79,12 +79,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
-
-    var isSyncing: Bool { get }
     
     func startSync()
 
-    func pauseSync()
+    func stopSync()
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     

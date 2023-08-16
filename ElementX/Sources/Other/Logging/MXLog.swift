@@ -75,7 +75,7 @@ enum MXLog {
             self.target = Constants.target
         }
         
-        rootSpan = Span(file: #file, line: #line, column: #column, level: .info, target: self.target, name: "root")
+        rootSpan = Span(file: #file, line: #line, level: .info, target: self.target, name: "root")
         
         rootSpan.enter()
         
@@ -181,7 +181,7 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        return Span(file: file, line: UInt32(line), column: UInt32(column), level: level, target: target, name: name)
+        return Span(file: file, line: UInt32(line), level: level, target: target, name: name)
     }
     
     private static func log(_ message: Any,
@@ -199,6 +199,6 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), column: UInt32(column), level: level, target: target, message: "\(message)")
+        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), level: level, target: target, message: "\(message)")
     }
 }
