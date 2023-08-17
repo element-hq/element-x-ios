@@ -79,14 +79,9 @@ struct HomeScreen: View {
             .onReceive(scrollViewAdapter.isScrolling) { _ in
                 updateVisibleRange()
             }
-            .onChange(of: context.searchQuery) { searchQuery in
-                if context.viewState.fuzzySearchEnabled {
-                    context.send(viewAction: .updatedSearchQuery)
-                } else {
-                    guard searchQuery.isEmpty else { return }
-                    // Dispatch allows the view to update after changing the query
-                    DispatchQueue.main.async { updateVisibleRange() }
-                }
+            .onChange(of: context.searchQuery) { _ in
+                // Dispatch allows the view to update after changing the query
+                DispatchQueue.main.async { updateVisibleRange() }
             }
             .onReceive(scrollViewAdapter.scrollDirection) { direction in
                 withAnimation(.elementDefault) { lastScrollDirection = direction }

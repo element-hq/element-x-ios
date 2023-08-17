@@ -47,7 +47,6 @@ enum HomeScreenViewAction {
     case skipSessionVerification
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
     case selectInvites
-    case updatedSearchQuery
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {

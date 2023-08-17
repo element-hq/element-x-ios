@@ -78,6 +78,66 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.fuzzySearchEnabled, on: self)
             .store(in: &cancellables)
         
+        context.$viewState
+            .filter { _ in appSettings.fuzzySearchEnabled }
+            .map(\.bindings.searchQuery)
+            .debounceAndRemoveDuplicates()
+            .sink { [weak self] searchQuery in
+                self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
+            }
+            .store(in: &cancellables)
+        
+        setupRoomSummaryProviderSubscriptions()
+        
+        updateRooms()
+    }
+    
+    // MARK: - Public
+    
+    override func process(viewAction: HomeScreenViewAction) {
+        switch viewAction {
+        case .selectRoom(let roomIdentifier):
+            callback?(.presentRoom(roomIdentifier: roomIdentifier))
+        case .showRoomDetails(roomIdentifier: let roomIdentifier):
+            callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
+        case .leaveRoom(roomIdentifier: let roomIdentifier):
+            startLeaveRoomProcess(roomId: roomIdentifier)
+        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
+            leaveRoom(roomId: roomIdentifier)
+        case .userMenu(let action):
+            switch action {
+            case .feedback:
+                callback?(.presentFeedbackScreen)
+            case .settings:
+                callback?(.presentSettingsScreen)
+            case .signOut:
+                callback?(.signOut)
+            }
+        case .verifySession:
+            callback?(.presentSessionVerificationScreen)
+        case .skipSessionVerification:
+            state.showSessionVerificationBanner = false
+        case .updateVisibleItemRange(let range, let isScrolling):
+            visibleItemRangePublisher.send((range, isScrolling))
+        case .startChat:
+            callback?(.presentStartChatScreen)
+        case .selectInvites:
+            callback?(.presentInvitesScreen)
+        }
+    }
+    
+    func presentCrashedLastRunAlert() {
+        state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                             title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
+                                             primaryButton: .init(title: L10n.actionNo, action: nil),
+                                             secondaryButton: .init(title: L10n.actionYes) { [weak self] in
+                                                 self?.callback?(.presentFeedbackScreen)
+                                             })
+    }
+    
+    // MARK: - Private
+    
+    private func setupRoomSummaryProviderSubscriptions() {
         guard let roomSummaryProvider, let inviteSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -119,11 +179,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        await userSession.clientProxy.loadUserAvatarURL()
+                        await self.userSession.clientProxy.loadUserAvatarURL()
                     }
                     
                     Task {
-                        if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
+                        if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
                             self.state.userDisplayName = userDisplayName
                         }
                     }
@@ -156,56 +216,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 })
             }
             .store(in: &cancellables)
-        
-        updateRooms()
     }
-    
-    // MARK: - Public
-    
-    override func process(viewAction: HomeScreenViewAction) {
-        switch viewAction {
-        case .selectRoom(let roomIdentifier):
-            callback?(.presentRoom(roomIdentifier: roomIdentifier))
-        case .showRoomDetails(roomIdentifier: let roomIdentifier):
-            callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
-        case .leaveRoom(roomIdentifier: let roomIdentifier):
-            startLeaveRoomProcess(roomId: roomIdentifier)
-        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
-            leaveRoom(roomId: roomIdentifier)
-        case .userMenu(let action):
-            switch action {
-            case .feedback:
-                callback?(.presentFeedbackScreen)
-            case .settings:
-                callback?(.presentSettingsScreen)
-            case .signOut:
-                callback?(.signOut)
-            }
-        case .verifySession:
-            callback?(.presentSessionVerificationScreen)
-        case .skipSessionVerification:
-            state.showSessionVerificationBanner = false
-        case .updateVisibleItemRange(let range, let isScrolling):
-            visibleItemRangePublisher.send((range, isScrolling))
-        case .startChat:
-            callback?(.presentStartChatScreen)
-        case .selectInvites:
-            callback?(.presentInvitesScreen)
-        case .updatedSearchQuery:
-            roomSummaryProvider?.updateFilterPattern(state.bindings.searchQuery)
-        }
-    }
-    
-    func presentCrashedLastRunAlert() {
-        state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                             title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
-                                             primaryButton: .init(title: L10n.actionNo, action: nil),
-                                             secondaryButton: .init(title: L10n.actionYes) { [weak self] in
-                                                 self?.callback?(.presentFeedbackScreen)
-                                             })
-    }
-    
-    // MARK: - Private
     
     private func installListRangeModifiers() {
         guard visibleItemRangeObservationToken == nil else {
