@@ -79,12 +79,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         context.$viewState
+            .filter { _ in appSettings.fuzzySearchEnabled }
             .map(\.bindings.searchQuery)
             .debounceAndRemoveDuplicates()
             .sink { [weak self] searchQuery in
-                if appSettings.fuzzySearchEnabled {
-                    self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
-                }
+                self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
             }
             .store(in: &cancellables)
         
