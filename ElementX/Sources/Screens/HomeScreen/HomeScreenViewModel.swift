@@ -78,6 +78,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.fuzzySearchEnabled, on: self)
             .store(in: &cancellables)
         
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .debounceAndRemoveDuplicates()
+            .sink { [weak self] searchQuery in
+                if appSettings.fuzzySearchEnabled {
+                    self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
+                }
+            }
+            .store(in: &cancellables)
+        
         guard let roomSummaryProvider, let inviteSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -191,8 +201,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentStartChatScreen)
         case .selectInvites:
             callback?(.presentInvitesScreen)
-        case .updatedSearchQuery:
-            roomSummaryProvider?.updateFilterPattern(state.bindings.searchQuery)
         }
     }
     
