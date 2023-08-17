@@ -88,84 +88,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        guard let roomSummaryProvider, let inviteSummaryProvider else {
-            MXLog.error("Room summary provider unavailable")
-            return
-        }
-        
-        // Combine together the state and the room list to correctly compute the view state if
-        // data is present in the room list "cold cache"
-        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
-                                 roomSummaryProvider.roomListPublisher)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] state, rooms in
-                guard let self else { return }
-                
-                let isLoadingData = !state.isLoaded && rooms.isEmpty
-                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty)
-                
-                var roomListMode = self.state.roomListMode
-                if isLoadingData {
-                    roomListMode = .skeletons
-                } else if hasNoRooms {
-                    roomListMode = .empty
-                } else {
-                    roomListMode = .rooms
-                }
-                
-                guard roomListMode != self.state.roomListMode else {
-                    return
-                }
-                
-                // End the initial sync performance timing once the room list is about to be displayed.
-                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
-                    analytics.signpost.endSync()
-                }
-                
-                self.state.roomListMode = roomListMode
-                
-                MXLog.info("Received room summary provider update, setting view room list mode to \"\(self.state.roomListMode)\"")
-                
-                // Delay user profile detail loading until after the initial room list loads
-                if roomListMode == .rooms {
-                    Task {
-                        await userSession.clientProxy.loadUserAvatarURL()
-                    }
-                    
-                    Task {
-                        if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
-                            self.state.userDisplayName = userDisplayName
-                        }
-                    }
-                }
-            }
-            .store(in: &cancellables)
-        
-        roomSummaryProvider.roomListPublisher
-            .dropFirst(1) // We don't care about its initial value
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateRooms()
-                
-                // Wait for the all rooms view to receive its first update before installing
-                // dynamic timeline modifiers
-                self?.installListRangeModifiers()
-            }
-            .store(in: &cancellables)
-        
-        inviteSummaryProvider.roomListPublisher
-            .combineLatest(appSettings.$seenInvites)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] summaries, readInvites in
-                self?.state.hasPendingInvitations = !summaries.isEmpty
-                self?.state.hasUnreadPendingInvitations = summaries.contains(where: {
-                    guard let roomId = $0.id else {
-                        return false
-                    }
-                    return !readInvites.contains(roomId)
-                })
-            }
-            .store(in: &cancellables)
+        setupRoomSummaryProviderSubscriptions()
         
         updateRooms()
     }
@@ -214,6 +137,87 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func setupRoomSummaryProviderSubscriptions() {
+        guard let roomSummaryProvider, let inviteSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
+        // Combine together the state and the room list to correctly compute the view state if
+        // data is present in the room list "cold cache"
+        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
+                                 roomSummaryProvider.roomListPublisher)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state, rooms in
+                guard let self else { return }
+                
+                let isLoadingData = !state.isLoaded && rooms.isEmpty
+                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty)
+                
+                var roomListMode = self.state.roomListMode
+                if isLoadingData {
+                    roomListMode = .skeletons
+                } else if hasNoRooms {
+                    roomListMode = .empty
+                } else {
+                    roomListMode = .rooms
+                }
+                
+                guard roomListMode != self.state.roomListMode else {
+                    return
+                }
+                
+                // End the initial sync performance timing once the room list is about to be displayed.
+                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
+                    analytics.signpost.endSync()
+                }
+                
+                self.state.roomListMode = roomListMode
+                
+                MXLog.info("Received room summary provider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                
+                // Delay user profile detail loading until after the initial room list loads
+                if roomListMode == .rooms {
+                    Task {
+                        await self.userSession.clientProxy.loadUserAvatarURL()
+                    }
+                    
+                    Task {
+                        if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
+                            self.state.userDisplayName = userDisplayName
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+        roomSummaryProvider.roomListPublisher
+            .dropFirst(1) // We don't care about its initial value
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateRooms()
+                
+                // Wait for the all rooms view to receive its first update before installing
+                // dynamic timeline modifiers
+                self?.installListRangeModifiers()
+            }
+            .store(in: &cancellables)
+        
+        inviteSummaryProvider.roomListPublisher
+            .combineLatest(appSettings.$seenInvites)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] summaries, readInvites in
+                self?.state.hasPendingInvitations = !summaries.isEmpty
+                self?.state.hasUnreadPendingInvitations = summaries.contains(where: {
+                    guard let roomId = $0.id else {
+                        return false
+                    }
+                    return !readInvites.contains(roomId)
+                })
+            }
+            .store(in: &cancellables)
+    }
     
     private func installListRangeModifiers() {
         guard visibleItemRangeObservationToken == nil else {
