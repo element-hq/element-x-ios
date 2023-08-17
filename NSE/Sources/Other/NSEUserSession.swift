@@ -30,6 +30,7 @@ final class NSEUserSession {
         baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
+            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent() ?? "unknown")
             .build()
 
         try baseClient.restoreSession(session: credentials.restorationToken.session)

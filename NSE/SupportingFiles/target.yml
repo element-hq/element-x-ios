@@ -38,6 +38,7 @@ targets:
       - package: Collections
       - package: Compound
       - package: DesignKit
+      - package: DeviceKit
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -91,3 +92,6 @@ targets:
     - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/Other/SharedUserDefaultsKeys.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
+    - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
+    - path: ../../ElementX/Sources/Other/Extensions/String.swift
+    - path: ../../ElementX/Sources/Other/Extensions/LayoutDirection.swift

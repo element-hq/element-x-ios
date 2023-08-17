@@ -29,6 +29,9 @@ struct InfoPlistReader {
     /// Info.plist reader on the bundle object that contains the current executable.
     static let main = InfoPlistReader(bundle: .main)
 
+    /// Info.plist reader on the bundle object that contains the main app executable.
+    static let app = InfoPlistReader(bundle: .app)
+
     private let bundle: Bundle
 
     /// Initializer
