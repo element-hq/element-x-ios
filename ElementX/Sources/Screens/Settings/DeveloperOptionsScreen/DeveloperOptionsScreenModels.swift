@@ -50,7 +50,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var swiftUITimelineEnabled: Bool { get set }
     var pollsInTimelineEnabled: Bool { get set }
     var fuzzySearchEnabled: Bool { get set }
-    var filterNotificationsByPushRulesEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

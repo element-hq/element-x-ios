@@ -21,8 +21,4 @@ final class NSESettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
-
-    /// Allows notifications to be filtered based on the push context of the room
-    @UserPreference(key: SharedUserDefaultsKeys.filterNotificationsByPushRulesEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var filterNotificationsByPushRulesEnabled
 }
