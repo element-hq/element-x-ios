@@ -22,13 +22,13 @@ import DeviceKit
 #endif
 
 final class UserAgentBuilder {
-    class func makeASCIIUserAgent() -> String? {
-        makeUserAgent()?.asciified()
+    class func makeASCIIUserAgent() -> String {
+        makeUserAgent()?.asciified() ?? "unknown"
     }
     
     private class func makeUserAgent() -> String? {
-        let clientName = InfoPlistReader.main.bundleDisplayName
-        let clientVersion = InfoPlistReader.main.bundleShortVersionString
+        let clientName = InfoPlistReader.app.bundleDisplayName
+        let clientVersion = InfoPlistReader.app.bundleShortVersionString
 
         #if os(iOS)
         return String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
