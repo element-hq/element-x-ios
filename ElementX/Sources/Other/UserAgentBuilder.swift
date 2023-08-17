@@ -22,8 +22,8 @@ import DeviceKit
 #endif
 
 final class UserAgentBuilder {
-    class func makeASCIIUserAgent() -> String? {
-        makeUserAgent()?.asciified()
+    class func makeASCIIUserAgent() -> String {
+        makeUserAgent()?.asciified() ?? "unknown"
     }
     
     private class func makeUserAgent() -> String? {

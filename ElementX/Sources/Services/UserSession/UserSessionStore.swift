@@ -114,7 +114,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
             .homeserverUrl(url: credentials.restorationToken.session.homeserverUrl)
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent() ?? "unknown")
+            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
 
         do {
