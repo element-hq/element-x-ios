@@ -71,7 +71,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession = try NSEUserSession(credentials: credentials, filterByPushRulesEnabled: settings.filterNotificationsByPushRulesEnabled)
+            let userSession = try NSEUserSession(credentials: credentials)
             self.userSession = userSession
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
