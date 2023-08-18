@@ -18,7 +18,7 @@ import SwiftUI
 
 struct MessageComposer: View {
     @Binding var text: String
-    @Binding var focused: Bool
+    var focused: FocusState<Bool>.Binding
     let sendingDisabled: Bool
     let mode: RoomScreenComposerMode
     
@@ -37,7 +37,7 @@ struct MessageComposer: View {
             HStack(alignment: .bottom) {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                          text: $text,
-                                         focused: $focused,
+                                         focused: focused,
                                          isMultiline: $isMultiline,
                                          maxHeight: 300,
                                          enterKeyHandler: sendAction,
@@ -70,7 +70,7 @@ struct MessageComposer: View {
                     .fill(Color.compound.bgSubtleSecondary)
                 roundedRectangle
                     .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
-                    .opacity(focused ? 1 : 0)
+                    .opacity(focused.wrappedValue ? 1 : 0)
             }
         }
         // Explicitly disable all animations to fix weirdness with the header immediately
@@ -177,7 +177,7 @@ struct MessageComposer_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             MessageComposer(text: .constant(""),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: true,
                             mode: .default,
                             sendAction: { },
@@ -186,7 +186,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
 
             MessageComposer(text: .constant("This is a short message."),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: false,
                             mode: .default,
                             sendAction: { },
@@ -195,7 +195,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
 
             MessageComposer(text: .constant("This is a very long message that will wrap to 2 lines on an iPhone 14."),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: false,
                             mode: .default,
                             sendAction: { },
@@ -204,7 +204,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
 
             MessageComposer(text: .constant("This is an even longer message that will wrap to 3 lines on an iPhone 14, just to see the difference it makes."),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: false,
                             mode: .default,
                             sendAction: { },
@@ -213,7 +213,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
 
             MessageComposer(text: .constant("Some message"),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: false,
                             mode: .edit(originalItemId: .random),
                             sendAction: { },
@@ -222,7 +222,7 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
 
             MessageComposer(text: .constant(""),
-                            focused: .constant(false),
+                            focused: FocusState<Bool>().projectedValue,
                             sendingDisabled: false,
                             mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
@@ -254,7 +254,7 @@ struct MessageComposer_Previews: PreviewProvider {
 
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     MessageComposer(text: .constant(""),
-                                    focused: .constant(false),
+                                    focused: FocusState<Bool>().projectedValue,
                                     sendingDisabled: false,
                                     mode: .reply(itemID: .random,
                                                  replyDetails: replyDetails),
