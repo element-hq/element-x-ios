@@ -81,6 +81,15 @@ targets:
           io.element.elementx.background.refresh
         ]
         mapLibreAPIKey: $(MAPLIBRE_API_KEY)
+        UTExportedTypeDeclarations:
+        - UTTypeConformsTo: [public.text]
+          UTTypeDescription: Mention Pills
+          UTTypeIdentifier: $(PILLS_UT_TYPE_IDENTIFIER)
+        CFBundleDocumentTypes:
+        - CFBundleTypeName: Mention Pills
+          CFBundleTypeRole: Viewer
+          LSHandlerRank: Owner
+          LSItemContentTypes: $(PILLS_UT_TYPE_IDENTIFIER)
 
 
     settings:
@@ -90,10 +99,11 @@ targets:
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
-        CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 
+        CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
-        
+        PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
+
     preBuildScripts:
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false

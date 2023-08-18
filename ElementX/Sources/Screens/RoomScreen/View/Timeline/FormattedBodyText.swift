@@ -27,18 +27,18 @@ struct FormattedBodyText: View {
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString
         adjustedAttributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
-        
+
         let string = String(attributedString.characters)
-        
+
         if boostEmojiSize,
            string.containsOnlyEmoji,
            let range = adjustedAttributedString.range(of: string) {
             adjustedAttributedString[range].font = .system(size: 48.0)
         }
-        
+
         return adjustedAttributedString.formattedComponents
     }
-    
+
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
          boostEmojiSize: Bool = false) {
@@ -46,9 +46,13 @@ struct FormattedBodyText: View {
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostEmojiSize = boostEmojiSize
     }
-    
+
     init(text: String, additionalWhitespacesCount: Int = 0, boostEmojiSize: Bool = false) {
-        self.init(attributedString: AttributedString(text),
+        var attributedString = AttributedString(text)
+        // Sadly we can't use compound SwiftUI font because only UI ones are supported
+        attributedString.font = UIFont.preferredFont(forTextStyle: .body)
+
+        self.init(attributedString: attributedString,
                   additionalWhitespacesCount: additionalWhitespacesCount,
                   boostEmojiSize: boostEmojiSize)
     }
@@ -57,7 +61,7 @@ struct FormattedBodyText: View {
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
-    
+
     var body: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
@@ -67,7 +71,7 @@ struct FormattedBodyText: View {
                 .tint(.compound.textLinkExternal)
         }
     }
-    
+
     /// The attributed components laid out for the bubbles timeline style.
     var bubbleLayout: some View {
         TimelineBubbleLayout(spacing: 8) {
@@ -75,8 +79,7 @@ struct FormattedBodyText: View {
                 if component.isBlockquote {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
-                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .foregroundColor(.compound.textSecondary)
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 12.0)
@@ -90,19 +93,19 @@ struct FormattedBodyText: View {
                         }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
-                    Text(component.attributedString)
+                    MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.compound.textPrimary)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
-            
+
             // Make a second iteration through the components adding fixed width blockquotes
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
@@ -111,7 +114,7 @@ struct FormattedBodyText: View {
             }
         }
     }
-    
+
     /// The attributed components laid out for the plain timeline style.
     var plainLayout: some View {
         VStack(alignment: .leading, spacing: 8.0) {
@@ -121,12 +124,12 @@ struct FormattedBodyText: View {
                         Rectangle()
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
-                        Text(component.attributedString)
+                        MessageText(attributedString: component.attributedString)
                             .foregroundColor(.compound.textPrimary)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
-                    Text(component.attributedString)
+                    MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.compound.textPrimary)
@@ -137,7 +140,9 @@ struct FormattedBodyText: View {
 
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
-        container.font = .compound.bodyMD
+        // Sadly setting SwiftUI font does not work so we would need UIFont equivalents for compound
+        container.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        container.foregroundColor = UIColor.compound.textSecondary
         return container
     }
 }
@@ -150,7 +155,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
         body
             .environment(\.timelineStyle, .plain)
     }
-    
+
     @ViewBuilder
     static var body: some View {
         let htmlStrings = [
@@ -179,9 +184,9 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <code>Hello world</code>
             """
         ]
-        
+
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
-        
+
         VStack(alignment: .leading, spacing: 24.0) {
             ForEach(htmlStrings, id: \.self) { htmlString in
                 if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
@@ -200,7 +205,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
 
 private struct PreviewBubbleModifier: ViewModifier {
     @Environment(\.timelineStyle) private var timelineStyle
-    
+
     func body(content: Content) -> some View {
         content
             .padding(timelineStyle == .bubbles ? 8 : 0)

@@ -85,6 +85,16 @@ struct InfoPlistReader {
         infoPlistStringValue(forKey: Keys.mapLibreAPIKey)
     }
 
+    /// Mention Pills UTType
+    var pillsUTType: String {
+        guard let values = bundle.object(forInfoDictionaryKey: "UTExportedTypeDeclarations") as? [[String: Any]],
+              let firstValue = values.first,
+              let utTypeIdentifier = firstValue["UTTypeIdentifier"] as? String else {
+            fatalError("Missing pillsUTTtpe")
+        }
+        return utTypeIdentifier
+    }
+
     private func infoPlistStringValue(forKey key: String) -> String {
         guard let result = bundle.object(forInfoDictionaryKey: key) as? String else {
             fatalError("Add \(key) into your target's Info.plst")
