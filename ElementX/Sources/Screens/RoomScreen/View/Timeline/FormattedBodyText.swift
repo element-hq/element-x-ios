@@ -45,6 +45,7 @@ struct FormattedBodyText: View {
         var attributedString = attributedString
         var defaultFontContainer = AttributeContainer()
         defaultFontContainer.font = UIFont.preferredFont(forTextStyle: .body)
+        // Required to allow the underlying TextView to use  body font when no font is specified.
         attributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
@@ -143,6 +144,8 @@ struct FormattedBodyText: View {
         // Sadly setting SwiftUI font does not work so we would need UIFont equivalents for compound
         container.font = UIFont.preferredFont(forTextStyle: .subheadline)
         container.foregroundColor = UIColor.compound.textSecondary
+        // To remove the block style paragraph that the parser adds by default
+        container.paragraphStyle = .default
         return container
     }
 }

@@ -67,6 +67,14 @@ struct MessageText_Previews: PreviewProvider {
     static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld")
     static let attributedStringWithAttachment = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
 
+    static let htmlStringWithQuote =
+        """
+        <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote>
+        <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
+        """
+
+    static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+
     static var previews: some View {
         MessageText(attributedString: attributedString)
             .border(Color.purple)
@@ -78,5 +86,10 @@ struct MessageText_Previews: PreviewProvider {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
             .previewDisplayName("Custom Attachment")
+        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
+            MessageText(attributedString: attributedString)
+                .border(Color.purple)
+                .previewDisplayName("With block quote")
+        }
     }
 }
