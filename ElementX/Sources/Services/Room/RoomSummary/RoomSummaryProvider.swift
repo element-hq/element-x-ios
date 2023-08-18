@@ -22,7 +22,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let roomListService: RoomListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
-    private var appSettings: AppSettings
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private let serialDispatchQueue: DispatchQueue
@@ -30,7 +29,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
-    private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicFilterResult?
     private var listUpdatesTaskHandle: TaskHandle?
     private var stateUpdatesTaskHandle: TaskHandle?
     
@@ -57,13 +55,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
-         appSettings: AppSettings,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
-        self.appSettings = appSettings
         self.backgroundTaskService = backgroundTaskService
         
         diffsPublisher
@@ -80,16 +76,20 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
 
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicFilter(listener: RoomListEntriesListenerProxy { [weak self] updates in
+            let listUpdatesSubscriptionResult = roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
                 MXLog.info("\(name): Received list update")
                 diffsPublisher.send(updates)
             })
             
-            listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
+            listUpdatesTaskHandle = listUpdatesSubscriptionResult.entriesStream
+
+            rooms = listUpdatesSubscriptionResult.entries.map { roomListEntry in
+                buildSummaryForRoomListEntry(roomListEntry)
+            }
             
-            // Forces the listener above to be called with the current state
-            updateFilterPattern(nil)
+            // Manually call it here as the didSet doesn't work from constructors
+            roomListSubject.send(rooms)
 
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
                 guard let self else { return }
@@ -100,6 +100,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.stateStream
             
             stateSubject.send(RoomSummaryProviderState(roomListState: stateUpdatesSubscriptionResult.state))
+            
         } catch {
             MXLog.error("Failed setting up room list entry listener with error: \(error)")
         }
@@ -115,18 +116,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
         }
     }
-    
-    func updateFilterPattern(_ pattern: String?) {
-        guard let pattern, !pattern.isEmpty else {
-            _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .all)
-            return
-        }
         
-        guard appSettings.fuzzySearchEnabled else { return }
-        
-        _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .fuzzyMatchRoomName(pattern: pattern.lowercased()))
-    }
-    
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [RoomListEntriesUpdate]) {

@@ -49,7 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, fuzzySearchEnabled: appSettings.fuzzySearchEnabled),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -72,19 +72,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         selectedRoomPublisher
             .weakAssign(to: \.state.selectedRoomID, on: self)
-            .store(in: &cancellables)
-        
-        appSettings.$fuzzySearchEnabled
-            .weakAssign(to: \.state.fuzzySearchEnabled, on: self)
-            .store(in: &cancellables)
-        
-        context.$viewState
-            .filter { _ in appSettings.fuzzySearchEnabled }
-            .map(\.bindings.searchQuery)
-            .debounceAndRemoveDuplicates()
-            .sink { [weak self] searchQuery in
-                self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
-            }
             .store(in: &cancellables)
         
         setupRoomSummaryProviderSubscriptions()
