@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct MessageText: UIViewRepresentable {
     let attributedString: AttributedString
@@ -23,7 +24,11 @@ struct MessageText: UIViewRepresentable {
         let textView = UITextView()
         textView.isEditable = false
         textView.isScrollEnabled = false
-        textView.isSelectable = false
+
+        // Required to allow tapping links
+        // We disable selection at delegate level
+        textView.isSelectable = true
+        textView.isUserInteractionEnabled = true
 
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
@@ -32,6 +37,7 @@ struct MessageText: UIViewRepresentable {
         textView.layoutManager.usesFontLeading = false
         textView.backgroundColor = .clear
         textView.attributedText = NSAttributedString(attributedString)
+        textView.delegate = context.coordinator
         return textView
     }
 
@@ -41,6 +47,16 @@ struct MessageText: UIViewRepresentable {
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
         uiView.sizeThatFits(CGSize(width: proposal.width ?? UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingCompressedSize.height))
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    final class Coordinator: NSObject, UITextViewDelegate {
+        func textViewDidChangeSelection(_ textView: UITextView) {
+            textView.selectedTextRange = nil
+        }
     }
 }
 
