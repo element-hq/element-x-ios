@@ -35,7 +35,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.cache.value(forKey: string) {
+        if let cached = cache.value(forKey: string) {
             return cached
         }
 
@@ -60,7 +60,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.cache.value(forKey: htmlString) {
+        if let cached = cache.value(forKey: htmlString) {
             return cached
         }
         
