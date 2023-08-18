@@ -79,14 +79,12 @@ struct HomeScreenViewState: BindableState {
     
     var selectedRoomID: String?
     
-    var fuzzySearchEnabled: Bool
-    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
         }
         
-        if fuzzySearchEnabled || bindings.searchQuery.isEmpty {
+        if bindings.searchQuery.isEmpty {
             return rooms
         }
         
