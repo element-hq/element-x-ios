@@ -227,7 +227,8 @@ class LoggingTests: XCTestCase {
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageFormattedTimestamp: "Now",
                                              unreadNotificationCount: 0,
-                                             canonicalAlias: nil)
+                                             canonicalAlias: nil,
+                                             inviter: nil)
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)

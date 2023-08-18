@@ -22,7 +22,7 @@ typealias PasteHandler = (NSItemProvider) -> Void
 struct MessageComposerTextField: View {
     let placeholder: String
     @Binding var text: String
-    @Binding var focused: Bool
+    var focused: FocusState<Bool>.Binding
     @Binding var isMultiline: Bool
     
     let maxHeight: CGFloat
@@ -31,13 +31,13 @@ struct MessageComposerTextField: View {
     
     var body: some View {
         UITextViewWrapper(text: $text,
-                          focused: $focused,
                           isMultiline: $isMultiline,
                           maxHeight: maxHeight,
                           enterKeyHandler: enterKeyHandler,
                           pasteHandler: pasteHandler)
             .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
+            .focused(focused)
     }
     
     @ViewBuilder
@@ -54,7 +54,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     typealias UIViewType = UITextView
 
     @Binding var text: String
-    @Binding var focused: Bool
     @Binding var isMultiline: Bool
     
     let maxHeight: CGFloat
@@ -110,17 +109,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 }
             }
         }
-
-        if !focused, textView.isFirstResponder {
-            textView.resignFirstResponder()
-        } else if focused, textView.window != nil, !textView.isFirstResponder {
-            textView.becomeFirstResponder()
-        }
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
-                    focused: $focused,
                     maxHeight: maxHeight,
                     enterKeyHandler: enterKeyHandler,
                     pasteHandler: pasteHandler)
@@ -128,7 +120,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
         private var text: Binding<String>
-        private var focused: Binding<Bool>
         
         private let maxHeight: CGFloat
         
@@ -136,12 +127,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         private let pasteHandler: PasteHandler
         
         init(text: Binding<String>,
-             focused: Binding<Bool>,
              maxHeight: CGFloat,
              enterKeyHandler: @escaping EnterKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
-            self.focused = focused
             self.maxHeight = maxHeight
             self.enterKeyHandler = enterKeyHandler
             self.pasteHandler = pasteHandler
@@ -149,18 +138,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         func textViewDidChange(_ textView: UITextView) {
             text.wrappedValue = textView.text
-        }
-        
-        func textViewDidBeginEditing(_ textView: UITextView) {
-            DispatchQueue.main.async {
-                self.focused.wrappedValue = true
-            }
-        }
-        
-        func textViewDidEndEditing(_ textView: UITextView) {
-            DispatchQueue.main.async {
-                self.focused.wrappedValue = false
-            }
         }
         
         func textViewDidReceiveEnterKeyPress(_ textView: UITextView) {
@@ -256,19 +233,17 @@ struct MessageComposerTextField_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         @State var text: String
-        @State var focused: Bool
         @State var isMultiline: Bool
         
         init(text: String) {
             _text = .init(initialValue: text)
-            _focused = .init(initialValue: false)
             _isMultiline = .init(initialValue: false)
         }
         
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
-                                     focused: $focused,
+                                     focused: FocusState().projectedValue,
                                      isMultiline: $isMultiline,
                                      maxHeight: 300,
                                      enterKeyHandler: { },

@@ -18,6 +18,7 @@ import SwiftUI
 
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
+    @FocusState private var composerFocused: Bool
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {
@@ -26,11 +27,17 @@ struct ComposerToolbar: View {
             messageComposer
                 .environmentObject(context)
         }
+        .onChange(of: context.composerFocused) { newValue in
+            composerFocused = newValue
+        }
+        .onChange(of: composerFocused) { newValue in
+            context.composerFocused = newValue
+        }
     }
-
+    
     private var messageComposer: some View {
         MessageComposer(text: $context.composerText,
-                        focused: $context.composerFocused,
+                        focused: $composerFocused,
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         mode: context.viewState.composerMode) {
             sendMessage()
