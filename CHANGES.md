@@ -1,3 +1,14 @@
+## Changes in 1.2.4 (2023-08-18)
+
+✨ Features
+
+- Allow fuzzy searching for room list rooms ([#1483](https://github.com/vector-im/element-x-ios/pull/1483))
+
+🙌 Improvements
+
+- Use Compound ListRow instead of .xyzStyle(.compoundRow) ([#1484](https://github.com/vector-im/element-x-ios/pull/1484))
+
+
 ## Changes in 1.2.3 (2023-08-10)
 
 ✨ Features
