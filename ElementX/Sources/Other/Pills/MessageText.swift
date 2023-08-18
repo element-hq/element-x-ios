@@ -24,6 +24,7 @@ struct MessageText: UIViewRepresentable {
         let textView = UITextView()
         textView.isEditable = false
         textView.isScrollEnabled = false
+        textView.adjustsFontForContentSizeCategory = true
 
         // Required to allow tapping links
         // We disable selection at delegate level

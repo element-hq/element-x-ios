@@ -42,17 +42,17 @@ struct FormattedBodyText: View {
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
          boostEmojiSize: Bool = false) {
+        var attributedString = attributedString
+        var defaultFontContainer = AttributeContainer()
+        defaultFontContainer.font = UIFont.preferredFont(forTextStyle: .body)
+        attributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostEmojiSize = boostEmojiSize
     }
 
     init(text: String, additionalWhitespacesCount: Int = 0, boostEmojiSize: Bool = false) {
-        var attributedString = AttributedString(text)
-        // Sadly we can't use compound SwiftUI font because only UI ones are supported
-        attributedString.font = UIFont.preferredFont(forTextStyle: .body)
-
-        self.init(attributedString: attributedString,
+        self.init(attributedString: AttributedString(text),
                   additionalWhitespacesCount: additionalWhitespacesCount,
                   boostEmojiSize: boostEmojiSize)
     }
@@ -194,6 +194,8 @@ struct FormattedBodyText_Previews: PreviewProvider {
                         .previewBubble()
                 }
             }
+            FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                .previewBubble()
             FormattedBodyText(text: "Some plain text that's not an attributed component.")
                 .previewBubble()
             FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
