@@ -1,3 +1,8 @@
+## Changes in 1.2.5 (2023-08-18)
+
+No significant changes.
+
+
 ## Changes in 1.2.4 (2023-08-18)
 
 ✨ Features
