@@ -24,9 +24,17 @@ struct FormattedBodyText: View {
     private let additionalWhitespacesCount: Int
     private let boostEmojiSize: Bool
 
+    private var defaultFontContainer: AttributeContainer {
+        var container = AttributeContainer()
+        container.font = UIFont.preferredFont(forTextStyle: .body)
+        return container
+    }
+
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var adjustedAttributedString = attributedString
-        adjustedAttributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
+        var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
+
+        // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
+        adjustedAttributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
 
         let string = String(attributedString.characters)
 
@@ -42,11 +50,6 @@ struct FormattedBodyText: View {
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
          boostEmojiSize: Bool = false) {
-        var attributedString = attributedString
-        var defaultFontContainer = AttributeContainer()
-        defaultFontContainer.font = UIFont.preferredFont(forTextStyle: .body)
-        // Required to allow the underlying TextView to use  body font when no font is specified.
-        attributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostEmojiSize = boostEmojiSize
@@ -190,21 +193,25 @@ struct FormattedBodyText_Previews: PreviewProvider {
 
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
 
-        VStack(alignment: .leading, spacing: 24.0) {
-            ForEach(htmlStrings, id: \.self) { htmlString in
-                if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
-                    FormattedBodyText(attributedString: attributedString)
-                        .previewBubble()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24.0) {
+                ForEach(htmlStrings, id: \.self) { htmlString in
+                    if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                        FormattedBodyText(attributedString: attributedString)
+                            .previewBubble()
+                    }
                 }
+                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                    .previewBubble()
+                FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                    .previewBubble()
+                FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
+                    .previewBubble()
+
+                FormattedBodyText(text: "❤️", boostEmojiSize: true)
             }
-            FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
-                .previewBubble()
-            FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                .previewBubble()
-            FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
-                .previewBubble()
+            .padding()
         }
-        .padding()
     }
 }
 
