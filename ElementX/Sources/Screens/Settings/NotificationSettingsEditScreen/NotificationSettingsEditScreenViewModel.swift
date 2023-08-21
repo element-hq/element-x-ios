@@ -21,7 +21,7 @@ typealias NotificationSettingsEditScreenViewModelType = StateStoreViewModel<Noti
 
 class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenViewModelType, NotificationSettingsEditScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<NotificationSettingsEditScreenViewModelAction, Never> = .init()
-    private let isDirect: Bool
+    private let chatType: NotificationSettingsChatType
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let userSession: UserSessionProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -32,17 +32,17 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     var actions: AnyPublisher<NotificationSettingsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    init(isDirect: Bool, userSession: UserSessionProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
+    
+    init(chatType: NotificationSettingsChatType, userSession: UserSessionProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol) {
         let bindings = NotificationSettingsEditScreenViewStateBindings()
-        self.isDirect = isDirect
+        self.chatType = chatType
         self.userSession = userSession
         self.notificationSettingsProxy = notificationSettingsProxy
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
-                                                                             strings: NotificationSettingsEditScreenStrings(isDirect: isDirect),
-                                                                             isDirect: isDirect),
+                                                                             strings: NotificationSettingsEditScreenStrings(chatType: chatType),
+                                                                             chatType: chatType),
                    imageProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()
@@ -85,8 +85,9 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
     private func fetchDefaultRoomNotificationModes() {
         fetchDefaultRoomNotificationModesTask = Task {
             var mode: RoomNotificationModeProxy?
-            let encrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect)
-            let unencrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect)
+            let isOneToOne = chatType == .oneToOneChat
+            let encrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isOneToOne)
+            let unencrypted_mode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isOneToOne)
             if encrypted_mode == unencrypted_mode {
                 mode = encrypted_mode
             }
@@ -141,7 +142,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
                     guard let roomProxy = await userSession.clientProxy.roomForIdentifier(details.id) else { continue }
                     // `isOneToOneRoom` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
                     let isOneToOneRoom = roomProxy.activeMembersCount == 2
-                    if isDirect == isOneToOneRoom {
+                    if chatType == .oneToOneChat, isOneToOneRoom {
                         await roomsWithUserDefinedMode.append(buildRoom(with: details))
                     }
                 }
@@ -176,8 +177,9 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         Task {
             do {
                 // On modern clients, we don't have different settings for encrypted and non-encrypted rooms.
-                try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isDirect, mode: roomNotificationModeProxy)
-                try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isDirect, mode: roomNotificationModeProxy)
+                let isOneToOne = chatType == .oneToOneChat
+                try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: isOneToOne, mode: roomNotificationModeProxy)
+                try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: isOneToOne, mode: roomNotificationModeProxy)
             } catch {
                 // In case of failure, we let the user retry
                 let retryAction: () -> Void = { [weak self] in

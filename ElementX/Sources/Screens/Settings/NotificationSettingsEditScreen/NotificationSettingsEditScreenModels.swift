@@ -28,7 +28,7 @@ enum NotificationSettingsEditScreenDefaultMode {
 struct NotificationSettingsEditScreenViewState: BindableState {
     var bindings: NotificationSettingsEditScreenViewStateBindings
     var strings: NotificationSettingsEditScreenStrings
-    var isDirect: Bool
+    var chatType: NotificationSettingsChatType
     var availableDefaultModes: [NotificationSettingsEditScreenDefaultMode] = [.allMessages, .mentionsAndKeywordsOnly]
     var defaultMode: NotificationSettingsEditScreenDefaultMode?
     var pendingMode: NotificationSettingsEditScreenDefaultMode?
@@ -61,11 +61,12 @@ struct NotificationSettingsEditScreenStrings {
     let navigationTitle: String
     let modeSectionTitle: String
     
-    init(isDirect: Bool) {
-        if isDirect {
+    init(chatType: NotificationSettingsChatType) {
+        switch chatType {
+        case .oneToOneChat:
             navigationTitle = L10n.screenNotificationSettingsDirectChats
             modeSectionTitle = L10n.screenNotificationSettingsEditScreenDirectSectionHeader
-        } else {
+        case .groupChat:
             navigationTitle = L10n.screenNotificationSettingsGroupChats
             modeSectionTitle = L10n.screenNotificationSettingsEditScreenGroupSectionHeader
         }

@@ -66,7 +66,7 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider {
 
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
-        let viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        let viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         

@@ -45,7 +45,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
                 return .mentionsAndKeywordsOnly
             }
         }
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
 
@@ -71,7 +71,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     func testSetModeAllMessages() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -112,7 +112,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     }
     
     func testSetModeMentions() async throws {
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -155,7 +155,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     func testSetModeDirectChats() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         // Initialize for direct chats
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -189,7 +189,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     func testSetModeFailure() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(message: "error")
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -211,7 +211,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     func testSelectRoom() async throws {
         let roomID = "!roomidentifier:matrix.org"
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         

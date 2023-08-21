@@ -77,7 +77,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
                                                                        roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
                                           mediaProvider: MockMediaProvider())
-        var viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        var viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
@@ -91,7 +91,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
                                                                        roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms))),
                                           mediaProvider: MockMediaProvider())
-        var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.fetchInitialContent()
@@ -104,7 +104,7 @@ struct NotificationSettingsEditScreen_Previews: PreviewProvider {
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
 
-        var viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        var viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                                 userSession: userSession,
                                                                 notificationSettingsProxy: notificationSettingsProxy)
         viewModel.state.pendingMode = .mentionsAndKeywordsOnly

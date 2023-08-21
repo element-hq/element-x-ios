@@ -19,7 +19,7 @@ import SwiftUI
 
 struct NotificationSettingsEditScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    let isDirect: Bool
+    let chatType: NotificationSettingsChatType
     let userSession: UserSessionProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
 }
@@ -39,7 +39,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
     init(parameters: NotificationSettingsEditScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: parameters.isDirect,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: parameters.chatType,
                                                             userSession: parameters.userSession,
                                                             notificationSettingsProxy: parameters.notificationSettings)
     }
