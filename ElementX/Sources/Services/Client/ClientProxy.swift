@@ -399,11 +399,13 @@ class ClientProxy: ClientProxyProtocol {
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
+                                                      appSettings: appSettings,
                                                       backgroundTaskService: backgroundTaskService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites",
+                                                        appSettings: appSettings,
                                                         backgroundTaskService: backgroundTaskService)
 
             self.syncService = syncService
