@@ -64,16 +64,22 @@ struct MessageText: UIViewRepresentable {
 // MARK: - Previews
 
 struct MessageText_Previews: PreviewProvider {
-    static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld")
-    static let attributedStringWithAttachment = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
+    private static let defaultFontContainer: AttributeContainer = {
+        var container = AttributeContainer()
+        container.font = UIFont.preferredFont(forTextStyle: .body)
+        return container
+    }()
 
-    static let htmlStringWithQuote =
+    private static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld", attributes: defaultFontContainer)
+    private static let attributedStringWithAttachment = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
+
+    private static let htmlStringWithQuote =
         """
         <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote>
         <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
         """
 
-    static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
 
     static var previews: some View {
         MessageText(attributedString: attributedString)
