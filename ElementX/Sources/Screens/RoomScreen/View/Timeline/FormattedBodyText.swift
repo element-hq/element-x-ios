@@ -187,7 +187,8 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <code><b>Hello</b> <i>world</i></code>
             <p>Text</p>
             <code>Hello world</code>
-            """
+            """,
+            "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
         ]
         
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
@@ -208,6 +209,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
                     .previewBubble()
                 
                 FormattedBodyText(text: "❤️", boostEmojiSize: true)
+                    .previewBubble()
             }
             .padding()
         }

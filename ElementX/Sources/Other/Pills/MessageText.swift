@@ -107,6 +107,8 @@ struct MessageText_Previews: PreviewProvider {
         <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote>
         <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
         """
+    
+    private static let htmlStringWithList = "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
 
     private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
 
@@ -125,6 +127,11 @@ struct MessageText_Previews: PreviewProvider {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
+        }
+        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
+            MessageText(attributedString: attributedString)
+                .border(Color.purple)
+                .previewDisplayName("With list")
         }
     }
 }
