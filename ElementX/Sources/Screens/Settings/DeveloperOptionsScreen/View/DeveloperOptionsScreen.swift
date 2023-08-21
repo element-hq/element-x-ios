@@ -39,8 +39,8 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room list") {
-                Toggle(isOn: $context.fuzzySearchEnabled) {
-                    Text("Fuzzy search")
+                Toggle(isOn: $context.dynamicEntriesEnabled) {
+                    Text("Dynamic entries")
                     Text("Requires app reboot")
                 }
             }

@@ -38,7 +38,7 @@ final class AppSettings {
         case notificationSettingsEnabled
         case swiftUITimelineEnabled
         case pollsInTimeline
-        case fuzzySearchEnabled
+        case dynamicEntriesEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -225,6 +225,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.pollsInTimeline, defaultValue: false, storageType: .userDefaults(store))
     var pollsInTimelineEnabled
     
-    @UserPreference(key: UserDefaultsKeys.fuzzySearchEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var fuzzySearchEnabled
+    @UserPreference(key: UserDefaultsKeys.dynamicEntriesEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var dynamicEntriesEnabled
 }
