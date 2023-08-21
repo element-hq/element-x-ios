@@ -41,7 +41,7 @@ struct FormattedBodyText: View {
         if boostEmojiSize,
            string.containsOnlyEmoji,
            let range = adjustedAttributedString.range(of: string) {
-            adjustedAttributedString[range].font = .system(size: 48.0)
+            adjustedAttributedString[range].font = UIFont.systemFont(ofSize: 48.0)
         }
 
         return adjustedAttributedString.formattedComponents
