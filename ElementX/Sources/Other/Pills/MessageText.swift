@@ -17,12 +17,23 @@
 import SwiftUI
 import UIKit
 
+final class MessageTextView: UITextView {
+    override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
+        // Prevent long press to show the magnifying glass
+        if gestureRecognizer is UILongPressGestureRecognizer {
+            gestureRecognizer.isEnabled = false
+        }
+        
+        super.addGestureRecognizer(gestureRecognizer)
+    }
+}
+
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction: OpenURLAction
     let attributedString: AttributedString
 
-    func makeUIView(context: Context) -> UITextView {
-        let textView = UITextView()
+    func makeUIView(context: Context) -> MessageTextView {
+        let textView = MessageTextView()
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
@@ -31,6 +42,9 @@ struct MessageText: UIViewRepresentable {
         // We disable selection at delegate level
         textView.isSelectable = true
         textView.isUserInteractionEnabled = true
+        
+        // Otherwise links can be dragged and dropped when long pressed
+        textView.textDragInteraction?.isEnabled = false
 
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
@@ -43,12 +57,12 @@ struct MessageText: UIViewRepresentable {
         return textView
     }
 
-    func updateUIView(_ uiView: UITextView, context: Context) {
+    func updateUIView(_ uiView: MessageTextView, context: Context) {
         uiView.attributedText = NSAttributedString(attributedString)
         context.coordinator.openURLAction = openURLAction
     }
 
-    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
         uiView.sizeThatFits(CGSize(width: proposal.width ?? UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingCompressedSize.height))
     }
 
@@ -68,7 +82,9 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-            openURLAction.callAsFunction(URL)
+            if interaction == .invokeDefaultAction {
+                openURLAction.callAsFunction(URL)
+            }
             return false
         }
     }
