@@ -19,34 +19,34 @@ import SwiftUI
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     @Environment(\.layoutDirection) private var layoutDirection
-
+    
     private let attributedString: AttributedString
     private let additionalWhitespacesCount: Int
     private let boostEmojiSize: Bool
-
+    
     private let defaultFontContainer: AttributeContainer = {
         var container = AttributeContainer()
         container.font = UIFont.preferredFont(forTextStyle: .body)
         return container
     }()
-
+    
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
-
+        
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
         adjustedAttributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
-
+        
         let string = String(attributedString.characters)
-
+        
         if boostEmojiSize,
            string.containsOnlyEmoji,
            let range = adjustedAttributedString.range(of: string) {
             adjustedAttributedString[range].font = UIFont.systemFont(ofSize: 48.0)
         }
-
+        
         return adjustedAttributedString.formattedComponents
     }
-
+    
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
          boostEmojiSize: Bool = false) {
@@ -54,18 +54,18 @@ struct FormattedBodyText: View {
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostEmojiSize = boostEmojiSize
     }
-
+    
     init(text: String, additionalWhitespacesCount: Int = 0, boostEmojiSize: Bool = false) {
         self.init(attributedString: AttributedString(text),
                   additionalWhitespacesCount: additionalWhitespacesCount,
                   boostEmojiSize: boostEmojiSize)
     }
-
+    
     // These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
-
+    
     var body: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
@@ -75,7 +75,7 @@ struct FormattedBodyText: View {
                 .tint(.compound.textLinkExternal)
         }
     }
-
+    
     /// The attributed components laid out for the bubbles timeline style.
     var bubbleLayout: some View {
         TimelineBubbleLayout(spacing: 8) {
@@ -104,7 +104,7 @@ struct FormattedBodyText: View {
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
-
+            
             // Make a second iteration through the components adding fixed width blockquotes
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents, id: \.self) { component in
@@ -118,7 +118,7 @@ struct FormattedBodyText: View {
             }
         }
     }
-
+    
     /// The attributed components laid out for the plain timeline style.
     var plainLayout: some View {
         VStack(alignment: .leading, spacing: 8.0) {
@@ -141,7 +141,7 @@ struct FormattedBodyText: View {
             }
         }
     }
-
+    
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
         // Sadly setting SwiftUI font does not work so we would need UIFont equivalents for compound
@@ -161,7 +161,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
         body
             .environment(\.timelineStyle, .plain)
     }
-
+    
     @ViewBuilder
     static var body: some View {
         let htmlStrings = [
@@ -190,9 +190,9 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <code>Hello world</code>
             """
         ]
-
+        
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
-
+        
         ScrollView {
             VStack(alignment: .leading, spacing: 24.0) {
                 ForEach(htmlStrings, id: \.self) { htmlString in
@@ -207,7 +207,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
                     .previewBubble()
                 FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
                     .previewBubble()
-
+                
                 FormattedBodyText(text: "❤️", boostEmojiSize: true)
             }
             .padding()
@@ -217,7 +217,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
 
 private struct PreviewBubbleModifier: ViewModifier {
     @Environment(\.timelineStyle) private var timelineStyle
-
+    
     func body(content: Content) -> some View {
         content
             .padding(timelineStyle == .bubbles ? 8 : 0)
