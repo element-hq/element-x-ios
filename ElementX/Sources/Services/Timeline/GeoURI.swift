@@ -28,7 +28,7 @@ struct GeoURI: Hashable {
     // MARK: - Setup
 
     init?(string: String) {
-        guard let parsedURI = GeoURI.parseGeoURI(from: string) else {
+        guard let parsedURI = Self.parseGeoURI(from: string) else {
             MXLog.warning("\(Self.self) failed to parse the string: \(string)")
             return nil
         }

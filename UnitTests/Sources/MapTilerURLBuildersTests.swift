@@ -23,7 +23,7 @@ final class MapTilerURLBuildersTests: XCTestCase {
     private static let apiKey = "some_key"
 
     func testStaticMapBuilder() {
-        let builder = MapTilerStaticMap(baseURL: MapTilerURLBuildersTests.baseURL, key: MapTilerURLBuildersTests.apiKey)
+        let builder = MapTilerStaticMap(baseURL: Self.baseURL, key: Self.apiKey)
         
         let url = builder.staticMapURL(for: .light,
                                        coordinates: .init(latitude: 1, longitude: 2),
@@ -36,7 +36,7 @@ final class MapTilerURLBuildersTests: XCTestCase {
     }
 
     func testStaticMapBuilderWithAttribution() {
-        let builder = MapTilerStaticMap(baseURL: MapTilerURLBuildersTests.baseURL, key: MapTilerURLBuildersTests.apiKey)
+        let builder = MapTilerStaticMap(baseURL: Self.baseURL, key: Self.apiKey)
 
         let url = builder.staticMapURL(for: .dark,
                                        coordinates: .init(latitude: 1, longitude: 2),
@@ -49,7 +49,7 @@ final class MapTilerURLBuildersTests: XCTestCase {
     }
 
     func testDynamicMapBuilder() {
-        let builder = MapTilerStyleBuilder(baseURL: MapTilerURLBuildersTests.baseURL, key: MapTilerURLBuildersTests.apiKey)
+        let builder = MapTilerStyleBuilder(baseURL: Self.baseURL, key: Self.apiKey)
         let url = builder.dynamicMapURL(for: .dark)
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/style.json?key=some_key"
         XCTAssertEqual(url, expectedURL)

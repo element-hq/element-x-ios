@@ -25,7 +25,7 @@ struct LoginHomeserver: Equatable {
     
     /// Creates a new homeserver value.
     init(address: String, loginMode: LoginMode) {
-        let address = LoginHomeserver.sanitized(address).components(separatedBy: "://").last ?? address
+        let address = Self.sanitized(address).components(separatedBy: "://").last ?? address
         
         self.address = address
         self.loginMode = loginMode
