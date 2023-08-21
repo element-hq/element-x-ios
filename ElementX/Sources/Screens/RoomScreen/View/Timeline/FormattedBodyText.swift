@@ -24,11 +24,11 @@ struct FormattedBodyText: View {
     private let additionalWhitespacesCount: Int
     private let boostEmojiSize: Bool
 
-    private var defaultFontContainer: AttributeContainer {
+    private let defaultFontContainer: AttributeContainer = {
         var container = AttributeContainer()
         container.font = UIFont.preferredFont(forTextStyle: .body)
         return container
-    }
+    }()
 
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)

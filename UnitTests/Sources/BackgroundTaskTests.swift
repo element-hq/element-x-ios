@@ -231,7 +231,7 @@ private class MockApplication: ApplicationProtocol {
         }
         Self.bgTaskIdentifier += 1
 
-        let identifier = UIBackgroundTaskIdentifier(rawValue: bgTaskIdentifier)
+        let identifier = UIBackgroundTaskIdentifier(rawValue: MockApplication.bgTaskIdentifier)
         bgTasks[identifier] = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             handler?()
