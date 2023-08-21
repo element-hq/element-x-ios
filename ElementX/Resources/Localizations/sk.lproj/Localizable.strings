@@ -199,7 +199,6 @@
 "room_timeline_beginning_of_room_no_name" = "Toto je začiatok tejto konverzácie.";
 "room_timeline_read_marker_title" = "Nové";
 "screen_account_provider_change" = "Zmeniť poskytovateľa účtu";
-"screen_account_provider_continue" = "Pokračovať";
 "screen_account_provider_form_hint" = "Adresa domovského servera";
 "screen_account_provider_form_notice" = "Zadajte hľadaný výraz alebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhľadať spoločnosť, komunitu alebo súkromný server.";
@@ -457,6 +456,7 @@
 "notification_fallback_content" = "Oznámenie";
 "notification_room_action_quick_reply" = "Rýchla odpoveď";
 "rageshake_detection_dialog_content" = "Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s nahlásením chýb?";
+"screen_account_provider_continue" = "Pokračovať";
 "screen_analytics_settings_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
 "screen_analytics_settings_read_terms" = "Môžete si prečítať všetky naše podmienky %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "tu";

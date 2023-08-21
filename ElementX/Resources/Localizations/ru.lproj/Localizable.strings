@@ -199,7 +199,6 @@
 "room_timeline_beginning_of_room_no_name" = "Это начало разговора.";
 "room_timeline_read_marker_title" = "Новый";
 "screen_account_provider_change" = "Переключить аккаунт";
-"screen_account_provider_continue" = "Продолжить";
 "screen_account_provider_form_hint" = "Адрес домашнего сервера";
 "screen_account_provider_form_notice" = "Введите поисковый запрос или адрес домена.";
 "screen_account_provider_form_subtitle" = "Поиск компании, сообщества или частного сервера.";
@@ -457,6 +456,7 @@
 "notification_fallback_content" = "Уведомление";
 "notification_room_action_quick_reply" = "Быстрый ответ";
 "rageshake_detection_dialog_content" = "Кажется, вы трясли телефон. Хотите открыть экран отчета об ошибке?";
+"screen_account_provider_continue" = "Продолжить";
 "screen_analytics_settings_help_us_improve" = "Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы.";
 "screen_analytics_settings_read_terms" = "Вы можете ознакомиться со всеми нашими условиями %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "здесь";

@@ -199,7 +199,6 @@
 "room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
 "room_timeline_read_marker_title" = "Nou";
 "screen_account_provider_change" = "Schimbați furnizorul contului";
-"screen_account_provider_continue" = "Continuați";
 "screen_account_provider_form_hint" = "Adresa Homeserver-ului";
 "screen_account_provider_form_notice" = "Introduceţi un termen de căutare sau o adresă de domeniu.";
 "screen_account_provider_form_subtitle" = "Căutați o companie, o comunitate sau un server privat.";
@@ -457,6 +456,7 @@
 "notification_fallback_content" = "Notificare";
 "notification_room_action_quick_reply" = "Raspuns rapid";
 "rageshake_detection_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?";
+"screen_account_provider_continue" = "Continuați";
 "screen_analytics_settings_help_us_improve" = "Distribuiți date anonime de utilizare pentru a ne ajuta să identificăm probleme.";
 "screen_analytics_settings_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "aici";

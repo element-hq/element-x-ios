@@ -199,7 +199,6 @@
 "room_timeline_beginning_of_room_no_name" = "Ceci est le début de cette conversation.";
 "room_timeline_read_marker_title" = "Nouveau";
 "screen_account_provider_change" = "Changer de fournisseur";
-"screen_account_provider_continue" = "Continuer";
 "screen_account_provider_form_hint" = "Adresse du serveur d'accueil";
 "screen_account_provider_form_notice" = "Entrez un mot clé de recherche ou un nom de domaine.";
 "screen_account_provider_form_subtitle" = "Rechercher une entreprise, une communauté ou un serveur privé.";
@@ -457,6 +456,7 @@
 "notification_fallback_content" = "Notification";
 "notification_room_action_quick_reply" = "Réponse rapide";
 "rageshake_detection_dialog_content" = "Vous semblez secouer le téléphone de frustration. Voulez-vous ouvrir le formulaire de rapport de problème ?";
+"screen_account_provider_continue" = "Continuer";
 "screen_analytics_settings_help_us_improve" = "Partagez des données d'utilisation anonymes pour nous aider à identifier les problèmes.";
 "screen_analytics_settings_read_terms" = "Consultez nos conditions d'utilisation %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "ici";
