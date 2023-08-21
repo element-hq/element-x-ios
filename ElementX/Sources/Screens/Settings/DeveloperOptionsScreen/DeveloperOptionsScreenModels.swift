@@ -49,7 +49,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var notificationSettingsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
     var pollsInTimelineEnabled: Bool { get set }
-    var fuzzySearchEnabled: Bool { get set }
+    var dynamicEntriesEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
