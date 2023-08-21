@@ -208,4 +208,21 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
         XCTAssertNotNil(context.viewState.bindings.alertInfo)
     }
+    
+    func testSelectRoom() async throws {
+        let roomID = "!roomidentifier:matrix.org"
+        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+                                                            userSession: userSession,
+                                                            notificationSettingsProxy: notificationSettingsProxy)
+        
+        let deferredActions = deferFulfillment(viewModel.actions.first())
+        context.send(viewAction: .selectRoom(roomIdentifier: roomID))
+        let sentActions = try await deferredActions.fulfill()
+        
+        let expectedAction = NotificationSettingsEditScreenViewModelAction.requestRoomNotificationSettingsPresentation(roomID: roomID)
+        guard case let .requestRoomNotificationSettingsPresentation(roomID: receivedRoomID) = sentActions, receivedRoomID == roomID else {
+            XCTFail("Expected action \(expectedAction), but was \(sentActions)")
+            return
+        }
+    }
 }
