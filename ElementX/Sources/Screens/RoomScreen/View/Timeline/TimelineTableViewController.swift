@@ -169,16 +169,6 @@ class TimelineTableViewController: UIViewController {
                     .id(id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
-                    .onAppear {
-                        coordinator.send(viewAction: .itemAppeared(itemID: viewState.identifier))
-                    }
-                    .onDisappear {
-                        coordinator.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
-                    }
-                    .environment(\.openURL, OpenURLAction { url in
-                        coordinator.send(viewAction: .linkClicked(url: url))
-                        return .systemAction
-                    })
             }
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)

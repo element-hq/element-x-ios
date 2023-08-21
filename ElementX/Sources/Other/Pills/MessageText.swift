@@ -18,6 +18,7 @@ import SwiftUI
 import UIKit
 
 struct MessageText: UIViewRepresentable {
+    @Environment(\.openURL) private var openURLAction: OpenURLAction
     let attributedString: AttributedString
 
     func makeUIView(context: Context) -> UITextView {
@@ -44,6 +45,7 @@ struct MessageText: UIViewRepresentable {
 
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.attributedText = NSAttributedString(attributedString)
+        context.coordinator.openURLAction = openURLAction
     }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
@@ -51,12 +53,23 @@ struct MessageText: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(openURLAction: openURLAction)
     }
 
     final class Coordinator: NSObject, UITextViewDelegate {
+        var openURLAction: OpenURLAction
+        
+        init(openURLAction: OpenURLAction) {
+            self.openURLAction = openURLAction
+        }
+        
         func textViewDidChangeSelection(_ textView: UITextView) {
             textView.selectedTextRange = nil
+        }
+        
+        func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+            openURLAction.callAsFunction(URL)
+            return false
         }
     }
 }
