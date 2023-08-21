@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomNotificationSettingsUserDefinedScreen: View {
@@ -25,7 +26,7 @@ struct RoomNotificationSettingsUserDefinedScreen: View {
             
             deleteButton
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(context.viewState.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .roomNotifications)
@@ -34,21 +35,14 @@ struct RoomNotificationSettingsUserDefinedScreen: View {
     // MARK: - Private
     
     private var deleteButton: some View {
-        Button(role: .destructive) {
-            context.send(viewAction: .deleteCustomSettingTapped)
-        } label: {
-            LabeledContent {
-                if context.viewState.deletingCustomSetting {
-                    ProgressView()
-                } else {
-                    EmptyView()
-                }
-            } label: {
-                Label(UntranslatedL10n.screenRoomNotificationSettingsEditRemoveSetting, systemImage: "trash")
-            }
-        }
-        .buttonStyle(.compoundForm())
-        .disabled(context.viewState.deletingCustomSetting)
+        ListRow(label: .action(title: UntranslatedL10n.screenRoomNotificationSettingsEditRemoveSetting,
+                               systemIcon: .trash,
+                               role: .destructive),
+                details: context.viewState.deletingCustomSetting ? .isWaiting(true) : nil,
+                kind: .button {
+                    context.send(viewAction: .deleteCustomSettingTapped)
+                })
+                .disabled(context.viewState.deletingCustomSetting)
     }
 }
 

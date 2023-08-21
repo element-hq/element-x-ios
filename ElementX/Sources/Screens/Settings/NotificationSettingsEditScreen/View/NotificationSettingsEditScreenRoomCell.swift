@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Combine
+import Compound
 import SwiftUI
 
 struct NotificationSettingsEditScreenRoomCell: View {
@@ -24,26 +24,16 @@ struct NotificationSettingsEditScreenRoomCell: View {
     let context: NotificationSettingsEditScreenViewModel.Context
     
     var body: some View {
-        Button {
-            if let roomId = room.roomId {
-                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
-            }
-        } label: {
-            LabeledContent {
-                if let notificationMode = room.notificationMode {
-                    Text(context.viewState.strings.string(for: notificationMode))
-                        .fixedSize()
-                }
-            } label: {
-                HStack(spacing: 16.0) {
-                    avatar
-                    content
-                }
-            }
-            .accessibilityElement(children: .combine)
-        }
-        .buttonStyle(.compoundForm(accessory: .navigationLink))
-        .accessibilityIdentifier(A11yIdentifiers.notificationSettingsEditScreen.roomName(room.name))
+        ListRow(label: .action(title: room.name,
+                               icon: avatar),
+                details: roomDetailsLabel,
+                kind: .navigationLink {
+                    if let roomId = room.roomId {
+                        context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+                    }
+                })
+                .lineLimit(1)
+                .accessibilityIdentifier(A11yIdentifiers.notificationSettingsEditScreen.roomName(room.name))
     }
     
     @ViewBuilder @MainActor
@@ -59,12 +49,11 @@ struct NotificationSettingsEditScreenRoomCell: View {
         }
     }
     
-    var content: some View {
-        Text(room.name)
-            .font(.compound.bodyLG)
-            .foregroundColor(.compound.textPrimary)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
+    @MainActor
+    var roomDetailsLabel: ListDetailsLabel<EmptyView>? {
+        guard let mode = room.notificationMode else { return nil }
+        return .label(title: context.viewState.strings.string(for: mode),
+                      icon: EmptyView())
     }
 }
 

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct NotificationSettingsEditScreen: View {
@@ -28,7 +29,7 @@ struct NotificationSettingsEditScreen: View {
                 roomsWithCustomSettingsSection
             }
         }
-        .compoundForm()
+        .compoundList()
         .navigationTitle(context.viewState.strings.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .settingsDefaultNotifications)
@@ -39,27 +40,17 @@ struct NotificationSettingsEditScreen: View {
     private var notificationModeSection: some View {
         Section {
             ForEach(context.viewState.availableDefaultModes, id: \.self) { mode in
-                Button {
-                    context.send(viewAction: .setMode(mode))
-                } label: {
-                    LabeledContent {
-                        if context.viewState.pendingMode == mode {
-                            ProgressView()
-                        } else {
-                            EmptyView()
-                        }
-                    } label: {
-                        Text(context.viewState.strings.string(for: mode))
-                    }
-                }
-                .buttonStyle(.compoundForm(accessory: .selected(context.viewState.isSelected(mode: mode))))
-                .disabled(context.viewState.pendingMode != nil)
+                ListRow(label: .plain(title: context.viewState.strings.string(for: mode)),
+                        details: (context.viewState.pendingMode == mode) ? .isWaiting(true) : nil,
+                        kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
+                            context.send(viewAction: .setMode(mode))
+                        })
+                        .disabled(context.viewState.pendingMode != nil)
             }
         } header: {
             Text(context.viewState.strings.modeSectionTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
-        .compoundFormSection()
     }
     
     private var roomsWithCustomSettingsSection: some View {
@@ -69,7 +60,7 @@ struct NotificationSettingsEditScreen: View {
             }
         } header: {
             Text(UntranslatedL10n.screenNotificationSettingsEditCustomSettingsSectionTitle)
-                .compoundFormSectionHeader()
+                .compoundListSectionHeader()
         }
         .compoundFormSection()
     }
