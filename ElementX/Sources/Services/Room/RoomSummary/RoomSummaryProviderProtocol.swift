@@ -99,4 +99,6 @@ protocol RoomSummaryProviderProtocol {
     func setRoomList(_ roomList: RoomList)
     
     func updateVisibleRange(_ range: Range<Int>)
+    
+    func updateFilterPattern(_ pattern: String?)
 }

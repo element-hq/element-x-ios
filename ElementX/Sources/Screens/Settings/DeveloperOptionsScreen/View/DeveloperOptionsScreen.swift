@@ -38,6 +38,13 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Room list") {
+                Toggle(isOn: $context.fuzzySearchEnabled) {
+                    Text("Fuzzy search")
+                    Text("Requires app reboot")
+                }
+            }
+
             Section("Notifications") {
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")
