@@ -222,7 +222,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          name: roomInfo.name ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
-                                         avatarURL: roomListItem.avatarUrl().flatMap(URL.init(string:)),
+                                         avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadNotificationCount: UInt(roomInfo.notificationCount),
