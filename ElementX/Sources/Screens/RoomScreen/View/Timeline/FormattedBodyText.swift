@@ -24,9 +24,11 @@ struct FormattedBodyText: View {
     private let additionalWhitespacesCount: Int
     private let boostEmojiSize: Bool
     
-    private let defaultFontContainer: AttributeContainer = {
+    private let defaultAttributesContainer: AttributeContainer = {
         var container = AttributeContainer()
+        // Equivalent to compound's bodyLG
         container.font = UIFont.preferredFont(forTextStyle: .body)
+        container.foregroundColor = UIColor.compound.textPrimary
         return container
     }()
     
@@ -34,7 +36,7 @@ struct FormattedBodyText: View {
         var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
         
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
-        adjustedAttributedString.mergeAttributes(defaultFontContainer, mergePolicy: .keepCurrent)
+        adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
         
         let string = String(attributedString.characters)
         
@@ -100,7 +102,6 @@ struct FormattedBodyText: View {
                     MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.compound.textPrimary)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
@@ -129,14 +130,12 @@ struct FormattedBodyText: View {
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
                         MessageText(attributedString: component.attributedString)
-                            .foregroundColor(.compound.textPrimary)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
                     MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.compound.textPrimary)
                 }
             }
         }
@@ -144,7 +143,7 @@ struct FormattedBodyText: View {
     
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
-        // Sadly setting SwiftUI font does not work so we would need UIFont equivalents for compound
+        // Sadly setting SwiftUI fonts do not work so we would need UIFont equivalents for compound, this one is bodyMD
         container.font = UIFont.preferredFont(forTextStyle: .subheadline)
         container.foregroundColor = UIColor.compound.textSecondary
         // To remove the block style paragraph that the parser adds by default
