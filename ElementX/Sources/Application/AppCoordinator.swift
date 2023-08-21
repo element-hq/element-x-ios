@@ -591,6 +591,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                selector: #selector(applicationWillTerminate),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didChangeContentSizeCategory),
+                                               name: UIContentSizeCategory.didChangeNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func didChangeContentSizeCategory() {
+        AttributedStringBuilder.invalidateCache()
     }
 
     @objc

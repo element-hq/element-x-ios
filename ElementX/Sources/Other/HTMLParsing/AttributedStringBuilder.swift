@@ -25,6 +25,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let permalinkBaseURL: URL
     
     private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
+
+    static func invalidateCache() {
+        cache.removeAllValues()
+    }
     
     init(permalinkBaseURL: URL) {
         self.permalinkBaseURL = permalinkBaseURL
