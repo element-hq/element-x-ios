@@ -59,7 +59,7 @@ struct NotificationSettingsEditScreen: View {
                 NotificationSettingsEditScreenRoomCell(room: room, context: context)
             }
         } header: {
-            Text(UntranslatedL10n.screenNotificationSettingsEditCustomSettingsSectionTitle)
+            Text(L10n.screenNotificationSettingsEditCustomSettingsSectionTitle)
                 .compoundListSectionHeader()
         }
         .compoundFormSection()

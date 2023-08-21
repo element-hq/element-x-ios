@@ -74,9 +74,9 @@ struct NotificationSettingsEditScreenStrings {
     func string(for mode: NotificationSettingsEditScreenDefaultMode) -> String {
         switch mode {
         case .allMessages:
-            return L10n.screenNotificationSettingsModeAll
+            return L10n.screenNotificationSettingsEditModeAllMessages
         case .mentionsAndKeywordsOnly:
-            return L10n.screenNotificationSettingsModeMentions
+            return L10n.screenNotificationSettingsEditModeMentionsAndKeywords
         }
     }
     

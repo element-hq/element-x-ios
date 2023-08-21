@@ -35,7 +35,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy
         let navigationTitle = displayAsUserDefinedRoomSettings ? roomProxy.roomTitle : L10n.screenRoomDetailsNotificationTitle
-        let customSettingsSectionHeader = displayAsUserDefinedRoomSettings ? UntranslatedL10n.screenRoomNotificationSettingsRoomCustomSettingsTitle : L10n.screenRoomNotificationSettingsCustomSettingsTitle
+        let customSettingsSectionHeader = displayAsUserDefinedRoomSettings ? L10n.screenRoomNotificationSettingsRoomCustomSettingsTitle : L10n.screenRoomNotificationSettingsCustomSettingsTitle
         super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings,
                                                                              displayAsUserDefinedRoomSettings: displayAsUserDefinedRoomSettings,
                                                                              navigationTitle: navigationTitle,

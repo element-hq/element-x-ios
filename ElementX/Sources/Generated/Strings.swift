@@ -10,10 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
-  /// Plural format key: "%#@COUNT@"
-  public static func countSRoomsWeb(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "%(count)s rooms_web", p1)
-  }
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Send files
@@ -692,8 +688,14 @@ public enum L10n {
   public static var screenNotificationSettingsCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_calls_label") }
   /// Direct chats
   public static var screenNotificationSettingsDirectChats: String { return L10n.tr("Localizable", "screen_notification_settings_direct_chats") }
+  /// Custom setting per chat
+  public static var screenNotificationSettingsEditCustomSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_edit_custom_settings_section_title") }
   /// An error occurred while updating the notification setting.
   public static var screenNotificationSettingsEditFailedUpdatingDefaultMode: String { return L10n.tr("Localizable", "screen_notification_settings_edit_failed_updating_default_mode") }
+  /// All messages
+  public static var screenNotificationSettingsEditModeAllMessages: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_all_messages") }
+  /// Mentions and Keywords only
+  public static var screenNotificationSettingsEditModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_mentions_and_keywords") }
   /// On direct chats, notify me for
   public static var screenNotificationSettingsEditScreenDirectSectionHeader: String { return L10n.tr("Localizable", "screen_notification_settings_edit_screen_direct_section_header") }
   /// On group chats, notify me for
@@ -848,6 +850,8 @@ public enum L10n {
   public static var screenRoomNotificationSettingsDefaultSettingFootnoteContentLink: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_footnote_content_link") }
   /// Default setting
   public static var screenRoomNotificationSettingsDefaultSettingTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_title") }
+  /// Remove custom setting
+  public static var screenRoomNotificationSettingsEditRemoveSetting: String { return L10n.tr("Localizable", "screen_room_notification_settings_edit_remove_setting") }
   /// An error occurred while loading notification settings.
   public static var screenRoomNotificationSettingsErrorLoadingSettings: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_loading_settings") }
   /// Failed restoring the default mode, please try again.
@@ -858,6 +862,8 @@ public enum L10n {
   public static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
   /// Mentions and Keywords only
   public static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
+  /// In this room, notify me for
+  public static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
   /// Show less
   public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
   /// Show more
@@ -1194,13 +1200,6 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
-
-  public enum UseAnIdentityServerToInviteByEmail {
-    public enum DefaultUseTheDefaultDefaultIdentityServerNameSDefaultOrManageInSettingsSettingsSettings {
-      /// Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.
-      public static var web: String { return L10n.tr("Localizable", "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>._web") }
-    }
-  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

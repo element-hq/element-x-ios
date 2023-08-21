@@ -15,7 +15,3 @@
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
 
-// MARK: - Notifications
-"screen_notification_settings_edit_custom_settings_section_title" = "Custom setting per chat";
-"screen_room_notification_settings_edit_remove_setting" = "Remove custom setting";
-"screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";

@@ -1,5 +1,4 @@
 "Notification" = "Notification";
-"Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>._web" = "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.";
 "a11y_hide_password" = "Hide password";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
@@ -266,7 +265,10 @@
 "screen_notification_settings_additional_settings_section_title" = "Additional settings";
 "screen_notification_settings_calls_label" = "Audio and video calls";
 "screen_notification_settings_direct_chats" = "Direct chats";
+"screen_notification_settings_edit_custom_settings_section_title" = "Custom setting per chat";
 "screen_notification_settings_edit_failed_updating_default_mode" = "An error occurred while updating the notification setting.";
+"screen_notification_settings_edit_mode_all_messages" = "All messages";
+"screen_notification_settings_edit_mode_mentions_and_keywords" = "Mentions and Keywords only";
 "screen_notification_settings_edit_screen_direct_section_header" = "On direct chats, notify me for";
 "screen_notification_settings_edit_screen_group_section_header" = "On group chats, notify me for";
 "screen_notification_settings_enable_notifications" = "Enable notifications on this device";
@@ -333,11 +335,13 @@
 "screen_room_notification_settings_default_setting_footnote" = "You can change it in your %1$@.";
 "screen_room_notification_settings_default_setting_footnote_content_link" = "global settings";
 "screen_room_notification_settings_default_setting_title" = "Default setting";
+"screen_room_notification_settings_edit_remove_setting" = "Remove custom setting";
 "screen_room_notification_settings_error_loading_settings" = "An error occurred while loading notification settings.";
 "screen_room_notification_settings_error_restoring_default" = "Failed restoring the default mode, please try again.";
 "screen_room_notification_settings_error_setting_mode" = "Failed setting the mode, please try again.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
 "screen_room_reactions_show_less" = "Show less";
 "screen_room_reactions_show_more" = "Show more";
 "screen_room_retry_send_menu_send_again_action" = "Send again";
