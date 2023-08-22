@@ -62,8 +62,8 @@ struct TracingConfiguration {
         .hyper: .warn,
         .matrix_sdk_crypto: .debug,
         .matrix_sdk_http_client: .debug,
-        .matrix_sdk_sliding_sync: .trace,
-        .matrix_sdk_base_sliding_sync: .trace,
+        .matrix_sdk_sliding_sync: .debug,
+        .matrix_sdk_base_sliding_sync: .debug,
         .matrix_sdk_ui_timeline: .info
     ]
     
