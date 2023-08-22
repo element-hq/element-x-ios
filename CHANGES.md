@@ -1,3 +1,14 @@
+## Changes in 1.2.6 (2023-08-22)
+
+✨ Features
+
+- Enable OIDC support, with notification content disabled for now. ([#261](https://github.com/vector-im/element-x-ios/issues/261))
+
+🐛 Bugfixes
+
+- Fix for voice over reading braille dot at the end of a message. ([#1538](https://github.com/vector-im/element-x-ios/pull/1538))
+
+
 ## Changes in 1.2.5 (2023-08-18)
 
 No significant changes.
