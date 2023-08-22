@@ -69,7 +69,10 @@ struct OIDCAuthenticationDataProxy: Equatable {
     let underlyingData: OidcAuthenticationData
     
     var url: URL {
-        URL(string: underlyingData.loginUrl())!
+        guard let url = URL(string: underlyingData.loginUrl()) else {
+            fatalError("OIDC login URL hasn't been validated.")
+        }
+        return url
     }
 }
 

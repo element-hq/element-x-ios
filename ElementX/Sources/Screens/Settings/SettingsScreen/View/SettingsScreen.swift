@@ -221,7 +221,8 @@ struct SettingsScreen_Previews: PreviewProvider {
         verificationController.isVerified = false
         let userSession = MockUserSession(sessionVerificationController: verificationController,
                                           clientProxy: MockClientProxy(userID: "@userid:example.com",
-                                                                       deviceID: "AAAAAAAAAAA"),
+                                                                       deviceID: "AAAAAAAAAAA",
+                                                                       accountURL: "https://matrix.org/account"),
                                           mediaProvider: MockMediaProvider())
         ServiceLocator.shared.settings.notificationSettingsEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
