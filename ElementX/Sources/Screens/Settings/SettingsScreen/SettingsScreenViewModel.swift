@@ -39,6 +39,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(bindings: bindings,
                                            deviceID: userSession.deviceID,
                                            userID: userSession.userID,
+                                           accountURL: userSession.clientProxy.accountURL,
                                            showSessionVerificationSection: showSessionVerificationSection,
                                            showNotificationSettings: appSettings.notificationSettingsEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
@@ -85,6 +86,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         switch viewAction {
         case .close:
             callback?(.close)
+        case .account:
+            callback?(.account)
         case .analytics:
             callback?(.analytics)
         case .reportBug:
@@ -101,6 +104,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.notifications)
         case .developerOptions:
             callback?(.developerOptions)
+            
+        case .updateWindow(let window):
+            Task {
+                guard state.window != window else { return }
+                state.window = window
+            }
         }
     }
 }

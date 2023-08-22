@@ -46,6 +46,9 @@ struct SettingsScreen: View {
                 doneButton
             }
         }
+        .introspect(.window, on: .iOS(.v16)) { window in
+            context.send(viewAction: .updateWindow(window))
+        }
     }
 
     private var versionText: Text {
@@ -100,6 +103,17 @@ struct SettingsScreen: View {
     
     private var simplifiedSection: some View {
         Section {
+            // Account
+            if context.viewState.accountURL != nil {
+                ListRow(label: .default(title: L10n.screenSettingsOidcAccount,
+                                        systemIcon: .person),
+                        kind: .button {
+                            context.send(viewAction: .account)
+                        })
+                        .accessibilityIdentifier("notificationsButton")
+            }
+            
+            // Message layout
             ListRow(label: .default(title: L10n.commonMessageLayout,
                                     systemIcon: .rectangleGrid1x2),
                     kind: .picker(selection: $context.timelineStyle,

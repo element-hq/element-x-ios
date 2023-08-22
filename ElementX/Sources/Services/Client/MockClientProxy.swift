@@ -25,6 +25,7 @@ class MockClientProxy: ClientProxyProtocol {
     let deviceID: String?
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
+    let accountURL: URL? = nil
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     

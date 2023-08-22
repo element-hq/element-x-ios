@@ -932,6 +932,8 @@ public enum L10n {
   public static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   public static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Account and devices
+  public static var screenSettingsOidcAccount: String { return L10n.tr("Localizable", "screen_settings_oidc_account") }
   /// Share location
   public static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
   /// Share my location

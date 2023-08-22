@@ -368,6 +368,7 @@
 "screen_session_verification_they_match" = "They match";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
+"screen_settings_oidc_account" = "Account and devices";
 "screen_share_location_title" = "Share location";
 "screen_share_my_location_action" = "Share my location";
 "screen_share_open_apple_maps" = "Open in Apple Maps";

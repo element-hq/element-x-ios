@@ -100,7 +100,16 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 if isModallyPresented {
                     navigationStackCoordinator.setSheetCoordinator(nil)
                 } else {
-                    showLoginScreen()
+                    // We are here because the default server failed to respond.
+                    if authenticationService.homeserver.value.loginMode == .password {
+                        // Add the password login screen directly to the flow, its fine.
+                        showLoginScreen()
+                    } else {
+                        // OIDC is presented from the confirmation screen so replace the
+                        // server selection screen which was inserted to handle the failure.
+                        navigationStackCoordinator.pop()
+                        showServerConfirmationScreen()
+                    }
                 }
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)

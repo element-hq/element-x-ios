@@ -108,6 +108,10 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
+    
+    var accountURL: URL? {
+        client.accountUrl().flatMap(URL.init(string:))
+    }
 
     func startSync() {
         MXLog.info("Starting sync")
@@ -305,7 +309,8 @@ class ClientProxy: ClientProxyProtocol {
     func logout() async {
         await Task.dispatch(on: clientQueue) {
             do {
-                try self.client.logout()
+                // We aren't currently handling the RP initiated sign out URL.
+                _ = try self.client.logout()
             } catch {
                 MXLog.error("Failed logging out with error: \(error)")
             }

@@ -76,6 +76,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var restorationToken: RestorationToken? { get }
     
+    var accountURL: URL? { get }
+    
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }

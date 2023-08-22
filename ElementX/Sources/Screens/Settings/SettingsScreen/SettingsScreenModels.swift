@@ -19,6 +19,7 @@ import UIKit
 
 enum SettingsScreenViewModelAction {
     case close
+    case account
     case analytics
     case reportBug
     case about
@@ -32,11 +33,15 @@ struct SettingsScreenViewState: BindableState {
     var bindings: SettingsScreenViewStateBindings
     var deviceID: String?
     var userID: String
+    var accountURL: URL?
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showSessionVerificationSection: Bool
     var showNotificationSettings: Bool
     var showDeveloperOptions: Bool
+    
+    /// The presentation anchor used to display the OIDC account URL.
+    var window: UIWindow?
 }
 
 struct SettingsScreenViewStateBindings {
@@ -45,6 +50,7 @@ struct SettingsScreenViewStateBindings {
 
 enum SettingsScreenViewAction {
     case close
+    case account
     case analytics
     case reportBug
     case about
@@ -53,4 +59,7 @@ enum SettingsScreenViewAction {
     case changedTimelineStyle
     case developerOptions
     case notifications
+    
+    /// Updates the window used for the OIDC account URL anchor.
+    case updateWindow(UIWindow)
 }

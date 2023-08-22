@@ -48,6 +48,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 self.callback?(.dismiss)
+            case .account:
+                self.presentAccountSettings()
             case .analytics:
                 self.presentAnalyticsScreen()
             case .reportBug:
@@ -73,6 +75,26 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Private
+    
+    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
+    private func presentAccountSettings() {
+        guard let accountURL = viewModel.context.viewState.accountURL else {
+            MXLog.error("Account URL is missing.")
+            return
+        }
+        
+        guard let window = viewModel.context.viewState.window else {
+            MXLog.error("The window is missing.")
+            return
+        }
+        
+        // Safari never works in the simulator, use a Web Authentication Session instead.
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
+        accountSettingsPresenter?.start()
+        
+        // Safari isn't working with the shared browser session 😕
+        // UIApplication.shared.open(accountURL)
+    }
     
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,

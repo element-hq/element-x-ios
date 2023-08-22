@@ -31,6 +31,23 @@ class SDKClientMock: SDKClientProtocol {
             return accountDataEventTypeReturnValue
         }
     }
+    //MARK: - `accountUrl`
+
+    public var accountUrlCallsCount = 0
+    public var accountUrlCalled: Bool {
+        return accountUrlCallsCount > 0
+    }
+    public var accountUrlReturnValue: String?
+    public var accountUrlClosure: (() -> String?)?
+
+    public func `accountUrl`() -> String? {
+        accountUrlCallsCount += 1
+        if let accountUrlClosure = accountUrlClosure {
+            return accountUrlClosure()
+        } else {
+            return accountUrlReturnValue
+        }
+    }
     //MARK: - `avatarUrl`
 
     public var avatarUrlThrowableError: Error?
@@ -367,14 +384,19 @@ class SDKClientMock: SDKClientProtocol {
     public var logoutCalled: Bool {
         return logoutCallsCount > 0
     }
-    public var logoutClosure: (() throws -> Void)?
+    public var logoutReturnValue: String?
+    public var logoutClosure: (() throws -> String?)?
 
-    public func `logout`() throws {
+    public func `logout`() throws -> String? {
         if let error = logoutThrowableError {
             throw error
         }
         logoutCallsCount += 1
-        try logoutClosure?()
+        if let logoutClosure = logoutClosure {
+            return try logoutClosure()
+        } else {
+            return logoutReturnValue
+        }
     }
     //MARK: - `notificationClient`
 
