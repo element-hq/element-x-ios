@@ -69,6 +69,13 @@ struct FormattedBodyText: View {
     }
     
     var body: some View {
+        mainContent
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(attributedString))
+    }
+    
+    @ViewBuilder
+    var mainContent: some View {
         if timelineStyle == .bubbles {
             bubbleLayout
                 .tint(.compound.textLinkExternal)
