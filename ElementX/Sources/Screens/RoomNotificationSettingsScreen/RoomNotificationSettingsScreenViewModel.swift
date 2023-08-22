@@ -30,11 +30,16 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol) {
+    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol, displayAsUserDefinedRoomSettings: Bool) {
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy
-        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings))
+        let navigationTitle = displayAsUserDefinedRoomSettings ? roomProxy.roomTitle : L10n.screenRoomDetailsNotificationTitle
+        let customSettingsSectionHeader = displayAsUserDefinedRoomSettings ? L10n.screenRoomNotificationSettingsRoomCustomSettingsTitle : L10n.screenRoomNotificationSettingsCustomSettingsTitle
+        super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings,
+                                                                             displayAsUserDefinedRoomSettings: displayAsUserDefinedRoomSettings,
+                                                                             navigationTitle: navigationTitle,
+                                                                             customSettingsSectionHeader: customSettingsSectionHeader))
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
@@ -50,6 +55,8 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             setCustomMode(mode)
         case .customSettingFootnoteLinkTapped:
             actionsSubject.send(.openGlobalSettings)
+        case .deleteCustomSettingTapped:
+            Task { await deleteCustomSetting() }
         }
     }
     
@@ -77,6 +84,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     
     private func fetchRoomNotificationSettings() async {
         do {
+            // `isOneToOne` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
             let settings = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                        isEncrypted: roomProxy.isEncrypted,
                                                                                        isOneToOne: roomProxy.activeMembersCount == 2)
@@ -152,5 +160,16 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
                                                  title: L10n.commonError,
                                                  message: L10n.screenRoomNotificationSettingsErrorRestoringDefault)
         }
+    }
+    
+    private func deleteCustomSetting() async {
+        state.deletingCustomSetting = true
+        do {
+            try await notificationSettingsProxy.restoreDefaultNotificationMode(roomId: roomProxy.id)
+            actionsSubject.send(.dismiss)
+        } catch {
+            displayError(.restoreDefaultFailed)
+        }
+        state.deletingCustomSetting = false
     }
 }

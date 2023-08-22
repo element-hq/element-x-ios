@@ -173,7 +173,10 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = false
 
-        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
+
+        var viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
+                                                            appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationSettingsProxy: notificationSettingsProxy,
                                                             isModallyPresented: true)

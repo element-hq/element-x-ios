@@ -23,12 +23,15 @@ import XCTest
 class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     private var viewModel: NotificationSettingsEditScreenViewModelProtocol!
     private var notificationSettingsProxy: NotificationSettingsProxyMock!
+    private var userSession: UserSessionProtocol!
     
     private var context: NotificationSettingsEditScreenViewModelType.Context {
         viewModel.context
     }
     
     @MainActor override func setUpWithError() throws {
+        let clientProxy = MockClientProxy(userID: "@a:b.com")
+        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
     }
@@ -42,7 +45,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
                 return .mentionsAndKeywordsOnly
             }
         }
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
 
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
@@ -67,7 +71,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     func testSetModeAllMessages() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -107,7 +112,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     }
     
     func testSetModeMentions() async throws {
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: false,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -149,7 +155,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     func testSetModeDirectChats() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         // Initialize for direct chats
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -182,7 +189,8 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     func testSetModeFailure() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(message: "error")
-        viewModel = NotificationSettingsEditScreenViewModel(isDirect: true,
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
+                                                            userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
             .first(where: { !$0.isNil }))
@@ -199,5 +207,22 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
         XCTAssertNotNil(context.viewState.bindings.alertInfo)
+    }
+    
+    func testSelectRoom() async throws {
+        let roomID = "!roomidentifier:matrix.org"
+        viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
+                                                            userSession: userSession,
+                                                            notificationSettingsProxy: notificationSettingsProxy)
+        
+        let deferredActions = deferFulfillment(viewModel.actions.first())
+        context.send(viewAction: .selectRoom(roomIdentifier: roomID))
+        let sentActions = try await deferredActions.fulfill()
+        
+        let expectedAction = NotificationSettingsEditScreenViewModelAction.requestRoomNotificationSettingsPresentation(roomID: roomID)
+        guard case let .requestRoomNotificationSettingsPresentation(roomID: receivedRoomID) = sentActions, receivedRoomID == roomID else {
+            XCTFail("Expected action \(expectedAction), but was \(sentActions)")
+            return
+        }
     }
 }

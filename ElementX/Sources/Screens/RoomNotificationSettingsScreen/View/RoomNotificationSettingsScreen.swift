@@ -31,14 +31,13 @@ struct RoomNotificationSettingsScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.screenRoomDetailsNotificationTitle)
+        .navigationTitle(context.viewState.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .roomNotifications)
     }
     
     // MARK: - Private
 
-    @ViewBuilder
     private var allowCustomSettingSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsAllowCustom),
@@ -54,7 +53,6 @@ struct RoomNotificationSettingsScreen: View {
         }
     }
     
-    @ViewBuilder
     private var defaultSettingSection: some View {
         Section {
             ListRow(label: .plain(title: context.viewState.isRestoringDefaultSetting ? L10n.commonLoading : context.viewState.strings.string(for: context.viewState.notificationSettingsState)),
@@ -74,21 +72,8 @@ struct RoomNotificationSettingsScreen: View {
         }
     }
     
-    @ViewBuilder
     private var customSettingsSection: some View {
-        Section {
-            ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsCustomSettingsTitle),
-                    kind: .inlinePicker(selection: $context.customMode,
-                                        items: context.viewState.availableCustomRoomNotificationModes.map {
-                                            (title: context.viewState.strings.string(for: $0), tag: $0)
-                                        }))
-                                        .onChange(of: context.customMode) { mode in
-                                            context.send(viewAction: .setCustomMode(mode))
-                                        }
-        } header: {
-            Text(L10n.screenRoomNotificationSettingsCustomSettingsTitle)
-                .compoundListSectionHeader()
-        }
+        RoomNotificationSettingsCustomSectionView(context: context)
     }
 }
 
@@ -100,10 +85,9 @@ struct RoomNotificationSettingsScreen_Previews: PreviewProvider {
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
-        let model = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
-                                                            roomProxy: roomProxy)
-        
-        return model
+        return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
+                                                       roomProxy: roomProxy,
+                                                       displayAsUserDefinedRoomSettings: false)
     }()
 
     static let viewModelCustom = {
@@ -111,12 +95,11 @@ struct RoomNotificationSettingsScreen_Previews: PreviewProvider {
 
         let roomProxy = RoomProxyMock(with: .init(displayName: "Room", isEncrypted: true, joinedMembersCount: 4))
         
-        let model = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
-                                                            roomProxy: roomProxy)
-        
-        return model
+        return RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxy,
+                                                       roomProxy: roomProxy,
+                                                       displayAsUserDefinedRoomSettings: false)
     }()
-
+    
     static var previews: some View {
         RoomNotificationSettingsScreen(context: viewModel.context)
             .previewDisplayName("Default")

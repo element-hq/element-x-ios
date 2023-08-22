@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import MatrixRustSDK
 import XCTest
 
@@ -25,18 +26,21 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     var roomProxyMock: RoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var context: RoomNotificationSettingsScreenViewModelType.Context { viewModel.context }
+    var cancellables: Set<AnyCancellable> = []
 
     override func setUpWithError() throws {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
     }
 
     func testInitialStateDefaultMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
@@ -48,7 +52,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     func testInitialStateCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
@@ -60,7 +65,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     func testInitialStateFailure() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isError))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
@@ -77,7 +83,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     func testToggleAllCustomSettingOff() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
             .first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
@@ -98,7 +105,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     func testToggleAllCustomSettingOffOn() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         var deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -116,7 +124,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     func testSetCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
-                                                            roomProxy: roomProxyMock)
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: false)
         let deferredState = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferredState.fulfill()
@@ -150,5 +159,71 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1, .mentionsAndKeywordsOnly)
             XCTAssertEqual(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount, 3)
         }
+    }
+    
+    func testDeleteCustomSettingTapped() async throws {
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
+        viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: true)
+        let deferredState = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferredState.fulfill()
+        
+        var actionSent: RoomNotificationSettingsScreenViewModelAction?
+        viewModel.actions
+            .sink { value in
+                actionSent = value
+            }
+            .store(in: &cancellables)
+        
+        let deferredViewState = deferFulfillment(context.$viewState
+            .map(\.deletingCustomSetting)
+            .removeDuplicates()
+            .collect(3).first())
+        context.send(viewAction: .deleteCustomSettingTapped)
+        let states = try await deferredViewState.fulfill()
+        
+        // `deletingCustomSetting` must be set to `true` when deleting, and reset to `false` afterwards.
+        XCTAssertEqual(states, [false, true, false])
+        // the `dismiss` action must have been sent
+        XCTAssertEqual(actionSent, .dismiss)
+        // `restoreDefaultNotificationMode` should have been called
+        XCTAssert(notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdCalled)
+        XCTAssertEqual(notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdReceivedInvocations, [roomProxyMock.id])
+        // and no alert is expected
+        XCTAssertNil(context.alertInfo)
+    }
+    
+    func testDeleteCustomSettingTappedFailure() async throws {
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
+        notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdThrowableError = NotificationSettingsError.Generic(message: "error")
+        viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
+                                                            roomProxy: roomProxyMock,
+                                                            displayAsUserDefinedRoomSettings: true)
+        let deferredState = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferredState.fulfill()
+        
+        var actionSent: RoomNotificationSettingsScreenViewModelAction?
+        viewModel.actions
+            .sink { value in
+                actionSent = value
+            }
+            .store(in: &cancellables)
+        
+        let deferredViewState = deferFulfillment(context.$viewState
+            .map(\.deletingCustomSetting)
+            .removeDuplicates()
+            .collect(3).first())
+        context.send(viewAction: .deleteCustomSettingTapped)
+        let states = try await deferredViewState.fulfill()
+        
+        // `deletingCustomSetting` must be set to `true` when deleting, and reset to `false` afterwards.
+        XCTAssertEqual(states, [false, true, false])
+        // an alert is expected
+        XCTAssertEqual(context.alertInfo?.id, .restoreDefaultFailed)
+        // the `dismiss` action must not have been sent
+        XCTAssertNil(actionSent)
     }
 }

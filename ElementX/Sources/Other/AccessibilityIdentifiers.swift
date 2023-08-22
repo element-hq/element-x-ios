@@ -36,6 +36,7 @@ struct A11yIdentifiers {
     static let invitesScreen = InvitesScreen()
     static let welcomeScreen = WelcomeScreen()
     static let migrationScreen = MigrationScreen()
+    static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
 
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"
@@ -160,5 +161,12 @@ struct A11yIdentifiers {
 
     struct MigrationScreen {
         let message = "migration_screen-message"
+    }
+    
+    struct NotificationSettingsEditScreen {
+        let roomNamePrefix = "notification_settings_edit_screen-room_name"
+        func roomName(_ name: String) -> String {
+            "\(roomNamePrefix):\(name)"
+        }
     }
 }

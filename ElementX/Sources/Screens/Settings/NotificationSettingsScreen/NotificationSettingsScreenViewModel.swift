@@ -24,13 +24,15 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private let appSettings: AppSettings
     private let userNotificationCenter: UserNotificationCenterProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    private let userSession: UserSessionProtocol
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, isModallyPresented: Bool) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings, userNotificationCenter: UserNotificationCenterProtocol, notificationSettingsProxy: NotificationSettingsProxyProtocol, isModallyPresented: Bool) {
+        self.userSession = userSession
         self.appSettings = appSettings
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
@@ -60,9 +62,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         case .changedEnableNotifications:
             toggleNotifications()
         case .groupChatsTapped:
-            actionsSubject.send(.editDefaultMode(isDirect: false))
+            actionsSubject.send(.editDefaultMode(chatType: .groupChat))
         case .directChatsTapped:
-            actionsSubject.send(.editDefaultMode(isDirect: true))
+            actionsSubject.send(.editDefaultMode(chatType: .oneToOneChat))
         case .roomMentionChanged:
             guard let settings = state.settings, settings.roomMentionsEnabled != state.bindings.roomMentionsEnabled else {
                 return

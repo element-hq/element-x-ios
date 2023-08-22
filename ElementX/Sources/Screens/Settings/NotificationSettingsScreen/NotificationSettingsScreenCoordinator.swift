@@ -19,6 +19,7 @@ import SwiftUI
 
 struct NotificationSettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
+    let userSession: UserSessionProtocol
     let userNotificationCenter: UserNotificationCenterProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let isModallyPresented: Bool
@@ -45,7 +46,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
+        viewModel = NotificationSettingsScreenViewModel(userSession: parameters.userSession,
+                                                        appSettings: ServiceLocator.shared.settings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
                                                         notificationSettingsProxy: parameters.notificationSettings,
                                                         isModallyPresented: parameters.isModallyPresented)
@@ -59,8 +61,8 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 self.actionsSubject.send(.close)
-            case .editDefaultMode(let isDirect):
-                self.presentEditScreen(isDirect: isDirect)
+            case .editDefaultMode(let chatType):
+                self.presentEditScreen(chatType: chatType)
             }
         }
         .store(in: &cancellables)
@@ -72,8 +74,10 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func presentEditScreen(isDirect: Bool) {
-        let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(isDirect: isDirect,
+    private func presentEditScreen(chatType: NotificationSettingsChatType) {
+        let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                                         chatType: chatType,
+                                                                                         userSession: parameters.userSession,
                                                                                          notificationSettings: parameters.notificationSettings)
         let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
         navigationStackCoordinator?.push(editSettingsCoordinator)

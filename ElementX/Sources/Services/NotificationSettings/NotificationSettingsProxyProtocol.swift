@@ -28,6 +28,7 @@ protocol NotificationSettingsProxyProtocol {
     
     func getNotificationSettings(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws -> RoomNotificationSettingsProxyProtocol
     func setNotificationMode(roomId: String, mode: RoomNotificationModeProxy) async throws
+    func getUserDefinedRoomNotificationMode(roomId: String) async throws -> RoomNotificationModeProxy?
     func getDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool) async -> RoomNotificationModeProxy
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws
     func restoreDefaultNotificationMode(roomId: String) async throws
@@ -39,4 +40,5 @@ protocol NotificationSettingsProxyProtocol {
     func setUserMentionEnabled(enabled: Bool) async throws
     func isCallEnabled() async throws -> Bool
     func setCallEnabled(enabled: Bool) async throws
+    func getRoomsWithUserDefinedRules() async throws -> [String]
 }

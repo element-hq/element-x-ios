@@ -197,7 +197,10 @@ class MockScreen: Identifiable {
         case .notificationSettingsScreen:
             let userNotificationCenter = UserNotificationCenterMock()
             userNotificationCenter.authorizationStatusReturnValue = .denied
-            let parameters = NotificationSettingsScreenCoordinatorParameters(userNotificationCenter: userNotificationCenter,
+            let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
+                                          mediaProvider: MockMediaProvider())
+            let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
+                                                                             userNotificationCenter: userNotificationCenter,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)
@@ -501,7 +504,8 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .allMessages)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members)),
+                                                                                          displayAsUserDefinedRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomNotificationSettingsCustomSetting:
@@ -509,7 +513,8 @@ class MockScreen: Identifiable {
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]
             let coordinator = RoomNotificationSettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                                           notificationSettingsProxy: NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly)),
-                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members))))
+                                                                                          roomProxy: RoomProxyMock(with: .init(displayName: "test", members: members)),
+                                                                                          displayAsUserDefinedRoomSettings: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .reportContent:

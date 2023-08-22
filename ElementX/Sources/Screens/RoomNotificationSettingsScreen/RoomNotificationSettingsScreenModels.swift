@@ -18,6 +18,7 @@ import Foundation
 
 enum RoomNotificationSettingsScreenViewModelAction {
     case openGlobalSettings
+    case dismiss
 }
 
 enum RoomNotificationSettingsState {
@@ -56,6 +57,17 @@ struct RoomNotificationSettingsScreenViewState: BindableState {
     var availableCustomRoomNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly, .mute]
     var isRestoringDefaultSetting = false
     var pendingCustomMode: RoomNotificationModeProxy?
+    var displayAsUserDefinedRoomSettings = false
+    var navigationTitle: String
+    var customSettingsSectionHeader: String
+    var deletingCustomSetting = false
+    
+    func isSelected(mode: RoomNotificationModeProxy) -> Bool {
+        if case .loaded(let settings) = notificationSettingsState, settings.mode == mode, pendingCustomMode == nil {
+            return true
+        }
+        return false
+    }
 }
 
 struct RoomNotificationSettingsScreenViewStateBindings {
@@ -69,6 +81,7 @@ enum RoomNotificationSettingsScreenViewAction {
     case changedAllowCustomSettings
     case setCustomMode(RoomNotificationModeProxy)
     case customSettingFootnoteLinkTapped
+    case deleteCustomSettingTapped
 }
 
 struct RoomNotificationSettingsScreenStrings {
@@ -87,7 +100,7 @@ struct RoomNotificationSettingsScreenStrings {
         
         self.customSettingFootnote = customSettingFootnote
     }
-    
+        
     func string(for mode: RoomNotificationModeProxy) -> String {
         switch mode {
         case .allMessages:
