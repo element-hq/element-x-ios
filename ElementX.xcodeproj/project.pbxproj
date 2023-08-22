@@ -231,6 +231,7 @@
 		518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */; };
 		51C240F4660F7269203A9B3A /* MigrationScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75910F5A36EA8FF9BAD08D18 /* MigrationScreenUITests.swift */; };
 		520EEDAFBC778AB0B41F2F53 /* ClientMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE6170EFE6A161B0A68AB61 /* ClientMock.swift */; };
+		523C6800ED85D5810CF18C19 /* OIDCAccountSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D737F4672021D0A7D218CD /* OIDCAccountSettingsPresenter.swift */; };
 		5375902175B2FEA2949D7D74 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDDDDD9FE1A699D23A5E096 /* LoginScreen.swift */; };
 		53A55748D5F587C9061F98BF /* ServerConfigurationScreenViewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C20CDD5B64510401B6D0D /* ServerConfigurationScreenViewStateTests.swift */; };
 		53A59720F4729D9BBFFB7CAB /* NotificationSettingsEditScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9CB3B9DFA353AB2B7CD9F8 /* NotificationSettingsEditScreenCoordinator.swift */; };
@@ -1372,6 +1373,7 @@
 		C14D83B2B7CD5501A0089EFC /* LayoutDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDirection.swift; sourceTree = "<group>"; };
 		C1511766C534367700C8DD75 /* RoomNotificationModeProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNotificationModeProxy.swift; sourceTree = "<group>"; };
 		C15E0017717EAE3A1D02D005 /* StaticLocationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLocationScreenCoordinator.swift; sourceTree = "<group>"; };
+		C1D737F4672021D0A7D218CD /* OIDCAccountSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCAccountSettingsPresenter.swift; sourceTree = "<group>"; };
 		C23B3FAD8B23C421BC0D1B1E /* MapTilerGeoCodingServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerGeoCodingServiceProtocol.swift; sourceTree = "<group>"; };
 		C2886615BEBAE33A0AA4D5F8 /* RoomScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenModels.swift; sourceTree = "<group>"; };
 		C2E9B841EE4878283ECDB554 /* InviteUsersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreen.swift; sourceTree = "<group>"; };
@@ -2499,6 +2501,7 @@
 		70B74A432C241E56A7ACE610 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				EB5B1119B5AD79297F1D49EB /* AccountSettings */,
 				09C599CB430ABF160C1EE55C /* AnalyticsSettingsScreen */,
 				1CA6CD0DE6F0445156361B6D /* DeveloperOptionsScreen */,
 				38A1C74493B816B8753F5BC2 /* LegalInformationScreen */,
@@ -3691,6 +3694,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		EB5B1119B5AD79297F1D49EB /* AccountSettings */ = {
+			isa = PBXGroup;
+			children = (
+				C1D737F4672021D0A7D218CD /* OIDCAccountSettingsPresenter.swift */,
+			);
+			path = AccountSettings;
+			sourceTree = "<group>";
+		};
 		EBBEB5471737E9D116DF4738 /* Background */ = {
 			isa = PBXGroup;
 			children = (
@@ -4594,6 +4605,7 @@
 				D12F440F7973F1489F61389D /* NotificationSettingsScreenModels.swift in Sources */,
 				7F7EA51A9A43125A8CB6AC90 /* NotificationSettingsScreenViewModel.swift in Sources */,
 				CBD2ABE4C1A47ECD99E1488E /* NotificationSettingsScreenViewModelProtocol.swift in Sources */,
+				523C6800ED85D5810CF18C19 /* OIDCAccountSettingsPresenter.swift in Sources */,
 				9A4E3D5AA44B041DAC3A0D81 /* OIDCAuthenticationPresenter.swift in Sources */,
 				329571083B132E4941131835 /* OnboardingBackgroundImage.swift in Sources */,
 				2CB6787E25B11711518E9588 /* OnboardingCoordinator.swift in Sources */,
@@ -5507,7 +5519,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.110-alpha";
+				version = "1.0.112-alpha";
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {

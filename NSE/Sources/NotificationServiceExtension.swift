@@ -40,6 +40,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // - NotificationID could not be resolved
             return contentHandler(request.content)
         }
+        
+        if credentials.restorationToken.session.oidcData != nil {
+            // Notification content is disabled for OIDC sessions
+            // until token refresh is multi-process aware.
+            return contentHandler(request.content)
+        }
 
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent

@@ -66,16 +66,18 @@ enum OIDCError: Error {
 }
 
 struct OIDCAuthenticationDataProxy: Equatable {
-//    let underlyingData: OidcAuthenticationData
-//
-//    var url: URL {
-//        URL(string: underlyingData.loginUrl())!
-//    }
-    let url: URL = "https://theroadtonowhere"
+    let underlyingData: OidcAuthenticationData
+    
+    var url: URL {
+        guard let url = URL(string: underlyingData.loginUrl()) else {
+            fatalError("OIDC login URL hasn't been validated.")
+        }
+        return url
+    }
 }
 
-// extension OidcAuthenticationData: Equatable {
-//    public static func == (lhs: MatrixRustSDK.OidcAuthenticationData, rhs: MatrixRustSDK.OidcAuthenticationData) -> Bool {
-//        lhs.loginUrl() == rhs.loginUrl()
-//    }
-// }
+extension OidcAuthenticationData: Equatable {
+    public static func == (lhs: MatrixRustSDK.OidcAuthenticationData, rhs: MatrixRustSDK.OidcAuthenticationData) -> Bool {
+        lhs.loginUrl() == rhs.loginUrl()
+    }
+}

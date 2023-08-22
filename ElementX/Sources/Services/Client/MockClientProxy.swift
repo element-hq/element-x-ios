@@ -25,6 +25,7 @@ class MockClientProxy: ClientProxyProtocol {
     let deviceID: String?
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
+    let accountURL: URL?
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
@@ -32,9 +33,10 @@ class MockClientProxy: ClientProxyProtocol {
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
 
-    init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+    init(userID: String, deviceID: String? = nil, accountURL: URL? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         self.deviceID = deviceID
+        self.accountURL = accountURL
         self.roomSummaryProvider = roomSummaryProvider
     }
 

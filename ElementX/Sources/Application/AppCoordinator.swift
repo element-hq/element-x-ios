@@ -543,11 +543,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
 
     private func startSync() {
-        ServiceLocator.shared.analytics.signpost.beginSync()
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
+        guard let userSession else { return }
         
+        ServiceLocator.shared.analytics.signpost.beginSync()
         userSession.clientProxy.startSync()
         
         let identifier = "StaleDataIndicator"

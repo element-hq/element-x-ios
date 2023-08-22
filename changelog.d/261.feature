@@ -1,0 +1,1 @@
+Enable OIDC support, with notification content disabled for now.
