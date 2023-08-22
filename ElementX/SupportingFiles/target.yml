@@ -90,6 +90,7 @@ targets:
           CFBundleTypeRole: Viewer
           LSHandlerRank: Owner
           LSItemContentTypes: $(PILLS_UT_TYPE_IDENTIFIER)
+        LSSupportsOpeningDocumentsInPlace: false
 
 
     settings:
