@@ -24,6 +24,13 @@ struct InfoPlistReader {
         static let bundleShortVersion = "CFBundleShortVersionString"
         static let bundleDisplayName = "CFBundleDisplayName"
         static let mapLibreAPIKey = "mapLibreAPIKey"
+        static let utExportedTypeDeclarationsKey = "UTExportedTypeDeclarations"
+        static let utTypeIdentifierKey = "UTTypeIdentifier"
+        static let utDescriptionKey = "UTTypeDescription"
+    }
+    
+    private enum Values {
+        static let mentionPills = "Mention Pills"
     }
 
     /// Info.plist reader on the bundle object that contains the current executable.
@@ -42,51 +49,61 @@ struct InfoPlistReader {
 
     /// App group identifier set in Info.plist of the target
     var appGroupIdentifier: String {
-        infoPlistStringValue(forKey: Keys.appGroupIdentifier)
+        infoPlistValue(forKey: Keys.appGroupIdentifier)
     }
 
     /// Base bundle identifier set in Info.plist of the target
     var baseBundleIdentifier: String {
-        infoPlistStringValue(forKey: Keys.baseBundleIdentifier)
+        infoPlistValue(forKey: Keys.baseBundleIdentifier)
     }
     
     /// Keychain access group identifier set in Info.plist of the target
     var keychainAccessGroupIdentifier: String {
-        infoPlistStringValue(forKey: Keys.keychainAccessGroupIdentifier)
+        infoPlistValue(forKey: Keys.keychainAccessGroupIdentifier)
     }
 
     /// Bundle executable of the target
     var bundleExecutable: String {
-        infoPlistStringValue(forKey: kCFBundleExecutableKey as String)
+        infoPlistValue(forKey: kCFBundleExecutableKey as String)
     }
 
     /// Bundle identifier of the target
     var bundleIdentifier: String {
-        infoPlistStringValue(forKey: kCFBundleIdentifierKey as String)
+        infoPlistValue(forKey: kCFBundleIdentifierKey as String)
     }
 
     /// Bundle short version string of the target
     var bundleShortVersionString: String {
-        infoPlistStringValue(forKey: Keys.bundleShortVersion)
+        infoPlistValue(forKey: Keys.bundleShortVersion)
     }
 
     /// Bundle version of the target
     var bundleVersion: String {
-        infoPlistStringValue(forKey: kCFBundleVersionKey as String)
+        infoPlistValue(forKey: kCFBundleVersionKey as String)
     }
 
     /// Bundle display name of the target
     var bundleDisplayName: String {
-        infoPlistStringValue(forKey: Keys.bundleDisplayName)
+        infoPlistValue(forKey: Keys.bundleDisplayName)
     }
 
     /// Map Libre API Key
     var mapLibreAPIKey: String {
-        infoPlistStringValue(forKey: Keys.mapLibreAPIKey)
+        infoPlistValue(forKey: Keys.mapLibreAPIKey)
     }
 
-    private func infoPlistStringValue(forKey key: String) -> String {
-        guard let result = bundle.object(forInfoDictionaryKey: key) as? String else {
+    /// Mention Pills UTType
+    var pillsUTType: String {
+        let exportedTypes: [[String: Any]] = infoPlistValue(forKey: Keys.utExportedTypeDeclarationsKey)
+        guard let mentionPills = exportedTypes.first(where: { $0[Keys.utDescriptionKey] as? String == Values.mentionPills }),
+              let utType = mentionPills[Keys.utTypeIdentifierKey] as? String else {
+            fatalError("Add properly \(Values.mentionPills) exported type into your target's Info.plst")
+        }
+        return utType
+    }
+
+    private func infoPlistValue<T>(forKey key: String) -> T {
+        guard let result = bundle.object(forInfoDictionaryKey: key) as? T else {
             fatalError("Add \(key) into your target's Info.plst")
         }
         return result

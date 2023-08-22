@@ -23,7 +23,6 @@ struct RoomTimelineItemView: View {
         timelineView
             .animation(.elementDefault, value: viewState.groupStyle)
             .animation(.elementDefault, value: viewState.type)
-            .environmentObject(context)
             .environment(\.timelineGroupStyle, viewState.groupStyle)
             .onAppear {
                 context.send(viewAction: .itemAppeared(itemID: viewState.identifier))

@@ -25,6 +25,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let permalinkBaseURL: URL
     
     private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
+
+    static func invalidateCache() {
+        cache.removeAllValues()
+    }
     
     init(permalinkBaseURL: URL) {
         self.permalinkBaseURL = permalinkBaseURL
@@ -64,10 +68,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return cached
         }
         
-        // Trick DTCoreText into preserving newlines
-        let adjustedHTMLString = htmlString.replacingOccurrences(of: "\n", with: "<br>")
-        
-        guard let data = adjustedHTMLString.data(using: .utf8) else {
+        guard let data = htmlString.data(using: .utf8) else {
             return nil
         }
         

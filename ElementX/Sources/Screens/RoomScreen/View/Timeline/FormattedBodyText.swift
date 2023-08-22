@@ -19,21 +19,31 @@ import SwiftUI
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     @Environment(\.layoutDirection) private var layoutDirection
-
+    
     private let attributedString: AttributedString
     private let additionalWhitespacesCount: Int
     private let boostEmojiSize: Bool
-
+    
+    private let defaultAttributesContainer: AttributeContainer = {
+        var container = AttributeContainer()
+        // Equivalent to compound's bodyLG
+        container.font = UIFont.preferredFont(forTextStyle: .body)
+        container.foregroundColor = UIColor.compound.textPrimary
+        return container
+    }()
+    
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var adjustedAttributedString = attributedString
-        adjustedAttributedString.append(AttributedString(stringLiteral: additionalWhitespacesSuffix))
+        var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
+        
+        // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
+        adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
         
         let string = String(attributedString.characters)
         
         if boostEmojiSize,
            string.containsOnlyEmoji,
            let range = adjustedAttributedString.range(of: string) {
-            adjustedAttributedString[range].font = .system(size: 48.0)
+            adjustedAttributedString[range].font = UIFont.systemFont(ofSize: 48.0)
         }
         
         return adjustedAttributedString.formattedComponents
@@ -52,7 +62,7 @@ struct FormattedBodyText: View {
                   additionalWhitespacesCount: additionalWhitespacesCount,
                   boostEmojiSize: boostEmojiSize)
     }
-
+    
     // These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
@@ -75,8 +85,7 @@ struct FormattedBodyText: View {
                 if component.isBlockquote {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
-                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .foregroundColor(.compound.textSecondary)
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 12.0)
@@ -90,10 +99,9 @@ struct FormattedBodyText: View {
                         }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
-                    Text(component.attributedString)
+                    MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.compound.textPrimary)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
             }
@@ -102,7 +110,7 @@ struct FormattedBodyText: View {
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
@@ -121,23 +129,25 @@ struct FormattedBodyText: View {
                         Rectangle()
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
-                        Text(component.attributedString)
-                            .foregroundColor(.compound.textPrimary)
+                        MessageText(attributedString: component.attributedString)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
-                    Text(component.attributedString)
+                    MessageText(attributedString: component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.compound.textPrimary)
                 }
             }
         }
     }
-
+    
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
-        container.font = .compound.bodyMD
+        // Sadly setting SwiftUI fonts do not work so we would need UIFont equivalents for compound, this one is bodyMD
+        container.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        container.foregroundColor = UIColor.compound.textSecondary
+        // To remove the block style paragraph that the parser adds by default
+        container.paragraphStyle = .default
         return container
     }
 }
@@ -177,24 +187,32 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <code><b>Hello</b> <i>world</i></code>
             <p>Text</p>
             <code>Hello world</code>
-            """
+            """,
+            "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
         ]
         
         let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
         
-        VStack(alignment: .leading, spacing: 24.0) {
-            ForEach(htmlStrings, id: \.self) { htmlString in
-                if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
-                    FormattedBodyText(attributedString: attributedString)
-                        .previewBubble()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24.0) {
+                ForEach(htmlStrings, id: \.self) { htmlString in
+                    if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                        FormattedBodyText(attributedString: attributedString)
+                            .previewBubble()
+                    }
                 }
+                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                    .previewBubble()
+                FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                    .previewBubble()
+                FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
+                    .previewBubble()
+                
+                FormattedBodyText(text: "❤️", boostEmojiSize: true)
+                    .previewBubble()
             }
-            FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                .previewBubble()
-            FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
-                .previewBubble()
+            .padding()
         }
-        .padding()
     }
 }
 
