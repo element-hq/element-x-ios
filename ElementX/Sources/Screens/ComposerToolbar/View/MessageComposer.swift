@@ -43,7 +43,6 @@ struct MessageComposer: View {
                 composerView
                     .tint(.compound.iconAccentTertiary)
                     .frame(height: idealHeight)
-                    .padding(.horizontal, 12)
                     .padding(.vertical, 10)
                     .focused($focused)
                     .onAppear {
