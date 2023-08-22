@@ -49,7 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, dynamicEntriesEnabled: appSettings.dynamicEntriesEnabled),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -74,12 +74,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$dynamicEntriesEnabled
-            .weakAssign(to: \.state.dynamicEntriesEnabled, on: self)
-            .store(in: &cancellables)
-        
         context.$viewState
-            .filter { _ in appSettings.dynamicEntriesEnabled }
             .map(\.bindings.searchQuery)
             .debounceAndRemoveDuplicates()
             .sink { [weak self] searchQuery in

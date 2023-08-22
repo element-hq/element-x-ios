@@ -78,36 +78,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         self.roomList = roomList
-
+        
         do {
-            if appSettings.dynamicEntriesEnabled {
-                listUpdatesSubscriptionResult = roomList.entriesWithDynamicFilter(listener: RoomListEntriesListenerProxy { [weak self] updates in
-                    guard let self else { return }
-                    MXLog.info("\(name): Received list update")
-                    diffsPublisher.send(updates)
-                })
-                
-                listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
-                
-                // Forces the listener above to be called with the current state
-                updateFilterPattern(nil)
-            } else {
-                let listUpdatesSubscriptionResult = roomList.entries(listener: RoomListEntriesListenerProxy { [weak self] updates in
-                    guard let self else { return }
-                    MXLog.info("\(name): Received list update")
-                    diffsPublisher.send(updates)
-                })
-                
-                listUpdatesTaskHandle = listUpdatesSubscriptionResult.entriesStream
-
-                rooms = listUpdatesSubscriptionResult.entries.map { roomListEntry in
-                    buildSummaryForRoomListEntry(roomListEntry)
-                }
-                
-                // Manually call it here as the didSet doesn't work from constructors
-                roomListSubject.send(rooms)
-            }
-
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicFilter(listener: RoomListEntriesListenerProxy { [weak self] updates in
+                guard let self else { return }
+                MXLog.info("\(name): Received list update")
+                diffsPublisher.send(updates)
+            })
+            
+            listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
+            
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
                 guard let self else { return }
                 MXLog.info("\(name): Received state update: \(state)")
@@ -138,8 +118,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .all)
             return
         }
-        
-        guard appSettings.dynamicEntriesEnabled else { return }
         
         _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .normalizedMatchRoomName(pattern: pattern.lowercased()))
     }
