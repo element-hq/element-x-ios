@@ -74,3 +74,15 @@ struct ComposerToolbar: View {
         }
     }
 }
+
+// MARK: - Mock
+
+extension ComposerToolbar {
+    static func mock() -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
+    }
+}

@@ -163,16 +163,10 @@ struct RoomScreen_Previews: PreviewProvider {
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-
-    static let wysiwygViewModel = WysiwygComposerViewModel()
-    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
-    static let composerToolbar = ComposerToolbar(context: composerViewModel.context,
-                                                 wysiwygViewModel: wysiwygViewModel,
-                                                 keyCommandHandler: { _ in false })
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: composerToolbar)
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
         }
     }
 }
