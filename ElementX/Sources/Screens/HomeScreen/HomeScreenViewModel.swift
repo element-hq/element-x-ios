@@ -240,7 +240,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        MXLog.info("Updating rooms")
+        MXLog.verbose("Updating rooms")
         
         var rooms = [HomeScreenRoom]()
         
@@ -259,7 +259,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         state.rooms = rooms
         
-        MXLog.info("Finished updating rooms")
+        MXLog.verbose("Finished updating rooms")
     }
     
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
