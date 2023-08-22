@@ -35,7 +35,7 @@ struct RoomScreen: View {
                     .padding(.top, 8)
                     .padding(.bottom)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .focused($composerFocused, equals: true)
+                    .focused($composerFocused)
                     .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)

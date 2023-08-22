@@ -29,7 +29,6 @@ struct ComposerToolbar: View {
             RoomAttachmentPicker(context: context)
                 .padding(.bottom, 5) // centre align with the send button
             messageComposer
-                .clipped()
                 .environmentObject(context)
         }
     }
@@ -49,7 +48,7 @@ struct ComposerToolbar: View {
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
         }
-        .focused($composerFocused, equals: true)
+        .focused($composerFocused)
         .onChange(of: context.composerFocused) { newValue in
             guard composerFocused != newValue else { return }
 
@@ -59,16 +58,14 @@ struct ComposerToolbar: View {
             context.composerFocused = newValue
         }
     }
-
-    private var composerView: AnyView {
-        let view = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                       viewModel: wysiwygViewModel,
-                                       itemProviderHelper: ItemProviderHelper(),
-                                       keyCommandHandler: keyCommandHandler) { provider in
+    
+    private var composerView: WysiwygComposerView {
+        WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+                            viewModel: wysiwygViewModel,
+                            itemProviderHelper: ItemProviderHelper(),
+                            keyCommandHandler: keyCommandHandler) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
         }
-
-        return AnyView(view)
     }
 
     private class ItemProviderHelper: WysiwygItemProviderHelper {

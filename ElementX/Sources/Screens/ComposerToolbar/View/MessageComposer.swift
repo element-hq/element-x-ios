@@ -21,7 +21,7 @@ typealias EnterKeyHandler = () -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
-    let composerView: AnyView
+    let composerView: WysiwygComposerView
     var idealHeight: CGFloat
     let sendingDisabled: Bool
     let mode: RoomScreenComposerMode
@@ -45,7 +45,7 @@ struct MessageComposer: View {
                     .frame(height: idealHeight)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
-                    .focused($focused, equals: true)
+                    .focused($focused)
                     .onAppear {
                         onAppearAction()
                     }
@@ -69,6 +69,7 @@ struct MessageComposer: View {
             }
         }
         .padding(.leading, 12.0)
+        .clipped()
         .background {
             ZStack {
                 roundedRectangle
@@ -186,11 +187,11 @@ struct MessageComposer_Previews: PreviewProvider {
                                                  maxExpandedHeight: 250)
         viewModel.setMarkdownContent(content)
 
-        let composerView = AnyView(WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                                       viewModel: viewModel,
-                                                       itemProviderHelper: nil,
-                                                       keyCommandHandler: nil,
-                                                       pasteHandler: nil))
+        let composerView = WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                               viewModel: viewModel,
+                                               itemProviderHelper: nil,
+                                               keyCommandHandler: nil,
+                                               pasteHandler: nil)
 
         return MessageComposer(composerView: composerView,
                                idealHeight: viewModel.idealHeight,
