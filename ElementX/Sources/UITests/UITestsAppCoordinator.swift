@@ -204,6 +204,25 @@ class MockScreen: Identifiable {
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)
+        case .notificationSettingsScreenMismatchConfiguration:
+            let userNotificationCenter = UserNotificationCenterMock()
+            userNotificationCenter.authorizationStatusReturnValue = .denied
+            let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
+                                          mediaProvider: MockMediaProvider())
+            let notificationSettings = NotificationSettingsProxyMock(with: .init())
+            notificationSettings.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+                switch (isEncrypted, isOneToOne) {
+                case (true, _):
+                    return .allMessages
+                case (false, _):
+                    return .mentionsAndKeywordsOnly
+                }
+            }
+            let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
+                                                                             userNotificationCenter: userNotificationCenter,
+                                                                             notificationSettings: notificationSettings,
+                                                                             isModallyPresented: false)
+            return NotificationSettingsScreenCoordinator(parameters: parameters)
         case .onboarding:
             return OnboardingCoordinator()
         case .roomPlainNoAvatar:
