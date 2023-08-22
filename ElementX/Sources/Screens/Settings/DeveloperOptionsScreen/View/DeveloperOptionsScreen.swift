@@ -38,13 +38,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Room list") {
-                Toggle(isOn: $context.dynamicEntriesEnabled) {
-                    Text("Dynamic entries")
-                    Text("Requires app reboot")
-                }
-            }
-
             Section("Notifications") {
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")

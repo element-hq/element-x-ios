@@ -79,18 +79,12 @@ struct HomeScreenViewState: BindableState {
     
     var selectedRoomID: String?
     
-    var dynamicEntriesEnabled: Bool
-    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
         }
         
-        if dynamicEntriesEnabled || bindings.searchQuery.isEmpty {
-            return rooms
-        }
-        
-        return rooms.filter { $0.name.localizedStandardContains(bindings.searchQuery) }
+        return rooms
     }
     
     var bindings = HomeScreenViewStateBindings()
