@@ -27,6 +27,7 @@ enum ComposerToolbarViewModelAction {
     case handlePasteOrDrop(provider: NSItemProvider)
 
     case composerModeChanged(mode: RoomScreenComposerMode)
+    case composerFocusedChanged(isFocused: Bool)
 }
 
 enum ComposerToolbarViewAction {

@@ -37,6 +37,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .sink { [weak self] in self?.actionsSubject.send(.composerModeChanged(mode: $0)) }
             .store(in: &cancellables)
 
+        context.$viewState
+            .map(\.bindings.composerFocused)
+            .removeDuplicates()
+            .sink { [weak self] in self?.actionsSubject.send(.composerFocusedChanged(isFocused: $0)) }
+            .store(in: &cancellables)
+
         wysiwygViewModel.$isContentEmpty
             .weakAssign(to: \.state.composerEmpty, on: self)
             .store(in: &cancellables)

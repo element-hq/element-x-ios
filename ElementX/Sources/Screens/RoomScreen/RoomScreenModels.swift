@@ -104,8 +104,6 @@ struct RoomScreenViewState: BindableState {
 
 struct RoomScreenViewStateBindings {
     var isScrolledToBottom = true
-
-    var composerFocused: Bool
     
     /// The state of wether reactions listed on the timeline are expanded/collapsed.
     /// Key is itemID, value is the collapsed state.

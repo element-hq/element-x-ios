@@ -23,8 +23,7 @@ struct RoomScreen: View {
     let composerToolbar: ComposerToolbar
 
     private let attachmentButtonPadding = 10.0
-    @FocusState private var composerFocused: Bool
-    
+
     var body: some View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
@@ -35,7 +34,6 @@ struct RoomScreen: View {
                     .padding(.top, 8)
                     .padding(.bottom)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .focused($composerFocused)
                     .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -77,14 +75,6 @@ struct RoomScreen: View {
                 if isScrolledToBottom {
                     context.send(viewAction: .scrolledToBottom)
                 }
-            }
-            .onChange(of: context.composerFocused) { newValue in
-                guard newValue != composerFocused else { return }
-
-                composerFocused = newValue
-            }
-            .onChange(of: composerFocused) { newValue in
-                context.composerFocused = newValue
             }
     }
 
