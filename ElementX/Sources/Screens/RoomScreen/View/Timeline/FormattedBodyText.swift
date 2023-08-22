@@ -31,9 +31,9 @@ struct FormattedBodyText: View {
         container.foregroundColor = UIColor.compound.textPrimary
         return container
     }()
-    
+        
     private var attributedComponents: [AttributedStringBuilderComponent] {
-        var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
+        var adjustedAttributedString = AttributedString(layoutDirection.isolateLayoutUnicodeString) + attributedString + AttributedString(additionalWhitespacesSuffix)
         
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
         adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
@@ -89,7 +89,10 @@ struct FormattedBodyText: View {
     var bubbleLayout: some View {
         TimelineBubbleLayout(spacing: 8) {
             ForEach(attributedComponents, id: \.self) { component in
-                if component.isBlockquote {
+                // Ignore if the string contains only the layout correction
+                if String(component.attributedString.characters) == layoutDirection.isolateLayoutUnicodeString {
+                    EmptyView()
+                } else if component.isBlockquote {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
