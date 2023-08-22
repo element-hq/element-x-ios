@@ -28,6 +28,7 @@ struct NotificationSettingsScreenViewState: BindableState {
     let isModallyPresented: Bool
     var isUserPermissionGranted: Bool?
     var allowedNotificationModes: [RoomNotificationModeProxy] = [.allMessages, .mentionsAndKeywordsOnly]
+    var fixingConfigurationMismatch = false
     
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
@@ -51,7 +52,12 @@ struct NotificationSettingsScreenSettings {
     let callsEnabled: Bool?
     // Old clients were having specific settings for encrypted and unencrypted rooms,
     // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
-    let inconsistentSettings: Bool
+    let inconsistentSettings: [NotificationSettingsScreenSettingsChatMismatchConfiguration]
+}
+
+struct NotificationSettingsScreenSettingsChatMismatchConfiguration: Equatable {
+    let type: NotificationSettingsChatType
+    let isEncrypted: Bool
 }
 
 struct NotificationSettingsScreenStrings {
@@ -87,9 +93,11 @@ enum NotificationSettingsScreenViewAction {
     case roomMentionChanged
     case callsChanged
     case close
+    case fixConfigurationMismatchTapped
 }
 
 enum NotificationSettingsScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert
+    case fixMismatchConfigurationFailed
 }

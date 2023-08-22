@@ -686,6 +686,14 @@ public enum L10n {
   public static var screenNotificationSettingsAdditionalSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_additional_settings_section_title") }
   /// Audio and video calls
   public static var screenNotificationSettingsCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_calls_label") }
+  /// Configuration mismatch
+  public static var screenNotificationSettingsConfigurationMismatch: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch") }
+  /// We’ve simplified Notifications Settings to make options easier to find. 
+  /// 
+  /// Some custom settings you’ve chosen in the past are not shown here, but they’re still active. 
+  /// 
+  /// If you proceed, some of your settings may change.
+  public static var screenNotificationSettingsConfigurationMismatchDescription: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch_description") }
   /// Direct chats
   public static var screenNotificationSettingsDirectChats: String { return L10n.tr("Localizable", "screen_notification_settings_direct_chats") }
   /// Custom setting per chat
@@ -702,6 +710,8 @@ public enum L10n {
   public static var screenNotificationSettingsEditScreenGroupSectionHeader: String { return L10n.tr("Localizable", "screen_notification_settings_edit_screen_group_section_header") }
   /// Enable notifications on this device
   public static var screenNotificationSettingsEnableNotifications: String { return L10n.tr("Localizable", "screen_notification_settings_enable_notifications") }
+  /// The configuration has not been corrected, please try again.
+  public static var screenNotificationSettingsFailedFixingConfiguration: String { return L10n.tr("Localizable", "screen_notification_settings_failed_fixing_configuration") }
   /// Group chats
   public static var screenNotificationSettingsGroupChats: String { return L10n.tr("Localizable", "screen_notification_settings_group_chats") }
   /// Mentions

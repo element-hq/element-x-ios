@@ -22,17 +22,21 @@ struct NotificationSettingsScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.showSystemNotificationsAlert {
-                userPermissionSection
-            }
-            enableNotificationSection
-            if context.enableNotifications {
-                roomsNotificationSection
-                if context.viewState.settings?.roomMentionsEnabled != nil {
-                    mentionsSection
+            if context.viewState.settings?.inconsistentSettings.isEmpty == false {
+                configurationMismatchSection
+            } else {
+                if context.viewState.showSystemNotificationsAlert {
+                    userPermissionSection
                 }
-                if context.viewState.settings?.callsEnabled != nil {
-                    callsSection
+                enableNotificationSection
+                if context.enableNotifications {
+                    roomsNotificationSection
+                    if context.viewState.settings?.roomMentionsEnabled != nil {
+                        mentionsSection
+                    }
+                    if context.viewState.settings?.callsEnabled != nil {
+                        callsSection
+                    }
                 }
             }
         }
@@ -152,6 +156,30 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
+    
+    private var configurationMismatchSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "gearshape")
+                    .font(.compound.headingSMSemibold)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L10n.screenNotificationSettingsConfigurationMismatch)
+                        .font(.compound.headingSMSemibold)
+                    Text(L10n.screenNotificationSettingsConfigurationMismatchDescription)
+                        .foregroundColor(.compound.textSecondary)
+                }
+                Button {
+                    context.send(viewAction: .fixConfigurationMismatchTapped)
+                } label: {
+                    Text(L10n.actionContinue)
+                }
+                .buttonStyle(.elementCapsuleProminent)
+                .disabled(context.viewState.fixingConfigurationMismatch)
+                .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
+            }
+            .padding(.vertical, 4)
+        }
+    }
 }
 
 // MARK: - Previews
@@ -183,8 +211,39 @@ struct NotificationSettingsScreen_Previews: PreviewProvider {
         viewModel.fetchInitialContent()
         return viewModel
     }()
+    
+    static let viewModelConfigurationMismatch: NotificationSettingsScreenViewModel = {
+        let appSettings = AppSettings()
+        let notificationCenter = UserNotificationCenterMock()
+        notificationCenter.authorizationStatusReturnValue = .notDetermined
+        let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+            switch (isEncrypted, isOneToOne) {
+            case (true, true):
+                return .allMessages
+            case (false, true):
+                return .mute
+            default:
+                return .mentionsAndKeywordsOnly
+            }
+        }
+        notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
+        notificationSettingsProxy.isCallEnabledReturnValue = false
+        
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe"), mediaProvider: MockMediaProvider())
+
+        var viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
+                                                            appSettings: appSettings,
+                                                            userNotificationCenter: notificationCenter,
+                                                            notificationSettingsProxy: notificationSettingsProxy,
+                                                            isModallyPresented: true)
+        viewModel.fetchInitialContent()
+        return viewModel
+    }()
 
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
+        NotificationSettingsScreen(context: viewModelConfigurationMismatch.context)
+            .previewDisplayName("Configuration mismatch")
     }
 }

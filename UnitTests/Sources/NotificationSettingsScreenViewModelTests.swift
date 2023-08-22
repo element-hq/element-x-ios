@@ -82,7 +82,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.settings?.groupChatsMode, .mentionsAndKeywordsOnly)
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, false)
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [])
         XCTAssertNil(context.viewState.bindings.alertInfo)
     }
         
@@ -104,7 +104,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.groupChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, true)
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .groupChat, isEncrypted: false)])
     }
     
     func testInconsistentDirectChatsSettings() async throws {
@@ -125,7 +125,90 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, true)
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .oneToOneChat, isEncrypted: false)])
+    }
+    
+    func testFixInconsistentSettings() async throws {
+        // Initialize with a configuration mismatch where encrypted one-to-one chats is `.allMessages` and unencrypted one-to-one chats is `.mentionsAndKeywordsOnly`
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+            switch (isEncrypted, isOneToOne) {
+            case (true, true):
+                return .allMessages
+            case (false, true):
+                return .mentionsAndKeywordsOnly
+            default:
+                return .allMessages
+            }
+        }
+                
+        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.settings)
+            .first(where: { $0 != nil }))
+        notificationSettingsProxy.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .oneToOneChat, isEncrypted: false)])
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState
+            .map(\.fixingConfigurationMismatch)
+            .removeDuplicates()
+            .collect(3)
+            .first())
+        context.send(viewAction: .fixConfigurationMismatchTapped)
+        let fixingStates = try await deferredState.fulfill()
+        
+        XCTAssertEqual(fixingStates, [false, true, false])
+        
+        // Ensure we only fix the invalid setting: unencrypted one-to-one chats should be set to `.allMessages` (to match encrypted one-to-one chats)
+        XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 1)
+        let callArguments = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedArguments
+        XCTAssertEqual(callArguments?.isEncrypted, false)
+        XCTAssertEqual(callArguments?.isOneToOne, true)
+        XCTAssertEqual(callArguments?.mode, .allMessages)
+    }
+    
+    func testFixAllInconsistentSettings() async throws {
+        // Initialize with a configuration mismatch where
+        // - encrypted one-to-one chats is `.allMessages` and unencrypted one-to-one chats is `.mentionsAndKeywordsOnly`
+        // - encrypted group chats is `.allMessages` and unencrypted group chats is `.mentionsAndKeywordsOnly`
+        notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
+            switch (isEncrypted, isOneToOne) {
+            case (true, _):
+                return .allMessages
+            case (false, _):
+                return .mentionsAndKeywordsOnly
+            }
+        }
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.settings)
+            .first(where: { $0 != nil }))
+        notificationSettingsProxy.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .groupChat, isEncrypted: false), .init(type: .oneToOneChat, isEncrypted: false)])
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState
+            .map(\.fixingConfigurationMismatch)
+            .removeDuplicates()
+            .collect(3)
+            .first())
+        context.send(viewAction: .fixConfigurationMismatchTapped)
+        let fixingStates = try await deferredState.fulfill()
+        
+        XCTAssertEqual(fixingStates, [false, true, false])
+        
+        // All problems should be fixed
+        XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
+        let callArguments = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
+        // Ensure we fix the invalid unencrypted group chats setting (it should be set to `.allMessages` to match encrypted group chats)
+        XCTAssertEqual(callArguments[0].isEncrypted, false)
+        XCTAssertEqual(callArguments[0].isOneToOne, false)
+        XCTAssertEqual(callArguments[0].mode, .allMessages)
+        // Ensure we fix the invalid unencrypted one-to-one chats setting (it should be set to `.allMessages` to match encrypted one-to-one chats)
+        XCTAssertEqual(callArguments[1].isEncrypted, false)
+        XCTAssertEqual(callArguments[1].isOneToOne, true)
+        XCTAssertEqual(callArguments[1].mode, .allMessages)
     }
     
     func testToggleRoomMentionOff() async throws {
