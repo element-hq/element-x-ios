@@ -69,7 +69,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             return
         }
         
-        MXLog.info("Updating rooms")
+        MXLog.verbose("Updating rooms")
         
         var rooms = [MessageForwardingRoom]()
                 
@@ -89,6 +89,6 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         
         state.rooms = rooms
         
-        MXLog.info("Finished updating rooms")
+        MXLog.verbose("Finished updating rooms")
     }
 }
