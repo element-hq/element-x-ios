@@ -36,7 +36,7 @@ class LoggingTests: XCTestCase {
 
         let log = UUID().uuidString
 
-        MXLog.configure(redirectToFiles: true)
+        MXLog.configure(logLevel: .info, redirectToFiles: true)
         
         MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
@@ -55,7 +55,7 @@ class LoggingTests: XCTestCase {
         // When launching the app 5 times.
         let launchCount = 5
         for index in 0..<launchCount {
-            MXLog.configure(redirectToFiles: true)
+            MXLog.configure(logLevel: .info, redirectToFiles: true)
             MXLog.info("Launch \(index + 1)")
         }
         
@@ -74,7 +74,7 @@ class LoggingTests: XCTestCase {
         let launchCount = 10
         let logFileCount = 5
         for index in 0..<launchCount {
-            MXLog.configure(redirectToFiles: true, maxLogFileCount: UInt(logFileCount))
+            MXLog.configure(logLevel: .info, redirectToFiles: true, maxLogFileCount: UInt(logFileCount))
             MXLog.info("Launch \(index + 1)")
         }
         
@@ -93,7 +93,7 @@ class LoggingTests: XCTestCase {
         let launchCount = 10
         let logFileSizeLimit: UInt = 25 * 1024
         for index in 0..<launchCount {
-            MXLog.configure(redirectToFiles: true, logFileSizeLimit: logFileSizeLimit)
+            MXLog.configure(logLevel: .info, redirectToFiles: true, logFileSizeLimit: logFileSizeLimit)
             MXLog.info("Launch \(index + 1)")
             
             // Add ~5KB of logs
@@ -133,7 +133,7 @@ class LoggingTests: XCTestCase {
 
         let log = UUID().uuidString
 
-        MXLog.configure(redirectToFiles: true)
+        MXLog.configure(logLevel: .info, redirectToFiles: true)
         
         MXLog.verbose(log)
         guard let logFile = MXLogger.logFiles.first else {
@@ -150,7 +150,7 @@ class LoggingTests: XCTestCase {
 
         let target = "nse"
 
-        MXLog.configure(target: target, redirectToFiles: true)
+        MXLog.configure(target: target, logLevel: .info, redirectToFiles: true)
         
         MXLog.info(UUID().uuidString)
         guard let logFile = MXLogger.logFiles.first else {
@@ -233,7 +233,7 @@ class LoggingTests: XCTestCase {
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
         
-        MXLog.configure(redirectToFiles: true)
+        MXLog.configure(logLevel: .info, redirectToFiles: true)
         
         MXLog.info(roomSummary)
         
@@ -294,7 +294,7 @@ class LoggingTests: XCTestCase {
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
         
-        MXLog.configure(redirectToFiles: true)
+        MXLog.configure(logLevel: .info, redirectToFiles: true)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
@@ -352,7 +352,7 @@ class LoggingTests: XCTestCase {
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
         
-        MXLog.configure(redirectToFiles: true)
+        MXLog.configure(logLevel: .info, redirectToFiles: true)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)

@@ -18,7 +18,9 @@ import SwiftUI
 
 struct PillView: View {
     var body: some View {
-        Button(action: { MXLog.info("TEXT ATTACHMENT TEST") }) {
+        Button {
+            MXLog.info("TEXT ATTACHMENT TEST")
+        } label: {
             HStack {
                 Image(asset: Asset.Images.launchLogo)
                     .resizable()

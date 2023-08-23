@@ -21,10 +21,6 @@ import MatrixRustSDK
 // We can filter by level, crate and even file. See more details here:
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
 struct TracingConfiguration {
-    static var release = TracingConfiguration(overrides: [.common: .info])
-    
-    static var debug = TracingConfiguration(overrides: [.common: .info])
-    
     /// Configure tracing with certain overrides in place
     /// - Parameter overrides: the desired overrides
     /// - Returns: a custom tracing configuration
@@ -43,7 +39,7 @@ struct TracingConfiguration {
         return TracingConfiguration(overrides: overrides)
     }
     
-    enum LogLevel: String { case error, warn, info, debug, trace }
+    enum LogLevel: String, Codable, CaseIterable { case error, warn, info, debug, trace }
     
     enum Target: String {
         case common = ""
@@ -59,11 +55,11 @@ struct TracingConfiguration {
     
     static let targets: OrderedDictionary<Target, LogLevel> = [
         .common: .info,
-        .hyper: .warn,
-        .matrix_sdk_crypto: .debug,
-        .matrix_sdk_http_client: .debug,
-        .matrix_sdk_sliding_sync: .debug,
-        .matrix_sdk_base_sliding_sync: .debug,
+        .hyper: .info,
+        .matrix_sdk_crypto: .info,
+        .matrix_sdk_http_client: .info,
+        .matrix_sdk_sliding_sync: .info,
+        .matrix_sdk_base_sliding_sync: .info,
         .matrix_sdk_ui_timeline: .info
     ]
     
