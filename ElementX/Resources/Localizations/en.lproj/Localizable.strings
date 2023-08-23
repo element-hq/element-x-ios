@@ -265,7 +265,7 @@
 "screen_notification_settings_additional_settings_section_title" = "Additional settings";
 "screen_notification_settings_calls_label" = "Audio and video calls";
 "screen_notification_settings_configuration_mismatch" = "Configuration mismatch";
-"screen_notification_settings_configuration_mismatch_description" = "We’ve simplified Notifications Settings to make options easier to find. \n\nSome custom settings you’ve chosen in the past are not shown here, but they’re still active. \n\nIf you proceed, some of your settings may change.";
+"screen_notification_settings_configuration_mismatch_description" = "We’ve simplified Notifications Settings to make options easier to find.\n\nSome custom settings you’ve chosen in the past are not shown here, but they’re still active.\n\nIf you proceed, some of your settings may change.";
 "screen_notification_settings_direct_chats" = "Direct chats";
 "screen_notification_settings_edit_custom_settings_section_title" = "Custom setting per chat";
 "screen_notification_settings_edit_failed_updating_default_mode" = "An error occurred while updating the notification setting.";
