@@ -57,11 +57,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     @Consumable private var storedAppRoute: AppRoute?
 
     init() {
-        MXLog.configure()
+        let appSettings = AppSettings()
+        MXLog.configure(logLevel: appSettings.logLevel)
+        
+        if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
+            AppSettings.reset()
+        }
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
-        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
+        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
 
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -191,13 +196,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - Private
     
-    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
-        if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
-            AppSettings.reset()
-        }
-        
+    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator, appSettings: AppSettings) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
-        ServiceLocator.shared.register(appSettings: AppSettings())
+        ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
         ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
                                                                           sentryURL: ServiceLocator.shared.settings.bugReportSentryURL,

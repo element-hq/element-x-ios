@@ -29,6 +29,7 @@ final class AppSettings {
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
+        case logLevel
         
         // Feature flags
         case shouldCollapseRoomStateEvents
@@ -195,6 +196,9 @@ final class AppSettings {
     // MARK: - Other
     
     let permalinkBaseURL: URL = "https://matrix.to"
+    
+    @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
+    var logLevel
     
     // MARK: - Maps
     

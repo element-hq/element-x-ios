@@ -43,6 +43,7 @@ enum DeveloperOptionsScreenViewAction {
 }
 
 protocol DeveloperOptionsProtocol: AnyObject {
+    var logLevel: TracingConfiguration.LogLevel { get set }
     var shouldCollapseRoomStateEvents: Bool { get set }
     var userSuggestionsEnabled: Bool { get set }
     var readReceiptsEnabled: Bool { get set }

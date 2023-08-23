@@ -22,6 +22,15 @@ struct DeveloperOptionsScreen: View {
 
     var body: some View {
         Form {
+            Picker(selection: $context.logLevel) {
+                ForEach(TracingConfiguration.LogLevel.allCases, id: \.self) { logLevel in
+                    Text(logLevel.rawValue.capitalized)
+                }
+            } label: {
+                Text("Log level")
+                Text("Requires app reboot")
+            }
+            
             Section("Timeline") {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")

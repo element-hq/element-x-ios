@@ -81,7 +81,7 @@ class NSELogger {
         }
         isConfigured = true
 
-        MXLog.configure(target: "nse")
+        MXLog.configure(target: "nse", logLevel: .info)
     }
 
     static func logMemory(with tag: String) {
