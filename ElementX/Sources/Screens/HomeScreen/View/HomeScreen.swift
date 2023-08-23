@@ -80,15 +80,13 @@ struct HomeScreen: View {
                 updateVisibleRange()
             }
             .onChange(of: context.searchQuery) { _ in
-                // Dispatch allows the view to update after changing the query
-                DispatchQueue.main.async { updateVisibleRange() }
+                updateVisibleRange()
             }
             .onReceive(scrollViewAdapter.scrollDirection) { direction in
                 withAnimation(.elementDefault) { lastScrollDirection = direction }
             }
             .onChange(of: context.viewState.visibleRooms) { _ in
-                // Dispatch gives the view a chance to update
-                DispatchQueue.main.async { updateVisibleRange() }
+                updateVisibleRange()
             }
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.roomListMode == .skeletons)
@@ -182,7 +180,14 @@ struct HomeScreen: View {
         }
     }
     
+    /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
+    /// Dispatch it with a delay to allow the UI to update and the computations to be correct
+    /// Once we move to iOS 17 we should remove all of this and use scroll anchors instead
     private func updateVisibleRange() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { updateVisibleRange() }
+    }
+    
+    private func delayedUpdateVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
               context.viewState.visibleRooms.count > 0 else {
             return
