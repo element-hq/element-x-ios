@@ -139,6 +139,13 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var avatarURL: URL?
     
+    var notificationMode: RoomNotificationModeProxy?
+    
+    var hasDecoration: Bool {
+        let showNotificationSettings = notificationMode != nil && notificationMode != .allMessages
+        return hasUnreads || showNotificationSettings
+    }
+    
     var isPlaceholder = false
     
     static func placeholder() -> HomeScreenRoom {

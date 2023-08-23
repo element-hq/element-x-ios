@@ -272,7 +272,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               hasUnreads: details.unreadNotificationCount > 0,
                               timestamp: details.lastMessageFormattedTimestamp,
                               lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
-                              avatarURL: details.avatarURL)
+                              avatarURL: details.avatarURL,
+                              notificationMode: details.notificationMode)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {
