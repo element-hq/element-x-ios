@@ -36,6 +36,7 @@ struct A11yIdentifiers {
     static let invitesScreen = InvitesScreen()
     static let welcomeScreen = WelcomeScreen()
     static let migrationScreen = MigrationScreen()
+    static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
 
     struct AnalyticsPromptScreen {
@@ -161,6 +162,10 @@ struct A11yIdentifiers {
 
     struct MigrationScreen {
         let message = "migration_screen-message"
+    }
+    
+    struct NotificationSettingsScreen {
+        let fixMismatchConfiguration = "notification_settings_screen-fix_mismatch_configuration"
     }
     
     struct NotificationSettingsEditScreen {

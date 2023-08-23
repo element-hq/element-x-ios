@@ -34,6 +34,7 @@ enum UITestsScreenIdentifier: String {
     case bugReport
     case bugReportWithScreenshot
     case notificationSettingsScreen
+    case notificationSettingsScreenMismatchConfiguration
     case onboarding
     case roomPlainNoAvatar
     case roomEncryptedWithAvatar

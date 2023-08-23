@@ -18,4 +18,14 @@ import ElementX
 import XCTest
 
 @MainActor
-class NotificationSettingsScreenUITests: XCTestCase { }
+class NotificationSettingsScreenUITests: XCTestCase {
+    func testRegularScreen() async throws {
+        let app = Application.launch(.notificationSettingsScreen)
+        try await app.assertScreenshot(.notificationSettingsScreen)
+    }
+    
+    func testMismatchConfigurationScreen() async throws {
+        let app = Application.launch(.notificationSettingsScreenMismatchConfiguration)
+        try await app.assertScreenshot(.notificationSettingsScreenMismatchConfiguration)
+    }
+}
