@@ -159,25 +159,28 @@ struct NotificationSettingsScreen: View {
     
     private var configurationMismatchSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
-                Image(systemName: "gearshape")
-                    .font(.compound.headingSMSemibold)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(L10n.screenNotificationSettingsConfigurationMismatch)
+            ListRow(kind: .custom {
+                VStack(alignment: .leading, spacing: 12) {
+                    Image(systemName: "gearshape")
                         .font(.compound.headingSMSemibold)
-                    Text(L10n.screenNotificationSettingsConfigurationMismatchDescription)
-                        .foregroundColor(.compound.textSecondary)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(L10n.screenNotificationSettingsConfigurationMismatch)
+                            .font(.compound.headingSMSemibold)
+                        Text(L10n.screenNotificationSettingsConfigurationMismatchDescription)
+                            .foregroundColor(.compound.textSecondary)
+                    }
+                    Button {
+                        context.send(viewAction: .fixConfigurationMismatchTapped)
+                    } label: {
+                        Text(L10n.actionContinue)
+                    }
+                    .buttonStyle(.elementCapsuleProminent)
+                    .disabled(context.viewState.fixingConfigurationMismatch)
+                    .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
                 }
-                Button {
-                    context.send(viewAction: .fixConfigurationMismatchTapped)
-                } label: {
-                    Text(L10n.actionContinue)
-                }
-                .buttonStyle(.elementCapsuleProminent)
-                .disabled(context.viewState.fixingConfigurationMismatch)
-                .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
-            }
-            .padding(.vertical, 4)
+                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.vertical, ListRowPadding.vertical)
+            })
         }
     }
 }
