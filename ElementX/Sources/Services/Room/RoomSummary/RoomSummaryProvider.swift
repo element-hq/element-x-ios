@@ -74,16 +74,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
-        notificationSettings.callbacks
-            .receive(on: serialDispatchQueue)
-            .sink { [weak self] callback in
-                guard let self else { return }
-                switch callback {
-                case .settingsDidChange:
-                    self.rebuildRoomSummaries()
+        if appSettings.notificationSettingsEnabled {
+            notificationSettings.callbacks
+                .receive(on: serialDispatchQueue)
+                .sink { [weak self] callback in
+                    guard let self else { return }
+                    switch callback {
+                    case .settingsDidChange:
+                        self.rebuildRoomSummaries()
+                    }
                 }
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
+        }
     }
     
     func setRoomList(_ roomList: RoomList) {

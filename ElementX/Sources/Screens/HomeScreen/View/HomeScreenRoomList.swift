@@ -34,11 +34,11 @@ struct HomeScreenRoomList: View {
         } else {
             ForEach(context.viewState.visibleRooms) { room in
                 if room.isPlaceholder {
-                    HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                    HomeScreenRoomCell(room: room, context: context, isSelected: false, showNotificationMode: false)
                         .redacted(reason: .placeholder)
                 } else {
                     let isSelected = context.viewState.selectedRoomID == room.id
-                    HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
+                    HomeScreenRoomCell(room: room, context: context, isSelected: isSelected, showNotificationMode: context.viewState.showNotificationSettings)
                         .contextMenu {
                             Button {
                                 context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))

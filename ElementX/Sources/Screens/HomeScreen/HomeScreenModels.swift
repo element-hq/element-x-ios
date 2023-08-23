@@ -73,6 +73,7 @@ struct HomeScreenViewState: BindableState {
     var showSessionVerificationBanner = false
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
+    let showNotificationSettings: Bool
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false

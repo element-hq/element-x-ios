@@ -49,7 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, showNotificationSettings: appSettings.notificationSettingsEnabled),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
