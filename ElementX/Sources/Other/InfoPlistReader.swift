@@ -27,6 +27,10 @@ struct InfoPlistReader {
         static let utExportedTypeDeclarationsKey = "UTExportedTypeDeclarations"
         static let utTypeIdentifierKey = "UTTypeIdentifier"
         static let utDescriptionKey = "UTTypeDescription"
+        
+        static let otlpTracingURL = "otlpTracingURL"
+        static let otlpTracingUsername = "otlpTracingUsername"
+        static let otlpTracingPassword = "otlpTracingPassword"
     }
     
     private enum Values {
@@ -87,10 +91,27 @@ struct InfoPlistReader {
         infoPlistValue(forKey: Keys.bundleDisplayName)
     }
 
-    /// Map Libre API Key
+    // MARK: - MapLibre
+    
     var mapLibreAPIKey: String {
         infoPlistValue(forKey: Keys.mapLibreAPIKey)
     }
+    
+    // MARK: - OTLP Tracing
+    
+    var otlpTracingURL: String {
+        infoPlistValue(forKey: Keys.otlpTracingURL)
+    }
+    
+    var otlpTracingUsername: String {
+        infoPlistValue(forKey: Keys.otlpTracingUsername)
+    }
+    
+    var otlpTracingPassword: String {
+        infoPlistValue(forKey: Keys.otlpTracingPassword)
+    }
+    
+    // MARK: - Mention Pills
 
     /// Mention Pills UTType
     var pillsUTType: String {
@@ -101,6 +122,8 @@ struct InfoPlistReader {
         }
         return utType
     }
+    
+    // MARK: - Private
 
     private func infoPlistValue<T>(forKey key: String) -> T {
         guard let result = bundle.object(forInfoDictionaryKey: key) as? T else {

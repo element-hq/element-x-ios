@@ -43,6 +43,7 @@ enum MXLog {
     
     static func configure(target: String? = nil,
                           logLevel: TracingConfiguration.LogLevel,
+                          otlpConfiguration: OTLPConfiguration? = nil,
                           redirectToFiles: Bool = Constants.redirectToFiles,
                           maxLogFileCount: UInt = Constants.maxLogFileCount,
                           logFileSizeLimit: UInt = Constants.logFilesSizeLimit) {
@@ -58,7 +59,7 @@ enum MXLog {
             return
         }
         
-        setupTracing(configuration: .custom(logLevel: logLevel))
+        setupTracing(configuration: .custom(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
         
         if let target {
             self.target = target

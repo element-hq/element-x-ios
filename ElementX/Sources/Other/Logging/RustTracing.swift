@@ -17,6 +17,12 @@
 import Collections
 import MatrixRustSDK
 
+struct OTLPConfiguration {
+    let url: String
+    let username: String
+    let password: String
+}
+
 // This exposes the full Rust side tracing subscriber filter for more flexibility.
 // We can filter by level, crate and even file. See more details here:
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
@@ -83,6 +89,18 @@ struct TracingConfiguration {
     }
 }
 
-func setupTracing(configuration: TracingConfiguration) {
-    setupTracing(config: .init(filter: configuration.filter, writeToStdoutOrSystem: true, writeToFiles: nil))
+func setupTracing(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
+    if let otlpConfiguration {
+        setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
+                                       user: otlpConfiguration.username,
+                                       password: otlpConfiguration.password,
+                                       otlpEndpoint: otlpConfiguration.url,
+                                       filter: configuration.filter,
+                                       writeToStdoutOrSystem: true,
+                                       writeToFiles: nil))
+    } else {
+        setupTracing(config: .init(filter: configuration.filter,
+                                   writeToStdoutOrSystem: true,
+                                   writeToFiles: nil))
+    }
 }

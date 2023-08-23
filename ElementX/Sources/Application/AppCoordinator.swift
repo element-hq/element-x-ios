@@ -58,7 +58,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     init() {
         let appSettings = AppSettings()
-        MXLog.configure(logLevel: appSettings.logLevel)
+        
+        if appSettings.otlpTracingEnabled {
+            MXLog.configure(logLevel: appSettings.logLevel, otlpConfiguration: .init(url: appSettings.otlpTracingURL,
+                                                                                     username: appSettings.otlpTracingUsername,
+                                                                                     password: appSettings.otlpTracingPassword))
+        } else {
+            MXLog.configure(logLevel: appSettings.logLevel)
+        }
         
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
             AppSettings.reset()
