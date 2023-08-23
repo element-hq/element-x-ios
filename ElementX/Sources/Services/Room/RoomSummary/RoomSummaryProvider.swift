@@ -60,7 +60,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          appSettings: AppSettings,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.appSettings = appSettings
