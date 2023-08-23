@@ -23,6 +23,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
     private var appSettings: AppSettings
+    private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private let serialDispatchQueue: DispatchQueue
@@ -58,17 +59,30 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          appSettings: AppSettings,
+         notificationSettings: NotificationSettingsProxyProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.appSettings = appSettings
+        self.notificationSettings = notificationSettings
         self.backgroundTaskService = backgroundTaskService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
+            .store(in: &cancellables)
+        
+        notificationSettings.callbacks
+            .receive(on: serialDispatchQueue)
+            .sink { [weak self] callback in
+                guard let self else { return }
+                switch callback {
+                case .settingsDidChange:
+                    self.rebuildRoomSummaries()
+                }
+            }
             .store(in: &cancellables)
     }
     
@@ -326,6 +340,26 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         return CollectionDifference(changes)
+    }
+    
+    private func rebuildRoomSummaries() {
+        let span = MXLog.createSpan("\(name).rebuild_room_summaries")
+        span.enter()
+        defer {
+            span.exit()
+        }
+        
+        MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
+        
+        rooms = rooms.map {
+            if let roomId = $0.id {
+                return self.buildRoomSummaryForIdentifier(roomId, invalidated: false)
+            } else {
+                return $0
+            }
+        }
+        
+        MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
     }
 }
 

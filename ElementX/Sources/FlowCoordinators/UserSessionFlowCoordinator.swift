@@ -297,22 +297,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Settings
     
     private func presentSettingsScreen(animated: Bool) {
-        Task {
-            await asyncPresentSettingsScreen(animated: animated)
-        }
-    }
-    
-    private func asyncPresentSettingsScreen(animated: Bool) async {
         let settingsNavigationStackCoordinator = NavigationStackCoordinator()
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: settingsNavigationStackCoordinator)
         
-        let parameters = await SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
-                                                                   userIndicatorController: userIndicatorController,
-                                                                   userSession: userSession,
-                                                                   bugReportService: bugReportService,
-                                                                   notificationSettings: userSession.clientProxy.notificationSettings(),
-                                                                   appSettings: appSettings)
+        let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
+                                                             userIndicatorController: userIndicatorController,
+                                                             userSession: userSession,
+                                                             bugReportService: bugReportService,
+                                                             notificationSettings: userSession.clientProxy.notificationSettings,
+                                                             appSettings: appSettings)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
         settingsScreenCoordinator.callback = { [weak self] action in
             guard let self else { return }
