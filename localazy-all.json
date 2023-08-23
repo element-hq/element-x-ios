@@ -11,6 +11,9 @@
         "replacements": {
           "%s": "%@",
           "$s": "$@"
+        },
+        "params": {
+          "flatten_keys": "underscore"
         }
       },
       {
@@ -22,7 +25,8 @@
           "$s": "$@"
         },
         "params": {
-          "variable": "COUNT"
+          "variable": "COUNT",
+          "flatten_keys": "underscore"
         }
       }
     ]
