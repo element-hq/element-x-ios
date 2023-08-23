@@ -30,6 +30,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case logLevel
+        case otlpTracingEnabled
         
         // Feature flags
         case shouldCollapseRoomStateEvents
@@ -197,8 +198,17 @@ final class AppSettings {
     
     let permalinkBaseURL: URL = "https://matrix.to"
     
+    // MARK: - Logging
+    
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    @UserPreference(key: UserDefaultsKeys.otlpTracingEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var otlpTracingEnabled
+    
+    let otlpTracingURL = InfoPlistReader.main.otlpTracingURL
+    let otlpTracingUsername = InfoPlistReader.main.otlpTracingUsername
+    let otlpTracingPassword = InfoPlistReader.main.otlpTracingPassword
     
     // MARK: - Maps
     

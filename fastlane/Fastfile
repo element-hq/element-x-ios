@@ -164,7 +164,7 @@ lane :config_nightly do
   data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
 
-  config_maplibre()
+  config_secrets()
   
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
@@ -180,7 +180,7 @@ lane :config_nightly do
 end
 
 lane :config_production do
-  config_maplibre()
+  config_secrets()
   xcodegen(spec: "project.yml")
 end
 
@@ -414,13 +414,43 @@ private_lane :create_simulator_if_necessary do |options|
   end
 end
 
-private_lane :config_maplibre do
-  api_key = ENV["MAPLIBRE_API_KEY"]
-  UI.user_error!("Invalid Map Libre API key.") unless !api_key.to_s.empty?
+private_lane :config_secrets do
+  maplibre_api_key = ENV["MAPLIBRE_API_KEY"]
+  UI.user_error!("Invalid Map Libre API key.") unless !maplibre_api_key.to_s.empty?
+
+  otlp_tracing_url = ENV["OTLP_TRACING_URL"]
+  UI.user_error!("Invalid OTLP tracing URL.") unless !otlp_tracing_url.to_s.empty?
+
+  otlp_tracing_username = ENV["OTLP_TRACING_USERNAME"]
+  UI.user_error!("Invalid OTLP tracing username.") unless !otlp_tracing_username.to_s.empty?
+
+  otlp_tracing_password = ENV["OTLP_TRACING_PASSWORD"]
+  UI.user_error!("Invalid OTLP tracing URL.") unless !otlp_tracing_password.to_s.empty?
 
   set_xcconfig_value(
     path: './ElementX/SupportingFiles/secrets.xcconfig',
     name: 'MAPLIBRE_API_KEY',
-    value: api_key
+    value: maplibre_api_key
+  )
+
+  # URLs need special treatment to work properly in xcconfig files
+  # https://stackoverflow.com/a/36297483/730924
+  # i.e. make sure to use https:/$()/ in the scheme in the stored secret
+  set_xcconfig_value(
+    path: './ElementX/SupportingFiles/secrets.xcconfig',
+    name: 'OTLP_TRACING_URL',
+    value: otlp_tracing_url
+  )
+
+  set_xcconfig_value(
+    path: './ElementX/SupportingFiles/secrets.xcconfig',
+    name: 'OTLP_TRACING_USERNAME',
+    value: otlp_tracing_username
+  )
+
+  set_xcconfig_value(
+    path: './ElementX/SupportingFiles/secrets.xcconfig',
+    name: 'OTLP_TRACING_PASSWORD',
+    value: otlp_tracing_password
   )
 end

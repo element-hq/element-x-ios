@@ -22,13 +22,20 @@ struct DeveloperOptionsScreen: View {
 
     var body: some View {
         Form {
-            Picker(selection: $context.logLevel) {
-                ForEach(TracingConfiguration.LogLevel.allCases, id: \.self) { logLevel in
-                    Text(logLevel.rawValue.capitalized)
+            Section("Logging") {
+                Picker(selection: $context.logLevel) {
+                    ForEach(TracingConfiguration.LogLevel.allCases, id: \.self) { logLevel in
+                        Text(logLevel.rawValue.capitalized)
+                    }
+                } label: {
+                    Text("Log level")
+                    Text("Requires app reboot")
                 }
-            } label: {
-                Text("Log level")
-                Text("Requires app reboot")
+                
+                Toggle(isOn: $context.otlpTracingEnabled) {
+                    Text("OTLP tracing")
+                    Text("Requires app reboot")
+                }
             }
             
             Section("Timeline") {
