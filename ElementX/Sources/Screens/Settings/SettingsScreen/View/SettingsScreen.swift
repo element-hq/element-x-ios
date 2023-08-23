@@ -46,7 +46,7 @@ struct SettingsScreen: View {
                 doneButton
             }
         }
-        .introspect(.window, on: .iOS(.v16)) { window in
+        .introspect(.window, on: .iOS(.v16, .v17)) { window in
             context.send(viewAction: .updateWindow(window))
         }
     }
