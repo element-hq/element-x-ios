@@ -133,35 +133,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
-        for diff in diffs {
-            // Special case resets in order to prevent large updates from blocking the UI
-            // Render the first resetDiffChunkingThreshhold as a reset and then append the rest to give the UI time to update
-            let resetDiffChunkingThreshhold = 50
-            if case .reset(let values) = diff, values.count > resetDiffChunkingThreshhold {
-                processDiff(RoomListEntriesUpdate.reset(values: Array(values[..<resetDiffChunkingThreshhold])))
-                processDiff(RoomListEntriesUpdate.append(values: Array(values.dropFirst(resetDiffChunkingThreshhold))))
-            } else {
-                processDiff(diff)
+        rooms = diffs
+            .reduce(rooms) { currentItems, diff in
+                guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
+                    MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
+                    return currentItems
+                }
+                
+                guard let updatedItems = currentItems.applying(collectionDiff) else {
+                    MXLog.error("\(name): Failed applying diff: \(collectionDiff)")
+                    return currentItems
+                }
+                
+                return updatedItems
             }
-        }
         
         detectDuplicatesInRoomList(rooms)
         
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
-    }
-    
-    private func processDiff(_ diff: RoomListEntriesUpdate) {
-        guard let collectionDiff = buildDiff(from: diff, on: rooms) else {
-            MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
-            return
-        }
-        
-        guard let updatedItems = rooms.applying(collectionDiff) else {
-            MXLog.error("\(name): Failed applying diff: \(collectionDiff)")
-            return
-        }
-        
-        rooms = updatedItems
     }
 
     private func fetchRoomInfo(roomListItem: RoomListItemProtocol) -> RoomInfo? {
