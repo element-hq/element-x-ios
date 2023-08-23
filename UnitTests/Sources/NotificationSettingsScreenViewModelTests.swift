@@ -104,7 +104,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.groupChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .groupChat, isEncrypted: false)])
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(chatType: .groupChat, isEncrypted: false)])
     }
     
     func testInconsistentDirectChatsSettings() async throws {
@@ -125,7 +125,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .oneToOneChat, isEncrypted: false)])
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(chatType: .oneToOneChat, isEncrypted: false)])
     }
     
     func testFixInconsistentSettings() async throws {
@@ -147,7 +147,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .oneToOneChat, isEncrypted: false)])
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(chatType: .oneToOneChat, isEncrypted: false)])
         
         let deferredState = deferFulfillment(viewModel.context.$viewState
             .map(\.fixingConfigurationMismatch)
@@ -186,7 +186,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
-        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(type: .groupChat, isEncrypted: false), .init(type: .oneToOneChat, isEncrypted: false)])
+        XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(chatType: .groupChat, isEncrypted: false), .init(chatType: .oneToOneChat, isEncrypted: false)])
         
         let deferredState = deferFulfillment(viewModel.context.$viewState
             .map(\.fixingConfigurationMismatch)

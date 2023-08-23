@@ -123,7 +123,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     private func fetchSettings() {
         fetchSettingsTask = Task {
-            var inconsistentSettings: [NotificationSettingsScreenSettingsChatMismatchConfiguration] = []
+            var inconsistentSettings: [NotificationSettingsScreenInvalidSetting] = []
             // Group chats
             var groupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: false)
             let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: false)
@@ -137,12 +137,12 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             if groupChatsMode != encryptedGroupChatsMode {
                 groupChatsMode = .allMessages
                 // a default setting for a chat can only be `.allMessages` or `.mentionsAndKeywordsOnly`.
-                inconsistentSettings.append(.init(type: .groupChat, isEncrypted: encryptedGroupChatsMode != .allMessages))
+                inconsistentSettings.append(.init(chatType: .groupChat, isEncrypted: encryptedGroupChatsMode != .allMessages))
             }
             if directChatsMode != encryptedDirectChatsMode {
                 directChatsMode = .allMessages
                 // a default setting for a chat can only be `.allMessages` or `.mentionsAndKeywordsOnly`.
-                inconsistentSettings.append(.init(type: .oneToOneChat, isEncrypted: encryptedDirectChatsMode != .allMessages))
+                inconsistentSettings.append(.init(chatType: .oneToOneChat, isEncrypted: encryptedDirectChatsMode != .allMessages))
             }
             
             // The following calls may fail if the associated push rule doesn't exist
@@ -167,24 +167,22 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         guard let settings = state.settings, !settings.inconsistentSettings.isEmpty, !state.fixingConfigurationMismatch else { return }
         state.fixingConfigurationMismatch = true
         
-        Task {
-            var failures: [NotificationSettingsScreenSettingsChatMismatchConfiguration] = []
-            for inconsistentSetting in settings.inconsistentSettings {
-                do {
-                    try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: inconsistentSetting.isEncrypted, isOneToOne: inconsistentSetting.type == .oneToOneChat, mode: .allMessages)
-                } catch {
-                    failures.append(inconsistentSetting)
-                }
+        var failures: [NotificationSettingsScreenInvalidSetting] = []
+        for inconsistentSetting in settings.inconsistentSettings {
+            do {
+                try await notificationSettingsProxy.setDefaultRoomNotificationMode(isEncrypted: inconsistentSetting.isEncrypted, isOneToOne: inconsistentSetting.chatType == .oneToOneChat, mode: .allMessages)
+            } catch {
+                failures.append(inconsistentSetting)
             }
-            
-            if !failures.isEmpty {
-                state.bindings.alertInfo = AlertInfo(id: .fixMismatchConfigurationFailed,
-                                                     title: L10n.commonError,
-                                                     message: L10n.screenNotificationSettingsFailedFixingConfiguration,
-                                                     primaryButton: .init(title: L10n.actionOk, action: nil))
-            }
-            state.fixingConfigurationMismatch = false
         }
+        
+        if !failures.isEmpty {
+            state.bindings.alertInfo = AlertInfo(id: .fixMismatchConfigurationFailed,
+                                                 title: L10n.commonError,
+                                                 message: L10n.screenNotificationSettingsFailedFixingConfiguration,
+                                                 primaryButton: .init(title: L10n.actionOk, action: nil))
+        }
+        state.fixingConfigurationMismatch = false
     }
     
     private func enableRoomMention(_ enable: Bool) async {

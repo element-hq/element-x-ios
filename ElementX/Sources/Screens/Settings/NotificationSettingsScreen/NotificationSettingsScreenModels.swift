@@ -52,11 +52,11 @@ struct NotificationSettingsScreenSettings {
     let callsEnabled: Bool?
     // Old clients were having specific settings for encrypted and unencrypted rooms,
     // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
-    let inconsistentSettings: [NotificationSettingsScreenSettingsChatMismatchConfiguration]
+    let inconsistentSettings: [NotificationSettingsScreenInvalidSetting]
 }
 
-struct NotificationSettingsScreenSettingsChatMismatchConfiguration: Equatable {
-    let type: NotificationSettingsChatType
+struct NotificationSettingsScreenInvalidSetting: Equatable {
+    let chatType: NotificationSettingsChatType
     let isEncrypted: Bool
 }
 
