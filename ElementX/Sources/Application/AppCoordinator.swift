@@ -191,7 +191,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID)
-        switch await roomProxy?.sendMessage(replyText) {
+        switch await roomProxy?.sendMessage(replyText, html: nil) {
         case .success:
             break
         default:

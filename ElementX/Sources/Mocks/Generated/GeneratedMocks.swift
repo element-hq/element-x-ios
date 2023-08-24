@@ -964,23 +964,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendMessage
 
-    var sendMessageInReplyToCallsCount = 0
-    var sendMessageInReplyToCalled: Bool {
-        return sendMessageInReplyToCallsCount > 0
+    var sendMessageHtmlInReplyToCallsCount = 0
+    var sendMessageHtmlInReplyToCalled: Bool {
+        return sendMessageHtmlInReplyToCallsCount > 0
     }
-    var sendMessageInReplyToReceivedArguments: (message: String, eventID: String?)?
-    var sendMessageInReplyToReceivedInvocations: [(message: String, eventID: String?)] = []
-    var sendMessageInReplyToReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageInReplyToClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
+    var sendMessageHtmlInReplyToReceivedArguments: (message: String, html: String?, eventID: String?)?
+    var sendMessageHtmlInReplyToReceivedInvocations: [(message: String, html: String?, eventID: String?)] = []
+    var sendMessageHtmlInReplyToReturnValue: Result<Void, RoomProxyError>!
+    var sendMessageHtmlInReplyToClosure: ((String, String?, String?) async -> Result<Void, RoomProxyError>)?
 
-    func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageInReplyToCallsCount += 1
-        sendMessageInReplyToReceivedArguments = (message: message, eventID: eventID)
-        sendMessageInReplyToReceivedInvocations.append((message: message, eventID: eventID))
-        if let sendMessageInReplyToClosure = sendMessageInReplyToClosure {
-            return await sendMessageInReplyToClosure(message, eventID)
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError> {
+        sendMessageHtmlInReplyToCallsCount += 1
+        sendMessageHtmlInReplyToReceivedArguments = (message: message, html: html, eventID: eventID)
+        sendMessageHtmlInReplyToReceivedInvocations.append((message: message, html: html, eventID: eventID))
+        if let sendMessageHtmlInReplyToClosure = sendMessageHtmlInReplyToClosure {
+            return await sendMessageHtmlInReplyToClosure(message, html, eventID)
         } else {
-            return sendMessageInReplyToReturnValue
+            return sendMessageHtmlInReplyToReturnValue
         }
     }
     //MARK: - toggleReaction
@@ -1127,23 +1127,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - editMessage
 
-    var editMessageOriginalCallsCount = 0
-    var editMessageOriginalCalled: Bool {
-        return editMessageOriginalCallsCount > 0
+    var editMessageHtmlOriginalCallsCount = 0
+    var editMessageHtmlOriginalCalled: Bool {
+        return editMessageHtmlOriginalCallsCount > 0
     }
-    var editMessageOriginalReceivedArguments: (newMessage: String, eventID: String)?
-    var editMessageOriginalReceivedInvocations: [(newMessage: String, eventID: String)] = []
-    var editMessageOriginalReturnValue: Result<Void, RoomProxyError>!
-    var editMessageOriginalClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
+    var editMessageHtmlOriginalReceivedArguments: (newMessage: String, html: String, eventID: String)?
+    var editMessageHtmlOriginalReceivedInvocations: [(newMessage: String, html: String, eventID: String)] = []
+    var editMessageHtmlOriginalReturnValue: Result<Void, RoomProxyError>!
+    var editMessageHtmlOriginalClosure: ((String, String, String) async -> Result<Void, RoomProxyError>)?
 
-    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
-        editMessageOriginalCallsCount += 1
-        editMessageOriginalReceivedArguments = (newMessage: newMessage, eventID: eventID)
-        editMessageOriginalReceivedInvocations.append((newMessage: newMessage, eventID: eventID))
-        if let editMessageOriginalClosure = editMessageOriginalClosure {
-            return await editMessageOriginalClosure(newMessage, eventID)
+    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+        editMessageHtmlOriginalCallsCount += 1
+        editMessageHtmlOriginalReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID)
+        editMessageHtmlOriginalReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID))
+        if let editMessageHtmlOriginalClosure = editMessageHtmlOriginalClosure {
+            return await editMessageHtmlOriginalClosure(newMessage, html, eventID)
         } else {
-            return editMessageOriginalReturnValue
+            return editMessageHtmlOriginalReturnValue
         }
     }
     //MARK: - redact

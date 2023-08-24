@@ -35,7 +35,6 @@ struct ComposerToolbar: View {
     
     private var messageComposer: some View {
         MessageComposer(composerView: composerView,
-                        idealHeight: wysiwygViewModel.idealHeight,
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         mode: context.viewState.composerMode) {
             context.send(viewAction: .sendMessage)

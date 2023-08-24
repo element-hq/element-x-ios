@@ -146,8 +146,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
-        case .sendMessage(let message, let mode):
-            Task { await sendCurrentMessage(message, mode: mode) }
+        case .sendMessage(let message, let html, let mode):
+            Task { await sendCurrentMessage(message, html: html, mode: mode) }
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
@@ -427,8 +427,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage(_ currentMessage: String, mode: RoomScreenComposerMode) async {
-        guard !currentMessage.isEmpty else {
+    private func sendCurrentMessage(_ message: String, html: String, mode: RoomScreenComposerMode) async {
+        guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }
 
@@ -436,11 +436,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch mode {
         case .reply(let itemId, _):
-            await timelineController.sendMessage(currentMessage, inReplyTo: itemId)
+            await timelineController.sendMessage(message, html: html, inReplyTo: itemId)
         case .edit(let originalItemId):
-            await timelineController.editMessage(currentMessage, original: originalItemId)
+            await timelineController.editMessage(message, html: html, original: originalItemId)
         default:
-            await timelineController.sendMessage(currentMessage)
+            await timelineController.sendMessage(message, html: html)
         }
     }
     

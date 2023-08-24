@@ -92,7 +92,7 @@ protocol RoomProxyProtocol {
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>
     
-    func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
     func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
     
@@ -130,7 +130,7 @@ protocol RoomProxyProtocol {
     /// Cancels  a failed message given its transaction ID from the timeline
     func cancelSend(transactionID: String) async
 
-    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
+    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
@@ -181,8 +181,8 @@ extension RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
-        await sendMessage(message, inReplyTo: nil)
+    func sendMessage(_ message: String, html: String?) async -> Result<Void, RoomProxyError> {
+        await sendMessage(message, html: html, inReplyTo: nil)
     }
     
     // Avoids to duplicate the same logic around in the app

@@ -17,7 +17,7 @@
 import UIKit
 
 enum ComposerToolbarViewModelAction {
-    case sendMessage(message: String, mode: RoomScreenComposerMode)
+    case sendMessage(plain: String, html: String, mode: RoomScreenComposerMode)
 
     case displayCameraPicker
     case displayMediaPicker

@@ -262,20 +262,25 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
         let transactionId = genTransactionId()
-        let messageContent = messageEventContentFromMarkdown(md: message)
-        
+        let messageContent: RoomMessageEventContent
+        if let html {
+            messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
+        } else {
+            messageContent = messageEventContentFromMarkdown(md: message)
+        }     
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
                     try self.room.sendReply(msg: messageContent, inReplyToEventId: eventID, txnId: transactionId)
                 } else {
+
                     self.room.send(msg: messageContent, txnId: transactionId)
                 }
             } catch {
@@ -443,7 +448,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()

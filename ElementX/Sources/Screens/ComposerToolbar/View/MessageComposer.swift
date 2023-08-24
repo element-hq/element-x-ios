@@ -22,7 +22,6 @@ typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
     let composerView: WysiwygComposerView
-    var idealHeight: CGFloat
     let sendingDisabled: Bool
     let mode: RoomScreenComposerMode
     let sendAction: EnterKeyHandler
@@ -42,7 +41,6 @@ struct MessageComposer: View {
             HStack(alignment: .bottom) {
                 composerView
                     .tint(.compound.iconAccentTertiary)
-                    .frame(height: idealHeight)
                     .padding(.vertical, 10)
                     .focused($focused)
                     .onAppear {
@@ -193,7 +191,6 @@ struct MessageComposer_Previews: PreviewProvider {
                                                pasteHandler: nil)
 
         return MessageComposer(composerView: composerView,
-                               idealHeight: viewModel.idealHeight,
                                sendingDisabled: sendingDisabled,
                                mode: mode,
                                sendAction: { },

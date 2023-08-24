@@ -57,7 +57,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
 
-            actionsSubject.send(.sendMessage(message: wysiwygViewModel.content.markdown, mode: state.composerMode))
+            actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                             html: wysiwygViewModel.content.html,
+                                             mode: state.composerMode))
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:

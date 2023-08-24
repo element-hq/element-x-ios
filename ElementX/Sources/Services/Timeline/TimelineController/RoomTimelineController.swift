@@ -121,7 +121,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyTo itemID: TimelineItemIdentifier?) async {
+    func sendMessage(_ message: String, html: String, inReplyTo itemID: TimelineItemIdentifier?) async {
         var inReplyTo: String?
         if itemID == nil {
             MXLog.info("Send message in \(roomID)")
@@ -133,7 +133,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
 
-        switch await roomProxy.sendMessage(message, inReplyTo: inReplyTo) {
+        switch await roomProxy.sendMessage(message, html: html, inReplyTo: inReplyTo) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -156,16 +156,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func editMessage(_ newMessage: String, original itemID: TimelineItemIdentifier) async {
+    func editMessage(_ newMessage: String, html: String, original itemID: TimelineItemIdentifier) async {
         MXLog.info("Edit message in \(roomID)")
         if let timelineItem = timelineItems.firstUsingStableID(itemID),
            let item = timelineItem as? EventBasedTimelineItemProtocol,
            item.hasFailedToSend {
             MXLog.info("Editing a failed echo, will cancel and resend it as a new message")
             await cancelSend(itemID)
-            await sendMessage(newMessage)
+            await sendMessage(newMessage, html: html)
         } else if let eventID = itemID.eventID {
-            switch await roomProxy.editMessage(newMessage, original: eventID) {
+            switch await roomProxy.editMessage(newMessage, html: html, original: eventID) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):
