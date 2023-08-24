@@ -26,7 +26,8 @@ class Signposter {
     /// Signpost name constants.
     enum Name {
         static let login: StaticString = "Login"
-        static let sync: StaticString = "Sync"
+        static let firstSync: StaticString = "FirstSync"
+        static let firstRooms: StaticString = "FirstRooms"
         static let roomFlow: StaticString = "RoomFlow"
     }
     
@@ -51,19 +52,34 @@ class Signposter {
         self.loginState = nil
     }
     
-    // MARK: - Sync
+    // MARK: - FirstSync
     
-    private var syncState: OSSignpostIntervalState?
+    private var firstSyncState: OSSignpostIntervalState?
     
-    func beginSync() {
-        syncState = signposter.beginInterval(Name.sync)
+    func beginFirstSync() {
+        firstSyncState = signposter.beginInterval(Name.firstSync)
     }
     
-    func endSync() {
-        guard let syncState else { return }
+    func endFirstSync() {
+        guard let firstSyncState else { return }
         
-        signposter.endInterval(Name.sync, syncState)
-        self.syncState = nil
+        signposter.endInterval(Name.firstSync, firstSyncState)
+        self.firstSyncState = nil
+    }
+    
+    // MARK: - FirstRooms
+    
+    private var firstRoomsState: OSSignpostIntervalState?
+    
+    func beginFirstRooms() {
+        firstRoomsState = signposter.beginInterval(Name.firstRooms)
+    }
+    
+    func endFirstRooms() {
+        guard let firstRoomsState else { return }
+        
+        signposter.endInterval(Name.firstRooms, firstRoomsState)
+        self.firstRoomsState = nil
     }
     
     // MARK: - Room Flow
