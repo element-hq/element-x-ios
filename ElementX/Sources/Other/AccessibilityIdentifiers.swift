@@ -29,6 +29,7 @@ struct A11yIdentifiers {
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
+    static let settingsScreen = SettingsScreen()
     static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
@@ -98,6 +99,7 @@ struct A11yIdentifiers {
         let name = "room-name"
         let avatar = "room-avatar"
         let attachmentPicker = "room-attachment_picker"
+        let timelineItemActionMenu = "room-timeline_item_action_menu"
     }
     
     struct RoomDetailsScreen {
@@ -131,6 +133,10 @@ struct A11yIdentifiers {
         let emojiWrapper = "session_verification-emojis"
         let verificationComplete = "session_verification-verification_complete"
         let close = "session_verification-close"
+    }
+    
+    struct SettingsScreen {
+        let logout = "settings-logout"
     }
     
     struct SoftLogoutScreen {

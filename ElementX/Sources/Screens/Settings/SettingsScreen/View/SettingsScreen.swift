@@ -166,7 +166,7 @@ struct SettingsScreen: View {
                     kind: .button {
                         showingLogoutConfirmation = true
                     })
-                    .accessibilityIdentifier("logoutButton")
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
                     .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
                         Button(L10n.screenSignoutConfirmationDialogSubmit,
                                role: .destructive,
