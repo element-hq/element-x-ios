@@ -14,19 +14,22 @@
       <tr>
         <td><h2>Launch time(s)</h2></td>
         <td><h2>Login time(s)</h2></td>
-        <td><h2>Sync time(s)</h2></td>
+        <td><h2>First Sync time(s)</h2></td>
+        <td><h2>First Rooms time(s)</h2></td>
         <td><h2>Roomflow time(s) [1]</h2></td>
       </tr>
       <tr>
         <td><canvas id="launchPerformance"/></td>
         <td><canvas id="loginPerformance"/></td>
-        <td><canvas id="syncPerformance"/></td>
-        <td><canvas id="roomflowPerformance"/></td>
+        <td><canvas id="firstSyncPerformance"/></td>
+        <td><canvas id="firstRoomsPerformance"/></td>
+        <td><canvas id="roomFlowPerformance"/></td>
       </tr>
       <tr>
         <td><small>Time to start app to first paint</small></td>
         <td><small>Time from submitting user/pass form to completing all pre-sync tasks</small></td>
-        <td><small>Time from first request for sync to populated room list view in app</small></td>
+        <td><small>Time for first sync request to finish</small></td>
+        <td><small>Time from the app start to a populated room list</small></td>
         <td><small>Time from click on first room in list to seeing contents of room.</small></td>
 
       </tr>
@@ -54,10 +57,12 @@
     makeChart(launchPerformance,"launchPerformance")
     var loginPerformance = perfdata.filter(function (d) { return d.Test == "loginPerformance"  });
     makeChart(loginPerformance,"loginPerformance")
-    var syncPerformance = perfdata.filter(function (d) { return d.Test == "syncPerformance"  });
-    makeChart(syncPerformance,"syncPerformance")
-    var roomflowPerformance = perfdata.filter(function (d) { return d.Test == "roomflowPerformance"  });
-    makeChart(roomflowPerformance,"roomflowPerformance")
+    var firstSyncPerformance = perfdata.filter(function (d) { return d.Test == "firstSyncPerformance"  });
+    makeChart(firstSyncPerformance,"firstSyncPerformance")
+    var firstRoomsPerformance = perfdata.filter(function (d) { return d.Test == "firstRoomsPerformance"  });
+    makeChart(firstRoomsPerformance,"firstRoomsPerformance")
+    var roomFlowPerformance = perfdata.filter(function (d) { return d.Test == "roomFlowPerformance"  });
+    makeChart(roomFlowPerformance,"roomFlowPerformance")
   }
     
   function makeChart(perfdata, canvas_id) {
