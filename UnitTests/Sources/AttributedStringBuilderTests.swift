@@ -395,7 +395,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
     }
-    
+
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
