@@ -67,6 +67,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
+        
+        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
 
         ServiceLocator.shared.analytics.startIfEnabled()
 
@@ -546,7 +548,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private func startSync() {
         guard let userSession else { return }
         
-        ServiceLocator.shared.analytics.signpost.beginSync()
+        ServiceLocator.shared.analytics.signpost.beginFirstSync()
         userSession.clientProxy.startSync()
         
         let identifier = "StaleDataIndicator"
@@ -568,7 +570,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 case .startedUpdating:
                     showLoadingIndicator()
                 case .receivedSyncUpdate:
-                    ServiceLocator.shared.analytics.signpost.endSync()
+                    ServiceLocator.shared.analytics.signpost.endFirstSync()
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
                 default:
                     break

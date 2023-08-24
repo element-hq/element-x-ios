@@ -164,7 +164,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 // End the initial sync performance timing once the room list is about to be displayed.
                 if roomListMode == .rooms, self.state.roomListMode == .skeletons {
-                    analytics.signpost.endSync()
+                    analytics.signpost.endFirstRooms()
                 }
                 
                 self.state.roomListMode = roomListMode
