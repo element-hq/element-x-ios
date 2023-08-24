@@ -32,16 +32,11 @@ class LoginTests: XCTestCase {
                 self.runLoginLogoutFlow()
             }
         }
-        
-        guard let actualDuration = parser.valueForMetric(.clockMonotonicTime) else {
-            XCTFail("Couldn't retrieve duration")
-            return
-        }
     }
-
+    
     private func runLoginLogoutFlow() {
         let app = Application.launch()
-                
+        
         let getStartedButton = app.buttons[A11yIdentifiers.onboardingScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
@@ -79,9 +74,9 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(nextButton.isEnabled)
         
         nextButton.tap()
-
+        
         sleep(10)
-
+        
         // Handle analytics prompt screen
         if app.staticTexts[A11yIdentifiers.analyticsPromptScreen.title].waitForExistence(timeout: 1.0) {
             // Wait for login and then handle save password sheet
@@ -89,12 +84,12 @@ class LoginTests: XCTestCase {
             if savePasswordButton.waitForExistence(timeout: 10.0) {
                 savePasswordButton.tap()
             }
-        
+            
             let enableButton = app.buttons[A11yIdentifiers.analyticsPromptScreen.enable]
             XCTAssertTrue(enableButton.waitForExistence(timeout: 10.0))
             enableButton.tap()
         }
-
+        
         // This might come in a different order, wait for both.
         let savePasswordButton = app.buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
@@ -111,44 +106,94 @@ class LoginTests: XCTestCase {
         // Migration screen may be shown as an overlay.
         // if that pops up soon enough, we just let that happen and wait
         let message = app.staticTexts[A11yIdentifiers.migrationScreen.message]
-
+        
         if message.waitForExistence(timeout: 10.0) {
             let doesNotExistPredicate = NSPredicate(format: "exists == 0")
             expectation(for: doesNotExistPredicate, evaluatedWith: message)
             waitForExpectations(timeout: 300.0)
         }
-
+        
         // Welcome screen may be shown as an overlay.
         if app.buttons[A11yIdentifiers.welcomeScreen.letsGo].waitForExistence(timeout: 1.0) {
             let goButton = app.buttons[A11yIdentifiers.welcomeScreen.letsGo]
             XCTAssertTrue(goButton.waitForExistence(timeout: 1.0))
             goButton.tap()
         }
-
+        
         // Wait for the home screen to become visible.
         let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         // Timeouts are huge because we're waiting for the server.
         XCTAssertTrue(profileButton.waitForExistence(timeout: 300.0))
         
         // Open the first room in the list.
-        let rooms = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix))
-        rooms.firstMatch.tap()
-        // Temporary sleep to get it working.
-        sleep(20)
-        // Go back to the home screen.
-        app.navigationBars.firstMatch.buttons["All Chats"].tap()
+        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix)).firstMatch
+        XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
+        firstRoom.tap()
+        
+        // Long press on the last message
+        let lastMessage = app.cells.firstMatch
+        XCTAssertTrue(lastMessage.waitForExistence(timeout: 10.0))
+        lastMessage.press(forDuration: 2.0)
+        
+        // Hide the bottom sheet
+        let timelineItemActionMenu = app.otherElements[A11yIdentifiers.roomScreen.timelineItemActionMenu].firstMatch
+        XCTAssertTrue(timelineItemActionMenu.waitForExistence(timeout: 10.0))
+        timelineItemActionMenu.swipeDown(velocity: .fast)
+        
+        // Open the room details
+        let roomHeader = app.staticTexts["room-name"]
+        XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
+        roomHeader.tap()
+        
+        // Open the room member details
+        let roomMembers = app.buttons["room_details-people"]
+        XCTAssertTrue(roomMembers.waitForExistence(timeout: 10.0))
+        roomMembers.tap()
+        
+        // Open the first member's details
+        let firstRoomMember = app.scrollViews.buttons.firstMatch
+        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 10.0))
+        firstRoomMember.tap()
+        
+        // Go back to the room member details
+        var backButton = app.buttons["People"]
+        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
+        backButton.tap()
+        
+        // Go back to the room details
+        backButton = app.buttons["Back"]
+        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
+        backButton.tap()
+        
+        // Go back to the room
+        backButton = app.buttons["Back"]
+        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
+        backButton.tap()
+        
+        // Go back to the room list
+        backButton = app.navigationBars.firstMatch.buttons["All Chats"]
+        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
+        backButton.tap()
         
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.forceTap()
         
-        let menuLogoutButton = app.buttons["Sign out"]
-        XCTAssertTrue(menuLogoutButton.waitForExistence(timeout: 10.0))
-        menuLogoutButton.tap()
+        // Open the settings
+        let settingsButton = app.buttons["Settings"]
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 10.0))
+        settingsButton.tap()
         
-        let alertLogoutButton = app.buttons["Sign out"]
+        // Logout
+        let logoutButton = app.buttons[A11yIdentifiers.settingsScreen.logout]
+        XCTAssertTrue(logoutButton.waitForExistence(timeout: 10.0))
+        logoutButton.tap()
+        
+        // Confirm logout
+        let alertLogoutButton = app.alerts.firstMatch.buttons["Sign out"]
         XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 10.0))
         alertLogoutButton.tap()
         
+        // Check that we're back on the login screen
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
     }
 }
