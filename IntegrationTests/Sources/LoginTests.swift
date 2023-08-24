@@ -24,7 +24,8 @@ class LoginTests: XCTestCase {
                 XCTApplicationLaunchMetric(),
                 XCTClockMetric(),
                 XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.login)"),
-                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.sync)"),
+                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.firstSync)"),
+                XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.firstRooms)"),
                 XCTOSSignpostMetric(subsystem: Signposter.subsystem, category: Signposter.category, name: "\(Signposter.Name.roomFlow)")
             ]
             
