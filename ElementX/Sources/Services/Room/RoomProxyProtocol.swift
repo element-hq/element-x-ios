@@ -72,9 +72,9 @@ protocol RoomProxyProtocol {
     
     var activeMembersCount: Int { get }
     
-    /// Publishes the room's updates.
+    /// Publishes room state updates
     /// The thread on which this publisher sends the output isn't defined.
-    var updatesPublisher: AnyPublisher<[TimelineDiff], Never> { get }
+    var stateUpdatesPublisher: AnyPublisher<Void, Never> { get }
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
