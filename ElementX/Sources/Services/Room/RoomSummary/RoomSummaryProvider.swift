@@ -151,8 +151,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         rooms = updatedItems
         
-        detectDuplicatesInRoomList(rooms)
-        
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
     }
     
@@ -310,25 +308,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         return CollectionDifference(changes)
-    }
-    
-    private func detectDuplicatesInRoomList(_ rooms: [RoomSummary]) {
-        let filteredRooms = rooms.filter {
-            switch $0 {
-            case .empty:
-                return false
-            default:
-                return true
-            }
-        }
-        
-        let groupedRooms = Dictionary(grouping: filteredRooms, by: \.id)
-        
-        let duplicates = groupedRooms.filter { $1.count > 1 }
-        
-        if duplicates.count > 0 {
-            MXLog.error("\(name): Found duplicated room room list items: \(duplicates)")
-        }
     }
 }
 
