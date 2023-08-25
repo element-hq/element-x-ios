@@ -39,6 +39,11 @@ struct TracingConfiguration {
     /// - Returns: a custom tracing configuration
     static func custom(logLevel: LogLevel) -> TracingConfiguration {
         let overrides = targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
+            // Keep the defaults here
+            if target == .common || target == .hyper {
+                return
+            }
+            
             partialResult[target] = logLevel
         }
 
@@ -49,6 +54,8 @@ struct TracingConfiguration {
     
     enum Target: String {
         case common = ""
+        
+        case elementx
         
         case hyper, matrix_sdk_ffi, matrix_sdk_crypto
         
@@ -61,7 +68,8 @@ struct TracingConfiguration {
     
     static let targets: OrderedDictionary<Target, LogLevel> = [
         .common: .info,
-        .hyper: .info,
+        .elementx: .info,
+        .hyper: .warn,
         .matrix_sdk_crypto: .info,
         .matrix_sdk_http_client: .info,
         .matrix_sdk_sliding_sync: .info,
