@@ -74,8 +74,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
-        
-        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
 
         ServiceLocator.shared.analytics.startIfEnabled()
 

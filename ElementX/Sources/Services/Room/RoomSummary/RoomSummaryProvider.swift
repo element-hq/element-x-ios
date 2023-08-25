@@ -66,6 +66,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.appSettings = appSettings
         self.backgroundTaskService = backgroundTaskService
         
+        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
+        
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
@@ -154,6 +156,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         detectDuplicatesInRoomList(rooms)
         
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
+        
+        ServiceLocator.shared.analytics.signpost.endFirstRooms()
     }
     
     private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {

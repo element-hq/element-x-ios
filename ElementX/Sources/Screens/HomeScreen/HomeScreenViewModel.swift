@@ -162,11 +162,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     return
                 }
                 
-                // End the initial sync performance timing once the room list is about to be displayed.
-                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
-                    analytics.signpost.endFirstRooms()
-                }
-                
                 self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received room summary provider update, setting view room list mode to \"\(self.state.roomListMode)\"")
