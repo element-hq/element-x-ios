@@ -564,6 +564,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
         }
         
+        guard clientProxyObserver == nil else {
+            return
+        }
+        
         // Prevent the syncing indicator from showing over the offline one
         if ServiceLocator.shared.networkMonitor.reachabilityPublisher.value == .reachable {
             showLoadingIndicator()
@@ -612,7 +616,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     @objc
     private func applicationWillTerminate() {
-        userSession?.clientProxy.stopSync()
+        stopSync()
     }
 
     @objc
@@ -626,7 +630,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             guard let self else { return }
             
-            userSession?.clientProxy.stopSync()
+            stopSync()
             
             backgroundTask?.stop()
             backgroundTask = nil
