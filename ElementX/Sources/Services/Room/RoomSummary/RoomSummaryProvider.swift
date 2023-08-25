@@ -86,6 +86,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 diffsPublisher.send(updates)
             })
             
+            // Forces the listener above to be called with the current state
+            updateFilterPattern(nil)
+            
             listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
