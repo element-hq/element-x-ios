@@ -100,7 +100,7 @@ struct RoomEventStringBuilder {
                                           member: sender.id,
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
-        case .poll, .pollEnd:
+        case .poll:
             // The Rust SDK doesn't support poll events as room summaries yet
             return nil
         }

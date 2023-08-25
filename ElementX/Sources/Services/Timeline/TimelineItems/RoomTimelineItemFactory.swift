@@ -73,8 +73,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return nil
             }
             return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing)
-        case .pollEnd:
-            return nil
         }
     }
     
