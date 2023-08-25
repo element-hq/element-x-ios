@@ -269,18 +269,17 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         let transactionId = genTransactionId()
-        let messageContent: RoomMessageEventContent
+        let messageContent: RoomMessageEventContentWithoutRelation
         if let html {
             messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
         } else {
             messageContent = messageEventContentFromMarkdown(md: message)
-        }     
+        }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
                     try self.room.sendReply(msg: messageContent, inReplyToEventId: eventID, txnId: transactionId)
                 } else {
-
                     self.room.send(msg: messageContent, txnId: transactionId)
                 }
             } catch {
@@ -458,7 +457,7 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                let newMessageContent = messageEventContentFromMarkdown(md: newMessage)
+                let newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
                 try self.room.edit(newMsg: newMessageContent, originalEventId: eventID, txnId: transactionId)
                 return .success(())
             } catch {
