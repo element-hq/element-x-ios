@@ -1153,3 +1153,9 @@ Date,SHA,Test,Data1,Data2,Data3,Data4,Data5
 2023-08-25T18:30+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (FirstRooms), s,0.002835, 0.004403, 0.001532, 0.002909, 0.002504
 2023-08-25T18:30+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (FirstSync), s,1.541837, 1.570074, 1.342366, 1.332715, 1.462635
 2023-08-25T18:30+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (Login), s,0.314224, 0.342126, 0.568736, 0.268146, 0.315829
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (AppLaunch), s,0.933446, 0.898436, 0.895520, 0.892754, 0.880738
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (RoomFlow), s,2.918010, 2.919717, 2.943338, 2.899444, 2.911036
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Clock Monotonic Time, s,102.696953, 102.699835, 102.709677, 102.655734, 102.792921
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (FirstRooms), s,0.004099, 0.003474, 0.002873, 0.003330, 0.003572
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (FirstSync), s,1.494006, 1.425473, 1.326006, 1.445819, 1.388837
+2023-08-26T06:29+00:00,c776229dc04800efca2d281386f3d6624f21266a,IntegrationTests.PerformanceTests testLoginFlow,Duration (Login), s,0.251630, 0.255364, 0.312802, 0.410108, 0.324448
