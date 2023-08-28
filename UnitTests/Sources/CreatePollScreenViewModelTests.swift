@@ -29,4 +29,41 @@ class CreatePollScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         viewModel = CreatePollScreenViewModel()
     }
+
+    func testInitialState() {
+        XCTAssertEqual(context.options.count, 2)
+        XCTAssertTrue(context.options.allSatisfy(\.text.isEmpty))
+        XCTAssertTrue(context.question.isEmpty)
+        XCTAssertTrue(context.viewState.bindings.isCreateButtonDisabled)
+        XCTAssertFalse(context.viewState.bindings.isUndisclosed)
+    }
+
+    func testValidPoll() async throws {
+        context.question = "foo"
+        context.options[0].text = "bla1"
+        context.options[1].text = "bla2"
+        XCTAssertFalse(context.viewState.bindings.isCreateButtonDisabled)
+
+        let deferred = deferFulfillment(viewModel.actions.first())
+        context.send(viewAction: .create)
+        let action = try await deferred.fulfill()
+
+        guard case .create(let question, let options, let kind) = action else {
+            XCTFail("Unexpected action")
+            return
+        }
+        XCTAssertEqual(question, "foo")
+        XCTAssertEqual(options.count, 2)
+        XCTAssertEqual(options[0], "bla1")
+        XCTAssertEqual(options[1], "bla2")
+        XCTAssertEqual(kind, .disclosed)
+    }
+
+    func testInvalidPollEmptyOption() {
+        context.question = "foo"
+        context.options[0].text = "bla"
+        context.options[1].text = "bla"
+        context.send(viewAction: .addOption)
+        XCTAssertTrue(context.viewState.bindings.isCreateButtonDisabled)
+    }
 }
