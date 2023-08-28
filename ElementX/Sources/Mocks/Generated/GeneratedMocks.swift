@@ -928,10 +928,10 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var messageEventContentForReceivedEventID: String?
     var messageEventContentForReceivedInvocations: [String] = []
-    var messageEventContentForReturnValue: RoomMessageEventContent?
-    var messageEventContentForClosure: ((String) -> RoomMessageEventContent?)?
+    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation?
+    var messageEventContentForClosure: ((String) -> RoomMessageEventContentWithoutRelation?)?
 
-    func messageEventContent(for eventID: String) -> RoomMessageEventContent? {
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
         messageEventContentForCallsCount += 1
         messageEventContentForReceivedEventID = eventID
         messageEventContentForReceivedInvocations.append(eventID)
@@ -947,12 +947,12 @@ class RoomProxyMock: RoomProxyProtocol {
     var sendMessageEventContentCalled: Bool {
         return sendMessageEventContentCallsCount > 0
     }
-    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContent?
-    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContent] = []
+    var sendMessageEventContentReceivedMessageContent: RoomMessageEventContentWithoutRelation?
+    var sendMessageEventContentReceivedInvocations: [RoomMessageEventContentWithoutRelation] = []
     var sendMessageEventContentReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageEventContentClosure: ((RoomMessageEventContent) async -> Result<Void, RoomProxyError>)?
+    var sendMessageEventContentClosure: ((RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>)?
 
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
         sendMessageEventContentCallsCount += 1
         sendMessageEventContentReceivedMessageContent = messageContent
         sendMessageEventContentReceivedInvocations.append(messageContent)

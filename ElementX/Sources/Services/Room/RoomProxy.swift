@@ -238,11 +238,11 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func messageEventContent(for eventID: String) -> RoomMessageEventContent? {
+    func messageEventContent(for eventID: String) -> RoomMessageEventContentWithoutRelation? {
         try? room.getTimelineEventContentByEventId(eventId: eventID)
     }
     
-    func sendMessageEventContent(_ messageContent: RoomMessageEventContent) async -> Result<Void, RoomProxyError> {
+    func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -263,13 +263,13 @@ class RoomProxy: RoomProxyProtocol {
         }
         
         let transactionId = genTransactionId()
+        let messageContent = messageEventContentFromMarkdown(md: message)
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
-                    try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
+                    try self.room.sendReply(msg: messageContent, inReplyToEventId: eventID, txnId: transactionId)
                 } else {
-                    let messageContent = messageEventContentFromMarkdown(md: message)
                     self.room.send(msg: messageContent, txnId: transactionId)
                 }
             } catch {
@@ -447,7 +447,8 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                try self.room.edit(newMsg: newMessage, originalEventId: eventID, txnId: transactionId)
+                let newMessageContent = messageEventContentFromMarkdown(md: newMessage)
+                try self.room.edit(newMsg: newMessageContent, originalEventId: eventID, txnId: transactionId)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
