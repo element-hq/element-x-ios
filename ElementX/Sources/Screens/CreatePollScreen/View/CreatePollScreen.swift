@@ -28,7 +28,7 @@ struct CreatePollScreen: View {
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
-        .navigationTitle("Create Poll")
+        .navigationTitle(L10n.screenCreatePollTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
@@ -36,9 +36,9 @@ struct CreatePollScreen: View {
     // MARK: - Private
 
     private var questionSection: some View {
-        Section("Question or topic") {
+        Section(L10n.screenCreatePollQuestionDesc) {
             TextField(text: $context.question) {
-                Text("Question placeholder")
+                Text(L10n.screenCreatePollQuestionHint)
                     .compoundFormTextFieldPlaceholder()
             }
             .introspect(.textField, on: .iOS(.v16)) { textField in
@@ -54,7 +54,7 @@ struct CreatePollScreen: View {
             ForEach(context.options) { option in
                 if let index = context.options.firstIndex(of: option) {
                     CreatePollOptionView(text: $context.options[index].text,
-                                         placeholder: "Option \(index + 1)",
+                                         placeholder: L10n.screenCreatePollAnswerHint(index + 1),
                                          canDeleteItem: context.options.count > 2) {
                         withAnimation(.elementDefault) {
                             context.send(viewAction: .deleteOption(index: index))
@@ -66,7 +66,7 @@ struct CreatePollScreen: View {
                 context.options.move(fromOffsets: offsets, toOffset: toOffset)
             }
 
-            Button("Add option") {
+            Button(L10n.screenCreatePollAddOptionBtn) {
                 withAnimation(.elementDefault) {
                     context.send(viewAction: .addOption)
                 }
@@ -78,7 +78,7 @@ struct CreatePollScreen: View {
 
     private var showResultsSection: some View {
         Section {
-            Toggle("Show results only after poll ends", isOn: $context.isUndisclosed)
+            Toggle(L10n.screenCreatePollAnonymousDesc, isOn: $context.isUndisclosed)
         }
         .compoundFormSection()
     }
