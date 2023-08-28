@@ -18,6 +18,10 @@ import SwiftUI
 import UIKit
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
+    private var isXcodePreview: Bool {
+        ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+    }
+    
     // MARK: - Override
 
     override func loadView() {
@@ -28,8 +32,14 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             return
         }
 
-        let view = PillView()
+        let imageProvider = isXcodePreview ? MockMediaProvider() : Self.currentSession?.mediaProvider
+        let view = PillView(imageProvider: imageProvider)
         let controller = UIHostingController(rootView: view)
         self.view = controller.view
     }
+}
+
+extension PillAttachmentViewProvider {
+    // This is a bit of an hack, since the Provider is instantiated by the system we have no way to pass the current session it, so we need to inject it globally.
+    static var currentSession: UserSessionProtocol?
 }

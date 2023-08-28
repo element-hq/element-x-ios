@@ -14,24 +14,4 @@
 // limitations under the License.
 //
 
-import SwiftUI
-
-struct PillView: View {
-    let imageProvider: ImageProviderProtocol?
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            LoadableAvatarImage(url: nil, name: "test", contentID: "test", avatarSize: .custom(24), imageProvider: imageProvider)
-            Text("Test")
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Capsule().foregroundColor(.gray))
-    }
-}
-
-struct PillView_Previews: PreviewProvider {
-    static var previews: some View {
-        PillView(imageProvider: MockMediaProvider())
-    }
-}
+import Foundation

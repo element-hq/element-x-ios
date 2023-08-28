@@ -94,9 +94,15 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
         container.font = UIFont.preferredFont(forTextStyle: .body)
         return container
     }()
-
+    
     private static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld", attributes: defaultFontContainer)
-    private static let attributedStringWithAttachment = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
+    
+    private static let attributedStringWithAttachment: AttributedString = {
+        var attributedString = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
+        attributedString
+            .mergeAttributes(defaultFontContainer)
+        return attributedString
+    }()
 
     private static let htmlStringWithQuote =
         """
