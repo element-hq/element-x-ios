@@ -636,9 +636,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
         isSuspended = true
 
+        // Intentionally disabled until we get to the bottom of the performance issues we've been seeing
+        // It looks like the process is severely throttled when this runs causing slow syncs
+        
         // This does seem to work if scheduled from the background task above
         // Schedule it here instead but with an earliest being date of 30 seconds
-        scheduleBackgroundAppRefresh()
+        // scheduleBackgroundAppRefresh()
     }
 
     @objc
