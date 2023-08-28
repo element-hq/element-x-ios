@@ -62,7 +62,7 @@ struct CreatePollScreen: View {
         Section {
             ForEach(context.options) { option in
                 if let index = context.options.firstIndex(of: option) {
-                    CreatePollOptionView(text: $context.options[index].text,
+                    CreatePollOptionView(text: $context.options[index].text.limited(to: 240),
                                          placeholder: L10n.screenCreatePollAnswerHint(index + 1),
                                          canDeleteItem: context.options.count > 2) {
                         if case .option(let focusedIndex) = focus, focusedIndex == index {
@@ -152,6 +152,16 @@ struct CreatePollScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             CreatePollScreen(context: viewModel.context)
+        }
+    }
+}
+
+private extension Binding where Value == String {
+    func limited(to limit: Int) -> Self {
+        .init {
+            wrappedValue
+        } set: { newValue in
+            wrappedValue = String(newValue.prefix(limit))
         }
     }
 }
