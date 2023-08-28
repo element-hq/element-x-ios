@@ -119,6 +119,7 @@ struct HomeScreen: View {
             HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
                 context.send(viewAction: .selectInvites)
             }
+            .accessibilityLabel(A11yIdentifiers.homeScreen.invites)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.vertical, -8.0)
         }
@@ -178,6 +179,7 @@ struct HomeScreen: View {
         } label: {
             Image(systemName: "square.and.pencil")
         }
+        .accessibilityLabel(A11yIdentifiers.homeScreen.startChat)
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search

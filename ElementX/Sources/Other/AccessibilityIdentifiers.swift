@@ -35,6 +35,7 @@ struct A11yIdentifiers {
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
     static let createRoomScreen = CreateRoomScreen()
     static let invitesScreen = InvitesScreen()
+    static let inviteUsersScreen = InviteUsersScreen()
     static let welcomeScreen = WelcomeScreen()
     static let migrationScreen = MigrationScreen()
     static let notificationSettingsScreen = NotificationSettingsScreen()
@@ -66,6 +67,8 @@ struct A11yIdentifiers {
         let settings = "home_screen-settings"
         let signOut = "home_screen-sign_out"
         let verificationBannerContinue = "home_screen-verification_continue"
+        let invites = "home_screen-invites"
+        let startChat = "home_screen-start_chat"
         
         let roomNamePrefix = "home_screen-room_name"
         func roomName(_ name: String) -> String {
@@ -79,6 +82,10 @@ struct A11yIdentifiers {
         let decline = "invites-decline"
     }
 
+    struct InviteUsersScreen {
+        let proceed = "invite_users-proceed"
+    }
+    
     struct LoginScreen {
         let emailUsername = "login-email_username"
         let password = "login-password"
@@ -99,6 +106,10 @@ struct A11yIdentifiers {
         let name = "room-name"
         let avatar = "room-avatar"
         let attachmentPicker = "room-attachment_picker"
+        let attachmentPickerPhotoLibrary = "room-attachment_picker_photo_library"
+        let attachmentPickerDocuments = "room-attachment_picker_documents"
+        let attachmentPickerCamera = "room-attachment_picker_camera"
+        let attachmentPickerLocation = "room-attachment_picker_location"
         let timelineItemActionMenu = "room-timeline_item_action_menu"
     }
     
@@ -136,6 +147,13 @@ struct A11yIdentifiers {
     }
     
     struct SettingsScreen {
+        let done = "settings-done"
+        let account = "settings-account"
+        let notifications = "settings-notifications"
+        let analytics = "settings-analytics"
+        let reportBug = "settings-report_bug"
+        let about = "settings_about"
+        let developerOptions = "settings_developer-options"
         let logout = "settings-logout"
     }
     
@@ -153,6 +171,7 @@ struct A11yIdentifiers {
     
     struct StartChatScreen {
         let closeStartChat = "start_chat-close"
+        let createRoom = "start_chat-create_room"
         let inviteFriends = "start_chat-invite_friends"
         let searchNoResults = "start_chat-search_no_results"
     }

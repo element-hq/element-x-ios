@@ -97,7 +97,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .developerOptions)
                     })
-                    .accessibilityIdentifier("developerOptionsButton")
+                    .accessibilityLabel(A11yIdentifiers.settingsScreen.developerOptions)
         }
     }
     
@@ -110,7 +110,7 @@ struct SettingsScreen: View {
                         kind: .button {
                             context.send(viewAction: .account)
                         })
-                        .accessibilityIdentifier("notificationsButton")
+                        .accessibilityLabel(A11yIdentifiers.settingsScreen.account)
             }
             
             // Message layout
@@ -130,7 +130,7 @@ struct SettingsScreen: View {
                         kind: .navigationLink {
                             context.send(viewAction: .notifications)
                         })
-                        .accessibilityIdentifier("notificationsButton")
+                        .accessibilityLabel(A11yIdentifiers.settingsScreen.notifications)
             }
             
             // Analytics
@@ -139,7 +139,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .analytics)
                     })
-                    .accessibilityIdentifier("analyticsButton")
+                    .accessibilityLabel(A11yIdentifiers.settingsScreen.analytics)
             
             // Report Bug
             ListRow(label: .default(title: L10n.commonReportABug,
@@ -147,7 +147,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .reportBug)
                     })
-                    .accessibilityIdentifier("reportBugButton")
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             
             // About
             ListRow(label: .default(title: L10n.commonAbout,
@@ -155,7 +155,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .about)
                     })
-                    .accessibilityIdentifier("aboutButton")
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
         }
     }
     
@@ -191,6 +191,7 @@ struct SettingsScreen: View {
 
     private var doneButton: some View {
         Button(L10n.actionDone, action: close)
+            .accessibilityLabel(A11yIdentifiers.settingsScreen.done)
     }
 
     private func close() {

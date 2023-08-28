@@ -39,6 +39,7 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, icon: Image(systemName: "photo.fill"))
                 }
+                .accessibilityLabel(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
                 
                 Button {
                     context.showAttachmentPopover = false
@@ -46,6 +47,7 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, icon: Image(systemName: "paperclip"))
                 }
+                .accessibilityLabel(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
                 
                 Button {
                     context.showAttachmentPopover = false
@@ -53,6 +55,7 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, icon: Image(systemName: "camera.fill"))
                 }
+                .accessibilityLabel(A11yIdentifiers.roomScreen.attachmentPickerCamera)
 
                 Button {
                     context.showAttachmentPopover = false
@@ -60,6 +63,7 @@ struct RoomAttachmentPicker: View {
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
                 }
+                .accessibilityLabel(A11yIdentifiers.roomScreen.attachmentPickerLocation)
             }
             .padding(.top, isPresented ? 20 : 0)
             .background {
