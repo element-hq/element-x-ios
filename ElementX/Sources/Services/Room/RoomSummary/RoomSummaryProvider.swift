@@ -108,8 +108,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     func updateVisibleRange(_ range: Range<Int>) {
         Task {
             do {
-                MXLog.info("\(name): Setting visible range to \(range)")
-                try await roomListService.applyInput(input: .viewport(ranges: [.init(start: UInt32(range.lowerBound), endInclusive: UInt32(range.upperBound))]))
+                // The scroll view content size based visible range calculations might create large ranges
+                // This is just a safety check to not overload the backend
+                var upperBound = range.upperBound
+                if range.upperBound - range.lowerBound > SlidingSyncConstants.maximumVisibleRangeSize {
+                    upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
+                }
+                
+                MXLog.info("\(name): Setting visible range to \(range.lowerBound)...\(upperBound)")
+                
+                try await roomListService.applyInput(input: .viewport(ranges: [.init(start: UInt32(range.lowerBound), endInclusive: UInt32(upperBound))]))
             } catch {
                 MXLog.error("Failed updating visible range with error: \(error)")
             }
