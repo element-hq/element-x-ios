@@ -18,6 +18,12 @@ import SwiftUI
 
 struct CreatePollScreen: View {
     @ObservedObject var context: CreatePollScreenViewModel.Context
+    @FocusState var focus: Focus?
+
+    enum Focus: Hashable {
+        case question
+        case option(index: Int)
+    }
 
     var body: some View {
         Form {
@@ -31,6 +37,7 @@ struct CreatePollScreen: View {
         .navigationTitle(L10n.screenCreatePollTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
+        .animation(.elementDefault, value: context.options)
     }
 
     // MARK: - Private
@@ -45,6 +52,7 @@ struct CreatePollScreen: View {
                 textField.clearButtonMode = .whileEditing
             }
             .textFieldStyle(.compoundForm)
+            .focused($focus, equals: .question)
         }
         .compoundFormSection()
     }
@@ -56,10 +64,16 @@ struct CreatePollScreen: View {
                     CreatePollOptionView(text: $context.options[index].text,
                                          placeholder: L10n.screenCreatePollAnswerHint(index + 1),
                                          canDeleteItem: context.options.count > 2) {
-                        withAnimation(.elementDefault) {
+                        if case .option(let focusedIndex) = focus, focusedIndex == index {
+                            focus = nil
+                        }
+
+                        // fixes a crash that caused an index out of range when an option with the keyboard focus was deleted
+                        DispatchQueue.main.async {
                             context.send(viewAction: .deleteOption(index: index))
                         }
                     }
+                    .focused($focus, equals: .option(index: index))
                 }
             }
             .onMove { offsets, toOffset in
