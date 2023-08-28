@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>%(count)s rooms_web</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%(count)s room</string>
-			<key>other</key>
-			<string>%(count)s rooms</string>
-		</dict>
-	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -45,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d Stimme</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d Stimmen</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -173,7 +157,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 Person</string>
+			<string>%1$d Person</string>
 			<key>other</key>
 			<string>%1$d Personen</string>
 		</dict>
@@ -188,8 +172,10 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>one</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d more</string>
+			<string>%1$d weitere</string>
 		</dict>
 	</dict>
 </dict>

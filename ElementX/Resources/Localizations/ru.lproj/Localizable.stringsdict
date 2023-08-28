@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>%(count)s rooms_web</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%(count)s room</string>
-			<key>other</key>
-			<string>%(count)s rooms</string>
-		</dict>
-	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -208,8 +192,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>other</key>
-			<string>%1$d more</string>
+			<key>one</key>
+			<string>И ещё %1$d</string>
+			<key>few</key>
+			<string>И ещё %1$d</string>
+			<key>many</key>
+			<string>И ещё %1$d</string>
 		</dict>
 	</dict>
 </dict>
