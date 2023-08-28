@@ -19,9 +19,14 @@ import XCTest
 
 @MainActor
 class CreatePollScreenUITests: XCTestCase {
-    func testScreen() async throws {
+    func testEmptyScreen() async throws {
+        let app = Application.launch(.createPollEmpty)
+        try await app.assertScreenshot(.createPollEmpty)
+    }
+
+    func testFilledPoll() async throws {
         let app = Application.launch(.createPoll)
-        
+
         try await app.assertScreenshot(.createPoll)
     }
 }

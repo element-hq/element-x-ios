@@ -75,6 +75,7 @@ enum UITestsScreenIdentifier: String {
     case inviteUsersInRoomExistingMembers
     case createRoom
     case createRoomNoUsers
+    case createPollEmpty
     case createPoll
 }
 

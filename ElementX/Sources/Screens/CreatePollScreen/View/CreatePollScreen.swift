@@ -53,6 +53,7 @@ struct CreatePollScreen: View {
             }
             .textFieldStyle(.compoundForm)
             .focused($focus, equals: .question)
+            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.question)
         }
         .compoundFormSection()
     }
@@ -74,6 +75,7 @@ struct CreatePollScreen: View {
                         }
                     }
                     .focused($focus, equals: .option(index: index))
+                    .accessibilityIdentifier(A11yIdentifiers.createPollScreen.optionID(index))
                 }
             }
             .onMove { offsets, toOffset in
@@ -110,6 +112,7 @@ struct CreatePollScreen: View {
                 context.send(viewAction: .create)
             }
             .disabled(context.viewState.bindings.isCreateButtonDisabled)
+            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.create)
         }
     }
 }
