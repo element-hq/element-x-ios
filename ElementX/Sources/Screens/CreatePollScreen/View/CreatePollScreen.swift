@@ -83,11 +83,10 @@ struct CreatePollScreen: View {
             }
 
             Button(L10n.screenCreatePollAddOptionBtn) {
-                withAnimation(.elementDefault) {
-                    context.send(viewAction: .addOption)
-                }
+                context.send(viewAction: .addOption)
             }
             .disabled(context.options.count >= 20)
+            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
         }
         .compoundFormSection()
     }
@@ -95,6 +94,7 @@ struct CreatePollScreen: View {
     private var showResultsSection: some View {
         Section {
             Toggle(L10n.screenCreatePollAnonymousDesc, isOn: $context.isUndisclosed)
+                .accessibilityIdentifier(A11yIdentifiers.createPollScreen.pollKind)
         }
         .compoundFormSection()
     }

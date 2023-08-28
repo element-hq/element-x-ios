@@ -185,8 +185,10 @@ struct A11yIdentifiers {
     struct CreatePollScreen {
         let question = "create_poll-question"
         let create = "create_poll-create"
+        let addOption = "create_poll-add_option"
+        let pollKind = "create_poll-kind"
 
-        private let optionPrefix = "create_room-option"
+        private let optionPrefix = "create_poll-option"
 
         func optionID(_ index: Int) -> String {
             "\(optionPrefix)-\(index)"

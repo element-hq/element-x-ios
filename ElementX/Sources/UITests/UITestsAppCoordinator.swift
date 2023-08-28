@@ -666,7 +666,7 @@ class MockScreen: Identifiable {
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .createPoll, .createPollEmpty:
+        case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = CreatePollScreenCoordinator(parameters: .init())
             navigationStackCoordinator.setRootCoordinator(coordinator)
