@@ -114,7 +114,7 @@ extension XCUIApplication {
         profileButton.forceTap()
         
         // Open the settings
-        let settingsButton = buttons["Settings"]
+        let settingsButton = buttons[A11yIdentifiers.homeScreen.settings]
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 10.0))
         settingsButton.tap()
         

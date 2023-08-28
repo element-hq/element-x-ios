@@ -17,16 +17,84 @@
 import XCTest
 
 class UserFlowTests: XCTestCase {
-    func testUserFlow() {
-        let app = Application.launch()
-        
+    private var app: XCUIApplication!
+    
+    override func setUp() {
+        app = Application.launch()
         app.login(currentTestCase: self)
+    }
+    
+    func testUserFlow() {
+        checkSettings()
+        
+        checkInvites()
+        
+        checkRoomCreation()
         
         // Open the first room in the list.
         let firstRoom = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix)).firstMatch
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
         firstRoom.tap()
         
+        checkAttachmentsPicker()
+        
+        checkTimelineItemActionMenu()
+        
+        checkRoomDetails()
+        
+        app.logout()
+    }
+    
+    private func checkInvites() {
+        // Open invites
+        let invitesButton = app.buttons[A11yIdentifiers.homeScreen.invites]
+        XCTAssertTrue(invitesButton.waitForExistence(timeout: 10.0))
+        invitesButton.tap()
+        
+        // Go back to the room list
+        tapOnButton("All Chats")
+    }
+    
+    private func checkAttachmentsPicker() {
+        for identifier in [A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary,
+                           A11yIdentifiers.roomScreen.attachmentPickerDocuments,
+                           A11yIdentifiers.roomScreen.attachmentPickerCamera,
+                           A11yIdentifiers.roomScreen.attachmentPickerLocation] {
+            tapOnButton(A11yIdentifiers.roomScreen.attachmentPicker)
+            tapOnButton(identifier)
+            tapOnButton("Cancel")
+        }
+                
+        // Open attachments picker
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPicker)
+
+        // Open photo library picker
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
+        
+        // Tap on the first image
+        app.scrollViews.images.firstMatch.tap()
+        
+        // Cancel the upload flow
+        tapOnButton("Cancel")
+    }
+    
+    private func checkRoomCreation() {
+        tapOnButton(A11yIdentifiers.homeScreen.startChat)
+        
+        tapOnButton(A11yIdentifiers.startChatScreen.createRoom)
+        
+        tapOnButton(A11yIdentifiers.inviteUsersScreen.proceed)
+        
+        tapOnButton("Invite people")
+        
+        tapOnButton("Start chat")
+        
+        tapOnButton("Cancel")
+        
+        sleep(1)
+    }
+    
+    private func checkTimelineItemActionMenu() {
         // Long press on the last message
         let lastMessage = app.cells.firstMatch
         XCTAssertTrue(lastMessage.waitForExistence(timeout: 10.0))
@@ -36,16 +104,16 @@ class UserFlowTests: XCTestCase {
         let timelineItemActionMenu = app.otherElements[A11yIdentifiers.roomScreen.timelineItemActionMenu].firstMatch
         XCTAssertTrue(timelineItemActionMenu.waitForExistence(timeout: 10.0))
         timelineItemActionMenu.swipeDown(velocity: .fast)
-        
+    }
+    
+    private func checkRoomDetails() {
         // Open the room details
-        let roomHeader = app.staticTexts["room-name"]
+        let roomHeader = app.staticTexts[A11yIdentifiers.roomScreen.name]
         XCTAssertTrue(roomHeader.waitForExistence(timeout: 10.0))
         roomHeader.tap()
         
         // Open the room member details
-        let roomMembers = app.buttons["room_details-people"]
-        XCTAssertTrue(roomMembers.waitForExistence(timeout: 10.0))
-        roomMembers.tap()
+        tapOnButton(A11yIdentifiers.roomDetailsScreen.people)
         
         // Open the first member's details
         let firstRoomMember = app.scrollViews.buttons.firstMatch
@@ -53,25 +121,52 @@ class UserFlowTests: XCTestCase {
         firstRoomMember.tap()
         
         // Go back to the room member details
-        var backButton = app.buttons["People"]
-        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
-        backButton.tap()
+        tapOnButton("People")
         
         // Go back to the room details
-        backButton = app.buttons["Back"]
-        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
-        backButton.tap()
+        tapOnButton("Back")
         
         // Go back to the room
-        backButton = app.buttons["Back"]
-        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
-        backButton.tap()
+        tapOnButton("Back")
         
         // Go back to the room list
-        backButton = app.navigationBars.firstMatch.buttons["All Chats"]
-        XCTAssertTrue(backButton.waitForExistence(timeout: 10.0))
-        backButton.tap()
+        tapOnButton("All Chats")
+    }
+    
+    private func checkSettings() {
+        let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         
-        app.logout()
+        // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
+        profileButton.forceTap()
+        
+        // Open the settings
+        tapOnButton(A11yIdentifiers.homeScreen.settings)
+        
+        // Open analytics
+        tapOnButton(A11yIdentifiers.settingsScreen.analytics)
+        
+        // Go back to settings
+        tapOnButton("Settings")
+        
+        // Open report a bug
+        tapOnButton(A11yIdentifiers.settingsScreen.reportBug)
+        
+        // Go back to settings
+        tapOnButton("Settings")
+        
+        // Open about
+        tapOnButton(A11yIdentifiers.settingsScreen.about)
+        
+        // Go back to settings
+        tapOnButton("Settings")
+        
+        // Close the settings
+        tapOnButton(A11yIdentifiers.settingsScreen.done)
+    }
+    
+    private func tapOnButton(_ identifier: String) {
+        let button = app.buttons[identifier]
+        XCTAssertTrue(button.waitForExistence(timeout: 10.0))
+        button.tap()
     }
 }

@@ -130,6 +130,7 @@ struct InviteUsersScreen: View {
             Button(context.viewState.actionText) {
                 context.send(viewAction: .proceed)
             }
+            .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
             .disabled(context.viewState.isActionDisabled)
         }
     }
