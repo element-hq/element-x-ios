@@ -572,7 +572,7 @@ public enum L10n {
   public static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
-  /// Matrix.org is an open network for secure, decentralized communication.
+  /// Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.
   public static var screenChangeAccountProviderMatrixOrgSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_matrix_org_subtitle") }
   /// Other
   public static var screenChangeAccountProviderOther: String { return L10n.tr("Localizable", "screen_change_account_provider_other") }
@@ -596,6 +596,24 @@ public enum L10n {
   public static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
+  /// Add option
+  public static var screenCreatePollAddOptionBtn: String { return L10n.tr("Localizable", "screen_create_poll_add_option_btn") }
+  /// Show results only after poll ends
+  public static var screenCreatePollAnonymousDesc: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_desc") }
+  /// Anonymous Poll
+  public static var screenCreatePollAnonymousHeadline: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_headline") }
+  /// Option %1$d
+  public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
+  }
+  /// Are you sure you would like to go back?
+  public static var screenCreatePollConfirmation: String { return L10n.tr("Localizable", "screen_create_poll_confirmation") }
+  /// Question or topic
+  public static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
+  /// What is the poll about?
+  public static var screenCreatePollQuestionHint: String { return L10n.tr("Localizable", "screen_create_poll_question_hint") }
+  /// Create Poll
+  public static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
   /// New room
   public static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
   /// Invite friends to Element
