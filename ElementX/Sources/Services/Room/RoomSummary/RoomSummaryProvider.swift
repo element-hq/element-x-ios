@@ -136,6 +136,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [RoomListEntriesUpdate]) {
+        MXLog.info("Started processing room list diffs")
+        
         let span = MXLog.createSpan("\(name).process_room_list_diffs")
         span.enter()
         defer {
@@ -165,6 +167,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
         ServiceLocator.shared.analytics.signpost.endFirstRooms()
+        
+        MXLog.info("Finished processing room list diffs")
     }
     
     private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {
