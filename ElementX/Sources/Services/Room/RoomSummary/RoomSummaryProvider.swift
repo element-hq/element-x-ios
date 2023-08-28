@@ -66,8 +66,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.appSettings = appSettings
         self.backgroundTaskService = backgroundTaskService
         
-        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
-        
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
