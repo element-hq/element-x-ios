@@ -18,7 +18,7 @@ import SwiftUI
 import UIKit
 
 final class MessageTextView: UITextView {
-    // This prevents the caret magnifying glass from showing up
+    // This prevents the magnifying glass from showing up
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
     }
