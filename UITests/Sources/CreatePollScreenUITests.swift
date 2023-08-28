@@ -49,14 +49,16 @@ class CreatePollScreenUITests: XCTestCase {
         let createButton = app.buttons[A11yIdentifiers.createPollScreen.create]
         let addOption = app.buttons[A11yIdentifiers.createPollScreen.addOption]
 
-        for _ in 1...20 {
+        for _ in 1...18 {
             if !addOption.exists {
                 app.swipeUp()
             }
             addOption.tap()
         }
 
-        XCTAssertFalse(addOption.isEnabled)
+        app.swipeUp()
+        
+        XCTAssertFalse(addOption.exists)
         XCTAssertFalse(createButton.isEnabled)
 
         try await app.assertScreenshot(.createPoll, step: 2)

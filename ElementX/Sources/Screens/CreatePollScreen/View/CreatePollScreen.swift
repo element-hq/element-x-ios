@@ -82,11 +82,12 @@ struct CreatePollScreen: View {
                 context.options.move(fromOffsets: offsets, toOffset: toOffset)
             }
 
-            Button(L10n.screenCreatePollAddOptionBtn) {
-                context.send(viewAction: .addOption)
+            if context.options.count < 20 {
+                Button(L10n.screenCreatePollAddOptionBtn) {
+                    context.send(viewAction: .addOption)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
             }
-            .disabled(context.options.count >= 20)
-            .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
         }
         .compoundFormSection()
     }
