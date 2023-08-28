@@ -186,7 +186,7 @@ struct HomeScreen: View {
     /// Dispatch it with a delay to allow the UI to update and the computations to be correct
     /// Once we move to iOS 17 we should remove all of this and use scroll anchors instead
     private func updateVisibleRange() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { updateVisibleRange() }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { delayedUpdateVisibleRange() }
     }
     
     private func delayedUpdateVisibleRange() {
