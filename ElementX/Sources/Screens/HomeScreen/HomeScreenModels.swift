@@ -143,6 +143,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     var notificationMode: RoomNotificationModeProxy?
     
     var hasDecoration: Bool {
+        // notification setting is displayed only for .mentionsAndKeywords and .mute
         let showNotificationSettings = notificationMode != nil && notificationMode != .allMessages
         return hasUnreads || showNotificationSettings
     }

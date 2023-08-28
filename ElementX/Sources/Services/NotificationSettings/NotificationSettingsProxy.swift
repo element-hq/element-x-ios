@@ -37,7 +37,7 @@ private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate 
 final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     private(set) var notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol?
-
+    
     let callbacks = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
 
     init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol, backgroundTaskService: BackgroundTaskServiceProtocol?) {

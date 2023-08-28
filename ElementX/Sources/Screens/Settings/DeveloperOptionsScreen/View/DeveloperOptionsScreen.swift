@@ -50,6 +50,7 @@ struct DeveloperOptionsScreen: View {
             Section("Notifications") {
                 Toggle(isOn: $context.notificationSettingsEnabled) {
                     Text("Show notification settings")
+                    Text("Requires app reboot")
                 }
             }
 

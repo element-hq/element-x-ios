@@ -75,16 +75,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
         
         if appSettings.notificationSettingsEnabled {
-            notificationSettings.callbacks
-                .receive(on: serialDispatchQueue)
-                .sink { [weak self] callback in
-                    guard let self else { return }
-                    switch callback {
-                    case .settingsDidChange:
-                        self.rebuildRoomSummaries()
-                    }
-                }
-                .store(in: &cancellables)
+            setupNotificationSettingsSubscription()
         }
     }
     
@@ -342,6 +333,20 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         return CollectionDifference(changes)
+    }
+    
+    private func setupNotificationSettingsSubscription() {
+        notificationSettings.callbacks
+            .receive(on: serialDispatchQueue)
+            .dropFirst() // drop the first one to avoid rebuilding the summaries during the first synchronization
+            .sink { [weak self] callback in
+                guard let self else { return }
+                switch callback {
+                case .settingsDidChange:
+                    self.rebuildRoomSummaries()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func rebuildRoomSummaries() {
