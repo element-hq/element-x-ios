@@ -130,7 +130,7 @@ protocol RoomProxyProtocol {
     /// Cancels  a failed message given its transaction ID from the timeline
     func cancelSend(transactionID: String) async
 
-    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError>
+    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     

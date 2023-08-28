@@ -148,6 +148,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch composerAction {
         case .sendMessage(let message, let html, let mode):
             Task { await sendCurrentMessage(message, html: html, mode: mode) }
+        case .sendPlainTextMessage(let message, let mode):
+            Task { await sendCurrentMessage(message, html: nil, mode: mode) }
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
@@ -427,7 +429,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage(_ message: String, html: String, mode: RoomScreenComposerMode) async {
+    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode) async {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }

@@ -1131,12 +1131,12 @@ class RoomProxyMock: RoomProxyProtocol {
     var editMessageHtmlOriginalCalled: Bool {
         return editMessageHtmlOriginalCallsCount > 0
     }
-    var editMessageHtmlOriginalReceivedArguments: (newMessage: String, html: String, eventID: String)?
-    var editMessageHtmlOriginalReceivedInvocations: [(newMessage: String, html: String, eventID: String)] = []
+    var editMessageHtmlOriginalReceivedArguments: (newMessage: String, html: String?, eventID: String)?
+    var editMessageHtmlOriginalReceivedInvocations: [(newMessage: String, html: String?, eventID: String)] = []
     var editMessageHtmlOriginalReturnValue: Result<Void, RoomProxyError>!
-    var editMessageHtmlOriginalClosure: ((String, String, String) async -> Result<Void, RoomProxyError>)?
+    var editMessageHtmlOriginalClosure: ((String, String?, String) async -> Result<Void, RoomProxyError>)?
 
-    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         editMessageHtmlOriginalCallsCount += 1
         editMessageHtmlOriginalReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID)
         editMessageHtmlOriginalReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID))

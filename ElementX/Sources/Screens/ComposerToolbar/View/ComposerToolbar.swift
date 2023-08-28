@@ -34,7 +34,8 @@ struct ComposerToolbar: View {
     }
     
     private var messageComposer: some View {
-        MessageComposer(composerView: composerView,
+        MessageComposer(plainText: $context.composerPlainText,
+                        composerView: composerView,
                         sendingDisabled: context.viewState.sendButtonDisabled,
                         mode: context.viewState.composerMode) {
             context.send(viewAction: .sendMessage)

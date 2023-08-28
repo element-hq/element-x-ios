@@ -121,7 +121,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendMessage(_ message: String, html: String, inReplyTo itemID: TimelineItemIdentifier?) async {
+    func sendMessage(_ message: String, html: String?, inReplyTo itemID: TimelineItemIdentifier?) async {
         var inReplyTo: String?
         if itemID == nil {
             MXLog.info("Send message in \(roomID)")
@@ -156,7 +156,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func editMessage(_ newMessage: String, html: String, original itemID: TimelineItemIdentifier) async {
+    func editMessage(_ newMessage: String, html: String?, original itemID: TimelineItemIdentifier) async {
         MXLog.info("Edit message in \(roomID)")
         if let timelineItem = timelineItems.firstUsingStableID(itemID),
            let item = timelineItem as? EventBasedTimelineItemProtocol,

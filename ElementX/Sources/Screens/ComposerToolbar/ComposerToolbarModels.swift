@@ -18,6 +18,7 @@ import UIKit
 
 enum ComposerToolbarViewModelAction {
     case sendMessage(plain: String, html: String, mode: RoomScreenComposerMode)
+    case sendPlainTextMessage(message: String, mode: RoomScreenComposerMode)
 
     case displayCameraPicker
     case displayMediaPicker
@@ -49,11 +50,16 @@ struct ComposerToolbarViewState: BindableState {
     var bindings: ComposerToolbarViewStateBindings
 
     var sendButtonDisabled: Bool {
-        composerEmpty
+        if ServiceLocator.shared.settings.richTextEditorEnabled {
+            return composerEmpty
+        } else {
+            return bindings.composerPlainText.isEmpty
+        }
     }
 }
 
 struct ComposerToolbarViewStateBindings {
+    var composerPlainText: String
     var composerFocused: Bool
 
     var showAttachmentPopover = false {

@@ -29,7 +29,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     init(wysiwygViewModel: WysiwygComposerViewModel) {
         self.wysiwygViewModel = wysiwygViewModel
 
-        super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerFocused: false)))
+        super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerPlainText: "", composerFocused: false)))
 
         context.$viewState
             .map(\.composerMode)
@@ -57,9 +57,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
 
-            actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                             html: wysiwygViewModel.content.html,
-                                             mode: state.composerMode))
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                                 html: wysiwygViewModel.content.html,
+                                                 mode: state.composerMode))
+            } else {
+                actionsSubject.send(.sendPlainTextMessage(message: context.composerPlainText,
+                                                          mode: state.composerMode))
+            }
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
@@ -115,6 +120,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.setMarkdownContent(text)
+        if ServiceLocator.shared.settings.richTextEditorEnabled {
+            wysiwygViewModel.setMarkdownContent(text)
+        } else {
+            state.bindings.composerPlainText = text
+        }
     }
 }

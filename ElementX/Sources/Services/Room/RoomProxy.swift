@@ -447,17 +447,22 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, html: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
         let transactionId = genTransactionId()
+        let newMessageContent: RoomMessageEventContentWithoutRelation
+        if let html {
+            newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
+        } else {
+            newMessageContent = messageEventContentFromMarkdown(md: newMessage)
+        }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                let newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
                 try self.room.edit(newMsg: newMessageContent, originalEventId: eventID, txnId: transactionId)
                 return .success(())
             } catch {
