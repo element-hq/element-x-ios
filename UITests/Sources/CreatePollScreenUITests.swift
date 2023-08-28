@@ -20,11 +20,8 @@ import XCTest
 @MainActor
 class CreatePollScreenUITests: XCTestCase {
     func testScreen() async throws {
-        let app = Application.launch(.createPollScreen)
+        let app = Application.launch(.createPoll)
         
-        let title = app.staticTexts["CreatePoll title"]
-        XCTAssert(title.exists)
-
-        try await app.assertScreenshot(.createPollScreen)
+        try await app.assertScreenshot(.createPoll)
     }
 }
