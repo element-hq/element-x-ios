@@ -17,4 +17,18 @@
 import UIKit
 
 /// Text attachment for pills display.
-final class PillTextAttachment: NSTextAttachment { }
+final class PillTextAttachment: NSTextAttachment {
+    convenience init?(attachmentData: PillTextAttachmentData) {
+        let encoder = JSONEncoder()
+        guard let encodedData = try? encoder.encode(attachmentData) else { return nil }
+        self.init(data: encodedData, ofType: InfoPlistReader.main.pillsUTType)
+    }
+    
+    var pillData: PillTextAttachmentData? {
+        guard let contents else {
+            return nil
+        }
+        let decoder = JSONDecoder()
+        return try? decoder.decode(PillTextAttachmentData.self, from: contents)
+    }
+}

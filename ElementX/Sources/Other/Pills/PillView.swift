@@ -18,20 +18,25 @@ import SwiftUI
 
 struct PillView: View {
     let imageProvider: ImageProviderProtocol?
-    
+    @ObservedObject var viewModel: PillViewModel
+        
     var body: some View {
         HStack(spacing: 4) {
-            LoadableAvatarImage(url: nil, name: "test", contentID: "test", avatarSize: .custom(24), imageProvider: imageProvider)
-            Text("Test")
+            LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
+            Text(viewModel.displayText)
+                .lineLimit(1)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(Capsule().foregroundColor(.gray))
+        .frame(maxWidth: 250)
     }
 }
 
 struct PillView_Previews: PreviewProvider {
     static var previews: some View {
-        PillView(imageProvider: MockMediaProvider())
+        PillView(imageProvider:
+            MockMediaProvider(),
+            viewModel: PillViewModel.mockViewModel(type: .user))
     }
 }

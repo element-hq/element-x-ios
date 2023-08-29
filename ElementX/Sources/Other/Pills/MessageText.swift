@@ -22,6 +22,17 @@ final class MessageTextView: UITextView {
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
     }
+    
+    func invalidateTextAttachmentsDisplay() {
+        attributedText.enumerateAttribute(.attachment,
+                                          in: NSRange(location: 0, length: attributedText.length),
+                                          options: []) { value, range, _ in
+            guard value != nil else {
+                return
+            }
+            self.layoutManager.invalidateDisplay(forCharacterRange: range)
+        }
+    }
 }
 
 struct MessageText: UIViewRepresentable {

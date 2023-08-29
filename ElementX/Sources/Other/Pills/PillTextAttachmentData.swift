@@ -15,3 +15,20 @@
 //
 
 import Foundation
+
+struct PillTextAttachmentData: Codable {
+    // MARK: - Properties
+
+    /// Pill type
+    var type: PillType
+    /// Items to render
+    /// Alpha for pill display
+    /// Font for the display name
+//    var font: UIFont
+    /// Max width
+//    var maxWidth: CGFloat
+}
+
+enum PillType: Codable {
+    case user(userId: String) /// userId
+}

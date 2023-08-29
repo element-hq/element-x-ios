@@ -542,6 +542,7 @@
 		A74438ED16F8683A4B793E6A /* AnalyticsSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCE3FAF40932AC7C7639AC4 /* AnalyticsSettingsScreenViewModel.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		A7DB81682A9D03E800D26A8D /* PillTextAttachmentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DB81672A9D03E800D26A8D /* PillTextAttachmentData.swift */; };
+		A7DB816A2A9E0B1D00D26A8D /* PillViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DB81692A9E0B1D00D26A8D /* PillViewModel.swift */; };
 		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
 		A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */; };
@@ -1366,6 +1367,7 @@
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A7DB81672A9D03E800D26A8D /* PillTextAttachmentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillTextAttachmentData.swift; sourceTree = "<group>"; };
+		A7DB81692A9E0B1D00D26A8D /* PillViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillViewModel.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8903A9F615BBD0E6D7CD133 /* ApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationProtocol.swift; sourceTree = "<group>"; };
 		A931ECBDC32FC90A6480751F /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
@@ -3207,6 +3209,7 @@
 				9CF1EE0AA78470C674554262 /* PillTextAttachment.swift */,
 				7773CBFDBD458E0B7E270507 /* PillView.swift */,
 				A7DB81672A9D03E800D26A8D /* PillTextAttachmentData.swift */,
+				A7DB81692A9E0B1D00D26A8D /* PillViewModel.swift */,
 			);
 			path = Pills;
 			sourceTree = "<group>";
@@ -4635,6 +4638,7 @@
 				564BF06B3E93D6DD55F903B2 /* CreateRoomCoordinator.swift in Sources */,
 				C32765D740C81AD4C42E8F50 /* CreateRoomFlowParameters.swift in Sources */,
 				FB53CD9B74A15B3B94F9F788 /* CreateRoomModels.swift in Sources */,
+				A7DB816A2A9E0B1D00D26A8D /* PillViewModel.swift in Sources */,
 				292827744227DF61C930BDDB /* CreateRoomScreen.swift in Sources */,
 				0BE4D5CBF86956410F071F91 /* CreateRoomViewModel.swift in Sources */,
 				4799A852132F1744E2825994 /* CreateRoomViewModelProtocol.swift in Sources */,

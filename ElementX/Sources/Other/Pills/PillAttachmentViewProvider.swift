@@ -22,18 +22,38 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     }
     
+    private weak var messageTextView: MessageTextView?
+    
     // MARK: - Override
+    
+    override init(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) {
+        super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
 
+        // Keep a reference to the parent text view for size adjustments and pills flushing.
+        messageTextView = parentView?.superview as? MessageTextView
+    }
+    
     override func loadView() {
         super.loadView()
 
-        guard textAttachment is PillTextAttachment else {
-            MXLog.failure("[PillAttachmentViewProvider]: attachment is missing or not of expected class")
+        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData else {
+            MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
             return
         }
+        
+        tracksTextAttachmentViewBounds = true
 
         let imageProvider = isXcodePreview ? MockMediaProvider() : Self.currentSession?.mediaProvider
-        let view = PillView(imageProvider: imageProvider)
+        let viewModel: PillViewModel
+        if isXcodePreview {
+            viewModel = PillViewModel.mockViewModel(type: .user)
+        } else if let clientProxy = Self.currentSession?.clientProxy {
+            viewModel = PillViewModel(clientProxy: clientProxy, data: textAttachmentData)
+        } else {
+            MXLog.failure("[PillAttachmentViewProvider]: client proxy is missing")
+            return
+        }
+        var view = PillView(imageProvider: imageProvider, viewModel: viewModel)
         let controller = UIHostingController(rootView: view)
         self.view = controller.view
     }
