@@ -107,7 +107,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
-    func logout() async
+    func logout() async -> URL?
 
     func setPusher(with configuration: PusherConfiguration) async throws
     
