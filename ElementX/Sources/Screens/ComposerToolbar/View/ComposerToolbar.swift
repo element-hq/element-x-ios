@@ -15,9 +15,13 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
+    let wysiwygViewModel: WysiwygComposerViewModel
+    let keyCommandHandler: KeyCommandHandler
+
     @FocusState private var composerFocused: Bool
 
     var body: some View {
@@ -27,7 +31,27 @@ struct ComposerToolbar: View {
             messageComposer
                 .environmentObject(context)
         }
+    }
+    
+    private var messageComposer: some View {
+        MessageComposer(plainText: $context.composerPlainText,
+                        composerView: composerView,
+                        sendingDisabled: context.viewState.sendButtonDisabled,
+                        mode: context.viewState.composerMode) {
+            context.send(viewAction: .sendMessage)
+        } pasteAction: { provider in
+            context.send(viewAction: .handlePasteOrDrop(provider: provider))
+        } replyCancellationAction: {
+            context.send(viewAction: .cancelReply)
+        } editCancellationAction: {
+            context.send(viewAction: .cancelEdit)
+        } onAppearAction: {
+            context.send(viewAction: .composerAppeared)
+        }
+        .focused($composerFocused)
         .onChange(of: context.composerFocused) { newValue in
+            guard composerFocused != newValue else { return }
+
             composerFocused = newValue
         }
         .onChange(of: composerFocused) { newValue in
@@ -35,23 +59,30 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var messageComposer: some View {
-        MessageComposer(text: $context.composerText,
-                        focused: $composerFocused,
-                        sendingDisabled: context.viewState.sendButtonDisabled,
-                        mode: context.viewState.composerMode) {
-            sendMessage()
-        } pasteAction: { provider in
+    private var composerView: WysiwygComposerView {
+        WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+                            viewModel: wysiwygViewModel,
+                            itemProviderHelper: ItemProviderHelper(),
+                            keyCommandHandler: keyCommandHandler) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
-        } replyCancellationAction: {
-            context.send(viewAction: .cancelReply)
-        } editCancellationAction: {
-            context.send(viewAction: .cancelEdit)
         }
     }
 
-    private func sendMessage() {
-        guard !context.viewState.sendButtonDisabled else { return }
-        context.send(viewAction: .sendMessage(message: context.composerText, mode: context.viewState.composerMode))
+    private class ItemProviderHelper: WysiwygItemProviderHelper {
+        func isPasteSupported(for itemProvider: NSItemProvider) -> Bool {
+            itemProvider.isSupportedForPasteOrDrop
+        }
+    }
+}
+
+// MARK: - Mock
+
+extension ComposerToolbar {
+    static func mock() -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
     }
 }

@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 import SwiftUIIntrospect
+import WysiwygComposer
 
 struct TimelineView: View {
     let viewState: TimelineViewState
@@ -174,11 +175,9 @@ struct TimelineView_Previews: PreviewProvider {
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-    static let composerViewModel = ComposerToolbarViewModel()
-
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
         }
     }
 }

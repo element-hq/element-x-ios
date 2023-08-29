@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
@@ -106,7 +107,7 @@ struct RoomAttachmentPicker: View {
 }
 
 struct RoomAttachmentPicker_Previews: PreviewProvider {
-    static let viewModel = ComposerToolbarViewModel()
+    static let viewModel = ComposerToolbarViewModel(wysiwygViewModel: WysiwygComposerViewModel())
 
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)

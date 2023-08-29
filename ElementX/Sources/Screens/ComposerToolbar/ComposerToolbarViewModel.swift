@@ -15,17 +15,21 @@
 //
 
 import Combine
+import WysiwygComposer
 
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
+    private let wysiwygViewModel: WysiwygComposerViewModel
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerText: "", composerFocused: false)))
+    init(wysiwygViewModel: WysiwygComposerViewModel) {
+        self.wysiwygViewModel = wysiwygViewModel
+
+        super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerPlainText: "", composerFocused: false)))
 
         context.$viewState
             .map(\.composerMode)
@@ -36,7 +40,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         context.$viewState
             .map(\.bindings.composerFocused)
             .removeDuplicates()
-            .sink { [weak self] in self?.actionsSubject.send(.focusedChanged(isFocused: $0)) }
+            .sink { [weak self] in self?.actionsSubject.send(.composerFocusedChanged(isFocused: $0)) }
+            .store(in: &cancellables)
+
+        wysiwygViewModel.$isContentEmpty
+            .weakAssign(to: \.state.composerEmpty, on: self)
             .store(in: &cancellables)
     }
 
@@ -44,8 +52,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     override func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
-        case .sendMessage(let message, let mode):
-            actionsSubject.send(.sendMessage(message: message, mode: mode))
+        case .composerAppeared:
+            wysiwygViewModel.setup()
+        case .sendMessage:
+            guard !state.sendButtonDisabled else { return }
+
+            if ServiceLocator.shared.settings.richTextEditorEnabled {
+                actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                                 html: wysiwygViewModel.content.html,
+                                                 mode: state.composerMode))
+            } else {
+                actionsSubject.send(.sendPlainTextMessage(message: context.composerPlainText,
+                                                          mode: state.composerMode))
+            }
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
@@ -78,6 +97,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
+    func handleKeyCommand(_ keyCommand: WysiwygKeyCommand) -> Bool {
+        switch keyCommand {
+        case .enter:
+            process(viewAction: .sendMessage)
+            return true
+        case .shiftEnter:
+            return false
+        }
+    }
+
     // MARK: - Private
 
     private func set(mode: RoomScreenComposerMode) {
@@ -91,6 +120,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        state.bindings.composerText = text
+        if ServiceLocator.shared.settings.richTextEditorEnabled {
+            wysiwygViewModel.setMarkdownContent(text)
+        } else {
+            state.bindings.composerPlainText = text
+        }
     }
 }

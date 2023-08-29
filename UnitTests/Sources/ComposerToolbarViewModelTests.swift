@@ -15,12 +15,14 @@
 //
 
 @testable import ElementX
+import WysiwygComposer
 import XCTest
 
 @MainActor
 class ComposerToolbarViewModelTests: XCTestCase {
     func testComposerFocus() {
-        let viewModel = ComposerToolbarViewModel()
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.process(roomAction: .removeFocus)
@@ -28,7 +30,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerMode() {
-        let viewModel = ComposerToolbarViewModel()
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         viewModel.process(roomAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
@@ -37,7 +40,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerModeIsPublished() {
-        let viewModel = ComposerToolbarViewModel()
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
@@ -55,5 +59,12 @@ class ComposerToolbarViewModelTests: XCTestCase {
 
         wait(for: [expectation], timeout: 2.0)
         cancellable.cancel()
+    }
+
+    func testHandleKeyCommand() {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        XCTAssertTrue(viewModel.handleKeyCommand(.enter))
+        XCTAssertFalse(viewModel.handleKeyCommand(.shiftEnter))
     }
 }

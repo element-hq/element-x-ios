@@ -199,6 +199,7 @@
 		43F35A7E5703D64DB0519C59 /* ServerSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */; };
 		440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D505843AB66822EB91F0DF0 /* TimelineItemProxy.swift */; };
 		44121202B4A260C98BF615A7 /* RoomMembersListScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7A755E985FA14469E86B2 /* RoomMembersListScreenUITests.swift */; };
+		44F0E1B576C7599DF8022071 /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */; };
 		46562110EE202E580A5FFD9C /* RoomScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF7B19FFCF8EFBE0A8696A /* RoomScreenViewModelTests.swift */; };
 		46A261AA898344A1F3C406B1 /* ReportContentScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCE3636E3D01477C8B2E9D0 /* ReportContentScreenModels.swift */; };
 		46BA7F4B4D3A7164DED44B88 /* FullscreenDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565F1B2B300597C616B37888 /* FullscreenDialog.swift */; };
@@ -1635,6 +1636,7 @@
 				36AD4DD4C798E22584ED3200 /* URLRouting in Frameworks */,
 				36CD6E11B37396E14F032CB6 /* Version in Frameworks */,
 				A0D7E5BD0298A97DCBDCE40B /* Emojibase in Frameworks */,
+				44F0E1B576C7599DF8022071 /* WysiwygComposer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3893,6 +3895,7 @@
 				E9BAB8A793FE3B54CDD47102 /* URLRouting */,
 				A05AF81DDD14AD58CB0E1B9B /* Version */,
 				C05729B1684C331F5FFE9232 /* Emojibase */,
+				CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -4025,6 +4028,7 @@
 				9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				0020F10A9DA1895036A72013 /* XCRemoteSwiftPackageReference "swift-url-routing" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
+				945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -5538,6 +5542,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.6.3;
+			};
+		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
@@ -5867,6 +5879,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
+		};
+		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */;
+			productName = WysiwygComposer;
 		};
 		CCE5BF78B125320CBF3BB834 /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;

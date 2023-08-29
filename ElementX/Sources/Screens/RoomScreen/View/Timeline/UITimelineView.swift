@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 /// A table view wrapper that displays the timeline of a room.
 struct UITimelineView: UIViewControllerRepresentable {
@@ -86,11 +87,9 @@ struct UITimelineView_Previews: PreviewProvider {
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-    static let composerViewModel = ComposerToolbarViewModel()
-    
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
         }
     }
 }

@@ -262,15 +262,19 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
         let transactionId = genTransactionId()
-        let messageContent = messageEventContentFromMarkdown(md: message)
-        
+        let messageContent: RoomMessageEventContentWithoutRelation
+        if let html {
+            messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
+        } else {
+            messageContent = messageEventContentFromMarkdown(md: message)
+        }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
@@ -443,17 +447,22 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
         let transactionId = genTransactionId()
+        let newMessageContent: RoomMessageEventContentWithoutRelation
+        if let html {
+            newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
+        } else {
+            newMessageContent = messageEventContentFromMarkdown(md: newMessage)
+        }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                let newMessageContent = messageEventContentFromMarkdown(md: newMessage)
                 try self.room.edit(newMsg: newMessageContent, originalEventId: eventID, txnId: transactionId)
                 return .success(())
             } catch {

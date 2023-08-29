@@ -16,6 +16,7 @@
 
 import Combine
 import SwiftUI
+import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
@@ -40,6 +41,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
     private var viewModel: RoomScreenViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModel
+    private var wysiwygViewModel: WysiwygComposerViewModel
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -58,7 +60,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                         analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-        composerViewModel = ComposerToolbarViewModel()
+        wysiwygViewModel = WysiwygComposerViewModel(minHeight: 22, maxExpandedHeight: 250)
+        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
     }
     
     // MARK: - Public
@@ -111,6 +114,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context)))
+        let composerToolbar = ComposerToolbar(context: composerViewModel.context,
+                                              wysiwygViewModel: wysiwygViewModel,
+                                              keyCommandHandler: composerViewModel.handleKeyCommand)
+
+        return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar))
     }
 }

@@ -72,6 +72,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
 
+            Section("Rich Text Editor") {
+                Toggle(isOn: $context.richTextEditorEnabled) {
+                    Text("Use the Rich Text Editor")
+                }
+            }
+
             Section {
                 Button {
                     showConfetti = true

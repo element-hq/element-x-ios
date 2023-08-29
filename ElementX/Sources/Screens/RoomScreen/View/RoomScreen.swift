@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import WysiwygComposer
 
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
@@ -22,7 +23,7 @@ struct RoomScreen: View {
     let composerToolbar: ComposerToolbar
 
     private let attachmentButtonPadding = 10.0
-    
+
     var body: some View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
@@ -152,12 +153,10 @@ struct RoomScreen_Previews: PreviewProvider {
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-
-    static let composerViewModel = ComposerToolbarViewModel()
     
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar(context: composerViewModel.context))
+            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
         }
     }
 }
