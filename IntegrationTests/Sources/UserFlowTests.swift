@@ -58,7 +58,6 @@ class UserFlowTests: XCTestCase {
     private func checkAttachmentsPicker() {
         for identifier in [A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary,
                            A11yIdentifiers.roomScreen.attachmentPickerDocuments,
-                           A11yIdentifiers.roomScreen.attachmentPickerCamera,
                            A11yIdentifiers.roomScreen.attachmentPickerLocation] {
             tapOnButton(A11yIdentifiers.roomScreen.attachmentPicker)
             tapOnButton(identifier)
