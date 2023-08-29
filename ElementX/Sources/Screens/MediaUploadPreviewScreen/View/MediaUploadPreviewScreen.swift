@@ -59,7 +59,7 @@ private struct PreviewView: UIViewControllerRepresentable {
     let title: String?
 
     func makeUIViewController(context: Context) -> UIViewController {
-        let previewController = QLPreviewController()
+        let previewController = PreviewViewController()
         previewController.dataSource = context.coordinator
         previewController.delegate = context.coordinator
         
@@ -121,5 +121,13 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider {
                                                              url: URL.picturesDirectory)
     static var previews: some View {
         MediaUploadPreviewScreen(context: viewModel.context)
+    }
+}
+
+private class PreviewViewController: QLPreviewController {
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        navigationItem.rightBarButtonItem = nil
     }
 }
