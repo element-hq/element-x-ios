@@ -109,7 +109,11 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     private static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld", attributes: defaultFontContainer)
     
     private static let attributedStringWithAttachment: AttributedString = {
-        var attributedString = "Hello " + AttributedString(NSAttributedString(attachment: PillTextAttachment(data: Data(), ofType: InfoPlistReader.main.pillsUTType))) + " World!"
+        guard let attachment = PillTextAttachment(attachmentData: testData) else {
+            return AttributedString()
+        }
+        
+        var attributedString = "Hello " + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
         attributedString
             .mergeAttributes(defaultFontContainer)
         return attributedString
