@@ -138,6 +138,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        ServiceLocator.shared.analytics.signpost.beginFirstRooms()
+        
         // Combine together the state and the room list to correctly compute the view state if
         // data is present in the room list "cold cache"
         Publishers.CombineLatest(roomSummaryProvider.statePublisher,
@@ -160,6 +162,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 guard roomListMode != self.state.roomListMode else {
                     return
+                }
+                
+                if roomListMode == .rooms, self.state.roomListMode == .skeletons {
+                    ServiceLocator.shared.analytics.signpost.endFirstRooms()
                 }
                 
                 self.state.roomListMode = roomListMode

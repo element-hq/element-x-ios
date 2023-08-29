@@ -166,8 +166,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
-        ServiceLocator.shared.analytics.signpost.endFirstRooms()
-        
         MXLog.info("Finished processing room list diffs")
     }
     
