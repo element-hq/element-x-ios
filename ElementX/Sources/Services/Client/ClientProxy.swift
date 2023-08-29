@@ -399,8 +399,6 @@ class ClientProxy: ClientProxyProtocol {
                                     appIdentifier: "MainApp")
                 .finish()
             let roomListService = syncService.roomListService()
-            
-            ServiceLocator.shared.analytics.signpost.beginFirstRooms()
 
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
