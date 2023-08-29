@@ -25,11 +25,11 @@ struct LegalInformationScreen: View {
         Form {
             Section {
                 ListRow(label: .plain(title: L10n.commonCopyright),
-                        kind: .navigationLink { openURL("https://element.io/copyright") })
+                        kind: .button { openURL(context.viewState.copyrightURL) })
                 ListRow(label: .plain(title: L10n.commonAcceptableUsePolicy),
-                        kind: .navigationLink { openURL("https://element.io/acceptable-use-policy-terms") })
+                        kind: .button { openURL(context.viewState.acceptableUseURL) })
                 ListRow(label: .plain(title: L10n.commonPrivacyPolicy),
-                        kind: .navigationLink { openURL("https://element.io/privacy") })
+                        kind: .button { openURL(context.viewState.privacyURL) })
             }
         }
         .compoundList()
@@ -41,7 +41,7 @@ struct LegalInformationScreen: View {
 // MARK: - Previews
 
 struct LegalInformationScreen_Previews: PreviewProvider {
-    static let viewModel = LegalInformationScreenViewModel()
+    static let viewModel = LegalInformationScreenViewModel(appSettings: AppSettings())
     static var previews: some View {
         LegalInformationScreen(context: viewModel.context)
     }

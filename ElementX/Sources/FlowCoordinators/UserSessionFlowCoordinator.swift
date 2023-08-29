@@ -311,7 +311,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                    userIndicatorController: userIndicatorController,
                                                                    userSession: userSession,
                                                                    bugReportService: bugReportService,
-                                                                   notificationSettings: userSession.clientProxy.notificationSettings())
+                                                                   notificationSettings: userSession.clientProxy.notificationSettings(),
+                                                                   appSettings: appSettings)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
         settingsScreenCoordinator.callback = { [weak self] action in
             guard let self else { return }

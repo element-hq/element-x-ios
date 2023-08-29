@@ -33,9 +33,10 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         
         let oidcConfiguration = OidcConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
                                                   redirectUri: appSettings.oidcRedirectURL.absoluteString,
-                                                  clientUri: appSettings.oidcClientURL.absoluteString,
-                                                  tosUri: appSettings.oidcTermsURL.absoluteString,
-                                                  policyUri: appSettings.oidcPolicyURL.absoluteString,
+                                                  clientUri: appSettings.websiteURL.absoluteString,
+                                                  logoUri: appSettings.logoURL.absoluteString,
+                                                  tosUri: appSettings.acceptableUseURL.absoluteString,
+                                                  policyUri: appSettings.privacyURL.absoluteString,
                                                   staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,

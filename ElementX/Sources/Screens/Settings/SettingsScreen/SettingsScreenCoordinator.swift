@@ -22,6 +22,7 @@ struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
+    let appSettings: AppSettings
 }
 
 enum SettingsScreenCoordinatorAction {
@@ -132,7 +133,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentLegalInformationScreen() {
-        parameters.navigationStackCoordinator?.push(LegalInformationScreenCoordinator())
+        parameters.navigationStackCoordinator?.push(LegalInformationScreenCoordinator(appSettings: parameters.appSettings))
     }
     
     private func verifySession() {

@@ -102,6 +102,17 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasShownWelcomeScreen, defaultValue: false, storageType: .userDefaults(store))
     var hasShownWelcomeScreen: Bool
     
+    /// A URL where users can go read more about the app.
+    let websiteURL: URL = "https://element.io"
+    /// A URL that contains the app's logo that may be used when showing content in a web view.
+    let logoURL: URL = "https://element.io/mobile-icon.png"
+    /// A URL that contains that app's copyright notice.
+    let copyrightURL: URL = "https://element.io/copyright"
+    /// A URL that contains the app's Terms of use.
+    let acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
+    /// A URL that contains the app's Privacy Policy.
+    let privacyURL: URL = "https://element.io/privacy"
+    
     // MARK: - Authentication
     
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
@@ -109,12 +120,6 @@ final class AppSettings {
     
     /// The redirect URL used for OIDC.
     let oidcRedirectURL: URL = "io.element:/callback"
-    /// The app's main URL shown when using OIDC.
-    let oidcClientURL: URL = "https://element.io"
-    /// The app's Terms of Service URL shown when using OIDC.
-    let oidcTermsURL: URL = "https://element.io/user-terms-of-service"
-    /// The app's Privacy Policy URL shown when using OIDC.
-    let oidcPolicyURL: URL = "https://element.io/privacy"
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
 
