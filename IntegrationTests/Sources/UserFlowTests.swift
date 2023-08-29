@@ -70,8 +70,8 @@ class UserFlowTests: XCTestCase {
         // Open photo library picker
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
         
-        // Tap on the first image
-        app.scrollViews.images.firstMatch.tap()
+        // Tap on the second image. First one is always broken on simulators.
+        app.scrollViews.images.element(boundBy: 1).tap()
         
         // Cancel the upload flow
         tapOnButton("Cancel")
