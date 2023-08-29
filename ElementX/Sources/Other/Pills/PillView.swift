@@ -19,6 +19,7 @@ import SwiftUI
 struct PillView: View {
     let imageProvider: ImageProviderProtocol?
     @ObservedObject var viewModel: PillViewModel
+    let updateClosure: () -> Void
         
     var body: some View {
         HStack(spacing: 4) {
@@ -30,6 +31,9 @@ struct PillView: View {
         .padding(.vertical, 4)
         .background(Capsule().foregroundColor(.gray))
         .frame(maxWidth: 250)
+        .onChange(of: viewModel.displayText) { _ in
+            updateClosure()
+        }
     }
 }
 
@@ -37,6 +41,6 @@ struct PillView_Previews: PreviewProvider {
     static var previews: some View {
         PillView(imageProvider:
             MockMediaProvider(),
-            viewModel: PillViewModel.mockViewModel(type: .user))
+            viewModel: PillViewModel.mockViewModel(type: .user)) { }
     }
 }

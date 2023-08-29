@@ -46,9 +46,11 @@ final class PillViewModel: ObservableObject {
         let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), data: PillTextAttachmentData(type: pillType))
         Task {
             try? await Task.sleep(for: .seconds(2))
-            viewModel.url = URL.documentsDirectory
-            viewModel.name = "Test"
-            viewModel.displayText = "Test Longer Display Text"
+            await MainActor.run {
+                viewModel.url = URL.documentsDirectory
+                viewModel.name = "Test"
+                viewModel.displayText = "Test Longer Display Text"
+            }
         }
         return viewModel
     }

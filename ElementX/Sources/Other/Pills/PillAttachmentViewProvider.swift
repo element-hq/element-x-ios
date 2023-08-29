@@ -31,6 +31,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
 
         // Keep a reference to the parent text view for size adjustments and pills flushing.
         messageTextView = parentView?.superview as? MessageTextView
+        tracksTextAttachmentViewBounds = true
     }
     
     override func loadView() {
@@ -41,9 +42,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             return
         }
         
-        tracksTextAttachmentViewBounds = true
-
-        let imageProvider = isXcodePreview ? MockMediaProvider() : Self.currentSession?.mediaProvider
+        let imageProvider = MockMediaProvider()
         let viewModel: PillViewModel
         if isXcodePreview {
             viewModel = PillViewModel.mockViewModel(type: .user)
@@ -53,7 +52,9 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             MXLog.failure("[PillAttachmentViewProvider]: client proxy is missing")
             return
         }
-        var view = PillView(imageProvider: imageProvider, viewModel: viewModel)
+        var view = PillView(imageProvider: imageProvider, viewModel: viewModel) { [weak self] in
+            self?.messageTextView?.invalidateTextAttachmentsDisplay()
+        }
         let controller = UIHostingController(rootView: view)
         self.view = controller.view
     }

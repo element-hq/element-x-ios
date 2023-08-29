@@ -14,10 +14,12 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
-import UIKit
 
 final class MessageTextView: UITextView {
+    var updateClosure: (() -> Void)?
+
     // This prevents the magnifying glass from showing up
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
@@ -31,16 +33,20 @@ final class MessageTextView: UITextView {
                 return
             }
             self.layoutManager.invalidateDisplay(forCharacterRange: range)
+            updateClosure?()
         }
     }
 }
 
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction: OpenURLAction
-    let attributedString: AttributedString
+    @State var attributedString: AttributedString
 
     func makeUIView(context: Context) -> MessageTextView {
         let textView = MessageTextView()
+        textView.updateClosure = {
+            attributedString = AttributedString(textView.attributedText)
+        }
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
