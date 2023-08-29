@@ -434,7 +434,7 @@ class ClientProxy: ClientProxyProtocol {
             case .running, .terminated, .idle:
                 break
             case .error:
-                restartSync(delay: .seconds(1))
+                restartSync()
             }
         })
     }
