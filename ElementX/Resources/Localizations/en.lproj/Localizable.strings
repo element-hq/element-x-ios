@@ -60,6 +60,7 @@
 "action_take_photo" = "Take photo";
 "action_view_source" = "View Source";
 "action_yes" = "Yes";
+"action.end_poll" = "End poll";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_analytics" = "Analytics";

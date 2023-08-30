@@ -110,7 +110,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .react: return Label(L10n.actionReact, systemImage: "hand.thumbsup")
         case .endPoll:
             #warning("AG: fix asset and copy")
-            return Label("End poll", image: Asset.Images.timelinePollAttachment.name)
+            return Label(L10n.Action.endPoll, image: Asset.Images.timelinePollAttachment.name)
         }
     }
 }
