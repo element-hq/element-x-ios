@@ -19,18 +19,11 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
-
+    
     var body: some View {
         Form {
             Section("Logging") {
-                Picker(selection: $context.logLevel) {
-                    ForEach(TracingConfiguration.LogLevel.allCases, id: \.self) { logLevel in
-                        Text(logLevel.rawValue.capitalized)
-                    }
-                } label: {
-                    Text("Log level")
-                    Text("Requires app reboot")
-                }
+                LogLevelConfigurationView(logLevel: $context.logLevel)
                 
                 Toggle(isOn: $context.otlpTracingEnabled) {
                     Text("OTLP tracing")
@@ -127,6 +120,51 @@ struct DeveloperOptionsScreen: View {
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
+    }
+}
+
+private struct LogLevelConfigurationView: View {
+    @Binding var logLevel: TracingConfiguration.LogLevel
+    
+    @State private var customTracingConfiguration: String
+
+    init(logLevel: Binding<TracingConfiguration.LogLevel>) {
+        _logLevel = logLevel
+        
+        if case .custom(let configuration) = logLevel.wrappedValue {
+            customTracingConfiguration = configuration
+        } else {
+            customTracingConfiguration = TracingConfiguration(logLevel: .info).filter
+        }
+    }
+    
+    var body: some View {
+        Picker(selection: $logLevel) {
+            ForEach(logLevels, id: \.self) { logLevel in
+                Text(logLevel.title)
+            }
+        } label: {
+            Text("Log level")
+            Text("Requires app reboot")
+        }
+        
+        if case .custom = logLevel {
+            TextEditor(text: $customTracingConfiguration)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .onChange(of: customTracingConfiguration) { newValue in
+                    logLevel = .custom(newValue)
+                }
+        }
+    }
+    
+    /// Allows the picker to work with associated values
+    private var logLevels: [TracingConfiguration.LogLevel] {
+        if case let .custom(filter) = logLevel {
+            return [.error, .warn, .info, .debug, .trace, .custom(filter)]
+        } else {
+            return [.error, .warn, .info, .debug, .trace, .custom("")]
+        }
     }
 }
 

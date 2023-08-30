@@ -59,7 +59,7 @@ enum MXLog {
             return
         }
         
-        setupTracing(configuration: .custom(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
+        setupTracing(configuration: .init(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
         
         if let target {
             self.target = target
