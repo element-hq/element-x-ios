@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct CreatePollScreen: View {
@@ -126,7 +127,9 @@ private struct CreatePollOptionView: View {
         HStack {
             if editMode?.wrappedValue == .active {
                 Button(action: deleteAction) {
-                    Image(Asset.Images.delete.name)
+                    CompoundIcon(\.delete)
+                        .font(.system(size: 24))
+                        .foregroundColor(.compound.iconCriticalPrimary)
                 }
                 .disabled(!canDeleteItem)
                 .buttonStyle(PlainButtonStyle())
