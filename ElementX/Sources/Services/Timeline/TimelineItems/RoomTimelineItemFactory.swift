@@ -326,7 +326,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        _ votes: [String: [String]],
                                        _ endTime: UInt64?,
                                        _ eventItemProxy: EventTimelineItemProxy,
-                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let eventID = eventItemProxy.id.eventID else {
+            return nil
+        }
+
         let allVotes = votes.reduce(0) { count, pair in
             count + pair.value.count
         }
@@ -344,7 +348,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                isWinning: optionVotesCount.map { $0 == maxOptionVotes } ?? false)
         }
 
-        let poll = Poll(question: question,
+        let poll = Poll(id: eventID,
+                        question: question,
                         kind: .init(pollKind: pollKind),
                         maxSelections: Int(maxSelections),
                         options: options,

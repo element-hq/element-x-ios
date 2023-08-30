@@ -28,6 +28,8 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
 }
 
 struct Poll: Equatable {
+    /// The "m.poll.start" event id
+    let id: String
     let question: String
     let kind: Kind
     let maxSelections: Int
