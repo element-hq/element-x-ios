@@ -171,7 +171,8 @@ class MockScreen: Identifiable {
                                                                           userIndicatorController: nil,
                                                                           userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                                           bugReportService: BugReportServiceMock(),
-                                                                          notificationSettings: NotificationSettingsProxyMock(with: .init())))
+                                                                          notificationSettings: NotificationSettingsProxyMock(with: .init()),
+                                                                          appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .bugReport:

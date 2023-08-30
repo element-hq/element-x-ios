@@ -18,6 +18,10 @@ import Foundation
 
 enum LegalInformationScreenViewModelAction { }
 
-struct LegalInformationScreenViewState: BindableState { }
+struct LegalInformationScreenViewState: BindableState {
+    let copyrightURL: URL
+    let acceptableUseURL: URL
+    let privacyURL: URL
+}
 
 enum LegalInformationScreenViewAction { }
