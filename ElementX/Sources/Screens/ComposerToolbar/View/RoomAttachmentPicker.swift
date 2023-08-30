@@ -31,7 +31,7 @@ struct RoomAttachmentPicker: View {
                 .font(.compound.headingLG)
                 .foregroundColor(.compound.textActionPrimary)
         }
-        .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPicker)
+        .accessibilityIdentifier(A11yIdentifiers.composerToolbar.openComposeOptions)
         .popover(isPresented: $context.showAttachmentPopover) {
             VStack(alignment: .leading, spacing: 0.0) {
                 Button {
@@ -71,6 +71,17 @@ struct RoomAttachmentPicker: View {
                     context.send(viewAction: .displayPollForm)
                 } label: {
                     PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.timelinePollAttachment))
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+
+                if ServiceLocator.shared.settings.richTextEditorEnabled {
+                    Button {
+                        context.showAttachmentPopover = false
+                        context.send(viewAction: .enableTextFormatting)
+                    } label: {
+                        PickerLabel(title: L10n.screenRoomAttachmentTextFormatting, icon: Image(asset: Asset.Images.textFormat))
+                    }
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
                 }
             }
             .padding(.top, isPresented ? 20 : 0)
