@@ -20,17 +20,13 @@ import XCTest
 
 class TracingConfigurationTests: XCTestCase {
     func testConfiguration() {
-        let configuration = TracingConfiguration(overrides: [.common: .trace,
-                                                             .matrix_sdk_base_sliding_sync: .error,
-                                                             .matrix_sdk_http_client: .warn,
-                                                             .matrix_sdk_crypto: .info,
-                                                             .hyper: .debug])
+        let configuration = TracingConfiguration(logLevel: .trace)
         
         let filterComponents = configuration.filter.components(separatedBy: ",")
-        XCTAssertEqual(filterComponents.first, "trace")
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=error"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_crypto=info"))
-        XCTAssertTrue(filterComponents.contains("hyper=debug"))
+        XCTAssertEqual(filterComponents.first, "info")
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=trace"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=trace"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_crypto=trace"))
+        XCTAssertTrue(filterComponents.contains("hyper=warn"))
     }
 }
