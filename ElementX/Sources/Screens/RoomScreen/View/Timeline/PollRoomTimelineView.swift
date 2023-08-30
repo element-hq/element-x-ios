@@ -29,14 +29,15 @@ struct PollRoomTimelineView: View {
 
                 ForEach(poll.options, id: \.id) { option in
                     Button {
-                        context.send(viewAction: .selectedPollOption(poll: poll, optionID: option.id))
+                        guard let eventID else { return }
+                        context.send(viewAction: .selectedPollOption(pollStartID: eventID, optionID: option.id))
                     } label: {
                         PollOptionView(pollOption: option,
                                        showVotes: showVotes,
                                        isFinalResult: poll.hasEnded)
                             .foregroundColor(progressBarColor(for: option))
                     }
-                    .disabled(poll.hasEnded)
+                    .disabled(poll.hasEnded || eventID == nil)
                 }
 
                 summaryView
@@ -49,6 +50,10 @@ struct PollRoomTimelineView: View {
 
     private var poll: Poll {
         timelineItem.poll
+    }
+
+    private var eventID: String? {
+        timelineItem.id.eventID
     }
 
     private var questionView: some View {

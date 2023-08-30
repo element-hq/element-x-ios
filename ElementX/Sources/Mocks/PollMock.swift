@@ -17,14 +17,12 @@
 import Foundation
 
 extension Poll {
-    static func mock(id: String = UUID().uuidString,
-                     question: String,
+    static func mock(question: String,
                      pollKind: Poll.Kind = .disclosed,
                      options: [Poll.Option],
                      votes: [String: [String]] = [:],
                      ended: Bool = false) -> Self {
-        .init(id: id,
-              question: question,
+        .init(question: question,
               kind: pollKind,
               maxSelections: 1,
               options: options,

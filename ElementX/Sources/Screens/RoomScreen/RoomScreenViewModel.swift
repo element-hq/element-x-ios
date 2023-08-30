@@ -139,8 +139,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if state.swiftUITimelineEnabled {
                 renderPendingTimelineItems()
             }
-        case let .selectedPollOption(poll, optionID):
-            sendPollVote(poll: poll, optionID: optionID)
+        case let .selectedPollOption(pollStartID, optionID):
+            sendPollVote(pollStartID: pollStartID, optionID: optionID)
         }
     }
 
@@ -528,8 +528,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         actions.append(.copyPermalink)
 
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded {
-            actions.append(.endPoll(pollStartID: poll.id))
+        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
+            actions.append(.endPoll(pollStartID: eventID))
         }
         
         if canRedactItem(item) {
@@ -800,9 +800,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     // MARK: - Polls
 
-    private func sendPollVote(poll: Poll, optionID: String) {
+    private func sendPollVote(pollStartID: String, optionID: String) {
         Task {
-            let sendPollVoteResult = await roomProxy.sendPollVote(votes: [optionID], pollStartID: poll.id)
+            let sendPollVoteResult = await roomProxy.sendPollVote(votes: [optionID], pollStartID: pollStartID)
             switch sendPollVoteResult {
             case .success:
                 break
