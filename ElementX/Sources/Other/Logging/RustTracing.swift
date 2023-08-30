@@ -27,30 +27,44 @@ struct OTLPConfiguration {
 // We can filter by level, crate and even file. See more details here:
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
 struct TracingConfiguration {
-    /// Configure tracing with certain overrides in place
-    /// - Parameter overrides: the desired overrides
-    /// - Returns: a custom tracing configuration
-    static func custom(overrides: [Target: LogLevel]) -> TracingConfiguration {
-        TracingConfiguration(overrides: overrides)
-    }
-    
-    /// Sets the same log level for all Targets
-    /// - Parameter logLevel: the desired log level
-    /// - Returns: a custom tracing configuration
-    static func custom(logLevel: LogLevel) -> TracingConfiguration {
-        let overrides = targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
-            // Keep the defaults here
-            if target == .common || target == .hyper {
-                return
+    enum LogLevel: Codable, Hashable {
+        case error, warn, info, debug, trace
+        case custom(String)
+        
+        var title: String {
+            switch self {
+            case .error:
+                return "Error"
+            case .warn:
+                return "Warning"
+            case .info:
+                return "Info"
+            case .debug:
+                return "Debug"
+            case .trace:
+                return "Trace"
+            case .custom:
+                return "Custom"
             }
-            
-            partialResult[target] = logLevel
         }
-
-        return TracingConfiguration(overrides: overrides)
+        
+        fileprivate var rawValue: String {
+            switch self {
+            case .error:
+                return "error"
+            case .warn:
+                return "warn"
+            case .info:
+                return "info"
+            case .debug:
+                return "debug"
+            case .trace:
+                return "trace"
+            case .custom(let filter):
+                return filter
+            }
+        }
     }
-    
-    enum LogLevel: String, Codable, CaseIterable { case error, warn, info, debug, trace }
     
     enum Target: String {
         case common = ""
@@ -77,9 +91,26 @@ struct TracingConfiguration {
         .matrix_sdk_ui_timeline: .info
     ]
     
-    var overrides = [Target: LogLevel]()
+    let filter: String
     
-    var filter: String {
+    /// Sets the same log level for all Targets
+    /// - Parameter logLevel: the desired log level
+    /// - Returns: a custom tracing configuration
+    init(logLevel: LogLevel) {
+        if case let .custom(filter) = logLevel {
+            self.filter = filter
+            return
+        }
+        
+        let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
+            // Keep the defaults here
+            if target == .common || target == .hyper {
+                return
+            }
+            
+            partialResult[target] = logLevel
+        }
+        
         var newTargets = Self.targets
         for (target, logLevel) in overrides {
             newTargets.updateValue(logLevel, forKey: target)
@@ -93,7 +124,7 @@ struct TracingConfiguration {
             return "\(target.rawValue)=\(logLevel.rawValue)"
         }
         
-        return components.joined(separator: ",")
+        filter = components.joined(separator: ",")
     }
 }
 

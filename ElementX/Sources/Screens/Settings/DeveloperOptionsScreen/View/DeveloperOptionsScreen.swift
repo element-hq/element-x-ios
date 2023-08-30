@@ -19,17 +19,36 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
+    @State private var customTracingConfiguration: String
 
+    init(context: DeveloperOptionsScreenViewModel.Context) {
+        self.context = context
+        
+        if case .custom(let configuration) = context.logLevel {
+            customTracingConfiguration = configuration
+        } else {
+            customTracingConfiguration = ""
+        }
+    }
+    
     var body: some View {
         Form {
             Section("Logging") {
                 Picker(selection: $context.logLevel) {
-                    ForEach(TracingConfiguration.LogLevel.allCases, id: \.self) { logLevel in
-                        Text(logLevel.rawValue.capitalized)
+                    ForEach(logLevels, id: \.self) { logLevel in
+                        Text(logLevel.title)
                     }
                 } label: {
                     Text("Log level")
                     Text("Requires app reboot")
+                }
+                
+                if case .custom = context.logLevel {
+                    TextField("Tracing configuration", text: $customTracingConfiguration)
+                        .textInputAutocapitalization(.never)
+                        .onChange(of: customTracingConfiguration) { newValue in
+                            context.logLevel = .custom(newValue)
+                        }
                 }
                 
                 Toggle(isOn: $context.otlpTracingEnabled) {
@@ -123,6 +142,14 @@ struct DeveloperOptionsScreen: View {
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
+    }
+    
+    private var logLevels: [TracingConfiguration.LogLevel] {
+        if case let .custom(filter) = context.logLevel {
+            return [.error, .warn, .info, .debug, .trace, .custom(filter)]
+        } else {
+            return [.error, .warn, .info, .debug, .trace, .custom("")]
+        }
     }
 }
 
