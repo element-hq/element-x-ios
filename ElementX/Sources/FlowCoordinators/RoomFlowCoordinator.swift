@@ -582,17 +582,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         coordinator.actions
             .sink { [weak self] action in
+                guard let self else {
+                    return
+                }
+
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+
                 switch action {
                 case .cancel:
-                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    break
                 case let .create(question, options, pollKind):
                     Task {
-                        guard let self else {
-                            return
-                        }
-
-                        self.navigationSplitCoordinator.setSheetCoordinator(nil)
-
                         guard let roomProxy = self.roomProxy else {
                             self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
                             return
