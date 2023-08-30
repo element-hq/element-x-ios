@@ -41,6 +41,7 @@ final class AppSettings {
         case swiftUITimelineEnabled
         case pollsInTimeline
         case richTextEditorEnabled
+        case pollsCreationEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -241,4 +242,7 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: false, storageType: .userDefaults(store))
     var richTextEditorEnabled
+
+    @UserPreference(key: UserDefaultsKeys.pollsCreationEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var pollsCreationEnabled
 }

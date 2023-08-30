@@ -75,6 +75,7 @@ enum UITestsScreenIdentifier: String {
     case inviteUsersInRoomExistingMembers
     case createRoom
     case createRoomNoUsers
+    case createPoll
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

@@ -146,6 +146,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .messageForwarding(roomID: roomID, itemID: itemID)
             case (.dismissMessageForwarding, .messageForwarding(let roomID, _)):
                 return .room(roomID: roomID)
+
             case (.presentMapNavigator, .room(let roomID)):
                 return .mapNavigator(roomID: roomID)
             case (.dismissMapNavigator, .mapNavigator(let roomID)):
@@ -155,6 +156,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .notificationSettingsScreen(roomID: roomID)
             case (.dismissNotificationSettingsScreen, .notificationSettingsScreen(let roomID)):
                 return .roomDetails(roomID: roomID, isRoot: false)
+
+            case (.presentCreatePollForm, .room(let roomID)):
+                return .createPollForm(roomID: roomID)
+            case (.dismissCreatePollForm, .createPollForm(let roomID)):
+                return .room(roomID: roomID)
+
             default:
                 return nil
             }
@@ -217,6 +224,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMessageForwarding(for: itemID)
             case (.messageForwarding, .dismissMessageForwarding, .room):
                 break
+
             case (.room, .presentMapNavigator(let mode), .mapNavigator):
                 presentMapNavigator(interactionMode: mode)
             case (.mapNavigator, .dismissMapNavigator, .room):
@@ -225,6 +233,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettingsScreen):
                 asyncPresentNotificationSettingsScreen(animated: animated)
             case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
+                break
+
+            case (.room, .presentCreatePollForm, .createPollForm):
+                presentCreatePollForm()
+            case (.createPollForm, .dismissCreatePollForm, .room):
                 break
 
             default:
@@ -324,6 +337,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
+                case .presentPollForm:
+                    stateMachine.tryEvent(.presentCreatePollForm)
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
                 case .presentRoomMemberDetails(member: let member):
@@ -559,7 +574,48 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
     }
-    
+
+    private func presentCreatePollForm() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = CreatePollScreenCoordinator(parameters: .init())
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else {
+                    return
+                }
+
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+
+                switch action {
+                case .cancel:
+                    break
+                case let .create(question, options, pollKind):
+                    Task {
+                        guard let roomProxy = self.roomProxy else {
+                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                            return
+                        }
+
+                        let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
+
+                        switch result {
+                        case .success:
+                            break
+                        case .failure:
+                            self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellables)
+
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissCreatePollForm)
+        }
+    }
+
     private func presentRoomMemberDetails(member: RoomMemberProxyProtocol) {
         guard let roomProxy else {
             fatalError()
@@ -689,6 +745,7 @@ private extension RoomFlowCoordinator {
         case roomMemberDetails(roomID: String, member: HashableRoomMemberWrapper)
         case messageForwarding(roomID: String, itemID: TimelineItemIdentifier)
         case notificationSettingsScreen(roomID: String)
+        case createPollForm(roomID: String)
     }
     
     struct EventUserInfo {
@@ -726,6 +783,9 @@ private extension RoomFlowCoordinator {
         
         case presentNotificationSettingsScreen
         case dismissNotificationSettingsScreen
+
+        case presentCreatePollForm
+        case dismissCreatePollForm
     }
 }
 

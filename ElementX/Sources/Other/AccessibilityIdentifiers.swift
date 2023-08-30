@@ -40,6 +40,7 @@ struct A11yIdentifiers {
     static let migrationScreen = MigrationScreen()
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
+    static let createPollScreen = CreatePollScreen()
 
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"
@@ -179,6 +180,19 @@ struct A11yIdentifiers {
     struct CreateRoomScreen {
         let roomName = "create_room-room_name"
         let roomTopic = "create_room-room_topic"
+    }
+
+    struct CreatePollScreen {
+        let question = "create_poll-question"
+        let create = "create_poll-create"
+        let addOption = "create_poll-add_option"
+        let pollKind = "create_poll-kind"
+
+        private let optionPrefix = "create_poll-option"
+
+        func optionID(_ index: Int) -> String {
+            "\(optionPrefix)-\(index)"
+        }
     }
 
     struct WelcomeScreen {

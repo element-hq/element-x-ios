@@ -1464,6 +1464,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserRedactUserIDReturnValue
         }
     }
+    //MARK: - createPoll
+
+    var createPollQuestionAnswersPollKindCallsCount = 0
+    var createPollQuestionAnswersPollKindCalled: Bool {
+        return createPollQuestionAnswersPollKindCallsCount > 0
+    }
+    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
+    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
+    var createPollQuestionAnswersPollKindReturnValue: Result<Void, RoomProxyError>!
+    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, RoomProxyError>)?
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
+        createPollQuestionAnswersPollKindCallsCount += 1
+        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
+        createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
+        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
+            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+        } else {
+            return createPollQuestionAnswersPollKindReturnValue
+        }
+    }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {

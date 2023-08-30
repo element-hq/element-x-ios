@@ -78,6 +78,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             actionsSubject.send(.displayDocumentPicker)
         case .displayLocationPicker:
             actionsSubject.send(.displayLocationPicker)
+        case .displayPollForm:
+            actionsSubject.send(.displayPollForm)
         case .handlePasteOrDrop(let provider):
             actionsSubject.send(.handlePasteOrDrop(provider: provider))
         }
