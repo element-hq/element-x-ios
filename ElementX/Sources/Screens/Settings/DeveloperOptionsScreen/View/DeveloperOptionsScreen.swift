@@ -147,6 +147,7 @@ private struct LogLevelConfigurationView: View {
         if case .custom = logLevel {
             TextField("Tracing configuration", text: $customTracingConfiguration)
                 .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
                 .onChange(of: customTracingConfiguration) { newValue in
                     logLevel = .custom(newValue)
                 }
