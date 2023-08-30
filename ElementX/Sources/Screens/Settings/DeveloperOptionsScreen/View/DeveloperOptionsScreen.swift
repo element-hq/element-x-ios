@@ -130,7 +130,7 @@ private struct LogLevelConfigurationView: View {
         if case .custom(let configuration) = logLevel.wrappedValue {
             customTracingConfiguration = configuration
         } else {
-            customTracingConfiguration = ""
+            customTracingConfiguration = TracingConfiguration(logLevel: .info).filter
         }
     }
     
@@ -145,7 +145,7 @@ private struct LogLevelConfigurationView: View {
         }
         
         if case .custom = logLevel {
-            TextField("Tracing configuration", text: $customTracingConfiguration)
+            TextEditor(text: $customTracingConfiguration)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .onChange(of: customTracingConfiguration) { newValue in
