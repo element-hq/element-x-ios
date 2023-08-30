@@ -1485,25 +1485,25 @@ class RoomProxyMock: RoomProxyProtocol {
             return createPollQuestionAnswersPollKindReturnValue
         }
     }
-    //MARK: - sendPollVote
+    //MARK: - sendPollResponse
 
-    var sendPollVoteVotesPollStartIDCallsCount = 0
-    var sendPollVoteVotesPollStartIDCalled: Bool {
-        return sendPollVoteVotesPollStartIDCallsCount > 0
+    var sendPollResponsePollStartIDAnswersCallsCount = 0
+    var sendPollResponsePollStartIDAnswersCalled: Bool {
+        return sendPollResponsePollStartIDAnswersCallsCount > 0
     }
-    var sendPollVoteVotesPollStartIDReceivedArguments: (votes: [String], pollStartID: String)?
-    var sendPollVoteVotesPollStartIDReceivedInvocations: [(votes: [String], pollStartID: String)] = []
-    var sendPollVoteVotesPollStartIDReturnValue: Result<Void, RoomProxyError>!
-    var sendPollVoteVotesPollStartIDClosure: (([String], String) async -> Result<Void, RoomProxyError>)?
+    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
+    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
+    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, RoomProxyError>!
+    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, RoomProxyError>)?
 
-    func sendPollVote(votes: [String], pollStartID: String) async -> Result<Void, RoomProxyError> {
-        sendPollVoteVotesPollStartIDCallsCount += 1
-        sendPollVoteVotesPollStartIDReceivedArguments = (votes: votes, pollStartID: pollStartID)
-        sendPollVoteVotesPollStartIDReceivedInvocations.append((votes: votes, pollStartID: pollStartID))
-        if let sendPollVoteVotesPollStartIDClosure = sendPollVoteVotesPollStartIDClosure {
-            return await sendPollVoteVotesPollStartIDClosure(votes, pollStartID)
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
+        sendPollResponsePollStartIDAnswersCallsCount += 1
+        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
+        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
+        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
+            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
         } else {
-            return sendPollVoteVotesPollStartIDReturnValue
+            return sendPollResponsePollStartIDAnswersReturnValue
         }
     }
     //MARK: - endPoll

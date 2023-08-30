@@ -140,7 +140,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 renderPendingTimelineItems()
             }
         case let .selectedPollOption(pollStartID, optionID):
-            sendPollVote(pollStartID: pollStartID, optionID: optionID)
+            sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         }
     }
 
@@ -800,10 +800,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     // MARK: - Polls
 
-    private func sendPollVote(pollStartID: String, optionID: String) {
+    private func sendPollResponse(pollStartID: String, optionID: String) {
         Task {
-            let sendPollVoteResult = await roomProxy.sendPollVote(votes: [optionID], pollStartID: pollStartID)
-            switch sendPollVoteResult {
+            let sendPollResponseResult = await roomProxy.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
+            switch sendPollResponseResult {
             case .success:
                 break
             case .failure:

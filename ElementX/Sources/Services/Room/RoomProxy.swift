@@ -701,13 +701,13 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func sendPollVote(votes: [String], pollStartID: String) async -> Result<Void, RoomProxyError> {
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: votes, txnId: genTransactionId()))
+                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers, txnId: genTransactionId()))
             } catch {
                 MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
-                return .failure(.failedSendingPollVote)
+                return .failure(.failedSendingPollResponse)
             }
         }
     }

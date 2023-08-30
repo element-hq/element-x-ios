@@ -43,7 +43,7 @@ enum RoomProxyError: Error, Equatable {
     case failedUploadingAvatar
     case failedCheckingPermission
     case failedCreatingPoll
-    case failedSendingPollVote
+    case failedSendingPollResponse
     case failedEndingPoll
 }
 
@@ -171,7 +171,7 @@ protocol RoomProxyProtocol {
 
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
 
-    func sendPollVote(votes: [String], pollStartID: String) async -> Result<Void, RoomProxyError>
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
 
     func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError>
 }
