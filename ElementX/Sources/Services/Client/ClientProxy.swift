@@ -312,6 +312,7 @@ class ClientProxy: ClientProxyProtocol {
                 return try self.client.logout().flatMap(URL.init(string:))
             } catch {
                 MXLog.error("Failed logging out with error: \(error)")
+                return nil
             }
         }
     }
