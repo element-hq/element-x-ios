@@ -49,7 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, showNotificationSettings: appSettings.notificationSettingsEnabled),
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -266,6 +266,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
+        let notificationMode = details.notificationMode == .allMessages || appSettings.notificationSettingsEnabled == false ? nil : details.notificationMode
+        
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,
                               name: details.name,
@@ -273,7 +275,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               timestamp: details.lastMessageFormattedTimestamp,
                               lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
                               avatarURL: details.avatarURL,
-                              notificationMode: details.notificationMode)
+                              notificationMode: notificationMode)
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {

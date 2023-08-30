@@ -41,7 +41,7 @@ struct HomeScreen: View {
                 case .skeletons:
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenRoomCell(room: room, context: context, isSelected: false, showNotificationMode: context.viewState.showNotificationSettings)
+                            HomeScreenRoomCell(room: room, context: context, isSelected: false)
                                 .redacted(reason: .placeholder)
                         }
                     }

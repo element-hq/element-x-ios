@@ -24,7 +24,6 @@ struct HomeScreenRoomCell: View {
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     let isSelected: Bool
-    let showNotificationMode: Bool
     
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
@@ -117,7 +116,7 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if showNotificationMode {
+                if let notificationMode = room.notificationMode {
                     notificationModeIcon
                         .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 }
@@ -224,14 +223,14 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
 
         return VStack(spacing: 0) {
             ForEach(rooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModel.context, isSelected: false, showNotificationMode: viewModel.context.viewState.showNotificationSettings)
+                HomeScreenRoomCell(room: room, context: viewModel.context, isSelected: false)
             }
             
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false, showNotificationMode: false)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false, showNotificationMode: false)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
-            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false, showNotificationMode: false)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
                 .redacted(reason: .placeholder)
         }
     }

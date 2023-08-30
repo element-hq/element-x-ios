@@ -84,7 +84,7 @@ struct ShimmerOverlay_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ForEach(0...8, id: \.self) { _ in
-                HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false, showNotificationMode: false)
+                HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
             }
         }
         .redacted(reason: .placeholder)

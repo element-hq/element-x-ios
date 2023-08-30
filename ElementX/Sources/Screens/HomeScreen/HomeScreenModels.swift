@@ -73,7 +73,6 @@ struct HomeScreenViewState: BindableState {
     var showSessionVerificationBanner = false
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
-    let showNotificationSettings: Bool
     
     var hasPendingInvitations = false
     var hasUnreadPendingInvitations = false
@@ -144,7 +143,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var hasDecoration: Bool {
         // notification setting is displayed only for .mentionsAndKeywords and .mute
-        let showNotificationSettings = notificationMode != nil && notificationMode != .allMessages
+        let showNotificationSettings = notificationMode != nil
         return hasUnreads || showNotificationSettings
     }
     
