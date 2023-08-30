@@ -179,7 +179,8 @@ extension NotificationItemProxyProtocol {
         notification.eventID = eventID
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         // So that the UI groups notification that are received for the same room but also for the same user
-        notification.threadIdentifier = "\(receiverID)\(roomID)"
+        // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
+        notification.threadIdentifier = "\(receiverID)\(roomID)".replacingOccurrences(of: "@", with: "")
         return notification
     }
 
