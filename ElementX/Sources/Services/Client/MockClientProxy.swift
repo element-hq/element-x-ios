@@ -116,8 +116,8 @@ class MockClientProxy: ClientProxyProtocol {
         }
     }
     
-    func logout() async {
-        // no-op
+    func logout() async -> URL? {
+        nil
     }
     
     var setPusherErrorToThrow: Error?

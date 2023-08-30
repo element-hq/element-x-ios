@@ -88,12 +88,19 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             return
         }
         
-        // Safari never works in the simulator, use a Web Authentication Session instead.
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
-        accountSettingsPresenter?.start()
+        #if targetEnvironment(simulator)
+        let canOpenURL = false // Safari can't access the cookie on the iOS 16 simulator 🤷‍♂️
+        #else
+        let canOpenURL = UIApplication.shared.canOpenURL(accountURL)
+        #endif
         
-        // Safari isn't working with the shared browser session 😕
-        // UIApplication.shared.open(accountURL)
+        if canOpenURL {
+            UIApplication.shared.open(accountURL)
+        } else {
+            // Fall back to an ASWebAuthenticationSession to handle the URL inside the app.
+            accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
+            accountSettingsPresenter?.start()
+        }
     }
     
     private func presentAnalyticsScreen() {

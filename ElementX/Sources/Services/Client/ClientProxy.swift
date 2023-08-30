@@ -306,13 +306,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func logout() async {
+    func logout() async -> URL? {
         await Task.dispatch(on: clientQueue) {
             do {
-                // We aren't currently handling the RP initiated sign out URL.
-                _ = try self.client.logout()
+                return try self.client.logout().flatMap(URL.init(string:))
             } catch {
                 MXLog.error("Failed logging out with error: \(error)")
+                return nil
             }
         }
     }
