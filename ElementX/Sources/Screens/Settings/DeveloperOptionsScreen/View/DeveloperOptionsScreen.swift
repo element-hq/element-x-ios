@@ -19,37 +19,11 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
-    @State private var customTracingConfiguration: String
-
-    init(context: DeveloperOptionsScreenViewModel.Context) {
-        self.context = context
-        
-        if case .custom(let configuration) = context.logLevel {
-            customTracingConfiguration = configuration
-        } else {
-            customTracingConfiguration = ""
-        }
-    }
     
     var body: some View {
         Form {
             Section("Logging") {
-                Picker(selection: $context.logLevel) {
-                    ForEach(logLevels, id: \.self) { logLevel in
-                        Text(logLevel.title)
-                    }
-                } label: {
-                    Text("Log level")
-                    Text("Requires app reboot")
-                }
-                
-                if case .custom = context.logLevel {
-                    TextField("Tracing configuration", text: $customTracingConfiguration)
-                        .textInputAutocapitalization(.never)
-                        .onChange(of: customTracingConfiguration) { newValue in
-                            context.logLevel = .custom(newValue)
-                        }
-                }
+                LogLevelConfigurationView(logLevel: $context.logLevel)
                 
                 Toggle(isOn: $context.otlpTracingEnabled) {
                     Text("OTLP tracing")
@@ -143,9 +117,45 @@ struct DeveloperOptionsScreen: View {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
     }
+}
+
+private struct LogLevelConfigurationView: View {
+    @Binding var logLevel: TracingConfiguration.LogLevel
     
+    @State private var customTracingConfiguration: String
+
+    init(logLevel: Binding<TracingConfiguration.LogLevel>) {
+        _logLevel = logLevel
+        
+        if case .custom(let configuration) = logLevel.wrappedValue {
+            customTracingConfiguration = configuration
+        } else {
+            customTracingConfiguration = ""
+        }
+    }
+    
+    var body: some View {
+        Picker(selection: $logLevel) {
+            ForEach(logLevels, id: \.self) { logLevel in
+                Text(logLevel.title)
+            }
+        } label: {
+            Text("Log level")
+            Text("Requires app reboot")
+        }
+        
+        if case .custom = logLevel {
+            TextField("Tracing configuration", text: $customTracingConfiguration)
+                .textInputAutocapitalization(.never)
+                .onChange(of: customTracingConfiguration) { newValue in
+                    logLevel = .custom(newValue)
+                }
+        }
+    }
+    
+    /// Allows the picker to work with associated values
     private var logLevels: [TracingConfiguration.LogLevel] {
-        if case let .custom(filter) = context.logLevel {
+        if case let .custom(filter) = logLevel {
             return [.error, .warn, .info, .debug, .trace, .custom(filter)]
         } else {
             return [.error, .warn, .info, .debug, .trace, .custom("")]
