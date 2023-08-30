@@ -36,7 +36,7 @@ class CreatePollScreenUITests: XCTestCase {
 
         let option2TextField = app.textFields[A11yIdentifiers.createPollScreen.optionID(1)]
         option2TextField.tap()
-        option2TextField.typeText("No")
+        option2TextField.typeText("No\n")
 
         let createButton = app.buttons[A11yIdentifiers.createPollScreen.create]
         XCTAssertTrue(createButton.isEnabled)
