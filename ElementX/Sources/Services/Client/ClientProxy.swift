@@ -431,7 +431,10 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.info("Received sync service update: \(state)")
             
             switch state {
-            case .running, .terminated, .idle:
+            case .running:
+                // Show the loading spinner when the sync service goes into running
+                callbacks.send(.startedUpdating)
+            case .terminated, .idle:
                 break
             case .error:
                 restartSync()
@@ -448,7 +451,10 @@ class ClientProxy: ClientProxyProtocol {
                 // The sync service is responsible of handling error and termination
                 return
             }
-
+            
+            // Hide the sync spinner as soon as we get any update back
+            callbacks.send(.receivedSyncUpdate)
+            
             // The invites are available only when entering `running`
             if state == .running {
                 Task {
@@ -463,9 +469,6 @@ class ClientProxy: ClientProxyProtocol {
                         MXLog.error("Failed configuring invites room list with error: \(error)")
                     }
                 }
-                callbacks.send(.receivedSyncUpdate)
-            } else {
-                callbacks.send(.startedUpdating)
             }
         })
     }
