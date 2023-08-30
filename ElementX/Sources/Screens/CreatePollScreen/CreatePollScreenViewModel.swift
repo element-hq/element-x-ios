@@ -46,6 +46,9 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
             }
             state.bindings.options.remove(at: index)
         case .addOption:
+            guard state.bindings.options.count < state.maxNumberOfOptions else {
+                return
+            }
             state.bindings.options.append(.init())
         }
     }

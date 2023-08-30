@@ -82,7 +82,7 @@ struct CreatePollScreen: View {
                 context.options.move(fromOffsets: offsets, toOffset: toOffset)
             }
 
-            if context.options.count < 20 {
+            if context.options.count < context.viewState.maxNumberOfOptions {
                 Button(L10n.screenCreatePollAddOptionBtn) {
                     context.send(viewAction: .addOption)
                 }
