@@ -23,7 +23,6 @@ typealias PasteHandler = (NSItemProvider) -> Void
 struct MessageComposer: View {
     @Binding var plainText: String
     let composerView: WysiwygComposerView
-    let sendingDisabled: Bool
     let mode: RoomScreenComposerMode
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
@@ -33,7 +32,6 @@ struct MessageComposer: View {
     @FocusState private var focused: Bool
 
     @State private var isMultiline = false
-    @ScaledMetric private var sendButtonIconSize = 16
     
     var body: some View {
         let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
@@ -59,26 +57,9 @@ struct MessageComposer: View {
                         .padding(.vertical, 10)
                         .focused($focused)
                 }
-                
-                Button {
-                    sendAction()
-                } label: {
-                    submitButtonImage
-                        .symbolVariant(.fill)
-                        .font(.compound.bodyLG)
-                        .foregroundColor(sendingDisabled ? .compound.iconDisabled : .global.white)
-                        .background {
-                            Circle()
-                                .foregroundColor(sendingDisabled ? .clear : .compound.iconAccentTertiary)
-                        }
-                }
-                .disabled(sendingDisabled)
-                .animation(.linear(duration: 0.1), value: sendingDisabled)
-                .keyboardShortcut(.return, modifiers: [.command])
-                .padding([.vertical, .trailing], 6)
             }
         }
-        .padding(.leading, 12.0)
+        .padding([.leading, .trailing], 12.0)
         .clipped()
         .background {
             ZStack {
@@ -103,24 +84,6 @@ struct MessageComposer: View {
             MessageComposerEditHeader(action: editCancellationAction)
         case .default:
             EmptyView()
-        }
-    }
-    
-    private var submitButtonImage: some View {
-        // ZStack with opacity so the button size is consistent.
-        ZStack {
-            Image(systemName: "checkmark")
-                .opacity(mode.isEdit ? 1 : 0)
-                .fontWeight(.medium)
-                .accessibilityLabel(L10n.actionConfirm)
-                .accessibilityHidden(!mode.isEdit)
-            Image(asset: Asset.Images.timelineComposerSendMessage)
-                .resizable()
-                .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
-                .opacity(mode.isEdit ? 0 : 1)
-                .accessibilityLabel(L10n.actionSend)
-                .accessibilityHidden(mode.isEdit)
         }
     }
     
@@ -205,7 +168,6 @@ struct MessageComposer_Previews: PreviewProvider {
 
         return MessageComposer(plainText: .constant(content),
                                composerView: composerView,
-                               sendingDisabled: sendingDisabled,
                                mode: mode,
                                sendAction: { },
                                pasteAction: { _ in },

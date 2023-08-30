@@ -23,6 +23,7 @@ struct ComposerToolbar: View {
     let keyCommandHandler: KeyCommandHandler
 
     @FocusState private var composerFocused: Bool
+    @ScaledMetric private var sendButtonIconSize = 16
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {
@@ -30,13 +31,28 @@ struct ComposerToolbar: View {
                 .padding(.bottom, 5) // centre align with the send button
             messageComposer
                 .environmentObject(context)
+            Button {
+                context.send(viewAction: .sendMessage)
+            } label: {
+                submitButtonImage
+                    .symbolVariant(.fill)
+                    .font(.compound.bodyLG)
+                    .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .global.white)
+                    .background {
+                        Circle()
+                            .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
+                    }
+            }
+            .disabled(context.viewState.sendButtonDisabled)
+            .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
+            .keyboardShortcut(.return, modifiers: [.command])
+            .padding([.vertical, .trailing], 6)
         }
     }
     
     private var messageComposer: some View {
         MessageComposer(plainText: $context.composerPlainText,
                         composerView: composerView,
-                        sendingDisabled: context.viewState.sendButtonDisabled,
                         mode: context.viewState.composerMode) {
             context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
@@ -65,6 +81,24 @@ struct ComposerToolbar: View {
                             itemProviderHelper: ItemProviderHelper(),
                             keyCommandHandler: keyCommandHandler) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
+        }
+    }
+
+    private var submitButtonImage: some View {
+        // ZStack with opacity so the button size is consistent.
+        ZStack {
+            Image(systemName: "checkmark")
+                .opacity(context.viewState.composerMode.isEdit ? 1 : 0)
+                .fontWeight(.medium)
+                .accessibilityLabel(L10n.actionConfirm)
+                .accessibilityHidden(!context.viewState.composerMode.isEdit)
+            Image(asset: Asset.Images.timelineComposerSendMessage)
+                .resizable()
+                .frame(width: sendButtonIconSize, height: sendButtonIconSize)
+                .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
+                .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
+                .accessibilityLabel(L10n.actionSend)
+                .accessibilityHidden(context.viewState.composerMode.isEdit)
         }
     }
 
