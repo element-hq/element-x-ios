@@ -108,9 +108,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .retryDecryption: return Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report: return Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
         case .react: return Label(L10n.actionReact, systemImage: "hand.thumbsup")
-        case .endPoll:
-            #warning("AG: fix asset and copy")
-            return Label(L10n.Action.endPoll, image: Asset.Images.timelinePollAttachment.name)
+        case .endPoll: return Label(L10n.Action.endPoll, image: Asset.Images.timelinePollAttachment.name)
         }
     }
 }
