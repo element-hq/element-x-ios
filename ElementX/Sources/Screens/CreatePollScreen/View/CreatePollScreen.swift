@@ -69,10 +69,7 @@ struct CreatePollScreen: View {
                             focus = nil
                         }
 
-                        // fixes a crash that caused an index out of range when an option with the keyboard focus was deleted
-                        DispatchQueue.main.async {
-                            context.send(viewAction: .deleteOption(index: index))
-                        }
+                        context.send(viewAction: .deleteOption(index: index))
                     }
                     .focused($focus, equals: .option(index: index))
                     .accessibilityIdentifier(A11yIdentifiers.createPollScreen.optionID(index))

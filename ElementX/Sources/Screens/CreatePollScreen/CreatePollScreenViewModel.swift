@@ -41,10 +41,14 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
         case .cancel:
             actionsSubject.send(.cancel)
         case .deleteOption(let index):
-            guard state.bindings.options.indices.contains(index) else {
-                return
+            // fixes a crash that caused an index out of range when an option with the keyboard focus was deleted
+            Task {
+                try await Task.sleep(for: .milliseconds(100))
+                guard state.bindings.options.indices.contains(index) else {
+                    return
+                }
+                state.bindings.options.remove(at: index)
             }
-            state.bindings.options.remove(at: index)
         case .addOption:
             guard state.bindings.options.count < state.maxNumberOfOptions else {
                 return
