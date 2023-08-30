@@ -37,6 +37,10 @@ struct Poll: Equatable {
     let votes: [String: [String]]
     let endDate: Date?
 
+    var hasEnded: Bool {
+        endDate != nil
+    }
+
     enum Kind: Equatable {
         case disclosed
         case undisclosed

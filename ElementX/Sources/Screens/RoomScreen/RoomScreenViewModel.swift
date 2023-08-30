@@ -528,7 +528,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         actions.append(.copyPermalink)
 
-        if item.isOutgoing, let poll = item.pollIfAvailable, poll.endDate == nil {
+        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded {
             actions.append(.endPoll(pollStartID: poll.id))
         }
         

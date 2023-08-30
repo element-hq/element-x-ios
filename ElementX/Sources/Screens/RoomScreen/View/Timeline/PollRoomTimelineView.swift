@@ -102,10 +102,6 @@ private extension Poll {
             return L10n.commonPollUndisclosedText
         }
     }
-
-    var hasEnded: Bool {
-        endDate != nil
-    }
 }
 
 struct PollRoomTimelineView_Previews: PreviewProvider {
