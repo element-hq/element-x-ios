@@ -23,16 +23,7 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    @State private var lastScrollDirection: ScrollViewAdapter.ScrollDirection = .up
     @State private var isSearching = false
-    
-    var bottomBarVisibility: Visibility {
-        switch context.viewState.roomListMode {
-        case .skeletons: return .hidden
-        case .empty: return .visible
-        case .rooms: return lastScrollDirection == .up ? .automatic : .hidden
-        }
-    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -78,9 +69,6 @@ struct HomeScreen: View {
             .onChange(of: context.searchQuery) { _ in
                 updateVisibleRange()
             }
-            .onReceive(scrollViewAdapter.scrollDirection) { direction in
-                withAnimation(.elementDefault) { lastScrollDirection = direction }
-            }
             .onChange(of: context.viewState.visibleRooms) { _ in
                 updateVisibleRange()
             }
@@ -96,7 +84,6 @@ struct HomeScreen: View {
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar(bottomBarVisibility, for: .bottomBar)
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
@@ -163,8 +150,7 @@ struct HomeScreen: View {
             HomeScreenUserMenuButton(context: context)
         }
         
-        ToolbarItemGroup(placement: .bottomBar) {
-            Spacer()
+        ToolbarItemGroup(placement: .primaryAction) {
             newRoomButton
         }
     }
@@ -174,6 +160,7 @@ struct HomeScreen: View {
             context.send(viewAction: .startChat)
         } label: {
             Image(systemName: "square.and.pencil")
+                .fontWeight(.semibold)
         }
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
     }
