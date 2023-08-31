@@ -1,3 +1,18 @@
+## Changes in 1.2.7 (2023-08-31)
+
+🙌 Improvements
+
+- Use Safari for OIDC account management. ([#1591](https://github.com/vector-im/element-x-ios/pull/1591))
+- New room button has been moved to the top. ([#1602](https://github.com/vector-im/element-x-ios/issues/1602))
+
+🐛 Bugfixes
+
+- Improve timestamp rendering when mixed LTR and RTL languages are present in the message. ([#1539](https://github.com/vector-im/element-x-ios/pull/1539))
+- Fixed a bug that made the spring board crash when trying to mute notifications. ([#1519](https://github.com/vector-im/element-x-ios/issues/1519))
+- Add app logo and fix terms link for OIDC login (only affects fresh app installs). ([#1547](https://github.com/vector-im/element-x-ios/issues/1547))
+- Fixed a bug that made a magnifying glass appear when long pressing a message. ([#1581](https://github.com/vector-im/element-x-ios/issues/1581))
+
+
 ## Changes in 1.2.6 (2023-08-22)
 
 ✨ Features
