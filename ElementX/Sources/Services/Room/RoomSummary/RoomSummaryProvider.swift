@@ -359,10 +359,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
         rooms = rooms.map {
-            if let roomId = $0.id {
-                return self.buildRoomSummaryForIdentifier(roomId, invalidated: true)
-            } else {
+            switch $0 {
+            case .empty:
                 return $0
+            case .filled(let details):
+                return self.buildRoomSummaryForIdentifier(details.id, invalidated: false)
+            case .invalidated(let details):
+                return self.buildRoomSummaryForIdentifier(details.id, invalidated: true)
             }
         }
         
