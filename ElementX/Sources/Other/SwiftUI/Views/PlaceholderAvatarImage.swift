@@ -33,9 +33,8 @@ struct PlaceholderAvatarImage: View {
                 // This text's frame doesn't look right when redacted
                 if redactionReasons != .placeholder {
                     Text(textForImage)
-                        .padding(geometry.size.width <= 30 ? 0 : 4)
-                        .foregroundColor(.white)
-                        .font(.system(size: 200).weight(.semibold))
+                        .foregroundColor(avatarColor?.foreground ?? .white)
+                        .font(.system(size: geometry.size.width * 0.5625, weight: .semibold))
                         .minimumScaleFactor(0.001)
                         .frame(alignment: .center)
                 }
@@ -55,11 +54,15 @@ struct PlaceholderAvatarImage: View {
             return Color(.systemGray4) // matches the default text redaction
         }
 
+        return avatarColor?.background ?? .compound.iconPrimary
+    }
+    
+    private var avatarColor: AvatarColor? {
         guard let contentID else {
-            return .compound.iconPrimary
+            return nil
         }
-
-        return .element.avatarBackground(for: contentID)
+        
+        return Color.compound.avatarColor(for: contentID)
     }
 }
 
