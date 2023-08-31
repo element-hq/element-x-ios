@@ -97,19 +97,31 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     }
     
     /// The action's label.
+    @ViewBuilder
     var label: some View {
         switch self {
-        case .copy: return Label(L10n.actionCopy, systemImage: "doc.on.doc")
-        case .edit: return Label(L10n.actionEdit, systemImage: "pencil.line")
-        case .copyPermalink: return Label(L10n.actionCopyLinkToMessage, systemImage: "link")
-        case .reply: return Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
-        case .forward: return Label(L10n.actionForward, systemImage: "arrowshape.turn.up.right")
-        case .redact: return Label(L10n.actionRemove, systemImage: "trash")
-        case .viewSource: return Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
-        case .retryDecryption: return Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
-        case .report: return Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
-        case .react: return Label(L10n.actionReact, systemImage: "hand.thumbsup")
-        case .endPoll: return Label { Text(L10n.actionEndPoll) } icon: { Image.compound.check.resizable() }
+        case .copy:
+            Label(L10n.actionCopy, systemImage: "doc.on.doc")
+        case .edit:
+            Label(L10n.actionEdit, systemImage: "pencil.line")
+        case .copyPermalink:
+            Label(L10n.actionCopyLinkToMessage, systemImage: "link")
+        case .reply:
+            Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
+        case .forward:
+            Label(L10n.actionForward, systemImage: "arrowshape.turn.up.right")
+        case .redact:
+            Label(L10n.actionRemove, systemImage: "trash")
+        case .viewSource:
+            Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
+        case .retryDecryption:
+            Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
+        case .report:
+            Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
+        case .react:
+            Label(L10n.actionReact, systemImage: "hand.thumbsup")
+        case .endPoll:
+            Label { Text(L10n.actionEndPoll) } icon: { CompoundIcon(customImage: Asset.Images.endedPoll.swiftUIImage) }
         }
     }
 }

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct PollRoomTimelineView: View {
@@ -58,7 +59,9 @@ struct PollRoomTimelineView: View {
 
     private var questionView: some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(Asset.Images.timelinePoll.name)
+            let asset = poll.hasEnded ? Asset.Images.endedPoll : Asset.Images.timelinePoll
+
+            CompoundIcon(customImage: asset.swiftUIImage)
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
