@@ -55,6 +55,10 @@ struct CreatePollScreen: View {
             .textFieldStyle(.compoundForm)
             .focused($focus, equals: .question)
             .accessibilityIdentifier(A11yIdentifiers.createPollScreen.question)
+            .onSubmit {
+                focus = context.options.indices.first.map { .option(index: $0) }
+            }
+            .submitLabel(.next)
         }
         .compoundFormSection()
     }
@@ -74,6 +78,11 @@ struct CreatePollScreen: View {
                     }
                     .focused($focus, equals: .option(index: index))
                     .accessibilityIdentifier(A11yIdentifiers.createPollScreen.optionID(index))
+                    .onSubmit {
+                        let nextOptionIndex = index == context.options.endIndex - 1 ? nil : index + 1
+                        focus = nextOptionIndex.map { .option(index: $0) }
+                    }
+                    .submitLabel(index == context.options.endIndex - 1 ? .done : .next)
                 }
             }
             .onMove { offsets, toOffset in
@@ -83,6 +92,7 @@ struct CreatePollScreen: View {
             if context.options.count < context.viewState.maxNumberOfOptions {
                 Button(L10n.screenCreatePollAddOptionBtn) {
                     context.send(viewAction: .addOption)
+                    focus = .option(index: context.options.endIndex - 1)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
             }
