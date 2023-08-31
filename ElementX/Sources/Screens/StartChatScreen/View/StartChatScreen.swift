@@ -72,7 +72,7 @@ struct StartChatScreen: View {
                     .imageScale(.small)
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-            .accessibilityLabel(A11yIdentifiers.startChatScreen.createRoom)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)
         }
         .compoundFormSection()
     }
