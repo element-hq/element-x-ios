@@ -57,6 +57,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
                                             lastMessageFormattedTimestamp: "Now",
                                             unreadNotificationCount: 4,
+                                            notificationMode: .allMessages,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie)),
         .filled(details: RoomSummaryDetails(id: "2",
@@ -66,6 +67,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 1,
+                                            notificationMode: .mentionsAndKeywordsOnly,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie)),
         .filled(details: RoomSummaryDetails(id: "3",
@@ -75,6 +77,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
                                             lastMessageFormattedTimestamp: "Later",
                                             unreadNotificationCount: 0,
+                                            notificationMode: .mute,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie)),
         .empty
@@ -87,6 +90,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 0,
+                                            notificationMode: nil,
                                             canonicalAlias: "#footest:somewhere.org",
                                             inviter: RoomMemberProxyMock.mockCharlie)),
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
@@ -96,6 +100,7 @@ extension Array where Element == RoomSummary {
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 0,
+                                            notificationMode: nil,
                                             canonicalAlias: nil,
                                             inviter: RoomMemberProxyMock.mockCharlie))
     ]

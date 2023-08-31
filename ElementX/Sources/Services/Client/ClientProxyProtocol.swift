@@ -83,6 +83,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
     
+    var notificationSettings: NotificationSettingsProxyProtocol { get }
+    
     func startSync()
 
     func stopSync()
@@ -114,6 +116,4 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
-    
-    func notificationSettings() async -> NotificationSettingsProxyProtocol
 }

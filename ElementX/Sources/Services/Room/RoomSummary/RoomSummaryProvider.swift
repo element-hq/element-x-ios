@@ -23,6 +23,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
     private var appSettings: AppSettings
+    private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private let serialDispatchQueue: DispatchQueue
@@ -58,18 +59,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          appSettings: AppSettings,
+         notificationSettings: NotificationSettingsProxyProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.appSettings = appSettings
+        self.notificationSettings = notificationSettings
         self.backgroundTaskService = backgroundTaskService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
+        
+        if appSettings.notificationSettingsEnabled {
+            setupNotificationSettingsSubscription()
+        }
     }
     
     func setRoomList(_ roomList: RoomList) {
@@ -227,6 +234,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             inviterProxy = RoomMemberProxy(member: inviter, backgroundTaskService: backgroundTaskService)
         }
         
+        let notificationMode = roomInfo.notificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+        
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          name: roomInfo.name ?? roomInfo.id,
                                          isDirect: roomInfo.isDirect,
@@ -234,6 +243,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadNotificationCount: UInt(roomInfo.notificationCount),
+                                         notificationMode: notificationMode,
                                          canonicalAlias: roomInfo.canonicalAlias,
                                          inviter: inviterProxy)
         
@@ -323,6 +333,43 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         return CollectionDifference(changes)
+    }
+    
+    private func setupNotificationSettingsSubscription() {
+        notificationSettings.callbacks
+            .receive(on: serialDispatchQueue)
+            .dropFirst() // drop the first one to avoid rebuilding the summaries during the first synchronization
+            .sink { [weak self] callback in
+                guard let self else { return }
+                switch callback {
+                case .settingsDidChange:
+                    self.rebuildRoomSummaries()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func rebuildRoomSummaries() {
+        let span = MXLog.createSpan("\(name).rebuild_room_summaries")
+        span.enter()
+        defer {
+            span.exit()
+        }
+        
+        MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
+        
+        rooms = rooms.map {
+            switch $0 {
+            case .empty:
+                return $0
+            case .filled(let details):
+                return self.buildRoomSummaryForIdentifier(details.id, invalidated: false)
+            case .invalidated(let details):
+                return self.buildRoomSummaryForIdentifier(details.id, invalidated: true)
+            }
+        }
+        
+        MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
     }
 }
 

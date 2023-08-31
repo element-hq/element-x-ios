@@ -189,6 +189,7 @@ private extension InvitesScreenRoomDetails {
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
                                         unreadNotificationCount: 0,
+                                        notificationMode: nil,
                                         canonicalAlias: "#footest:somewhere.org",
                                         inviter: inviter)
         return .init(roomDetails: dmRoom, isUnread: false)
@@ -207,6 +208,7 @@ private extension InvitesScreenRoomDetails {
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
                                         unreadNotificationCount: 0,
+                                        notificationMode: nil,
                                         canonicalAlias: alias,
                                         inviter: inviter)
         return .init(roomDetails: dmRoom, isUnread: isUnread)

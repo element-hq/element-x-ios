@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
@@ -115,17 +116,42 @@ struct HomeScreenRoomCell: View {
             
             Spacer()
             
-            if room.hasUnreads {
-                Circle()
-                    .frame(width: 12, height: 12)
-                    .foregroundColor(.compound.iconAccentTertiary)
-                    .padding(.leading, 12)
-            } else {
-                // Force extra padding between last message text and the right border of the screen if there is no unread dot
-                Circle()
-                    .frame(width: 12, height: 12)
-                    .hidden()
+            HStack(spacing: 8) {
+                if let notificationMode = room.notificationMode {
+                    notificationModeIcon
+                        .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                }
+                
+                if room.hasUnreads {
+                    Circle()
+                        .frame(width: 12, height: 12)
+                        .foregroundColor(.compound.iconAccentTertiary)
+                }
+                
+                if !room.hasDecoration {
+                    // Force extra padding between last message text and the right border of the screen if there is no unread dot
+                    Circle()
+                        .frame(width: 12, height: 12)
+                        .hidden()
+                }
             }
+            .padding(.leading, room.hasDecoration ? 12 : 0)
+        }
+    }
+    
+    @ViewBuilder
+    var notificationModeIcon: some View {
+        switch room.notificationMode {
+        case .none, .allMessages:
+            EmptyView()
+        case .mentionsAndKeywordsOnly:
+            CompoundIcon(\.mention)
+                .font(.system(size: 15))
+                .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
+        case .mute:
+            CompoundIcon(\.notificationsSolidOff)
+                .font(.system(size: 15))
+                .accessibilityLabel(L10n.a11yNotificationsMuted)
         }
     }
     
@@ -191,7 +217,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                       hasUnreads: details.unreadNotificationCount > 0,
                                       timestamp: Date.now.formattedMinimal(),
                                       lastMessage: .init(attributedString: details.lastMessage,
-                                                         isLoading: false))
+                                                         isLoading: false),
+                                      notificationMode: details.notificationMode)
             }
         }
 

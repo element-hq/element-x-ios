@@ -12,6 +12,10 @@ import Foundation
 public enum L10n {
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
+  /// Mentions only
+  public static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
+  /// Muted
+  public static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
   /// Send files
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password

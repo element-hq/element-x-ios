@@ -231,7 +231,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
             
             case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettingsScreen):
-                asyncPresentNotificationSettingsScreen(animated: animated)
+                presentNotificationSettingsScreen(animated: animated)
             case (.notificationSettingsScreen, .dismissNotificationSettingsScreen, .roomDetails):
                 break
 
@@ -397,13 +397,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let params = await RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
-                                                                  navigationStackCoordinator: navigationStackCoordinator,
-                                                                  roomProxy: roomProxy,
-                                                                  mediaProvider: userSession.mediaProvider,
-                                                                  userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  notificationSettings: userSession.clientProxy.notificationSettings())
+        let params = RoomDetailsScreenCoordinatorParameters(accountUserID: userSession.userID,
+                                                            navigationStackCoordinator: navigationStackCoordinator,
+                                                            roomProxy: roomProxy,
+                                                            mediaProvider: userSession.mediaProvider,
+                                                            userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
+                                                            userIndicatorController: userIndicatorController,
+                                                            notificationSettings: userSession.clientProxy.notificationSettings)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             switch action {
@@ -691,19 +691,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.tryEvent(.presentRoom(roomID: roomID), userInfo: EventUserInfo(animated: true, destinationRoomProxy: targetRoomProxy))
     }
     
-    private func asyncPresentNotificationSettingsScreen(animated: Bool) {
-        Task {
-            await presentNotificationSettingsScreen(animated: animated)
-        }
-    }
-    
-    private func presentNotificationSettingsScreen(animated: Bool) async {
+    private func presentNotificationSettingsScreen(animated: Bool) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let parameters = await NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
-                                                                               userSession: userSession,
-                                                                               userNotificationCenter: UNUserNotificationCenter.current(),
-                                                                               notificationSettings: userSession.clientProxy.notificationSettings(),
-                                                                               isModallyPresented: true)
+        let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationCoordinator,
+                                                                         userSession: userSession,
+                                                                         userNotificationCenter: UNUserNotificationCenter.current(),
+                                                                         notificationSettings: userSession.clientProxy.notificationSettings,
+                                                                         isModallyPresented: true)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
             switch action {

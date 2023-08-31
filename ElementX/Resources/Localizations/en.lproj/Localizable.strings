@@ -1,5 +1,7 @@
 "Notification" = "Notification";
 "a11y_hide_password" = "Hide password";
+"a11y_notifications_mentions_only" = "Mentions only";
+"a11y_notifications_muted" = "Muted";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
 "a11y_user_menu" = "User menu";

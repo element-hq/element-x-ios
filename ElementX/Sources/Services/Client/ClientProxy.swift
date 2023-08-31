@@ -36,6 +36,8 @@ class ClientProxy: ClientProxyProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol?
     var inviteSummaryProvider: RoomSummaryProviderProtocol?
+    
+    var notificationSettings: NotificationSettingsProxyProtocol
 
     private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
@@ -66,6 +68,9 @@ class ClientProxy: ClientProxyProtocol {
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
+        
+        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
+                                                         backgroundTaskService: backgroundTaskService)
 
         client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
@@ -348,13 +353,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func notificationSettings() async -> NotificationSettingsProxyProtocol {
-        await Task.dispatch(on: clientQueue) {
-            NotificationSettingsProxy(notificationSettings: self.client.getNotificationSettings(),
-                                      backgroundTaskService: self.backgroundTaskService)
-        }
-    }
-    
     // MARK: Private
     
     private func restartSync(delay: Duration = .zero) {
@@ -405,12 +403,14 @@ class ClientProxy: ClientProxyProtocol {
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       appSettings: appSettings,
+                                                      notificationSettings: notificationSettings,
                                                       backgroundTaskService: backgroundTaskService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites",
                                                         appSettings: appSettings,
+                                                        notificationSettings: notificationSettings,
                                                         backgroundTaskService: backgroundTaskService)
 
             self.syncService = syncService

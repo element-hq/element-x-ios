@@ -32,6 +32,8 @@ class MockClientProxy: ClientProxyProtocol {
     var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
+    
+    var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
 
     init(userID: String, deviceID: String? = nil, accountURL: URL? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
@@ -140,14 +142,5 @@ class MockClientProxy: ClientProxyProtocol {
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         getProfileCalled = true
         return getProfileResult
-    }
-    
-    var notificationSettingsResult: NotificationSettingsProxyProtocol?
-    func notificationSettings() -> NotificationSettingsProxyProtocol {
-        if let notificationSettingsResult {
-            return notificationSettingsResult
-        } else {
-            return NotificationSettingsProxyMock(with: .init())
-        }
     }
 }
