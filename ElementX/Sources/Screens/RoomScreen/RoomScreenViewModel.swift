@@ -814,7 +814,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private func endPoll(pollStartID: String) {
         Task {
-            let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID)
+            let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID,
+                                                        text: "The poll with event id: \(pollStartID) has ended")
             switch endPollResult {
             case .success:
                 break

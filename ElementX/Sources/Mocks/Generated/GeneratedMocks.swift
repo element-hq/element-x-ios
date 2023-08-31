@@ -1508,23 +1508,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - endPoll
 
-    var endPollPollStartIDCallsCount = 0
-    var endPollPollStartIDCalled: Bool {
-        return endPollPollStartIDCallsCount > 0
+    var endPollPollStartIDTextCallsCount = 0
+    var endPollPollStartIDTextCalled: Bool {
+        return endPollPollStartIDTextCallsCount > 0
     }
-    var endPollPollStartIDReceivedPollStartID: String?
-    var endPollPollStartIDReceivedInvocations: [String] = []
-    var endPollPollStartIDReturnValue: Result<Void, RoomProxyError>!
-    var endPollPollStartIDClosure: ((String) async -> Result<Void, RoomProxyError>)?
+    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
+    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
+    var endPollPollStartIDTextReturnValue: Result<Void, RoomProxyError>!
+    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
 
-    func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError> {
-        endPollPollStartIDCallsCount += 1
-        endPollPollStartIDReceivedPollStartID = pollStartID
-        endPollPollStartIDReceivedInvocations.append(pollStartID)
-        if let endPollPollStartIDClosure = endPollPollStartIDClosure {
-            return await endPollPollStartIDClosure(pollStartID)
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
+        endPollPollStartIDTextCallsCount += 1
+        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
+        endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
+        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
+            return await endPollPollStartIDTextClosure(pollStartID, text)
         } else {
-            return endPollPollStartIDReturnValue
+            return endPollPollStartIDTextReturnValue
         }
     }
 }
