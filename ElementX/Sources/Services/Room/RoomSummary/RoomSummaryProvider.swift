@@ -360,7 +360,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         rooms = rooms.map {
             if let roomId = $0.id {
-                return self.buildRoomSummaryForIdentifier(roomId, invalidated: false)
+                return self.buildRoomSummaryForIdentifier(roomId, invalidated: true)
             } else {
                 return $0
             }
