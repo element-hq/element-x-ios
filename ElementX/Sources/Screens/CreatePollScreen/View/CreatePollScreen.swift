@@ -94,7 +94,7 @@ struct CreatePollScreen: View {
             if context.options.count < context.viewState.maxNumberOfOptions {
                 Button(L10n.screenCreatePollAddOptionBtn) {
                     context.send(viewAction: .addOption)
-                    focus = .option(index: context.options.endIndex - 1)
+                    focus = context.options.indices.last.map { .option(index: $0) }
                 }
                 .accessibilityIdentifier(A11yIdentifiers.createPollScreen.addOption)
             }
