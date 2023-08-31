@@ -39,6 +39,7 @@ struct CreatePollScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .animation(.elementDefault, value: context.options)
+        .interactiveDismissDisabled(context.viewState.bindings.hasDraftContent)
     }
 
     // MARK: - Private

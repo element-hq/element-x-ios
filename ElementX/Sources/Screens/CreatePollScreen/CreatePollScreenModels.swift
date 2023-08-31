@@ -39,6 +39,10 @@ struct CreatePollScreenViewStateBindings {
     var isCreateButtonDisabled: Bool {
         question.isEmpty || options.count < 2 || options.contains { $0.text.isEmpty }
     }
+
+    var hasDraftContent: Bool {
+        !question.isEmpty || options.contains(where: { !$0.text.isEmpty }) || isUndisclosed
+    }
 }
 
 enum CreatePollScreenViewAction {
