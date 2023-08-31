@@ -20,10 +20,6 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct HomeScreen: View {
-    enum Constants {
-        static let slidingWindowBoundsPadding = 5
-    }
-    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
@@ -205,12 +201,8 @@ struct HomeScreen: View {
         let firstIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.contentInset.top) / cellHeight)
         let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
         
-        // Add some extra padding just to be on the safe side
-        let lowerBound = max(0, firstIndex - Constants.slidingWindowBoundsPadding)
-        let upperBound = min(Int(context.viewState.rooms.count), lastIndex + Constants.slidingWindowBoundsPadding)
-
         // This will be deduped and throttled on the view model layer
-        context.send(viewAction: .updateVisibleItemRange(range: lowerBound..<upperBound, isScrolling: scrollViewAdapter.isScrolling.value))
+        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
     }
     
     @ViewBuilder
