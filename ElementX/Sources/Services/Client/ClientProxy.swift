@@ -406,13 +406,15 @@ class ClientProxy: ClientProxyProtocol {
                                                       notificationSettings: notificationSettings,
                                                       backgroundTaskService: backgroundTaskService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
+            
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites",
                                                         appSettings: appSettings,
                                                         notificationSettings: notificationSettings,
                                                         backgroundTaskService: backgroundTaskService)
-
+            try await inviteSummaryProvider?.setRoomList(roomListService.invites())
+            
             self.syncService = syncService
             self.roomListService = roomListService
 
@@ -454,22 +456,6 @@ class ClientProxy: ClientProxyProtocol {
             
             // Hide the sync spinner as soon as we get any update back
             callbacks.send(.receivedSyncUpdate)
-            
-            // The invites are available only when entering `running`
-            if state == .running {
-                Task {
-                    do {
-                        guard let roomListService = self.roomListService else {
-                            MXLog.error("Room list service is not configured")
-                            return
-                        }
-                        // Subscribe to invites later as the underlying SlidingSync list is only added when entering AllRooms
-                        try await self.inviteSummaryProvider?.setRoomList(roomListService.invites())
-                    } catch {
-                        MXLog.error("Failed configuring invites room list with error: \(error)")
-                    }
-                }
-            }
         })
     }
     
