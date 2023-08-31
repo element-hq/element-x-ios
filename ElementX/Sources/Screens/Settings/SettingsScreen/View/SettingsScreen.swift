@@ -97,7 +97,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .developerOptions)
                     })
-                    .accessibilityLabel(A11yIdentifiers.settingsScreen.developerOptions)
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
         }
     }
     
@@ -110,7 +110,7 @@ struct SettingsScreen: View {
                         kind: .button {
                             context.send(viewAction: .account)
                         })
-                        .accessibilityLabel(A11yIdentifiers.settingsScreen.account)
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
             
             // Message layout
@@ -130,7 +130,7 @@ struct SettingsScreen: View {
                         kind: .navigationLink {
                             context.send(viewAction: .notifications)
                         })
-                        .accessibilityLabel(A11yIdentifiers.settingsScreen.notifications)
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             }
             
             // Analytics
@@ -139,7 +139,7 @@ struct SettingsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .analytics)
                     })
-                    .accessibilityLabel(A11yIdentifiers.settingsScreen.analytics)
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
             // Report Bug
             ListRow(label: .default(title: L10n.commonReportABug,
@@ -191,7 +191,7 @@ struct SettingsScreen: View {
 
     private var doneButton: some View {
         Button(L10n.actionDone, action: close)
-            .accessibilityLabel(A11yIdentifiers.settingsScreen.done)
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
     }
 
     private func close() {

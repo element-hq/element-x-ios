@@ -29,7 +29,7 @@ struct HomeScreenUserMenuButton: View {
                 } label: {
                     Label(L10n.commonSettings, systemImage: "gearshape")
                 }
-                .accessibilityLabel(A11yIdentifiers.homeScreen.settings)
+                .accessibilityIdentifier(A11yIdentifiers.homeScreen.settings)
             }
             Section {
                 MatrixUserShareLink(userID: context.viewState.userID) {
