@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
@@ -144,13 +145,13 @@ struct HomeScreenRoomCell: View {
         case .none, .allMessages:
             EmptyView()
         case .mentionsAndKeywordsOnly:
-            Image(systemName: "at")
-                .resizable()
-                .frame(width: 15, height: 15)
+            CompoundIcon(\.mention)
+                .font(.system(size: 15))
+                .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
         case .mute:
-            Image(systemName: "bell.slash.fill")
-                .resizable()
-                .frame(width: 15, height: 15)
+            CompoundIcon(\.notificationsSolidOff)
+                .font(.system(size: 15))
+                .accessibilityLabel(L10n.a11yNotificationsMuted)
         }
     }
     
