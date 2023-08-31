@@ -40,6 +40,7 @@ struct CreatePollScreen: View {
         .toolbar { toolbar }
         .animation(.elementDefault, value: context.options)
         .interactiveDismissDisabled(context.viewState.bindings.hasDraftContent)
+        .alert(item: $context.alertInfo)
     }
 
     // MARK: - Private
