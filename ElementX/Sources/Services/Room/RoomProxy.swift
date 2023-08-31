@@ -99,6 +99,10 @@ class RoomProxy: RoomProxyProtocol {
         
         let timelineListener = RoomTimelineListener { [weak self] timelineDiffs in
             self?.timelineUpdatesSubject.send(timelineDiffs)
+            
+            // Workaround for subscribeToRoomStateUpdates creating problems in the timeline
+            // https://github.com/matrix-org/matrix-rust-sdk/issues/2488
+            self?.stateUpdatesSubject.send()
         }
         
         self.timelineListener = timelineListener
@@ -108,7 +112,7 @@ class RoomProxy: RoomProxyProtocol {
         
         subscribeToBackpagination()
         
-        subscribeToRoomStateUpdates()
+        // subscribeToRoomStateUpdates()
         
         innerTimelineProvider = await RoomTimelineProvider(currentItems: result.items,
                                                            updatePublisher: timelineUpdatesSubject.eraseToAnyPublisher(),
