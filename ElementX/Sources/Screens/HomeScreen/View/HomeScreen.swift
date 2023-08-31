@@ -163,8 +163,7 @@ struct HomeScreen: View {
             HomeScreenUserMenuButton(context: context)
         }
         
-        ToolbarItemGroup(placement: .bottomBar) {
-            Spacer()
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
             newRoomButton
         }
     }
@@ -174,6 +173,7 @@ struct HomeScreen: View {
             context.send(viewAction: .startChat)
         } label: {
             Image(systemName: "square.and.pencil")
+                .fontWeight(.semibold)
         }
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
     }
