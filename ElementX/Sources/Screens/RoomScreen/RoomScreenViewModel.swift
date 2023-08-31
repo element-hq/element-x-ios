@@ -139,8 +139,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if state.swiftUITimelineEnabled {
                 renderPendingTimelineItems()
             }
-        case .selectedPollOption:
-            break
+        case let .selectedPollOption(pollStartID, optionID):
+            sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         }
     }
 
@@ -489,7 +489,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.send(.composer(action: .removeFocus))
         state.bindings.actionMenuInfo = .init(item: eventTimelineItem)
     }
-    
+
+    // swiftlint:disable:next cyclomatic_complexity
     private func timelineItemMenuActionsForItemId(_ itemID: TimelineItemIdentifier) -> TimelineItemMenuActions? {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -510,11 +511,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return .init(actions: [], debugActions: debugActions)
         }
         
-        var actions: [TimelineItemMenuAction] = [
-            .reply
-        ]
+        var actions: [TimelineItemMenuAction] = []
 
         if item.isMessage {
+            actions.append(.reply)
             actions.append(.forward(itemID: itemID))
         }
 
@@ -527,6 +527,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         actions.append(.copyPermalink)
+
+        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = itemID.eventID {
+            actions.append(.endPoll(pollStartID: eventID))
+        }
         
         if canRedactItem(item) {
             actions.append(.redact)
@@ -610,6 +614,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
             showEmojiPicker(for: itemID)
+        case .endPoll(let pollStartID):
+            endPoll(pollStartID: pollStartID)
         }
         
         if action.switchToDefaultComposer {
@@ -790,6 +796,32 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.bindings.reactionSummaryInfo = .init(reactions: eventTimelineItem.properties.reactions, selectedKey: selectedKey)
+    }
+
+    // MARK: - Polls
+
+    private func sendPollResponse(pollStartID: String, optionID: String) {
+        Task {
+            let sendPollResponseResult = await roomProxy.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
+            switch sendPollResponseResult {
+            case .success:
+                break
+            case .failure:
+                displayError(.toast(L10n.errorUnknown))
+            }
+        }
+    }
+
+    private func endPoll(pollStartID: String) {
+        Task {
+            let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID)
+            switch endPollResult {
+            case .success:
+                break
+            case .failure:
+                displayError(.toast(L10n.errorUnknown))
+            }
+        }
     }
 }
 

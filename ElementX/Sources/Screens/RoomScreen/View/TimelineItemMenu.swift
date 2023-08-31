@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct TimelineItemMenuActions {
@@ -51,6 +52,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case retryDecryption(sessionID: String)
     case report
     case react
+    case endPoll(pollStartID: String)
     
     var id: Self { self }
     
@@ -107,6 +109,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .retryDecryption: return Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report: return Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
         case .react: return Label(L10n.actionReact, systemImage: "hand.thumbsup")
+        case .endPoll: return Label { Text(L10n.actionEndPoll) } icon: { Image.compound.check.resizable() }
         }
     }
 }

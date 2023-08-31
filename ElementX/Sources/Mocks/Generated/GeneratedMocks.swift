@@ -1485,6 +1485,48 @@ class RoomProxyMock: RoomProxyProtocol {
             return createPollQuestionAnswersPollKindReturnValue
         }
     }
+    //MARK: - sendPollResponse
+
+    var sendPollResponsePollStartIDAnswersCallsCount = 0
+    var sendPollResponsePollStartIDAnswersCalled: Bool {
+        return sendPollResponsePollStartIDAnswersCallsCount > 0
+    }
+    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
+    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
+    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, RoomProxyError>!
+    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, RoomProxyError>)?
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
+        sendPollResponsePollStartIDAnswersCallsCount += 1
+        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
+        sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
+        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
+            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
+        } else {
+            return sendPollResponsePollStartIDAnswersReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDCallsCount = 0
+    var endPollPollStartIDCalled: Bool {
+        return endPollPollStartIDCallsCount > 0
+    }
+    var endPollPollStartIDReceivedPollStartID: String?
+    var endPollPollStartIDReceivedInvocations: [String] = []
+    var endPollPollStartIDReturnValue: Result<Void, RoomProxyError>!
+    var endPollPollStartIDClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError> {
+        endPollPollStartIDCallsCount += 1
+        endPollPollStartIDReceivedPollStartID = pollStartID
+        endPollPollStartIDReceivedInvocations.append(pollStartID)
+        if let endPollPollStartIDClosure = endPollPollStartIDClosure {
+            return await endPollPollStartIDClosure(pollStartID)
+        } else {
+            return endPollPollStartIDReturnValue
+        }
+    }
 }
 class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var updatePublisher: AnyPublisher<TimelineProviderUpdate, Never> {

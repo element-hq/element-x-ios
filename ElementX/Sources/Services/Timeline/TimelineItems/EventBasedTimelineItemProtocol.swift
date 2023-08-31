@@ -46,6 +46,10 @@ extension EventBasedTimelineItemProtocol {
         self is LocationRoomTimelineItem
     }
 
+    var pollIfAvailable: Poll? {
+        (self as? PollRoomTimelineItem)?.poll
+    }
+
     var isRedacted: Bool {
         self is RedactedRoomTimelineItem
     }

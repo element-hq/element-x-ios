@@ -26,7 +26,7 @@ struct TimelineItemIdentifier: Hashable {
     /// Only available for EventTimelineItem and only when the item is returned by the server.
     var eventID: String?
 
-    /// Uniquely identfies the local echo of the timeline item.
+    /// Uniquely identifies the local echo of the timeline item.
     /// Only available for sent EventTimelineItem that have not been returned by the server yet.
     var transactionID: String?
 }

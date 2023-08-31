@@ -688,6 +688,8 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
+    // MARK: - Polls
+
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
@@ -695,6 +697,28 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 MXLog.error("Failed creating a poll: \(error)")
                 return .failure(.failedCreatingPoll)
+            }
+        }
+    }
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers, txnId: genTransactionId()))
+            } catch {
+                MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
+                return .failure(.failedSendingPollResponse)
+            }
+        }
+    }
+
+    func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                return try .success(self.room.endPoll(pollStartId: pollStartID, text: .init(), txnId: genTransactionId()))
+            } catch {
+                MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
+                return .failure(.failedEndingPoll)
             }
         }
     }
