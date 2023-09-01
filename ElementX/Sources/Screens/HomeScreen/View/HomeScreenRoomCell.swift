@@ -117,10 +117,8 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if let notificationMode = room.notificationMode {
-                    notificationModeIcon
-                        .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
-                }
+                notificationModeIcon
+                    .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
                 
                 if room.hasUnreads {
                     Circle()
