@@ -319,7 +319,7 @@ struct MediaUploadingPreprocessor {
     ///   - targetSize: maximum resulting size
     /// - Returns: the resized image
     private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) async -> Result<UIImage, MediaUploadingPreprocessorError> {
-        let maximumSize = min(targetSize.height, targetSize.width)
+        let maximumSize = max(targetSize.height, targetSize.width)
         
         let options: [NSString: Any] = [
             // The maximum width and height in pixels of a thumbnail.
