@@ -274,6 +274,8 @@ public enum L10n {
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// Syncing
   public static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
+  /// Text
+  public static var commonText: String { return L10n.tr("Localizable", "common_text") }
   /// Third-party notices
   public static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
   /// Topic
@@ -462,10 +464,16 @@ public enum L10n {
   public static var richTextEditorA11yAddAttachment: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_attachment") }
   /// Toggle bullet list
   public static var richTextEditorBulletList: String { return L10n.tr("Localizable", "rich_text_editor_bullet_list") }
+  /// Close formatting options
+  public static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
   /// Toggle code block
   public static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
   /// Message…
   public static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }
+  /// Create a link
+  public static var richTextEditorCreateLink: String { return L10n.tr("Localizable", "rich_text_editor_create_link") }
+  /// Edit link
+  public static var richTextEditorEditLink: String { return L10n.tr("Localizable", "rich_text_editor_edit_link") }
   /// Apply bold format
   public static var richTextEditorFormatBold: String { return L10n.tr("Localizable", "rich_text_editor_format_bold") }
   /// Apply italic format
@@ -484,10 +492,14 @@ public enum L10n {
   public static var richTextEditorLink: String { return L10n.tr("Localizable", "rich_text_editor_link") }
   /// Toggle numbered list
   public static var richTextEditorNumberedList: String { return L10n.tr("Localizable", "rich_text_editor_numbered_list") }
+  /// Open compose options
+  public static var richTextEditorOpenComposeOptions: String { return L10n.tr("Localizable", "rich_text_editor_open_compose_options") }
   /// Toggle quote
   public static var richTextEditorQuote: String { return L10n.tr("Localizable", "rich_text_editor_quote") }
   /// Unindent
   public static var richTextEditorUnindent: String { return L10n.tr("Localizable", "rich_text_editor_unindent") }
+  /// Link
+  public static var richTextEditorUrlPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_url_placeholder") }
   /// This is the beginning of %1$@.
   public static func roomTimelineBeginningOfRoom(_ p1: Any) -> String {
     return L10n.tr("Localizable", "room_timeline_beginning_of_room", String(describing: p1))
@@ -612,8 +624,10 @@ public enum L10n {
   public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
   }
-  /// Are you sure you would like to go back?
-  public static var screenCreatePollConfirmation: String { return L10n.tr("Localizable", "screen_create_poll_confirmation") }
+  /// Are you sure you want to discard this poll?
+  public static var screenCreatePollDiscardConfirmation: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation") }
+  /// Discard Poll
+  public static var screenCreatePollDiscardConfirmationTitle: String { return L10n.tr("Localizable", "screen_create_poll_discard_confirmation_title") }
   /// Question or topic
   public static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
   /// What is the poll about?

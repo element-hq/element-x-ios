@@ -41,8 +41,8 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
         case .cancel:
             if state.bindings.hasDraftContent {
                 state.bindings.alertInfo = .init(id: .init(),
-                                                 title: L10n.dialogTitleWarning,
-                                                 message: L10n.screenCreatePollConfirmation,
+                                                 title: L10n.screenCreatePollDiscardConfirmationTitle,
+                                                 message: L10n.screenCreatePollDiscardConfirmation,
                                                  primaryButton: .init(title: L10n.actionCancel, action: nil),
                                                  secondaryButton: .init(title: L10n.actionOk, action: { self.actionsSubject.send(.cancel) }))
             } else {
