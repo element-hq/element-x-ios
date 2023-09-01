@@ -22,6 +22,7 @@ struct PollRoomTimelineView: View {
     @Environment(\.timelineStyle) var timelineStyle
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @ScaledMetric private var summaryPadding = 32
+    @ScaledMetric private var iconSize = 22
 
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
@@ -61,7 +62,9 @@ struct PollRoomTimelineView: View {
         HStack(alignment: .top, spacing: 12) {
             let asset = poll.hasEnded ? Asset.Images.timelineEndedPoll : Asset.Images.timelinePoll
 
-            CompoundIcon(customImage: asset.swiftUIImage)
+            Image(asset.name)
+                .resizable()
+                .frame(width: iconSize, height: iconSize)
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
