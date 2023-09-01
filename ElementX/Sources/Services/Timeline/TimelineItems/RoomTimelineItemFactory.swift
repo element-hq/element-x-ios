@@ -69,9 +69,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        previousAvatarURLString: prevAvatarUrl,
                                                        isOutgoing: isOutgoing)
         case .poll(question: let question, kind: let kind, maxSelections: let maxSelections, answers: let answers, votes: let votes, endTime: let endTime):
-            guard ServiceLocator.shared.settings.pollsInTimelineEnabled else {
-                return nil
-            }
             return buildPollTimelineItem(question, kind, maxSelections, answers, votes, endTime, eventItemProxy, isOutgoing)
         }
     }
