@@ -20,10 +20,14 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct HomeScreen: View {
+    @Environment(\.isPresented) private var isPresented
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
+    @State private var bloomView: UIView?
+    @State private var alreadyDone = false
+    @State private var cancellable: Cancellable?
     
     var body: some View {
         GeometryReader { geometry in
@@ -87,9 +91,58 @@ struct HomeScreen: View {
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
+        .introspect(.viewController, on: .iOS(.v16)) { controller in
+            if controller.navigationController?.topViewController == controller {
+//                bloomView?.isHidden = false
+            } else {
+                bloomView?.isHidden = true
+            }
+            Task {
+//                cancellable = controller.navigationController?.topViewController.publisher
+//                    .sink { topViewController in
+//                        guard let bloomView else {
+//                            return
+//                        }
+//                        UIView.transition(with: bloomView, duration: 3.0, options: [.transitionCrossDissolve, .curveLinear]) {
+//                            let isHidden = topViewController != controller
+//                            if bloomView.isHidden != isHidden {
+//                                bloomView.isHidden = isHidden
+//                            }
+//                        }
+//                    }
+                if !alreadyDone,
+                   controller.navigationController?.topViewController == controller,
+                   let navContainer = controller.navigationController?.navigationBar.subviews.first,
+                   let leftBarButtonView = controller.navigationItem.leadingItemGroups.first?.barButtonItems.first?.customView {
+                    setNavigationBarBackground(leftBarButtonView: leftBarButtonView, navigationContainer: navContainer)
+                    alreadyDone = true
+                }
+            }
+        }
+        .onAppear {
+            guard let bloomView else {
+                return
+            }
+            UIView.transition(with: bloomView, duration: 3.0, options: .transitionCrossDissolve) {
+                bloomView.isHidden = false
+            }
+        }
     }
     
     // MARK: - Private
+    
+    private func setNavigationBarBackground(leftBarButtonView: UIView, navigationContainer: UIView) {
+        let center = leftBarButtonView.convert(leftBarButtonView.center, to: navigationContainer.coordinateSpace)
+        let bgView = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 150)))
+        bgView.backgroundColor = .systemRed
+        bgView.center = center
+        bgView.translatesAutoresizingMaskIntoConstraints = true
+        bgView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+//                            bgView.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor).isActive = true
+//                            bgView.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor).isActive = true
+        navigationContainer.insertSubview(bgView, at: 0)
+        bloomView = bgView
+    }
     
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
