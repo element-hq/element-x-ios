@@ -1,3 +1,15 @@
+## Changes in 1.2.8 (2023-09-01)
+
+🙌 Improvements
+
+- New avatar colouring + username colouring. ([#1603](https://github.com/vector-im/element-x-ios/issues/1603))
+
+🐛 Bugfixes
+
+- Fix the size of the generated thumbnail when uploading media ([#980](https://github.com/vector-im/element-x-ios/issues/980))
+- Avatar colouring is aligned to web. ([#1345](https://github.com/vector-im/element-x-ios/issues/1345))
+
+
 ## Changes in 1.2.7 (2023-08-31)
 
 🙌 Improvements
