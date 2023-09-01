@@ -39,7 +39,7 @@ class CreatePollScreenViewModel: CreatePollScreenViewModelType, CreatePollScreen
                                         options: state.bindings.options.map(\.text),
                                         pollKind: state.bindings.isUndisclosed ? .undisclosed : .disclosed))
         case .cancel:
-            if state.bindings.hasDraftContent {
+            if state.bindings.hasContent {
                 state.bindings.alertInfo = .init(id: .init(),
                                                  title: L10n.screenCreatePollDiscardConfirmationTitle,
                                                  message: L10n.screenCreatePollDiscardConfirmation,
