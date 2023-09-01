@@ -18,6 +18,13 @@ import SceneKit
 import SwiftUI
 
 class EffectsScene: SCNScene {
+    static let colors: [Color] = [
+        .blue,
+        .red,
+        .yellow,
+        .green
+    ]
+    
     private enum Constants {
         static let confettiSceneName = "ConfettiScene.scn"
         static let particlesNodeName = "particles"
@@ -26,7 +33,7 @@ class EffectsScene: SCNScene {
     static func confetti() -> EffectsScene? {
         guard let scene = EffectsScene(named: Constants.confettiSceneName) else { return nil }
         
-        let colors: [[Float]] = Color.element.contentAndAvatars.compactMap(\.floatComponents)
+        let colors: [[Float]] = colors.compactMap(\.floatComponents)
         
         if let particles = scene.rootNode.childNode(withName: Constants.particlesNodeName, recursively: false)?.particleSystems?.first {
             // The particles need a non-zero color variation for the handler to affect the color

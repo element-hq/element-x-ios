@@ -30,32 +30,11 @@ public struct ElementColors {
     
     @available(swift, deprecated: 5.0, message: "Use textActionAccent/iconAccentTertiary from Compound.")
     public var brand: Color { colors.accent }
-    
-    public var contentAndAvatars: [Color] { colors.contentAndAvatars }
-    
-    public func avatarBackground(for contentId: String) -> Color {
-        let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
-        return contentAndAvatars[colorIndex % contentAndAvatars.count]
-    }
-    
+        
     // MARK: - Temp
     
     /// The background colour of a row in a Form or grouped List.
     ///
     /// This colour will be removed once Compound form styles are used everywhere.
     public var formRowBackground = Color.compound.bgCanvasDefaultLevel1
-}
-
-private extension String {
-    /// Calculates a numeric hash same as Element Web
-    /// See original function here https://github.com/matrix-org/matrix-react-sdk/blob/321dd49db4fbe360fc2ff109ac117305c955b061/src/utils/FormattingUtils.js#L47
-    var hashCode: Int32 {
-        var hash: Int32 = 0
-
-        for character in self {
-            let shiftedHash = hash << 5
-            hash = shiftedHash.subtractingReportingOverflow(hash).partialValue + Int32(character.unicodeScalars[character.unicodeScalars.startIndex].value)
-        }
-        return abs(hash)
-    }
 }
