@@ -254,7 +254,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addErrorHandler { context in
-            fatalError("Failed transition with context: \(context)")
+            if context.fromState == context.toState {
+                MXLog.error("Failed transition from equal states: \(context.fromState)")
+            } else {
+                fatalError("Failed transition with context: \(context)")
+            }
         }
     }
     
