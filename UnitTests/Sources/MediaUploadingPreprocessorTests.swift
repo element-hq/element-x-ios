@@ -144,9 +144,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 52159)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 257)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 89553)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 800)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 344)
     }
     
     func testPortraitImageProcessing() async {
@@ -165,16 +165,16 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.blurhash, "KdE:ess+RP^-n*RP%hWAV@")
+        XCTAssertEqual(imageInfo.blurhash, "KdE:ets+RP^-n*RP%OWAV@")
         XCTAssertEqual(imageInfo.size, 4_414_666)
         XCTAssertEqual(imageInfo.width, 3024)
         XCTAssertEqual(imageInfo.height, 4032)
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 156_948)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 450)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 600)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size, 264_500)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
     }
     
     // MARK: - Private
@@ -225,7 +225,12 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        XCTAssert(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
-        XCTAssert(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
+        if thumbnail.size.width > thumbnail.size.height {
+            XCTAssert(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
+            XCTAssert(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
+        } else {
+            XCTAssert(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
+            XCTAssert(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
+        }
     }
 }
