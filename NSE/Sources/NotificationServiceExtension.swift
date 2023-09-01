@@ -41,12 +41,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // - NotificationID could not be resolved
             return contentHandler(request.content)
         }
-        
-        if credentials.restorationToken.session.oidcData != nil {
-            // Notification content is disabled for OIDC sessions
-            // until token refresh is multi-process aware.
-            return contentHandler(request.content)
-        }
 
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
@@ -80,8 +74,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
-            let userSession = try NSEUserSession(credentials: credentials)
+            let userSession = try NSEUserSession(credentials: credentials, clientSessionDelegate: keychainController)
             self.userSession = userSession
+            
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard()

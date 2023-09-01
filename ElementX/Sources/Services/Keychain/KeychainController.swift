@@ -16,6 +16,7 @@
 
 import Foundation
 import KeychainAccess
+import MatrixRustSDK
 
 enum KeychainControllerService: String {
     case sessions
@@ -85,5 +86,21 @@ class KeychainController: KeychainControllerProtocol {
         } catch {
             MXLog.error("Failed removing all tokens")
         }
+    }
+    
+    // MARK: - ClientSessionDelegate
+    
+    func retrieveSessionFromKeychain(userId: String) throws -> Session {
+        MXLog.info("Retrieving an updated Session from the keychain.")
+        guard let session = restorationTokenForUsername(userId)?.session else {
+            throw ClientError.Generic(msg: "Failed to find RestorationToken in the Keychain.")
+        }
+        return session
+    }
+    
+    func saveSessionInKeychain(session: Session) {
+        MXLog.info("Saving session changes in the keychain.")
+        let restorationToken = RestorationToken(session: session)
+        setRestorationToken(restorationToken, forUsername: session.userId)
     }
 }

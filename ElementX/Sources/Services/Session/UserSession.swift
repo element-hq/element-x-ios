@@ -94,8 +94,6 @@ class UserSession: UserSessionProtocol {
                 case .receivedAuthError(let isSoftLogout):
                     callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
                     tearDownAuthErrorWatchdog()
-                case .updateRestorationToken:
-                    callbacks.send(.updateRestorationToken)
                 default:
                     break
                 }

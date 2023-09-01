@@ -86,8 +86,6 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
-        } tokenRefreshCallback: { [weak self] in
-            self?.callbacks.send(.updateRestorationToken)
         })
         
         await configureAppService()
@@ -536,12 +534,9 @@ private class RoomListServiceSyncIndicatorListenerProxy: RoomListServiceSyncIndi
 
 private class ClientDelegateWrapper: ClientDelegate {
     private let authErrorCallback: (Bool) -> Void
-    private let tokenRefreshCallback: () -> Void
     
-    init(authErrorCallback: @escaping (Bool) -> Void,
-         tokenRefreshCallback: @escaping () -> Void) {
+    init(authErrorCallback: @escaping (Bool) -> Void) {
         self.authErrorCallback = authErrorCallback
-        self.tokenRefreshCallback = tokenRefreshCallback
     }
     
     // MARK: - ClientDelegate
@@ -552,7 +547,6 @@ private class ClientDelegateWrapper: ClientDelegate {
     }
     
     func didRefreshTokens() {
-        MXLog.info("The session has updated tokens.")
-        tokenRefreshCallback()
+        MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }
 }

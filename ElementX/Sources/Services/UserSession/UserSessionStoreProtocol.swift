@@ -37,15 +37,14 @@ protocol UserSessionStoreProtocol {
     /// Returns the location to store user data for a particular username.
     var baseDirectory: URL { get }
     
+    /// Returns the delegate that should handle any changes to a `Client`'s `Session`.
+    var clientSessionDelegate: ClientSessionDelegate { get }
+    
     /// Restores an existing user session.
     func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Creates a user session for a new client from the SDK.
     func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError>
-
-    /// Refresh the restore token of the client for a given session.
-    @discardableResult
-    func refreshRestorationToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError>
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)

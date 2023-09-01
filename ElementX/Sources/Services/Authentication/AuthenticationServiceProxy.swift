@@ -44,7 +44,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                       passphrase: nil,
                                                       userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                                       oidcConfiguration: oidcConfiguration,
-                                                      customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString)
+                                                      customSlidingSyncProxy: appSettings.slidingSyncProxyURL?.absoluteString,
+                                                      sessionDelegate: userSessionStore.clientSessionDelegate,
+                                                      crossProcessRefreshLockId: InfoPlistReader.main.bundleIdentifier)
     }
     
     // MARK: - Public
