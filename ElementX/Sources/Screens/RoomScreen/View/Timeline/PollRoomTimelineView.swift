@@ -59,7 +59,7 @@ struct PollRoomTimelineView: View {
 
     private var questionView: some View {
         HStack(alignment: .top, spacing: 12) {
-            let asset = poll.hasEnded ? Asset.Images.endedPoll : Asset.Images.timelinePoll
+            let asset = poll.hasEnded ? Asset.Images.timelineEndedPoll : Asset.Images.timelinePoll
 
             CompoundIcon(customImage: asset.swiftUIImage)
 
