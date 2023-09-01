@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import Compound
 import SwiftUI
 
 struct PollRoomTimelineView: View {
