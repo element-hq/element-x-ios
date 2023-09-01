@@ -64,6 +64,7 @@ struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
         let placeholder: String
         let text: Binding<String>
         let autoCapitalization: TextInputAutocapitalization
+        let autoCorrectionDisabled: Bool
 
         var id = UUID()
     }
@@ -121,6 +122,7 @@ extension View {
                     ForEach(textFields) { textField in
                         TextField(textField.placeholder, text: textField.text)
                             .textInputAutocapitalization(textField.autoCapitalization)
+                            .autocorrectionDisabled(textField.autoCorrectionDisabled)
                     }
                 }
             }

@@ -208,10 +208,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                   }),
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.commonText,
                                                               text: textBinding,
-                                                              autoCapitalization: .never),
+                                                              autoCapitalization: .never,
+                                                              autoCorrectionDisabled: false),
                                AlertInfo<UUID>.AlertTextField(placeholder: L10n.richTextEditorUrlPlaceholder,
                                                               text: urlBinding,
-                                                              autoCapitalization: .never)])
+                                                              autoCapitalization: .never,
+                                                              autoCorrectionDisabled: true)])
     }
 
     private func makeSetUrlAlertInfo(urlBinding: Binding<String>, isEdit: Bool) -> AlertInfo<UUID> {
@@ -227,7 +229,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                   }),
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.richTextEditorUrlPlaceholder,
                                                               text: urlBinding,
-                                                              autoCapitalization: .never)])
+                                                              autoCapitalization: .never,
+                                                              autoCorrectionDisabled: true)])
     }
 
     private func makeEditChoiceAlertInfo(urlBinding: Binding<String>) -> AlertInfo<UUID> {
