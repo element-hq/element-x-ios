@@ -121,6 +121,7 @@
 "common_success" = "Success";
 "common_suggestions" = "Suggestions";
 "common_syncing" = "Syncing";
+"common_text" = "Text";
 "common_third_party_notices" = "Third-party notices";
 "common_topic" = "Topic";
 "common_topic_placeholder" = "What is this room about?";
@@ -182,10 +183,12 @@
 "rageshake_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
 "report_content_hint" = "Reason for reporting this content";
-"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Toggle bullet list";
+"rich_text_editor_close_formatting_options" = "Close formatting options";
 "rich_text_editor_code_block" = "Toggle code block";
 "rich_text_editor_composer_placeholder" = "Message…";
+"rich_text_editor_create_link" = "Create a link";
+"rich_text_editor_edit_link" = "Edit link";
 "rich_text_editor_format_bold" = "Apply bold format";
 "rich_text_editor_format_italic" = "Apply italic format";
 "rich_text_editor_format_strikethrough" = "Apply strikethrough format";
@@ -195,8 +198,11 @@
 "rich_text_editor_inline_code" = "Apply inline code format";
 "rich_text_editor_link" = "Set link";
 "rich_text_editor_numbered_list" = "Toggle numbered list";
+"rich_text_editor_open_compose_options" = "Open compose options";
 "rich_text_editor_quote" = "Toggle quote";
 "rich_text_editor_unindent" = "Unindent";
+"rich_text_editor_url_placeholder" = "Link";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "room_timeline_read_marker_title" = "New";
@@ -241,7 +247,8 @@
 "screen_create_poll_anonymous_desc" = "Show results only after poll ends";
 "screen_create_poll_anonymous_headline" = "Anonymous Poll";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_confirmation" = "Are you sure you would like to go back?";
+"screen_create_poll_discard_confirmation" = "Are you sure you want to discard this poll?";
+"screen_create_poll_discard_confirmation_title" = "Discard Poll";
 "screen_create_poll_question_desc" = "Question or topic";
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";

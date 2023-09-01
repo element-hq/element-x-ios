@@ -56,6 +56,9 @@ class CreatePollScreenUITests: XCTestCase {
             addOption.tap()
         }
 
+        if app.keyboards.count > 0 {
+            app.typeText("\n")
+        }
         app.swipeUp()
         
         XCTAssertFalse(addOption.exists)

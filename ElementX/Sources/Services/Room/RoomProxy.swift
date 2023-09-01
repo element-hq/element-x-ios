@@ -712,10 +712,10 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError> {
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.endPoll(pollStartId: pollStartID, text: .init(), txnId: genTransactionId()))
+                return try .success(self.room.endPoll(pollStartId: pollStartID, text: text, txnId: genTransactionId()))
             } catch {
                 MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
                 return .failure(.failedEndingPoll)

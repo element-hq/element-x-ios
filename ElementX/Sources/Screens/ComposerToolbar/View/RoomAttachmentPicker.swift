@@ -66,13 +66,11 @@ struct RoomAttachmentPicker: View {
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
 
-                if ServiceLocator.shared.settings.pollsCreationEnabled {
-                    Button {
-                        context.showAttachmentPopover = false
-                        context.send(viewAction: .displayPollForm)
-                    } label: {
-                        PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.timelinePollAttachment))
-                    }
+                Button {
+                    context.showAttachmentPopover = false
+                    context.send(viewAction: .displayPollForm)
+                } label: {
+                    PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.timelinePollAttachment))
                 }
             }
             .padding(.top, isPresented ? 20 : 0)

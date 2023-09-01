@@ -60,16 +60,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
 
-            Section("Polls") {
-                Toggle(isOn: $context.pollsInTimelineEnabled) {
-                    Text("View polls in timeline")
-                }
-
-                Toggle(isOn: $context.pollsCreationEnabled) {
-                    Text("View polls creation flow")
-                }
-            }
-
             Section("Rich Text Editor") {
                 Toggle(isOn: $context.richTextEditorEnabled) {
                     Text("Use the Rich Text Editor")

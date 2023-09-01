@@ -173,7 +173,7 @@ protocol RoomProxyProtocol {
 
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
 
-    func endPoll(pollStartID: String) async -> Result<Void, RoomProxyError>
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {
