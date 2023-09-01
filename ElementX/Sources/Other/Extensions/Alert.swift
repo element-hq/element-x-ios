@@ -57,9 +57,7 @@ struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
         var role: ButtonRole?
         let action: (() -> Void)?
 
-        var id: UUID {
-            UUID()
-        }
+        var id = UUID()
     }
 
     struct AlertTextField: Identifiable {
@@ -67,9 +65,7 @@ struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
         let text: Binding<String>
         let autoCapitalization: TextInputAutocapitalization
 
-        var id: UUID {
-            UUID()
-        }
+        var id = UUID()
     }
 
     /// An identifier that can be used to distinguish one error from another.
