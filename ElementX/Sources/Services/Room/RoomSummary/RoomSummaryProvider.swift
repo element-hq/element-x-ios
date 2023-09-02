@@ -143,13 +143,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [RoomListEntriesUpdate]) {
-        MXLog.info("Started processing room list diffs")
-        
         let span = MXLog.createSpan("\(name).process_room_list_diffs")
         span.enter()
         defer {
             span.exit()
         }
+        
+        MXLog.info("Started processing room list diffs")
         
         MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
