@@ -96,7 +96,7 @@ protocol RoomSummaryProviderProtocol {
     
     /// This is outside of the constructor because the invites list is added later on the Rust side.
     /// Wanted to be able to build the InvitesSummaryProvider directly instead of having to inform the HomeScreenViewModel about it later
-    func setRoomList(_ roomList: RoomList)
+    func setRoomList(_ roomList: RoomListProtocol)
     
     func updateVisibleRange(_ range: Range<Int>)
     

@@ -42,7 +42,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func setRoomList(_ roomList: RoomList) { }
+    func setRoomList(_ roomList: RoomListProtocol) { }
     
     func updateVisibleRange(_ range: Range<Int>) { }
     

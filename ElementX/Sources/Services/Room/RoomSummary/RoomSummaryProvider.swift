@@ -19,6 +19,11 @@ import Foundation
 import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
+    private enum Constants {
+        static let maxListSize = 500
+        static let resetDiffChunkingThreshhold = 50
+    }
+    
     private let roomListService: RoomListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
@@ -79,7 +84,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func setRoomList(_ roomList: RoomList) {
+    func setRoomList(_ roomList: RoomListProtocol) {
         guard listUpdatesTaskHandle == nil, stateUpdatesTaskHandle == nil else {
             return
         }
@@ -155,16 +160,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var updatedItems = rooms
         for diff in diffs {
-            let resetDiffChunkingThreshhold = 50
-            if case .reset(let values) = diff, values.count > resetDiffChunkingThreshhold {
-                // Special case resets in order to prevent large updates from blocking the UI
-                // Render the first resetDiffChunkingThreshhold as a reset and then append the rest to give the UI time to update
-                updatedItems = processDiff(.reset(values: Array(values[..<resetDiffChunkingThreshhold])), on: updatedItems)
-
-                // Once a reset is chunked dispatch the first part to the UI for rendering
-                rooms = updatedItems
-
-                updatedItems = processDiff(.append(values: Array(values.dropFirst(resetDiffChunkingThreshhold))), on: updatedItems)
+            if case .reset(let values) = diff {
+                // Limit the total reset to Constants.maxListSize, similar to `processDiff`
+                let values = values.prefix(Constants.maxListSize)
+                if values.count > Constants.resetDiffChunkingThreshhold {
+                    // Special case resets in order to prevent large updates from blocking the UI
+                    // Render the first resetDiffChunkingThreshhold as a reset and then append the rest to give the UI time to update
+                    updatedItems = processDiff(.reset(values: Array(values[..<Constants.resetDiffChunkingThreshhold])), on: updatedItems)
+                    
+                    // Once a reset is chunked dispatch the first part to the UI for rendering
+                    rooms = updatedItems
+                    
+                    updatedItems = processDiff(.append(values: Array(values.dropFirst(Constants.resetDiffChunkingThreshhold))), on: updatedItems)
+                } else {
+                    updatedItems = processDiff(diff, on: updatedItems)
+                }
             } else {
                 updatedItems = processDiff(diff, on: updatedItems)
             }
@@ -272,7 +282,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
+        // Diffs will be processed considering Constants.maxListSize so that the total size never exceeds that
+        
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
@@ -280,7 +293,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             MXLog.verbose("\(name): Push Front \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
+            
+            if rooms.count >= Constants.maxListSize {
+                guard let value = rooms.last else {
+                    fatalError()
+                }
+                
+                changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
+            }
         case .pushBack(let value):
+            guard rooms.count < Constants.maxListSize else {
+                break
+            }
+            
             MXLog.verbose("\(name): Push Back \(value.debugIdentifier)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
@@ -288,23 +313,49 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let debugIdentifiers = values.map(\.debugIdentifier)
             MXLog.verbose("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
+                guard index < Constants.maxListSize else {
+                    continue
+                }
+                
                 let summary = buildSummaryForRoomListEntry(value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .set(let index, let value):
+            guard index < Constants.maxListSize else {
+                break
+            }
+            
             MXLog.verbose("\(name): Update \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .insert(let index, let value):
+            guard index < Constants.maxListSize else {
+                break
+            }
+            
             MXLog.verbose("\(name): Insert at \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
+            
+            if rooms.count >= Constants.maxListSize {
+                guard let value = rooms.last else {
+                    fatalError()
+                }
+                
+                changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
+            }
         case .remove(let index):
+            guard index < Constants.maxListSize else {
+                break
+            }
+            
             let summary = rooms[Int(index)]
             MXLog.verbose("\(name): Remove \(summary.id ?? "") from \(index)")
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .reset(let values):
+            let values = values.prefix(Constants.maxListSize)
+            
             let debugIdentifiers = values.map(\.debugIdentifier)
             MXLog.verbose("\(name): Replace all items with \(debugIdentifiers)")
             for (index, summary) in rooms.enumerated() {
