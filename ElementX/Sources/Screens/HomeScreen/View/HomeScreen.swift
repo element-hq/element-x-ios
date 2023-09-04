@@ -26,8 +26,6 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
     @State private var bloomView: UIView?
-    @State private var alreadyDone = false
-    @State private var cancellable: Cancellable?
     
     var body: some View {
         GeometryReader { geometry in
@@ -92,30 +90,12 @@ struct HomeScreen: View {
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
         .introspect(.viewController, on: .iOS(.v16)) { controller in
-            if controller.navigationController?.topViewController == controller {
-//                bloomView?.isHidden = false
-            } else {
+            if controller.navigationController?.topViewController != controller {
                 bloomView?.isHidden = true
             }
             Task {
-//                cancellable = controller.navigationController?.topViewController.publisher
-//                    .sink { topViewController in
-//                        guard let bloomView else {
-//                            return
-//                        }
-//                        UIView.transition(with: bloomView, duration: 3.0, options: [.transitionCrossDissolve, .curveLinear]) {
-//                            let isHidden = topViewController != controller
-//                            if bloomView.isHidden != isHidden {
-//                                bloomView.isHidden = isHidden
-//                            }
-//                        }
-//                    }
-                if !alreadyDone,
-                   controller.navigationController?.topViewController == controller,
-                   let navContainer = controller.navigationController?.navigationBar.subviews.first,
-                   let leftBarButtonView = controller.navigationItem.leadingItemGroups.first?.barButtonItems.first?.customView {
-                    setNavigationBarBackground(leftBarButtonView: leftBarButtonView, navigationContainer: navContainer)
-                    alreadyDone = true
+                if bloomView == nil {
+                    setBloomView(controller: controller)
                 }
             }
         }
@@ -130,18 +110,20 @@ struct HomeScreen: View {
     }
     
     // MARK: - Private
-    
-    private func setNavigationBarBackground(leftBarButtonView: UIView, navigationContainer: UIView) {
-        let center = leftBarButtonView.convert(leftBarButtonView.center, to: navigationContainer.coordinateSpace)
-        let bgView = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 150)))
-        bgView.backgroundColor = .systemRed
-        bgView.center = center
-        bgView.translatesAutoresizingMaskIntoConstraints = true
-        bgView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-//                            bgView.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor).isActive = true
-//                            bgView.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor).isActive = true
-        navigationContainer.insertSubview(bgView, at: 0)
-        bloomView = bgView
+            
+    private func setBloomView(controller: UIViewController) {
+        guard let navigationBarContainer = controller.navigationController?.navigationBar.subviews.first,
+              let leftBarButtonView = controller.navigationItem.leadingItemGroups.first?.barButtonItems.first?.customView else {
+            return
+        }
+        
+        let hostingController = UIHostingController(rootView: bloom)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        hostingController.view.backgroundColor = .clear
+        navigationBarContainer.insertSubview(hostingController.view, at: 0)
+        bloomView = hostingController.view
+        hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor).isActive = true
+        hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor).isActive = true
     }
     
     @ViewBuilder
@@ -206,6 +188,25 @@ struct HomeScreen: View {
         ToolbarItemGroup(placement: .primaryAction) {
             newRoomButton
         }
+    }
+    
+    private var bloom: some View {
+        ZStack {
+            avatar
+                .blur(radius: 50).blendMode(.hardLight)
+                .opacity(0.25)
+            avatar
+                .blur(radius: 50).blendMode(.normal)
+                .opacity(0.25)
+        }
+    }
+    
+    private var avatar: some View {
+        LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                            name: context.viewState.userDisplayName,
+                            contentID: context.viewState.userID,
+                            avatarSize: .custom(256),
+                            imageProvider: context.imageProvider)
     }
     
     private var newRoomButton: some View {
