@@ -65,10 +65,10 @@ struct ComposerToolbarViewState: BindableState {
 }
 
 struct ComposerToolbarViewStateBindings {
-    var composerPlainText: String
-    var composerFocused: Bool
-    var composerActionsEnabled: Bool
-    var formatItems: [FormatItem]
+    var composerPlainText = ""
+    var composerFocused = false
+    var composerActionsEnabled = false
+    var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
 
     var showAttachmentPopover = false {

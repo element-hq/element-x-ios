@@ -40,7 +40,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     init(wysiwygViewModel: WysiwygComposerViewModel) {
         self.wysiwygViewModel = wysiwygViewModel
 
-        super.init(initialViewState: ComposerToolbarViewState(bindings: .init(composerPlainText: "", composerFocused: false, composerActionsEnabled: false, formatItems: [])))
+        super.init(initialViewState: ComposerToolbarViewState(bindings: .init()))
 
         context.$viewState
             .map(\.composerMode)
