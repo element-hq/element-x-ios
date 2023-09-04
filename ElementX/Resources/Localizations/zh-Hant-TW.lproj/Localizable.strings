@@ -1,5 +1,7 @@
 "Notification" = "通知";
 "a11y_hide_password" = "隱藏密碼";
+"a11y_notifications_mentions_only" = "Mentions only";
+"a11y_notifications_muted" = "Muted";
 "a11y_send_files" = "傳送檔案";
 "a11y_show_password" = "顯示密碼";
 "a11y_user_menu" = "使用者選單";
@@ -22,6 +24,7 @@
 "action_done" = "完成";
 "action_edit" = "編輯";
 "action_enable" = "啟用";
+"action_end_poll" = "End poll";
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
 "action_invite" = "邀請";
@@ -118,6 +121,7 @@
 "common_success" = "成功";
 "common_suggestions" = "建議";
 "common_syncing" = "同步中";
+"common_text" = "Text";
 "common_third_party_notices" = "Third-party notices";
 "common_topic" = "主題";
 "common_topic_placeholder" = "What is this room about?";
@@ -179,10 +183,12 @@
 "rageshake_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
 "report_content_hint" = "檢舉這個內容的原因";
-"rich_text_editor_a11y_add_attachment" = "新增附件";
 "rich_text_editor_bullet_list" = "切換項目編號";
+"rich_text_editor_close_formatting_options" = "Close formatting options";
 "rich_text_editor_code_block" = "切換程式碼區塊";
 "rich_text_editor_composer_placeholder" = "訊息";
+"rich_text_editor_create_link" = "Create a link";
+"rich_text_editor_edit_link" = "Edit link";
 "rich_text_editor_format_bold" = "套用粗體";
 "rich_text_editor_format_italic" = "套用斜體";
 "rich_text_editor_format_strikethrough" = "套用刪除線";
@@ -192,8 +198,11 @@
 "rich_text_editor_inline_code" = "Apply inline code format";
 "rich_text_editor_link" = "設定連結";
 "rich_text_editor_numbered_list" = "切換數字編號";
+"rich_text_editor_open_compose_options" = "Open compose options";
 "rich_text_editor_quote" = "切換引用";
 "rich_text_editor_unindent" = "減少縮排";
+"rich_text_editor_url_placeholder" = "Link";
+"rich_text_editor_a11y_add_attachment" = "新增附件";
 "room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "room_timeline_read_marker_title" = "新訊息";
@@ -238,7 +247,8 @@
 "screen_create_poll_anonymous_desc" = "Show results only after poll ends";
 "screen_create_poll_anonymous_headline" = "Anonymous Poll";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_confirmation" = "Are you sure you would like to go back?";
+"screen_create_poll_discard_confirmation" = "Are you sure you want to discard this poll?";
+"screen_create_poll_discard_confirmation_title" = "Discard Poll";
 "screen_create_poll_question_desc" = "Question or topic";
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";
@@ -308,6 +318,7 @@
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_attachment_source_location" = "位置";
 "screen_room_attachment_source_poll" = "投票";
+"screen_room_attachment_text_formatting" = "Text Formatting";
 "screen_room_details_add_topic_title" = "新增主題";
 "screen_room_details_already_a_member" = "已是成員";
 "screen_room_details_already_invited" = "已邀請";
