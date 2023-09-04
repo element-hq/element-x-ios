@@ -37,7 +37,7 @@ struct PlaceholderScreen: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background()
             .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
-            .toolbar(.hidden, for: .automatic)
+            .ignoresSafeArea(edges: .top)
     }
     
     @ViewBuilder
