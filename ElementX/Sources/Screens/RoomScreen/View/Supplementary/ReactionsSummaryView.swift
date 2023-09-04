@@ -78,7 +78,6 @@ struct ReactionsSummaryView: View {
                 .tag(reaction.key)
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
