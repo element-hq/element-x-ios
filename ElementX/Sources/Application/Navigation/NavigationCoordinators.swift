@@ -359,15 +359,19 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
 
 private struct NavigationSplitCoordinatorView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var isInSplitMode = true
+    
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.scenePhase) private var scenePhase
+    
     @ObservedObject var navigationSplitCoordinator: NavigationSplitCoordinator
     
     var body: some View {
         Group {
-            if horizontalSizeClass == .compact {
-                navigationStack
-            } else {
+            if isInSplitMode {
                 navigationSplitView
+            } else {
+                navigationStack
             }
         }
         // This needs to be handled on the top level otherwise sheets
@@ -379,6 +383,25 @@ private struct NavigationSplitCoordinatorView: View {
         }
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
+        }
+        // Handle `horizontalSizeClass` changes breaking the navigation bar
+        // https://github.com/vector-im/element-x-ios/issues/617
+        .onChange(of: horizontalSizeClass) { value in
+            guard scenePhase != .background else {
+                return
+            }
+            
+            isInSplitMode = value == .regular
+        }
+        .onChange(of: scenePhase) { value in
+            guard value == .active else {
+                return
+            }
+            
+            isInSplitMode = horizontalSizeClass == .regular
+        }
+        .task {
+            isInSplitMode = horizontalSizeClass == .regular
         }
     }
     
