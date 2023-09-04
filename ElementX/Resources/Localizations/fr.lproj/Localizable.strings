@@ -1,5 +1,7 @@
 "Notification" = "Notification";
 "a11y_hide_password" = "Masquer le mot de passe";
+"a11y_notifications_mentions_only" = "Mentions only";
+"a11y_notifications_muted" = "Muted";
 "a11y_send_files" = "Envoyer des fichiers";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_user_menu" = "Menu utilisateur";
@@ -22,6 +24,7 @@
 "action_done" = "Terminé";
 "action_edit" = "Modifier";
 "action_enable" = "Activer";
+"action_end_poll" = "End poll";
 "action_forgot_password" = "Mot de passe oublié ?";
 "action_forward" = "Transférer";
 "action_invite" = "Inviter";
@@ -118,6 +121,7 @@
 "common_success" = "Succès";
 "common_suggestions" = "Suggestions";
 "common_syncing" = "Synchronisation";
+"common_text" = "Text";
 "common_third_party_notices" = "Mentions tierces";
 "common_topic" = "Sujet";
 "common_topic_placeholder" = "De quoi parle ce salon ?";
@@ -179,10 +183,12 @@
 "rageshake_dialog_content" = "Vous semblez secouer le téléphone de frustration. Voulez-vous ouvrir le formulaire de rapport de problème ?";
 "report_content_explanation" = "Ce message sera signalé à l’administrateur de votre serveur d'accueil. Ils ne pourront lire aucun message chiffré.";
 "report_content_hint" = "Raison du signalement de ce contenu";
-"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "rich_text_editor_bullet_list" = "Afficher une liste à puces";
+"rich_text_editor_close_formatting_options" = "Close formatting options";
 "rich_text_editor_code_block" = "Afficher le bloc de code";
 "rich_text_editor_composer_placeholder" = "Envoyer un message…";
+"rich_text_editor_create_link" = "Create a link";
+"rich_text_editor_edit_link" = "Edit link";
 "rich_text_editor_format_bold" = "Appliquer le format gras";
 "rich_text_editor_format_italic" = "Appliquer le format italique";
 "rich_text_editor_format_strikethrough" = "Appliquer le format barré";
@@ -192,8 +198,11 @@
 "rich_text_editor_inline_code" = "Appliquer le formatage de code en ligne";
 "rich_text_editor_link" = "Définir un lien";
 "rich_text_editor_numbered_list" = "Afficher une liste numérotée";
+"rich_text_editor_open_compose_options" = "Open compose options";
 "rich_text_editor_quote" = "Afficher une citation";
 "rich_text_editor_unindent" = "Décaler vers la gauche";
+"rich_text_editor_url_placeholder" = "Link";
+"rich_text_editor_a11y_add_attachment" = "Add attachment";
 "room_timeline_beginning_of_room" = "Ceci est le début de %1$@.";
 "room_timeline_beginning_of_room_no_name" = "Ceci est le début de cette conversation.";
 "room_timeline_read_marker_title" = "Nouveau";
@@ -238,7 +247,8 @@
 "screen_create_poll_anonymous_desc" = "Show results only after poll ends";
 "screen_create_poll_anonymous_headline" = "Anonymous Poll";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_confirmation" = "Are you sure you would like to go back?";
+"screen_create_poll_discard_confirmation" = "Are you sure you want to discard this poll?";
+"screen_create_poll_discard_confirmation_title" = "Discard Poll";
 "screen_create_poll_question_desc" = "Question or topic";
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";
@@ -308,6 +318,7 @@
 "screen_room_attachment_source_gallery" = "Gallerie photo et vidéo";
 "screen_room_attachment_source_location" = "Location";
 "screen_room_attachment_source_poll" = "Poll";
+"screen_room_attachment_text_formatting" = "Text Formatting";
 "screen_room_details_add_topic_title" = "Définir un sujet";
 "screen_room_details_already_a_member" = "Déjà membre";
 "screen_room_details_already_invited" = "Déjà invité(e)";
