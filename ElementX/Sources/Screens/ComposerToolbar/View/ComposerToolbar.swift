@@ -145,6 +145,12 @@ struct ComposerToolbar: View {
     }
 }
 
+struct ComposerToolbar_Previews: PreviewProvider {
+    static var previews: some View {
+        ComposerToolbar.mock()
+    }
+}
+
 // MARK: - Mock
 
 extension ComposerToolbar {
