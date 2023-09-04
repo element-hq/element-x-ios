@@ -26,6 +26,7 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
     @State private var bloomView: UIView?
+    @State private var centeringConstraints: [NSLayoutConstraint] = []
     
     var body: some View {
         GeometryReader { geometry in
@@ -58,7 +59,7 @@ struct HomeScreen: View {
                     .disableAutocorrection(true)
                 }
             }
-            .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
+            .introspect(.scrollView, on: .iOS(.v16, .v17)) { scrollView in
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
@@ -90,9 +91,7 @@ struct HomeScreen: View {
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
         .introspect(.viewController, on: .iOS(.v16)) { controller in
-            if controller.navigationController?.topViewController != controller {
-                bloomView?.isHidden = true
-            }
+            bloomView?.isHidden = controller.navigationController?.topViewController != controller
             Task {
                 if bloomView == nil {
                     setBloomView(controller: controller)
@@ -103,9 +102,8 @@ struct HomeScreen: View {
             guard let bloomView else {
                 return
             }
-            UIView.transition(with: bloomView, duration: 3.0, options: .transitionCrossDissolve) {
-                bloomView.isHidden = false
-            }
+            centeringConstraints.forEach { $0.isActive = true }
+            bloomView.isHidden = false
         }
     }
     
@@ -122,8 +120,11 @@ struct HomeScreen: View {
         hostingController.view.backgroundColor = .clear
         navigationBarContainer.insertSubview(hostingController.view, at: 0)
         bloomView = hostingController.view
-        hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor).isActive = true
-        hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor).isActive = true
+        
+        centeringConstraints = [hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor),
+                                hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor)]
+        
+        centeringConstraints.forEach { $0.isActive = true }
     }
     
     @ViewBuilder
