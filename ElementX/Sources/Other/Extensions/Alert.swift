@@ -53,20 +53,18 @@ extension View {
 /// ```
 struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
     struct AlertButton: Identifiable {
+        let id = UUID()
         let title: String
         var role: ButtonRole?
         let action: (() -> Void)?
-
-        let id = UUID()
     }
 
     struct AlertTextField: Identifiable {
+        let id = UUID()
         let placeholder: String
         let text: Binding<String>
         let autoCapitalization: TextInputAutocapitalization
         let autoCorrectionDisabled: Bool
-
-        let id = UUID()
     }
 
     /// An identifier that can be used to distinguish one error from another.
@@ -117,6 +115,7 @@ extension View {
                     }
                 }
             }
+
             if let textFields = item.textFields {
                 VStack(spacing: 24) {
                     ForEach(textFields) { textField in
@@ -126,9 +125,11 @@ extension View {
                     }
                 }
             }
+
             Button(item.primaryButton.title, role: item.primaryButton.role) {
                 item.primaryButton.action?()
             }
+
             if let secondaryButton = item.secondaryButton {
                 Button(secondaryButton.title, role: secondaryButton.role) {
                     secondaryButton.action?()
