@@ -26,7 +26,7 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
     @State private var bloomView: UIView?
-    @State private var centeringConstraints: [NSLayoutConstraint] = []
+    @State private var bloomConstraints: [NSLayoutConstraint] = []
     
     var body: some View {
         GeometryReader { geometry in
@@ -91,19 +91,19 @@ struct HomeScreen: View {
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
         .introspect(.viewController, on: .iOS(.v16)) { controller in
-            bloomView?.isHidden = controller.navigationController?.topViewController != controller
             Task {
                 if bloomView == nil {
                     setBloomView(controller: controller)
                 }
             }
-        }
-        .onAppear {
-            guard let bloomView else {
-                return
+            let isHidden = controller.navigationController?.topViewController != controller
+            bloomView?.isHidden = isHidden
+            Task {
+                try? await Task.sleep(for: .milliseconds(1))
+                if !isSearching, bloomView?.isHidden == false {
+                    bloomConstraints.forEach { $0.isActive = true }
+                }
             }
-            centeringConstraints.forEach { $0.isActive = true }
-            bloomView.isHidden = false
         }
     }
     
@@ -115,16 +115,16 @@ struct HomeScreen: View {
             return
         }
         
+        navigationBarContainer.clipsToBounds = true
         let hostingController = UIHostingController(rootView: bloom)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         hostingController.view.backgroundColor = .clear
         navigationBarContainer.insertSubview(hostingController.view, at: 0)
         bloomView = hostingController.view
         
-        centeringConstraints = [hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor),
-                                hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor)]
-        
-        centeringConstraints.forEach { $0.isActive = true }
+        bloomConstraints = [hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor),
+                            hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor)]
+        bloomConstraints.forEach { $0.isActive = true }
     }
     
     @ViewBuilder
@@ -194,11 +194,11 @@ struct HomeScreen: View {
     private var bloom: some View {
         ZStack {
             avatar
-                .blur(radius: 50).blendMode(.hardLight)
-                .opacity(0.25)
+//                .blur(radius: 64).blendMode(.hardLight)
+//                .opacity(0.20)
             avatar
-                .blur(radius: 50).blendMode(.normal)
-                .opacity(0.25)
+//                .blur(radius: 64).blendMode(.saturation)
+//                .opacity(0.75)
         }
     }
     
