@@ -20,6 +20,7 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct HomeScreen: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.isPresented) private var isPresented
     @ObservedObject var context: HomeScreenViewModel.Context
     
@@ -196,10 +197,10 @@ struct HomeScreen: View {
         ZStack {
             avatar
                 .blur(radius: 64).blendMode(.hardLight)
-                .opacity(0.20)
+                .opacity(colorScheme == .dark ? 0.15 : 0.20)
             avatar
-                .blur(radius: 64).blendMode(.saturation)
-                .opacity(0.75)
+                .blur(radius: 64).blendMode(colorScheme == .dark ? .normal : .saturation)
+                .opacity(colorScheme == .dark ? 0.20 : 0.75)
         }
     }
     
