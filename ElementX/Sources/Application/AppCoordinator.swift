@@ -412,6 +412,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return
         }
         
+        // The user will log out, clear any existing notifications
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
         Task {
             // First log out from the server
             let accountLogoutURL = await userSession.clientProxy.logout()
