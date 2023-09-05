@@ -26,28 +26,64 @@ struct ComposerToolbar: View {
     @ScaledMetric private var sendButtonIconSize = 16
 
     var body: some View {
+        VStack(spacing: 8) {
+            topBar
+            if context.composerActionsEnabled {
+                bottomBar
+            }
+        }
+        .alert(item: $context.alertInfo)
+    }
+
+    private var topBar: some View {
         HStack(alignment: .bottom, spacing: 10) {
-            RoomAttachmentPicker(context: context)
-                .padding(.bottom, 5) // centre align with the send button
+            if !context.composerActionsEnabled {
+                RoomAttachmentPicker(context: context)
+                    .padding(.bottom, 5) // centre align with the send button
+            }
             messageComposer
                 .environmentObject(context)
-            Button {
-                context.send(viewAction: .sendMessage)
-            } label: {
-                submitButtonImage
-                    .symbolVariant(.fill)
-                    .font(.compound.bodyLG)
-                    .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .global.white)
-                    .background {
-                        Circle()
-                            .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
-                    }
+            if !context.composerActionsEnabled {
+                sendButton
             }
-            .disabled(context.viewState.sendButtonDisabled)
-            .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
-            .keyboardShortcut(.return, modifiers: [.command])
-            .padding([.vertical, .trailing], 6)
         }
+    }
+
+    private var bottomBar: some View {
+        HStack(alignment: .bottom, spacing: 10) {
+            Button {
+                context.composerActionsEnabled = false
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.compound.headingLG)
+                    .foregroundColor(.compound.textActionPrimary)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
+            .padding(.bottom, 5) // centre align with the send button
+            FormattingToolbar(formatItems: context.formatItems) { action in
+                context.send(viewAction: .composerAction(action: action.composerAction))
+            }
+            sendButton
+        }
+    }
+
+    private var sendButton: some View {
+        Button {
+            context.send(viewAction: .sendMessage)
+        } label: {
+            submitButtonImage
+                .symbolVariant(.fill)
+                .font(.compound.bodyLG)
+                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .global.white)
+                .background {
+                    Circle()
+                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
+                }
+        }
+        .disabled(context.viewState.sendButtonDisabled)
+        .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
+        .keyboardShortcut(.return, modifiers: [.command])
+        .padding([.vertical, .trailing], 6)
     }
     
     private var messageComposer: some View {
@@ -106,6 +142,12 @@ struct ComposerToolbar: View {
         func isPasteSupported(for itemProvider: NSItemProvider) -> Bool {
             itemProvider.isSupportedForPasteOrDrop
         }
+    }
+}
+
+struct ComposerToolbar_Previews: PreviewProvider {
+    static var previews: some View {
+        ComposerToolbar.mock()
     }
 }
 

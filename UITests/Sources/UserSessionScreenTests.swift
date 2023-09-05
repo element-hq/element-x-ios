@@ -21,21 +21,28 @@ import XCTest
 class UserSessionScreenTests: XCTestCase {
     func testUserSessionFlows() async throws {
         let roomName = "First room"
-        
         let app = Application.launch(.userSessionScreen)
-
         try await app.assertScreenshot(.userSessionScreen, step: 1)
-        
+
         app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        
         XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
-        
         try await Task.sleep(for: .seconds(1))
-    
         try await app.assertScreenshot(.userSessionScreen, step: 2)
-        
-        app.buttons[A11yIdentifiers.roomScreen.attachmentPicker].tap()
-        
+
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap()
         try await app.assertScreenshot(.userSessionScreen, step: 3)
+    }
+
+    func testUserSessionReply() async throws {
+        let roomName = "First room"
+        let app = Application.launch(.userSessionScreenReply, disableTimelineAccessibility: false)
+        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
+        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+
+        let cell = app.cells.firstMatch
+        cell.swipeRight(velocity: .fast)
+
+        try await app.assertScreenshot(.userSessionScreenReply)
     }
 }

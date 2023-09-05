@@ -50,6 +50,7 @@ enum UITestsScreenIdentifier: String {
     case roomWithUndisclosedPolls
     case sessionVerification
     case userSessionScreen
+    case userSessionScreenReply
     case roomDetailsScreen
     case roomDetailsScreenWithRoomAvatar
     case roomDetailsScreenWithEmptyTopic

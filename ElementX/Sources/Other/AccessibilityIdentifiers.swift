@@ -106,12 +106,32 @@ struct A11yIdentifiers {
     struct RoomScreen {
         let name = "room-name"
         let avatar = "room-avatar"
-        let attachmentPicker = "room-attachment_picker"
         let attachmentPickerPhotoLibrary = "room-attachment_picker_photo_library"
         let attachmentPickerDocuments = "room-attachment_picker_documents"
         let attachmentPickerCamera = "room-attachment_picker_camera"
         let attachmentPickerLocation = "room-attachment_picker_location"
+        let attachmentPickerPoll = "room-attachment_picker_poll"
+        let attachmentPickerTextFormatting = "room-attachment_picker_text_formatting"
         let timelineItemActionMenu = "room-timeline_item_action_menu"
+
+        let composerToolbar = ComposerToolbar()
+
+        struct ComposerToolbar {
+            let bold = "composer_toolbar-bold"
+            let italic = "composer_toolbar-italic"
+            let underline = "composer_toolbar-underline"
+            let strikethrough = "composer_toolbar-strikethrough"
+            let unorderedList = "composer_toolbar-unordered_list"
+            let orderedList = "composer_toolbar-ordered_list"
+            let indent = "composer_toolbar-indent"
+            let unindent = "composer_toolbar-unindent"
+            let inlineCode = "composer_toolbar-inline_code"
+            let codeBlock = "composer_toolbar-code_block"
+            let quote = "composer_toolbar-quote"
+            let link = "composer_toolbar-link"
+            let openComposeOptions = "composer_toolbar-open_compose_options"
+            let closeFormattingOptions = "composer_toolbar-close-formatting-options"
+        }
     }
     
     struct RoomDetailsScreen {

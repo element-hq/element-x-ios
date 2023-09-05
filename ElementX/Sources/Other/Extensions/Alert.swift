@@ -52,10 +52,19 @@ extension View {
 ///     .alert(item: $context.alertInfo)
 /// ```
 struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
-    struct AlertButton {
+    struct AlertButton: Identifiable {
+        let id = UUID()
         let title: String
         var role: ButtonRole?
         let action: (() -> Void)?
+    }
+
+    struct AlertTextField: Identifiable {
+        let id = UUID()
+        let placeholder: String
+        let text: Binding<String>
+        let autoCapitalization: TextInputAutocapitalization
+        let autoCorrectionDisabled: Bool
     }
 
     /// An identifier that can be used to distinguish one error from another.
@@ -68,6 +77,10 @@ struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
     var primaryButton = AlertButton(title: L10n.actionOk, action: nil)
     /// The alert's secondary button title and action.
     var secondaryButton: AlertButton?
+    /// The alert's displayed text fields.
+    var textFields: [AlertTextField]?
+    /// The alert's additional buttons displayed vertically above the primary button.
+    var verticalButtons: [AlertButton]?
 }
 
 extension AlertInfo {
@@ -95,9 +108,28 @@ extension AlertInfo {
 extension View {
     func alert<T: Hashable>(item: Binding<AlertInfo<T>?>) -> some View {
         alert(item: item) { item in
+            if let verticalButtons = item.verticalButtons {
+                ForEach(verticalButtons) { button in
+                    Button(button.title, role: button.role) {
+                        button.action?()
+                    }
+                }
+            }
+
+            if let textFields = item.textFields {
+                VStack(spacing: 24) {
+                    ForEach(textFields) { textField in
+                        TextField(textField.placeholder, text: textField.text)
+                            .textInputAutocapitalization(textField.autoCapitalization)
+                            .autocorrectionDisabled(textField.autoCorrectionDisabled)
+                    }
+                }
+            }
+
             Button(item.primaryButton.title, role: item.primaryButton.role) {
                 item.primaryButton.action?()
             }
+
             if let secondaryButton = item.secondaryButton {
                 Button(secondaryButton.title, role: secondaryButton.role) {
                     secondaryButton.action?()

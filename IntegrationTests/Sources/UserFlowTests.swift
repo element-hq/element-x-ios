@@ -59,13 +59,13 @@ class UserFlowTests: XCTestCase {
         for identifier in [A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary,
                            A11yIdentifiers.roomScreen.attachmentPickerDocuments,
                            A11yIdentifiers.roomScreen.attachmentPickerLocation] {
-            tapOnButton(A11yIdentifiers.roomScreen.attachmentPicker)
+            tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
             tapOnButton(identifier)
             tapOnButton("Cancel")
         }
                 
         // Open attachments picker
-        tapOnButton(A11yIdentifiers.roomScreen.attachmentPicker)
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
 
         // Open photo library picker
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
