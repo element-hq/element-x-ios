@@ -89,19 +89,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             return
         }
         
-        #if targetEnvironment(simulator)
-        let canOpenURL = false // Safari can't access the cookie on the iOS 16 simulator 🤷‍♂️
-        #else
-        let canOpenURL = UIApplication.shared.canOpenURL(accountURL)
-        #endif
-        
-        if canOpenURL {
-            UIApplication.shared.open(accountURL)
-        } else {
-            // Fall back to an ASWebAuthenticationSession to handle the URL inside the app.
-            accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
-            accountSettingsPresenter?.start()
-        }
+        // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
+        // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
+        accountSettingsPresenter?.start()
     }
     
     private func presentAnalyticsScreen() {
