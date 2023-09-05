@@ -36,4 +36,8 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(ProgressView("Running Unit Tests"))
     }
+    
+    func handleUniversalLink(_ url: URL) {
+        fatalError("Not implemented.")
+    }
 }
