@@ -91,7 +91,7 @@ struct HomeScreen: View {
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
-        .introspect(.viewController, on: .iOS(.v16)) { controller in
+        .introspect(.viewController, on: .iOS(.v16, .v17)) { controller in
             Task {
                 if bloomView == nil {
                     setBloomView(controller: controller)
