@@ -31,7 +31,7 @@ struct RoomAttachmentPicker: View {
                 .font(.compound.headingLG)
                 .foregroundColor(.compound.textActionPrimary)
         }
-        .accessibilityIdentifier(A11yIdentifiers.composerToolbar.openComposeOptions)
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         .popover(isPresented: $context.showAttachmentPopover) {
             VStack(alignment: .leading, spacing: 0.0) {
                 Button {

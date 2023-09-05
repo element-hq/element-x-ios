@@ -146,29 +146,29 @@ extension FormatItem {
     var accessibilityIdentifier: String {
         switch type {
         case .bold:
-            return A11yIdentifiers.composerToolbar.bold
+            return A11yIdentifiers.roomScreen.composerToolbar.bold
         case .italic:
-            return A11yIdentifiers.composerToolbar.italic
+            return A11yIdentifiers.roomScreen.composerToolbar.italic
         case .underline:
-            return A11yIdentifiers.composerToolbar.underline
+            return A11yIdentifiers.roomScreen.composerToolbar.underline
         case .strikeThrough:
-            return A11yIdentifiers.composerToolbar.strikethrough
+            return A11yIdentifiers.roomScreen.composerToolbar.strikethrough
         case .unorderedList:
-            return A11yIdentifiers.composerToolbar.unorderedList
+            return A11yIdentifiers.roomScreen.composerToolbar.unorderedList
         case .orderedList:
-            return A11yIdentifiers.composerToolbar.orderedList
+            return A11yIdentifiers.roomScreen.composerToolbar.orderedList
         case .indent:
-            return A11yIdentifiers.composerToolbar.indent
+            return A11yIdentifiers.roomScreen.composerToolbar.indent
         case .unindent:
-            return A11yIdentifiers.composerToolbar.unindent
+            return A11yIdentifiers.roomScreen.composerToolbar.unindent
         case .inlineCode:
-            return A11yIdentifiers.composerToolbar.inlineCode
+            return A11yIdentifiers.roomScreen.composerToolbar.inlineCode
         case .codeBlock:
-            return A11yIdentifiers.composerToolbar.codeBlock
+            return A11yIdentifiers.roomScreen.composerToolbar.codeBlock
         case .quote:
-            return A11yIdentifiers.composerToolbar.quote
+            return A11yIdentifiers.roomScreen.composerToolbar.quote
         case .link:
-            return A11yIdentifiers.composerToolbar.link
+            return A11yIdentifiers.roomScreen.composerToolbar.link
         }
     }
 

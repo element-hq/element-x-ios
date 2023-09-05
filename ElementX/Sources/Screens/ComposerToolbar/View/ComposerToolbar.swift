@@ -58,7 +58,7 @@ struct ComposerToolbar: View {
                     .font(.compound.headingLG)
                     .foregroundColor(.compound.textActionPrimary)
             }
-            .accessibilityIdentifier(A11yIdentifiers.composerToolbar.closeFormattingOptions)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
             .padding(.bottom, 5) // centre align with the send button
             FormattingToolbar(formatItems: context.formatItems) { action in
                 context.send(viewAction: .composerAction(action: action.composerAction))

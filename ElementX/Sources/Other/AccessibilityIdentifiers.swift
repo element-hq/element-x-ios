@@ -41,7 +41,6 @@ struct A11yIdentifiers {
     static let notificationSettingsScreen = NotificationSettingsScreen()
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let createPollScreen = CreatePollScreen()
-    static let composerToolbar = ComposerToolbar()
 
     struct AnalyticsPromptScreen {
         let title = "analytics_prompt-title"
@@ -114,6 +113,25 @@ struct A11yIdentifiers {
         let attachmentPickerPoll = "room-attachment_picker_poll"
         let attachmentPickerTextFormatting = "room-attachment_picker_text_formatting"
         let timelineItemActionMenu = "room-timeline_item_action_menu"
+
+        let composerToolbar = ComposerToolbar()
+
+        struct ComposerToolbar {
+            let bold = "composer_toolbar-bold"
+            let italic = "composer_toolbar-italic"
+            let underline = "composer_toolbar-underline"
+            let strikethrough = "composer_toolbar-strikethrough"
+            let unorderedList = "composer_toolbar-unordered_list"
+            let orderedList = "composer_toolbar-ordered_list"
+            let indent = "composer_toolbar-indent"
+            let unindent = "composer_toolbar-unindent"
+            let inlineCode = "composer_toolbar-inline_code"
+            let codeBlock = "composer_toolbar-code_block"
+            let quote = "composer_toolbar-quote"
+            let link = "composer_toolbar-link"
+            let openComposeOptions = "composer_toolbar-open_compose_options"
+            let closeFormattingOptions = "composer_toolbar-close-formatting-options"
+        }
     }
     
     struct RoomDetailsScreen {
@@ -214,22 +232,5 @@ struct A11yIdentifiers {
         func roomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"
         }
-    }
-
-    struct ComposerToolbar {
-        let bold = "composer_toolbar-bold"
-        let italic = "composer_toolbar-italic"
-        let underline = "composer_toolbar-underline"
-        let strikethrough = "composer_toolbar-strikethrough"
-        let unorderedList = "composer_toolbar-unordered_list"
-        let orderedList = "composer_toolbar-ordered_list"
-        let indent = "composer_toolbar-indent"
-        let unindent = "composer_toolbar-unindent"
-        let inlineCode = "composer_toolbar-inline_code"
-        let codeBlock = "composer_toolbar-code_block"
-        let quote = "composer_toolbar-quote"
-        let link = "composer_toolbar-link"
-        let openComposeOptions = "composer_toolbar-open_compose_options"
-        let closeFormattingOptions = "composer_toolbar-close-formatting-options"
     }
 }
