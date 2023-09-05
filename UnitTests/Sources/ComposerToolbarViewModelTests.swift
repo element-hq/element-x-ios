@@ -20,9 +20,20 @@ import XCTest
 
 @MainActor
 class ComposerToolbarViewModelTests: XCTestCase {
+    private var appSettings: AppSettings!
+    private var wysiwygViewModel: WysiwygComposerViewModel!
+    private var viewModel: ComposerToolbarViewModel!
+
+    override func setUp() {
+        AppSettings.reset()
+        appSettings = AppSettings()
+        appSettings.richTextEditorEnabled = true
+        ServiceLocator.shared.register(appSettings: appSettings)
+        wysiwygViewModel = WysiwygComposerViewModel()
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+    }
+
     func testComposerFocus() {
-        let wysiwygViewModel = WysiwygComposerViewModel()
-        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.process(roomAction: .removeFocus)
@@ -30,8 +41,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerMode() {
-        let wysiwygViewModel = WysiwygComposerViewModel()
-        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         viewModel.process(roomAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
@@ -40,8 +49,6 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerModeIsPublished() {
-        let wysiwygViewModel = WysiwygComposerViewModel()
-        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
@@ -62,9 +69,27 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testHandleKeyCommand() {
-        let wysiwygViewModel = WysiwygComposerViewModel()
-        let viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
         XCTAssertTrue(viewModel.handleKeyCommand(.enter))
         XCTAssertFalse(viewModel.handleKeyCommand(.shiftEnter))
+    }
+
+    func testComposerFocusAfterEnablingRTE() {
+        viewModel.process(viewAction: .enableTextFormatting)
+        XCTAssertTrue(viewModel.state.bindings.composerFocused)
+    }
+
+    func testRTEDisabledAfterSendingMessage() {
+        viewModel.process(viewAction: .enableTextFormatting)
+        XCTAssertTrue(viewModel.state.bindings.composerFocused)
+        viewModel.state.composerEmpty = false
+        viewModel.process(viewAction: .sendMessage)
+        XCTAssertFalse(viewModel.state.bindings.composerActionsEnabled)
+    }
+
+    func testAlertIsShownAfterLinkAction() {
+        XCTAssertNil(viewModel.state.bindings.alertInfo)
+        viewModel.process(viewAction: .enableTextFormatting)
+        viewModel.process(viewAction: .composerAction(action: .link))
+        XCTAssertNotNil(viewModel.state.bindings.alertInfo)
     }
 }
