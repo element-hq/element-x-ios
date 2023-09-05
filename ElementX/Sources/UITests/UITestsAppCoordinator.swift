@@ -60,6 +60,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     func toPresentable() -> AnyView {
         navigationRootCoordinator.toPresentable()
     }
+    
+    func handleUniversalLink(_ url: URL) {
+        fatalError("Not implemented.")
+    }
 }
 
 @MainActor

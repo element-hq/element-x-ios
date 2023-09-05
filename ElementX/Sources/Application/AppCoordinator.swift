@@ -24,6 +24,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let appSettings: AppSettings
     
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: BackgroundTaskProtocol?
@@ -71,6 +72,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             AppSettings.reset()
         }
         
+        self.appSettings = appSettings
+        
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
@@ -88,7 +91,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
 
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
-                                                  appSettings: ServiceLocator.shared.settings)
+                                                  appSettings: appSettings)
         notificationManager.delegate = self
         notificationManager.start()
         
@@ -96,13 +99,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             fatalError("The app's version number **must** use semver for migration purposes.")
         }
         
-        if let previousVersion = ServiceLocator.shared.settings.lastVersionLaunched.flatMap(Version.init) {
+        if let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init) {
             performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
         } else {
             // The app has been deleted since the previous run. Reset everything.
             wipeUserData(includingSettings: true)
         }
-        ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
+        appSettings.lastVersionLaunched = currentVersion.description
 
         setupStateMachine()
 
@@ -130,6 +133,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.userIndicatorController.toPresentable()
                 .environment(\.analyticsService, ServiceLocator.shared.analytics)
         )
+    }
+    
+    func handleUniversalLink(_ url: URL) {
+        // Parse into an AppRoute to redirect these in a type safe way.
+        
+        // Until we have an OIDC callback AppRoute, handle it manually.
+        if url.absoluteString.starts(with: appSettings.oidcRedirectURL.absoluteString) {
+            MXLog.error("OIDC callback through Universal Links not implemented.")
+        }
     }
     
     // MARK: - AuthenticationCoordinatorDelegate
@@ -207,13 +219,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
         ServiceLocator.shared.register(appSettings: appSettings)
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
-        ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL,
-                                                                          sentryURL: ServiceLocator.shared.settings.bugReportSentryURL,
-                                                                          applicationId: ServiceLocator.shared.settings.bugReportApplicationId,
+        ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,
+                                                                          sentryURL: appSettings.bugReportSentryURL,
+                                                                          applicationId: appSettings.bugReportApplicationId,
                                                                           sdkGitSHA: sdkGitSha(),
-                                                                          maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize))
+                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: PostHogAnalyticsClient(),
-                                                                   appSettings: ServiceLocator.shared.settings,
+                                                                   appSettings: appSettings,
                                                                    bugReportService: ServiceLocator.shared.bugReportService))
     }
     
@@ -231,7 +243,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         if oldVersion < Version(1, 1, 7) {
             MXLog.info("Migrating to v1.1.0, marking accounts as migrated.")
             for userID in userSessionStore.userIDs {
-                ServiceLocator.shared.settings.migratedAccounts[userID] = true
+                appSettings.migratedAccounts[userID] = true
             }
         }
     }
@@ -300,10 +312,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private func startAuthentication() {
         let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
-        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: ServiceLocator.shared.settings)
+        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: appSettings)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
                                                               navigationStackCoordinator: authenticationNavigationStackCoordinator,
-                                                              appSettings: ServiceLocator.shared.settings,
+                                                              appSettings: appSettings,
                                                               analytics: ServiceLocator.shared.analytics,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
         authenticationCoordinator?.delegate = self
@@ -329,7 +341,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                           userDisplayName: displayName,
                                                           deviceID: userSession.deviceID)
             
-            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: ServiceLocator.shared.settings)
+            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: appSettings)
             _ = await authenticationService.configure(for: userSession.homeserver)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
@@ -361,7 +373,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     roomTimelineControllerFactory: RoomTimelineControllerFactory(),
-                                                                    appSettings: ServiceLocator.shared.settings,
+                                                                    appSettings: appSettings,
                                                                     analytics: ServiceLocator.shared.analytics)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
@@ -668,7 +680,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     // MARK: Background app refresh
     
     private func registerBackgroundAppRefresh() {
-        let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier, using: .main) { [weak self] task in
+        let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: appSettings.backgroundAppRefreshTaskIdentifier, using: .main) { [weak self] task in
             guard let task = task as? BGAppRefreshTask else {
                 MXLog.error("Invalid background app refresh configuration")
                 return
@@ -681,7 +693,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     private func scheduleBackgroundAppRefresh() {
-        let request = BGAppRefreshTaskRequest(identifier: ServiceLocator.shared.settings.backgroundAppRefreshTaskIdentifier)
+        let request = BGAppRefreshTaskRequest(identifier: appSettings.backgroundAppRefreshTaskIdentifier)
         
         // We have other background tasks that keep the app alive
         request.earliestBeginDate = Date(timeIntervalSinceNow: 30)

@@ -18,4 +18,5 @@ import Foundation
 
 protocol AppCoordinatorProtocol: CoordinatorProtocol {
     var notificationManager: NotificationManagerProtocol { get }
+    func handleUniversalLink(_ url: URL)
 }

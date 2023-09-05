@@ -35,6 +35,7 @@ struct Application: App {
         WindowGroup {
             appCoordinator.toPresentable()
                 .statusBarHidden(shouldHideStatusBar)
+                .onOpenURL { appCoordinator.handleUniversalLink($0) }
                 .introspect(.window, on: .iOS(.v16)) { window in
                     // Workaround for SwiftUI not consistently applying the tint colour to Alerts/Confirmation Dialogs.
                     window.tintColor = .compound.textActionPrimary
