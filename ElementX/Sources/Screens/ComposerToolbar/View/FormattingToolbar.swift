@@ -31,11 +31,11 @@ struct FormattingToolbar: View {
                     } label: {
                         item.icon
                             .renderingMode(.template)
-                            .foregroundColor(getForegroundColor(for: item))
+                            .foregroundColor(item.foregroundColor)
                     }
                     .disabled(item.state == .disabled)
                     .frame(width: 44, height: 44)
-                    .background(getBackgroundColor(for: item))
+                    .background(item.backgroundColor)
                     .cornerRadius(8)
                     .accessibilityIdentifier(item.accessibilityIdentifier)
                     .accessibilityLabel(item.accessibilityLabel)
@@ -43,19 +43,26 @@ struct FormattingToolbar: View {
             }
         }
     }
+}
 
-    private func getForegroundColor(for item: FormatItem) -> Color {
-        switch item.state {
-        case .reversed: return .compound.iconOnSolidPrimary
-        case .enabled: return .compound.iconSecondary
-        case .disabled: return .compound.iconDisabled
+private extension FormatItem {
+    var foregroundColor: Color {
+        switch state {
+        case .reversed:
+            return .compound.iconOnSolidPrimary
+        case .enabled:
+            return .compound.iconSecondary
+        case .disabled:
+            return .compound.iconDisabled
         }
     }
 
-    private func getBackgroundColor(for item: FormatItem) -> Color {
-        switch item.state {
-        case .reversed: return .compound.bgActionPrimaryRest
-        default: return .compound.bgCanvasDefault
+    var backgroundColor: Color {
+        switch state {
+        case .reversed:
+            return .compound.bgActionPrimaryRest
+        default:
+            return .compound.bgCanvasDefault
         }
     }
 }
