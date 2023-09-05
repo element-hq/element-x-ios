@@ -59,7 +59,7 @@ struct MessageComposer: View {
                 }
             }
         }
-        .padding([.leading, .trailing], 12.0)
+        .padding(.horizontal, 12.0)
         .clipped()
         .background {
             ZStack {
@@ -107,16 +107,16 @@ private struct MessageComposerReplyHeader: View {
             .padding(4.0)
             .background(Color.compound.bgCanvasDefault)
             .cornerRadius(13.0)
-            .padding([.trailing, .vertical], 8.0)
-            .padding([.leading], -4.0)
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     Image(systemName: "xmark")
                         .font(.compound.bodySM.weight(.medium))
                         .foregroundColor(.compound.iconTertiary)
-                        .padding(16.0)
+                        .padding(8.0)
                 }
             }
+            .padding(.vertical, 8.0)
+            .padding(.horizontal, -4.0)
     }
 }
 
