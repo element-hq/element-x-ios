@@ -60,7 +60,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         Task {
             await run(with: credentials,
                       roomId: roomId,
-                      eventId: eventId)
+                      eventId: eventId,
+                      unreadCount: request.unreadCount)
         }
     }
     
@@ -73,7 +74,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     private func run(with credentials: KeychainCredentials,
                      roomId: String,
-                     eventId: String) async {
+                     eventId: String,
+                     unreadCount: Int?) async {
         MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         do {
@@ -102,6 +104,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 modifiedContent = latestContent
             }
             // We still notify, but without the media attachment if it fails to load
+            
+            // Finally update the app badge
+            if let unreadCount {
+                modifiedContent?.badge = NSNumber(value: unreadCount)
+            }
+            
             return notify()
         } catch {
             MXLog.error("NSE run error: \(error)")
