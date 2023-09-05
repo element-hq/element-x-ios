@@ -99,7 +99,8 @@ struct HomeScreen: View {
             let isHidden = controller.navigationController?.topViewController != controller
             bloomView?.isHidden = isHidden
             Task {
-                try? await Task.sleep(for: .milliseconds(1))
+                // Required to wait when refresh the constraints otherwise might cause crashes
+                await Task.yield()
                 if !isSearching, bloomView?.isHidden == false {
                     bloomConstraints.forEach { $0.isActive = true }
                 }
@@ -194,11 +195,11 @@ struct HomeScreen: View {
     private var bloom: some View {
         ZStack {
             avatar
-//                .blur(radius: 64).blendMode(.hardLight)
-//                .opacity(0.20)
+                .blur(radius: 64).blendMode(.hardLight)
+                .opacity(0.20)
             avatar
-//                .blur(radius: 64).blendMode(.saturation)
-//                .opacity(0.75)
+                .blur(radius: 64).blendMode(.saturation)
+                .opacity(0.75)
         }
     }
     
