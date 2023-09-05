@@ -196,10 +196,12 @@ struct HomeScreen: View {
     private var bloom: some View {
         ZStack {
             avatar
-                .blur(radius: 64).blendMode(.hardLight)
+                .blur(radius: 64)
+                .blendMode(.hardLight)
                 .opacity(colorScheme == .dark ? 0.15 : 0.20)
             avatar
-                .blur(radius: 64).blendMode(colorScheme == .dark ? .normal : .saturation)
+                .blur(radius: colorScheme == .dark ? 53 : 64)
+                .blendMode(colorScheme == .dark ? .normal : .saturation)
                 .opacity(colorScheme == .dark ? 0.20 : 0.75)
         }
     }
