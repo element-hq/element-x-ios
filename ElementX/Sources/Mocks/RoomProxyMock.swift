@@ -34,6 +34,7 @@ struct RoomProxyMockConfiguration {
     var members: [RoomMemberProxyProtocol]?
     var inviter: RoomMemberProxyMock?
     var memberForID: RoomMemberProxyMock = .mockMe
+    var ownUserID = "@alice:somewhere.org"
     
     var invitedMembersCount = 100
     var joinedMembersCount = 50
@@ -61,6 +62,7 @@ extension RoomProxyMock {
         invitedMembersCount = configuration.invitedMembersCount
         joinedMembersCount = configuration.joinedMembersCount
         activeMembersCount = configuration.activeMembersCount
+        ownUserID = configuration.ownUserID
 
         if let members = configuration.members {
             membersPublisher = Just(members).eraseToAnyPublisher()
@@ -78,5 +80,6 @@ extension RoomProxyMock {
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)
+        canUserRedactUserIDReturnValue = .success(false)
     }
 }
