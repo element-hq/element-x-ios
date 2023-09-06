@@ -110,6 +110,10 @@ struct HomeScreen: View {
     }
     
     // MARK: - Private
+    
+    private var bloomGradient: some View {
+        LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+    }
             
     private func setBloomView(controller: UIViewController) {
         guard let navigationBarContainer = controller.navigationController?.navigationBar.subviews.first,
@@ -127,6 +131,17 @@ struct HomeScreen: View {
         bloomConstraints = [hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor),
                             hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor)]
         bloomConstraints.forEach { $0.isActive = true }
+        
+        let gradientController = UIHostingController(rootView: bloomGradient)
+        gradientController.view.backgroundColor = .clear
+        gradientController.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationBarContainer.insertSubview(gradientController.view, aboveSubview: hostingController.view)
+        
+        let constraints = [gradientController.view.bottomAnchor.constraint(equalTo: navigationBarContainer.bottomAnchor),
+                           gradientController.view.widthAnchor.constraint(equalTo: navigationBarContainer.widthAnchor),
+                           gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
+                           gradientController.view.heightAnchor.constraint(equalToConstant: 30)]
+        constraints.forEach { $0.isActive = true }
     }
     
     @ViewBuilder
