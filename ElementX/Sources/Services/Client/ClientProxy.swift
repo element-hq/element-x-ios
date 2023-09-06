@@ -30,6 +30,7 @@ class ClientProxy: ClientProxyProtocol {
         
     private var roomListService: RoomListService?
     private var roomListStateUpdateTaskHandle: TaskHandle?
+    private var roomListStateLoadingStateUpdateTaskHandle: TaskHandle?
 
     private var syncService: SyncService?
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
@@ -59,6 +60,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
+    
+    private let loadingStateSubject = CurrentValueSubject<ClientProxyLoadingState, Never>(.notLoading)
+    var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> {
+        loadingStateSubject.asCurrentValuePublisher()
+    }
     
     init(client: ClientProtocol, backgroundTaskService: BackgroundTaskServiceProtocol, appSettings: AppSettings) async {
         self.client = client
@@ -419,6 +425,7 @@ class ClientProxy: ClientProxyProtocol {
 
             syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
             roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
+            roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
 
         } catch {
             MXLog.error("Failed building room list service with error: \(error)")
@@ -432,10 +439,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.info("Received sync service update: \(state)")
             
             switch state {
-            case .running:
-                // Show the loading spinner when the sync service goes into running
-                callbacks.send(.startedUpdating)
-            case .terminated, .idle:
+            case .running, .terminated, .idle:
                 break
             case .error:
                 restartSync()
@@ -455,6 +459,19 @@ class ClientProxy: ClientProxyProtocol {
             
             // Hide the sync spinner as soon as we get any update back
             callbacks.send(.receivedSyncUpdate)
+        })
+    }
+    
+    private func createRoomListLoadingStateUpdateObserver(_ roomListService: RoomListService) -> TaskHandle {
+        roomListService.syncIndicator(listener: RoomListServiceSyncIndicatorListenerProxy { [weak self] state in
+            guard let self else { return }
+            
+            switch state {
+            case .show:
+                loadingStateSubject.send(.loading)
+            case .hide:
+                loadingStateSubject.send(.notLoading)
+            }
         })
     }
     
@@ -506,6 +523,18 @@ private class RoomListStateListenerProxy: RoomListServiceStateListener {
 
     func onUpdate(state: RoomListServiceState) {
         onUpdateClosure(state)
+    }
+}
+
+private class RoomListServiceSyncIndicatorListenerProxy: RoomListServiceSyncIndicatorListener {
+    private let onUpdateClosure: (RoomListServiceSyncIndicator) -> Void
+
+    init(onUpdateClosure: @escaping (RoomListServiceSyncIndicator) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
+        onUpdateClosure(syncIndicator)
     }
 }
 

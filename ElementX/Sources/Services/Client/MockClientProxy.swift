@@ -21,6 +21,8 @@ import MatrixRustSDK
 class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
+    let loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)
+    
     let userID: String
     let deviceID: String?
     let homeserver = ""
