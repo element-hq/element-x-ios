@@ -598,33 +598,25 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         ServiceLocator.shared.analytics.signpost.beginFirstSync()
         userSession.clientProxy.startSync()
         
-        let identifier = "StaleDataIndicator"
-        
-        func showLoadingIndicator() {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: identifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
-        }
-        
         guard clientProxyObserver == nil else {
             return
         }
         
-        // Prevent the syncing indicator from showing over the offline one
-        if ServiceLocator.shared.networkMonitor.reachabilityPublisher.value == .reachable {
-            showLoadingIndicator()
-        }
-        
         clientProxyObserver = userSession.clientProxy
-            .callbacks
+            .loadingStatePublisher
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { action in
-                switch action {
-                case .startedUpdating:
-                    showLoadingIndicator()
-                case .receivedSyncUpdate:
+            .sink { state in
+                let toastIdentifier = "StaleDataIndicator"
+                
+                switch state {
+                case .loading:
+                    if ServiceLocator.shared.networkMonitor.reachabilityPublisher.value == .reachable {
+                        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                    }
+                case .notLoading:
                     ServiceLocator.shared.analytics.signpost.endFirstSync()
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(identifier)
-                default:
-                    break
+                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }
             }
     }

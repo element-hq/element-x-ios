@@ -19,7 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 enum ClientProxyCallback {
-    case startedUpdating
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
     case updateRestorationToken
@@ -31,6 +30,11 @@ enum ClientProxyCallback {
             return false
         }
     }
+}
+
+enum ClientProxyLoadingState {
+    case loading
+    case notLoading
 }
 
 enum ClientProxyError: Error {
@@ -66,6 +70,8 @@ struct PusherConfiguration {
 
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
+    
+    var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> { get }
     
     var userID: String { get }
 
