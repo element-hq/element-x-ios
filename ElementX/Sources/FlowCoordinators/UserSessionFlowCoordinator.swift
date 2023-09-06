@@ -126,6 +126,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 roomFlowCoordinator.clearRoute(animated: animated)
             }
             stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
+        case .genericLink:
+            break
         }
     }
 

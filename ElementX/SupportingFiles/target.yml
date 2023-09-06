@@ -175,7 +175,6 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
-    - package: URLRouting
     - package: Version
     - package: Emojibase
     - package: WysiwygComposer

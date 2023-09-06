@@ -35,6 +35,26 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         rootModule?.coordinator
     }
     
+    @Published fileprivate var sheetModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove sheet", oldValue)
+                oldValue.tearDown()
+            }
+            
+            if let sheetModule {
+                logPresentationChange("Set sheet", sheetModule)
+                sheetModule.coordinator?.start()
+            }
+        }
+    }
+    
+    // The currently presented sheet coordinator
+    // Sheets will be presented through the NavigationSplitCoordinator if provided
+    var sheetCoordinator: (any CoordinatorProtocol)? {
+        sheetModule?.coordinator
+    }
+    
     /// Sets or replaces the presented coordinator
     /// - Parameter coordinator: the coordinator to display
     func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
@@ -44,6 +64,25 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         }
         
         rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+    }
+    
+    ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
+    func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
+        guard let coordinator else {
+            sheetModule = nil
+            return
+        }
+        
+        if sheetModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
         
     // MARK: - CoordinatorProtocol
@@ -79,5 +118,8 @@ private struct NavigationRootCoordinatorView: View {
             rootCoordinator.rootModule?.coordinator?.toPresentable()
         }
         .animation(.elementDefault, value: rootCoordinator.rootModule)
+        .sheet(item: $rootCoordinator.sheetModule) { module in
+            module.coordinator?.toPresentable()
+        }
     }
 }

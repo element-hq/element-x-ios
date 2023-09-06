@@ -198,7 +198,7 @@ struct CollapsibleReactionLayout: Layout {
         }
         var secondLastRow = rows[rows.count - 2]
         let collapseButton = secondLastRow.removeLast()
-        lastRow.prepend(collapseButton)
+        lastRow.insert(collapseButton, at: 0)
         rows[rows.count - 2] = secondLastRow
         rows[rows.count - 1] = lastRow
     }
