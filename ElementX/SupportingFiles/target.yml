@@ -75,7 +75,9 @@ targets:
         NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
         NSLocationWhenInUseUsageDescription: When you share your location to people, $(APP_DISPLAY_NAME) needs access to show them a map.
         UIBackgroundModes: [
-          fetch
+          fetch,
+          audio,
+          voip
         ]
         BGTaskSchedulerPermittedIdentifiers: [
           io.element.elementx.background.refresh
