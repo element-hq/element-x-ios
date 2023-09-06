@@ -105,29 +105,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - FlowCoordinatorProtocol
-
+    
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        // Tidy up any state before applying the new route.
-        switch stateMachine.state {
-        case .initial, .migration:
-            return // Not ready to handle a route.
-        case .roomList:
-            break // Nothing to tidy up on the home screen.
-        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen, .welcomeScreen:
-            navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
-        }
-        
-        // Apply the route.
-        switch appRoute {
-        case .room, .roomDetails, .roomList:
-            roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-        case .invites:
-            if UIDevice.current.isPhone {
-                roomFlowCoordinator.clearRoute(animated: animated)
+        clearPresentedSheets(animated: animated) { [weak self] in
+            guard let self else { return }
+            
+            switch appRoute {
+            case .room, .roomDetails, .roomList:
+                self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            case .invites:
+                if UIDevice.current.isPhone {
+                    self.roomFlowCoordinator.clearRoute(animated: animated)
+                }
+                self.stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
+            case .genericCallLink(let url):
+                self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             }
-            stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
-        case .genericLink:
-            break
         }
     }
 
@@ -136,6 +129,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     // MARK: - Private
+    
+    private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
+        navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
+        
+        // Prevents system crashes when presenting a sheet if another one was already shown
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            completion()
+        }
+    }
     
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in

@@ -20,11 +20,11 @@ import XCTest
 
 class AppRouterTests: XCTestCase {
     func testRoutes() {
-        guard let url = URL(string: "https://test.org") else {
+        guard let url = URL(string: "https://call.element.io/test") else {
             XCTFail("URL invalid")
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser.route(from: url), AppRoute.genericLink(url: url))
+        XCTAssertEqual(AppRouteURLParser.route(from: url), AppRoute.genericCallLink(url: url))
     }
 }

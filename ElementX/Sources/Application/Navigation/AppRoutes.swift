@@ -21,7 +21,7 @@ enum AppRoute: Equatable {
     case room(roomID: String)
     case roomDetails(roomID: String)
     case invites
-    case genericLink(url: URL)
+    case genericCallLink(url: URL)
 }
 
 enum AppRouteURLParser {
@@ -42,17 +42,19 @@ enum AppRouteURLParser {
         }
         
         guard KnownHosts.allCases.map(\.rawValue).contains(host) else {
-            return .genericLink(url: url)
+            return .genericCallLink(url: url)
         }
         
         if host == KnownHosts.callElementIo.rawValue {
-            return .genericLink(url: url)
+            return .genericCallLink(url: url)
+        }
+        
+        #warning("Remove this")
+        if host == KnownHosts.appElementIo.rawValue {
+            return .genericCallLink(url: "https://call.element.io/stefanTestsThings")
         }
         
         // Deep linking not supported
-//        return nil
-        
-        #warning("Remove this")
-        return .genericLink(url: url)
+        return nil
     }
 }

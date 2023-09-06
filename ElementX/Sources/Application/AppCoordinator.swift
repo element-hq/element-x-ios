@@ -139,7 +139,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         // Parse into an AppRoute to redirect these in a type safe way.
         
         if let route = AppRouteURLParser.route(from: url) {
-            navigationRootCoordinator.setSheetCoordinator(PlaceholderScreenCoordinator())
+            switch route {
+            case .genericCallLink(let url):
+                if let userSessionFlowCoordinator {
+                    userSessionFlowCoordinator.handleAppRoute(route, animated: true)
+                } else {
+                    navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
+                }
+            default:
+                break
+            }
+            
+            return
         }
         
         // Until we have an OIDC callback AppRoute, handle it manually.
