@@ -16,14 +16,19 @@
 
 import SwiftUI
 
-struct Waveform {
-    let data: [Float]
+struct Waveform: Equatable, Hashable {
+    let data: [UInt16]
 }
 
 extension Waveform {
-    static let maximum: Float = 400
-    var normalisedData: [Float] {
-        data.map { $0 / Self.maximum }
+    func normalisedData(count: Int) -> [Float] {
+        guard count > 0 else {
+            return []
+        }
+        let stride = max(1, Int(data.count / count))
+        let data = data.striding(by: stride)
+        let max = data.max().flatMap { Float($0) } ?? 0
+        return data.map { Float($0) / max }
     }
 }
 
@@ -35,21 +40,42 @@ extension Waveform {
 }
 
 struct WaveformView: View {
+    let lineWidth: CGFloat = 2
+    let linePadding: CGFloat = 2
     var waveform: Waveform
+    let minimumGraphAmplitude: CGFloat = 1
+    var progress: CGFloat = 0.0
     
     var body: some View {
         GeometryReader { geometry in
-            Path { path in
-                let centerY = geometry.size.height / 2
-                let normalisedData = waveform.normalisedData
-                for i in 0..<waveform.data.count {
-                    let x = (geometry.size.width / CGFloat(waveform.data.count)) * CGFloat(i)
-                    let height = geometry.size.height * CGFloat(normalisedData[i])
-                    path.move(to: CGPoint(x: x, y: centerY - (height / 2)))
-                    path.addLine(to: CGPoint(x: CGFloat(x), y: centerY + (height / 2)))
-                }
+            ZStack(alignment: .leading) {
+                Rectangle().fill(Color.compound.iconQuaternary)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                Rectangle().fill(Color.compound.iconSecondary)
+                    .frame(width: geometry.size.width * progress, height: geometry.size.height)
             }
-            .stroke(Color.compound.iconQuaternary, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+            .mask(alignment: .leading) {
+                Path { path in
+                    let width = geometry.size.width
+                    let height = geometry.size.height
+                    let centerY = geometry.size.height / 2
+                    let visibleSamplesCount = Int(width / (lineWidth + linePadding))
+                    let normalisedData = waveform.normalisedData(count: visibleSamplesCount)
+                    var xOffset: CGFloat = lineWidth / 2
+                    var index = 0
+                    
+                    while xOffset < width - lineWidth {
+                        let sample = CGFloat(index >= normalisedData.count ? 0 : normalisedData[index])
+                        let drawingAmplitude = max(minimumGraphAmplitude, sample * height)
+
+                        path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
+                        path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
+                        xOffset += lineWidth + linePadding
+                        index += 1
+                    }
+                }
+                .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+            }
         }
     }
 }

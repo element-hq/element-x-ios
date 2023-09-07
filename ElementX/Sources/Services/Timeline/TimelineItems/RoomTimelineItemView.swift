@@ -75,7 +75,7 @@ struct RoomTimelineItemView: View {
         case .poll(let item):
             PollRoomTimelineView(timelineItem: item)
         case .voice(let item):
-            VoiceMessageTimelineView(timelineItem: item)
+            VoiceRoomTimelineView(timelineItem: item)
         }
     }
 

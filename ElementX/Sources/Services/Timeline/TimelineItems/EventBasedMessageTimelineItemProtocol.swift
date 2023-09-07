@@ -25,7 +25,7 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
     case text(TextRoomTimelineItemContent)
     case video(VideoRoomTimelineItemContent)
     case location(LocationRoomTimelineItemContent)
-    case voice(VoiceRoomTimelineItemContent)
+    case voice(AudioRoomTimelineItemContent)
 }
 
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {

@@ -49,6 +49,6 @@ struct AudioRoomTimelineView_Previews: PreviewProvider {
                                                                   isOutgoing: false,
                                                                   isEditable: false,
                                                                   sender: .init(id: "Bob"),
-                                                                  content: .init(body: "audio.ogg", duration: 300, source: nil, contentType: nil)))
+                                                                  content: .init(body: "audio.ogg", duration: 300, waveform: nil, source: nil, contentType: nil)))
     }
 }

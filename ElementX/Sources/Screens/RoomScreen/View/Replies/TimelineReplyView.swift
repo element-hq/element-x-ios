@@ -208,6 +208,7 @@ struct TimelineReplyView_Previews: PreviewProvider {
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 contentType: .audio(.init(body: "Some audio",
                                                                                           duration: 0,
+                                                                                          waveform: nil,
                                                                                           source: nil,
                                                                                           contentType: nil))))
             

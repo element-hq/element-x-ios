@@ -241,7 +241,7 @@ struct MessageComposer_Previews: PreviewProvider {
         ScrollView {
             VStack {
                 let replyTypes: [TimelineItemReplyDetails] = [
-                    .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, source: nil, contentType: nil))),
+                    .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil))),
                     .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
                     .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
                     .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",

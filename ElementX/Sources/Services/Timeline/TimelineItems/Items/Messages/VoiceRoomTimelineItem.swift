@@ -23,7 +23,7 @@ struct VoiceRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isEditable: Bool
     let sender: TimelineItemSender
     
-    let content: VoiceRoomTimelineItemContent
+    let content: AudioRoomTimelineItemContent
     
     var replyDetails: TimelineItemReplyDetails?
 

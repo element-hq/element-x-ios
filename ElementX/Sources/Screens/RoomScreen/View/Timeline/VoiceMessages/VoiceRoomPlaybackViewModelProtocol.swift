@@ -14,12 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
-import UniformTypeIdentifiers
+import Combine
 
-struct VoiceRoomTimelineItemContent: Hashable {
-    let body: String
-    let duration: TimeInterval
-    let source: MediaSourceProxy?
-    let contentType: UTType?
+@MainActor
+protocol VoiceRoomPlaybackViewModelProtocol {
+    var actions: AnyPublisher<VoiceRoomPlaybackViewModelAction, Never> { get }
+    var context: VoiceRoomPlaybackViewModelType.Context { get }
 }

@@ -260,7 +260,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               sender: eventItemProxy.sender,
-                              content: buildVoiceTimelineItemContent(messageContent),
+                              content: buildAudioTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
@@ -432,17 +432,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
-        AudioRoomTimelineItemContent(body: messageContent.body,
-                                     duration: messageContent.info?.duration ?? 0,
-                                     source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
-                                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
-    }
-
-    private func buildVoiceTimelineItemContent(_ messageContent: AudioMessageContent) -> VoiceRoomTimelineItemContent {
-        VoiceRoomTimelineItemContent(body: messageContent.body,
-                                     duration: messageContent.info?.duration ?? 0,
-                                     source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
-                                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+        var waveform: Waveform?
+        if let audioWaveform = messageContent.details?.waveform {
+            waveform = Waveform(data: audioWaveform)
+        }
+        return AudioRoomTimelineItemContent(body: messageContent.body,
+                                            duration: messageContent.info?.duration ?? 0,
+                                            waveform: waveform,
+                                            source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                                            contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
@@ -594,7 +592,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let replyContent: EventBasedMessageTimelineItemContentType
             switch timelineItem.asMessage()?.msgtype() {
             case .audio(let content) where content.voice:
-                replyContent = .voice(buildVoiceTimelineItemContent(content))
+                replyContent = .voice(buildAudioTimelineItemContent(content))
             case .audio(let content):
                 replyContent = .audio(buildAudioTimelineItemContent(content))
             case .emote(let content):

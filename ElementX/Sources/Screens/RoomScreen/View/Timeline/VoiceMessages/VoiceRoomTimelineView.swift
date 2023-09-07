@@ -17,17 +17,24 @@
 import Foundation
 import SwiftUI
 
-struct VoiceMessageTimelineView: View {
-    let timelineItem: AudioRoomTimelineItem
+struct VoiceRoomTimelineView: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @StateObject private var playbackContext: VoiceRoomPlaybackViewModel
+    let timelineItem: VoiceRoomTimelineItem
+
+    init(timelineItem: VoiceRoomTimelineItem) {
+        self.timelineItem = timelineItem
+        _playbackContext = StateObject(wrappedValue: VoiceRoomPlaybackViewModel(timelineItem: timelineItem))
+    }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VoiceMessagePlaybackView(playbackData: VoiceMessagePlaybackData.mockPlaybackData, didTogglePlayPause: { _ in })
+            VoiceRoomPlaybackView(context: playbackContext.context)
         }
     }
 }
        
-struct VoiceMessageTimelineView_Previews: PreviewProvider {
+struct VoiceRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
     static let waveform = Waveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
                                           334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
@@ -41,17 +48,19 @@ struct VoiceMessageTimelineView_Previews: PreviewProvider {
             .environmentObject(viewModel.context)
     }
     
-    static let audioRoomTimelineItem = AudioRoomTimelineItem(id: .random,
+    static let voiceRoomTimelineItem = VoiceRoomTimelineItem(id: .random,
                                                              timestamp: "Now",
                                                              isOutgoing: false,
                                                              isEditable: false,
                                                              sender: .init(id: "Bob"),
                                                              content: .init(body: "audio.ogg",
                                                                             duration: 300,
+                                                                            waveform: waveform,
                                                                             source: nil,
                                                                             contentType: nil))
     
     static var body: some View {
-        VoiceMessageTimelineView(timelineItem: audioRoomTimelineItem)
+        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
