@@ -38,7 +38,6 @@ struct RoomScreen: View {
                 composerToolbar
                     .padding(.leading, attachmentButtonPadding)
                     .padding(.trailing, 12)
-                    .padding(.top, 8)
                     .padding(.bottom)
                     .background {
                         if composerToolbarContext.composerActionsEnabled {
@@ -47,6 +46,7 @@ struct RoomScreen: View {
                                 .ignoresSafeArea()
                         }
                     }
+                    .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     .environmentObject(context)
             }
