@@ -28,7 +28,7 @@ enum AppRouteURLParser {
     private enum KnownHosts: String, CaseIterable {
         case elementIo = "element.io"
         case appElementIo = "app.element.io"
-        case statingElementIo = "staging.element.io"
+        case stagingElementIo = "staging.element.io"
         case developElementIo = "develop.element.io"
         case mobileElementIo = "mobile.element.io"
         case callElementIo = "call.element.io"
@@ -48,13 +48,8 @@ enum AppRouteURLParser {
         if host == KnownHosts.callElementIo.rawValue {
             return .genericCallLink(url: url)
         }
-        
-        #warning("Remove this")
-        if host == KnownHosts.appElementIo.rawValue {
-            return .genericCallLink(url: "https://call.element.io/stefanTestsThings")
-        }
-        
-        // Deep linking not supported
+                
+        // Deep linking not supported at the moment
         return nil
     }
 }

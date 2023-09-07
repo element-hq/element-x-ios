@@ -45,7 +45,7 @@ private struct WebView: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(initialURL: url)
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
@@ -53,10 +53,12 @@ private struct WebView: UIViewRepresentable {
     }
 
     @MainActor
-    class Coordinator: NSObject, WKUIDelegate {
+    class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
+        private let initialURL: URL
         private(set) var webView: WKWebView!
 
-        override init() {
+        init(initialURL: URL) {
+            self.initialURL = initialURL
             super.init()
             
             let configuration = WKWebViewConfiguration()
@@ -71,7 +73,29 @@ private struct WebView: UIViewRepresentable {
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
-            .grant
+            // Don't allow permissions for domains different than what the call was started on
+            guard origin.host == initialURL.host else {
+                return .deny
+            }
+            
+            return .grant
+        }
+        
+        // MARK: - WKNavigationDelegate
+        
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+            // Allow any content from the main URL.
+            if navigationAction.request.url?.host == initialURL.host {
+                return .allow
+            }
+            
+            // Additionally allow any embedded content such as captchas.
+            if let targetFrame = navigationAction.targetFrame, !targetFrame.isMainFrame {
+                return .allow
+            }
+            
+            // Otherwise the request is invalid.
+            return .cancel
         }
     }
 }

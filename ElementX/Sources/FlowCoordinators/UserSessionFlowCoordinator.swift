@@ -131,6 +131,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func clearPresentedSheets(animated: Bool, completion: @escaping () -> Void) {
+        if navigationSplitCoordinator.sheetCoordinator == nil {
+            completion()
+            return
+        }
+        
         navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
         
         // Prevents system crashes when presenting a sheet if another one was already shown
