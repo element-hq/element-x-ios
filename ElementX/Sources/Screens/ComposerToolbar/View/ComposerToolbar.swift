@@ -43,6 +43,10 @@ struct ComposerToolbar: View {
             }
             messageComposer
                 .environmentObject(context)
+                .onTapGesture {
+                    guard !composerFocused else { return }
+                    composerFocused = true
+                }
             if !context.composerActionsEnabled {
                 sendButton
             }
