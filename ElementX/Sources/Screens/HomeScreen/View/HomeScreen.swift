@@ -97,7 +97,7 @@ struct HomeScreen: View {
                     setBloomView(controller: controller)
                 }
             }
-            let isHidden = controller.navigationController?.topViewController != controller
+            let isHidden = controller.navigationController?.topViewController != controller || isSearching
             bloomView?.isHidden = isHidden
             Task {
                 // Required to wait when refresh the constraints otherwise might cause crashes
