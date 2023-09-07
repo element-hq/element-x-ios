@@ -31,10 +31,13 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     @FocusState private var focused: Bool
+
+    #warning("AG: move to constants")
     @ScaledMetric private var composerMinHeight: CGFloat = 22
     private let composerMaxHeight: CGFloat = 250
 
     @State private var isMultiline = false
+    @State private var isExpanded = false
     @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
@@ -70,9 +73,9 @@ struct MessageComposer: View {
             header
             HStack(alignment: .bottom) {
                 if ServiceLocator.shared.settings.richTextEditorEnabled {
-                    let newComposerHeight = resizeBehaviorEnabled ? composerMinHeight + composerTranslation : 0
                     composerView
-                        .frame(minHeight: min(composerMaxHeight, max(composerMinHeight, newComposerHeight)), alignment: .top)
+                        .clipped()
+                        .frame(minHeight: composerHeight, alignment: .top)
                         .tint(.compound.iconAccentTertiary)
                         .padding(.vertical, 10)
                         .focused($focused)
@@ -92,6 +95,17 @@ struct MessageComposer: View {
                 }
             }
         }
+    }
+
+    private var composerHeight: CGFloat {
+        guard resizeBehaviorEnabled else {
+            return composerMinHeight
+        }
+
+        let height = isExpanded ? composerMaxHeight - composerTranslation : composerMinHeight - composerTranslation
+
+        #warning("AG: add clamp primitives")
+        return min(composerMaxHeight, max(composerMinHeight, height))
     }
     
     @ViewBuilder
@@ -126,7 +140,19 @@ struct MessageComposer: View {
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                composerTranslation -= value.translation.height
+                composerTranslation += value.translation.height
+            }
+            .onEnded { _ in
+                #warning("AG: move to constants")
+                let threshold: CGFloat = 100
+                withAnimation(.spring(dampingFraction: 0.75)) {
+                    if composerTranslation > threshold {
+                        isExpanded = false
+                    } else if composerTranslation < -threshold {
+                        isExpanded = true
+                    }
+                    composerTranslation = 0
+                }
             }
     }
 }
