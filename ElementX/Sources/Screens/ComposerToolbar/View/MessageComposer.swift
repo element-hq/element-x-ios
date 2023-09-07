@@ -48,7 +48,7 @@ struct MessageComposer: View {
 
             mainContent
                 .padding(.horizontal, 12.0)
-                .clipped()
+                .clipShape(RoundedRectangle(cornerRadius: borderRadius))
                 .background {
                     let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
                     ZStack {
@@ -74,7 +74,6 @@ struct MessageComposer: View {
             HStack(alignment: .bottom) {
                 if ServiceLocator.shared.settings.richTextEditorEnabled {
                     composerView
-                        .clipped()
                         .frame(minHeight: composerHeight, alignment: .top)
                         .tint(.compound.iconAccentTertiary)
                         .padding(.vertical, 10)
