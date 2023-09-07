@@ -109,10 +109,11 @@ struct HomeScreen: View {
     // MARK: - Private
     
     private var bloomGradient: some View {
-        ZStack {
-            LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
-        }
-        .ignoresSafeArea(edges: .all)
+        LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+            .mask {
+                LinearGradient(colors: [.clear, .white], startPoint: .trailing, endPoint: .leading)
+            }
+            .ignoresSafeArea(edges: .all)
     }
             
     private func setBloomView(controller: UIViewController) {
