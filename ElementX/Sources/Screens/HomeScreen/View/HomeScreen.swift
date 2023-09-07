@@ -28,6 +28,7 @@ struct HomeScreen: View {
     @State private var isSearching = false
     @State private var bloomView: UIView?
     @State private var bloomConstraints: [NSLayoutConstraint] = []
+    @State private var leftBarButtonView: UIView?
     
     var body: some View {
         GeometryReader { geometry in
@@ -99,12 +100,8 @@ struct HomeScreen: View {
             }
             let isHidden = controller.navigationController?.topViewController != controller || isSearching
             bloomView?.isHidden = isHidden
-            Task {
-                // Required to wait when refresh the constraints otherwise might cause crashes
-                await Task.yield()
-                if !isSearching, bloomView?.isHidden == false {
-                    bloomConstraints.forEach { $0.isActive = true }
-                }
+            if !isHidden {
+                updateBloomCenter()
             }
         }
     }
@@ -123,14 +120,12 @@ struct HomeScreen: View {
         
         navigationBarContainer.clipsToBounds = true
         let hostingController = UIHostingController(rootView: bloom)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = true
         hostingController.view.backgroundColor = .clear
         navigationBarContainer.insertSubview(hostingController.view, at: 0)
+        self.leftBarButtonView = leftBarButtonView
         bloomView = hostingController.view
-        
-        bloomConstraints = [hostingController.view.centerXAnchor.constraint(equalTo: leftBarButtonView.centerXAnchor),
-                            hostingController.view.centerYAnchor.constraint(equalTo: leftBarButtonView.centerYAnchor)]
-        bloomConstraints.forEach { $0.isActive = true }
+        updateBloomCenter()
         
         let gradientController = UIHostingController(rootView: bloomGradient)
         gradientController.view.backgroundColor = .clear
@@ -142,6 +137,17 @@ struct HomeScreen: View {
                            gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
                            gradientController.view.heightAnchor.constraint(equalToConstant: 30)]
         constraints.forEach { $0.isActive = true }
+    }
+
+    private func updateBloomCenter() {
+        guard let leftBarButtonView,
+              let bloomView,
+              let navigationBarContainer = bloomView.superview else {
+            return
+        }
+        
+        let center = leftBarButtonView.convert(leftBarButtonView.center, to: navigationBarContainer.coordinateSpace)
+        bloomView.center = center
     }
     
     @ViewBuilder
