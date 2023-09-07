@@ -27,7 +27,6 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
     @State private var bloomView: UIView?
-    @State private var bloomConstraints: [NSLayoutConstraint] = []
     @State private var leftBarButtonView: UIView?
     
     var body: some View {
