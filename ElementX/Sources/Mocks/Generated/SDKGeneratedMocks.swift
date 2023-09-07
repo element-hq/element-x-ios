@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.0.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.0.3 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -400,23 +400,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - notificationClient
 
-    public var notificationClientThrowableError: Error?
-    public var notificationClientCallsCount = 0
-    public var notificationClientCalled: Bool {
-        return notificationClientCallsCount > 0
+    public var notificationClientProcessSetupThrowableError: Error?
+    public var notificationClientProcessSetupCallsCount = 0
+    public var notificationClientProcessSetupCalled: Bool {
+        return notificationClientProcessSetupCallsCount > 0
     }
-    public var notificationClientReturnValue: NotificationClientBuilder!
-    public var notificationClientClosure: (() throws -> NotificationClientBuilder)?
+    public var notificationClientProcessSetupReceivedProcessSetup: NotificationProcessSetup?
+    public var notificationClientProcessSetupReceivedInvocations: [NotificationProcessSetup] = []
+    public var notificationClientProcessSetupReturnValue: NotificationClientBuilder!
+    public var notificationClientProcessSetupClosure: ((NotificationProcessSetup) throws -> NotificationClientBuilder)?
 
-    public func notificationClient() throws -> NotificationClientBuilder {
-        if let error = notificationClientThrowableError {
+    public func notificationClient(processSetup: NotificationProcessSetup) throws -> NotificationClientBuilder {
+        if let error = notificationClientProcessSetupThrowableError {
             throw error
         }
-        notificationClientCallsCount += 1
-        if let notificationClientClosure = notificationClientClosure {
-            return try notificationClientClosure()
+        notificationClientProcessSetupCallsCount += 1
+        notificationClientProcessSetupReceivedProcessSetup = processSetup
+        notificationClientProcessSetupReceivedInvocations.append(processSetup)
+        if let notificationClientProcessSetupClosure = notificationClientProcessSetupClosure {
+            return try notificationClientProcessSetupClosure(processSetup)
         } else {
-            return notificationClientReturnValue
+            return notificationClientProcessSetupReturnValue
         }
     }
     //MARK: - restoreSession

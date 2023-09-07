@@ -36,8 +36,7 @@ final class NSEUserSession {
         try baseClient.restoreSession(session: credentials.restorationToken.session)
 
         notificationClient = try baseClient
-            .notificationClient()
-            .retryDecryption(withCrossProcessLock: true)
+            .notificationClient(processSetup: .multipleProcesses)
             .filterByPushRules()
             .finish()
     }
