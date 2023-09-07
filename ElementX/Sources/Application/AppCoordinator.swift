@@ -138,6 +138,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     func handleUniversalLink(_ url: URL) {
         // Parse into an AppRoute to redirect these in a type safe way.
         
+        if let route = AppRouteURLParser.route(from: url) {
+            switch route {
+            case .genericCallLink(let url):
+                if let userSessionFlowCoordinator {
+                    userSessionFlowCoordinator.handleAppRoute(route, animated: true)
+                } else {
+                    navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
+                }
+            default:
+                break
+            }
+            
+            return
+        }
+        
         // Until we have an OIDC callback AppRoute, handle it manually.
         if url.absoluteString.starts(with: appSettings.oidcRedirectURL.absoluteString) {
             MXLog.error("OIDC callback through Universal Links not implemented.")

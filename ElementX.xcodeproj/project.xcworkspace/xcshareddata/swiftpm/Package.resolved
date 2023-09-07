@@ -179,15 +179,6 @@
       }
     },
     {
-      "identity" : "swift-case-paths",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-case-paths",
-      "state" : {
-        "revision" : "fc45e7b2cfece9dd80b5a45e6469ffe67fe67984",
-        "version" : "0.14.1"
-      }
-    },
-    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
@@ -206,30 +197,12 @@
       }
     },
     {
-      "identity" : "swift-parsing",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-parsing",
-      "state" : {
-        "revision" : "27c941bbd22a4bbc53005a15a0440443fd892f70",
-        "version" : "0.12.1"
-      }
-    },
-    {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
         "revision" : "dc46eeb3928a75390651fac6c1ef7f93ad59a73b",
         "version" : "1.11.1"
-      }
-    },
-    {
-      "identity" : "swift-url-routing",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-url-routing",
-      "state" : {
-        "revision" : "2f4f0404b3de0a0711feb7190f724d8a80bc1cfd",
-        "version" : "0.5.0"
       }
     },
     {
@@ -257,15 +230,6 @@
       "state" : {
         "revision" : "1fe824b80d89201652e7eca7c9252269a1d85e25",
         "version" : "2.0.1"
-      }
-    },
-    {
-      "identity" : "xctest-dynamic-overlay",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
-      "state" : {
-        "revision" : "50843cbb8551db836adec2290bb4bc6bac5c1865",
-        "version" : "0.9.0"
       }
     }
   ],

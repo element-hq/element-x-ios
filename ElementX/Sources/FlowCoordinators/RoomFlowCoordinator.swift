@@ -83,6 +83,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
         case .invites:
             break
+        case .genericCallLink:
+            break
         }
     }
 
