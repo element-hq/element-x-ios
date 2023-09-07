@@ -109,7 +109,10 @@ struct HomeScreen: View {
     // MARK: - Private
     
     private var bloomGradient: some View {
-        LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+        }
+        .ignoresSafeArea(edges: .all)
     }
             
     private func setBloomView(controller: UIViewController) {
@@ -133,7 +136,7 @@ struct HomeScreen: View {
         navigationBarContainer.insertSubview(gradientController.view, aboveSubview: hostingController.view)
         
         let constraints = [gradientController.view.bottomAnchor.constraint(equalTo: navigationBarContainer.bottomAnchor),
-                           gradientController.view.widthAnchor.constraint(equalTo: navigationBarContainer.widthAnchor),
+                           gradientController.view.trailingAnchor.constraint(equalTo: navigationBarContainer.trailingAnchor),
                            gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
                            gradientController.view.heightAnchor.constraint(equalToConstant: 30)]
         constraints.forEach { $0.isActive = true }
