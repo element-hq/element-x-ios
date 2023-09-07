@@ -165,7 +165,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         // As of right now we do not handle event id links in any way so there is no need to add them as links
         // matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: []))
         matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []))
-        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []))
+        
+        let linkMatches = MatrixEntityRegex.linkRegex.matches(in: string, options: [])
+        matches.append(contentsOf: linkMatches)
         guard matches.count > 0 else {
             return
         }
@@ -188,7 +190,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
-            attributedString.addAttribute(.link, value: string[matchRange] as Any, range: match.range)
+            var link = String(string[matchRange])
+            
+            if linkMatches.contains(match), !link.contains("://") {
+                link.insert(contentsOf: "https://", at: link.startIndex)
+            }
+            
+            attributedString.addAttribute(.link, value: link as Any, range: match.range)
         }
     }
     

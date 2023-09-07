@@ -110,6 +110,23 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
     
+    func testLinkDefaultScheme() {
+        let plainString = "This text contains a matrix.org link."
+        
+        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), plainString)
+        
+        XCTAssertEqual(attributedString.runs.count, 3)
+        
+        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        
+        XCTAssertEqual(link, "https://matrix.org")
+    }
+    
     func testRenderHTMLStringWithLinkInHeader() {
         let h1HTMLString = "<h1><a href=\"https://www.matrix.org/\">Matrix.org</a></h1>"
         let h2HTMLString = "<h2><a href=\"https://www.matrix.org/\">Matrix.org</a></h2>"
@@ -244,7 +261,7 @@ class AttributedStringBuilderTests: XCTestCase {
         var foundLink = false
         for run in attributedString.runs {
             if run.link != nil {
-                XCTAssertEqual(run.link?.path, "www.matrix.org")
+                XCTAssertEqual(run.link?.host, "www.matrix.org")
                 XCTAssertNil(run.uiKit.foregroundColor)
                 foundLink = true
             } else {
