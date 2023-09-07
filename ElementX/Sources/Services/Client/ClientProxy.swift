@@ -393,8 +393,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let syncService = try await client
                 .syncService()
-                .withEncryptionSync(withCrossProcessLock: true,
-                                    appIdentifier: "MainApp")
+                .withCrossProcessLock(appIdentifier: "MainApp")
                 .finish()
             let roomListService = syncService.roomListService()
 
