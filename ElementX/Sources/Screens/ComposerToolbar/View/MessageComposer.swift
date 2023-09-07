@@ -24,22 +24,55 @@ struct MessageComposer: View {
     @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
+    let resizeBehaviorEnabled: Bool
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
     let onAppearAction: () -> Void
     @FocusState private var focused: Bool
+    @ScaledMetric private var composerMinHeight: CGFloat = 22
+    private let composerMaxHeight: CGFloat = 250
 
     @State private var isMultiline = false
+    @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
-        let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
+        VStack(spacing: 0) {
+            if resizeBehaviorEnabled {
+                handle
+            }
+
+            mainContent
+                .padding(.horizontal, 12.0)
+                .clipped()
+                .background {
+                    let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
+                    ZStack {
+                        roundedRectangle
+                            .fill(Color.compound.bgSubtleSecondary)
+                        roundedRectangle
+                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
+                            .opacity(focused ? 1 : 0)
+                    }
+                }
+                // Explicitly disable all animations to fix weirdness with the header immediately
+                // appearing whilst the text field and keyboard are still animating up to it.
+                .animation(.noAnimation, value: mode)
+        }
+        .gesture(dragGesture)
+    }
+
+    // MARK: - Private
+
+    private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
             HStack(alignment: .bottom) {
                 if ServiceLocator.shared.settings.richTextEditorEnabled {
+                    let newComposerHeight = resizeBehaviorEnabled ? composerMinHeight + composerTranslation : 0
                     composerView
+                        .frame(minHeight: min(composerMaxHeight, max(composerMinHeight, newComposerHeight)), alignment: .top)
                         .tint(.compound.iconAccentTertiary)
                         .padding(.vertical, 10)
                         .focused($focused)
@@ -59,20 +92,6 @@ struct MessageComposer: View {
                 }
             }
         }
-        .padding(.horizontal, 12.0)
-        .clipped()
-        .background {
-            ZStack {
-                roundedRectangle
-                    .fill(Color.compound.bgSubtleSecondary)
-                roundedRectangle
-                    .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
-                    .opacity(focused ? 1 : 0)
-            }
-        }
-        // Explicitly disable all animations to fix weirdness with the header immediately
-        // appearing whilst the text field and keyboard are still animating up to it.
-        .animation(.noAnimation, value: mode)
     }
     
     @ViewBuilder
@@ -94,6 +113,21 @@ struct MessageComposer: View {
         case .reply, .edit:
             return 20
         }
+    }
+
+    private var handle: some View {
+        Capsule()
+            .foregroundColor(.compound.iconTertiary)
+            .frame(width: 36, height: 5)
+            .padding(.bottom, 8)
+            .frame(maxWidth: .infinity)
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                composerTranslation -= value.translation.height
+            }
     }
 }
 
@@ -169,6 +203,7 @@ struct MessageComposer_Previews: PreviewProvider {
         return MessageComposer(plainText: .constant(content),
                                composerView: composerView,
                                mode: mode,
+                               resizeBehaviorEnabled: false,
                                sendAction: { },
                                pasteAction: { _ in },
                                replyCancellationAction: { },

@@ -90,7 +90,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 actionsSubject.send(.sendPlainTextMessage(message: context.composerPlainText,
                                                           mode: state.composerMode))
             }
-            state.bindings.composerActionsEnabled = false
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:

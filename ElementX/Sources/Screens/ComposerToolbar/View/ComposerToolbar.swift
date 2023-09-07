@@ -89,7 +89,8 @@ struct ComposerToolbar: View {
     private var messageComposer: some View {
         MessageComposer(plainText: $context.composerPlainText,
                         composerView: composerView,
-                        mode: context.viewState.composerMode) {
+                        mode: context.viewState.composerMode,
+                        resizeBehaviorEnabled: context.viewState.bindings.composerActionsEnabled) {
             context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
