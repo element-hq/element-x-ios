@@ -133,7 +133,7 @@ struct MessageComposer: View {
         Capsule()
             .foregroundColor(.compound.iconTertiary)
             .frame(width: 36, height: 5)
-            .padding(.bottom, 8)
+            .padding(.vertical, 8)
             .frame(maxWidth: .infinity)
     }
 
