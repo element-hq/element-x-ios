@@ -42,7 +42,7 @@ struct RoomScreen: View {
                     .padding(.bottom)
                     .background {
                         if composerToolbarContext.composerActionsEnabled {
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
                                 .ignoresSafeArea()
                         }
