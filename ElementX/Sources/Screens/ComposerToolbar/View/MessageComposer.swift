@@ -143,7 +143,7 @@ struct MessageComposer: View {
             }
             .onEnded { _ in
                 #warning("AG: move to constants")
-                let threshold: CGFloat = 100
+                let threshold: CGFloat = 60
                 withAnimation(.spring(dampingFraction: 0.75)) {
                     if composerTranslation > threshold {
                         isExpanded = false
