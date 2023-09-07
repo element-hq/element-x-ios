@@ -35,6 +35,11 @@ struct TimelineReplyView: View {
                               plainBody: content.body,
                               formattedBody: nil,
                               icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
+                case .voice(let content):
+                    ReplyView(sender: sender,
+                              plainBody: content.body,
+                              formattedBody: nil,
+                              icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
                 case .emote(let content):
                     ReplyView(sender: sender,
                               plainBody: content.body,

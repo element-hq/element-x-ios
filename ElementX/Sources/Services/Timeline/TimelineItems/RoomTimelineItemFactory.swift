@@ -94,7 +94,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .emote(content: let content):
             return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
         case .audio(let content):
-            return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            if content.voice {
+                return buildVoiceTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            } else {
+                return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            }
         case .location(let content):
             return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
         case .none:
@@ -240,6 +244,23 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isEditable: eventItemProxy.isEditable,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(messageContent),
+                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+    }
+    
+    private func buildVoiceTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                        _ messageTimelineItem: Message,
+                                        _ messageContent: AudioMessageContent,
+                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        VoiceRoomTimelineItem(id: eventItemProxy.id,
+                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              sender: eventItemProxy.sender,
+                              content: buildVoiceTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
@@ -417,6 +438,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
 
+    private func buildVoiceTimelineItemContent(_ messageContent: AudioMessageContent) -> VoiceRoomTimelineItemContent {
+        VoiceRoomTimelineItemContent(body: messageContent.body,
+                                     duration: messageContent.info?.duration ?? 0,
+                                     source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+    }
+
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
@@ -565,6 +593,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             let replyContent: EventBasedMessageTimelineItemContentType
             switch timelineItem.asMessage()?.msgtype() {
+            case .audio(let content) where content.voice:
+                replyContent = .voice(buildVoiceTimelineItemContent(content))
             case .audio(let content):
                 replyContent = .audio(buildAudioTimelineItemContent(content))
             case .emote(let content):
