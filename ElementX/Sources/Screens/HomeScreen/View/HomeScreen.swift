@@ -21,7 +21,6 @@ import SwiftUIIntrospect
 
 struct HomeScreen: View {
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.isPresented) private var isPresented
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
