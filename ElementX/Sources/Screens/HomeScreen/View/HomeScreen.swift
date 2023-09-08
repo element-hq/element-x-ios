@@ -29,6 +29,7 @@ struct HomeScreen: View {
     @State private var leftBarButtonView: UIView?
     @State private var gradientView: UIView?
     @State private var navigationBarContainer: UIView?
+    @State private var hairlineView: UIView?
     
     var body: some View {
         GeometryReader { geometry in
@@ -102,11 +103,13 @@ struct HomeScreen: View {
             bloomView?.isHidden = isHidden
             gradientView?.isHidden = isHidden
             navigationBarContainer?.clipsToBounds = !isHidden
+            hairlineView?.isHidden = isHidden || !scrollViewAdapter.scrollViewIsAtTopEdgePublisher.value
             if !isHidden {
                 updateBloomCenter()
             }
         }
         .onReceive(scrollViewAdapter.scrollViewIsAtTopEdgePublisher.removeDuplicates()) { value in
+            hairlineView?.isHidden = !value
             guard let gradientView else {
                 return
             }
@@ -158,6 +161,15 @@ struct HomeScreen: View {
                            gradientController.view.heightAnchor.constraint(equalToConstant: 40)]
         constraints.forEach { $0.isActive = true }
         gradientView = gradientController.view
+        
+        let dividerController = UIHostingController(rootView: Divider().ignoresSafeArea())
+        dividerController.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationBarContainer.addSubview(dividerController.view)
+        let dividerConstraints = [dividerController.view.bottomAnchor.constraint(equalTo: gradientController.view.bottomAnchor),
+                                  dividerController.view.widthAnchor.constraint(equalTo: gradientController.view.widthAnchor),
+                                  dividerController.view.leadingAnchor.constraint(equalTo: gradientController.view.leadingAnchor)]
+        dividerConstraints.forEach { $0.isActive = true }
+        hairlineView = dividerController.view
     }
 
     private func updateBloomCenter() {
