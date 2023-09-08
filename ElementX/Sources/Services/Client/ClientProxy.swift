@@ -131,7 +131,10 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
-        guard !hasEncounteredAuthError else { return }
+        guard !hasEncounteredAuthError else {
+            MXLog.warning("Ignoring request, this client has an unknown token.")
+            return
+        }
         
         MXLog.info("Starting sync")
         
@@ -368,22 +371,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
-    
-    private func restartSync(delay: Duration = .zero) {
-        Task {
-            try await Task.sleep(for: delay)
-            
-            do {
-                MXLog.info("Restarting the sync service.")
-                try await self.syncService?.stop()
-            } catch {
-                MXLog.error("Failed restarting the sync service with error: \(error)")
-            }
-            
-            guard !hasEncounteredAuthError else { return }
-            await self.syncService?.start()
-        }
-    }
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
@@ -451,7 +438,7 @@ class ClientProxy: ClientProxyProtocol {
             case .running, .terminated, .idle:
                 break
             case .error:
-                restartSync()
+                startSync()
             }
         })
     }
