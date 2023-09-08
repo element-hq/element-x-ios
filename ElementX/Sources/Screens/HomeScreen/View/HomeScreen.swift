@@ -104,7 +104,7 @@ struct HomeScreen: View {
             bloomView?.isHidden = isHidden
             gradientView?.isHidden = isHidden
             navigationBarContainer?.clipsToBounds = !isHidden
-            hairlineView?.isHidden = isHidden || !scrollViewAdapter.scrollViewIsAtTopEdgePublisher.value
+            hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
             if !isHidden {
                 updateBloomCenter()
             }
