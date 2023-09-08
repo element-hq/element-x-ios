@@ -24,7 +24,7 @@ struct MessageComposer: View {
     @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
-    let showResizeHandle: Bool
+    let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
@@ -38,8 +38,8 @@ struct MessageComposer: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if showResizeHandle {
-                resizeHandle
+            if showResizeGrabber {
+                resizeGrabber
             }
 
             mainContent
@@ -118,7 +118,7 @@ struct MessageComposer: View {
         }
     }
 
-    private var resizeHandle: some View {
+    private var resizeGrabber: some View {
         Capsule()
             .foregroundColor(Asset.Colors.grabber.swiftUIColor)
             .frame(width: 36, height: 5)
@@ -216,7 +216,7 @@ struct MessageComposer_Previews: PreviewProvider {
         return MessageComposer(plainText: .constant(content),
                                composerView: composerView,
                                mode: mode,
-                               showResizeHandle: false,
+                               showResizeGrabber: false,
                                isExpanded: .constant(false),
                                sendAction: { },
                                pasteAction: { _ in },

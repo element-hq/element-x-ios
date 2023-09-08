@@ -95,7 +95,7 @@ struct ComposerToolbar: View {
         MessageComposer(plainText: $context.composerPlainText,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
-                        showResizeHandle: context.viewState.bindings.composerActionsEnabled,
+                        showResizeGrabber: context.viewState.bindings.composerActionsEnabled,
                         isExpanded: $context.composerExpanded) {
             context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
