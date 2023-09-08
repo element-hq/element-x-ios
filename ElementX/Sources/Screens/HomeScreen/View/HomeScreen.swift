@@ -224,24 +224,7 @@ struct HomeScreen: View {
     }
     
     private var bloom: some View {
-        ZStack {
-            avatar
-                .blur(radius: 64)
-                .blendMode(colorScheme == .dark ? .exclusion : .hardLight)
-                .opacity(colorScheme == .dark ? 0.50 : 0.20)
-            avatar
-                .blur(radius: 64)
-                .blendMode(.color)
-                .opacity(colorScheme == .dark ? 0.20 : 0.80)
-        }
-    }
-    
-    private var avatar: some View {
-        LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                            name: context.viewState.userDisplayName,
-                            contentID: context.viewState.userID,
-                            avatarSize: .custom(256),
-                            imageProvider: context.imageProvider)
+        BloomView(context: context)
     }
     
     private var newRoomButton: some View {
