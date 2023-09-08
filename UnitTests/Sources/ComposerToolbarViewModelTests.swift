@@ -78,12 +78,12 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
     }
 
-    func testRTEDisabledAfterSendingMessage() {
+    func testRTEEnabledAfterSendingMessage() {
         viewModel.process(viewAction: .enableTextFormatting)
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.state.composerEmpty = false
         viewModel.process(viewAction: .sendMessage)
-        XCTAssertFalse(viewModel.state.bindings.composerActionsEnabled)
+        XCTAssertTrue(viewModel.state.bindings.composerActionsEnabled)
     }
 
     func testAlertIsShownAfterLinkAction() {
