@@ -25,6 +25,8 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
+    
+    // Bloom components
     @State private var bloomView: UIView?
     @State private var leftBarButtonView: UIView?
     @State private var gradientView: UIView?
@@ -128,14 +130,14 @@ struct HomeScreen: View {
     private var bloomGradient: some View {
         LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
             .mask {
-                LinearGradient(stops:
-                    [.init(color: .white, location: 0.75), .init(color: .clear, location: 1.0)],
-                    startPoint: .leading, endPoint: .trailing)
+                LinearGradient(stops: [.init(color: .white, location: 0.75), .init(color: .clear, location: 1.0)],
+                               startPoint: .leading,
+                               endPoint: .trailing)
             }
             .ignoresSafeArea(edges: .all)
     }
             
-    private func setBloomView(controller: UIViewController) {
+    private func makeBloomView(controller: UIViewController) {
         guard let navigationBarContainer = controller.navigationController?.navigationBar.subviews.first,
               let leftBarButtonView = controller.navigationItem.leadingItemGroups.first?.barButtonItems.first?.customView else {
             return

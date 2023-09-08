@@ -49,8 +49,8 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             .eraseToAnyPublisher()
     }
     
-    private let scrollViewIsAtTopEdge: CurrentValueSubject<Bool, Never> = .init(false)
-    var scrollViewIsAtTopEdgePublisher: CurrentValuePublisher<Bool, Never> {
+    private let isAtTopEdgeSubject: CurrentValueSubject<Bool, Never> = .init(false)
+    var isAtTopEdge: CurrentValuePublisher<Bool, Never> {
         scrollViewIsAtTopEdge
             .asCurrentValuePublisher()
     }
