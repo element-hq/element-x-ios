@@ -17,6 +17,7 @@
 import Foundation
 
 enum AppRoute: Equatable {
+    case oidcCallback(url: URL)
     case roomList
     case room(roomID: String)
     case roomDetails(roomID: String)
@@ -24,32 +25,71 @@ enum AppRoute: Equatable {
     case genericCallLink(url: URL)
 }
 
-enum AppRouteURLParser {
-    private enum KnownHosts: String, CaseIterable {
-        case elementIo = "element.io"
-        case appElementIo = "app.element.io"
-        case stagingElementIo = "staging.element.io"
-        case developElementIo = "develop.element.io"
-        case mobileElementIo = "mobile.element.io"
-        case callElementIo = "call.element.io"
+struct AppRouteURLParser {
+    let urlParsers: [URLParser]
+    
+    init(appSettings: AppSettings) {
+        urlParsers = [
+            WebsiteParser(appSettings: appSettings),
+            ElementCallParser()
+        ]
     }
     
-    static func route(from url: URL) -> AppRoute? {
-        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
-              let host = urlComponents.host else {
-            MXLog.error("Failed parsing URL: \(url)")
-            return nil
+    func route(from url: URL) -> AppRoute? {
+        for parser in urlParsers {
+            if let appRoute = parser.route(from: url) {
+                return appRoute
+            }
         }
         
-        guard KnownHosts.allCases.map(\.rawValue).contains(host) else {
+        // Fallback to a generic call link. This is temporary and will
+        // be handled by a parser that checks for a specific URL scheme.
+        if let host = url.host(), !urlParsers.map(\.host).contains(host) {
             return .genericCallLink(url: url)
         }
         
-        if host == KnownHosts.callElementIo.rawValue {
-            return .genericCallLink(url: url)
-        }
-                
-        // Deep linking not supported at the moment
+        MXLog.error("Failed parsing URL: \(url)")
         return nil
+    }
+}
+
+/// Represents a type that can parse a `URL` into an `AppRoute`.
+///
+/// The following Universal Links are missing parsers.
+/// - app.element.io
+/// - staging.element.io
+/// - develop.element.io
+/// - mobile.element.io
+protocol URLParser {
+    var host: String { get }
+    func route(from url: URL) -> AppRoute?
+}
+
+/// The parser for the element.io main website.
+struct WebsiteParser: URLParser {
+    let host = "element.io"
+    
+    var appSettings: AppSettings
+    
+    func route(from url: URL) -> AppRoute? {
+        guard url.host() == host else { return nil }
+        let pathComponents = url.pathComponents
+        
+        // OIDC callback URL.
+        if pathComponents.count == 3, pathComponents[0] == "mobile", pathComponents[1] == "oidc" {
+            return .oidcCallback(url: url)
+        }
+        
+        return nil
+    }
+}
+
+/// The parser for Element Call links. This always returns a `.genericCallLink`
+struct ElementCallParser: URLParser {
+    let host = "call.element.io"
+    
+    func route(from url: URL) -> AppRoute? {
+        guard url.host() == host else { return nil }
+        return .genericCallLink(url: url)
     }
 }

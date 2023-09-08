@@ -55,6 +55,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     let notificationManager: NotificationManagerProtocol
 
+    private let appRouteURLParser: AppRouteURLParser
     @Consumable private var storedAppRoute: AppRoute?
 
     init() {
@@ -75,6 +76,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
         
         self.appSettings = appSettings
+        appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -140,7 +142,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     func handleDeepLink(_ url: URL) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
-        if let route = AppRouteURLParser.route(from: url) {
+        if let route = appRouteURLParser.route(from: url) {
             switch route {
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
