@@ -372,7 +372,9 @@ class MockScreen: Identifiable {
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy)
             return SessionVerificationScreenCoordinator(parameters: parameters)
-        case .userSessionScreen, .userSessionScreenReply:
+        case .userSessionScreen, .userSessionScreenReply, .userSessionScreenRTE:
+            let appSettings: AppSettings = ServiceLocator.shared.settings
+            appSettings.richTextEditorEnabled = id == .userSessionScreenRTE
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
             let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
@@ -383,7 +385,7 @@ class MockScreen: Identifiable {
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
                                                          bugReportService: BugReportServiceMock(),
                                                          roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
-                                                         appSettings: ServiceLocator.shared.settings,
+                                                         appSettings: appSettings,
                                                          analytics: ServiceLocator.shared.analytics)
             
             coordinator.start()

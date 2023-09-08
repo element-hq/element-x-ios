@@ -45,4 +45,19 @@ class UserSessionScreenTests: XCTestCase {
 
         try await app.assertScreenshot(.userSessionScreenReply)
     }
+
+    func testUserSessionRTE() async throws {
+        let roomName = "First room"
+        let app = Application.launch(.userSessionScreenRTE)
+
+        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
+        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap()
+        try await app.assertScreenshot(.userSessionScreenRTE, step: 1)
+
+        app.buttons[A11yIdentifiers.roomScreen.attachmentPickerTextFormatting].tap()
+        try await app.assertScreenshot(.userSessionScreenRTE, step: 2)
+    }
 }
