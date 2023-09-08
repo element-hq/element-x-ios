@@ -30,25 +30,33 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
-            WebsiteParser(appSettings: appSettings),
-            ElementCallParser()
+            ElementAppURLParser(appSettings: appSettings),
+            ElementCallURLParser()
         ]
     }
     
     func route(from url: URL) -> AppRoute? {
+        guard let scheme = url.scheme else {
+            return nil
+        }
+        
+        var url = url
+        if scheme == InfoPlistReader.app.appScheme {
+            guard let encodedURLString = url.host(percentEncoded: false),
+                  let decodedHostURL = URL(string: encodedURLString) else {
+                MXLog.error("Invalid custom scheme parameters")
+                return nil
+            }
+         
+            url = decodedHostURL
+        }
+        
         for parser in urlParsers {
             if let appRoute = parser.route(from: url) {
                 return appRoute
             }
         }
         
-        // Fallback to a generic call link. This is temporary and will
-        // be handled by a parser that checks for a specific URL scheme.
-        if let host = url.host(), !urlParsers.map(\.host).contains(host) {
-            return .genericCallLink(url: url)
-        }
-        
-        MXLog.error("Failed parsing URL: \(url)")
         return nil
     }
 }
@@ -57,22 +65,22 @@ struct AppRouteURLParser {
 ///
 /// The following Universal Links are missing parsers.
 /// - app.element.io
-/// - staging.element.io
-/// - develop.element.io
 /// - mobile.element.io
 protocol URLParser {
-    var host: String { get }
     func route(from url: URL) -> AppRoute?
 }
 
-/// The parser for the element.io main website.
-struct WebsiteParser: URLParser {
-    let host = "element.io"
+/// The parser for the main Element website.
+struct ElementAppURLParser: URLParser {
+    private let knownHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     
-    var appSettings: AppSettings
+    let appSettings: AppSettings
     
     func route(from url: URL) -> AppRoute? {
-        guard url.host() == host else { return nil }
+        guard let host = url.host, knownHosts.contains(host) else {
+            return nil
+        }
+        
         let pathComponents = url.pathComponents
         
         // OIDC callback URL.
@@ -85,11 +93,14 @@ struct WebsiteParser: URLParser {
 }
 
 /// The parser for Element Call links. This always returns a `.genericCallLink`
-struct ElementCallParser: URLParser {
-    let host = "call.element.io"
+struct ElementCallURLParser: URLParser {
+    private let knownHosts = ["call.element.io"]
     
     func route(from url: URL) -> AppRoute? {
-        guard url.host() == host else { return nil }
+        guard let host = url.host, knownHosts.contains(host) else {
+            return nil
+        }
+        
         return .genericCallLink(url: url)
     }
 }

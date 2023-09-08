@@ -31,6 +31,9 @@ struct InfoPlistReader {
         static let otlpTracingURL = "otlpTracingURL"
         static let otlpTracingUsername = "otlpTracingUsername"
         static let otlpTracingPassword = "otlpTracingPassword"
+        
+        static let bundleURLTypes = "CFBundleURLTypes"
+        static let bundleURLSchemes = "CFBundleURLSchemes"
     }
     
     private enum Values {
@@ -109,6 +112,19 @@ struct InfoPlistReader {
     
     var otlpTracingPassword: String {
         infoPlistValue(forKey: Keys.otlpTracingPassword)
+    }
+    
+    // MARK: - Custom App Scheme
+    
+    var appScheme: String {
+        let urlTypes: [[String: Any]] = infoPlistValue(forKey: Keys.bundleURLTypes)
+        
+        guard let urlSchemes = urlTypes.first?[Keys.bundleURLSchemes] as? [String],
+              let scheme = urlSchemes.first else {
+            fatalError("Invalid custon application scheme configuration")
+        }
+        
+        return scheme
     }
     
     // MARK: - Mention Pills
