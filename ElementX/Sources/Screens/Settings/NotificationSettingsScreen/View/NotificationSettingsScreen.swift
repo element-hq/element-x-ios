@@ -79,10 +79,6 @@ struct NotificationSettingsScreen: View {
                 }
                 .padding(.horizontal, ListRowPadding.horizontal)
                 .padding(.vertical, 8)
-                .environment(\.openURL, OpenURLAction { url in
-                    context.send(viewAction: .linkClicked(url: url))
-                    return .systemAction
-                })
             })
         }
     }

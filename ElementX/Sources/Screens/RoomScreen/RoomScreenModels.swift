@@ -56,7 +56,6 @@ enum RoomScreenViewAction {
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     case itemTapped(itemID: TimelineItemIdentifier)
-    case linkClicked(url: URL)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards

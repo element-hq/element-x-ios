@@ -104,8 +104,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.processItemDisappearance(id) }
         case .itemTapped(let id):
             Task { await itemTapped(with: id) }
-        case .linkClicked(let url):
-            MXLog.warning("Link clicked: \(url)")
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):

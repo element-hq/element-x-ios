@@ -61,7 +61,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.toPresentable()
     }
     
-    func handleUniversalLink(_ url: URL) {
+    func handleDeepLink(_ url: URL) -> Bool {
         fatalError("Not implemented.")
     }
 }
