@@ -120,7 +120,7 @@ struct MessageComposer: View {
 
     private var resizeHandle: some View {
         Capsule()
-            .foregroundColor(.compound.iconTertiary)
+            .foregroundColor(Asset.Colors.grabber.swiftUIColor)
             .frame(width: 36, height: 5)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)
