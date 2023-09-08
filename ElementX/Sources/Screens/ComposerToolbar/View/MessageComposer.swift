@@ -93,9 +93,8 @@ struct MessageComposer: View {
     }
 
     private var composerHeight: CGFloat {
-        let height = isExpanded ? ComposerConstant.maxHeight - composerTranslation : ComposerConstant.minHeight - composerTranslation
-        #warning("AG: add clamp primitives")
-        return min(ComposerConstant.maxHeight, max(ComposerConstant.minHeight, height))
+        let baseHeight = isExpanded ? ComposerConstant.maxHeight : ComposerConstant.minHeight
+        return (baseHeight - composerTranslation).clamped(to: ComposerConstant.allowedHeightRange)
     }
     
     @ViewBuilder
