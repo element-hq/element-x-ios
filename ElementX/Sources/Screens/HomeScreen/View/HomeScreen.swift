@@ -137,7 +137,7 @@ struct HomeScreen: View {
         let constraints = [gradientController.view.bottomAnchor.constraint(equalTo: navigationBarContainer.bottomAnchor),
                            gradientController.view.trailingAnchor.constraint(equalTo: navigationBarContainer.trailingAnchor),
                            gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
-                           gradientController.view.heightAnchor.constraint(equalToConstant: 30)]
+                           gradientController.view.heightAnchor.constraint(equalToConstant: 40)]
         constraints.forEach { $0.isActive = true }
     }
 
@@ -220,12 +220,12 @@ struct HomeScreen: View {
         ZStack {
             avatar
                 .blur(radius: 64)
-                .blendMode(.hardLight)
-                .opacity(colorScheme == .dark ? 0.15 : 0.20)
+                .blendMode(colorScheme == .dark ? .exclusion : .hardLight)
+                .opacity(colorScheme == .dark ? 0.50 : 0.20)
             avatar
-                .blur(radius: colorScheme == .dark ? 53 : 64)
-                .blendMode(colorScheme == .dark ? .normal : .saturation)
-                .opacity(colorScheme == .dark ? 0.20 : 0.75)
+                .blur(radius: 64)
+                .blendMode(.color)
+                .opacity(colorScheme == .dark ? 0.20 : 0.80)
         }
     }
     
