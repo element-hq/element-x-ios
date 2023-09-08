@@ -37,6 +37,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                   logoUri: appSettings.logoURL.absoluteString,
                                                   tosUri: appSettings.acceptableUseURL.absoluteString,
                                                   policyUri: appSettings.privacyURL.absoluteString,
+                                                  contacts: [appSettings.supportEmailAddress],
                                                   staticRegistrations: appSettings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
