@@ -25,6 +25,13 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var isSearching = false
     
+    // Bloom components
+    @State private var bloomView: UIView?
+    @State private var leftBarButtonView: UIView?
+    @State private var gradientView: UIView?
+    @State private var navigationBarContainer: UIView?
+    @State private var hairlineView: UIView?
+    
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
@@ -56,7 +63,7 @@ struct HomeScreen: View {
                     .disableAutocorrection(true)
                 }
             }
-            .introspect(.scrollView, on: .iOS(.v16)) { scrollView in
+            .introspect(.scrollView, on: .iOS(.v16, .v17)) { scrollView in
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
@@ -87,9 +94,95 @@ struct HomeScreen: View {
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
+        .introspect(.viewController, on: .iOS(.v16, .v17)) { controller in
+            Task {
+                if bloomView == nil {
+                    makeBloomView(controller: controller)
+                }
+            }
+            let isHidden = controller.navigationController?.topViewController != controller || isSearching
+            bloomView?.isHidden = isHidden
+            gradientView?.isHidden = isHidden
+            navigationBarContainer?.clipsToBounds = !isHidden
+            hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
+            if !isHidden {
+                updateBloomCenter()
+            }
+        }
+        .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { value in
+            hairlineView?.isHidden = !value
+            guard let gradientView else {
+                return
+            }
+            if value {
+                UIView.transition(with: gradientView, duration: 0.3, options: .curveEaseIn) {
+                    gradientView.alpha = 0
+                }
+            } else {
+                gradientView.alpha = 1
+            }
+        }
     }
     
     // MARK: - Private
+    
+    private var bloomGradient: some View {
+        LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+            .mask {
+                LinearGradient(stops: [.init(color: .white, location: 0.75), .init(color: .clear, location: 1.0)],
+                               startPoint: .leading,
+                               endPoint: .trailing)
+            }
+            .ignoresSafeArea(edges: .all)
+    }
+            
+    private func makeBloomView(controller: UIViewController) {
+        guard let navigationBarContainer = controller.navigationController?.navigationBar.subviews.first,
+              let leftBarButtonView = controller.navigationItem.leadingItemGroups.first?.barButtonItems.first?.customView else {
+            return
+        }
+        
+        let bloomController = UIHostingController(rootView: bloom)
+        bloomController.view.translatesAutoresizingMaskIntoConstraints = true
+        bloomController.view.backgroundColor = .clear
+        navigationBarContainer.insertSubview(bloomController.view, at: 0)
+        self.leftBarButtonView = leftBarButtonView
+        bloomView = bloomController.view
+        self.navigationBarContainer = navigationBarContainer
+        updateBloomCenter()
+        
+        let gradientController = UIHostingController(rootView: bloomGradient)
+        gradientController.view.backgroundColor = .clear
+        gradientController.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationBarContainer.insertSubview(gradientController.view, aboveSubview: bloomController.view)
+        
+        let constraints = [gradientController.view.bottomAnchor.constraint(equalTo: navigationBarContainer.bottomAnchor),
+                           gradientController.view.trailingAnchor.constraint(equalTo: navigationBarContainer.trailingAnchor),
+                           gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
+                           gradientController.view.heightAnchor.constraint(equalToConstant: 40)]
+        constraints.forEach { $0.isActive = true }
+        gradientView = gradientController.view
+        
+        let dividerController = UIHostingController(rootView: Divider().ignoresSafeArea())
+        dividerController.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationBarContainer.addSubview(dividerController.view)
+        let dividerConstraints = [dividerController.view.bottomAnchor.constraint(equalTo: gradientController.view.bottomAnchor),
+                                  dividerController.view.widthAnchor.constraint(equalTo: gradientController.view.widthAnchor),
+                                  dividerController.view.leadingAnchor.constraint(equalTo: gradientController.view.leadingAnchor)]
+        dividerConstraints.forEach { $0.isActive = true }
+        hairlineView = dividerController.view
+    }
+
+    private func updateBloomCenter() {
+        guard let leftBarButtonView,
+              let bloomView,
+              let navigationBarContainer = bloomView.superview else {
+            return
+        }
+        
+        let center = leftBarButtonView.convert(leftBarButtonView.center, to: navigationBarContainer.coordinateSpace)
+        bloomView.center = center
+    }
     
     @ViewBuilder
     /// The session verification banner and invites button if either are needed.
@@ -153,6 +246,10 @@ struct HomeScreen: View {
         ToolbarItemGroup(placement: .primaryAction) {
             newRoomButton
         }
+    }
+    
+    private var bloom: some View {
+        BloomView(context: context)
     }
     
     private var newRoomButton: some View {
