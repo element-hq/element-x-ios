@@ -49,11 +49,19 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             .eraseToAnyPublisher()
     }
     
+    private let scrollViewIsAtTopEdge: CurrentValueSubject<Bool, Never> = .init(false)
+    var scrollViewIsAtTopEdgePublisher: CurrentValuePublisher<Bool, Never> {
+        scrollViewIsAtTopEdge
+            .asCurrentValuePublisher()
+    }
+    
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         didScrollSubject.send(())
         updateScrollDirection(scrollView)
+        let contentInsetOffset = scrollView.contentOffset.y + scrollView.contentInset.top
+        scrollViewIsAtTopEdge.send(contentInsetOffset >= 3)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

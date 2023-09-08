@@ -106,6 +106,18 @@ struct HomeScreen: View {
                 updateBloomCenter()
             }
         }
+        .onReceive(scrollViewAdapter.scrollViewIsAtTopEdgePublisher.removeDuplicates()) { value in
+            guard let gradientView else {
+                return
+            }
+            if value {
+                UIView.transition(with: gradientView, duration: 0.3, options: .curveEaseIn) {
+                    gradientView.alpha = 0
+                }
+            } else {
+                gradientView.alpha = 1
+            }
+        }
     }
     
     // MARK: - Private
