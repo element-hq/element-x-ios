@@ -39,7 +39,7 @@ struct MessageComposer: View {
     var body: some View {
         VStack(spacing: 0) {
             if showResizeHandle {
-                handle
+                resizeHandle
             }
 
             mainContent
@@ -118,7 +118,7 @@ struct MessageComposer: View {
         }
     }
 
-    private var handle: some View {
+    private var resizeHandle: some View {
         Capsule()
             .foregroundColor(.compound.iconTertiary)
             .frame(width: 36, height: 5)
@@ -132,12 +132,10 @@ struct MessageComposer: View {
                 composerTranslation += value.translation.height
             }
             .onEnded { _ in
-                #warning("AG: move to constants")
-                let threshold: CGFloat = 60
                 withElementAnimation(.easeIn(duration: 0.3)) {
-                    if composerTranslation > threshold {
+                    if composerTranslation > ComposerConstant.translationThreshold {
                         isExpanded = false
-                    } else if composerTranslation < -threshold {
+                    } else if composerTranslation < -ComposerConstant.translationThreshold {
                         isExpanded = true
                     }
                     composerTranslation = 0

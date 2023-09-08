@@ -131,4 +131,5 @@ enum ComposerConstant {
     static let minHeight: CGFloat = 22
     static let maxHeight: CGFloat = 250
     static let allowedHeightRange = minHeight...maxHeight
+    static let translationThreshold: CGFloat = 60
 }
