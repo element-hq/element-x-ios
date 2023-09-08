@@ -73,14 +73,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         setupStateMachine()
         
-        roomFlowCoordinator.actions.sink { action in
+        roomFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
             case .presentedRoom(let roomID):
-                self.analytics.signpost.beginRoomFlow(roomID)
-                self.stateMachine.processEvent(.selectRoom(roomID: roomID))
+                analytics.signpost.beginRoomFlow(roomID)
+                stateMachine.processEvent(.selectRoom(roomID: roomID))
             case .dismissedRoom:
-                self.stateMachine.processEvent(.deselectRoom)
-                self.analytics.signpost.endRoomFlow()
+                stateMachine.processEvent(.deselectRoom)
+                analytics.signpost.endRoomFlow()
             }
         }
         .store(in: &cancellables)

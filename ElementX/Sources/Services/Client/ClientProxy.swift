@@ -54,6 +54,11 @@ class ClientProxy: ClientProxyProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var visibleRoomsListProxyStateObservationToken: AnyCancellable?
     
+    /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
+    /// before the client is released which ends up running in a loop. This is a workaround until the sync service
+    /// can tell us *what* error occurred so we can handle restarts more gracefully.
+    private var hasEncounteredAuthError = false
+    
     deinit {
         client.setDelegate(delegate: nil)
         stopSync()
@@ -79,6 +84,7 @@ class ClientProxy: ClientProxyProtocol {
                                                          backgroundTaskService: backgroundTaskService)
 
         client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
+            self?.hasEncounteredAuthError = true
             self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
         } tokenRefreshCallback: { [weak self] in
             self?.callbacks.send(.updateRestorationToken)
@@ -125,6 +131,11 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
+        guard !hasEncounteredAuthError else {
+            MXLog.warning("Ignoring request, this client has an unknown token.")
+            return
+        }
+        
         MXLog.info("Starting sync")
         
         Task {
@@ -360,21 +371,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
-    
-    private func restartSync(delay: Duration = .zero) {
-        Task {
-            try await Task.sleep(for: delay)
-            
-            do {
-                MXLog.info("Restarting the sync service.")
-                try await self.syncService?.stop()
-            } catch {
-                MXLog.error("Failed restarting the sync service with error: \(error)")
-            }
-            
-            await self.syncService?.start()
-        }
-    }
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
@@ -442,7 +438,7 @@ class ClientProxy: ClientProxyProtocol {
             case .running, .terminated, .idle:
                 break
             case .error:
-                restartSync()
+                startSync()
             }
         })
     }
