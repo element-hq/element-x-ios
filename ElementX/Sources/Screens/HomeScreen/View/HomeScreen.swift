@@ -27,6 +27,8 @@ struct HomeScreen: View {
     @State private var isSearching = false
     @State private var bloomView: UIView?
     @State private var leftBarButtonView: UIView?
+    @State private var gradientView: UIView?
+    @State private var navigationBarContainer: UIView?
     
     var body: some View {
         GeometryReader { geometry in
@@ -98,6 +100,8 @@ struct HomeScreen: View {
             }
             let isHidden = controller.navigationController?.topViewController != controller || isSearching
             bloomView?.isHidden = isHidden
+            gradientView?.isHidden = isHidden
+            navigationBarContainer?.clipsToBounds = !isHidden
             if !isHidden {
                 updateBloomCenter()
             }
@@ -109,7 +113,9 @@ struct HomeScreen: View {
     private var bloomGradient: some View {
         LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
             .mask {
-                LinearGradient(colors: [.clear, .white], startPoint: .trailing, endPoint: .leading)
+                LinearGradient(stops:
+                    [.init(color: .white, location: 0.75), .init(color: .clear, location: 1.0)],
+                    startPoint: .leading, endPoint: .trailing)
             }
             .ignoresSafeArea(edges: .all)
     }
@@ -120,13 +126,13 @@ struct HomeScreen: View {
             return
         }
         
-        navigationBarContainer.clipsToBounds = true
         let hostingController = UIHostingController(rootView: bloom)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = true
         hostingController.view.backgroundColor = .clear
         navigationBarContainer.insertSubview(hostingController.view, at: 0)
         self.leftBarButtonView = leftBarButtonView
         bloomView = hostingController.view
+        self.navigationBarContainer = navigationBarContainer
         updateBloomCenter()
         
         let gradientController = UIHostingController(rootView: bloomGradient)
@@ -139,6 +145,7 @@ struct HomeScreen: View {
                            gradientController.view.leadingAnchor.constraint(equalTo: navigationBarContainer.leadingAnchor),
                            gradientController.view.heightAnchor.constraint(equalToConstant: 40)]
         constraints.forEach { $0.isActive = true }
+        gradientView = gradientController.view
     }
 
     private func updateBloomCenter() {
