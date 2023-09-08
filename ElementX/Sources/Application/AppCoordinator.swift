@@ -58,6 +58,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     @Consumable private var storedAppRoute: AppRoute?
 
     init() {
+        Self.setupEnvironmentVariables()
+        
         let appSettings = AppSettings()
         
         if appSettings.otlpTracingEnabled {
@@ -77,7 +79,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         navigationRootCoordinator = NavigationRootCoordinator()
         
         Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator, appSettings: appSettings)
-
+        
         ServiceLocator.shared.analytics.startIfEnabled()
 
         stateMachine = AppCoordinatorStateMachine()
@@ -229,6 +231,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     }
     
     // MARK: - Private
+    
+    private static func setupEnvironmentVariables() {
+        setenv("RUST_BACKTRACE", "1", 1)
+    }
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator, appSettings: AppSettings) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))

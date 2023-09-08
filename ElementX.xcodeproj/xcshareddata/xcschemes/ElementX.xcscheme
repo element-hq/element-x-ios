@@ -83,11 +83,6 @@
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "RUST_BACKTRACE"
-            value = "full"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
             key = "HTTPS_PROXY"
             value = "localhost:9090"
             isEnabled = "NO">
