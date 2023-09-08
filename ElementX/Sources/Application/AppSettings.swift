@@ -110,6 +110,8 @@ final class AppSettings {
     let acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
     /// A URL that contains the app's Privacy Policy.
     let privacyURL: URL = "https://element.io/privacy"
+    /// An email address that should be used for support requests.
+    let supportEmailAddress = "support@element.io"
     
     // MARK: - Authentication
     

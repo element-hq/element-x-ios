@@ -619,6 +619,26 @@ class SDKClientMock: SDKClientProtocol {
         unignoreUserUserIdReceivedInvocations.append(userId)
         try unignoreUserUserIdClosure?(userId)
     }
+    //MARK: - uploadAvatar
+
+    public var uploadAvatarMimeTypeDataThrowableError: Error?
+    public var uploadAvatarMimeTypeDataCallsCount = 0
+    public var uploadAvatarMimeTypeDataCalled: Bool {
+        return uploadAvatarMimeTypeDataCallsCount > 0
+    }
+    public var uploadAvatarMimeTypeDataReceivedArguments: (mimeType: String, data: [UInt8])?
+    public var uploadAvatarMimeTypeDataReceivedInvocations: [(mimeType: String, data: [UInt8])] = []
+    public var uploadAvatarMimeTypeDataClosure: ((String, [UInt8]) throws -> Void)?
+
+    public func uploadAvatar(mimeType: String, data: [UInt8]) throws {
+        if let error = uploadAvatarMimeTypeDataThrowableError {
+            throw error
+        }
+        uploadAvatarMimeTypeDataCallsCount += 1
+        uploadAvatarMimeTypeDataReceivedArguments = (mimeType: mimeType, data: data)
+        uploadAvatarMimeTypeDataReceivedInvocations.append((mimeType: mimeType, data: data))
+        try uploadAvatarMimeTypeDataClosure?(mimeType, data)
+    }
     //MARK: - uploadMedia
 
     public var uploadMediaMimeTypeDataProgressWatcherThrowableError: Error?
