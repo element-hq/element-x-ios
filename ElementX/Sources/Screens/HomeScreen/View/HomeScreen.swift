@@ -138,19 +138,19 @@ struct HomeScreen: View {
             return
         }
         
-        let hostingController = UIHostingController(rootView: bloom)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = true
-        hostingController.view.backgroundColor = .clear
-        navigationBarContainer.insertSubview(hostingController.view, at: 0)
+        let bloomController = UIHostingController(rootView: bloom)
+        bloomController.view.translatesAutoresizingMaskIntoConstraints = true
+        bloomController.view.backgroundColor = .clear
+        navigationBarContainer.insertSubview(bloomController.view, at: 0)
         self.leftBarButtonView = leftBarButtonView
-        bloomView = hostingController.view
+        bloomView = bloomController.view
         self.navigationBarContainer = navigationBarContainer
         updateBloomCenter()
         
         let gradientController = UIHostingController(rootView: bloomGradient)
         gradientController.view.backgroundColor = .clear
         gradientController.view.translatesAutoresizingMaskIntoConstraints = false
-        navigationBarContainer.insertSubview(gradientController.view, aboveSubview: hostingController.view)
+        navigationBarContainer.insertSubview(gradientController.view, aboveSubview: bloomController.view)
         
         let constraints = [gradientController.view.bottomAnchor.constraint(equalTo: navigationBarContainer.bottomAnchor),
                            gradientController.view.trailingAnchor.constraint(equalTo: navigationBarContainer.trailingAnchor),
