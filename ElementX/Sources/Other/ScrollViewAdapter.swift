@@ -60,7 +60,7 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         didScrollSubject.send(())
         updateScrollDirection(scrollView)
-        let contentInsetOffset = scrollView.contentOffset.y + scrollView.contentInset.top
+        let insetContentOffset = scrollView.contentOffset.y + scrollView.contentInset.top
         scrollViewIsAtTopEdge.send(contentInsetOffset >= 3)
     }
     
