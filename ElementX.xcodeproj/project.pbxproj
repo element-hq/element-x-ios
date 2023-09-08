@@ -5188,6 +5188,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_CUSTOM_SCHEME = vector;
 				APP_DISPLAY_NAME = "Element X";
 				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
 				APP_NAME = ElementX;
@@ -5257,6 +5258,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_CUSTOM_SCHEME = vector;
 				APP_DISPLAY_NAME = "Element X";
 				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
 				APP_NAME = ElementX;
