@@ -20,7 +20,6 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct HomeScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
@@ -98,7 +97,7 @@ struct HomeScreen: View {
         .introspect(.viewController, on: .iOS(.v16, .v17)) { controller in
             Task {
                 if bloomView == nil {
-                    setBloomView(controller: controller)
+                    makeBloomView(controller: controller)
                 }
             }
             let isHidden = controller.navigationController?.topViewController != controller || isSearching
