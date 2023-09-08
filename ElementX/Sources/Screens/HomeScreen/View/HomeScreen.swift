@@ -109,7 +109,7 @@ struct HomeScreen: View {
                 updateBloomCenter()
             }
         }
-        .onReceive(scrollViewAdapter.scrollViewIsAtTopEdgePublisher.removeDuplicates()) { value in
+        .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { value in
             hairlineView?.isHidden = !value
             guard let gradientView else {
                 return
