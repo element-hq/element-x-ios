@@ -57,6 +57,7 @@ struct ComposerToolbar: View {
         HStack(alignment: .bottom, spacing: 10) {
             Button {
                 context.composerActionsEnabled = false
+                context.composerExpanded = false
             } label: {
                 Image(systemName: "xmark.circle.fill")
                     .font(.compound.headingLG)
@@ -94,7 +95,8 @@ struct ComposerToolbar: View {
         MessageComposer(plainText: $context.composerPlainText,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
-                        resizeBehaviorEnabled: context.viewState.bindings.composerActionsEnabled) {
+                        showResizeHandle: context.viewState.bindings.composerActionsEnabled,
+                        isExpanded: $context.composerExpanded) {
             context.send(viewAction: .sendMessage)
         } pasteAction: { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))

@@ -51,6 +51,7 @@ struct RoomScreen: View {
                     .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
@@ -155,6 +156,10 @@ struct RoomScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
         }
+    }
+
+    private var isNavigationBarHidden: Bool {
+        composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

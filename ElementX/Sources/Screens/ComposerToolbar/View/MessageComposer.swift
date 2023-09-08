@@ -24,7 +24,8 @@ struct MessageComposer: View {
     @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
-    let resizeBehaviorEnabled: Bool
+    let showResizeHandle: Bool
+    @Binding var isExpanded: Bool
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
@@ -32,17 +33,12 @@ struct MessageComposer: View {
     let onAppearAction: () -> Void
     @FocusState private var focused: Bool
 
-    #warning("AG: move to constants")
-    @ScaledMetric private var composerMinHeight: CGFloat = 22
-    private let composerMaxHeight: CGFloat = 250
-
     @State private var isMultiline = false
-    @State private var isExpanded = false
     @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 0) {
-            if resizeBehaviorEnabled {
+            if showResizeHandle {
                 handle
             }
 
@@ -97,14 +93,9 @@ struct MessageComposer: View {
     }
 
     private var composerHeight: CGFloat {
-        guard resizeBehaviorEnabled else {
-            return composerMinHeight
-        }
-
-        let height = isExpanded ? composerMaxHeight - composerTranslation : composerMinHeight - composerTranslation
-
+        let height = isExpanded ? ComposerConstant.maxHeight - composerTranslation : ComposerConstant.minHeight - composerTranslation
         #warning("AG: add clamp primitives")
-        return min(composerMaxHeight, max(composerMinHeight, height))
+        return min(ComposerConstant.maxHeight, max(ComposerConstant.minHeight, height))
     }
     
     @ViewBuilder
@@ -228,7 +219,8 @@ struct MessageComposer_Previews: PreviewProvider {
         return MessageComposer(plainText: .constant(content),
                                composerView: composerView,
                                mode: mode,
-                               resizeBehaviorEnabled: false,
+                               showResizeHandle: false,
+                               isExpanded: .constant(false),
                                sendAction: { },
                                pasteAction: { _ in },
                                replyCancellationAction: { },

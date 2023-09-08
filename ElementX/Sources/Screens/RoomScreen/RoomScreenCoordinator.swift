@@ -61,7 +61,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                         analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
-        wysiwygViewModel = WysiwygComposerViewModel(minHeight: 22, maxCompressedHeight: 250, maxExpandedHeight: 250)
+        wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
+                                                    maxCompressedHeight: ComposerConstant.maxHeight,
+                                                    maxExpandedHeight: ComposerConstant.maxHeight)
         composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
     }
     
@@ -123,4 +125,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         return AnyView(RoomScreen(context: viewModel.context, composerToolbar: composerToolbar))
     }
+}
+
+enum ComposerConstant {
+    static let minHeight: CGFloat = 22
+    static let maxHeight: CGFloat = 250
 }

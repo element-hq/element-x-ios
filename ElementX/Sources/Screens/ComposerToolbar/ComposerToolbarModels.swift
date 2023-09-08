@@ -68,6 +68,7 @@ struct ComposerToolbarViewStateBindings {
     var composerPlainText = ""
     var composerFocused = false
     var composerActionsEnabled = false
+    var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
 
