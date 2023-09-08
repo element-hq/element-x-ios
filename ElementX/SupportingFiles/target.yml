@@ -19,9 +19,6 @@ schemes:
     run:
       config: Debug
       environmentVariables:
-        - variable: RUST_BACKTRACE
-          value: full
-          isEnabled: false
         - variable: HTTPS_PROXY
           value: localhost:9090
           isEnabled: false
