@@ -17,6 +17,8 @@
 import Foundation
 import SwiftUI
 
+import Compound
+
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
@@ -217,29 +219,48 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
-            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-               let replyDetails = messageTimelineItem.replyDetails {
-                // The rendered reply bubble with a greedy width. The custom layout prevents
-                // the infinite width from increasing the overall width of the view.
-                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
-                    .cornerRadius(8)
-                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
-                
-                // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
-                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
-                    .hidden()
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+                if messageTimelineItem.isThreaded {
+                    threadDecorator
+                        .padding(.leading, 4)
+                        .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                }
+                if let replyDetails = messageTimelineItem.replyDetails {
+                    // The rendered reply bubble with a greedy width. The custom layout prevents
+                    // the infinite width from increasing the overall width of the view.
+                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(4.0)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.compound.bgCanvasDefault)
+                        .cornerRadius(8)
+                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    
+                    // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
+                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(4.0)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                        .hidden()
+                }
             }
             
             content()
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
         }
+    }
+    
+    private var threadDecorator: some View {
+        Label {
+            Text("Thread")
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodyXS)
+        } icon: {
+            CompoundIcon(\.threads)
+                .font(.system(size: 16))
+                .foregroundColor(.compound.iconSecondary)
+        }
+        .labelStyle(CustomLayoutLabelStyle(spacing: 4))
     }
     
     private var messageBubbleTopPadding: CGFloat {
@@ -374,6 +395,31 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
             .previewDisplayName("Mock Timeline RTL")
         replies
             .previewDisplayName("Replies")
+        threads
+            .previewDisplayName("Thread decorator")
+    }
+    
+    static var threads: some View {
+        VStack {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             isThreaded: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   contentType: .text(.init(body: "Short")))), groupStyle: .single))
+
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             isThreaded: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Short message")), groupStyle: .single))
+        }
+        .environmentObject(viewModel.context)
     }
 
     static var mockTimeline: some View {
