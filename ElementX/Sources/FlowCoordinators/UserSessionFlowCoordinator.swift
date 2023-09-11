@@ -121,6 +121,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.stateMachine.processEvent(.showInvitesScreen, userInfo: .init(animated: animated))
             case .genericCallLink(let url):
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+            case .oidcCallback:
+                break
             }
         }
     }

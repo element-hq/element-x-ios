@@ -30,10 +30,6 @@ struct RoomTimelineItemView: View {
             .onDisappear {
                 context.send(viewAction: .itemDisappeared(itemID: viewState.identifier))
             }
-            .environment(\.openURL, OpenURLAction { url in
-                context.send(viewAction: .linkClicked(url: url))
-                return .systemAction
-            })
     }
 
     @ViewBuilder private var timelineView: some View {

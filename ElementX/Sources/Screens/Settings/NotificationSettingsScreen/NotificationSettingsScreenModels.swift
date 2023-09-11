@@ -86,7 +86,6 @@ struct NotificationSettingsScreenStrings {
 }
 
 enum NotificationSettingsScreenViewAction {
-    case linkClicked(url: URL)
     case changedEnableNotifications
     case groupChatsTapped
     case directChatsTapped

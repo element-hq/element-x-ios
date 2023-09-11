@@ -57,8 +57,6 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     
     override func process(viewAction: NotificationSettingsScreenViewAction) {
         switch viewAction {
-        case .linkClicked(let url):
-            MXLog.warning("Link clicked: \(url)")
         case .changedEnableNotifications:
             toggleNotifications()
         case .groupChatsTapped:

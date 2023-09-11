@@ -18,5 +18,5 @@ import Foundation
 
 protocol AppCoordinatorProtocol: CoordinatorProtocol {
     var notificationManager: NotificationManagerProtocol { get }
-    func handleUniversalLink(_ url: URL)
+    @discardableResult func handleDeepLink(_ url: URL) -> Bool
 }
