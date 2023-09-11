@@ -36,21 +36,6 @@ struct AppRouteURLParser {
     }
     
     func route(from url: URL) -> AppRoute? {
-        guard let scheme = url.scheme else {
-            return nil
-        }
-        
-        var url = url
-        if scheme == InfoPlistReader.app.appScheme {
-            guard let encodedURLString = url.host(percentEncoded: false),
-                  let decodedHostURL = URL(string: encodedURLString) else {
-                MXLog.error("Invalid custom scheme parameters")
-                return nil
-            }
-         
-            url = decodedHostURL
-        }
-        
         for parser in urlParsers {
             if let appRoute = parser.route(from: url) {
                 return appRoute
@@ -95,8 +80,28 @@ struct ElementAppURLParser: URLParser {
 /// The parser for Element Call links. This always returns a `.genericCallLink`
 struct ElementCallURLParser: URLParser {
     private let knownHosts = ["call.element.io"]
+    private let customSchemeHost = "call"
+    private let customSchemeURLQueryParameterName = "url"
     
     func route(from url: URL) -> AppRoute? {
+        // First try processing URLs with custom schemes
+        if let scheme = url.scheme,
+           scheme == InfoPlistReader.app.appScheme {
+            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                  components.host == customSchemeHost else {
+                return nil
+            }
+            
+            guard let encodedURLString = components.queryItems?.first(where: { $0.name == customSchemeURLQueryParameterName })?.value,
+                  let callURL = URL(string: encodedURLString) else {
+                MXLog.error("Invalid custom scheme call parameters: \(url)")
+                return nil
+            }
+            
+            return .genericCallLink(url: callURL)
+        }
+        
+        // Otherwise try to interpret it as an universal link
         guard let host = url.host, knownHosts.contains(host) else {
             return nil
         }
