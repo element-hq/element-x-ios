@@ -55,21 +55,26 @@ struct ComposerToolbar: View {
 
     private var bottomBar: some View {
         HStack(alignment: .center, spacing: 10) {
-            Button {
-                context.composerActionsEnabled = false
-                context.composerExpanded = false
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.compound.headingLG)
-                    .foregroundColor(.compound.textActionPrimary)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
-            .padding(.bottom, 5) // centre align with the send button
+            closeRTEButton
+
             FormattingToolbar(formatItems: context.formatItems) { action in
                 context.send(viewAction: .composerAction(action: action.composerAction))
             }
+
             sendButton
         }
+    }
+
+    private var closeRTEButton: some View {
+        Button {
+            context.composerActionsEnabled = false
+            context.composerExpanded = false
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .font(.compound.headingLG)
+                .foregroundColor(.compound.textActionPrimary)
+        }
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
 
     private var sendButton: some View {
