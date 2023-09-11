@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import CompoundDesignTokens
 import SwiftUI
 
 struct PollOptionView: View {
@@ -71,7 +70,7 @@ private struct PollProgressView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .foregroundColor(CompoundColorTokens.colorAlphaGray500)
+                    .foregroundColor(.compound._bgEmptyItemAlpha)
 
                 Capsule()
                     .frame(maxWidth: progress * geometry.size.width)
