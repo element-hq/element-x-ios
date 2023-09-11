@@ -40,16 +40,12 @@ struct PollOptionView: View {
                     }
                 }
 
-                progressView
+                PollProgressView(progress: progress)
             }
         }
     }
 
     // MARK: - Private
-
-    private var progressView: some View {
-        PollProgressView(progress: progress)
-    }
 
     private var progress: Double {
         switch (showVotes, pollOption.allVotes, pollOption.isSelected) {
@@ -74,7 +70,7 @@ private struct PollProgressView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .foregroundColor(.compound.borderDisabled)
+                    .foregroundColor(.compound._bgEmptyItemAlpha)
 
                 Capsule()
                     .frame(maxWidth: progress * geometry.size.width)
