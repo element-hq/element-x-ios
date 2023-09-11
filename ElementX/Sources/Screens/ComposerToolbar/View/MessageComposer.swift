@@ -24,6 +24,8 @@ struct MessageComposer: View {
     @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
+    let showResizeGrabber: Bool
+    @Binding var isExpanded: Bool
     let sendAction: EnterKeyHandler
     let pasteAction: PasteHandler
     let replyCancellationAction: () -> Void
@@ -32,14 +34,43 @@ struct MessageComposer: View {
     @FocusState private var focused: Bool
 
     @State private var isMultiline = false
+    @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
-        let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
+        VStack(spacing: 0) {
+            if showResizeGrabber {
+                resizeGrabber
+            }
+
+            mainContent
+                .padding(.horizontal, 12.0)
+                .clipShape(RoundedRectangle(cornerRadius: borderRadius))
+                .background {
+                    let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
+                    ZStack {
+                        roundedRectangle
+                            .fill(Color.compound.bgSubtleSecondary)
+                        roundedRectangle
+                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
+                            .opacity(focused ? 1 : 0)
+                    }
+                }
+                // Explicitly disable all animations to fix weirdness with the header immediately
+                // appearing whilst the text field and keyboard are still animating up to it.
+                .animation(.noAnimation, value: mode)
+        }
+        .gesture(showResizeGrabber ? dragGesture : nil)
+    }
+
+    // MARK: - Private
+
+    private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
             HStack(alignment: .bottom) {
                 if ServiceLocator.shared.settings.richTextEditorEnabled {
                     composerView
+                        .frame(minHeight: composerHeight, alignment: .top)
                         .tint(.compound.iconAccentTertiary)
                         .padding(.vertical, 10)
                         .focused($focused)
@@ -59,20 +90,11 @@ struct MessageComposer: View {
                 }
             }
         }
-        .padding(.horizontal, 12.0)
-        .clipped()
-        .background {
-            ZStack {
-                roundedRectangle
-                    .fill(Color.compound.bgSubtleSecondary)
-                roundedRectangle
-                    .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
-                    .opacity(focused ? 1 : 0)
-            }
-        }
-        // Explicitly disable all animations to fix weirdness with the header immediately
-        // appearing whilst the text field and keyboard are still animating up to it.
-        .animation(.noAnimation, value: mode)
+    }
+
+    private var composerHeight: CGFloat {
+        let baseHeight = isExpanded ? ComposerConstant.maxHeight : ComposerConstant.minHeight
+        return (baseHeight - composerTranslation).clamped(to: ComposerConstant.allowedHeightRange)
     }
     
     @ViewBuilder
@@ -94,6 +116,31 @@ struct MessageComposer: View {
         case .reply, .edit:
             return 20
         }
+    }
+
+    private var resizeGrabber: some View {
+        Capsule()
+            .foregroundColor(Asset.Colors.grabber.swiftUIColor)
+            .frame(width: 36, height: 5)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                composerTranslation += value.translation.height
+            }
+            .onEnded { _ in
+                withElementAnimation(.easeIn(duration: 0.3)) {
+                    if composerTranslation > ComposerConstant.translationThreshold {
+                        isExpanded = false
+                    } else if composerTranslation < -ComposerConstant.translationThreshold {
+                        isExpanded = true
+                    }
+                    composerTranslation = 0
+                }
+            }
     }
 }
 
@@ -169,6 +216,8 @@ struct MessageComposer_Previews: PreviewProvider {
         return MessageComposer(plainText: .constant(content),
                                composerView: composerView,
                                mode: mode,
+                               showResizeGrabber: false,
+                               isExpanded: .constant(false),
                                sendAction: { },
                                pasteAction: { _ in },
                                replyCancellationAction: { },

@@ -19,10 +19,17 @@ import WysiwygComposer
 
 struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
+    @ObservedObject private var composerToolbarContext: ComposerToolbarViewModel.Context
     @State private var dragOver = false
     let composerToolbar: ComposerToolbar
 
     private let attachmentButtonPadding = 10.0
+
+    init(context: RoomScreenViewModel.Context, composerToolbar: ComposerToolbar) {
+        self.context = context
+        self.composerToolbar = composerToolbar
+        composerToolbarContext = composerToolbar.context
+    }
 
     var body: some View {
         timeline
@@ -31,12 +38,20 @@ struct RoomScreen: View {
                 composerToolbar
                     .padding(.leading, attachmentButtonPadding)
                     .padding(.trailing, 12)
-                    .padding(.top, 8)
                     .padding(.bottom)
+                    .background {
+                        if composerToolbarContext.composerActionsEnabled {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
+                                .ignoresSafeArea()
+                        }
+                    }
+                    .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     .environmentObject(context)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
@@ -141,6 +156,10 @@ struct RoomScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
         }
+    }
+
+    private var isNavigationBarHidden: Bool {
+        composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 
