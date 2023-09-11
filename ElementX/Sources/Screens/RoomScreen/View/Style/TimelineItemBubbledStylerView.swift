@@ -317,7 +317,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             switch messageItem {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
                 return .overlay
-            case  is LocationRoomTimelineItem:
+            case is LocationRoomTimelineItem:
                 // TODO: Check with design because locations can actually be with or without a description on the top. So they might be needed to be rendered differently given the use case.
                 return nil
             default:
@@ -499,7 +499,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                          sender: .init(id: "Bob"),
                                                          content: .init(body: "Fallback geo uri description",
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
-            
         }
         .environmentObject(viewModel.context)
     }
