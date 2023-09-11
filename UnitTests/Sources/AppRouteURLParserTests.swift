@@ -18,13 +18,20 @@ import XCTest
 
 @testable import ElementX
 
-class AppRouterTests: XCTestCase {
-    func testRoutes() {
+class AppRouteURLParserTests: XCTestCase {
+    func testElementCallRoutes() {
         guard let url = URL(string: "https://call.element.io/test") else {
             XCTFail("URL invalid")
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser.route(from: url), AppRoute.genericCallLink(url: url))
+        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: url), AppRoute.genericCallLink(url: url))
+        
+        guard let customSchemeURL = URL(string: "element://call?url=https%3A%2F%2Fcall.element.io%2Ftest") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
     }
 }

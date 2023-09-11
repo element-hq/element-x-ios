@@ -120,7 +120,6 @@
 		292827744227DF61C930BDDB /* CreateRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0D6CB491777E7FC6B5BA12 /* CreateRoomScreen.swift */; };
 		29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */; };
 		2955F4C160CFD7794D819C64 /* EffectsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F7398C5FC12586FB10E9D /* EffectsScene.swift */; };
-		296B988AB2280207D558C5BF /* AppRoutesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8CA15700B6BA365624AA7C /* AppRoutesTests.swift */; };
 		29EE1791E0AFA1ABB7F23D2F /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = 3853B78FB8531B83936C5DA6 /* SwiftState */; };
 		2A90DD14DE5C891BFA433950 /* TimelineReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE0E6043EFCF6FD2A341861 /* TimelineReplyView.swift */; };
 		2AAB2A77F1762A2648078A30 /* InteractiveQuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A81B97D51591D0FCFA598 /* InteractiveQuickLook.swift */; };
@@ -728,6 +727,7 @@
 		EA01A06EEDFEF4AE7652E5F3 /* NSRegularExpresion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */; };
 		EA65360A0EC026DD83AC0CF5 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA5F386C7701C129398945 /* AuthenticationCoordinator.swift */; };
 		EA6613B29BA671F39CE1B1D2 /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B383DCD3DCB19E00FD478A5F /* ConfirmationDialog.swift */; };
+		EA78A7512AFB1E5451744EB1 /* AppRouteURLParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E461B3C8BBBFCA400B268D14 /* AppRouteURLParserTests.swift */; };
 		EA974337FA7D040E7C74FE6E /* RoomDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFE1922F39398ABFB36DF3F /* RoomDetailsViewModelTests.swift */; };
 		EAC6FE2CD4F50A43068ADCD8 /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = 9573B94B1C86C6DF751AF3FD /* SwiftState */; };
 		EAF2B3E6C6AEC4AD3A8BD454 /* RoomMemberDetailsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A87D0471D438A233C2CF4A /* RoomMemberDetailsScreenViewModel.swift */; };
@@ -1290,7 +1290,6 @@
 		9E685274772980BDEFF6691E /* UNUserNotificationCenter+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNUserNotificationCenter+Settings.swift"; sourceTree = "<group>"; };
 		9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		9F85164F9475FF2867F71AAA /* RoomTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineController.swift; sourceTree = "<group>"; };
-		9F8CA15700B6BA365624AA7C /* AppRoutesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoutesTests.swift; sourceTree = "<group>"; };
 		A00C7A331B72C0F05C00392F /* RoomScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		A05707BF550D770168A406DB /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		A057F2FDC14866C3026A89A4 /* NotificationManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerProtocol.swift; sourceTree = "<group>"; };
@@ -1500,6 +1499,7 @@
 		E413F4CBD7BF0588F394A9DD /* RoomDetailsEditScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenViewModel.swift; sourceTree = "<group>"; };
 		E43005941B3A2C9671E23C85 /* UserIndicatorModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorModalView.swift; sourceTree = "<group>"; };
 		E44928D844E16EE48A311FCA /* ComposerToolbarViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerToolbarViewModelProtocol.swift; sourceTree = "<group>"; };
+		E461B3C8BBBFCA400B268D14 /* AppRouteURLParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteURLParserTests.swift; sourceTree = "<group>"; };
 		E51E3D86A84341C3A0CB8A40 /* FileRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRoomTimelineView.swift; sourceTree = "<group>"; };
 		E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurHashDecode.swift; sourceTree = "<group>"; };
 		E55B5EA766E89FF1F87C3ACB /* RoomNotificationSettingsProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNotificationSettingsProxyProtocol.swift; sourceTree = "<group>"; };
@@ -2580,7 +2580,7 @@
 			children = (
 				58C2527813FDAE23E72A9063 /* AnalyticsSettingsScreenViewModelTests.swift */,
 				C687844F60BFF532D49A994C /* AnalyticsTests.swift */,
-				9F8CA15700B6BA365624AA7C /* AppRoutesTests.swift */,
+				E461B3C8BBBFCA400B268D14 /* AppRouteURLParserTests.swift */,
 				893777A4997BBDB68079D4F5 /* ArrayTests.swift */,
 				AF25E364AE85090A70AE4644 /* AttributedStringBuilderTests.swift */,
 				37CA26F55123E36B50DB0B3A /* AttributedStringTests.swift */,
@@ -4295,7 +4295,7 @@
 			files = (
 				A9A5801D5EE3D4D91F6DDADB /* AnalyticsSettingsScreenViewModelTests.swift in Sources */,
 				890F0D453FE388756479AC97 /* AnalyticsTests.swift in Sources */,
-				296B988AB2280207D558C5BF /* AppRoutesTests.swift in Sources */,
+				EA78A7512AFB1E5451744EB1 /* AppRouteURLParserTests.swift in Sources */,
 				3EC698F80DDEEFA273857841 /* ArrayTests.swift in Sources */,
 				90DF83A6A347F7EE7EDE89EE /* AttributedStringBuilderTests.swift in Sources */,
 				5100F53E6884A15F9BA07CC3 /* AttributedStringTests.swift in Sources */,
