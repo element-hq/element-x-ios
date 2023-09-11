@@ -23,6 +23,8 @@ struct PollRoomTimelineView: View {
     @ScaledMetric private var summaryPadding = 32
     @ScaledMetric private var iconSize = 22
 
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 16) {
@@ -30,8 +32,9 @@ struct PollRoomTimelineView: View {
 
                 ForEach(poll.options, id: \.id) { option in
                     Button {
-                        guard let eventID else { return }
+                        guard let eventID, !option.isSelected else { return }
                         context.send(viewAction: .selectedPollOption(pollStartID: eventID, optionID: option.id))
+                        feedbackGenerator.impactOccurred()
                     } label: {
                         PollOptionView(pollOption: option,
                                        showVotes: showVotes,
