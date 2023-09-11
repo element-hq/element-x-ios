@@ -14,10 +14,20 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-@MainActor
-protocol VoiceRoomPlaybackViewModelProtocol {
-    var actions: AnyPublisher<VoiceRoomPlaybackViewModelAction, Never> { get }
-    var context: VoiceRoomPlaybackViewModelType.Context { get }
+class VoiceRoomPlaybackData: ObservableObject {
+    let duration: Double
+    let waveform: Waveform
+
+    @Published var progress: Double
+    
+    @Published var playing: Bool
+        
+    init(duration: Double = 0.0, waveform: Waveform? = nil, progress: Double = 0.0, playing: Bool = false) {
+        self.duration = duration
+        self.waveform = waveform ?? Waveform(data: [])
+        self.progress = progress
+        self.playing = playing
+    }
 }

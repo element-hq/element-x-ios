@@ -16,56 +16,67 @@
 
 import SwiftUI
 
-enum PlaybackState: Equatable {
-    case disabled
-    case paused
-    case playing
-    case recording
-}
-
 struct VoiceRoomPlaybackView: View {
-    @ObservedObject var context: VoiceRoomPlaybackViewModel.Context
+    @ObservedObject var playbackData: VoiceRoomPlaybackData
+    
+    let waveformMaxWidth: CGFloat = 150
+    let playPauseButtonSize = CGSize(width: 32, height: 32)
+    
+    private static let elapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "m:ss"
+        return dateFormatter
+    }()
+    
+    var onPlayPause: () -> Void = { }
+    var onSeek: (Double) -> Void = { _ in }
     
     var body: some View {
         HStack {
             HStack {
                 playPauseButton
-                Text(context.viewState.currentTime)
+                Text(Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playbackData.duration * playbackData.progress)))
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textSecondary)
                     .monospacedDigit()
             }
             .padding(.vertical, 6)
             GeometryReader { geometry in
-                WaveformView(waveform: context.viewState.waveform, progress: context.viewState.progress)
+                WaveformView(waveform: playbackData.waveform, progress: playbackData.progress)
                     .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
                         .onChanged { value in
                             let position = value.location.x / geometry.size.width
-                            if abs(position - context.viewState.progress) > 0.01 {
-                                context.send(viewAction: .seek(position: max(0, min(position, 1.0))))
+                            if abs(position - playbackData.progress) > 0.01 {
+                                onSeek(max(0, min(position, 1.0)))
                             }
                         }
                         .onEnded { value in
                             let position = value.location.x / geometry.size.width
-                            context.send(viewAction: .seek(position: max(0, min(position, 1.0))))
+                            onSeek(max(0, min(position, 1.0)))
                         }
                     )
+                    .transaction { transaction in
+                        // Disable animation
+                        transaction.animation = nil
+                    }
             }
-            .frame(maxWidth: 150)
+            .frame(maxWidth: waveformMaxWidth)
         }
         .padding(.vertical, 2)
         .padding(.horizontal, 8)
     }
     
+    @ViewBuilder
     var playPauseButton: some View {
         Button {
-            context.send(viewAction: .playPauseButtonTapped)
+            onPlayPause()
         } label: {
-            Image(systemName: context.viewState.playing ? "pause.fill" : "play.fill")
+            Image(systemName: playbackData.playing ? "pause.fill" : "play.fill")
                 .foregroundColor(.compound.iconSecondary)
                 .background(
                     Circle()
-                        .frame(width: 32, height: 32)
+                        .frame(width: playPauseButtonSize.width,
+                               height: playPauseButtonSize.height)
                         .foregroundColor(.compound.bgCanvasDefault)
                 )
                 .padding(.trailing, 7)
@@ -79,24 +90,13 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let viewModel = {
-        let timelineItem = VoiceRoomTimelineItem(id: .random,
-                                                 timestamp: "5 PM",
-                                                 isOutgoing: false,
-                                                 isEditable: false,
-                                                 sender: .init(id: "", displayName: "Bob"),
-                                                 content: .init(body: "Voice message",
-                                                                duration: 10.0,
-                                                                waveform: waveform,
-                                                                source: nil,
-                                                                contentType: nil))
-        var model = VoiceRoomPlaybackViewModel(timelineItem: timelineItem)
-
-        return model
-    }()
+    static let playbackData = VoiceRoomPlaybackData(duration: 10.0,
+                                                    waveform: waveform,
+                                                    progress: 2.0,
+                                                    playing: false)
     
     static var previews: some View {
-        VoiceRoomPlaybackView(context: viewModel.context)
+        VoiceRoomPlaybackView(playbackData: playbackData)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

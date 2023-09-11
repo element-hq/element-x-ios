@@ -94,7 +94,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .emote(content: let content):
             return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
         case .audio(let content):
-            if content.voice {
+            if content.voice != nil {
                 return buildVoiceTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
             } else {
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
@@ -433,7 +433,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
         var waveform: Waveform?
-        if let audioWaveform = messageContent.details?.waveform {
+        if let audioWaveform = messageContent.audio?.waveform {
             waveform = Waveform(data: audioWaveform)
         }
         return AudioRoomTimelineItemContent(body: messageContent.body,
@@ -591,7 +591,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             let replyContent: EventBasedMessageTimelineItemContentType
             switch timelineItem.asMessage()?.msgtype() {
-            case .audio(let content) where content.voice:
+            case .audio(let content) where content.voice != nil:
                 replyContent = .voice(buildAudioTimelineItemContent(content))
             case .audio(let content):
                 replyContent = .audio(buildAudioTimelineItemContent(content))

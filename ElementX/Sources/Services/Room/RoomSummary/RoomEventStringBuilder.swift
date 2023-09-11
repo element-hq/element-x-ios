@@ -59,7 +59,7 @@ struct RoomEventStringBuilder {
                 }
             // Message types that should be prefixed with the sender's name.
             case .audio(let content):
-                if content.voice {
+                if content.voice != nil {
                     message = UntranslatedL10n.commonVoice
                 } else {
                     message = L10n.commonAudio

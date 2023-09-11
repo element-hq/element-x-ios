@@ -36,6 +36,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
+    private(set) var timelineAudioPlaybackData = [TimelineItemIdentifier: VoiceRoomPlaybackData]()
     
     var roomID: String {
         roomProxy.id
@@ -219,6 +220,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         await roomProxy.retryDecryption(for: sessionID)
     }
 
+    func playbackAudioData(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackData? {
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
+            MXLog.error("timelineItem not found")
+            return .none
+        }
+        
+        switch timelineItem {
+        case let item as VoiceRoomTimelineItem:
+            if let playbackData = timelineAudioPlaybackData[itemID] {
+                return playbackData
+            }
+            let playbackData = VoiceRoomPlaybackData(duration: item.content.duration,
+                                                     waveform: item.content.waveform)
+            timelineAudioPlaybackData[itemID] = playbackData
+            return playbackData
+        default:
+            return .none
+        }
+    }
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("[RoomTimelineController] playPauseAudio(for \(itemID))")
+        timelineAudioPlaybackData[itemID]?.playing.toggle()
+    }
+    
+    func seekAudio(for itemID: TimelineItemIdentifier, position: Double) async {
+        MXLog.info("[RoomTimelineController] seekAudio(for \(itemID), position: \(position))")
+        timelineAudioPlaybackData[itemID]?.progress = position
+    }
+    
     // MARK: - Private
     
     @objc private func contentSizeCategoryDidChange() {

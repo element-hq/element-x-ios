@@ -19,18 +19,27 @@ import SwiftUI
 
 struct VoiceRoomTimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @StateObject private var playbackContext: VoiceRoomPlaybackViewModel
     let timelineItem: VoiceRoomTimelineItem
+    let playbackData: VoiceRoomPlaybackData?
 
-    init(timelineItem: VoiceRoomTimelineItem) {
-        self.timelineItem = timelineItem
-        _playbackContext = StateObject(wrappedValue: VoiceRoomPlaybackViewModel(timelineItem: timelineItem))
-    }
-    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VoiceRoomPlaybackView(context: playbackContext.context)
+            if let playbackData {
+                VoiceRoomPlaybackView(playbackData: playbackData,
+                                      onPlayPause: onPlaybackPlayPause,
+                                      onSeek: onPlaybackSeek(_:))
+            } else {
+                Text("Missing playback data")
+            }
         }
+    }
+    
+    private func onPlaybackPlayPause() {
+        context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+    }
+    
+    private func onPlaybackSeek(_ position: Double) {
+        context.send(viewAction: .seekAudio(itemID: timelineItem.id, position: position))
     }
 }
        
@@ -40,14 +49,7 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider {
                                           334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
-    
-    static var previews: some View {
-        body.environmentObject(viewModel.context)
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
-    }
-    
+
     static let voiceRoomTimelineItem = VoiceRoomTimelineItem(id: .random,
                                                              timestamp: "Now",
                                                              isOutgoing: false,
@@ -59,8 +61,20 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider {
                                                                             source: nil,
                                                                             contentType: nil))
     
+    static let playbackData = VoiceRoomPlaybackData(duration: 10.0,
+                                                    waveform: waveform,
+                                                    progress: 2.0,
+                                                    playing: false)
+    
+    static var previews: some View {
+        body.environmentObject(viewModel.context)
+        body
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+    }
+    
     static var body: some View {
-        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem)
+        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem, playbackData: playbackData)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

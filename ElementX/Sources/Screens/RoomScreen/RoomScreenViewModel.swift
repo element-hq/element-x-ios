@@ -75,6 +75,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             return self.timelineItemMenuActionsForItemId(itemId)
         }
+        
+        state.audioPlaybackDataProvider = { [weak self] itemId -> VoiceRoomPlaybackData? in
+            guard let self else { return nil }
+            
+            return self.audioPlaybackData(for: itemId)
+        }
 
         buildTimelineViews()
 
@@ -139,6 +145,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case let .selectedPollOption(pollStartID, optionID):
             sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+        case .playPauseAudio(let itemID):
+            Task { await timelineController.playPauseAudio(for: itemID) }
+        case .seekAudio(let itemID, let position):
+            Task { await timelineController.seekAudio(for: itemID, position: position) }
         }
     }
 
@@ -829,6 +839,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 displayError(.toast(L10n.errorUnknown))
             }
         }
+    }
+    
+    // MARK: - Audio
+    
+    private func audioPlaybackData(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackData? {
+        timelineController.playbackAudioData(for: itemID)
     }
 }
 

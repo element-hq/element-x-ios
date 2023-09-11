@@ -82,6 +82,17 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
     func retryDecryption(for sessionID: String) async { }
     
+    func playbackAudioData(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackData? {
+        VoiceRoomPlaybackData(duration: 10.0,
+                              waveform: nil,
+                              progress: 0.0,
+                              playing: false)
+    }
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
+    
+    func seekAudio(for itemID: TimelineItemIdentifier, position: Double) async { }
+    
     // MARK: - UI Test signalling
     
     /// The cancellable used for UI Tests signalling.

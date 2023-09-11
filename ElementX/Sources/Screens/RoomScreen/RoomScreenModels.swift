@@ -75,6 +75,9 @@ enum RoomScreenViewAction {
     case cancelSend(itemID: TimelineItemIdentifier)
     
     case scrolledToBottom
+    
+    case playPauseAudio(itemID: TimelineItemIdentifier)
+    case seekAudio(itemID: TimelineItemIdentifier, position: Double)
 }
 
 enum RoomScreenComposerAction {
@@ -100,6 +103,9 @@ struct RoomScreenViewState: BindableState {
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
     var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
+    
+    /// A closure providing the associated audio playback data for an item in the timeline.
+    var audioPlaybackDataProvider: ((_ itemId: TimelineItemIdentifier) -> VoiceRoomPlaybackData?)?
 }
 
 struct RoomScreenViewStateBindings {
