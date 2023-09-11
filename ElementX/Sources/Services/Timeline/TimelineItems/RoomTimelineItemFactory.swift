@@ -80,23 +80,24 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             fatalError("Invalid message timeline item: \(eventItemProxy)")
         }
 
+        let isThreaded = messageTimelineItem.isThreaded()
         switch messageTimelineItem.msgtype() {
         case .text(content: let content):
-            return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildTextTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .image(content: let content):
-            return buildImageTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildImageTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .video(let content):
-            return buildVideoTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildVideoTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .file(let content):
-            return buildFileTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildFileTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .notice(content: let content):
-            return buildNoticeTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildNoticeTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .emote(content: let content):
-            return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .audio(let content):
-            return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .location(let content):
-            return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing)
+            return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .none:
             return nil
         }
@@ -182,11 +183,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildTextTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                        _ messageTimelineItem: Message,
                                        _ messageContent: TextMessageContent,
-                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                       _ isOutgoing: Bool,
+                                       _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         TextRoomTimelineItem(id: eventItemProxy.id,
                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
+                             isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildTextTimelineItemContent(messageContent),
                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -199,11 +202,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageTimelineItem: Message,
                                         _ messageContent: ImageMessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                        _ isOutgoing: Bool,
+                                        _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         ImageRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildImageTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -216,11 +221,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageTimelineItem: Message,
                                         _ messageContent: VideoMessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                        _ isOutgoing: Bool,
+                                        _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         VideoRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildVideoTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -233,11 +240,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildAudioTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageTimelineItem: Message,
                                         _ messageContent: AudioMessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                        _ isOutgoing: Bool,
+                                        _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         AudioRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -250,11 +259,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                        _ messageTimelineItem: Message,
                                        _ messageContent: FileMessageContent,
-                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                       _ isOutgoing: Bool,
+                                       _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         FileRoomTimelineItem(id: eventItemProxy.id,
                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
+                             isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildFileTimelineItemContent(messageContent),
                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -267,11 +278,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildNoticeTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                          _ messageTimelineItem: Message,
                                          _ messageContent: NoticeMessageContent,
-                                         _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                         _ isOutgoing: Bool,
+                                         _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         NoticeRoomTimelineItem(id: eventItemProxy.id,
                                timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                isOutgoing: isOutgoing,
                                isEditable: eventItemProxy.isEditable,
+                               isThreaded: isThreaded,
                                sender: eventItemProxy.sender,
                                content: buildNoticeTimelineItemContent(messageContent),
                                replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -284,11 +297,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildEmoteTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageTimelineItem: Message,
                                         _ messageContent: EmoteMessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                        _ isOutgoing: Bool,
+                                        _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         EmoteRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildEmoteTimelineItemContent(senderDisplayName: eventItemProxy.sender.displayName, senderID: eventItemProxy.sender.id, messageContent: messageContent),
                               replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
@@ -301,11 +316,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildLocationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                            _ messageTimelineItem: Message,
                                            _ messageContent: LocationContent,
-                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                           _ isOutgoing: Bool,
+                                           _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         LocationRoomTimelineItem(id: eventItemProxy.id,
                                  timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
+                                 isThreaded: isThreaded,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(messageContent),
                                  replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),

@@ -58,7 +58,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
         EmoteRoomTimelineItem(id: .random,
                               timestamp: timestamp,
                               isOutgoing: false,
-                              isEditable: false,
+                              isEditable: false, isThreaded: false,
                               sender: .init(id: senderId),
                               content: .init(body: text))
     }

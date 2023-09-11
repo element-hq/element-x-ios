@@ -24,6 +24,7 @@ enum RoomTimelineItemFixtures {
                              timestamp: "10:10 AM",
                              isOutgoing: false,
                              isEditable: false,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Jacob"),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
@@ -31,6 +32,7 @@ enum RoomTimelineItemFixtures {
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗"),
                              properties: RoomTimelineItemProperties(reactions: [
@@ -40,6 +42,7 @@ enum RoomTimelineItemFixtures {
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/"),
                              properties: RoomTimelineItemProperties(reactions: [
@@ -57,6 +60,7 @@ enum RoomTimelineItemFixtures {
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
@@ -64,12 +68,14 @@ enum RoomTimelineItemFixtures {
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "And John's speech was amazing!")),
         TextRoomTimelineItem(id: .random,
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "New home office set up!"),
                              properties: RoomTimelineItemProperties(reactions: AggregatedReaction.mockReactions,
@@ -81,6 +87,7 @@ enum RoomTimelineItemFixtures {
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
+                             isThreaded: false,
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "",
                                             formattedBody: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL).fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳")))
@@ -230,6 +237,7 @@ private extension TextRoomTimelineItem {
                   timestamp: "10:47 am",
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
+                  isThreaded: false,
                   sender: .init(id: "", displayName: senderDisplayName),
                   content: .init(body: text))
     }

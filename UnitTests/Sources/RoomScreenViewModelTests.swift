@@ -511,6 +511,7 @@ private extension TextRoomTimelineItem {
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
+                  isThreaded: false,
                   sender: .init(id: "@\(sender):server.com", displayName: sender),
                   content: .init(body: text),
                   properties: RoomTimelineItemProperties(reactions: reactions))
@@ -529,6 +530,7 @@ private extension TextRoomTimelineItem {
                   timestamp: "",
                   isOutgoing: false,
                   isEditable: false,
+                  isThreaded: false,
                   sender: .init(id: ""),
                   content: .init(body: "Hello, World!"))
     }

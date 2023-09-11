@@ -23,6 +23,8 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     
+    let isThreaded: Bool
+    
     let sender: TimelineItemSender
     
     let content: FileRoomTimelineItemContent

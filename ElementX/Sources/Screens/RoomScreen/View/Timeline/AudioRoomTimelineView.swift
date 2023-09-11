@@ -49,7 +49,7 @@ struct AudioRoomTimelineView_Previews: PreviewProvider {
         AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .random,
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
-                                                                  isEditable: false,
+                                                                  isEditable: false, isThreaded: false,
                                                                   sender: .init(id: "Bob"),
                                                                   content: .init(body: "audio.ogg", duration: 300, source: nil, contentType: nil)))
     }

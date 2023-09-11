@@ -83,6 +83,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some video", duration: 21, source: nil, thumbnailSource: nil)))
 
@@ -90,6 +91,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some other video", duration: 22, source: nil, thumbnailSource: nil)))
             
@@ -97,6 +99,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Blurhashed video", duration: 23, source: nil, thumbnailSource: nil, aspectRatio: 0.7, blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")))
         }

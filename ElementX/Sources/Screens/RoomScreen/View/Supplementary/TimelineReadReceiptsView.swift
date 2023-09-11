@@ -81,7 +81,9 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider {
         TextRoomTimelineItem(id: .random,
                              timestamp: "Now",
                              isOutgoing: true,
-                             isEditable: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"),
+                             isEditable: false,
+                             isThreaded: false,
+                             sender: .init(id: UUID().uuidString), content: .init(body: "Test"),
                              properties: .init(orderedReadReceipts: receipts))
     }
 
