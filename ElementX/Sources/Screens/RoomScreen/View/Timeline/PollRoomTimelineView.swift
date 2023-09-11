@@ -99,7 +99,7 @@ private extension Poll {
     var summaryText: String? {
         guard !hasEnded else {
             return options.first.map {
-                L10n.commonPollFinalVotes($0.allVotes)
+                L10n.commonPollTotalVotes($0.allVotes)
             }
         }
 
