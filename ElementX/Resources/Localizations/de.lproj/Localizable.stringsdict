@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Mitglied</string>
+			<string>%1$d member</string>
 			<key>other</key>
-			<string>%1$d Mitglieder</string>
+			<string>%1$d members</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d Stimme</string>
+			<string>%d vote</string>
 			<key>other</key>
-			<string>%d Stimmen</string>
+			<string>%d votes</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d Nachricht</string>
+			<string>%1$@: %2$d message</string>
 			<key>other</key>
-			<string>%1$@: %2$d Nachrichten</string>
+			<string>%1$@: %2$d messages</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -61,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d Mitteilung</string>
+			<string>%d notification</string>
 			<key>other</key>
-			<string>%d Mitteilungen</string>
+			<string>%d notifications</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d Einladung</string>
+			<string>%d invitation</string>
 			<key>other</key>
-			<string>%d Einladungen</string>
+			<string>%d invitations</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d neue Nachricht</string>
+			<string>%d new message</string>
 			<key>other</key>
-			<string>%d neue Nachrichten</string>
+			<string>%d new messages</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ungelesene benachrichtigte Nachricht</string>
+			<string>%d unread notified message</string>
 			<key>other</key>
-			<string>%d ungelesene benachrichtigte Nachrichten</string>
+			<string>%d unread notified messages</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d Raum</string>
+			<string>%d room</string>
 			<key>other</key>
-			<string>%d Räume</string>
+			<string>%d rooms</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Raumänderung</string>
+			<string>%1$d room change</string>
 			<key>other</key>
-			<string>%1$d Raumänderungen</string>
+			<string>%1$d room changes</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -157,25 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Person</string>
+			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d Personen</string>
-		</dict>
-	</dict>
-	<key>screen_room_timeline_more_reactions</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string></string>
-			<key>other</key>
-			<string>%1$d weitere</string>
+			<string>%1$d people</string>
 		</dict>
 	</dict>
 </dict>

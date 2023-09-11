@@ -720,6 +720,10 @@ public enum L10n {
   public static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
   public static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
+  /// You can change your settings later.
+  public static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
+  /// Allow notifications and never miss a message
+  public static var screenNotificationOptinTitle: String { return L10n.tr("Localizable", "screen_notification_optin_title") }
   /// Additional settings
   public static var screenNotificationSettingsAdditionalSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_additional_settings_section_title") }
   /// Audio and video calls
@@ -928,10 +932,6 @@ public enum L10n {
   public static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
   /// Show less
   public static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
-  /// Plural format key: "%#@COUNT@"
-  public static func screenRoomTimelineMoreReactions(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_room_timeline_more_reactions", p1)
-  }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// Get started by messaging someone.
