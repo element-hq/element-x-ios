@@ -54,7 +54,7 @@ struct ComposerToolbar: View {
     }
 
     private var bottomBar: some View {
-        HStack(alignment: .bottom, spacing: 10) {
+        HStack(alignment: .center, spacing: 10) {
             Button {
                 context.composerActionsEnabled = false
                 context.composerExpanded = false
