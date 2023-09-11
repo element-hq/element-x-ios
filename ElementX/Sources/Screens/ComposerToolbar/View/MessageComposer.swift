@@ -59,7 +59,7 @@ struct MessageComposer: View {
                 // appearing whilst the text field and keyboard are still animating up to it.
                 .animation(.noAnimation, value: mode)
         }
-        .gesture(dragGesture)
+        .gesture(showResizeGrabber ? dragGesture : nil)
     }
 
     // MARK: - Private
