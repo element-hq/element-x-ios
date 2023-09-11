@@ -115,6 +115,8 @@ struct RoomAttachmentPicker: View {
                 Text(title)
             } icon: {
                 icon
+                    .resizable()
+                    .scaledToFit()
             }
             .labelStyle(FixedIconSizeLabelStyle())
             .multilineTextAlignment(.leading)
