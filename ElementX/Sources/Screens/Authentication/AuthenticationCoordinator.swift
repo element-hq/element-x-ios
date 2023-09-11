@@ -32,6 +32,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private var oidcPresenter: OIDCAuthenticationPresenter?
+    
     weak var delegate: AuthenticationCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
@@ -52,6 +54,15 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     func stop() {
         stopLoading()
+    }
+    
+    func handleOIDCRedirectURL(_ url: URL) {
+        guard let oidcPresenter else {
+            MXLog.error("Failed to find an OIDC request in progress.")
+            return
+        }
+        
+        oidcPresenter.handleUniversalLinkCallback(url)
     }
         
     // MARK: - Private
@@ -167,12 +178,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                 let presenter = OIDCAuthenticationPresenter(authenticationService: authenticationService,
                                                             oidcRedirectURL: appSettings.oidcRedirectURL,
                                                             presentationAnchor: presentationAnchor)
+                self.oidcPresenter = presenter
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
                     userHasSignedIn(userSession: userSession)
                 case .failure(let error):
                     handleError(error)
                 }
+                oidcPresenter = nil
             }
         }
     }

@@ -30,7 +30,7 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
-            ElementAppURLParser(appSettings: appSettings),
+            OIDCCallbackURLParser(appSettings: appSettings),
             ElementCallURLParser()
         ]
     }
@@ -50,34 +50,24 @@ struct AppRouteURLParser {
 ///
 /// The following Universal Links are missing parsers.
 /// - app.element.io
+/// - staging.element.io
+/// - develop.element.io
 /// - mobile.element.io
 protocol URLParser {
     func route(from url: URL) -> AppRoute?
 }
 
-/// The parser for the main Element website.
-struct ElementAppURLParser: URLParser {
-    private let knownHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
-    
+/// The parser for the OIDC callback URL. This always returns a `.oidcCallback`.
+struct OIDCCallbackURLParser: URLParser {
     let appSettings: AppSettings
     
     func route(from url: URL) -> AppRoute? {
-        guard let host = url.host, knownHosts.contains(host) else {
-            return nil
-        }
-        
-        let pathComponents = url.pathComponents
-        
-        // OIDC callback URL.
-        if pathComponents.count == 3, pathComponents[0] == "mobile", pathComponents[1] == "oidc" {
-            return .oidcCallback(url: url)
-        }
-        
-        return nil
+        guard url.absoluteString.starts(with: appSettings.oidcRedirectURL.absoluteString) else { return nil }
+        return .oidcCallback(url: url)
     }
 }
 
-/// The parser for Element Call links. This always returns a `.genericCallLink`
+/// The parser for Element Call links. This always returns a `.genericCallLink`.
 struct ElementCallURLParser: URLParser {
     private let knownHosts = ["call.element.io"]
     private let customSchemeURLQueryParameterName = "url"

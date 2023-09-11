@@ -19,20 +19,29 @@ import XCTest
 @testable import ElementX
 
 class AppRouteURLParserTests: XCTestCase {
+    var appSettings: AppSettings!
+    var appRouteURLParser: AppRouteURLParser!
+    
+    override func setUp() {
+        AppSettings.reset()
+        appSettings = AppSettings()
+        appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
+    }
+    
     func testElementCallRoutes() {
         guard let url = URL(string: "https://call.element.io/test") else {
             XCTFail("URL invalid")
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: url), AppRoute.genericCallLink(url: url))
+        XCTAssertEqual(appRouteURLParser.route(from: url), AppRoute.genericCallLink(url: url))
         
         guard let customSchemeURL = URL(string: "io.element.call:/?url=https%3A%2F%2Fcall.element.io%2Ftest") else {
             XCTFail("URL invalid")
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
+        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
     }
     
     func testCustomDomainUniversalLinkCallRoutes() {
@@ -41,7 +50,7 @@ class AppRouteURLParserTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: url), nil)
+        XCTAssertEqual(appRouteURLParser.route(from: url), nil)
     }
     
     func testCustomSchemeLinkCallRoutes() {
@@ -61,7 +70,7 @@ class AppRouteURLParserTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
+        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
     }
     
     func testHttpCustomSchemeLinkCallRoutes() {
@@ -70,6 +79,33 @@ class AppRouteURLParserTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), nil)
+        XCTAssertEqual(appRouteURLParser.route(from: customSchemeURL), nil)
+    }
+    
+    func testOIDCCallbackRoute() {
+        // Given an OIDC callback for this app.
+        let callbackURL = appSettings.oidcRedirectURL.appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
+                                                                             URLQueryItem(name: "code", value: "67890")])
+        
+        // When parsing that route.
+        let route = appRouteURLParser.route(from: callbackURL)
+        
+        // Then it should be considered a valid OIDC callback.
+        XCTAssertEqual(route, AppRoute.oidcCallback(url: callbackURL))
+    }
+    
+    func testOIDCCallbackAppVariantRoute() {
+        // Given an OIDC callback for a different app variant.
+        let callbackURL = appSettings.oidcRedirectURL
+            .deletingLastPathComponent()
+            .appending(component: "elementz")
+            .appending(queryItems: [URLQueryItem(name: "state", value: "12345"),
+                                    URLQueryItem(name: "code", value: "67890")])
+        
+        // When parsing that route in this app.
+        let route = appRouteURLParser.route(from: callbackURL)
+        
+        // Then the route shouldn't be considered valid and should be ignored.
+        XCTAssertEqual(route, nil)
     }
 }
