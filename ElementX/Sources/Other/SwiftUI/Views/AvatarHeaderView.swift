@@ -37,6 +37,7 @@ struct AvatarHeaderView<Footer: View>: View {
                                     avatarSize: avatarSize,
                                     imageProvider: imageProvider)
             }
+            .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
 
             Text(name ?? id)
                 .foregroundColor(.compound.textPrimary)
@@ -48,6 +49,7 @@ struct AvatarHeaderView<Footer: View>: View {
                     .foregroundColor(.compound.textSecondary)
                     .font(.compound.bodyLG)
                     .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
             }
             
             footer()
