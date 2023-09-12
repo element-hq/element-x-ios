@@ -28,6 +28,7 @@ struct BugReportScreenViewState: BindableState {
     var screenshot: UIImage?
     var bindings: BugReportScreenViewStateBindings
     let isModallyPresented: Bool
+    var shouldDisableInteraction = false
 }
 
 struct BugReportScreenViewStateBindings {

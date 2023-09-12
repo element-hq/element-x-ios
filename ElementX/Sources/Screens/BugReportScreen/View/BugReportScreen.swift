@@ -32,6 +32,7 @@ struct BugReportScreen: View {
             sendLogsSection
             canContactSection
         }
+        .disabled(context.viewState.shouldDisableInteraction)
         .scrollDismissesKeyboard(.immediately)
         .compoundList()
         .navigationTitle(L10n.commonReportABug)
@@ -131,6 +132,7 @@ struct BugReportScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.reportText.count < 5)
+            .disabled(context.viewState.shouldDisableInteraction)
         }
     }
 }

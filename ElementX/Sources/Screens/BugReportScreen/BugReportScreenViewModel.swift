@@ -24,6 +24,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let userID: String
     private let deviceID: String?
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
+    private var uploadTask: Task<Void, Never>?
 
     var actions: AnyPublisher<BugReportScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -49,9 +50,11 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     override func process(viewAction: BugReportScreenViewAction) {
         switch viewAction {
         case .cancel:
+            uploadTask?.cancel()
             actionsSubject.send(.cancel)
         case .submit:
-            Task { await submitBugReport() }
+            state.shouldDisableInteraction = true
+            uploadTask = Task { await submitBugReport() }
         case .removeScreenshot:
             state.screenshot = nil
         case let .attachScreenshot(image):
