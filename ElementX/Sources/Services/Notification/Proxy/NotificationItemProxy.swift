@@ -71,6 +71,34 @@ extension NotificationItemProxyProtocol {
     var isDM: Bool {
         isRoomDirect && roomJoinedMembers <= 2
     }
+    
+    var hasMedia: Bool {
+        if (isDM && senderAvatarMediaSource != nil) ||
+            (!isDM && roomAvatarMediaSource != nil) {
+            return true
+        }
+        switch event {
+        case .invite, .none:
+            return false
+        case .timeline(let event):
+            switch try? event.eventType() {
+            case .state, .none:
+                return false
+            case let .messageLike(content):
+                switch content {
+                case let .roomMessage(messageType):
+                    switch messageType {
+                    case .image, .video, .audio:
+                        return true
+                    default:
+                        return false
+                    }
+                default:
+                    return false
+                }
+            }
+        }
+    }
 }
 
 struct NotificationItemProxy: NotificationItemProxyProtocol {
@@ -169,219 +197,4 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     var notificationIdentifier: String { "" }
 
     var roomJoinedMembers: Int { 0 }
-}
-
-extension NotificationItemProxyProtocol {
-    var baseMutableContent: UNMutableNotificationContent {
-        let notification = UNMutableNotificationContent()
-        notification.receiverID = receiverID
-        notification.roomID = roomID
-        notification.eventID = eventID
-        notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
-        // So that the UI groups notification that are received for the same room but also for the same user
-        // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
-        notification.threadIdentifier = "\(receiverID)\(roomID)".replacingOccurrences(of: "@", with: "")
-        return notification
-    }
-
-    var hasMedia: Bool {
-        if (isDM && senderAvatarMediaSource != nil) ||
-            (!isDM && roomAvatarMediaSource != nil) {
-            return true
-        }
-        switch event {
-        case .invite, .none:
-            return false
-        case .timeline(let event):
-            switch try? event.eventType() {
-            case .state, .none:
-                return false
-            case let .messageLike(content):
-                switch content {
-                case let .roomMessage(messageType):
-                    switch messageType {
-                    case .image, .video, .audio:
-                        return true
-                    default:
-                        return false
-                    }
-                default:
-                    return false
-                }
-            }
-        }
-    }
-
-    var icon: NotificationIcon {
-        if isDM {
-            return NotificationIcon(mediaSource: senderAvatarMediaSource, groupInfo: nil)
-        } else {
-            return NotificationIcon(mediaSource: roomAvatarMediaSource,
-                                    groupInfo: .init(name: roomDisplayName, id: roomID))
-        }
-    }
-
-    /// Process the receiver item proxy
-    /// - Parameters:
-    ///   - receiverId: identifier of the user that has received the notification
-    ///   - roomId: Room identifier
-    ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
-    /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
-    func process(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        switch event {
-        case .none:
-            return processEmpty()
-        case .invite:
-            return try await processInvited(mediaProvider: mediaProvider)
-        case .timeline(let event):
-            switch try? event.eventType() {
-            case let .messageLike(content):
-                switch content {
-                case .roomMessage(messageType: let messageType):
-                    return try await processRoomMessage(messageType: messageType, mediaProvider: mediaProvider)
-                default:
-                    return processEmpty()
-                }
-            default:
-                return processEmpty()
-            }
-        }
-    }
-
-    // MARK: - Private
-
-    private func processInvited(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = baseMutableContent
-
-        notification.categoryIdentifier = NotificationConstants.Category.invite
-
-        let body: String
-        if !isDM {
-            body = L10n.notificationRoomInviteBody
-        } else {
-            body = L10n.notificationInviteBody
-        }
-
-        notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: senderID,
-                                                            senderName: senderDisplayName ?? roomDisplayName,
-                                                            icon: icon)
-        notification.body = body
-        
-        return notification
-    }
-
-    private func processRoomMessage(messageType: MessageType, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        switch messageType {
-        case .emote(content: let content):
-            return try await processEmote(content: content, mediaProvider: mediaProvider)
-        case .image(content: let content):
-            return try await processImage(content: content, mediaProvider: mediaProvider)
-        case .audio(content: let content):
-            return try await processAudio(content: content, mediaProvider: mediaProvider)
-        case .video(content: let content):
-            return try await processVideo(content: content, mediaProvider: mediaProvider)
-        case .file(content: let content):
-            return try await processFile(content: content, mediaProvider: mediaProvider)
-        case .notice(content: let content):
-            return try await processNotice(content: content, mediaProvider: mediaProvider)
-        case .text(content: let content):
-            return try await processText(content: content, mediaProvider: mediaProvider)
-        case .location:
-            return processEmpty()
-        }
-    }
-
-    private func processEmpty() -> UNMutableNotificationContent {
-        let notification = baseMutableContent
-        notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
-        notification.body = L10n.notification
-        notification.categoryIdentifier = NotificationConstants.Category.message
-        return notification
-    }
-
-    private func processCommon(mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = baseMutableContent
-        notification.title = senderDisplayName ?? roomDisplayName
-        if notification.title != roomDisplayName {
-            notification.subtitle = roomDisplayName
-        }
-        notification.categoryIdentifier = NotificationConstants.Category.message
-
-        notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: senderID,
-                                                            senderName: senderDisplayName ?? roomDisplayName,
-                                                            icon: icon)
-        return notification
-    }
-
-    // MARK: Message Types
-
-    private func processText(content: TextMessageContent,
-                             mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = content.body
-
-        return notification
-    }
-
-    private func processImage(content: ImageMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "📷 " + content.body
-
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-
-        return notification
-    }
-
-    private func processVideo(content: VideoMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "📹 " + content.body
-
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-
-        return notification
-    }
-
-    private func processFile(content: FileMessageContent,
-                             mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "📄 " + content.body
-
-        return notification
-    }
-
-    private func processNotice(content: NoticeMessageContent,
-                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "❕ " + content.body
-
-        return notification
-    }
-
-    private func processEmote(content: EmoteMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = L10n.commonEmote(senderDisplayName ?? roomDisplayName, content.body)
-
-        return notification
-    }
-
-    private func processAudio(content: AudioMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(mediaProvider: mediaProvider)
-        notification.body = "🔊 " + content.body
-
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-
-        return notification
-    }
 }
