@@ -606,6 +606,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
                         let result = await roomProxy.createPoll(question: question, answers: options, pollKind: pollKind)
 
+                        self.analytics.trackComposer(inThread: false,
+                                                     isEditing: false,
+                                                     isReply: false,
+                                                     messageType: .poll,
+                                                     startsThread: nil)
+
+                        self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
+                        
                         switch result {
                         case .success:
                             break

@@ -179,4 +179,24 @@ extension AnalyticsService {
         }
         capture(event: AnalyticsEvent.JoinedRoom(isDM: isDM, isSpace: isSpace, roomSize: roomSize, trigger: nil))
     }
+
+    /// Track the action of creating a poll
+    /// - Parameters:
+    ///   - isUndisclosed: whether the poll is undisclosed
+    ///   - numberOfAnswers: the number of options in the poll
+    func trackPollCreated(isUndisclosed: Bool, numberOfAnswers: Int) {
+        capture(event: AnalyticsEvent.PollCreation(action: .Create,
+                                                   isUndisclosed: isUndisclosed,
+                                                   numberOfAnswers: numberOfAnswers))
+    }
+
+    /// Track the action of voting on a poll
+    func trackPollVote() {
+        capture(event: AnalyticsEvent.PollVote(doNotUse: nil))
+    }
+
+    /// Track the action of ending a poll
+    func trackPollEnd() {
+        capture(event: AnalyticsEvent.PollEnd(doNotUse: nil))
+    }
 }
