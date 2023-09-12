@@ -17,7 +17,11 @@
 import SwiftUI
 
 struct FixedIconSizeLabelStyle: LabelStyle {
-    @ScaledMetric private var iconSize = 24.0
+    @ScaledMetric private var iconSize: CGFloat
+
+    init(iconSize: Double = 24.0) {
+        _iconSize = .init(wrappedValue: iconSize)
+    }
     
     var spacing: CGFloat = 16
     

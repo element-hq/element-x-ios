@@ -22,6 +22,8 @@ struct FormattingToolbar: View {
     /// The action when an item is selected
     var formatAction: (FormatType) -> Void
 
+    @ScaledMetric private var toolbarButtonIconSize = 24
+
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 4) {
@@ -31,10 +33,13 @@ struct FormattingToolbar: View {
                     } label: {
                         item.icon
                             .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: toolbarButtonIconSize, height: toolbarButtonIconSize)
                             .foregroundColor(item.foregroundColor)
+                            .padding(10)
                     }
                     .disabled(item.state == .disabled)
-                    .frame(width: 44, height: 44)
                     .background(item.backgroundColor)
                     .cornerRadius(8)
                     .accessibilityIdentifier(item.accessibilityIdentifier)
