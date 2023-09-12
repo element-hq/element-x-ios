@@ -268,7 +268,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
-        let notificationMode = details.notificationMode == .allMessages || appSettings.notificationSettingsEnabled == false ? nil : details.notificationMode
+        let notificationMode = details.notificationMode == .allMessages ? nil : details.notificationMode
         
         return HomeScreenRoom(id: identifier,
                               roomId: details.id,

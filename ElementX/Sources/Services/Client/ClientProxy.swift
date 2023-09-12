@@ -405,7 +405,6 @@ class ClientProxy: ClientProxyProtocol {
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
-                                                      appSettings: appSettings,
                                                       notificationSettings: notificationSettings,
                                                       backgroundTaskService: backgroundTaskService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
@@ -413,7 +412,6 @@ class ClientProxy: ClientProxyProtocol {
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "Invites",
-                                                        appSettings: appSettings,
                                                         notificationSettings: notificationSettings,
                                                         backgroundTaskService: backgroundTaskService)
             try await inviteSummaryProvider?.setRoomList(roomListService.invites())

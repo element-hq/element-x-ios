@@ -38,8 +38,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         notificationSettingsProxy: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) {
+         notificationSettingsProxy: NotificationSettingsProxyProtocol) {
         self.accountUserID = accountUserID
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
@@ -55,7 +54,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            joinedMembersCount: roomProxy.joinedMembersCount,
-                                           showNotificationSettings: appSettings.notificationSettingsEnabled,
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    imageProvider: mediaProvider)

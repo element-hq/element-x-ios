@@ -37,7 +37,6 @@ final class AppSettings {
         case userSuggestionsEnabled
         case readReceiptsEnabled
         case hasShownWelcomeScreen
-        case notificationSettingsEnabled
         case swiftUITimelineEnabled
         case richTextEditorEnabled
     }
@@ -236,9 +235,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.readReceiptsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var readReceiptsEnabled
     
-    @UserPreference(key: UserDefaultsKeys.notificationSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var notificationSettingsEnabled
-
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
 

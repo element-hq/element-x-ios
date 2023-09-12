@@ -41,7 +41,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            userID: userSession.userID,
                                            accountURL: userSession.clientProxy.accountURL,
                                            showSessionVerificationSection: showSessionVerificationSection,
-                                           showNotificationSettings: appSettings.notificationSettingsEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
@@ -52,11 +51,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         userSession.clientProxy.avatarURLPublisher
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
-        
-        appSettings.$notificationSettingsEnabled
-            .weakAssign(to: \.state.showNotificationSettings, on: self)
-            .store(in: &cancellables)
-        
+                
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
         }
