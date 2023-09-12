@@ -20,7 +20,7 @@ import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private let settings = NSESettings()
-    private let notificationContentBuilder = NotificationContentBuilder()
+    private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .homeDirectory)))
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     private var handler: ((UNNotificationContent) -> Void)?

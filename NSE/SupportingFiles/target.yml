@@ -73,6 +73,7 @@ targets:
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Generated
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/Date.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
@@ -100,4 +101,5 @@ targets:
     - path: ../../ElementX/Sources/Services/Media/Provider
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
     - path: ../../ElementX/Sources/Services/Notification/Proxy
+    - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift

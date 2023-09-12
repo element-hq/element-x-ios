@@ -19,6 +19,8 @@ import MatrixRustSDK
 import UserNotifications
 
 struct NotificationContentBuilder {
+    let messageEventStringBuilder: RoomMessageEventStringBuilder
+    
     /// Process the given notification item proxy
     /// - Parameters:
     ///   - notificationItem: The notification item
@@ -59,13 +61,12 @@ struct NotificationContentBuilder {
         return notification
     }
     
-    func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
-        if notificationItem.isDM {
-            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
-        } else {
-            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
-                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
-        }
+    private func processEmpty(notificationItem: NotificationItemProxyProtocol) -> UNMutableNotificationContent {
+        let notification = baseMutableContent(for: notificationItem)
+        notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
+        notification.body = L10n.notification
+        notification.categoryIdentifier = NotificationConstants.Category.message
+        return notification
     }
 
     private func processInvited(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
@@ -90,35 +91,32 @@ struct NotificationContentBuilder {
     }
 
     private func processRoomMessage(notificationItem: NotificationItemProxyProtocol, messageType: MessageType, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
+        
+        let senderDisplayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: false).characters)
+        
         switch messageType {
-        case .emote(content: let content):
-            return try await processEmote(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
         case .image(content: let content):
-            return try await processImage(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
+            notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                                 mediaSource: .init(source: content.source,
+                                                                                    mimeType: content.info?.mimetype))
         case .audio(content: let content):
-            return try await processAudio(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
+            notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                                 mediaSource: .init(source: content.source,
+                                                                                    mimeType: content.info?.mimetype))
         case .video(content: let content):
-            return try await processVideo(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
-        case .file(content: let content):
-            return try await processFile(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
-        case .notice(content: let content):
-            return try await processNotice(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
-        case .text(content: let content):
-            return try await processText(notificationItem: notificationItem, content: content, mediaProvider: mediaProvider)
-        case .location:
-            return processEmpty(notificationItem: notificationItem)
+            notification = await notification.addMediaAttachment(using: mediaProvider,
+                                                                 mediaSource: .init(source: content.source,
+                                                                                    mimeType: content.info?.mimetype))
+        default:
+            break
         }
-    }
-
-    private func processEmpty(notificationItem: NotificationItemProxyProtocol) -> UNMutableNotificationContent {
-        let notification = baseMutableContent(for: notificationItem)
-        notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
-        notification.body = L10n.notification
-        notification.categoryIdentifier = NotificationConstants.Category.message
+        
         return notification
     }
 
-    private func processCommon(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+    private func processCommonRoomMessage(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = baseMutableContent(for: notificationItem)
         notification.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         if notification.title != notificationItem.roomDisplayName {
@@ -132,81 +130,13 @@ struct NotificationContentBuilder {
                                                             icon: icon(for: notificationItem))
         return notification
     }
-
-    // MARK: Message Types
-
-    private func processText(notificationItem: NotificationItemProxyProtocol,
-                             content: TextMessageContent,
-                             mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = content.body
-        
-        return notification
-    }
     
-    private func processImage(notificationItem: NotificationItemProxyProtocol,
-                              content: ImageMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = "📷 " + content.body
-        
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-        
-        return notification
-    }
-
-    private func processVideo(notificationItem: NotificationItemProxyProtocol,
-                              content: VideoMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = "📹 " + content.body
-        
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-        
-        return notification
-    }
-
-    private func processFile(notificationItem: NotificationItemProxyProtocol,
-                             content: FileMessageContent,
-                             mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = "📄 " + content.body
-
-        return notification
-    }
-
-    private func processNotice(notificationItem: NotificationItemProxyProtocol,
-                               content: NoticeMessageContent,
-                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = "❕ " + content.body
-
-        return notification
-    }
-
-    private func processEmote(notificationItem: NotificationItemProxyProtocol,
-                              content: EmoteMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = L10n.commonEmote(notificationItem.senderDisplayName ?? notificationItem.roomDisplayName, content.body)
-
-        return notification
-    }
-
-    private func processAudio(notificationItem: NotificationItemProxyProtocol,
-                              content: AudioMessageContent,
-                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = "🔊 " + content.body
-
-        notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                             mediaSource: .init(source: content.source,
-                                                                                mimeType: content.info?.mimetype))
-
-        return notification
+    func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
+        if notificationItem.isDM {
+            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+        } else {
+            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
+                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
+        }
     }
 }

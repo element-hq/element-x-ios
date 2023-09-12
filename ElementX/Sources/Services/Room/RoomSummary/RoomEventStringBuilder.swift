@@ -19,70 +19,38 @@ import MatrixRustSDK
 
 struct RoomEventStringBuilder {
     private let stateEventStringBuilder: RoomStateEventStringBuilder
+    private let messageEventStringBuilder: RoomMessageEventStringBuilder
     
-    init(stateEventStringBuilder: RoomStateEventStringBuilder) {
+    init(stateEventStringBuilder: RoomStateEventStringBuilder, messageEventStringBuilder: RoomMessageEventStringBuilder) {
         self.stateEventStringBuilder = stateEventStringBuilder
+        self.messageEventStringBuilder = messageEventStringBuilder
     }
     
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
         
+        let senderDisplayName = sender.displayName ?? sender.id
+        
         switch eventItemProxy.content.kind() {
         case .unableToDecrypt:
-            return prefix(L10n.commonDecryptionError, with: sender)
+            return prefix(L10n.commonDecryptionError, with: senderDisplayName)
         case .redactedMessage:
-            return prefix(L10n.commonMessageRemoved, with: sender)
+            return prefix(L10n.commonMessageRemoved, with: senderDisplayName)
         case .sticker:
-            return prefix(L10n.commonSticker, with: sender)
+            return prefix(L10n.commonSticker, with: senderDisplayName)
         case .failedToParseMessageLike, .failedToParseState:
-            return prefix(L10n.commonUnsupportedEvent, with: sender)
+            return prefix(L10n.commonUnsupportedEvent, with: senderDisplayName)
         case .message:
             guard let messageContent = eventItemProxy.content.asMessage() else {
                 fatalError("Invalid message timeline item: \(eventItemProxy)")
             }
             
             guard let messageType = messageContent.msgtype() else {
-                return prefix(messageContent.body(), with: sender)
+                return prefix(messageContent.body(), with: senderDisplayName)
             }
             
-            let message: String
-            switch messageType {
-            // Message types that don't need a prefix.
-            case .emote(content: let content):
-                let senderDisplayName = sender.displayName ?? sender.id
-                
-                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
-                    return AttributedString(L10n.commonEmote(senderDisplayName, String(attributedMessage.characters)))
-                } else {
-                    return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
-                }
-            // Message types that should be prefixed with the sender's name.
-            case .audio:
-                message = L10n.commonAudio
-            case .image:
-                message = L10n.commonImage
-            case .video:
-                message = L10n.commonVideo
-            case .file:
-                message = L10n.commonFile
-            case .location:
-                message = L10n.commonSharedLocation
-            case .notice(content: let content):
-                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
-                    message = String(attributedMessage.characters)
-                } else {
-                    message = content.body
-                }
-            case .text(content: let content):
-                
-                if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
-                    message = String(attributedMessage.characters)
-                } else {
-                    message = content.body
-                }
-            }
-            return prefix(message, with: sender)
+            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: true)
         case .state(let stateKey, let state):
             return stateEventStringBuilder
                 .buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
@@ -106,21 +74,13 @@ struct RoomEventStringBuilder {
         }
     }
     
-    private func prefix(_ eventSummary: String, with sender: TimelineItemSender) -> AttributedString {
+    private func prefix(_ eventSummary: String, with senderDisplayName: String) -> AttributedString {
         let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         
-        if let senderDisplayName = sender.displayName {
-            var attributedSenderDisplayName = AttributedString(senderDisplayName)
-            attributedSenderDisplayName.bold()
-            
-            // Don't include the message body in the markdown otherwise it makes tappable links.
-            return attributedSenderDisplayName + ": " + attributedEventSummary
-        } else {
-            return attributedEventSummary
-        }
-    }
-    
-    private func attributedMessageFrom(formattedBody: FormattedBody?) -> AttributedString? {
-        formattedBody.flatMap { AttributedStringBuilder(permalinkBaseURL: .homeDirectory).fromHTML($0.body) }
+        var attributedSenderDisplayName = AttributedString(senderDisplayName)
+        attributedSenderDisplayName.bold()
+        
+        // Don't include the message body in the markdown otherwise it makes tappable links.
+        return attributedSenderDisplayName + ": " + attributedEventSummary
     }
 }
