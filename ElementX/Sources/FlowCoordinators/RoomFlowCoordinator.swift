@@ -566,7 +566,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 self.analytics.trackComposer(inThread: false,
                                              isEditing: false,
                                              isReply: false,
-                                             locationType: isUserLocation ? .myLocation : .pin,
+                                             messageType: isUserLocation ? .location(.user) : .location(.pin),
                                              startsThread: nil)
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
