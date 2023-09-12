@@ -148,8 +148,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] state, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = !state.isLoaded && rooms.isEmpty
-                let hasNoRooms = (state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty)
+                // Rust sends back loaded even when no rooms are loaded yet, check room for empty to be sure
+                let isLoadingData = !state.isLoaded || (state.totalNumberOfRooms != 0 && rooms.isEmpty)
+                
+                let hasNoRooms = state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {
