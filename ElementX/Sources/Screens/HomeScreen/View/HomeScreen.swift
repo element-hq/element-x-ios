@@ -82,7 +82,6 @@ struct HomeScreen: View {
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.roomListMode == .skeletons)
             .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)
-            .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
             .animation(.elementDefault, value: context.viewState.roomListMode)
             .animation(.none, value: context.viewState.visibleRooms)
         }
