@@ -24,8 +24,8 @@ struct VideoRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             thumbnail
-                .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
                 .aspectRatio(timelineItem.content.aspectRatio, contentMode: .fit)
+                .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(L10n.commonVideo)
         }

@@ -21,7 +21,7 @@ import Compound
 struct ThreadDecorator: View {
     var body: some View {
         Label {
-            Text("Thread")
+            Text(L10n.commonThread)
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodyXS)
         } icon: {
