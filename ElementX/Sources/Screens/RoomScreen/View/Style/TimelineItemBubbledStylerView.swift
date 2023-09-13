@@ -126,6 +126,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .swipeRightAction {
                 Image(systemName: "arrowshape.turn.up.left")
+                    .accessibilityHidden(true)
             } shouldStartAction: {
                 context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
             } action: {
