@@ -20,6 +20,13 @@ struct LocationRoomTimelineView: View {
     let timelineItem: LocationRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     
+    private var mapCornerRadius: CGFloat {
+        if timelineItem.replyDetails != nil || timelineItem.isThreaded {
+            return 8
+        }
+        return 0
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             mainContent
@@ -41,6 +48,7 @@ struct LocationRoomTimelineView: View {
                 .frame(maxHeight: mapMaxHeight)
                 .aspectRatio(mapAspectRatio, contentMode: .fit)
                 .clipped()
+                .cornerRadius(mapCornerRadius)
             }
         } else {
             FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))

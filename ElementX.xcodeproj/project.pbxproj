@@ -524,6 +524,7 @@
 		A6DEC1ADEC8FEEC206A0FA37 /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */; };
 		A74438ED16F8683A4B793E6A /* AnalyticsSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCE3FAF40932AC7C7639AC4 /* AnalyticsSettingsScreenViewModel.swift */; };
 		A762491F2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A762491E2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift */; };
+		A76249212AB1F56400ADB9E6 /* ThreadDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
@@ -1335,6 +1336,7 @@
 		A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHGPostHogConfiguration.swift; sourceTree = "<group>"; };
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
 		A762491E2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLayoutLabelStyle.swift; sourceTree = "<group>"; };
+		A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadDecorator.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8903A9F615BBD0E6D7CD133 /* ApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationProtocol.swift; sourceTree = "<group>"; };
@@ -3184,6 +3186,7 @@
 				94BCC8A9C73C1F838122C645 /* TimelineItemPlainStylerView.swift */,
 				8DC2C9E0E15C79BBDA80F0A2 /* TimelineStyle.swift */,
 				892E29C98C4E8182C9037F84 /* TimelineStyler.swift */,
+				A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -4528,6 +4531,7 @@
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
 				0B57C2399B9E1CE5CE0D8005 /* ComposerToolbar.swift in Sources */,
+				A76249212AB1F56400ADB9E6 /* ThreadDecorator.swift in Sources */,
 				56BAB81A0D03C2EF09B86294 /* ComposerToolbarModels.swift in Sources */,
 				5995C63B1C61DE1373AA2BCE /* ComposerToolbarViewModel.swift in Sources */,
 				9BEA56957B3AF954E7321658 /* ComposerToolbarViewModelProtocol.swift in Sources */,

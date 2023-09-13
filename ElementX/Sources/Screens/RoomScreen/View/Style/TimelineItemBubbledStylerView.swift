@@ -221,7 +221,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         TimelineBubbleLayout(spacing: 8) {
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 if messageTimelineItem.isThreaded {
-                    threadDecorator
+                    ThreadDecorator()
                         .padding(.leading, 4)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 }
@@ -247,20 +247,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             content()
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                .cornerRadius(timelineItem.contentCornerRadius)
         }
-    }
-    
-    private var threadDecorator: some View {
-        Label {
-            Text("Thread")
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodyXS)
-        } icon: {
-            CompoundIcon(\.threads)
-                .font(.system(size: 16))
-                .foregroundColor(.compound.iconSecondary)
-        }
-        .labelStyle(CustomLayoutLabelStyle(spacing: 4))
     }
     
     private var messageBubbleTopPadding: CGFloat {
@@ -394,6 +382,17 @@ private extension EventBasedTimelineItemProtocol {
         default:
             return defaultTimestampLayout
         }
+    }
+    
+    var contentCornerRadius: CGFloat {
+        if let message = self as? EventBasedMessageTimelineItemProtocol {
+            if self is LocationRoomTimelineItem {
+                // This is handled internally
+                return .zero
+            }
+            return message.replyDetails != nil || message.isThreaded ? 8 : .zero
+        }
+        return .zero
     }
 }
 

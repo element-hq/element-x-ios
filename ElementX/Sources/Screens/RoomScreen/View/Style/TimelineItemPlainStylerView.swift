@@ -48,17 +48,22 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         VStack(alignment: .leading) {
-            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-               let replyDetails = messageTimelineItem.replyDetails {
-                HStack(spacing: 4.0) {
-                    Rectangle()
-                        .foregroundColor(.global.melon)
-                        .frame(width: 4.0)
-                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+                if messageTimelineItem.isThreaded {
+                    ThreadDecorator()
+                }
+                if let replyDetails = messageTimelineItem.replyDetails {
+                    HStack(spacing: 4.0) {
+                        Rectangle()
+                            .foregroundColor(.global.melon)
+                            .frame(width: 4.0)
+                        TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                    }
                 }
             }
             
             content()
+                .layoutPriority(1)
         }
         .onTapGesture(count: 2) {
             context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
