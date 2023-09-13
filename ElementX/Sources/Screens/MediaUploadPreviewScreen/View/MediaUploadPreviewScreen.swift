@@ -128,6 +128,10 @@ private class PreviewViewController: QLPreviewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        navigationItem.rightBarButtonItem = nil
+        // Remove top file details bar
+        navigationController?.navigationBar.isHidden = true
+                
+        // Hide toolbar share button
+        toolbarItems?.first?.isHidden = true
     }
 }
