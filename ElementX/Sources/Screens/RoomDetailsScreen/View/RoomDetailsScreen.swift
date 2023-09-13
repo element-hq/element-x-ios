@@ -32,9 +32,7 @@ struct RoomDetailsScreen: View {
 
             topicSection
             
-            if context.viewState.showNotificationSettings {
-                notificationSection
-            }
+            notificationSection
 
             if context.viewState.dmRecipient == nil {
                 aboutSection
@@ -277,14 +275,12 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         let appSettings = AppSettings()
-        appSettings.notificationSettingsEnabled = true
         
         return RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: appSettings)
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static let dmRoomViewModel = {
@@ -307,8 +303,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: appSettings)
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static let simpleRoomViewModel = {
@@ -328,8 +323,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
                                           roomProxy: roomProxy,
                                           mediaProvider: MockMediaProvider(),
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                          notificationSettingsProxy: notificationSettingsProxy,
-                                          appSettings: appSettings)
+                                          notificationSettingsProxy: notificationSettingsProxy)
     }()
     
     static var previews: some View {

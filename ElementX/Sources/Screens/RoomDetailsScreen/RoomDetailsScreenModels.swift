@@ -48,7 +48,6 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomName = false
     var canEditRoomTopic = false
     var canEditRoomAvatar = false
-    let showNotificationSettings: Bool
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     
     var canEdit: Bool {
@@ -64,10 +63,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var dmRecipient: RoomMemberDetails?
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
-        var shortcuts: [RoomDetailsScreenViewShortcut] = []
-        if showNotificationSettings {
-            shortcuts.append(.mute)
-        }
+        var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
         if let permalink = dmRecipient?.permalink {
             shortcuts.append(.share(link: permalink))
         } else if let permalink {

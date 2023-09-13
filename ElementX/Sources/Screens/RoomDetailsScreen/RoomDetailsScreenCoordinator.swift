@@ -54,8 +54,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                roomProxy: parameters.roomProxy,
                                                mediaProvider: parameters.mediaProvider,
                                                userIndicatorController: parameters.userIndicatorController,
-                                               notificationSettingsProxy: parameters.notificationSettings,
-                                               appSettings: ServiceLocator.shared.settings)
+                                               notificationSettingsProxy: parameters.notificationSettings)
     }
     
     // MARK: - Public

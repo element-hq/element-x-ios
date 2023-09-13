@@ -22,7 +22,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let roomListService: RoomListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
-    private var appSettings: AppSettings
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
@@ -58,14 +57,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
-         appSettings: AppSettings,
          notificationSettings: NotificationSettingsProxyProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
-        self.appSettings = appSettings
         self.notificationSettings = notificationSettings
         self.backgroundTaskService = backgroundTaskService
         
@@ -74,9 +71,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
-        if appSettings.notificationSettingsEnabled {
-            setupNotificationSettingsSubscription()
-        }
+        setupNotificationSettingsSubscription()
     }
     
     func setRoomList(_ roomList: RoomList) {

@@ -37,7 +37,6 @@ struct SettingsScreenViewState: BindableState {
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showSessionVerificationSection: Bool
-    var showNotificationSettings: Bool
     var showDeveloperOptions: Bool
     
     /// The presentation anchor used to display the OIDC account URL.

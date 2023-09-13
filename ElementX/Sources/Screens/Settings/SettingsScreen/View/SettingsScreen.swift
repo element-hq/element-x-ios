@@ -124,14 +124,12 @@ struct SettingsScreen: View {
                 }
             
             // Notifications
-            if context.viewState.showNotificationSettings {
-                ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
-                                        systemIcon: .bell),
-                        kind: .navigationLink {
-                            context.send(viewAction: .notifications)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
-            }
+            ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
+                                    systemIcon: .bell),
+                    kind: .navigationLink {
+                        context.send(viewAction: .notifications)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
             // Analytics
             ListRow(label: .default(title: L10n.commonAnalytics,
@@ -225,7 +223,6 @@ struct SettingsScreen_Previews: PreviewProvider {
                                                                        deviceID: "AAAAAAAAAAA",
                                                                        accountURL: "https://matrix.org/account"),
                                           mediaProvider: MockMediaProvider())
-        ServiceLocator.shared.settings.notificationSettingsEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)
     }()
