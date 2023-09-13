@@ -333,9 +333,15 @@ private extension EventBasedTimelineItemProtocol {
         let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
 
         switch self {
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
+        case let self as EventBasedMessageTimelineItemProtocol:
+            switch self {
+            case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+                // In case a reply detail or a thread decorator is present we render the color and the padding
+                return self.replyDetails != nil || self.isThreaded ? defaultColor : nil
+            default:
+                return defaultColor
+            }
+        case is StickerRoomTimelineItem:
             return nil
         default:
             return defaultColor
@@ -348,14 +354,24 @@ private extension EventBasedTimelineItemProtocol {
         let defaultInsets: EdgeInsets = .init(around: 8)
 
         switch self {
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
+        case is StickerRoomTimelineItem:
             return .zero
         case is PollRoomTimelineItem:
             return .init(top: 12, leading: 12, bottom: 4, trailing: 12)
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            return locationTimelineItem.content.geoURI == nil ? defaultInsets : .zero
+        case let self as EventBasedMessageTimelineItemProtocol:
+            switch self {
+            // In case a reply detail or a thread decorator is present we render the color and the padding
+            case is ImageRoomTimelineItem,
+                 is VideoRoomTimelineItem:
+                return self.replyDetails != nil ||
+                    self.isThreaded ? defaultInsets : .zero
+            case let locationTimelineItem as LocationRoomTimelineItem:
+                return locationTimelineItem.content.geoURI == nil ||
+                    self.replyDetails != nil ||
+                    self.isThreaded ? defaultInsets : .zero
+            default:
+                return defaultInsets
+            }
         default:
             return defaultInsets
         }
@@ -452,7 +468,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                          isThreaded: true,
                                                          sender: .init(id: "Bob"),
                                                          content: .init(body: "Fallback geo uri description",
-                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
+                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
+                                                         replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               contentType: .text(.init(body: "Short")))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
                                                          isOutgoing: false,
@@ -460,7 +478,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                          isThreaded: true,
                                                          sender: .init(id: "Bob"),
                                                          content: .init(body: "Fallback geo uri description",
-                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil)))
+                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
+                                                         replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               contentType: .text(.init(body: "Short")))))
         }
         .environmentObject(viewModel.context)
     }
