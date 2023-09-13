@@ -24,10 +24,10 @@ struct LocationRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             mainContent
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel(L10n.commonSharedLocation)
+                .accessibilityLabel(accessibilityLabel)
         }
     }
-    
+                                    
     @ViewBuilder
     private var mainContent: some View {
         if let geoURI = timelineItem.content.geoURI {
@@ -48,6 +48,14 @@ struct LocationRoomTimelineView: View {
     }
 
     // MARK: - Private
+    
+    private var accessibilityLabel: String {
+        if let description = timelineItem.content.description {
+            return "\(L10n.commonSharedLocation), \(description)"
+        }
+        
+        return L10n.commonSharedLocation
+    }
 
     @ViewBuilder
     private var descriptionView: some View {

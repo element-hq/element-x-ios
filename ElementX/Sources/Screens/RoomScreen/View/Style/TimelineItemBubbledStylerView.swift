@@ -97,12 +97,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
-                .accessibilityRepresentation(representation: {
+                .accessibilityRepresentation {
                     VStack {
                         Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         messageBubble
                     }
-                })
+                }
                 .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
