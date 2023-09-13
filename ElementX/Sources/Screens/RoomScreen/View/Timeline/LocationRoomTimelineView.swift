@@ -21,7 +21,7 @@ struct LocationRoomTimelineView: View {
     @Environment(\.timelineStyle) var timelineStyle
     
     private var mapCornerRadius: CGFloat {
-        if timelineItem.replyDetails != nil || timelineItem.isThreaded {
+        if timelineStyle.isBubbles, timelineItem.replyDetails != nil || timelineItem.isThreaded {
             return 8
         }
         return 0
