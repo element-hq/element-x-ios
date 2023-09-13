@@ -32,7 +32,7 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .default(title: L10n.actionViewSource, systemIcon: .mailAndTextMagnifyingglass),
                         kind: .toggle($context.viewSourceEnabled))
                 
-                ListRow(label: .default(title: L10n.commonRichTextEditor, systemIcon: .squareFillTextGrid1x2),
+                ListRow(label: .default(title: L10n.commonRichTextEditor, icon: Image(asset: Asset.Images.textFormat)),
                         kind: .toggle($context.richTextEditorEnabled))
             }
         }
