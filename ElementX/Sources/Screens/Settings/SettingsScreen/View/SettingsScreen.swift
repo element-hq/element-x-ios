@@ -15,6 +15,7 @@
 //
 
 import Compound
+import SFSafeSymbols
 import SwiftUI
 
 struct SettingsScreen: View {
@@ -30,7 +31,11 @@ struct SettingsScreen: View {
                 sessionVerificationSection
             }
             
-            simplifiedSection
+            mainSection
+            
+            if context.viewState.accountSessionsListURL != nil {
+                manageSessionsSection
+            }
             
             if context.viewState.showDeveloperOptions {
                 developerOptionsSection
@@ -41,18 +46,10 @@ struct SettingsScreen: View {
         .compoundList()
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                doneButton
-            }
-        }
+        .toolbar { toolbar }
         .introspect(.window, on: .iOS(.v16, .v17)) { window in
             context.send(viewAction: .updateWindow(window))
         }
-    }
-
-    private var versionText: Text {
-        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
     }
 
     private var userSection: some View {
@@ -90,25 +87,13 @@ struct SettingsScreen: View {
         }
     }
     
-    private var developerOptionsSection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                    systemIcon: .hammerCircle),
-                    kind: .navigationLink {
-                        context.send(viewAction: .developerOptions)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-        }
-    }
-    
-    private var simplifiedSection: some View {
+    private var mainSection: some View {
         Section {
             // Account
-            if context.viewState.accountURL != nil {
-                ListRow(label: .default(title: L10n.screenSettingsOidcAccount,
-                                        systemIcon: .person),
+            if context.viewState.accountProfileURL != nil {
+                ListRow(label: .default(title: L10n.actionManageAccount, systemIcon: .person),
                         kind: .button {
-                            context.send(viewAction: .account)
+                            context.send(viewAction: .accountProfile)
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
@@ -157,6 +142,36 @@ struct SettingsScreen: View {
         }
     }
     
+    private var manageSessionsSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.actionManageDevices, systemIcon: deviceIcon),
+                    kind: .button {
+                        context.send(viewAction: .accountSessionsList)
+                    })
+        }
+    }
+    
+    private var deviceIcon: SFSymbol {
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return .macbookAndIphone
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return .ipad
+        } else {
+            return .iphone
+        }
+    }
+    
+    private var developerOptionsSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                                    systemIcon: .hammerCircle),
+                    kind: .navigationLink {
+                        context.send(viewAction: .developerOptions)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+        }
+    }
+    
     private var signOutSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenSignoutPreferenceItem,
@@ -166,9 +181,9 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
                     .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
-                        Button(L10n.screenSignoutConfirmationDialogSubmit,
-                               role: .destructive,
-                               action: logout)
+                        Button(L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) {
+                            context.send(viewAction: .logout)
+                        }
                     } message: {
                         Text(L10n.screenSignoutConfirmationDialogContent)
                     }
@@ -186,18 +201,16 @@ struct SettingsScreen: View {
             .padding(.top, 24)
         }
     }
-
-    private var doneButton: some View {
-        Button(L10n.actionDone, action: close)
-            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
+    
+    private var versionText: Text {
+        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
     }
-
-    private func close() {
-        context.send(viewAction: .close)
-    }
-
-    private func logout() {
-        context.send(viewAction: .logout)
+    
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionDone) { context.send(viewAction: .close) }
+                .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
+        }
     }
 }
 
@@ -220,8 +233,7 @@ struct SettingsScreen_Previews: PreviewProvider {
         verificationController.isVerified = false
         let userSession = MockUserSession(sessionVerificationController: verificationController,
                                           clientProxy: MockClientProxy(userID: "@userid:example.com",
-                                                                       deviceID: "AAAAAAAAAAA",
-                                                                       accountURL: "https://matrix.org/account"),
+                                                                       deviceID: "AAAAAAAAAAA"),
                                           mediaProvider: MockMediaProvider())
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)

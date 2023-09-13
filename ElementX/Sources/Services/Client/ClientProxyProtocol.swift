@@ -83,8 +83,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var restorationToken: RestorationToken? { get }
     
-    var accountURL: URL? { get }
-    
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
@@ -94,6 +92,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
 
     func stopSync()
+    
+    func accountURL(action: AccountManagementAction) -> URL?
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     

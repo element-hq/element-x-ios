@@ -170,7 +170,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .settings:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = MockClientProxy(userID: "@mock:client.com", accountURL: "https://matrix.org/account")
+            let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: nil,
                                                                           userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),

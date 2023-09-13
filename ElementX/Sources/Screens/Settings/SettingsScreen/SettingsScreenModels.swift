@@ -19,11 +19,12 @@ import UIKit
 
 enum SettingsScreenViewModelAction {
     case close
-    case account
+    case accountProfile
     case analytics
     case reportBug
     case about
     case sessionVerification
+    case accountSessionsList
     case developerOptions
     case notifications
     case logout
@@ -33,7 +34,8 @@ struct SettingsScreenViewState: BindableState {
     var bindings: SettingsScreenViewStateBindings
     var deviceID: String?
     var userID: String
-    var accountURL: URL?
+    var accountProfileURL: URL?
+    var accountSessionsListURL: URL?
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showSessionVerificationSection: Bool
@@ -49,13 +51,14 @@ struct SettingsScreenViewStateBindings {
 
 enum SettingsScreenViewAction {
     case close
-    case account
+    case accountProfile
     case analytics
     case reportBug
     case about
     case sessionVerification
     case logout
     case changedTimelineStyle
+    case accountSessionsList
     case developerOptions
     case notifications
     
