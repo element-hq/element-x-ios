@@ -150,6 +150,8 @@ public enum L10n {
   public static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
   public static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
+  /// Advanced settings
+  public static var commonAdvancedSettings: String { return L10n.tr("Localizable", "common_advanced_settings") }
   /// Analytics
   public static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
   /// Audio
@@ -248,6 +250,8 @@ public enum L10n {
   public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
   /// Report submitted
   public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
+  /// Rich text editor
+  public static var commonRichTextEditor: String { return L10n.tr("Localizable", "common_rich_text_editor") }
   /// Room name
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name

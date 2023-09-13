@@ -1,0 +1,1 @@
+Introduce a new advanced settings screen

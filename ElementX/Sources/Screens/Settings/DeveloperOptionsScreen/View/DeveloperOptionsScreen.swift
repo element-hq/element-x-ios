@@ -53,12 +53,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
 
-            Section("Rich Text Editor") {
-                Toggle(isOn: $context.richTextEditorEnabled) {
-                    Text("Use the Rich Text Editor")
-                }
-            }
-
             Section {
                 Button {
                     showConfetti = true
@@ -86,7 +80,7 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .overlay(effectsView)
-        .compoundForm()
+        .compoundList()
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -174,6 +174,7 @@ struct A11yIdentifiers {
         let analytics = "settings-analytics"
         let reportBug = "settings-report_bug"
         let about = "settings_about"
+        let advancedSettings = "settings_advanced-settings"
         let developerOptions = "settings_developer-options"
         let logout = "settings-logout"
     }

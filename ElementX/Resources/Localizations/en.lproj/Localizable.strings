@@ -67,6 +67,7 @@
 "action_yes" = "Yes";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
+"common_advanced_settings" = "Advanced settings";
 "common_analytics" = "Analytics";
 "common_audio" = "Audio";
 "common_bubbles" = "Bubbles";
@@ -108,6 +109,7 @@
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
 "common_report_submitted" = "Report submitted";
+"common_rich_text_editor" = "Rich text editor";
 "common_room_name" = "Room name";
 "common_room_name_placeholder" = "e.g. your project name";
 "common_search_for_someone" = "Search for someone";
