@@ -22,21 +22,28 @@ struct LocationRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let geoURI = timelineItem.content.geoURI {
-                VStack(alignment: .leading, spacing: 0) {
-                    descriptionView
-                        .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
-
-                    MapLibreStaticMapView(geoURI: geoURI, mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
-                        LocationMarkerView()
-                    }
-                    .frame(maxHeight: mapMaxHeight)
-                    .aspectRatio(mapAspectRatio, contentMode: .fit)
-                    .clipped()
+            mainContent
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(L10n.commonSharedLocation)
+        }
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        if let geoURI = timelineItem.content.geoURI {
+            VStack(alignment: .leading, spacing: 0) {
+                descriptionView
+                    .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
+                
+                MapLibreStaticMapView(geoURI: geoURI, mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
+                    LocationMarkerView()
                 }
-            } else {
-                FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
+                .frame(maxHeight: mapMaxHeight)
+                .aspectRatio(mapAspectRatio, contentMode: .fit)
+                .clipped()
             }
+        } else {
+            FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
         }
     }
 
