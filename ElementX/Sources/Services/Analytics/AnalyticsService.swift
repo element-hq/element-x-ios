@@ -145,18 +145,17 @@ extension AnalyticsService {
     ///   - inThread: whether the composer is used in a Thread
     ///   - isEditing: whether the composer is used to edit a message
     ///   - isReply: whether the composer is used to reply a message
-    ///   - locationType: the type of the shared location
+    ///   - messageType: the type of the message
     ///   - startsThread: whether the composer is used to start a new thread
     func trackComposer(inThread: Bool,
                        isEditing: Bool,
                        isReply: Bool,
-                       locationType: AnalyticsLocationType? = nil,
+                       messageType: AnalyticsMessageType = .text,
                        startsThread: Bool?) {
         capture(event: AnalyticsEvent.Composer(inThread: inThread,
                                                isEditing: isEditing,
-                                               isLocation: locationType != nil,
                                                isReply: isReply,
-                                               locationType: locationType.map { .init($0) },
+                                               messageType: .init(messageType),
                                                startsThread: startsThread))
     }
     
@@ -179,5 +178,25 @@ extension AnalyticsService {
             return
         }
         capture(event: AnalyticsEvent.JoinedRoom(isDM: isDM, isSpace: isSpace, roomSize: roomSize, trigger: nil))
+    }
+
+    /// Track the action of creating a poll
+    /// - Parameters:
+    ///   - isUndisclosed: whether the poll is undisclosed
+    ///   - numberOfAnswers: the number of options in the poll
+    func trackPollCreated(isUndisclosed: Bool, numberOfAnswers: Int) {
+        capture(event: AnalyticsEvent.PollCreation(action: .Create,
+                                                   isUndisclosed: isUndisclosed,
+                                                   numberOfAnswers: numberOfAnswers))
+    }
+
+    /// Track the action of voting on a poll
+    func trackPollVote() {
+        capture(event: AnalyticsEvent.PollVote(doNotUse: nil))
+    }
+
+    /// Track the action of ending a poll
+    func trackPollEnd() {
+        capture(event: AnalyticsEvent.PollEnd(doNotUse: nil))
     }
 }

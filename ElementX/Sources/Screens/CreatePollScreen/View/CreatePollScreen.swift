@@ -32,6 +32,7 @@ struct CreatePollScreen: View {
             optionsSection
             showResultsSection
         }
+        .track(screen: .createPoll)
         .compoundForm()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))

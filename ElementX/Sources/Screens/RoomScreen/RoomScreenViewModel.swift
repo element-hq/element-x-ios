@@ -806,6 +806,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func sendPollResponse(pollStartID: String, optionID: String) {
         Task {
             let sendPollResponseResult = await roomProxy.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
+            analytics.trackPollVote()
+
             switch sendPollResponseResult {
             case .success:
                 break
@@ -819,6 +821,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         Task {
             let endPollResult = await roomProxy.endPoll(pollStartID: pollStartID,
                                                         text: "The poll with event id: \(pollStartID) has ended")
+            analytics.trackPollEnd()
             switch endPollResult {
             case .success:
                 break

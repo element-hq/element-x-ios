@@ -61,6 +61,7 @@ enum AnalyticsScreen: Int {
     case createSpace
     case locationSend
     case locationView
+    case createPoll
 
     /// The screen name reported to the AnalyticsEvent.
     var screenName: AnalyticsEvent.MobileScreen.ScreenName {
@@ -151,6 +152,8 @@ enum AnalyticsScreen: Int {
             return .LocationSend
         case .locationView:
             return .LocationView
+        case .createPoll:
+            return .CreatePollView
         }
     }
 }
