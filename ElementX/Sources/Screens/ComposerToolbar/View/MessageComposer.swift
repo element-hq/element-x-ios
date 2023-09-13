@@ -40,6 +40,7 @@ struct MessageComposer: View {
                 resizeGrabber
             }
 
+            let borderRadius: CGFloat = 21
             mainContent
                 .padding(.horizontal, 12.0)
                 .clipShape(RoundedRectangle(cornerRadius: borderRadius))
@@ -91,16 +92,6 @@ struct MessageComposer: View {
             MessageComposerEditHeader(action: editCancellationAction)
         case .default:
             EmptyView()
-        }
-    }
-    
-    private var borderRadius: CGFloat {
-        switch mode {
-        case .default:
-            #warning("AG: check with Callum")
-            return 20
-        case .reply, .edit:
-            return 20
         }
     }
 
