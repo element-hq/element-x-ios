@@ -220,7 +220,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
-                if threadDecoratorStyle == .default {
+                if messageTimelineItem.isThreaded {
                     threadDecorator
                         .padding(.leading, 4)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
@@ -245,22 +245,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             
-            if threadDecoratorStyle == .overlay {
-                ZStack(alignment: .topLeading) {
-                    content()
-                    threadDecorator
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.compound.bgSubtleSecondary)
-                        .cornerRadius(10)
-                        .padding(.leading, 4)
-                        .padding(.top, 4)
-                }
+            content()
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
-            } else {
-                content()
-                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
-            }
         }
     }
     
@@ -310,22 +296,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var shouldShowSenderDetails: Bool {
         timelineGroupStyle.shouldShowSenderDetails
     }
-    
-    private var threadDecoratorStyle: ThreadDecoratorType? {
-        if let messageItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-           messageItem.isThreaded {
-            switch messageItem {
-            case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
-                return .overlay
-            case is LocationRoomTimelineItem:
-                // TODO: Check with design because locations can actually be with or without a description on the top. So they might be needed to be rendered differently given the use case.
-                return nil
-            default:
-                return .default
-            }
-        }
-        return nil
-    }
 }
 
 private extension View {
@@ -356,11 +326,6 @@ private enum BubbleSendInfoLayoutType {
 
         return AnyLayout(layout)
     }
-}
-
-private enum ThreadDecoratorType {
-    case `default`
-    case overlay
 }
 
 private extension EventBasedTimelineItemProtocol {
@@ -434,6 +399,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
             .previewDisplayName("Thread decorator")
     }
     
+    // These akwats include a reply
     static var threads: some View {
         ScrollView {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
@@ -446,24 +412,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                                    contentType: .text(.init(body: "Short")))), groupStyle: .single))
 
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
-                                                                             timestamp: "10:42",
-                                                                             isOutgoing: true,
-                                                                             isEditable: false,
-                                                                             isThreaded: true,
-                                                                             sender: .init(id: "whoever"),
-                                                                             content: .init(body: "Short message")),
-                                                  groupStyle: .single))
-            
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
-                                                                             timestamp: "10:42",
-                                                                             isOutgoing: false,
-                                                                             isEditable: false,
-                                                                             isThreaded: true,
-                                                                             sender: .init(id: "whoever"),
-                                                                             content: .init(body: "Short message")),
-                                                  groupStyle: .single))
-            
             AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
@@ -473,7 +421,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                       content: .init(body: "audio.ogg",
                                                                      duration: 100,
                                                                      source: nil,
-                                                                     contentType: nil)))
+                                                                     contentType: nil),
+                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            contentType: .text(.init(body: "Short")))))
             FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                      timestamp: "10:42",
                                                      isOutgoing: false,
@@ -483,14 +433,18 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                      content: .init(body: "File",
                                                                     source: nil,
                                                                     thumbnailSource: nil,
-                                                                    contentType: nil)))
+                                                                    contentType: nil),
+                                                     replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                           contentType: .text(.init(body: "Short")))))
             ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
                                                       isEditable: true,
                                                       isThreaded: true,
                                                       sender: .init(id: ""),
-                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
+                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
+                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            contentType: .text(.init(body: "Short")))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                          timestamp: "Now",
                                                          isOutgoing: false,
@@ -499,6 +453,14 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                          sender: .init(id: "Bob"),
                                                          content: .init(body: "Fallback geo uri description",
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
+            LocationRoomTimelineView(timelineItem: .init(id: .random,
+                                                         timestamp: "Now",
+                                                         isOutgoing: false,
+                                                         isEditable: false,
+                                                         isThreaded: true,
+                                                         sender: .init(id: "Bob"),
+                                                         content: .init(body: "Fallback geo uri description",
+                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil)))
         }
         .environmentObject(viewModel.context)
     }
