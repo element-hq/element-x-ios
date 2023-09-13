@@ -122,6 +122,8 @@ struct TimelineReactionButton: View {
             .longPressWithFeedback {
                 showReactionSummary(reaction.key)
             }
+            .accessibilityHint(L10n.commonReaction)
+            .accessibilityAddTraits(reaction.isHighlighted ? .isSelected : [])
     }
     
     var label: some View {
