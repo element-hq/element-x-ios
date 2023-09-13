@@ -130,10 +130,7 @@ private class PreviewViewController: QLPreviewController {
         
         // Remove top file details bar
         navigationController?.navigationBar.isHidden = true
-        
-        // Hide navigation bar share button
-        navigationItem.rightBarButtonItem = nil
-        
+                
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
     }

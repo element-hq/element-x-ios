@@ -119,10 +119,6 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         func previewControllerDidDismiss(_ controller: QLPreviewController) {
             onDismiss()
         }
-        
-        func previewController(_ controller: QLPreviewController, editingModeFor previewItem: QLPreviewItem) -> QLPreviewItemEditingMode {
-            .disabled
-        }
     }
 }
 
