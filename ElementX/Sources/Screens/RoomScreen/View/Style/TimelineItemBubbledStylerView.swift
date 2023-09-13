@@ -186,13 +186,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .cornerRadius(10)
                 .padding(.trailing, 4)
                 .padding(.bottom, 4)
-        case .overlay(capsuleStyle: false):
+        case .horizontal, .overlay(capsuleStyle: false):
             localizedSendInfo
                 .padding(.bottom, -4)
-        case .horizontal:
-            localizedSendInfo
-                .padding(.bottom, 4)
-                .padding(.trailing, 4)
         case .vertical:
             GridRow {
                 localizedSendInfo
