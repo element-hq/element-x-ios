@@ -21,7 +21,6 @@ typealias EnterKeyHandler = () -> Void
 typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
-    @Binding var plainText: String
     let composerView: WysiwygComposerView
     let mode: RoomScreenComposerMode
     let showResizeGrabber: Bool
@@ -33,7 +32,6 @@ struct MessageComposer: View {
     let onAppearAction: () -> Void
     @FocusState private var focused: Bool
 
-    @State private var isMultiline = false
     @State private var composerTranslation: CGFloat = 0
     
     var body: some View {
@@ -67,28 +65,15 @@ struct MessageComposer: View {
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
-            HStack(alignment: .bottom) {
-                if ServiceLocator.shared.settings.richTextEditorEnabled {
-                    composerView
-                        .frame(minHeight: composerHeight, alignment: .top)
-                        .tint(.compound.iconAccentTertiary)
-                        .padding(.vertical, 10)
-                        .focused($focused)
-                        .onAppear {
-                            onAppearAction()
-                        }
-                } else {
-                    MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                             text: $plainText,
-                                             isMultiline: $isMultiline,
-                                             maxHeight: 300,
-                                             enterKeyHandler: sendAction,
-                                             pasteHandler: pasteAction)
-                        .tint(.compound.iconAccentTertiary)
-                        .padding(.vertical, 10)
-                        .focused($focused)
+
+            composerView
+                .frame(minHeight: composerHeight, alignment: .top)
+                .tint(.compound.iconAccentTertiary)
+                .padding(.vertical, 10)
+                .focused($focused)
+                .onAppear {
+                    onAppearAction()
                 }
-            }
         }
     }
 
@@ -112,7 +97,8 @@ struct MessageComposer: View {
     private var borderRadius: CGFloat {
         switch mode {
         case .default:
-            return isMultiline ? 20 : 28
+            #warning("AG: check with Callum")
+            return 20
         case .reply, .edit:
             return 20
         }
@@ -213,8 +199,7 @@ struct MessageComposer_Previews: PreviewProvider {
                                                keyCommandHandler: nil,
                                                pasteHandler: nil)
 
-        return MessageComposer(plainText: .constant(content),
-                               composerView: composerView,
+        return MessageComposer(composerView: composerView,
                                mode: mode,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),

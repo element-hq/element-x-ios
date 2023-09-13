@@ -81,15 +81,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             wysiwygViewModel.setup()
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
-
-            if ServiceLocator.shared.settings.richTextEditorEnabled {
-                actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                                 html: wysiwygViewModel.content.html,
-                                                 mode: state.composerMode))
-            } else {
-                actionsSubject.send(.sendPlainTextMessage(message: context.composerPlainText,
-                                                          mode: state.composerMode))
-            }
+            let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
+            actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                             html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                             mode: state.composerMode))
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
@@ -156,11 +151,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        if ServiceLocator.shared.settings.richTextEditorEnabled {
-            wysiwygViewModel.setMarkdownContent(text)
-        } else {
-            state.bindings.composerPlainText = text
-        }
+        wysiwygViewModel.setMarkdownContent(text)
     }
 
     private func createLinkAlert() {

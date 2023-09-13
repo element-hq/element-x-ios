@@ -19,9 +19,7 @@ import UIKit
 import WysiwygComposer
 
 enum ComposerToolbarViewModelAction {
-    case sendMessage(plain: String, html: String, mode: RoomScreenComposerMode)
-    case sendPlainTextMessage(message: String, mode: RoomScreenComposerMode)
-
+    case sendMessage(plain: String, html: String?, mode: RoomScreenComposerMode)
     case displayCameraPicker
     case displayMediaPicker
     case displayDocumentPicker
@@ -56,16 +54,11 @@ struct ComposerToolbarViewState: BindableState {
     var bindings: ComposerToolbarViewStateBindings
 
     var sendButtonDisabled: Bool {
-        if ServiceLocator.shared.settings.richTextEditorEnabled {
-            return composerEmpty
-        } else {
-            return bindings.composerPlainText.isEmpty
-        }
+        composerEmpty
     }
 }
 
 struct ComposerToolbarViewStateBindings {
-    var composerPlainText = ""
     var composerFocused = false
     var composerActionsEnabled = false
     var composerExpanded = false
