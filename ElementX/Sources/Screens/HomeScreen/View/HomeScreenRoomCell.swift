@@ -55,7 +55,7 @@ struct HomeScreenRoomCell: View {
     }
     
     @ViewBuilder @MainActor
-    var avatar: some View {
+    private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             LoadableAvatarImage(url: room.avatarURL,
                                 name: room.name,
@@ -67,7 +67,7 @@ struct HomeScreenRoomCell: View {
         }
     }
     
-    var content: some View {
+    private var content: some View {
         VStack(alignment: .leading, spacing: 2) {
             header
             footer
@@ -85,7 +85,7 @@ struct HomeScreenRoomCell: View {
     }
     
     @ViewBuilder
-    var header: some View {
+    private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
                 .font(.compound.bodyLGSemibold)
@@ -102,7 +102,7 @@ struct HomeScreenRoomCell: View {
     }
     
     @ViewBuilder
-    var footer: some View {
+    private var footer: some View {
         HStack(alignment: .firstTextBaseline) {
             ZStack(alignment: .topLeading) {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
@@ -138,7 +138,7 @@ struct HomeScreenRoomCell: View {
     }
     
     @ViewBuilder
-    var notificationModeIcon: some View {
+    private var notificationModeIcon: some View {
         switch room.notificationMode {
         case .none, .allMessages:
             EmptyView()
@@ -154,17 +154,9 @@ struct HomeScreenRoomCell: View {
     }
     
     @ViewBuilder
-    var lastMessage: some View {
-        switch room.lastMessage {
-        case .loaded(let lastMessage):
+    private var lastMessage: some View {
+        if let lastMessage = room.lastMessage {
             Text(lastMessage)
-                .lastMessageFormatting()
-        case .loading:
-            Text(HomeScreenRoom.placeholderLastMessage)
-                .lastMessageFormatting()
-                .redacted(reason: .placeholder)
-        case .unknown:
-            Text(L10n.commonMessage)
                 .lastMessageFormatting()
         }
     }
@@ -214,8 +206,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                       name: details.name,
                                       hasUnreads: details.unreadNotificationCount > 0,
                                       timestamp: Date.now.formattedMinimal(),
-                                      lastMessage: .init(attributedString: details.lastMessage,
-                                                         isLoading: false),
+                                      lastMessage: details.lastMessage,
                                       notificationMode: details.notificationMode)
             }
         }

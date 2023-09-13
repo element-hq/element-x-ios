@@ -273,7 +273,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               name: details.name,
                               hasUnreads: details.unreadNotificationCount > 0,
                               timestamp: details.lastMessageFormattedTimestamp,
-                              lastMessage: .init(attributedString: details.lastMessage, isLoading: false),
+                              lastMessage: details.lastMessage,
                               avatarURL: details.avatarURL,
                               notificationMode: notificationMode)
     }
