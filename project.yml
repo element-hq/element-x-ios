@@ -46,7 +46,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.12
+    exactVersion: 1.1.13
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit

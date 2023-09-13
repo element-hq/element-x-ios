@@ -48,23 +48,25 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             
             switch action {
             case .close:
-                self.callback?(.dismiss)
-            case .account:
-                self.presentAccountSettings()
+                callback?(.dismiss)
+            case .accountProfile:
+                presentAccountProfileURL()
             case .analytics:
-                self.presentAnalyticsScreen()
+                presentAnalyticsScreen()
             case .reportBug:
-                self.presentBugReportScreen()
+                presentBugReportScreen()
             case .about:
-                self.presentLegalInformationScreen()
+                presentLegalInformationScreen()
             case .sessionVerification:
-                self.verifySession()
+                verifySession()
+            case .accountSessionsList:
+                presentAccountSessionsListURL()
             case .developerOptions:
-                self.presentDeveloperOptions()
+                presentDeveloperOptions()
             case .logout:
-                self.callback?(.logout)
+                callback?(.logout)
             case .notifications:
-                self.presentNotificationSettings()
+                presentNotificationSettings()
             }
         }
     }
@@ -75,15 +77,26 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         AnyView(SettingsScreen(context: viewModel.context))
     }
     
-    // MARK: - Private
+    // MARK: - OIDC Account Management
     
-    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
-    private func presentAccountSettings() {
-        guard let accountURL = viewModel.context.viewState.accountURL else {
+    private func presentAccountProfileURL() {
+        guard let url = viewModel.context.viewState.accountProfileURL else {
             MXLog.error("Account URL is missing.")
             return
         }
-        
+        presentAccountManagementURL(url)
+    }
+    
+    private func presentAccountSessionsListURL() {
+        guard let url = viewModel.context.viewState.accountSessionsListURL else {
+            MXLog.error("Account URL is missing.")
+            return
+        }
+        presentAccountManagementURL(url)
+    }
+    
+    private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
+    private func presentAccountManagementURL(_ url: URL) {
         guard let window = viewModel.context.viewState.window else {
             MXLog.error("The window is missing.")
             return
@@ -91,9 +104,11 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: accountURL, presentationAnchor: window)
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: window)
         accountSettingsPresenter?.start()
     }
+    
+    // MARK: - Private
     
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,

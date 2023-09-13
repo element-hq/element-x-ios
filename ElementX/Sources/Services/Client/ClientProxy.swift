@@ -125,10 +125,6 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
-    
-    var accountURL: URL? {
-        client.accountUrl().flatMap(URL.init(string:))
-    }
 
     func startSync() {
         guard !hasEncounteredAuthError else {
@@ -153,6 +149,10 @@ class ClientProxy: ClientProxyProtocol {
                 MXLog.error("Failed stopping the sync service with error: \(error)")
             }
         }
+    }
+    
+    func accountURL(action: AccountManagementAction) -> URL? {
+        try? client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {

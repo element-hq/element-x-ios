@@ -86,6 +86,10 @@ public enum L10n {
   public static var actionLeave: String { return L10n.tr("Localizable", "action_leave") }
   /// Leave room
   public static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
+  /// Manage account
+  public static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
+  /// Manage devices
+  public static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
   /// Next
   public static var actionNext: String { return L10n.tr("Localizable", "action_next") }
   /// No

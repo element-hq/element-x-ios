@@ -27,7 +27,6 @@ class MockClientProxy: ClientProxyProtocol {
     let deviceID: String?
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
-    let accountURL: URL?
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
@@ -37,20 +36,21 @@ class MockClientProxy: ClientProxyProtocol {
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
 
-    init(userID: String, deviceID: String? = nil, accountURL: URL? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+    init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         self.deviceID = deviceID
-        self.accountURL = accountURL
         self.roomSummaryProvider = roomSummaryProvider
     }
 
     func loadUserAvatarURL() async { }
     
     func startSync() { }
-    
-    func stopSync(completionHandler: () -> Void) { }
 
     func stopSync() { }
+    
+    func accountURL(action: AccountManagementAction) -> URL? {
+        "https://matrix.org/account"
+    }
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         .failure(.failedRetrievingDirectRoom)

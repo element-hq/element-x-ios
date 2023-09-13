@@ -33,19 +33,27 @@ class SDKClientMock: SDKClientProtocol {
     }
     //MARK: - accountUrl
 
-    public var accountUrlCallsCount = 0
-    public var accountUrlCalled: Bool {
-        return accountUrlCallsCount > 0
+    public var accountUrlActionThrowableError: Error?
+    public var accountUrlActionCallsCount = 0
+    public var accountUrlActionCalled: Bool {
+        return accountUrlActionCallsCount > 0
     }
-    public var accountUrlReturnValue: String?
-    public var accountUrlClosure: (() -> String?)?
+    public var accountUrlActionReceivedAction: AccountManagementAction?
+    public var accountUrlActionReceivedInvocations: [AccountManagementAction?] = []
+    public var accountUrlActionReturnValue: String?
+    public var accountUrlActionClosure: ((AccountManagementAction?) throws -> String?)?
 
-    public func accountUrl() -> String? {
-        accountUrlCallsCount += 1
-        if let accountUrlClosure = accountUrlClosure {
-            return accountUrlClosure()
+    public func accountUrl(action: AccountManagementAction?) throws -> String? {
+        if let error = accountUrlActionThrowableError {
+            throw error
+        }
+        accountUrlActionCallsCount += 1
+        accountUrlActionReceivedAction = action
+        accountUrlActionReceivedInvocations.append(action)
+        if let accountUrlActionClosure = accountUrlActionClosure {
+            return try accountUrlActionClosure(action)
         } else {
-            return accountUrlReturnValue
+            return accountUrlActionReturnValue
         }
     }
     //MARK: - avatarUrl

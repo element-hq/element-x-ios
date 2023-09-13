@@ -39,7 +39,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(bindings: bindings,
                                            deviceID: userSession.deviceID,
                                            userID: userSession.userID,
-                                           accountURL: userSession.clientProxy.accountURL,
+                                           accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
+                                           accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
                                            showSessionVerificationSection: showSessionVerificationSection,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
@@ -81,8 +82,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         switch viewAction {
         case .close:
             callback?(.close)
-        case .account:
-            callback?(.account)
+        case .accountProfile:
+            callback?(.accountProfile)
         case .analytics:
             callback?(.analytics)
         case .reportBug:
@@ -97,6 +98,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             appSettings.timelineStyle = state.bindings.timelineStyle
         case .notifications:
             callback?(.notifications)
+        case .accountSessionsList:
+            callback?(.accountSessionsList)
         case .developerOptions:
             callback?(.developerOptions)
             
