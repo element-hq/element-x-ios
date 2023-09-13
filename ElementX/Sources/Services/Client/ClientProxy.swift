@@ -398,8 +398,10 @@ class ClientProxy: ClientProxyProtocol {
                 .withCrossProcessLock(appIdentifier: "MainApp")
                 .finish()
             let roomListService = syncService.roomListService()
-
-            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+            
+            let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .homeDirectory))
+            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                            messageEventStringBuilder: roomMessageEventStringBuilder)
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",

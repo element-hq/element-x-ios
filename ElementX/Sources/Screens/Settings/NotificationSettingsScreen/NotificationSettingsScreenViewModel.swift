@@ -209,3 +209,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         state.applyingChange = false
     }
 }
+
+extension UNUserNotificationCenter {
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        await notificationSettings().authorizationStatus
+    }
+}

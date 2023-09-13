@@ -20,6 +20,7 @@ import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private let settings = NSESettings()
+    private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: .homeDirectory)))
     private lazy var keychainController = KeychainController(service: .sessions,
                                                              accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     private var handler: ((UNNotificationContent) -> Void)?
@@ -85,10 +86,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard()
             }
-
+            
             // After the first processing, update the modified content
-            modifiedContent = try await itemProxy.process(mediaProvider: nil)
-
+            modifiedContent = try await notificationContentBuilder.content(for: itemProxy, mediaProvider: nil)
+            
             guard itemProxy.hasMedia else {
                 MXLog.info("\(tag) no media needed")
 
@@ -99,7 +100,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             MXLog.info("\(tag) process with media")
 
             // There is some media to load, process it again
-            if let latestContent = try? await itemProxy.process(mediaProvider: userSession.mediaProvider) {
+            if let latestContent = try? await notificationContentBuilder.content(for: itemProxy, mediaProvider: userSession.mediaProvider) {
                 // Processing finished, hopefully with some media
                 modifiedContent = latestContent
             }

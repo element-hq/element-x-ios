@@ -39,6 +39,8 @@ targets:
       - package: Compound
       - package: DesignKit
       - package: DeviceKit
+      - package: DTCoreText
+      - package: LRUCache
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -70,28 +72,34 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Generated
-    - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
-    - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
-    - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
-    - path: ../../ElementX/Sources/Services/Notification/Proxy
-    - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
-    - path: ../../ElementX/Sources/Services/Media/Provider
-    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
-    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
-    - path: ../../ElementX/Sources/Other/Logging
-    - path: ../../ElementX/Sources/Other/Extensions/Task.swift
-    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
-    - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/Date.swift
+    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
-    - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
-    - path: ../../ElementX/Sources/Other/AvatarSize.swift
-    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+    - path: ../../ElementX/Sources/Other/Extensions/LayoutDirection.swift
+    - path: ../../ElementX/Sources/Other/Extensions/NSRegularExpresion.swift
+    - path: ../../ElementX/Sources/Other/Extensions/String.swift
+    - path: ../../ElementX/Sources/Other/Extensions/Task.swift
     - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
-    - path: ../../ElementX/Sources/Other/UserPreference.swift
+    - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
+    - path: ../../ElementX/Sources/Other/HTMLParsing
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+    - path: ../../ElementX/Sources/Other/Logging
+    - path: ../../ElementX/Sources/Other/MatrixEntityRegex.swift
+    - path: ../../ElementX/Sources/Other/PermalinkBuilder.swift
     - path: ../../ElementX/Sources/Other/SharedUserDefaultsKeys.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
-    - path: ../../ElementX/Sources/Other/Extensions/String.swift
-    - path: ../../ElementX/Sources/Other/Extensions/LayoutDirection.swift
+    - path: ../../ElementX/Sources/Other/UserPreference.swift
+    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
+    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
+    - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
+    - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
+    - path: ../../ElementX/Sources/Services/Media/Provider
+    - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
+    - path: ../../ElementX/Sources/Services/Notification/Proxy
+    - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
+    - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
