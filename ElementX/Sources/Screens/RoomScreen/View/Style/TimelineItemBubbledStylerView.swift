@@ -79,14 +79,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if shouldShowSenderDetails {
             HStack(alignment: .top, spacing: 4) {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
-                    .accessibilityHidden(true)
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.avatarColor(for: timelineItem.sender.id).foreground)
                     .lineLimit(1)
                     .padding(.vertical, senderNameVerticalPadding)
             }
-            .accessibilityElement(children: .combine)
+            .accessibilityHidden(true)
             .onTapGesture {
                 context.send(viewAction: .tappedOnUser(userID: timelineItem.sender.id))
             }
@@ -98,6 +97,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubble
+                .accessibilityRepresentation(representation: {
+                    VStack {
+                        Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                        messageBubble
+                    }
+                })
                 .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
