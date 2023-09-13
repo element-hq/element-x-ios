@@ -465,7 +465,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                                                          isThreaded: true,
                                                          sender: .init(id: "Bob"),
                                                          content: .init(body: "Fallback geo uri description",
-                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
+                                                                        geoURI: .init(latitude: 41.902782,
+                                                                                      longitude: 12.496366),
+                                                                        description: "Location description description description description description description description description"),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                contentType: .text(.init(body: "Short")))))
             LocationRoomTimelineView(timelineItem: .init(id: .random,
