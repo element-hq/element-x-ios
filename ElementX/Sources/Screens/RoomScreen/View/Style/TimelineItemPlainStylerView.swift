@@ -77,11 +77,12 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
         }
         .swipeRightAction {
-            Image(systemName: "arrowshape.turn.up.left")
+            SwipeToReplyView(timelineItem: timelineItem)
         } shouldStartAction: {
             context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
         } action: {
-            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
+            let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
+            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
         }
         .contextMenu {
             TimelineItemMacContextMenu(item: timelineItem,

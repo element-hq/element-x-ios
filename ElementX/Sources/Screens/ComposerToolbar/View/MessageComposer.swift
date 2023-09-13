@@ -33,7 +33,7 @@ struct MessageComposer: View {
     @FocusState private var focused: Bool
 
     @State private var composerTranslation: CGFloat = 0
-    
+        
     var body: some View {
         VStack(spacing: 0) {
             if showResizeGrabber {
@@ -62,6 +62,15 @@ struct MessageComposer: View {
     }
 
     // MARK: - Private
+    
+    private var placeholder: String {
+        switch mode {
+        case .reply(_, _, let isThread):
+            return isThread ? L10n.actionReplyInThread : L10n.richTextEditorComposerPlaceholder
+        default:
+            return L10n.richTextEditorComposerPlaceholder
+        }
+    }
 
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
@@ -86,7 +95,7 @@ struct MessageComposer: View {
     @ViewBuilder
     private var header: some View {
         switch mode {
-        case .reply(_, let replyDetails):
+        case .reply(_, let replyDetails, _):
             MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
         case .edit:
             MessageComposerEditHeader(action: editCancellationAction)
@@ -210,7 +219,7 @@ struct MessageComposer_Previews: PreviewProvider {
 
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
-                                                               contentType: .text(.init(body: "Text: Where the wild things are")))))
+                                                               contentType: .text(.init(body: "Text: Where the wild things are"))), isThread: false))
         }
         .padding(.horizontal)
 
@@ -234,7 +243,7 @@ struct MessageComposer_Previews: PreviewProvider {
 
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     messageComposer(mode: .reply(itemID: .random,
-                                                 replyDetails: replyDetails))
+                                                 replyDetails: replyDetails, isThread: false))
                 }
             }
         }

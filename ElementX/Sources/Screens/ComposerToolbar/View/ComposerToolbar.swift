@@ -122,8 +122,17 @@ struct ComposerToolbar: View {
         }
     }
     
+    private var placeholder: String {
+        switch context.viewState.composerMode {
+        case .reply(_, _, let isThread):
+            return isThread ? L10n.actionReplyInThread : L10n.richTextEditorComposerPlaceholder
+        default:
+            return L10n.richTextEditorComposerPlaceholder
+        }
+    }
+    
     private var composerView: WysiwygComposerView {
-        WysiwygComposerView(placeholder: L10n.richTextEditorComposerPlaceholder,
+        WysiwygComposerView(placeholder: placeholder,
                             viewModel: wysiwygViewModel,
                             itemProviderHelper: ItemProviderHelper(),
                             keyCommandHandler: keyCommandHandler) { provider in

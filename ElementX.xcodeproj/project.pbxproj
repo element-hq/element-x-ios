@@ -525,6 +525,7 @@
 		A74438ED16F8683A4B793E6A /* AnalyticsSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCE3FAF40932AC7C7639AC4 /* AnalyticsSettingsScreenViewModel.swift */; };
 		A762491F2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A762491E2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift */; };
 		A76249212AB1F56400ADB9E6 /* ThreadDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */; };
+		A76249232AB2064800ADB9E6 /* SwipeToReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76249222AB2064800ADB9E6 /* SwipeToReplyView.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
@@ -1337,6 +1338,7 @@
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
 		A762491E2AAF6EA800ADB9E6 /* CustomLayoutLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLayoutLabelStyle.swift; sourceTree = "<group>"; };
 		A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadDecorator.swift; sourceTree = "<group>"; };
+		A76249222AB2064800ADB9E6 /* SwipeToReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToReplyView.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8903A9F615BBD0E6D7CD133 /* ApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationProtocol.swift; sourceTree = "<group>"; };
@@ -3187,6 +3189,7 @@
 				8DC2C9E0E15C79BBDA80F0A2 /* TimelineStyle.swift */,
 				892E29C98C4E8182C9037F84 /* TimelineStyler.swift */,
 				A76249202AB1F56400ADB9E6 /* ThreadDecorator.swift */,
+				A76249222AB2064800ADB9E6 /* SwipeToReplyView.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -4828,6 +4831,7 @@
 				352C439BE0F75E101EF11FB1 /* RoomScreenModels.swift in Sources */,
 				7BB31E67648CF32D2AB5E502 /* RoomScreenViewModel.swift in Sources */,
 				617624A97BDBB75ED3DD8156 /* RoomScreenViewModelProtocol.swift in Sources */,
+				A76249232AB2064800ADB9E6 /* SwipeToReplyView.swift in Sources */,
 				6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */,
 				A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,

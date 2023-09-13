@@ -32,3 +32,9 @@ struct ThreadDecorator: View {
         .labelStyle(CustomLayoutLabelStyle(spacing: 4))
     }
 }
+
+struct ThreadDecorator_Previews: PreviewProvider {
+    static var previews: some View {
+        ThreadDecorator()
+    }
+}
