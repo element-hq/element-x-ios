@@ -82,6 +82,7 @@
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
 "common_image" = "Image";
+"common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
 "common_leaving_room" = "Leaving room";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
@@ -99,6 +100,7 @@
 "common_poll_total_votes" = "Total votes: %1$@";
 "common_poll_undisclosed_text" = "Results will show after the poll has ended";
 "common_privacy_policy" = "Privacy policy";
+"common_reaction" = "Reaction";
 "common_reactions" = "Reactions";
 "common_refreshing" = "Refreshing…";
 "common_replying_to" = "Replying to %1$@";

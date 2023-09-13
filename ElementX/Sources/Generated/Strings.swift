@@ -182,6 +182,10 @@ public enum L10n {
   public static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
   public static var commonImage: String { return L10n.tr("Localizable", "common_image") }
+  /// In reply to %1$@
+  public static func commonInReplyTo(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_in_reply_to", String(describing: p1))
+  }
   /// This Matrix ID can't be found, so the invite might not be received.
   public static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
   /// Leaving room
@@ -226,6 +230,8 @@ public enum L10n {
   }
   /// Privacy policy
   public static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
+  /// Reaction
+  public static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
   public static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
   /// Refreshing…

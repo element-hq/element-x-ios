@@ -29,6 +29,8 @@ struct AudioRoomTimelineView: View {
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(L10n.commonAudio)
         }
     }
 }

@@ -137,6 +137,7 @@ struct TimelineReplyView: View {
                     Text(sender.displayName ?? sender.id)
                         .font(.compound.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)
+                        .accessibilityLabel(L10n.commonInReplyTo(sender.displayName ?? sender.id))
                     
                     Text(messagePreview)
                         .font(.compound.bodyMD)
