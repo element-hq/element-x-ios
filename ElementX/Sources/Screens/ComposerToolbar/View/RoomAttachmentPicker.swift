@@ -20,15 +20,18 @@ import WysiwygComposer
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     @Environment(\.isPresented) var isPresented
-    
+    @ScaledMetric(relativeTo: .title) private var attachmentButtonSize: CGFloat = 30
+
     @State private var sheetContentHeight = CGFloat(0)
     
     var body: some View {
         Button {
             context.showAttachmentPopover = true
         } label: {
-            Image(systemName: "plus.circle.fill")
-                .font(.compound.headingLG)
+            Image(Asset.Images.composerAttachment.name)
+                .resizable()
+                .scaledToFit()
+                .frame(width: attachmentButtonSize, height: attachmentButtonSize)
                 .foregroundColor(.compound.textActionPrimary)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
