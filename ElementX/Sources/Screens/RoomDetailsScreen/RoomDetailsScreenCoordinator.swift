@@ -96,12 +96,16 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                                 roomProxy: parameters.roomProxy)
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
-        coordinator.callback = { [weak self] action in
-            switch action {
-            case .invite:
-                self?.presentInviteUsersScreen()
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .invite:
+                    presentInviteUsersScreen()
+                }
             }
-        }
+            .store(in: &cancellables)
         
         navigationStackCoordinator?.push(coordinator)
     }
