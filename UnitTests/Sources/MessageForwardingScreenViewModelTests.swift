@@ -26,6 +26,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
+        cancellables.removeAll()
         viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)), sourceRoomID: "1")
         context = viewModel.context
     }

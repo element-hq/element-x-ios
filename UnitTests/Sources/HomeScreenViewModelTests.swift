@@ -27,6 +27,7 @@ class HomeScreenViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
+        cancellables.removeAll()
         clientProxy = MockClientProxy(userID: "@mock:client.com")
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider()),

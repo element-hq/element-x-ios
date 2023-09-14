@@ -31,6 +31,10 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
+    override func setUp() {
+        cancellables.removeAll()
+    }
+    
     func testSelectUser() {
         setupWithRoomType(roomType: .draft)
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)

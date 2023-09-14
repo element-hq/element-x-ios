@@ -24,7 +24,7 @@ final class UserSessionTests: XCTestCase {
     private var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
-        cancellables = []
+        cancellables.removeAll()
         userSession = UserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 
