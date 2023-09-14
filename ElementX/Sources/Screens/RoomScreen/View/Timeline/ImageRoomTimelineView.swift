@@ -28,8 +28,8 @@ struct ImageRoomTimelineView: View {
                           imageProvider: context.imageProvider) {
                 placeholder
             }
-            .aspectRatio(timelineItem.content.aspectRatio, contentMode: .fit)
-            .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
+            .timelineMediaFrame(height: timelineItem.content.height,
+                                aspectRatio: timelineItem.content.height)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonImage)
         }

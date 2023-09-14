@@ -33,7 +33,7 @@ struct MessageComposer: View {
     @FocusState private var focused: Bool
 
     @State private var composerTranslation: CGFloat = 0
-        
+    
     var body: some View {
         VStack(spacing: 0) {
             if showResizeGrabber {
@@ -62,15 +62,6 @@ struct MessageComposer: View {
     }
 
     // MARK: - Private
-    
-    private var placeholder: String {
-        switch mode {
-        case .reply(_, _, let isThread):
-            return isThread ? L10n.actionReplyInThread : L10n.richTextEditorComposerPlaceholder
-        default:
-            return L10n.richTextEditorComposerPlaceholder
-        }
-    }
 
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {

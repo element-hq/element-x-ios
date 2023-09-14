@@ -46,7 +46,8 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .init(timelineID: ""),
                                                                     timestamp: "",
                                                                     isOutgoing: true,
-                                                                    isEditable: false, isThreaded: false,
+                                                                    isEditable: false,
+                                                                    isThreaded: false,
                                                                     sender: .init(id: "1", displayName: "Bob"),
                                                                     content: .init(body: "This is another message"))), groupStyle: .single))
 

@@ -16,19 +16,34 @@
 
 import SwiftUI
 
+extension LabelStyle where Self == CustomLayoutLabelStyle {
+    /// A label style that uses an `HStack` with parameters to customise the label's layout.
+    static func custom(spacing: CGFloat, alignment: VerticalAlignment = .center, iconLayout: Self.IconLayout = .leading) -> Self {
+        CustomLayoutLabelStyle(spacing: spacing, alignment: alignment, iconLayout: iconLayout)
+    }
+}
+
 struct CustomLayoutLabelStyle: LabelStyle {
     let spacing: CGFloat
-    var alignment = VerticalAlignment.center
-    var isInverted = false
+    var alignment: VerticalAlignment
+    
+    enum IconLayout { case leading, trailing }
+    var iconLayout: IconLayout
+    
+    fileprivate init(spacing: CGFloat, alignment: VerticalAlignment, iconLayout: IconLayout) {
+        self.spacing = spacing
+        self.alignment = alignment
+        self.iconLayout = iconLayout
+    }
     
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: spacing) {
-            if isInverted {
-                configuration.title
+            if iconLayout == .leading {
                 configuration.icon
+                configuration.title
             } else {
-                configuration.icon
                 configuration.title
+                configuration.icon
             }
         }
     }

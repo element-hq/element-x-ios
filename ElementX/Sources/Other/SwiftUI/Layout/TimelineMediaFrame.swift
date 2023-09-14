@@ -16,25 +16,10 @@
 
 import SwiftUI
 
-import Compound
-
-struct ThreadDecorator: View {
-    var body: some View {
-        Label {
-            Text(L10n.commonThread)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodyXS)
-        } icon: {
-            CompoundIcon(\.threads)
-                .font(.system(size: 16))
-                .foregroundColor(.compound.iconSecondary)
-        }
-        .labelStyle(.custom(spacing: 4))
-    }
-}
-
-struct ThreadDecorator_Previews: PreviewProvider {
-    static var previews: some View {
-        ThreadDecorator()
+extension View {
+    /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
+    func timelineMediaFrame(height contentHeight: CGFloat?, aspectRatio contentAspectRatio: CGFloat?) -> some View {
+        aspectRatio(contentAspectRatio, contentMode: .fit)
+            .frame(maxHeight: min(300, max(100, contentHeight ?? .infinity)))
     }
 }
