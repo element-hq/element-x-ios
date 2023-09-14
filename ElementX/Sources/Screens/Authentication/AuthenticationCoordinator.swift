@@ -228,10 +228,18 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             completion()
             return
         }
+        
         let coordinator = AnalyticsPromptScreenCoordinator(analytics: analytics, termsURL: appSettings.analyticsConfiguration.termsURL)
-        coordinator.callback = {
-            completion()
-        }
+        
+        coordinator.actions
+            .sink { action in
+                switch action {
+                case .done:
+                    completion()
+                }
+            }
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     

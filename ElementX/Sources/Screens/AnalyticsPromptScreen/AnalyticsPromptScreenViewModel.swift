@@ -20,7 +20,11 @@ import SwiftUI
 typealias AnalyticsPromptScreenViewModelType = StateStoreViewModel<AnalyticsPromptScreenViewState, AnalyticsPromptScreenViewAction>
 
 class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, AnalyticsPromptScreenViewModelProtocol {
-    var callback: (@MainActor (AnalyticsPromptScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<AnalyticsPromptScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<AnalyticsPromptScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     /// Initialize a view model with the specified prompt type and app display name.
     init(termsURL: URL) {
@@ -33,9 +37,9 @@ class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, Analyt
     override func process(viewAction: AnalyticsPromptScreenViewAction) {
         switch viewAction {
         case .enable:
-            callback?(.enable)
+            actionsSubject.send(.enable)
         case .disable:
-            callback?(.disable)
+            actionsSubject.send(.disable)
         }
     }
 }
