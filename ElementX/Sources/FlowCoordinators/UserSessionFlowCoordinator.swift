@@ -266,34 +266,36 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                          navigationStackCoordinator: detailNavigationStackCoordinator,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
-
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-
-            switch action {
-            case .presentRoom(let roomID):
-                roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
-            case .presentRoomDetails(let roomID):
-                roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
-            case .roomLeft(let roomID):
-                if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
-                   selectedRoomID == roomID {
-                    roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentRoom(let roomID):
+                    roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                case .presentRoomDetails(let roomID):
+                    roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                case .roomLeft(let roomID):
+                    if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
+                       selectedRoomID == roomID {
+                        roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+                    }
+                case .presentSettingsScreen:
+                    stateMachine.processEvent(.showSettingsScreen)
+                case .presentFeedbackScreen:
+                    stateMachine.processEvent(.feedbackScreen)
+                case .presentSessionVerificationScreen:
+                    stateMachine.processEvent(.showSessionVerificationScreen)
+                case .presentStartChatScreen:
+                    stateMachine.processEvent(.showStartChatScreen)
+                case .signOut:
+                    actionsSubject.send(.signOut)
+                case .presentInvitesScreen:
+                    stateMachine.processEvent(.showInvitesScreen)
                 }
-            case .presentSettingsScreen:
-                stateMachine.processEvent(.showSettingsScreen)
-            case .presentFeedbackScreen:
-                stateMachine.processEvent(.feedbackScreen)
-            case .presentSessionVerificationScreen:
-                stateMachine.processEvent(.showSessionVerificationScreen)
-            case .presentStartChatScreen:
-                stateMachine.processEvent(.showStartChatScreen)
-            case .signOut:
-                actionsSubject.send(.signOut)
-            case .presentInvitesScreen:
-                stateMachine.processEvent(.showInvitesScreen)
             }
-        }
+            .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
     }
