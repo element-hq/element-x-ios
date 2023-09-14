@@ -15,6 +15,8 @@
 //
 
 import Combine
+#warning("AG: delete me")
+import CompoundDesignTokens
 import HTMLParser
 import SwiftUI
 import WysiwygComposer
@@ -137,19 +139,18 @@ enum ComposerConstant {
 }
 
 private extension HTMLParserStyle {
-    /// Identical to `HTMLParserStyle.standard` except for the `backgroundColor` of `codeBlockStyle` and `quoteBlockStyle`
     static let elementX = HTMLParserStyle(textColor: UIColor.label,
                                           linkColor: UIColor.link,
-                                          codeBlockStyle: BlockStyle(backgroundColor: .compound._bgCodeBlock,
-                                                                     borderColor: UIColor(red: 227 / 255, green: 232 / 255, blue: 240 / 255, alpha: 1.0),
-                                                                     borderWidth: 1.0,
-                                                                     cornerRadius: 4.0,
+                                          codeBlockStyle: BlockStyle(backgroundColor: UIColor(CompoundColorTokens.colorGray100),
+                                                                     borderColor: UIColor(.compound.borderInteractiveSecondary),
+                                                                     borderWidth: 0.0,
+                                                                     cornerRadius: 0.0,
                                                                      padding: BlockStyle.Padding(horizontal: 10, vertical: 12),
                                                                      type: .background),
-                                          quoteBlockStyle: BlockStyle(backgroundColor: .compound._bgCodeBlock,
-                                                                      borderColor: UIColor(red: 227 / 255, green: 232 / 255, blue: 240 / 255, alpha: 1.0),
-                                                                      borderWidth: 0,
-                                                                      cornerRadius: 0,
+                                          quoteBlockStyle: BlockStyle(backgroundColor: UIColor(.compound.iconTertiary),
+                                                                      borderColor: UIColor(.compound.borderInteractiveSecondary),
+                                                                      borderWidth: 0.0,
+                                                                      cornerRadius: 0.0,
                                                                       padding: BlockStyle.Padding(horizontal: 25, vertical: 12),
                                                                       type: .side(offset: 5, width: 4)))
 }
