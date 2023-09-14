@@ -60,22 +60,24 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .requestMemberDetailsPresentation:
-                self.presentRoomMembersList()
-            case .requestInvitePeoplePresentation:
-                self.presentInviteUsersScreen()
-            case .leftRoom:
-                self.actionsSubject.send(.leftRoom)
-            case .requestEditDetailsPresentation(let accountOwner):
-                self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
-            case .requestNotificationSettingsPresentation:
-                self.presentNotificationSettings()
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .requestMemberDetailsPresentation:
+                    presentRoomMembersList()
+                case .requestInvitePeoplePresentation:
+                    presentInviteUsersScreen()
+                case .leftRoom:
+                    actionsSubject.send(.leftRoom)
+                case .requestEditDetailsPresentation(let accountOwner):
+                    presentRoomDetailsEditScreen(accountOwner: accountOwner)
+                case .requestNotificationSettingsPresentation:
+                    presentNotificationSettings()
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func stop() {

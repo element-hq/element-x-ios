@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol RoomDetailsScreenViewModelProtocol {
-    var callback: ((RoomDetailsScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<RoomDetailsScreenViewModelAction, Never> { get }
     var context: RoomDetailsScreenViewModelType.Context { get }
     func stop()
 }

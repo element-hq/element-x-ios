@@ -32,7 +32,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
 
     private var dmRecipient: RoomMemberProxyProtocol?
     
-    var callback: ((RoomDetailsScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<RoomDetailsScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<RoomDetailsScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(accountUserID: String,
          roomProxy: RoomProxyProtocol,
@@ -75,9 +79,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     override func process(viewAction: RoomDetailsScreenViewAction) {
         switch viewAction {
         case .processTapPeople:
-            callback?(.requestMemberDetailsPresentation)
+            actionsSubject.send(.requestMemberDetailsPresentation)
         case .processTapInvite:
-            callback?(.requestInvitePeoplePresentation)
+            actionsSubject.send(.requestInvitePeoplePresentation)
         case .processTapLeave:
             guard state.joinedMembersCount > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomId: roomProxy.id, state: .empty)
@@ -95,7 +99,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 MXLog.error("Missing account owner when presenting the room's edit details screen")
                 return
             }
-            callback?(.requestEditDetailsPresentation(accountOwner))
+            actionsSubject.send(.requestEditDetailsPresentation(accountOwner))
         case .ignoreConfirmed:
             Task { await ignore() }
         case .unignoreConfirmed:
@@ -104,7 +108,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             if state.notificationSettingsState.isError {
                 fetchNotificationSettings()
             } else {
-                callback?(.requestNotificationSettingsPresentation)
+                actionsSubject.send(.requestNotificationSettingsPresentation)
             }
         case .processToogleMuteNotifications:
             Task { await toggleMuteNotifications() }
@@ -239,7 +243,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
         case .success:
-            callback?(.leftRoom)
+            actionsSubject.send(.leftRoom)
         }
     }
 
