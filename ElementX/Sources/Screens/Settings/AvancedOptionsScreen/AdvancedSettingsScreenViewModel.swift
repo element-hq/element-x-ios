@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias AdvancedSettingsScreenViewModelType = StateStoreViewModel<AdvancedSettingsScreenViewState, AdvancedSettingsScreenViewAction>
 
 class AdvancedSettingsScreenViewModel: AdvancedSettingsScreenViewModelType, AdvancedSettingsScreenViewModelProtocol {
-    var callback: ((AdvancedSettingsScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<AdvancedSettingsScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<AdvancedSettingsScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(advancedSettings: AdvancedSettingsProtocol) {
         let bindings = AdvancedSettingsScreenViewStateBindings(advancedSettings: advancedSettings)

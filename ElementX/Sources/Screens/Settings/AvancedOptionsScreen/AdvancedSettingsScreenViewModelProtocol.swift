@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol AdvancedSettingsScreenViewModelProtocol {
-    var callback: ((AdvancedSettingsScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<AdvancedSettingsScreenViewModelAction, Never> { get }
     var context: AdvancedSettingsScreenViewModelType.Context { get }
 }
