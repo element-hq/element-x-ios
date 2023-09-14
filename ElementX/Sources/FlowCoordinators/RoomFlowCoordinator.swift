@@ -456,16 +456,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = ReportContentScreenCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] completion in
-            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            
-            switch completion {
-            case .cancel:
-                break
-            case .finish:
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+        
+        coordinator.actions
+            .sink { [weak self] completion in
+                guard let self else { return }
+                
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                
+                switch completion {
+                case .cancel:
+                    break
+                case .finish:
+                    userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+                }
             }
-        }
+            .store(in: &cancellables)
+        
         navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.tryEvent(.dismissReportContent)
