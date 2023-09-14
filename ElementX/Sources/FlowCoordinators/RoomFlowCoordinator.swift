@@ -508,12 +508,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        title: url.lastPathComponent,
                                                                        url: url)
 
-        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters) { [weak self] action in
-            switch action {
-            case .dismiss:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
+        
+        mediaUploadPreviewScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
             }
-        }
+            .store(in: &cancellables)
 
         stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
 

@@ -31,7 +31,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         }
     }
     
-    var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<MediaUploadPreviewScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(userIndicatorController: UserIndicatorControllerProtocol?,
          roomProxy: RoomProxyProtocol,
@@ -58,7 +62,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 case .success(let mediaInfo):
                     switch await sendAttachment(mediaInfo: mediaInfo, progressSubject: progressSubject) {
                     case .success:
-                        callback?(.dismiss)
+                        actionsSubject.send(.dismiss)
                     case .failure(let error):
                         MXLog.error("Failed sending attachment with error: \(error)")
                         showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
@@ -74,7 +78,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             
         case .cancel:
             requestHandle?.cancel()
-            callback?(.dismiss)
+            actionsSubject.send(.dismiss)
         }
     }
     

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
@@ -30,11 +31,14 @@ enum MediaUploadPreviewScreenCoordinatorAction {
 
 final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     private var viewModel: MediaUploadPreviewScreenViewModelProtocol
-    private let callback: (MediaUploadPreviewScreenCoordinatorAction) -> Void
+    private let actionsSubject: PassthroughSubject<MediaUploadPreviewScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
-    init(parameters: MediaUploadPreviewScreenCoordinatorParameters, callback: @escaping (MediaUploadPreviewScreenCoordinatorAction) -> Void) {
-        self.callback = callback
-        
+    var actions: AnyPublisher<MediaUploadPreviewScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
         viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: parameters.userIndicatorController,
                                                       roomProxy: parameters.roomProxy,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
@@ -43,14 +47,18 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            switch action {
-            case .dismiss:
-                self?.callback(.dismiss)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    actionsSubject.send(.dismiss)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(MediaUploadPreviewScreen(context: viewModel.context))
     }
