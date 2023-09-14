@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol ServerSelectionScreenViewModelProtocol {
-    var callback: (@MainActor (ServerSelectionScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<ServerSelectionScreenViewModelAction, Never> { get }
     var context: ServerSelectionScreenViewModelType.Context { get }
     
     /// Displays an error to the user.

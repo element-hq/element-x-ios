@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelectionScreenViewState, ServerSelectionScreenViewAction>
@@ -21,7 +22,11 @@ typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelecti
 class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, ServerSelectionScreenViewModelProtocol {
     private let slidingSyncLearnMoreURL: URL
     
-    var callback: (@MainActor (ServerSelectionScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<ServerSelectionScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(homeserverAddress: String, slidingSyncLearnMoreURL: URL, isModallyPresented: Bool) {
         self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
@@ -35,9 +40,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     override func process(viewAction: ServerSelectionScreenViewAction) {
         switch viewAction {
         case .confirm:
-            callback?(.confirm(homeserverAddress: state.bindings.homeserverAddress))
+            actionsSubject.send(.confirm(homeserverAddress: state.bindings.homeserverAddress))
         case .dismiss:
-            callback?(.dismiss)
+            actionsSubject.send(.dismiss)
         case .clearFooterError:
             clearFooterError()
         }
