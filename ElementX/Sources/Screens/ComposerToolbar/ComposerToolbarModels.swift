@@ -226,14 +226,4 @@ extension FormatType {
             return .link
         }
     }
-
-    /// Return true if the format type is an indentation action.
-    var isIndentType: Bool {
-        switch self {
-        case .indent, .unindent:
-            return true
-        default:
-            return false
-        }
-    }
 }
