@@ -99,8 +99,14 @@ struct HomeScreen: View {
                     makeBloomView(controller: controller)
                 }
             }
-            let isHidden = controller.navigationController?.topViewController != controller || isSearching
-            bloomView?.isHidden = isHidden
+            let isTopController = controller.navigationController?.topViewController != controller
+            let isHidden = isTopController || isSearching
+            if let bloomView {
+                bloomView.isHidden = isHidden
+                UIView.transition(with: bloomView, duration: 2.0, options: .curveEaseInOut) {
+                    bloomView.alpha = isTopController ? 0 : 1
+                }
+            }
             gradientView?.isHidden = isHidden
             navigationBarContainer?.clipsToBounds = !isHidden
             hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
