@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct SoftLogoutScreenCoordinatorParameters {
@@ -43,10 +44,14 @@ enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
 final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<SoftLogoutScreenCoordinatorResult, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     
-    var callback: (@MainActor (SoftLogoutScreenCoordinatorResult) -> Void)?
+    var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     @MainActor init(parameters: SoftLogoutScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -60,21 +65,23 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] result in
-            guard let self else { return }
-            MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
+        viewModel.actions
+            .sink { [weak self] result in
+                guard let self else { return }
+                MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
 
-            switch result {
-            case .login(let password):
-                self.login(withPassword: password)
-            case .forgotPassword:
-                self.showForgotPasswordScreen()
-            case .clearAllData:
-                self.callback?(.clearAllData)
-            case .continueWithOIDC:
-                self.continueWithOIDC(presentationAnchor: viewModel.context.viewState.window)
+                switch result {
+                case .login(let password):
+                    login(withPassword: password)
+                case .forgotPassword:
+                    showForgotPasswordScreen()
+                case .clearAllData:
+                    actionsSubject.send(.clearAllData)
+                case .continueWithOIDC:
+                    continueWithOIDC(presentationAnchor: viewModel.context.viewState.window)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func stop() {
@@ -119,7 +126,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceID: parameters.credentials.deviceID) {
             case .success(let userSession):
-                callback?(.signedIn(userSession))
+                actionsSubject.send(.signedIn(userSession))
                 stopLoading()
             case .failure(let error):
                 stopLoading()
@@ -146,7 +153,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                                                             presentationAnchor: presentationAnchor)
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
-                    callback?(.signedIn(userSession))
+                    actionsSubject.send(.signedIn(userSession))
                 case .failure(let error):
                     handleError(error)
                 }
