@@ -36,7 +36,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RoomFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomFlowCoordinatorAction, Never> {
@@ -458,12 +458,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = ReportContentScreenCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { [weak self] completion in
+            .sink { [weak self] action in
                 guard let self else { return }
                 
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 
-                switch completion {
+                switch action {
                 case .cancel:
                     break
                 case .finish:

@@ -33,7 +33,7 @@ final class RoomNotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: RoomNotificationSettingsScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
         
     var actions: AnyPublisher<RoomNotificationSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

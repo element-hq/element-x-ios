@@ -30,7 +30,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
     private let parameters: NotificationSettingsEditScreenCoordinatorParameters
     private var viewModel: NotificationSettingsEditScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<NotificationSettingsEditScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<NotificationSettingsEditScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -71,7 +71,7 @@ class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     
     private var retainedState = [Any]()
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     init(id: UITestsScreenIdentifier) {
         self.id = id

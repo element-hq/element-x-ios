@@ -24,7 +24,7 @@ class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
     var context: HomeScreenViewModelType.Context! { viewModel.context }
-    var cancellables: Set<AnyCancellable> = .init()
+    var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
         clientProxy = MockClientProxy(userID: "@mock:client.com")
@@ -64,8 +64,8 @@ class HomeScreenViewModelTests: XCTestCase {
         var correctResult = false
         
         viewModel.actions
-            .sink { result in
-                switch result {
+            .sink { action in
+                switch action {
                 case .presentSettingsScreen:
                     correctResult = true
                 default:
@@ -102,8 +102,8 @@ class HomeScreenViewModelTests: XCTestCase {
         var correctResult = false
         let expectation = expectation(description: #function)
         viewModel.actions
-            .sink { result in
-                switch result {
+            .sink { action in
+                switch action {
                 case .roomLeft(let roomIdentifier):
                     correctResult = roomIdentifier == mockRoomId
                 default:
@@ -125,8 +125,8 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "1"
         var correctResult = false
         viewModel.actions
-            .sink { result in
-                switch result {
+            .sink { action in
+                switch action {
                 case .presentRoomDetails(let roomIdentifier):
                     correctResult = roomIdentifier == mockRoomId
                 default:

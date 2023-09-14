@@ -35,7 +35,7 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     }
     
     private let actionsSubject: PassthroughSubject<RoomMembersListScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<RoomMembersListScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -74,7 +74,7 @@ class TimelineTableViewController: UIViewController {
     
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
 
     /// A publisher used to throttle back pagination requests.
     ///

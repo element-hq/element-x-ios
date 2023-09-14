@@ -20,7 +20,7 @@ import SwiftUI
 final class OnboardingScreenCoordinator: CoordinatorProtocol {
     private var viewModel: OnboardingScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<OnboardingScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<OnboardingScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -36,7 +36,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     private let parameters: InviteUsersScreenCoordinatorParameters
     private let viewModel: InviteUsersScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<InviteUsersScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<InviteUsersScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

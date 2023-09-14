@@ -26,7 +26,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     var userSession: MockUserSession!
     
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     var context: CreateRoomViewModel.Context {
         viewModel.context

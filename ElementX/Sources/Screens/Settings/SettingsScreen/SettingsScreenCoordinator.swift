@@ -37,7 +37,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: SettingsScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<SettingsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<SettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

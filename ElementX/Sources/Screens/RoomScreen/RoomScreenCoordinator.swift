@@ -106,10 +106,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
 
         composerViewModel.actions
-            .sink { [weak self] composerAction in
+            .sink { [weak self] action in
                 guard let self else { return }
 
-                viewModel.process(composerAction: composerAction)
+                viewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
     }

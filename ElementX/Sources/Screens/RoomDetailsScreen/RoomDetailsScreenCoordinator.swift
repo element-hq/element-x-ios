@@ -41,7 +41,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     private let actionsSubject: PassthroughSubject<RoomDetailsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
         
     var actions: AnyPublisher<RoomDetailsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -121,10 +121,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         inviteUsersStackCoordinator.setRootCoordinator(coordinator)
         
-        coordinator.actions.sink { [weak self] result in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
-            switch result {
+            switch action {
             case .cancel:
                 navigationStackCoordinator?.setSheetCoordinator(nil)
             case .proceed:

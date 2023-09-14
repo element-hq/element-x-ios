@@ -28,7 +28,7 @@ final class CreatePollScreenCoordinator: CoordinatorProtocol {
     private let parameters: CreatePollScreenCoordinatorParameters
     private var viewModel: CreatePollScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<CreatePollScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<CreatePollScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

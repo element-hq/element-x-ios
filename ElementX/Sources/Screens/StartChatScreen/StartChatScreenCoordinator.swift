@@ -33,7 +33,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private let parameters: StartChatScreenCoordinatorParameters
     private var viewModel: StartChatScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<StartChatScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private var createRoomParameters = CurrentValueSubject<CreateRoomFlowParameters, Never>(.init())
     private var createRoomParametersPublisher: CurrentValuePublisher<CreateRoomFlowParameters, Never> {
@@ -97,10 +97,10 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                                                                       mediaProvider: parameters.userSession.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
-        coordinator.actions.sink { [weak self] result in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
-            switch result {
+            switch action {
             case .cancel:
                 break // Not shown in this flow.
             case .proceed:
@@ -125,9 +125,9 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                                                                createRoomParameters: createRoomParametersPublisher,
                                                                selectedUsers: selectedUsersPublisher)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
-        coordinator.actions.sink { [weak self] result in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
-            switch result {
+            switch action {
             case .deselectUser(let user):
                 self.toggleUser(user)
             case .updateDetails(let details):

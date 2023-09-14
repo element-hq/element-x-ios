@@ -32,7 +32,7 @@ enum MediaUploadPreviewScreenCoordinatorAction {
 final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     private var viewModel: MediaUploadPreviewScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<MediaUploadPreviewScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<MediaUploadPreviewScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

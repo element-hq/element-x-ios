@@ -30,7 +30,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     

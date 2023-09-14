@@ -31,7 +31,7 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
     private let parameters: ServerConfirmationScreenCoordinatorParameters
     private var viewModel: ServerConfirmationScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<ServerConfirmationScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<ServerConfirmationScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

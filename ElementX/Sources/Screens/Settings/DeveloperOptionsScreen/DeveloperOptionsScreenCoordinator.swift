@@ -25,7 +25,7 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: DeveloperOptionsScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<DeveloperOptionsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<DeveloperOptionsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -33,7 +33,7 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
     private let parameters: ReportContentScreenCoordinatorParameters
     private var viewModel: ReportContentScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<ReportContentScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<ReportContentScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

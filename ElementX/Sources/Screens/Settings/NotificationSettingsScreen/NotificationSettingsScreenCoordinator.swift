@@ -33,7 +33,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: NotificationSettingsScreenCoordinatorParameters
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<NotificationSettingsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private var navigationStackCoordinator: NavigationStackCoordinator? {
         parameters.navigationStackCoordinator

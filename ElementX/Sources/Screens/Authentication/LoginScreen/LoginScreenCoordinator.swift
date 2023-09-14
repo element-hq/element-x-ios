@@ -43,7 +43,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<LoginScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

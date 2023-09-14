@@ -42,7 +42,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     private var viewModel: HomeScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<HomeScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

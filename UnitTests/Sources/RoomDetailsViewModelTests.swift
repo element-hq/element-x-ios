@@ -27,7 +27,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     var roomProxyMock: RoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var context: RoomDetailsScreenViewModelType.Context { viewModel.context }
-    var cancellables: Set<AnyCancellable> = .init()
+    var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))

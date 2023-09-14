@@ -37,7 +37,7 @@ final class WaitlistScreenCoordinator: CoordinatorProtocol {
     private let parameters: WaitlistScreenCoordinatorParameters
     private var viewModel: WaitlistScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<WaitlistScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     private var refreshCancellable: AnyCancellable?
     
     var actions: AnyPublisher<WaitlistScreenCoordinatorAction, Never> {

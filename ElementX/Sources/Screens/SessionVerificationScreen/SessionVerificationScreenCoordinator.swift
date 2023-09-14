@@ -30,7 +30,7 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     private var viewModel: SessionVerificationScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<SessionVerificationScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<SessionVerificationScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

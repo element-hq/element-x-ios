@@ -51,7 +51,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
     private var clientProxyObserver: AnyCancellable?
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     let notificationManager: NotificationManagerProtocol
 
@@ -376,10 +376,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             
             coordinator.actions
-                .sink { [weak self] result in
+                .sink { [weak self] action in
                     guard let self else { return }
                     
-                    switch result {
+                    switch action {
                     case .signedIn(let session):
                         self.userSession = session
                         stateMachine.processEvent(.createdUserSession)

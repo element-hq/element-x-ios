@@ -36,7 +36,7 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     private let parameters: CreateRoomCoordinatorParameters
     private var viewModel: CreateRoomViewModelProtocol
     private let actionsSubject: PassthroughSubject<CreateRoomCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<CreateRoomCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

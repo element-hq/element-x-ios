@@ -33,7 +33,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     private var viewModel: EmojiPickerScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<EmojiPickerScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<EmojiPickerScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

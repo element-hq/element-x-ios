@@ -23,7 +23,7 @@ import XCTest
 class SettingsScreenViewModelTests: XCTestCase {
     var viewModel: SettingsScreenViewModelProtocol!
     var context: SettingsScreenViewModelType.Context!
-    var cancellables: Set<AnyCancellable> = .init()
+    var cancellables = Set<AnyCancellable>()
     
     @MainActor override func setUpWithError() throws {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
@@ -36,8 +36,8 @@ class SettingsScreenViewModelTests: XCTestCase {
         var correctResult = false
         
         viewModel.actions
-            .sink { result in
-                switch result {
+            .sink { action in
+                switch action {
                 case .logout:
                     correctResult = true
                 default:
@@ -54,8 +54,8 @@ class SettingsScreenViewModelTests: XCTestCase {
     func testReportBug() async throws {
         var correctResult = false
         viewModel.actions
-            .sink { result in
-                correctResult = result == .reportBug
+            .sink { action in
+                correctResult = action == .reportBug
             }
             .store(in: &cancellables)
         
@@ -67,8 +67,8 @@ class SettingsScreenViewModelTests: XCTestCase {
     func testAnalytics() async throws {
         var correctResult = false
         viewModel.actions
-            .sink { result in
-                correctResult = result == .analytics
+            .sink { action in
+                correctResult = action == .analytics
             }
             .store(in: &cancellables)
         

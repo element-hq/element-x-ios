@@ -25,7 +25,7 @@ final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
     private let analytics: AnalyticsService
     private var viewModel: AnalyticsPromptScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AnalyticsPromptScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<AnalyticsPromptScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

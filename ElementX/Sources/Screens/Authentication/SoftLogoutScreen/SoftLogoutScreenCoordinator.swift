@@ -45,7 +45,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<SoftLogoutScreenCoordinatorResult, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     
@@ -66,11 +66,11 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModel.actions
-            .sink { [weak self] result in
+            .sink { [weak self] action in
                 guard let self else { return }
-                MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
+                MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(action).")
 
-                switch result {
+                switch action {
                 case .login(let password):
                     login(withPassword: password)
                 case .forgotPassword:

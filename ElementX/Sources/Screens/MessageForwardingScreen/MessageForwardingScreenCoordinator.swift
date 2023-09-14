@@ -31,7 +31,7 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     private let parameters: MessageForwardingScreenCoordinatorParameters
     private var viewModel: MessageForwardingScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<MessageForwardingScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<MessageForwardingScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -34,7 +34,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
     
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     private var migrationCancellable: AnyCancellable?
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator

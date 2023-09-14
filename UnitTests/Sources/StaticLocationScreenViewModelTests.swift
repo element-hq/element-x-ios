@@ -24,7 +24,7 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     var viewModel: StaticLocationScreenViewModelProtocol!
     
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     var context: StaticLocationScreenViewModel.Context {
         viewModel.context
