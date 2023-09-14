@@ -34,7 +34,7 @@ struct NotificationSettingsScreen: View {
                     if context.viewState.settings?.roomMentionsEnabled != nil {
                         mentionsSection
                     }
-                    if context.viewState.settings?.callsEnabled != nil {
+                    if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
                     }
                 }
