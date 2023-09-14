@@ -23,10 +23,8 @@ import XCTest
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
     var clientProxy: MockClientProxy!
-    
-    var context: HomeScreenViewModelType.Context! {
-        viewModel.context
-    }
+    var context: HomeScreenViewModelType.Context! { viewModel.context }
+    var cancellables: Set<AnyCancellable> = .init()
     
     override func setUpWithError() throws {
         clientProxy = MockClientProxy(userID: "@mock:client.com")
@@ -43,16 +41,19 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "mock_room_id"
         var correctResult = false
         var selectedRoomId = ""
-        viewModel.callback = { result in
-            switch result {
-            case .presentRoom(let roomId):
-                correctResult = true
-                selectedRoomId = roomId
-            default:
-                break
+        
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .presentRoom(let roomId):
+                    correctResult = true
+                    selectedRoomId = roomId
+                default:
+                    break
+                }
             }
-        }
-
+            .store(in: &cancellables)
+        
         context.send(viewAction: .selectRoom(roomIdentifier: mockRoomId))
         await Task.yield()
         XCTAssert(correctResult)
@@ -61,15 +62,18 @@ class HomeScreenViewModelTests: XCTestCase {
 
     func testTapUserAvatar() async throws {
         var correctResult = false
-        viewModel.callback = { result in
-            switch result {
-            case .presentSettingsScreen:
-                correctResult = true
-            default:
-                break
+        
+        viewModel.actions
+            .sink { result in
+                switch result {
+                case .presentSettingsScreen:
+                    correctResult = true
+                default:
+                    break
+                }
             }
-        }
-
+            .store(in: &cancellables)
+        
         context.send(viewAction: .userMenu(action: .settings))
         await Task.yield()
         XCTAssert(correctResult)
@@ -97,15 +101,17 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "1"
         var correctResult = false
         let expectation = expectation(description: #function)
-        viewModel.callback = { result in
-            switch result {
-            case .roomLeft(let roomIdentifier):
-                correctResult = roomIdentifier == mockRoomId
-            default:
-                break
+        viewModel.actions
+            .sink { result in
+                switch result {
+                case .roomLeft(let roomIdentifier):
+                    correctResult = roomIdentifier == mockRoomId
+                default:
+                    break
+                }
+                expectation.fulfill()
             }
-            expectation.fulfill()
-        }
+            .store(in: &cancellables)
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
         room.leaveRoomClosure = { .success(()) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
@@ -118,14 +124,16 @@ class HomeScreenViewModelTests: XCTestCase {
     func testShowRoomDetails() async throws {
         let mockRoomId = "1"
         var correctResult = false
-        viewModel.callback = { result in
-            switch result {
-            case .presentRoomDetails(let roomIdentifier):
-                correctResult = roomIdentifier == mockRoomId
-            default:
-                break
+        viewModel.actions
+            .sink { result in
+                switch result {
+                case .presentRoomDetails(let roomIdentifier):
+                    correctResult = roomIdentifier == mockRoomId
+                default:
+                    break
+                }
             }
-        }
+            .store(in: &cancellables)
         context.send(viewAction: .showRoomDetails(roomIdentifier: mockRoomId))
         await Task.yield()
         XCTAssertNil(context.alertInfo)

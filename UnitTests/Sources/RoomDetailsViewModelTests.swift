@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import MatrixRustSDK
 import SwiftUI
 import XCTest
@@ -26,6 +27,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     var roomProxyMock: RoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var context: RoomDetailsScreenViewModelType.Context { viewModel.context }
+    var cancellables: Set<AnyCancellable> = .init()
     
     override func setUp() {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))
@@ -84,15 +86,17 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock.leaveRoomClosure = {
             .success(())
         }
-        viewModel.callback = { action in
-            switch action {
-            case .leftRoom:
-                break
-            default:
-                XCTFail("leftRoom expected")
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .leftRoom:
+                    break
+                default:
+                    XCTFail("leftRoom expected")
+                }
+                expectation.fulfill()
             }
-            expectation.fulfill()
-        }
+            .store(in: &cancellables)
         context.send(viewAction: .confirmLeave)
         await fulfillment(of: [expectation])
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
@@ -263,14 +267,16 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canInviteUsers)
         
         var callbackCorrectlyCalled = false
-        viewModel.callback = { action in
-            switch action {
-            case .requestInvitePeoplePresentation:
-                callbackCorrectlyCalled = true
-            default:
-                callbackCorrectlyCalled = false
+        viewModel.actions
+            .sink { action in
+                switch action {
+                case .requestInvitePeoplePresentation:
+                    callbackCorrectlyCalled = true
+                default:
+                    callbackCorrectlyCalled = false
+                }
             }
-        }
+            .store(in: &cancellables)
         
         context.send(viewAction: .processTapInvite)
         await Task.yield()

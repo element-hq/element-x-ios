@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
@@ -22,6 +23,7 @@ import XCTest
 class SettingsScreenViewModelTests: XCTestCase {
     var viewModel: SettingsScreenViewModelProtocol!
     var context: SettingsScreenViewModelType.Context!
+    var cancellables: Set<AnyCancellable> = .init()
     
     @MainActor override func setUpWithError() throws {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
@@ -32,14 +34,17 @@ class SettingsScreenViewModelTests: XCTestCase {
 
     @MainActor func testLogout() async throws {
         var correctResult = false
-        viewModel.callback = { result in
-            switch result {
-            case .logout:
-                correctResult = true
-            default:
-                break
+        
+        viewModel.actions
+            .sink { result in
+                switch result {
+                case .logout:
+                    correctResult = true
+                default:
+                    break
+                }
             }
-        }
+            .store(in: &cancellables)
 
         context.send(viewAction: .logout)
         await Task.yield()
@@ -48,10 +53,12 @@ class SettingsScreenViewModelTests: XCTestCase {
 
     func testReportBug() async throws {
         var correctResult = false
-        viewModel.callback = { result in
-            correctResult = result == .reportBug
-        }
-
+        viewModel.actions
+            .sink { result in
+                correctResult = result == .reportBug
+            }
+            .store(in: &cancellables)
+        
         context.send(viewAction: .reportBug)
         await Task.yield()
         XCTAssert(correctResult)
@@ -59,10 +66,12 @@ class SettingsScreenViewModelTests: XCTestCase {
     
     func testAnalytics() async throws {
         var correctResult = false
-        viewModel.callback = { result in
-            correctResult = result == .analytics
-        }
-
+        viewModel.actions
+            .sink { result in
+                correctResult = result == .analytics
+            }
+            .store(in: &cancellables)
+        
         context.send(viewAction: .analytics)
         await Task.yield()
         XCTAssert(correctResult)
