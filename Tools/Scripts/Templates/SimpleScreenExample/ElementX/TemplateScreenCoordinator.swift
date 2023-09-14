@@ -29,7 +29,7 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
     private let parameters: TemplateScreenCoordinatorParameters
     private var viewModel: TemplateScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<TemplateScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<TemplateScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

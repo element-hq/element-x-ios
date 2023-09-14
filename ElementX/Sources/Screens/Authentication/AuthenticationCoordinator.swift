@@ -30,7 +30,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
@@ -57,15 +57,18 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func showOnboarding() {
-        let coordinator = OnboardingCoordinator()
-
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .login:
-                Task { await self.startAuthentication() }
+        let coordinator = OnboardingScreenCoordinator()
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .login:
+                    Task { await self.startAuthentication() }
+                }
             }
-        }
+            .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
@@ -92,29 +95,31 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                                                                     isModallyPresented: isModallyPresented)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .updated:
-                if isModallyPresented {
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                } else {
-                    // We are here because the default server failed to respond.
-                    if authenticationService.homeserver.value.loginMode == .password {
-                        // Add the password login screen directly to the flow, its fine.
-                        showLoginScreen()
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .updated:
+                    if isModallyPresented {
+                        navigationStackCoordinator.setSheetCoordinator(nil)
                     } else {
-                        // OIDC is presented from the confirmation screen so replace the
-                        // server selection screen which was inserted to handle the failure.
-                        navigationStackCoordinator.pop()
-                        showServerConfirmationScreen()
+                        // We are here because the default server failed to respond.
+                        if authenticationService.homeserver.value.loginMode == .password {
+                            // Add the password login screen directly to the flow, its fine.
+                            showLoginScreen()
+                        } else {
+                            // OIDC is presented from the confirmation screen so replace the
+                            // server selection screen which was inserted to handle the failure.
+                            navigationStackCoordinator.pop()
+                            showServerConfirmationScreen()
+                        }
                     }
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
                 }
-            case .dismiss:
-                navigationStackCoordinator.setSheetCoordinator(nil)
             }
-        }
+            .store(in: &cancellables)
         
         if isModallyPresented {
             navigationCoordinator.setRootCoordinator(coordinator)
@@ -178,20 +183,22 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                                                           userIndicatorController: userIndicatorController)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
 
-            switch action {
-            case .signedIn(let userSession):
-                userHasSignedIn(userSession: userSession)
-            case .configuredForOIDC:
-                // Pop back to the confirmation screen for OIDC login to continue.
-                navigationStackCoordinator.pop(animated: false)
-            case .isOnWaitlist(let credentials):
-                showWaitlistScreen(for: credentials)
+                switch action {
+                case .signedIn(let userSession):
+                    userHasSignedIn(userSession: userSession)
+                case .configuredForOIDC:
+                    // Pop back to the confirmation screen for OIDC login to continue.
+                    navigationStackCoordinator.pop(animated: false)
+                case .isOnWaitlist(let credentials):
+                    showWaitlistScreen(for: credentials)
+                }
             }
-        }
-
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     
@@ -228,10 +235,18 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             completion()
             return
         }
+        
         let coordinator = AnalyticsPromptScreenCoordinator(analytics: analytics, termsURL: appSettings.analyticsConfiguration.termsURL)
-        coordinator.callback = {
-            completion()
-        }
+        
+        coordinator.actions
+            .sink { action in
+                switch action {
+                case .done:
+                    completion()
+                }
+            }
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     

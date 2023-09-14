@@ -32,9 +32,12 @@ enum ReportContentScreenCoordinatorAction {
 final class ReportContentScreenCoordinator: CoordinatorProtocol {
     private let parameters: ReportContentScreenCoordinatorParameters
     private var viewModel: ReportContentScreenViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = .init()
+    private let actionsSubject: PassthroughSubject<ReportContentScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
-    var callback: ((ReportContentScreenCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<ReportContentScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: ReportContentScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -48,17 +51,18 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
+                
                 switch action {
                 case .submitStarted:
-                    self.startLoading()
+                    startLoading()
                 case let .submitFailed(error):
-                    self.stopLoading()
-                    self.showError(description: error.localizedDescription)
+                    stopLoading()
+                    showError(description: error.localizedDescription)
                 case .submitFinished:
-                    self.stopLoading()
-                    self.callback?(.finish)
+                    stopLoading()
+                    actionsSubject.send(.finish)
                 case .cancel:
-                    self.callback?(.cancel)
+                    actionsSubject.send(.cancel)
                 }
             }
             .store(in: &cancellables)

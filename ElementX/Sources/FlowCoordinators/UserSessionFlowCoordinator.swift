@@ -29,11 +29,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
     
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     private var migrationCancellable: AnyCancellable?
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -41,7 +42,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
@@ -263,34 +266,36 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                          navigationStackCoordinator: detailNavigationStackCoordinator,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
-
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-
-            switch action {
-            case .presentRoom(let roomID):
-                self.roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
-            case .presentRoomDetails(let roomID):
-                self.roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
-            case .roomLeft(let roomID):
-                if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
-                   selectedRoomID == roomID {
-                    self.roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentRoom(let roomID):
+                    roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                case .presentRoomDetails(let roomID):
+                    roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                case .roomLeft(let roomID):
+                    if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
+                       selectedRoomID == roomID {
+                        roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+                    }
+                case .presentSettingsScreen:
+                    stateMachine.processEvent(.showSettingsScreen)
+                case .presentFeedbackScreen:
+                    stateMachine.processEvent(.feedbackScreen)
+                case .presentSessionVerificationScreen:
+                    stateMachine.processEvent(.showSessionVerificationScreen)
+                case .presentStartChatScreen:
+                    stateMachine.processEvent(.showStartChatScreen)
+                case .signOut:
+                    actionsSubject.send(.signOut)
+                case .presentInvitesScreen:
+                    stateMachine.processEvent(.showInvitesScreen)
                 }
-            case .presentSettingsScreen:
-                self.stateMachine.processEvent(.showSettingsScreen)
-            case .presentFeedbackScreen:
-                self.stateMachine.processEvent(.feedbackScreen)
-            case .presentSessionVerificationScreen:
-                self.stateMachine.processEvent(.showSessionVerificationScreen)
-            case .presentStartChatScreen:
-                self.stateMachine.processEvent(.showStartChatScreen)
-            case .signOut:
-                self.callback?(.signOut)
-            case .presentInvitesScreen:
-                self.stateMachine.processEvent(.showInvitesScreen)
             }
-        }
+            .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
     }
@@ -324,18 +329,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                              notificationSettings: userSession.clientProxy.notificationSettings,
                                                              appSettings: appSettings)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
-        settingsScreenCoordinator.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .dismiss:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .logout:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.callback?(.signOut)
-            case .clearCache:
-                self.callback?(.clearCache)
+        
+        settingsScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .logout:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.signOut)
+                case .clearCache:
+                    actionsSubject.send(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
         
         settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
         
@@ -355,9 +364,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self] in
-            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-        }
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .done:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)

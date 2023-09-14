@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias EmojiPickerScreenViewModelType = StateStoreViewModel<EmojiPickerScreenViewState, EmojiPickerScreenViewAction>
 
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
-    var callback: ((EmojiPickerScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<EmojiPickerScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<EmojiPickerScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     private let emojiProvider: EmojiProviderProtocol
     
@@ -40,9 +45,9 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
                 state.categories = convert(emojiCategories: categories)
             }
         case let .emojiTapped(emoji: emoji):
-            callback?(.emojiSelected(emoji: emoji.value))
+            actionsSubject.send(.emojiSelected(emoji: emoji.value))
         case .dismiss:
-            callback?(.dismiss)
+            actionsSubject.send(.dismiss)
         }
     }
     

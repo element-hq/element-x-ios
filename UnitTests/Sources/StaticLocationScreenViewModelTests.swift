@@ -24,13 +24,14 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     var viewModel: StaticLocationScreenViewModelProtocol!
     
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     var context: StaticLocationScreenViewModel.Context {
         viewModel.context
     }
     
     override func setUpWithError() throws {
+        cancellables.removeAll()
         let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
         viewModel.state.bindings.isLocationAuthorized = true
         self.viewModel = viewModel

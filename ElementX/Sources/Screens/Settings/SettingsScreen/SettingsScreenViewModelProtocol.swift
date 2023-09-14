@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol SettingsScreenViewModelProtocol {
-    var callback: ((SettingsScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<SettingsScreenViewModelAction, Never> { get }
     var context: SettingsScreenViewModelType.Context { get }
 }

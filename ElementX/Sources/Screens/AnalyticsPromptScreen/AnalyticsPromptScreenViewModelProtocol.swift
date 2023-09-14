@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol AnalyticsPromptScreenViewModelProtocol {
-    var callback: (@MainActor (AnalyticsPromptScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<AnalyticsPromptScreenViewModelAction, Never> { get }
     var context: AnalyticsPromptScreenViewModelType.Context { get }
 }

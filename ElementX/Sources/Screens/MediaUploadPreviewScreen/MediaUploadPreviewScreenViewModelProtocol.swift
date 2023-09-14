@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol MediaUploadPreviewScreenViewModelProtocol {
-    var callback: ((MediaUploadPreviewScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> { get }
     var context: MediaUploadPreviewScreenViewModelType.Context { get }
 }

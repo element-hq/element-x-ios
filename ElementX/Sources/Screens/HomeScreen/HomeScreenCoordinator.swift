@@ -41,9 +41,12 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     private let parameters: HomeScreenCoordinatorParameters
     private var viewModel: HomeScreenViewModelProtocol
     
+    private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var callback: ((HomeScreenCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<HomeScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -55,30 +58,32 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         analytics: ServiceLocator.shared.analytics,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .presentRoom(let roomIdentifier):
-                self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
-            case .presentRoomDetails(roomIdentifier: let roomIdentifier):
-                self.callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
-            case .roomLeft(roomIdentifier: let roomIdentifier):
-                self.callback?(.roomLeft(roomIdentifier: roomIdentifier))
-            case .presentFeedbackScreen:
-                self.callback?(.presentFeedbackScreen)
-            case .presentSettingsScreen:
-                self.callback?(.presentSettingsScreen)
-            case .presentSessionVerificationScreen:
-                self.callback?(.presentSessionVerificationScreen)
-            case .signOut:
-                self.callback?(.signOut)
-            case .presentStartChatScreen:
-                self.callback?(.presentStartChatScreen)
-            case .presentInvitesScreen:
-                self.callback?(.presentInvitesScreen)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentRoom(let roomIdentifier):
+                    actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+                case .presentRoomDetails(roomIdentifier: let roomIdentifier):
+                    actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
+                case .roomLeft(roomIdentifier: let roomIdentifier):
+                    actionsSubject.send(.roomLeft(roomIdentifier: roomIdentifier))
+                case .presentFeedbackScreen:
+                    actionsSubject.send(.presentFeedbackScreen)
+                case .presentSettingsScreen:
+                    actionsSubject.send(.presentSettingsScreen)
+                case .presentSessionVerificationScreen:
+                    actionsSubject.send(.presentSessionVerificationScreen)
+                case .signOut:
+                    actionsSubject.send(.signOut)
+                case .presentStartChatScreen:
+                    actionsSubject.send(.presentStartChatScreen)
+                case .presentInvitesScreen:
+                    actionsSubject.send(.presentInvitesScreen)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public

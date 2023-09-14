@@ -21,7 +21,7 @@ import SwiftUI
 struct OnboardingScreen: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    @ObservedObject var context: OnboardingViewModel.Context
+    @ObservedObject var context: OnboardingScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -45,7 +45,7 @@ struct OnboardingScreen: View {
         }
         .navigationBarHidden(true)
         .background {
-            OnboardingBackgroundImage()
+            OnboardingScreenBackgroundImage()
         }
     }
     
@@ -99,7 +99,7 @@ struct OnboardingScreen: View {
 // MARK: - Previews
 
 struct OnboardingScreen_Previews: PreviewProvider {
-    static let viewModel = OnboardingViewModel()
+    static let viewModel = OnboardingScreenViewModel()
     
     static var previews: some View {
         OnboardingScreen(context: viewModel.context)

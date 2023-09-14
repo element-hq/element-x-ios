@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct ServerSelectionScreenCoordinatorParameters {
@@ -35,7 +36,12 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     private var viewModel: ServerSelectionScreenViewModelProtocol
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
-    var callback: (@MainActor (ServerSelectionScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<ServerSelectionScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<ServerSelectionScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -48,16 +54,18 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .confirm(let homeserverAddress):
-                self.useHomeserver(homeserverAddress)
-            case .dismiss:
-                self.callback?(.dismiss)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .confirm(let homeserverAddress):
+                    self.useHomeserver(homeserverAddress)
+                case .dismiss:
+                    actionsSubject.send(.dismiss)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func stop() {
@@ -88,7 +96,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
             switch await authenticationService.configure(for: homeserverAddress) {
             case .success:
                 MXLog.info("Selected homeserver: \(homeserverAddress)")
-                callback?(.updated)
+                actionsSubject.send(.updated)
                 stopLoading()
             case .failure(let error):
                 MXLog.info("Invalid homeserver: \(homeserverAddress)")

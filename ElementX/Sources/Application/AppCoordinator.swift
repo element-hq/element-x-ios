@@ -51,7 +51,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
     private var clientProxyObserver: AnyCancellable?
-    private var networkMonitorObserver: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
     
     let notificationManager: NotificationManagerProtocol
 
@@ -374,15 +374,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                    keyBackupNeeded: false,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
-            coordinator.callback = { result in
-                switch result {
-                case .signedIn(let session):
-                    self.userSession = session
-                    self.stateMachine.processEvent(.createdUserSession)
-                case .clearAllData:
-                    self.stateMachine.processEvent(.signOut(isSoft: false))
+            
+            coordinator.actions
+                .sink { [weak self] action in
+                    guard let self else { return }
+                    
+                    switch action {
+                    case .signedIn(let session):
+                        self.userSession = session
+                        stateMachine.processEvent(.createdUserSession)
+                    case .clearAllData:
+                        stateMachine.processEvent(.signOut(isSoft: false))
+                    }
                 }
-            }
+                .store(in: &cancellables)
             
             navigationRootCoordinator.setRootCoordinator(coordinator)
         }
@@ -401,14 +406,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                     appSettings: appSettings,
                                                                     analytics: ServiceLocator.shared.analytics)
         
-        userSessionFlowCoordinator.callback = { [weak self] action in
-            switch action {
-            case .signOut:
-                self?.stateMachine.processEvent(.signOut(isSoft: false))
-            case .clearCache:
-                self?.stateMachine.processEvent(.clearCache)
+        userSessionFlowCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signOut:
+                    stateMachine.processEvent(.signOut(isSoft: false))
+                case .clearCache:
+                    stateMachine.processEvent(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
         
         userSessionFlowCoordinator.start()
         
@@ -528,7 +537,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
-        networkMonitorObserver = ServiceLocator.shared.networkMonitor
+        ServiceLocator.shared.networkMonitor
             .reachabilityPublisher
             .removeDuplicates()
             .sink { reachability in
@@ -542,6 +551,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                                         persistent: true))
                 }
             }
+            .store(in: &cancellables)
     }
     
     private func handleAppRoute(_ appRoute: AppRoute) {

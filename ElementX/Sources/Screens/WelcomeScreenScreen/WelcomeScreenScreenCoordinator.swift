@@ -24,7 +24,7 @@ enum WelcomeScreenScreenCoordinatorAction {
 final class WelcomeScreenScreenCoordinator: CoordinatorProtocol {
     private var viewModel: WelcomeScreenScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<WelcomeScreenScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<WelcomeScreenScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

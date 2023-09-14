@@ -23,9 +23,10 @@ import Combine
 class RoomFlowCoordinatorTests: XCTestCase {
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
-    private var cancellables: Set<AnyCancellable> = .init()
+    var cancellables = Set<AnyCancellable>()
     
     override func setUp() async throws {
+        cancellables.removeAll()
         let clientProxy = MockClientProxy(userID: "hi@bob", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
         let mediaProvider = MockMediaProvider()
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: mediaProvider)

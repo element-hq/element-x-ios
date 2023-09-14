@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
@@ -24,7 +25,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     private var members: [RoomMemberProxyProtocol] = []
     
-    var callback: ((RoomMembersListScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<RoomMembersListScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<RoomMembersListScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -47,9 +52,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 MXLog.error("Selected member \(id) not found")
                 return
             }
-            callback?(.selectMember(member))
+            actionsSubject.send(.selectMember(member))
         case .invite:
-            callback?(.invite)
+            actionsSubject.send(.invite)
         }
     }
     

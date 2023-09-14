@@ -31,7 +31,7 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     let viewModel: StaticLocationScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<StaticLocationScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<StaticLocationScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

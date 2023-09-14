@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct RoomMembersListScreenCoordinatorParameters {
@@ -33,7 +34,12 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator
     }
     
-    var callback: ((RoomMembersListScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<RoomMembersListScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<RoomMembersListScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -44,16 +50,18 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case let .selectMember(member):
-                self.selectMember(member)
-            case .invite:
-                callback?(.invite)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case let .selectMember(member):
+                    selectMember(member)
+                case .invite:
+                    actionsSubject.send(.invite)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {

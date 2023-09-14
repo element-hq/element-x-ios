@@ -26,9 +26,10 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     var roomProxyMock: RoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var context: RoomNotificationSettingsScreenViewModelType.Context { viewModel.context }
-    var cancellables: Set<AnyCancellable> = []
+    var cancellables = Set<AnyCancellable>()
 
     override func setUpWithError() throws {
+        cancellables.removeAll()
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", joinedMembersCount: 0))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
@@ -172,8 +173,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         
         var actionSent: RoomNotificationSettingsScreenViewModelAction?
         viewModel.actions
-            .sink { value in
-                actionSent = value
+            .sink { action in
+                actionSent = action
             }
             .store(in: &cancellables)
         
@@ -207,8 +208,8 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         
         var actionSent: RoomNotificationSettingsScreenViewModelAction?
         viewModel.actions
-            .sink { value in
-                actionSent = value
+            .sink { action in
+                actionSent = action
             }
             .store(in: &cancellables)
         

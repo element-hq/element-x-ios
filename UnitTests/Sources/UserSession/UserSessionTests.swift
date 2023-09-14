@@ -21,10 +21,10 @@ final class UserSessionTests: XCTestCase {
     var userSession: UserSession!
     let clientProxy = MockClientProxy(userID: "@test:user.net")
     
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     override func setUpWithError() throws {
-        cancellables = []
+        cancellables.removeAll()
         userSession = UserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 

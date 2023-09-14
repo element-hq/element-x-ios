@@ -14,12 +14,10 @@
 // limitations under the License.
 //
 
-import XCTest
+import Combine
 
 @MainActor
-class OnboardingUITests: XCTestCase {
-    func testInitialStateComponents() async throws {
-        let app = Application.launch(.onboarding)
-        try await app.assertScreenshot(.onboarding)
-    }
+protocol OnboardingScreenViewModelProtocol {
+    var actions: AnyPublisher<OnboardingScreenViewModelAction, Never> { get }
+    var context: OnboardingScreenViewModelType.Context { get }
 }

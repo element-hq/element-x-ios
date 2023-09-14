@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct EmojiPickerScreenCoordinatorParameters {
@@ -31,7 +32,12 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     private let parameters: EmojiPickerScreenCoordinatorParameters
     private var viewModel: EmojiPickerScreenViewModelProtocol
     
-    var callback: ((EmojiPickerScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<EmojiPickerScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<EmojiPickerScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: EmojiPickerScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -40,16 +46,18 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case let .emojiSelected(emoji: emoji):
-                self.callback?(.emojiSelected(emoji: emoji, itemID: self.parameters.itemID))
-            case .dismiss:
-                self.callback?(.dismiss)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case let .emojiSelected(emoji: emoji):
+                    actionsSubject.send(.emojiSelected(emoji: emoji, itemID: self.parameters.itemID))
+                case .dismiss:
+                    actionsSubject.send(.dismiss)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

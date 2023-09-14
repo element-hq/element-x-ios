@@ -14,10 +14,27 @@
 // limitations under the License.
 //
 
-import XCTest
+import SwiftUI
 
-@testable import ElementX
+// MARK: - Coordinator
 
-class OnboardingViewModelTests: XCTestCase {
-    // Nothing to test, the view model has no mutable state.
+enum OnboardingScreenCoordinatorAction {
+    case login
+}
+
+/// The content displayed in a single screen page.
+struct OnboardingScreenPageContent {
+    let title: AttributedString
+    let message: String
+    let image: ImageAsset
+}
+
+enum OnboardingScreenViewModelAction {
+    case login
+}
+
+struct OnboardingScreenViewState: BindableState { }
+
+enum OnboardingScreenViewAction {
+    case login
 }

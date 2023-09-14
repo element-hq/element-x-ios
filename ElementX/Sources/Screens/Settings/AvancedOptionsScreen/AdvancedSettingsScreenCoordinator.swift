@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 enum AdvancedSettingsScreenCoordinatorAction {
@@ -23,7 +24,12 @@ enum AdvancedSettingsScreenCoordinatorAction {
 final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AdvancedSettingsScreenViewModelProtocol
     
-    var callback: ((AdvancedSettingsScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<AdvancedSettingsScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<AdvancedSettingsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init() {
         viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings)

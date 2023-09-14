@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol SessionVerificationScreenViewModelProtocol {
-    var callback: ((SessionVerificationScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<SessionVerificationScreenViewModelAction, Never> { get }
     var context: SessionVerificationViewModelType.Context { get }
 }

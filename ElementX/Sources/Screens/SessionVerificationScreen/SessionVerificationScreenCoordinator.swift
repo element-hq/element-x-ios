@@ -14,7 +14,12 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
+
+enum SessionVerificationScreenCoordinatorAction {
+    case done
+}
 
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
@@ -24,7 +29,12 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     private let parameters: SessionVerificationScreenCoordinatorParameters
     private var viewModel: SessionVerificationScreenViewModelProtocol
     
-    var callback: (() -> Void)?
+    private let actionsSubject: PassthroughSubject<SessionVerificationScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<SessionVerificationScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -35,14 +45,16 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .finished:
-                self.callback?()
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .finished:
+                    actionsSubject.send(.done)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

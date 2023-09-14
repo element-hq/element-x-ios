@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol DeveloperOptionsScreenViewModelProtocol {
-    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<DeveloperOptionsScreenViewModelAction, Never> { get }
     var context: DeveloperOptionsScreenViewModelType.Context { get }
 }

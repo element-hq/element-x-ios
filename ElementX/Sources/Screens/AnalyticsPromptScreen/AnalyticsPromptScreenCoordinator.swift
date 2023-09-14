@@ -14,13 +14,22 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
+
+enum AnalyticsPromptScreenCoordinatorAction {
+    case done
+}
 
 final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
     private let analytics: AnalyticsService
-    private var viewModel: AnalyticsPromptScreenViewModel
-
-    var callback: (@MainActor () -> Void)?
+    private var viewModel: AnalyticsPromptScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<AnalyticsPromptScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<AnalyticsPromptScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(analytics: AnalyticsService, termsURL: URL) {
         self.analytics = analytics
@@ -30,20 +39,22 @@ final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] result in
-            guard let self else { return }
-            
-            switch result {
-            case .enable:
-                MXLog.info("Enable Analytics")
-                analytics.optIn()
-                self.callback?()
-            case .disable:
-                MXLog.info("Disable Analytics")
-                analytics.optOut()
-                self.callback?()
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .enable:
+                    MXLog.info("Enable Analytics")
+                    analytics.optIn()
+                    actionsSubject.send(.done)
+                case .disable:
+                    MXLog.info("Disable Analytics")
+                    analytics.optOut()
+                    actionsSubject.send(.done)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

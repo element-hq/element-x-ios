@@ -32,7 +32,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private var visibleItemRangeObservationToken: AnyCancellable?
     private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
-    var callback: ((HomeScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
@@ -92,9 +96,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .selectRoom(let roomIdentifier):
-            callback?(.presentRoom(roomIdentifier: roomIdentifier))
+            actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
         case .showRoomDetails(roomIdentifier: let roomIdentifier):
-            callback?(.presentRoomDetails(roomIdentifier: roomIdentifier))
+            actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(roomIdentifier: let roomIdentifier):
             startLeaveRoomProcess(roomId: roomIdentifier)
         case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
@@ -102,22 +106,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .userMenu(let action):
             switch action {
             case .feedback:
-                callback?(.presentFeedbackScreen)
+                actionsSubject.send(.presentFeedbackScreen)
             case .settings:
-                callback?(.presentSettingsScreen)
+                actionsSubject.send(.presentSettingsScreen)
             case .signOut:
-                callback?(.signOut)
+                actionsSubject.send(.signOut)
             }
         case .verifySession:
-            callback?(.presentSessionVerificationScreen)
+            actionsSubject.send(.presentSessionVerificationScreen)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
-            callback?(.presentStartChatScreen)
+            actionsSubject.send(.presentStartChatScreen)
         case .selectInvites:
-            callback?(.presentInvitesScreen)
+            actionsSubject.send(.presentInvitesScreen)
         }
     }
     
@@ -126,7 +130,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                              title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
                                              primaryButton: .init(title: L10n.actionNo, action: nil),
                                              secondaryButton: .init(title: L10n.actionYes) { [weak self] in
-                                                 self?.callback?(.presentFeedbackScreen)
+                                                 self?.actionsSubject.send(.presentFeedbackScreen)
                                              })
     }
     
@@ -335,7 +339,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                                                       type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
                                                                       title: L10n.commonCurrentUserLeftRoom,
                                                                       iconName: "checkmark"))
-                callback?(.roomLeft(roomIdentifier: roomId))
+                actionsSubject.send(.roomLeft(roomIdentifier: roomId))
             }
         }
     }

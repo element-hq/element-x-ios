@@ -41,7 +41,7 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     private let actionsSubject: PassthroughSubject<RoomDetailsScreenCoordinatorAction, Never> = .init()
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
         
     var actions: AnyPublisher<RoomDetailsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -60,22 +60,24 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .requestMemberDetailsPresentation:
-                self.presentRoomMembersList()
-            case .requestInvitePeoplePresentation:
-                self.presentInviteUsersScreen()
-            case .leftRoom:
-                self.actionsSubject.send(.leftRoom)
-            case .requestEditDetailsPresentation(let accountOwner):
-                self.presentRoomDetailsEditScreen(accountOwner: accountOwner)
-            case .requestNotificationSettingsPresentation:
-                self.presentNotificationSettings()
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .requestMemberDetailsPresentation:
+                    presentRoomMembersList()
+                case .requestInvitePeoplePresentation:
+                    presentInviteUsersScreen()
+                case .leftRoom:
+                    actionsSubject.send(.leftRoom)
+                case .requestEditDetailsPresentation(let accountOwner):
+                    presentRoomDetailsEditScreen(accountOwner: accountOwner)
+                case .requestNotificationSettingsPresentation:
+                    presentNotificationSettings()
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func stop() {
@@ -94,12 +96,16 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                                 roomProxy: parameters.roomProxy)
         let coordinator = RoomMembersListScreenCoordinator(parameters: params)
         
-        coordinator.callback = { [weak self] action in
-            switch action {
-            case .invite:
-                self?.presentInviteUsersScreen()
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .invite:
+                    presentInviteUsersScreen()
+                }
             }
-        }
+            .store(in: &cancellables)
         
         navigationStackCoordinator?.push(coordinator)
     }
@@ -115,10 +121,10 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         inviteUsersStackCoordinator.setRootCoordinator(coordinator)
         
-        coordinator.actions.sink { [weak self] result in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
-            switch result {
+            switch action {
             case .cancel:
                 navigationStackCoordinator?.setSheetCoordinator(nil)
             case .proceed:

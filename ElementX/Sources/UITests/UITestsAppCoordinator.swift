@@ -71,7 +71,7 @@ class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     
     private var retainedState = [Any]()
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     init(id: UITestsScreenIdentifier) {
         self.id = id
@@ -229,7 +229,7 @@ class MockScreen: Identifiable {
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)
         case .onboarding:
-            return OnboardingCoordinator()
+            return OnboardingScreenCoordinator()
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil)),

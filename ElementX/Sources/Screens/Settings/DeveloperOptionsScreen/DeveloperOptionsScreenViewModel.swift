@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
 
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
-    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<DeveloperOptionsScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<DeveloperOptionsScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(developerOptions: DeveloperOptionsProtocol) {
         let bindings = DeveloperOptionsScreenViewStateBindings(developerOptions: developerOptions)
@@ -31,7 +36,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     override func process(viewAction: DeveloperOptionsScreenViewAction) {
         switch viewAction {
         case .clearCache:
-            callback?(.clearCache)
+            actionsSubject.send(.clearCache)
         }
     }
 }

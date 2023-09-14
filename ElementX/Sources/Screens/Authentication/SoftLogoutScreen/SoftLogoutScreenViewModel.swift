@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias SoftLogoutScreenViewModelType = StateStoreViewModel<SoftLogoutScreenViewState, SoftLogoutScreenViewAction>
 
 class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreenViewModelProtocol {
-    var callback: (@MainActor (SoftLogoutScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<SoftLogoutScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<SoftLogoutScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(credentials: SoftLogoutScreenCredentials,
          homeserver: LoginHomeserver,
@@ -36,13 +41,13 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
     override func process(viewAction: SoftLogoutScreenViewAction) {
         switch viewAction {
         case .login:
-            callback?(.login(state.bindings.password))
+            actionsSubject.send(.login(state.bindings.password))
         case .forgotPassword:
-            callback?(.forgotPassword)
+            actionsSubject.send(.forgotPassword)
         case .clearAllData:
-            callback?(.clearAllData)
+            actionsSubject.send(.clearAllData)
         case .continueWithOIDC:
-            callback?(.continueWithOIDC)
+            actionsSubject.send(.continueWithOIDC)
         case .updateWindow(let window):
             guard state.window != window else { return }
             Task { state.window = window }

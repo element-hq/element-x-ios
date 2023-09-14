@@ -36,7 +36,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RoomFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<RoomFlowCoordinatorAction, Never> {
@@ -456,16 +456,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController)
         let coordinator = ReportContentScreenCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] completion in
-            self?.navigationStackCoordinator.setSheetCoordinator(nil)
-            
-            switch completion {
-            case .cancel:
-                break
-            case .finish:
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                
+                switch action {
+                case .cancel:
+                    break
+                case .finish:
+                    userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+                }
             }
-        }
+            .store(in: &cancellables)
+        
         navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.tryEvent(.dismissReportContent)
@@ -508,12 +514,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        title: url.lastPathComponent,
                                                                        url: url)
 
-        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters) { [weak self] action in
-            switch action {
-            case .dismiss:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+        let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
+        
+        mediaUploadPreviewScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
             }
-        }
+            .store(in: &cancellables)
 
         stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
 
@@ -526,18 +538,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
                                                             itemID: itemID, selectedEmojis: selectedEmoji)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
-        coordinator.callback = { [weak self] action in
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
             switch action {
             case let .emojiSelected(emoji: emoji, itemID: itemID):
                 MXLog.debug("Selected \(emoji) for \(itemID)")
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await self?.timelineController?.toggleReaction(emoji, to: itemID)
+                    await self.timelineController?.toggleReaction(emoji, to: itemID)
                 }
             case .dismiss:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
+        .store(in: &cancellables)
         
         navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissEmojiPicker)

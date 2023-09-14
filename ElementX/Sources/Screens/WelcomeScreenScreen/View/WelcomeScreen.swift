@@ -26,7 +26,7 @@ struct WelcomeScreen: View {
         } bottomContent: {
             button
         }
-        .background(OnboardingBackgroundImage())
+        .background(OnboardingScreenBackgroundImage())
         .environment(\.backgroundStyle, AnyShapeStyle(Color.clear))
         .onAppear {
             context.send(viewAction: .appeared)

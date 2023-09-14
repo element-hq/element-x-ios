@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 protocol SoftLogoutScreenViewModelProtocol {
-    var callback: (@MainActor (SoftLogoutScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<SoftLogoutScreenViewModelAction, Never> { get }
     var context: SoftLogoutScreenViewModelType.Context { get }
     
     /// Display an error to the user.

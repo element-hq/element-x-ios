@@ -25,10 +25,14 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     var clientProxy: MockClientProxy!
     var userDiscoveryService: UserDiscoveryServiceMock!
     
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = Set<AnyCancellable>()
     
     var context: InviteUsersScreenViewModel.Context {
         viewModel.context
+    }
+    
+    override func setUp() {
+        cancellables.removeAll()
     }
     
     func testSelectUser() {

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 enum DeveloperOptionsScreenCoordinatorAction {
@@ -23,18 +24,28 @@ enum DeveloperOptionsScreenCoordinatorAction {
 final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: DeveloperOptionsScreenViewModelProtocol
     
-    var callback: ((DeveloperOptionsScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<DeveloperOptionsScreenCoordinatorAction, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    var actions: AnyPublisher<DeveloperOptionsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init() {
         viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings)
-        viewModel.callback = { [weak self] action in
-            switch action {
-            case .clearCache:
-                self?.callback?(.clearCache)
+        
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .clearCache:
+                    actionsSubject.send(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
-            
+    
     func toPresentable() -> AnyView {
         AnyView(DeveloperOptionsScreen(context: viewModel.context))
     }

@@ -14,12 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
-import UIKit
+import Combine
 
 @MainActor
 protocol HomeScreenViewModelProtocol {
-    var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<HomeScreenViewModelAction, Never> { get }
     
     var context: HomeScreenViewModelType.Context { get }
     

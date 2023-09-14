@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol LoginScreenViewModelProtocol {
-    var callback: (@MainActor (LoginScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<LoginScreenViewModelAction, Never> { get }
     var context: LoginScreenViewModelType.Context { get }
     
     /// Update the view to reflect that a new homeserver is being loaded.

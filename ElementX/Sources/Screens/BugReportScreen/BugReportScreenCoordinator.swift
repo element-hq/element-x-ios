@@ -35,7 +35,7 @@ struct BugReportScreenCoordinatorParameters {
 final class BugReportScreenCoordinator: CoordinatorProtocol {
     private let parameters: BugReportScreenCoordinatorParameters
     private var viewModel: BugReportScreenViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     var completion: ((BugReportScreenCoordinatorResult) -> Void)?
     
@@ -54,10 +54,10 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
     func start() {
         viewModel
             .actions
-            .sink { [weak self] result in
+            .sink { [weak self] action in
                 guard let self else { return }
-                MXLog.info("BugReportViewModel did complete with result: \(result).")
-                switch result {
+                MXLog.info("BugReportViewModel did complete with result: \(action).")
+                switch action {
                 case .cancel:
                     self.completion?(.cancel)
                 case let .submitStarted(progressPublisher):
