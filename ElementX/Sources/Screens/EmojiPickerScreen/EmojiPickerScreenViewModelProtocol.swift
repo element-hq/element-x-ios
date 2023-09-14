@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol EmojiPickerScreenViewModelProtocol {
-    var callback: ((EmojiPickerScreenViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<EmojiPickerScreenViewModelAction, Never> { get }
     var context: EmojiPickerScreenViewModelType.Context { get }
 }
