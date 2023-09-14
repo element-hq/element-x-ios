@@ -195,14 +195,16 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     private func presentDeveloperOptions() {
         let coordinator = DeveloperOptionsScreenCoordinator()
         
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .clearCache:
-                actionsSubject.send(.clearCache)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .clearCache:
+                    actionsSubject.send(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
         
         parameters.navigationStackCoordinator?.push(coordinator)
     }
