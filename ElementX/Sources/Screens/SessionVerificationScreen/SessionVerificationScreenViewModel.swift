@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerificationScreenViewState, SessionVerificationScreenViewAction>
@@ -23,7 +24,11 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     private var stateMachine: SessionVerificationScreenStateMachine
 
-    var callback: ((SessionVerificationScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<SessionVerificationScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<SessionVerificationScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          initialState: SessionVerificationScreenViewState = SessionVerificationScreenViewState()) {
@@ -79,7 +84,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                 return
             }
             
-            callback?(.finished)
+            actionsSubject.send(.finished)
         case .accept:
             stateMachine.processEvent(.acceptChallenge)
         case .decline:
@@ -93,24 +98,24 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
                 
-            self.state.verificationState = context.toState
+            state.verificationState = context.toState
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .requestVerification, .requestingVerification):
-                self.requestVerification()
+                requestVerification()
             case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
-                self.startSasVerification()
+                startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
-                self.acceptChallenge()
+                acceptChallenge()
             case (.showingChallenge, .declineChallenge, .decliningChallenge):
-                self.declineChallenge()
+                declineChallenge()
             case (_, .cancel, .cancelling):
-                self.cancelVerification()
+                cancelVerification()
             case (_, _, .verified):
                 // Dismiss the success screen automatically.
                 Task {
                     try? await Task.sleep(for: .seconds(2))
-                    self.callback?(.finished)
+                    self.actionsSubject.send(.finished)
                 }
             default:
                 break

@@ -360,9 +360,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self] in
-            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-        }
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .done:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)

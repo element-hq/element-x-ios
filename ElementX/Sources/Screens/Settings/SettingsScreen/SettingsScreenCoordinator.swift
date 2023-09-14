@@ -152,10 +152,17 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         let verificationParameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
         let coordinator = SessionVerificationScreenCoordinator(parameters: verificationParameters)
         
-        coordinator.callback = { [weak self] in
-            self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-        }
-        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .done:
+                    parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+
         parameters.navigationStackCoordinator?.setSheetCoordinator(coordinator) { [weak self] in
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
