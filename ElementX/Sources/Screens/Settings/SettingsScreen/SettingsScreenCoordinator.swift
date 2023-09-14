@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct SettingsScreenCoordinatorParameters {
@@ -34,8 +35,13 @@ enum SettingsScreenCoordinatorAction {
 final class SettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: SettingsScreenCoordinatorParameters
     private var viewModel: SettingsScreenViewModelProtocol
-
-    var callback: ((SettingsScreenCoordinatorAction) -> Void)?
+    
+    private let actionsSubject: PassthroughSubject<SettingsScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    var actions: AnyPublisher<SettingsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     // MARK: - Setup
     
@@ -43,34 +49,37 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession, appSettings: ServiceLocator.shared.settings)
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .close:
-                callback?(.dismiss)
-            case .accountProfile:
-                presentAccountProfileURL()
-            case .analytics:
-                presentAnalyticsScreen()
-            case .reportBug:
-                presentBugReportScreen()
-            case .about:
-                presentLegalInformationScreen()
-            case .sessionVerification:
-                verifySession()
-            case .accountSessionsList:
-                presentAccountSessionsListURL()
-            case .notifications:
-                presentNotificationSettings()
-            case .advancedSettings:
-                self.presentAdvancedSettings()
-            case .developerOptions:
-                presentDeveloperOptions()
-            case .logout:
-                callback?(.logout)
+        
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .close:
+                    actionsSubject.send(.dismiss)
+                case .accountProfile:
+                    presentAccountProfileURL()
+                case .analytics:
+                    presentAnalyticsScreen()
+                case .reportBug:
+                    presentBugReportScreen()
+                case .about:
+                    presentLegalInformationScreen()
+                case .sessionVerification:
+                    verifySession()
+                case .accountSessionsList:
+                    presentAccountSessionsListURL()
+                case .notifications:
+                    presentNotificationSettings()
+                case .advancedSettings:
+                    self.presentAdvancedSettings()
+                case .developerOptions:
+                    presentDeveloperOptions()
+                case .logout:
+                    actionsSubject.send(.logout)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -187,9 +196,11 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         let coordinator = DeveloperOptionsScreenCoordinator()
         
         coordinator.callback = { [weak self] action in
+            guard let self else { return }
+            
             switch action {
             case .clearCache:
-                self?.callback?(.clearCache)
+                actionsSubject.send(.clearCache)
             }
         }
         

@@ -329,18 +329,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                              notificationSettings: userSession.clientProxy.notificationSettings,
                                                              appSettings: appSettings)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
-        settingsScreenCoordinator.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .dismiss:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .logout:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-                actionsSubject.send(.signOut)
-            case .clearCache:
-                actionsSubject.send(.clearCache)
+        
+        settingsScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .logout:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.signOut)
+                case .clearCache:
+                    actionsSubject.send(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
         
         settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
         

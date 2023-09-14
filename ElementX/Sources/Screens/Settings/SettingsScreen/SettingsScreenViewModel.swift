@@ -23,7 +23,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     private let userSession: UserSessionProtocol
     private let appSettings: AppSettings
 
-    var callback: ((SettingsScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<SettingsScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<SettingsScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol, appSettings: AppSettings) {
         self.userSession = userSession
@@ -74,27 +78,27 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     override func process(viewAction: SettingsScreenViewAction) {
         switch viewAction {
         case .close:
-            callback?(.close)
+            actionsSubject.send(.close)
         case .accountProfile:
-            callback?(.accountProfile)
+            actionsSubject.send(.accountProfile)
         case .analytics:
-            callback?(.analytics)
+            actionsSubject.send(.analytics)
         case .reportBug:
-            callback?(.reportBug)
+            actionsSubject.send(.reportBug)
         case .about:
-            callback?(.about)
+            actionsSubject.send(.about)
         case .logout:
-            callback?(.logout)
+            actionsSubject.send(.logout)
         case .sessionVerification:
-            callback?(.sessionVerification)
+            actionsSubject.send(.sessionVerification)
         case .notifications:
-            callback?(.notifications)
+            actionsSubject.send(.notifications)
         case .accountSessionsList:
-            callback?(.accountSessionsList)
+            actionsSubject.send(.accountSessionsList)
         case .advancedSettings:
-            callback?(.advancedSettings)
+            actionsSubject.send(.advancedSettings)
         case .developerOptions:
-            callback?(.developerOptions)
+            actionsSubject.send(.developerOptions)
             
         case .updateWindow(let window):
             Task {
