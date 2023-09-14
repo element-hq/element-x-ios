@@ -406,14 +406,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                     appSettings: appSettings,
                                                                     analytics: ServiceLocator.shared.analytics)
         
-        userSessionFlowCoordinator.callback = { [weak self] action in
-            switch action {
-            case .signOut:
-                self?.stateMachine.processEvent(.signOut(isSoft: false))
-            case .clearCache:
-                self?.stateMachine.processEvent(.clearCache)
+        userSessionFlowCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signOut:
+                    stateMachine.processEvent(.signOut(isSoft: false))
+                case .clearCache:
+                    stateMachine.processEvent(.clearCache)
+                }
             }
-        }
+            .store(in: &cancellables)
         
         userSessionFlowCoordinator.start()
         

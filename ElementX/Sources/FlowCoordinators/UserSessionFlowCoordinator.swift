@@ -29,6 +29,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
@@ -41,7 +42,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
@@ -269,26 +272,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
             switch action {
             case .presentRoom(let roomID):
-                self.roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
+                roomFlowCoordinator.handleAppRoute(.room(roomID: roomID), animated: true)
             case .presentRoomDetails(let roomID):
-                self.roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
             case .roomLeft(let roomID):
                 if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
                    selectedRoomID == roomID {
-                    self.roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
+                    roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
                 }
             case .presentSettingsScreen:
-                self.stateMachine.processEvent(.showSettingsScreen)
+                stateMachine.processEvent(.showSettingsScreen)
             case .presentFeedbackScreen:
-                self.stateMachine.processEvent(.feedbackScreen)
+                stateMachine.processEvent(.feedbackScreen)
             case .presentSessionVerificationScreen:
-                self.stateMachine.processEvent(.showSessionVerificationScreen)
+                stateMachine.processEvent(.showSessionVerificationScreen)
             case .presentStartChatScreen:
-                self.stateMachine.processEvent(.showStartChatScreen)
+                stateMachine.processEvent(.showStartChatScreen)
             case .signOut:
-                self.callback?(.signOut)
+                actionsSubject.send(.signOut)
             case .presentInvitesScreen:
-                self.stateMachine.processEvent(.showInvitesScreen)
+                stateMachine.processEvent(.showInvitesScreen)
             }
         }
         
@@ -328,12 +331,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .dismiss:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
             case .logout:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.callback?(.signOut)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.signOut)
             case .clearCache:
-                self.callback?(.clearCache)
+                actionsSubject.send(.clearCache)
             }
         }
         
