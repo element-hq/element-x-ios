@@ -61,12 +61,14 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 verifySession()
             case .accountSessionsList:
                 presentAccountSessionsListURL()
+            case .notifications:
+                presentNotificationSettings()
+            case .advancedSettings:
+                self.presentAdvancedSettings()
             case .developerOptions:
                 presentDeveloperOptions()
             case .logout:
                 callback?(.logout)
-            case .notifications:
-                presentNotificationSettings()
             }
         }
     }
@@ -159,6 +161,21 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         }
     }
     
+    private func presentNotificationSettings() {
+        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                                     userSession: parameters.userSession,
+                                                                                     userNotificationCenter: UNUserNotificationCenter.current(),
+                                                                                     notificationSettings: parameters.notificationSettings,
+                                                                                     isModallyPresented: false)
+        let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
+    
+    private func presentAdvancedSettings() {
+        let coordinator = AdvancedSettingsScreenCoordinator()
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
+    
     private func presentDeveloperOptions() {
         let coordinator = DeveloperOptionsScreenCoordinator()
         
@@ -174,15 +191,5 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
 
     private func showSuccess(label: String) {
         parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
-    }
-    
-    private func presentNotificationSettings() {
-        let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
-                                                                                     userSession: parameters.userSession,
-                                                                                     userNotificationCenter: UNUserNotificationCenter.current(),
-                                                                                     notificationSettings: parameters.notificationSettings,
-                                                                                     isModallyPresented: false)
-        let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
-        parameters.navigationStackCoordinator?.push(coordinator)
     }
 }

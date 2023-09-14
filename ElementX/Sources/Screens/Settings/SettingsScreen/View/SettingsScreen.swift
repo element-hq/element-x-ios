@@ -37,9 +37,7 @@ struct SettingsScreen: View {
                 manageSessionsSection
             }
             
-            if context.viewState.showDeveloperOptions {
-                developerOptionsSection
-            }
+            advancedOptionsSection
             
             signOutSection
         }
@@ -89,7 +87,6 @@ struct SettingsScreen: View {
     
     private var mainSection: some View {
         Section {
-            // Account
             if context.viewState.accountProfileURL != nil {
                 ListRow(label: .default(title: L10n.actionManageAccount, systemIcon: .person),
                         kind: .button {
@@ -98,17 +95,6 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.account)
             }
             
-            // Message layout
-            ListRow(label: .default(title: L10n.commonMessageLayout,
-                                    systemIcon: .rectangleGrid1x2),
-                    kind: .picker(selection: $context.timelineStyle,
-                                  items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
-                .accessibilityIdentifier("timelineStylePicker")
-                .onChange(of: context.timelineStyle) { _ in
-                    context.send(viewAction: .changedTimelineStyle)
-                }
-            
-            // Notifications
             ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
                                     systemIcon: .bell),
                     kind: .navigationLink {
@@ -116,7 +102,6 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
-            // Analytics
             ListRow(label: .default(title: L10n.commonAnalytics,
                                     systemIcon: .chartBar),
                     kind: .navigationLink {
@@ -124,7 +109,6 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
-            // Report Bug
             ListRow(label: .default(title: L10n.commonReportABug,
                                     systemIcon: .ladybug),
                     kind: .navigationLink {
@@ -132,7 +116,6 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             
-            // About
             ListRow(label: .default(title: L10n.commonAbout,
                                     systemIcon: .questionmarkCircle),
                     kind: .navigationLink {
@@ -161,14 +144,23 @@ struct SettingsScreen: View {
         }
     }
     
-    private var developerOptionsSection: some View {
+    private var advancedOptionsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                    systemIcon: .hammerCircle),
+            ListRow(label: .default(title: L10n.commonAdvancedSettings,
+                                    systemIcon: .gearshape2),
                     kind: .navigationLink {
-                        context.send(viewAction: .developerOptions)
+                        context.send(viewAction: .advancedSettings)
                     })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.advancedSettings)
+            
+            if context.viewState.showDeveloperOptions {
+                ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                                        systemIcon: .hammerCircle),
+                        kind: .navigationLink {
+                            context.send(viewAction: .developerOptions)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+            }
         }
     }
     

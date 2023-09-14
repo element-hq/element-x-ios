@@ -29,15 +29,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         self.userSession = userSession
         self.appSettings = appSettings
         
-        let bindings = SettingsScreenViewStateBindings(timelineStyle: appSettings.timelineStyle)
-        
         var showSessionVerificationSection = false
         if let sessionVerificationController = userSession.sessionVerificationController {
             showSessionVerificationSection = !sessionVerificationController.isVerified
         }
         
-        super.init(initialViewState: .init(bindings: bindings,
-                                           deviceID: userSession.deviceID,
+        super.init(initialViewState: .init(deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
@@ -45,10 +42,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
-        appSettings.$timelineStyle
-            .weakAssign(to: \.state.bindings.timelineStyle, on: self)
-            .store(in: &cancellables)
-
         userSession.clientProxy.avatarURLPublisher
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
@@ -94,12 +87,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.logout)
         case .sessionVerification:
             callback?(.sessionVerification)
-        case .changedTimelineStyle:
-            appSettings.timelineStyle = state.bindings.timelineStyle
         case .notifications:
             callback?(.notifications)
         case .accountSessionsList:
             callback?(.accountSessionsList)
+        case .advancedSettings:
+            callback?(.advancedSettings)
         case .developerOptions:
             callback?(.developerOptions)
             

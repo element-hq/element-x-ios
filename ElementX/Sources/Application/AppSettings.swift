@@ -31,6 +31,7 @@ final class AppSettings {
         case pusherProfileTag
         case logLevel
         case otlpTracingEnabled
+        case viewSourceEnabled
         
         // Feature flags
         case shouldCollapseRoomStateEvents
@@ -187,6 +188,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.shouldCollapseRoomStateEvents, defaultValue: true, storageType: .volatile)
     var shouldCollapseRoomStateEvents
+    
+    @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var viewSourceEnabled
     
     // MARK: - Notifications
 

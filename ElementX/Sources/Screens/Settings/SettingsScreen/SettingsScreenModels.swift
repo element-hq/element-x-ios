@@ -25,13 +25,13 @@ enum SettingsScreenViewModelAction {
     case about
     case sessionVerification
     case accountSessionsList
-    case developerOptions
     case notifications
+    case advancedSettings
+    case developerOptions
     case logout
 }
 
 struct SettingsScreenViewState: BindableState {
-    var bindings: SettingsScreenViewStateBindings
     var deviceID: String?
     var userID: String
     var accountProfileURL: URL?
@@ -45,10 +45,6 @@ struct SettingsScreenViewState: BindableState {
     var window: UIWindow?
 }
 
-struct SettingsScreenViewStateBindings {
-    var timelineStyle: TimelineStyle
-}
-
 enum SettingsScreenViewAction {
     case close
     case accountProfile
@@ -56,11 +52,11 @@ enum SettingsScreenViewAction {
     case reportBug
     case about
     case sessionVerification
-    case logout
-    case changedTimelineStyle
     case accountSessionsList
-    case developerOptions
     case notifications
+    case developerOptions
+    case advancedSettings
+    case logout
     
     /// Updates the window used for the OIDC account URL anchor.
     case updateWindow(UIWindow)

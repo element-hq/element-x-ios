@@ -501,7 +501,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return nil
         }
 
-        var debugActions: [TimelineItemMenuAction] = appSettings.canShowDeveloperOptions ? [.viewSource] : []
+        var debugActions: [TimelineItemMenuAction] = []
+        if appSettings.canShowDeveloperOptions || appSettings.viewSourceEnabled {
+            debugActions.append(.viewSource)
+        }
 
         if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
             switch encryptedItem.encryptionType {
