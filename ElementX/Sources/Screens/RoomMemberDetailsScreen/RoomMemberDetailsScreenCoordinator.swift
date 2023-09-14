@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct RoomMemberDetailsScreenCoordinatorParameters {
@@ -29,7 +30,12 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomMemberDetailsScreenCoordinatorParameters
     private var viewModel: RoomMemberDetailsScreenViewModelProtocol
 
-    var callback: ((RoomMemberDetailsScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<RoomMemberDetailsScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    var actions: AnyPublisher<RoomMemberDetailsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
         self.parameters = parameters

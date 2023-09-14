@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberDetailsScreenViewState, RoomMemberDetailsScreenViewAction>
@@ -24,7 +25,11 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    var callback: ((RoomMemberDetailsScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<RoomMemberDetailsScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<RoomMemberDetailsScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(roomProxy: RoomProxyProtocol,
          roomMemberProxy: RoomMemberProxyProtocol,
