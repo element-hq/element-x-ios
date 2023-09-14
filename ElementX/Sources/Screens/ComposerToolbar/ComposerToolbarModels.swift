@@ -88,6 +88,7 @@ enum FormatType {
     case italic
     case underline
     case strikeThrough
+    case link
     case unorderedList
     case orderedList
     case indent
@@ -95,7 +96,6 @@ enum FormatType {
     case inlineCode
     case codeBlock
     case quote
-    case link
 }
 
 extension FormatType: CaseIterable, Identifiable {
