@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 final class OnboardingCoordinator: CoordinatorProtocol {
     private var viewModel: OnboardingViewModelProtocol
-        
-    var callback: ((OnboardingCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<OnboardingCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    var actions: AnyPublisher<OnboardingCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init() {
         viewModel = OnboardingViewModel()
@@ -28,14 +33,16 @@ final class OnboardingCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .login:
-                self.callback?(.login)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .login:
+                    actionsSubject.send(.login)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

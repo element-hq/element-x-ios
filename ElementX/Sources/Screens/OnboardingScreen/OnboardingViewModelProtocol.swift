@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol OnboardingViewModelProtocol {
-    var callback: ((OnboardingViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<OnboardingViewModelAction, Never> { get }
     var context: OnboardingViewModelType.Context { get }
 }

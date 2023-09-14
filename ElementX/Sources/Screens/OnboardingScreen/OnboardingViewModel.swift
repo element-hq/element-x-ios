@@ -20,7 +20,11 @@ import SwiftUI
 typealias OnboardingViewModelType = StateStoreViewModel<OnboardingViewState, OnboardingViewAction>
 
 class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol {
-    var callback: ((OnboardingViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<OnboardingViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<OnboardingViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init() {
         super.init(initialViewState: OnboardingViewState())
@@ -29,7 +33,7 @@ class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol 
     override func process(viewAction: OnboardingViewAction) {
         switch viewAction {
         case .login:
-            callback?(.login)
+            actionsSubject.send(.login)
         }
     }
 }

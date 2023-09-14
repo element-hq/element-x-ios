@@ -58,14 +58,17 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showOnboarding() {
         let coordinator = OnboardingCoordinator()
-
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .login:
-                Task { await self.startAuthentication() }
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .login:
+                    Task { await self.startAuthentication() }
+                }
             }
-        }
+            .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
