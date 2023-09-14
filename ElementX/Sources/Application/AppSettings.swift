@@ -32,6 +32,7 @@ final class AppSettings {
         case logLevel
         case otlpTracingEnabled
         case viewSourceEnabled
+        case richTextEditorEnabled
         
         // Feature flags
         case shouldCollapseRoomStateEvents
@@ -39,7 +40,6 @@ final class AppSettings {
         case readReceiptsEnabled
         case hasShownWelcomeScreen
         case swiftUITimelineEnabled
-        case richTextEditorEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -191,6 +191,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var viewSourceEnabled
+
+    @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: true, storageType: .userDefaults(store))
+    var richTextEditorEnabled
     
     // MARK: - Notifications
 
@@ -241,7 +244,4 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
-
-    @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var richTextEditorEnabled
 }
