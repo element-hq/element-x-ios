@@ -36,17 +36,19 @@ struct ComposerToolbar: View {
     }
 
     private var topBar: some View {
-        HStack(alignment: .bottom, spacing: 10) {
+        HStack(alignment: .bottom, spacing: 12) {
             if !context.composerActionsEnabled {
                 RoomAttachmentPicker(context: context)
-                    .padding(.bottom, 5) // centre align with the send button
+                    .padding(.bottom, 9) // centre align with the send button
             }
+
             messageComposer
                 .environmentObject(context)
                 .onTapGesture {
                     guard !composerFocused else { return }
                     composerFocused = true
                 }
+
             if !context.composerActionsEnabled {
                 sendButton
             }
@@ -151,7 +153,7 @@ struct ComposerToolbar: View {
             Image(asset: Asset.Images.timelineComposerSendMessage)
                 .resizable()
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
+                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 9))
                 .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
