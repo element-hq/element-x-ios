@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
@@ -21,7 +22,11 @@ typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, L
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
     private let slidingSyncLearnMoreURL: URL
     
-    var callback: (@MainActor (LoginScreenViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<LoginScreenViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<LoginScreenViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(homeserver: LoginHomeserver, slidingSyncLearnMoreURL: URL) {
         self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
@@ -34,11 +39,11 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     override func process(viewAction: LoginScreenViewAction) {
         switch viewAction {
         case .parseUsername:
-            callback?(.parseUsername(state.bindings.username))
+            actionsSubject.send(.parseUsername(state.bindings.username))
         case .forgotPassword:
-            callback?(.forgotPassword)
+            actionsSubject.send(.forgotPassword)
         case .next:
-            callback?(.login(username: state.bindings.username, password: state.bindings.password))
+            actionsSubject.send(.login(username: state.bindings.username, password: state.bindings.password))
         }
     }
     

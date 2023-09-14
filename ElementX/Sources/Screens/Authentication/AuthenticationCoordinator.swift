@@ -178,20 +178,22 @@ class AuthenticationCoordinator: CoordinatorProtocol {
                                                           userIndicatorController: userIndicatorController)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self] action in
-            guard let self else { return }
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
 
-            switch action {
-            case .signedIn(let userSession):
-                userHasSignedIn(userSession: userSession)
-            case .configuredForOIDC:
-                // Pop back to the confirmation screen for OIDC login to continue.
-                navigationStackCoordinator.pop(animated: false)
-            case .isOnWaitlist(let credentials):
-                showWaitlistScreen(for: credentials)
+                switch action {
+                case .signedIn(let userSession):
+                    userHasSignedIn(userSession: userSession)
+                case .configuredForOIDC:
+                    // Pop back to the confirmation screen for OIDC login to continue.
+                    navigationStackCoordinator.pop(animated: false)
+                case .isOnWaitlist(let credentials):
+                    showWaitlistScreen(for: credentials)
+                }
             }
-        }
-
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     

@@ -42,7 +42,12 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
-    var callback: (@MainActor (LoginScreenCoordinatorAction) -> Void)?
+    private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
+    
+    var actions: AnyPublisher<LoginScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     // MARK: - Setup
     
@@ -56,18 +61,20 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
 
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .parseUsername(let username):
-                parseUsername(username)
-            case .forgotPassword:
-                showForgotPasswordScreen()
-            case .login(let username, let password):
-                login(username: username, password: password)
+        viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .parseUsername(let username):
+                    parseUsername(username)
+                case .forgotPassword:
+                    showForgotPasswordScreen()
+                case .login(let username, let password):
+                    login(username: username, password: password)
+                }
             }
-        }
+            .store(in: &cancellables)
     }
 
     func stop() {
@@ -126,7 +133,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceID: nil) {
             case .success(let userSession):
-                callback?(.signedIn(userSession))
+                actionsSubject.send(.signedIn(userSession))
                 parameters.analytics.signpost.endLogin()
                 stopLoading()
             case .failure(let error):
@@ -134,11 +141,11 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                 parameters.analytics.signpost.endLogin()
                 switch error {
                 case .isOnWaitlist:
-                    callback?(.isOnWaitlist(.init(username: username,
-                                                  password: password,
-                                                  initialDeviceName: UIDevice.current.initialDeviceName,
-                                                  deviceID: nil,
-                                                  homeserver: authenticationService.homeserver.value)))
+                    actionsSubject.send(.isOnWaitlist(.init(username: username,
+                                                            password: password,
+                                                            initialDeviceName: UIDevice.current.initialDeviceName,
+                                                            deviceID: nil,
+                                                            homeserver: authenticationService.homeserver.value)))
                 default:
                     handleError(error)
                 }
@@ -159,7 +166,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             case .success:
                 stopLoading()
                 if authenticationService.homeserver.value.loginMode == .oidc {
-                    callback?(.configuredForOIDC)
+                    actionsSubject.send(.configuredForOIDC)
                 } else {
                     updateViewModel()
                 }
