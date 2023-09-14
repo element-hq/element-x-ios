@@ -57,7 +57,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func showOnboarding() {
-        let coordinator = OnboardingCoordinator()
+        let coordinator = OnboardingScreenCoordinator()
         
         coordinator.actions
             .sink { [weak self] action in

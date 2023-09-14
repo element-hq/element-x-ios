@@ -14,10 +14,27 @@
 // limitations under the License.
 //
 
-import Combine
+import SwiftUI
 
-@MainActor
-protocol OnboardingViewModelProtocol {
-    var actions: AnyPublisher<OnboardingViewModelAction, Never> { get }
-    var context: OnboardingViewModelType.Context { get }
+// MARK: - Coordinator
+
+enum OnboardingScreenCoordinatorAction {
+    case login
+}
+
+/// The content displayed in a single screen page.
+struct OnboardingScreenPageContent {
+    let title: AttributedString
+    let message: String
+    let image: ImageAsset
+}
+
+enum OnboardingScreenViewModelAction {
+    case login
+}
+
+struct OnboardingScreenViewState: BindableState { }
+
+enum OnboardingScreenViewAction {
+    case login
 }

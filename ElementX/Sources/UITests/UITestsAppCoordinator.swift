@@ -229,7 +229,7 @@ class MockScreen: Identifiable {
                                                                              isModallyPresented: false)
             return NotificationSettingsScreenCoordinator(parameters: parameters)
         case .onboarding:
-            return OnboardingCoordinator()
+            return OnboardingScreenCoordinator()
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil)),

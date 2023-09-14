@@ -17,17 +17,17 @@
 import Combine
 import SwiftUI
 
-final class OnboardingCoordinator: CoordinatorProtocol {
-    private var viewModel: OnboardingViewModelProtocol
-    private let actionsSubject: PassthroughSubject<OnboardingCoordinatorAction, Never> = .init()
+final class OnboardingScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: OnboardingScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<OnboardingScreenCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<OnboardingCoordinatorAction, Never> {
+    var actions: AnyPublisher<OnboardingScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init() {
-        viewModel = OnboardingViewModel()
+        viewModel = OnboardingScreenViewModel()
     }
     
     // MARK: - Public

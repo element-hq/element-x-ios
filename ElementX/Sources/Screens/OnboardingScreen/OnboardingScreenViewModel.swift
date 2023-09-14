@@ -17,20 +17,20 @@
 import Combine
 import SwiftUI
 
-typealias OnboardingViewModelType = StateStoreViewModel<OnboardingViewState, OnboardingViewAction>
+typealias OnboardingScreenViewModelType = StateStoreViewModel<OnboardingScreenViewState, OnboardingScreenViewAction>
 
-class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<OnboardingViewModelAction, Never> = .init()
+class OnboardingScreenViewModel: OnboardingScreenViewModelType, OnboardingScreenViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<OnboardingScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<OnboardingViewModelAction, Never> {
+    var actions: AnyPublisher<OnboardingScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
     init() {
-        super.init(initialViewState: OnboardingViewState())
+        super.init(initialViewState: OnboardingScreenViewState())
     }
 
-    override func process(viewAction: OnboardingViewAction) {
+    override func process(viewAction: OnboardingScreenViewAction) {
         switch viewAction {
         case .login:
             actionsSubject.send(.login)
