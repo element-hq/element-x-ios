@@ -15,6 +15,7 @@
 //
 
 import Combine
+import HTMLParser
 import SwiftUI
 import WysiwygComposer
 
@@ -63,7 +64,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
-                                                    maxExpandedHeight: ComposerConstant.maxHeight)
+                                                    maxExpandedHeight: ComposerConstant.maxHeight,
+                                                    parserStyle: .elementX)
         composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
     }
     
@@ -132,4 +134,22 @@ enum ComposerConstant {
     static let maxHeight: CGFloat = 250
     static let allowedHeightRange = minHeight...maxHeight
     static let translationThreshold: CGFloat = 60
+}
+
+private extension HTMLParserStyle {
+    /// Identical to `HTMLParserStyle.standard` except for the `backgroundColor` of `codeBlockStyle` and `quoteBlockStyle`
+    static let elementX = HTMLParserStyle(textColor: UIColor.label,
+                                          linkColor: UIColor.link,
+                                          codeBlockStyle: BlockStyle(backgroundColor: .compound._bgCodeBlock,
+                                                                     borderColor: UIColor(red: 227 / 255, green: 232 / 255, blue: 240 / 255, alpha: 1.0),
+                                                                     borderWidth: 1.0,
+                                                                     cornerRadius: 4.0,
+                                                                     padding: BlockStyle.Padding(horizontal: 10, vertical: 12),
+                                                                     type: .background),
+                                          quoteBlockStyle: BlockStyle(backgroundColor: .compound._bgCodeBlock,
+                                                                      borderColor: UIColor(red: 227 / 255, green: 232 / 255, blue: 240 / 255, alpha: 1.0),
+                                                                      borderWidth: 0,
+                                                                      cornerRadius: 0,
+                                                                      padding: BlockStyle.Padding(horizontal: 25, vertical: 12),
+                                                                      type: .side(offset: 5, width: 4)))
 }
