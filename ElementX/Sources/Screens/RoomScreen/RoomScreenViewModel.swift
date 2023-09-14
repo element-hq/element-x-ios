@@ -146,8 +146,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch composerAction {
         case .sendMessage(let message, let html, let mode):
             Task { await sendCurrentMessage(message, html: html, mode: mode) }
-        case .sendPlainTextMessage(let message, let mode):
-            Task { await sendCurrentMessage(message, html: nil, mode: mode) }
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
@@ -441,7 +439,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await timelineController.sendMessage(message, html: html, inReplyTo: itemId)
         case .edit(let originalItemId):
             await timelineController.editMessage(message, html: html, original: originalItemId)
-        default:
+        case .default:
             await timelineController.sendMessage(message, html: html)
         }
     }

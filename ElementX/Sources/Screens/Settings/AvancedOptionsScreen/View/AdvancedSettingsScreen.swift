@@ -19,7 +19,6 @@ import SwiftUI
 
 struct AdvancedSettingsScreen: View {
     @ObservedObject var context: AdvancedSettingsScreenViewModel.Context
-    @State private var showConfetti = false
     
     var body: some View {
         Form {

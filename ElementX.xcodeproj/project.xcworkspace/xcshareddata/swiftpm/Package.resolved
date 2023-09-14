@@ -138,8 +138,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
       "state" : {
-        "revision" : "30d41b07b636f67e06bc50d8982c98ee3b97d4ae",
-        "version" : "2.8.0"
+        "revision" : "73a2e76929c02c7ca85ca1132e8974ec330cdc04",
+        "version" : "2.10.1"
       }
     },
     {
