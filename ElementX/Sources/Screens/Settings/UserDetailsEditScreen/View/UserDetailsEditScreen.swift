@@ -23,11 +23,21 @@ struct UserDetailsEditScreen: View {
         
     var body: some View {
         Form {
-            avatar
+            Section {
+                avatar
+            } footer: {
+                Text(context.viewState.userID)
+                    .frame(maxWidth: .infinity)
+                    .font(.compound.bodyLG)
+                    .foregroundColor(.compound.textPrimary)
+                    .padding(.bottom, 16)
+            }
+            
             nameSection
         }
         .compoundList()
         .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(L10n.screenEditProfileTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
@@ -53,7 +63,7 @@ struct UserDetailsEditScreen: View {
                                    url: context.viewState.selectedAvatarURL,
                                    name: context.viewState.currentDisplayName,
                                    contentID: context.viewState.userID,
-                                   avatarSize: .user(on: .memberDetails),
+                                   avatarSize: .user(on: .editUserDetails),
                                    imageProvider: context.imageProvider)
                 .overlay(alignment: .bottomTrailing) {
                     avatarOverlayIcon
