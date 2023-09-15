@@ -338,6 +338,20 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
+    
+    func removeUserAvatar() async -> Result<Void, ClientProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                try self.client.removeAvatar()
+                Task {
+                    await self.loadUserAvatarURL()
+                }
+                return .success(())
+            } catch {
+                return .failure(.failedSettingUserAvatar)
+            }
+        }
+    }
 
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
         await Task.dispatch(on: clientQueue) {

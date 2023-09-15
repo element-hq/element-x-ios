@@ -119,7 +119,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                             if let localMedia = await self.state.localMedia {
                                 try await self.clientProxy.setUserAvatar(media: localMedia).get()
                             } else if await self.state.replaceableAvatarURL == nil {
-//                                try await self.clientProxy.removeAvatar().get()
+                                try await self.clientProxy.removeUserAvatar().get()
                             }
                         }
                     }

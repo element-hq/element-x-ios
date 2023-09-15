@@ -103,6 +103,10 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedSettingUserAvatar)
     }
     
+    func removeUserAvatar() async -> Result<Void, ClientProxyError> {
+        .failure(.failedSettingUserAvatar)
+    }
+    
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
         .failure(.failedRetrievingAccountData)
     }

@@ -116,6 +116,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
     
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
+    
+    func removeUserAvatar() async -> Result<Void, ClientProxyError>
 
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
