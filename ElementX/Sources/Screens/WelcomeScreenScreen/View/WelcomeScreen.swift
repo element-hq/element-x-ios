@@ -44,11 +44,10 @@ struct WelcomeScreen: View {
     @ViewBuilder
     private var header: some View {
         VStack(spacing: 32) {
-            Image(asset: Asset.Images.launchLogo)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 118, height: 118)
-                .accessibilityHidden(true)
+            OnboardingLogo(isOnGradient: true)
+                .scaleEffect(x: 0.75, y: 0.75)
+                .padding(.vertical, -20)
+            
             title
         }
     }

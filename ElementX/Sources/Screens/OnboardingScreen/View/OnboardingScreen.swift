@@ -56,8 +56,7 @@ struct OnboardingScreen: View {
             if verticalSizeClass == .regular {
                 Spacer()
                 
-                Image(asset: Asset.Images.launchLogo)
-                    .accessibilityHidden(true)
+                OnboardingLogo(isOnGradient: true)
             }
             
             Spacer()
