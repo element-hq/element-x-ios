@@ -24,6 +24,7 @@ struct ComposerToolbar: View {
 
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
 
     var body: some View {
         VStack(spacing: 8) {
@@ -72,9 +73,10 @@ struct ComposerToolbar: View {
             context.composerActionsEnabled = false
             context.composerExpanded = false
         } label: {
-            Image(systemName: "xmark.circle.fill")
-                .font(.compound.headingLG)
-                .foregroundColor(.compound.textActionPrimary)
+            Image(Asset.Images.closeRte.name)
+                .resizable()
+                .scaledToFit()
+                .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
