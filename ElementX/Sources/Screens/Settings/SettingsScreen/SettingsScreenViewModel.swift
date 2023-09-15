@@ -46,18 +46,19 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
-        userSession.clientProxy.avatarURLPublisher
+        userSession.clientProxy.userAvatarURL
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.userDisplayName
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
                 
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
-        }
-        
-        Task {
-            if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
-                state.userDisplayName = userDisplayName
-            }
+            await userSession.clientProxy.loadUserDisplayName()
         }
         
         userSession.callbacks
@@ -79,6 +80,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
+        case .userDetails:
+            actionsSubject.send(.userDetails)
         case .accountProfile:
             actionsSubject.send(.accountProfile)
         case .analytics:

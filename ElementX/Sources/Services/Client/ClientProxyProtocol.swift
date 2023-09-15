@@ -39,7 +39,9 @@ enum ClientProxyLoadingState {
 enum ClientProxyError: Error {
     case failedCreatingRoom
     case failedRetrievingDirectRoom
-    case failedRetrievingDisplayName
+    case failedRetrievingUserDisplayName
+    case failedRetrievingUserAvatarURL
+    case failedSettingUserDisplayName
     case failedRetrievingAccountData
     case failedSettingAccountData
     case failedRetrievingSessionVerificationController
@@ -48,6 +50,7 @@ enum ClientProxyError: Error {
     case failedUploadingMedia(MatrixErrorCode)
     case failedSearchingUsers
     case failedGettingUserProfile
+    case failedSettingUserAvatar
 }
 
 enum SlidingSyncConstants {
@@ -77,8 +80,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
+    
+    var userDisplayName: CurrentValuePublisher<String?, Never> { get }
 
-    var avatarURLPublisher: AnyPublisher<URL?, Never> { get }
+    var userAvatarURL: CurrentValuePublisher<URL?, Never> { get }
 
     var restorationToken: RestorationToken? { get }
     
@@ -104,9 +109,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
-    func loadUserDisplayName() async -> Result<String, ClientProxyError>
+    @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
+    
+    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
 
-    func loadUserAvatarURL() async
+    @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
+    
+    func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
 
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     

@@ -52,28 +52,37 @@ struct SettingsScreen: View {
 
     private var userSection: some View {
         Section {
-            ListRow(kind: .custom {
-                HStack(spacing: 12) {
-                    LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                        name: context.viewState.userDisplayName,
-                                        contentID: context.viewState.userID,
-                                        avatarSize: .user(on: .settings),
-                                        imageProvider: context.imageProvider)
-                        .accessibilityHidden(true)
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(context.viewState.userDisplayName ?? "")
-                            .font(.compound.headingMD)
-                            .foregroundColor(.compound.textPrimary)
-                        Text(context.viewState.userID)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
+            Button {
+                context.send(viewAction: .userDetails)
+            } label: {
+                ListRow(kind: .custom {
+                    HStack(spacing: 12) {
+                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                            name: context.viewState.userDisplayName,
+                                            contentID: context.viewState.userID,
+                                            avatarSize: .user(on: .settings),
+                                            imageProvider: context.imageProvider)
+                            .accessibilityHidden(true)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(context.viewState.userDisplayName ?? "")
+                                .font(.compound.headingMD)
+                                .foregroundColor(.compound.textPrimary)
+                            Text(context.viewState.userID)
+                                .font(.compound.bodySM)
+                                .foregroundColor(.compound.textSecondary)
+                        }
+                        .accessibilityElement(children: .combine)
+                        
+                        Spacer()
+                        
+                        CompoundIcon(\.chevronRight)
+                            .font(.system(size: 24))
+                            .foregroundColor(.compound.iconTertiaryAlpha)
+                            .flipsForRightToLeftLayoutDirection(true)
                     }
-                    .accessibilityElement(children: .combine)
-                }
-                .padding(.horizontal, ListRowPadding.horizontal)
-                .padding(.vertical, 8)
-            })
+                })
+            }
         }
     }
     

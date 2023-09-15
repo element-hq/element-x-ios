@@ -32,7 +32,9 @@ class MockClientProxy: ClientProxyProtocol {
     
     var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
-    var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
+    var userAvatarURL: CurrentValuePublisher<URL?, Never> { CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher() }
+    
+    var userDisplayName: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher() }
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
 
@@ -41,8 +43,6 @@ class MockClientProxy: ClientProxyProtocol {
         self.deviceID = deviceID
         self.roomSummaryProvider = roomSummaryProvider
     }
-
-    func loadUserAvatarURL() async { }
     
     func startSync() { }
 
@@ -87,8 +87,20 @@ class MockClientProxy: ClientProxyProtocol {
         }
     }
     
-    func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        .success("User display name")
+    func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
+        .failure(.failedRetrievingUserDisplayName)
+    }
+    
+    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
+        .failure(.failedSettingUserDisplayName)
+    }
+    
+    func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
+        .failure(.failedRetrievingUserAvatarURL)
+    }
+    
+    func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError> {
+        .failure(.failedSettingUserAvatar)
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {

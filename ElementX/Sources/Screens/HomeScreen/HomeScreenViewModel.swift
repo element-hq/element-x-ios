@@ -70,8 +70,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
 
-        userSession.clientProxy.avatarURLPublisher
+        userSession.clientProxy.userAvatarURL
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.userDisplayName
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
         selectedRoomPublisher
@@ -182,12 +188,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if roomListMode == .rooms {
                     Task {
                         await self.userSession.clientProxy.loadUserAvatarURL()
-                    }
-                    
-                    Task {
-                        if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
-                            self.state.userDisplayName = userDisplayName
-                        }
+                        await self.userSession.clientProxy.loadUserDisplayName()
                     }
                 }
             }

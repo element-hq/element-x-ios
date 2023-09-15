@@ -510,6 +510,8 @@ public enum L10n {
   public static var richTextEditorOpenComposeOptions: String { return L10n.tr("Localizable", "rich_text_editor_open_compose_options") }
   /// Toggle quote
   public static var richTextEditorQuote: String { return L10n.tr("Localizable", "rich_text_editor_quote") }
+  /// Remove link
+  public static var richTextEditorRemoveLink: String { return L10n.tr("Localizable", "rich_text_editor_remove_link") }
   /// Unindent
   public static var richTextEditorUnindent: String { return L10n.tr("Localizable", "rich_text_editor_unindent") }
   /// Link
@@ -632,7 +634,7 @@ public enum L10n {
   public static var screenCreatePollAddOptionBtn: String { return L10n.tr("Localizable", "screen_create_poll_add_option_btn") }
   /// Show results only after poll ends
   public static var screenCreatePollAnonymousDesc: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_desc") }
-  /// Anonymous Poll
+  /// Hide votes
   public static var screenCreatePollAnonymousHeadline: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_headline") }
   /// Option %1$d
   public static func screenCreatePollAnswerHint(_ p1: Int) -> String {
@@ -682,6 +684,16 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
+  /// Display name
+  public static var screenEditProfileDisplayName: String { return L10n.tr("Localizable", "screen_edit_profile_display_name") }
+  /// Your display name
+  public static var screenEditProfileDisplayNamePlaceholder: String { return L10n.tr("Localizable", "screen_edit_profile_display_name_placeholder") }
+  /// An unknown error was encountered and the information couldn't be changed.
+  public static var screenEditProfileError: String { return L10n.tr("Localizable", "screen_edit_profile_error") }
+  /// Unable to update profile
+  public static var screenEditProfileErrorTitle: String { return L10n.tr("Localizable", "screen_edit_profile_error_title") }
+  /// Updating profile…
+  public static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
   /// Are you sure you want to decline the invitation to join %1$@?
   public static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))

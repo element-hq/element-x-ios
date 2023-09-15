@@ -19,6 +19,7 @@ import UIKit
 
 enum SettingsScreenViewModelAction {
     case close
+    case userDetails
     case accountProfile
     case analytics
     case reportBug
@@ -47,6 +48,7 @@ struct SettingsScreenViewState: BindableState {
 
 enum SettingsScreenViewAction {
     case close
+    case userDetails
     case accountProfile
     case analytics
     case reportBug

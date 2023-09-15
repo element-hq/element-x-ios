@@ -57,6 +57,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .close:
                     actionsSubject.send(.dismiss)
+                case .userDetails:
+                    presentUserDetailsScreen()
                 case .accountProfile:
                     presentAccountProfileURL()
                 case .analytics:
@@ -120,6 +122,15 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Private
+    
+    private func presentUserDetailsScreen() {
+        let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(clientProxy: parameters.userSession.clientProxy,
+                                                                             mediaProvider: parameters.userSession.mediaProvider,
+                                                                             navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                             userIndicatorController: parameters.userIndicatorController))
+        
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
     
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,
