@@ -19,13 +19,8 @@ import SwiftUI
 
 struct UserDetailsEditScreen: View {
     @ObservedObject var context: UserDetailsEditScreenViewModel.Context
-    @FocusState private var focus: Focus?
-    
-    private enum Focus {
-        case name
-        case topic
-    }
-    
+    @FocusState private var focus: Bool
+        
     var body: some View {
         Form {
             avatar
@@ -35,7 +30,6 @@ struct UserDetailsEditScreen: View {
         .scrollDismissesKeyboard(.immediately)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .track(screen: .roomSettings)
     }
     
     // MARK: - Private
@@ -45,7 +39,7 @@ struct UserDetailsEditScreen: View {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionSave) {
                 context.send(viewAction: .save)
-                focus = nil
+                focus = false
             }
             .disabled(!context.viewState.canSave)
         }
@@ -56,7 +50,7 @@ struct UserDetailsEditScreen: View {
             context.send(viewAction: .presentMediaSource)
         } label: {
             OverridableAvatarImage(overrideURL: context.viewState.localMedia?.thumbnailURL,
-                                   url: context.viewState.replaceableAvatarURL,
+                                   url: context.viewState.selectedAvatarURL,
                                    name: context.viewState.currentDisplayName,
                                    contentID: context.viewState.userID,
                                    avatarSize: .user(on: .memberDetails),
@@ -77,7 +71,7 @@ struct UserDetailsEditScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
                     kind: .textField(text: $context.name, axis: .horizontal))
-                .focused($focus, equals: .name)
+                .focused($focus)
         } header: {
             Text(L10n.screenEditProfileDisplayName)
                 .compoundListSectionHeader()

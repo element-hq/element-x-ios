@@ -52,6 +52,8 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
                     self?.displayMediaPickerWithSource(.camera)
                 case .displayMediaPicker:
                     self?.displayMediaPickerWithSource(.photoLibrary)
+                case .displayFilePicker:
+                    self?.displayMediaPickerWithSource(.documents)
                 }
             }
             .store(in: &cancellables)
@@ -74,7 +76,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-                viewModel.didSelectMediaUrl(url: url)
+                viewModel.didSelectMediaURL(url: url)
             }
         }
         

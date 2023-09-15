@@ -22,5 +22,5 @@ protocol UserDetailsEditScreenViewModelProtocol {
     var actions: AnyPublisher<UserDetailsEditScreenViewModelAction, Never> { get }
     var context: UserDetailsEditScreenViewModelType.Context { get }
     
-    func didSelectMediaUrl(url: URL)
+    func didSelectMediaURL(url: URL)
 }

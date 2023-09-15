@@ -58,7 +58,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 case .close:
                     actionsSubject.send(.dismiss)
                 case .userDetails:
-                    presentUserDetailsScreen()
+                    presentUserDetailsEditScreen()
                 case .accountProfile:
                     presentAccountProfileURL()
                 case .analytics:
@@ -123,7 +123,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func presentUserDetailsScreen() {
+    private func presentUserDetailsEditScreen() {
         let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(clientProxy: parameters.userSession.clientProxy,
                                                                              mediaProvider: parameters.userSession.mediaProvider,
                                                                              navigationStackCoordinator: parameters.navigationStackCoordinator,

@@ -45,12 +45,21 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         
         clientProxy.userAvatarURL
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.replaceableAvatarURL, on: self)
+            .weakAssign(to: \.state.selectedAvatarURL, on: self)
             .store(in: &cancellables)
         
         clientProxy.userDisplayName
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.currentDisplayName, on: self)
+            .store(in: &cancellables)
+        
+        clientProxy.userDisplayName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] displayName in
+                guard let self else { return }
+                
+                state.bindings.name = displayName ?? ""
+            }
             .store(in: &cancellables)
         
         Task {
@@ -73,11 +82,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
             state.localMedia = nil
-            state.replaceableAvatarURL = nil
+            state.selectedAvatarURL = nil
         }
     }
     
-    func didSelectMediaUrl(url: URL) {
+    func didSelectMediaURL(url: URL) {
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -118,7 +127,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                         group.addTask {
                             if let localMedia = await self.state.localMedia {
                                 try await self.clientProxy.setUserAvatar(media: localMedia).get()
-                            } else if await self.state.replaceableAvatarURL == nil {
+                            } else if await self.state.selectedAvatarURL == nil {
                                 try await self.clientProxy.removeUserAvatar().get()
                             }
                         }

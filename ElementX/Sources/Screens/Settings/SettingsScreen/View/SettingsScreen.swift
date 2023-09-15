@@ -49,13 +49,13 @@ struct SettingsScreen: View {
             context.send(viewAction: .updateWindow(window))
         }
     }
-
+    
     private var userSection: some View {
         Section {
-            Button {
-                context.send(viewAction: .userDetails)
-            } label: {
-                ListRow(kind: .custom {
+            ListRow(kind: .custom {
+                Button {
+                    context.send(viewAction: .userDetails)
+                } label: {
                     HStack(spacing: 12) {
                         LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                             name: context.viewState.userDisplayName,
@@ -72,7 +72,6 @@ struct SettingsScreen: View {
                                 .font(.compound.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                         }
-                        .accessibilityElement(children: .combine)
                         
                         Spacer()
                         
@@ -81,8 +80,10 @@ struct SettingsScreen: View {
                             .foregroundColor(.compound.iconTertiaryAlpha)
                             .flipsForRightToLeftLayoutDirection(true)
                     }
-                })
-            }
+                    .padding(.horizontal, ListRowPadding.horizontal)
+                    .padding(.vertical, 8)
+                }
+            })
         }
     }
     

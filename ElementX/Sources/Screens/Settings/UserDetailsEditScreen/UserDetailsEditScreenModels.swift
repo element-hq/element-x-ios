@@ -19,19 +19,16 @@ import Foundation
 enum UserDetailsEditScreenViewModelAction {
     case displayCameraPicker
     case displayMediaPicker
+    case displayFilePicker
 }
 
 struct UserDetailsEditScreenViewState: BindableState {
     let userID: String
     
     var currentAvatarURL: URL?
-    var replaceableAvatarURL: URL?
+    var selectedAvatarURL: URL?
     
-    var currentDisplayName: String? {
-        didSet {
-            bindings.name = currentDisplayName ?? ""
-        }
-    }
+    var currentDisplayName: String?
     
     var localMedia: MediaInfo?
     
@@ -47,7 +44,7 @@ struct UserDetailsEditScreenViewState: BindableState {
     }
             
     var avatarDidChange: Bool {
-        localMedia != nil || replaceableAvatarURL != currentAvatarURL
+        localMedia != nil || selectedAvatarURL != currentAvatarURL
     }
     
     var canSave: Bool {
@@ -55,7 +52,7 @@ struct UserDetailsEditScreenViewState: BindableState {
     }
     
     var showDeleteImageAction: Bool {
-        localMedia != nil || replaceableAvatarURL != nil
+        localMedia != nil || selectedAvatarURL != nil
     }
 }
 

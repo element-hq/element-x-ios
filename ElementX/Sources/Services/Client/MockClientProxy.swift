@@ -34,7 +34,7 @@ class MockClientProxy: ClientProxyProtocol {
 
     var userAvatarURL: CurrentValuePublisher<URL?, Never> { CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher() }
     
-    var userDisplayName: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher() }
+    var userDisplayName: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher() }
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
 
