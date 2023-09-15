@@ -33,6 +33,7 @@ struct RoomAttachmentPicker: View {
                 .scaledToFit()
                 .frame(width: attachmentButtonSize, height: attachmentButtonSize)
                 .foregroundColor(.compound.textActionPrimary)
+                .padding(7)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         .popover(isPresented: $context.showAttachmentPopover) {

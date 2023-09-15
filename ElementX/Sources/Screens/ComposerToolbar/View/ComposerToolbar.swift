@@ -37,10 +37,9 @@ struct ComposerToolbar: View {
     }
 
     private var topBar: some View {
-        HStack(alignment: .bottom, spacing: 12) {
+        HStack(alignment: .bottom, spacing: 5) {
             if !context.composerActionsEnabled {
                 RoomAttachmentPicker(context: context)
-                    .padding(.bottom, 9) // centre align with the send button
             }
 
             messageComposer
@@ -49,6 +48,8 @@ struct ComposerToolbar: View {
                     guard !composerFocused else { return }
                     composerFocused = true
                 }
+                .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+                .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
 
             if !context.composerActionsEnabled {
                 sendButton
@@ -57,7 +58,7 @@ struct ComposerToolbar: View {
     }
 
     private var bottomBar: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .center, spacing: 0) {
             closeRTEButton
 
             FormattingToolbar(formatItems: context.formatItems) { action in
@@ -77,6 +78,7 @@ struct ComposerToolbar: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
+                .padding(7)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
@@ -93,11 +95,12 @@ struct ComposerToolbar: View {
                     Circle()
                         .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
                 }
+                .padding(4)
         }
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
-        .padding([.vertical, .trailing], 6)
+        .padding(.leading, 3)
     }
     
     private var messageComposer: some View {

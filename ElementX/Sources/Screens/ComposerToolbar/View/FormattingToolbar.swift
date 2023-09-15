@@ -15,6 +15,8 @@
 //
 
 import SwiftUI
+#warning("AG: fix me")
+import CompoundDesignTokens
 
 struct FormattingToolbar: View {
     /// The list of items to render in the toolbar
@@ -22,7 +24,7 @@ struct FormattingToolbar: View {
     /// The action when an item is selected
     var formatAction: (FormatType) -> Void
 
-    @ScaledMetric private var toolbarButtonIconSize = 24
+    @ScaledMetric private var toolbarButtonIconSize = 20
 
     var body: some View {
         ScrollView(.horizontal) {
@@ -32,16 +34,16 @@ struct FormattingToolbar: View {
                         formatAction(item.type)
                     } label: {
                         item.icon
-                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: toolbarButtonIconSize, height: toolbarButtonIconSize)
                             .foregroundColor(item.foregroundColor)
-                            .padding(10)
+                            .padding(8)
+                            .background(item.backgroundColor)
+                            .cornerRadius(8)
+                            .padding(4)
                     }
                     .disabled(item.state == .disabled)
-                    .background(item.backgroundColor)
-                    .cornerRadius(8)
                     .accessibilityIdentifier(item.accessibilityIdentifier)
                     .accessibilityLabel(item.accessibilityLabel)
                 }
@@ -54,7 +56,7 @@ private extension FormatItem {
     var foregroundColor: Color {
         switch state {
         case .reversed:
-            return .compound.iconOnSolidPrimary
+            return .compound.iconSuccessPrimary
         case .enabled:
             return .compound.iconSecondary
         case .disabled:
@@ -65,8 +67,8 @@ private extension FormatItem {
     var backgroundColor: Color {
         switch state {
         case .reversed:
-            return .compound.bgActionPrimaryRest
-        default:
+            return CompoundColorTokens.colorGreen300
+        case .enabled, .disabled:
             return .compound.bgCanvasDefault
         }
     }

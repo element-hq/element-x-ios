@@ -23,8 +23,6 @@ struct RoomScreen: View {
     @State private var dragOver = false
     let composerToolbar: ComposerToolbar
 
-    private let attachmentButtonPadding = 10.0
-
     init(context: RoomScreenViewModel.Context, composerToolbar: ComposerToolbar) {
         self.context = context
         self.composerToolbar = composerToolbar
@@ -36,8 +34,8 @@ struct RoomScreen: View {
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composerToolbar
-                    .padding(.leading, attachmentButtonPadding)
-                    .padding(.trailing, 12)
+                    .padding(.leading, 5)
+                    .padding(.trailing, 8)
                     .padding(.bottom)
                     .background {
                         if composerToolbarContext.composerActionsEnabled {
