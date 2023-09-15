@@ -53,12 +53,13 @@ struct ComposerToolbar: View {
 
             if !context.composerActionsEnabled {
                 sendButton
+                    .padding(.leading, 3)
             }
         }
     }
 
     private var bottomBar: some View {
-        HStack(alignment: .center, spacing: 0) {
+        HStack(alignment: .center, spacing: 9) {
             closeRTEButton
 
             FormattingToolbar(formatItems: context.formatItems) { action in
@@ -66,6 +67,7 @@ struct ComposerToolbar: View {
             }
 
             sendButton
+                .padding(.leading, 7)
         }
     }
 
@@ -100,7 +102,6 @@ struct ComposerToolbar: View {
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
-        .padding(.leading, 3)
     }
     
     private var messageComposer: some View {
