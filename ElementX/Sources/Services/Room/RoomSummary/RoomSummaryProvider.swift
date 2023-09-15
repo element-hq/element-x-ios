@@ -229,7 +229,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             inviterProxy = RoomMemberProxy(member: inviter, backgroundTaskService: backgroundTaskService)
         }
         
-        let notificationMode = roomInfo.notificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+        let notificationMode = roomInfo.userDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         let details = RoomSummaryDetails(id: roomInfo.id,
                                          name: roomInfo.name ?? roomInfo.id,

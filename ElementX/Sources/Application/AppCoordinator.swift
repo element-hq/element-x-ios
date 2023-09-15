@@ -527,8 +527,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 switch callback {
                 case .didReceiveAuthError(let isSoftLogout):
                     stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
-                case .updateRestorationToken:
-                    userSessionStore.refreshRestorationToken(for: userSession)
                 default:
                     break
                 }

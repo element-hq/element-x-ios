@@ -25,27 +25,30 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                backgroundTaskService: nil)
 
-    init(credentials: KeychainCredentials) throws {
+    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate) throws {
         userID = credentials.userID
         baseClient = try ClientBuilder()
             .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
+                                           sessionDelegate: clientSessionDelegate)
             .build()
-
+        
+        baseClient.setDelegate(delegate: ClientDelegateWrapper())
         try baseClient.restoreSession(session: credentials.restorationToken.session)
-
+        
         notificationClient = try baseClient
             .notificationClient(processSetup: .multipleProcesses)
             .filterByPushRules()
             .finish()
     }
-
+    
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
         await Task.dispatch(on: .global()) {
             do {
                 let notification = try self.notificationClient.getNotification(roomId: roomID, eventId: eventID)
-
+                
                 guard let notification else {
                     return nil
                 }
@@ -58,5 +61,17 @@ final class NSEUserSession {
                 return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: self.userID)
             }
         }
+    }
+}
+
+private class ClientDelegateWrapper: ClientDelegate {
+    // MARK: - ClientDelegate
+
+    func didReceiveAuthError(isSoftLogout: Bool) {
+        MXLog.error("Received authentication error, the NSE can't handle this.")
+    }
+    
+    func didRefreshTokens() {
+        MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }
 }

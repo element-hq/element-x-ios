@@ -31,6 +31,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     /// The base directory where all session data is stored.
     let baseDirectory: URL
     
+    var clientSessionDelegate: ClientSessionDelegate { keychainController }
+    
     init(backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(service: .sessions,
                                                 accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -76,16 +78,6 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(error)
         }
     }
-
-    func refreshRestorationToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError> {
-        guard let restorationToken = userSession.clientProxy.restorationToken else {
-            return .failure(.failedRefreshingRestoreToken)
-        }
-
-        keychainController.setRestorationToken(restorationToken, forUsername: userSession.clientProxy.userID)
-
-        return .success(())
-    }
     
     func logout(userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userID
@@ -115,6 +107,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             .username(username: credentials.userID)
             .homeserverUrl(url: credentials.restorationToken.session.homeserverUrl)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier,
+                                           sessionDelegate: keychainController)
             .serverVersions(versions: ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"]) // FIXME: Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
 
         do {
@@ -133,9 +127,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     private func setupProxyForClient(_ client: Client) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         do {
             let session = try client.session()
-            let userId = try client.userId()
+            let userID = try client.userId()
             
-            keychainController.setRestorationToken(RestorationToken(session: session), forUsername: userId)
+            keychainController.setRestorationToken(RestorationToken(session: session), forUsername: userID)
         } catch {
             MXLog.error("Failed setting up user session with error: \(error)")
             return .failure(.failedSettingUpSession)
