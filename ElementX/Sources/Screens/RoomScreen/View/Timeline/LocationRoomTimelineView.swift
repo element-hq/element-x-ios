@@ -20,13 +20,6 @@ struct LocationRoomTimelineView: View {
     let timelineItem: LocationRoomTimelineItem
     @Environment(\.timelineStyle) var timelineStyle
     
-    private var mapCornerRadius: CGFloat {
-        if timelineStyle.isBubbles, timelineItem.replyDetails != nil || timelineItem.isThreaded {
-            return 8
-        }
-        return 0
-    }
-    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             mainContent
@@ -48,7 +41,6 @@ struct LocationRoomTimelineView: View {
                 .frame(maxHeight: mapMaxHeight)
                 .aspectRatio(mapAspectRatio, contentMode: .fit)
                 .clipped()
-                .cornerRadius(mapCornerRadius)
             }
         } else {
             FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(timelineStyle: timelineStyle))
@@ -94,16 +86,28 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
-        body
-            .environmentObject(viewModel.context)
-
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
+        ScrollView {
+            VStack {
+                states
+                    .padding(.horizontal)
+            }
+        }
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Bubbles")
+        
+        ScrollView {
+            VStack {
+                states
+                    .padding(.horizontal)
+            }
+        }
+        .environment(\.timelineStyle, .plain)
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Plain")
     }
 
     @ViewBuilder
-    static var body: some View {
+    static var states: some View {
         LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                      timestamp: "Now",
                                                      isOutgoing: false,

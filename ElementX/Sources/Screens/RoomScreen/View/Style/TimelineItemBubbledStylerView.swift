@@ -385,12 +385,14 @@ private extension EventBasedTimelineItemProtocol {
     }
     
     var contentCornerRadius: CGFloat {
-        // Location is handled internally
-        if let message = self as? EventBasedMessageTimelineItemProtocol,
-           message is ImageRoomTimelineItem || message is VideoRoomTimelineItem {
+        guard let message = self as? EventBasedMessageTimelineItemProtocol else { return .zero }
+        
+        switch message {
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem:
             return message.replyDetails != nil || message.isThreaded ? 8 : .zero
+        default:
+            return .zero
         }
-        return .zero
     }
 }
 
