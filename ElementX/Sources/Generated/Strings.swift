@@ -16,6 +16,10 @@ public enum L10n {
   public static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
   public static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
+  /// Poll
+  public static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
+  /// Ended poll
+  public static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
   /// Send files
   public static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
   /// Show password
@@ -692,6 +696,8 @@ public enum L10n {
   public static var screenEditProfileError: String { return L10n.tr("Localizable", "screen_edit_profile_error") }
   /// Unable to update profile
   public static var screenEditProfileErrorTitle: String { return L10n.tr("Localizable", "screen_edit_profile_error_title") }
+  /// Edit profile
+  public static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
   /// Updating profile…
   public static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
   /// Are you sure you want to decline the invitation to join %1$@?

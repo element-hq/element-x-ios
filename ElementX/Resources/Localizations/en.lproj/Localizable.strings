@@ -2,6 +2,8 @@
 "a11y_hide_password" = "Hide password";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
+"a11y_poll" = "Poll";
+"a11y_poll_end" = "Ended poll";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
 "a11y_user_menu" = "User menu";
@@ -274,6 +276,7 @@
 "screen_edit_profile_display_name_placeholder" = "Your display name";
 "screen_edit_profile_error" = "An unknown error was encountered and the information couldn't be changed.";
 "screen_edit_profile_error_title" = "Unable to update profile";
+"screen_edit_profile_title" = "Edit profile";
 "screen_edit_profile_updating_details" = "Updating profile…";
 "screen_invites_decline_chat_message" = "Are you sure you want to decline the invitation to join %1$@?";
 "screen_invites_decline_chat_title" = "Decline invite";
