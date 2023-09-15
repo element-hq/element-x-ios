@@ -43,12 +43,14 @@ class ClientProxy: ClientProxyProtocol {
     private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
-    private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
-    var avatarURLPublisher: AnyPublisher<URL?, Never> {
-        avatarURLSubject
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+    private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
+    var userAvatarURL: CurrentValuePublisher<URL?, Never> {
+        userAvatarURLSubject.asCurrentValuePublisher()
+    }
+    
+    private let userDisplayNameSubject = CurrentValueSubject<String?, Never>(nil)
+    var userDisplayName: CurrentValuePublisher<String?, Never> {
+        userDisplayNameSubject.asCurrentValuePublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -279,26 +281,74 @@ class ClientProxy: ClientProxyProtocol {
                                backgroundTaskService: backgroundTaskService)
     }
 
-    func loadUserDisplayName() async -> Result<String, ClientProxyError> {
+    func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 let displayName = try self.client.displayName()
-                return .success(displayName)
+                self.userDisplayNameSubject.send(displayName)
+                return .success(())
             } catch {
-                return .failure(.failedRetrievingDisplayName)
+                return .failure(.failedRetrievingUserDisplayName)
+            }
+        }
+    }
+    
+    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                try self.client.setDisplayName(name: name)
+                Task {
+                    await self.loadUserDisplayName()
+                }
+                return .success(())
+            } catch {
+                return .failure(.failedSettingUserDisplayName)
             }
         }
     }
 
-    func loadUserAvatarURL() async {
+    func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 let urlString = try self.client.avatarUrl()
                 self.loadCachedAvatarURLTask?.cancel()
-                self.avatarURLSubject.value = urlString.flatMap(URL.init)
+                self.userAvatarURLSubject.send(urlString.flatMap(URL.init))
+                return .success(())
             } catch {
-                MXLog.error("Failed fetching the user avatar url: \(error)")
-                return
+                return .failure(.failedRetrievingUserAvatarURL)
+            }
+        }
+    }
+    
+    func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError> {
+        await Task.dispatch(on: .global()) {
+            guard case let .image(imageURL, _, _) = media, let mimeType = media.mimeType else {
+                return .failure(.failedSettingUserAvatar)
+            }
+            
+            do {
+                let data = try Data(contentsOf: imageURL)
+                try self.client.uploadAvatar(mimeType: mimeType, data: [UInt8](data))
+                Task {
+                    await self.loadUserAvatarURL()
+                }
+                return .success(())
+            } catch {
+                return .failure(.failedSettingUserAvatar)
+            }
+        }
+    }
+    
+    func removeUserAvatar() async -> Result<Void, ClientProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                try self.client.removeAvatar()
+                Task {
+                    await self.loadUserAvatarURL()
+                }
+                return .success(())
+            } catch {
+                return .failure(.failedSettingUserAvatar)
             }
         }
     }
@@ -381,7 +431,7 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             guard !Task.isCancelled else { return }
-            self.avatarURLSubject.value = urlString.flatMap(URL.init)
+            self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
 

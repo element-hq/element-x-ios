@@ -431,6 +431,22 @@ class SDKClientMock: SDKClientProtocol {
             return notificationClientProcessSetupReturnValue
         }
     }
+    //MARK: - removeAvatar
+
+    public var removeAvatarThrowableError: Error?
+    public var removeAvatarCallsCount = 0
+    public var removeAvatarCalled: Bool {
+        return removeAvatarCallsCount > 0
+    }
+    public var removeAvatarClosure: (() throws -> Void)?
+
+    public func removeAvatar() throws {
+        if let error = removeAvatarThrowableError {
+            throw error
+        }
+        removeAvatarCallsCount += 1
+        try removeAvatarClosure?()
+    }
     //MARK: - restoreSession
 
     public var restoreSessionSessionThrowableError: Error?

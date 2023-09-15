@@ -356,14 +356,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
         
         Task {
-            var displayName = ""
-            if case .success(let name) = await userSession.clientProxy.loadUserDisplayName() {
-                displayName = name
-            }
-            
             let credentials = SoftLogoutScreenCredentials(userID: userSession.userID,
                                                           homeserverName: userSession.homeserver,
-                                                          userDisplayName: displayName,
+                                                          userDisplayName: userSession.clientProxy.userDisplayName.value ?? "",
                                                           deviceID: userSession.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore, appSettings: appSettings)
