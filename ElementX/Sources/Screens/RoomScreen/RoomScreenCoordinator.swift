@@ -15,8 +15,6 @@
 //
 
 import Combine
-#warning("AG: delete me")
-import CompoundDesignTokens
 import HTMLParser
 import SwiftUI
 import WysiwygComposer
@@ -141,7 +139,7 @@ enum ComposerConstant {
 private extension HTMLParserStyle {
     static let elementX = HTMLParserStyle(textColor: UIColor.label,
                                           linkColor: UIColor.link,
-                                          codeBlockStyle: BlockStyle(backgroundColor: UIColor(CompoundColorTokens.colorGray100),
+                                          codeBlockStyle: BlockStyle(backgroundColor: UIColor(.compound._bgCodeBlock),
                                                                      borderColor: UIColor(.compound.borderInteractiveSecondary),
                                                                      borderWidth: 0.0,
                                                                      cornerRadius: 0.0,

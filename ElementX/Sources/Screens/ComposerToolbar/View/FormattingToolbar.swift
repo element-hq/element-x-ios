@@ -15,8 +15,6 @@
 //
 
 import SwiftUI
-#warning("AG: fix me")
-import CompoundDesignTokens
 
 struct FormattingToolbar: View {
     /// The list of items to render in the toolbar
@@ -67,7 +65,7 @@ private extension FormatItem {
     var backgroundColor: Color {
         switch state {
         case .reversed:
-            return CompoundColorTokens.colorGreen300
+            return .compound._bgAccentSelected
         case .enabled, .disabled:
             return .compound.bgCanvasDefault
         }

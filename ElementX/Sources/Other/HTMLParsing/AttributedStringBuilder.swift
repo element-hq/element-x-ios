@@ -17,8 +17,6 @@
 import DTCoreText
 import Foundation
 import LRUCache
-#warning("AG: delete me")
-import CompoundDesignTokens
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
@@ -141,7 +139,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
-                attributedString.addAttribute(.backgroundColor, value: UIColor(CompoundColorTokens.colorGray100) as Any, range: range)
+                attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
             }
         }
     }

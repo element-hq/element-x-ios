@@ -52,7 +52,7 @@ packages:
     path: DesignKit
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: cbb4e9edbc6489e883b67d1016eb90705e998ba5
+    revision: 562988911c79e81c70ecc40ceb469b65e46e82dc
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
