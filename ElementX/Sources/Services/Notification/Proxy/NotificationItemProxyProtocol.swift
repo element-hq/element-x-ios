@@ -65,7 +65,7 @@ extension NotificationItemProxyProtocol {
                 return false
             case let .messageLike(content):
                 switch content {
-                case let .roomMessage(messageType):
+                case let .roomMessage(messageType, _):
                     switch messageType {
                     case .image, .video, .audio:
                         return true
