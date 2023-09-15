@@ -5713,7 +5713,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.10.1;
+				version = 2.11.0;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {

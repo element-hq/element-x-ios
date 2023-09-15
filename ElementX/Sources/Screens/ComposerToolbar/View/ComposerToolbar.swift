@@ -141,6 +141,7 @@ struct ComposerToolbar: View {
     
     private var composerView: WysiwygComposerView {
         WysiwygComposerView(placeholder: placeholder,
+                            placeholderColor: .compound.textSecondary,
                             viewModel: wysiwygViewModel,
                             itemProviderHelper: ItemProviderHelper(),
                             keyCommandHandler: keyCommandHandler) { provider in
