@@ -86,7 +86,7 @@ struct MessageComposer: View {
     @ViewBuilder
     private var header: some View {
         switch mode {
-        case .reply(_, let replyDetails):
+        case .reply(_, let replyDetails, _):
             MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
         case .edit:
             MessageComposerEditHeader(action: editCancellationAction)
@@ -176,6 +176,22 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 
 struct MessageComposer_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
+    
+    static let replyTypes: [TimelineItemReplyDetails] = [
+        .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, source: nil, contentType: nil))),
+        .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
+        .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
+        .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",
+                                                                      source: .init(url: .picturesDirectory, mimeType: nil),
+                                                                      thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+        .loaded(sender: .init(id: "Jason"), contentType: .notice(.init(body: "Notice: Too far gone?"))),
+        .loaded(sender: .init(id: "Kirk"), contentType: .text(.init(body: "Text: Where the wild things are"))),
+        .loaded(sender: .init(id: "Lars"), contentType: .video(.init(body: "Video: Through the never",
+                                                                     duration: 100,
+                                                                     source: nil,
+                                                                     thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
+        .loading(eventID: "")
+    ]
 
     static func messageComposer(_ content: String = "",
                                 sendingDisabled: Bool = false,
@@ -210,36 +226,32 @@ struct MessageComposer_Previews: PreviewProvider {
 
             messageComposer(mode: .reply(itemID: .random,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
-                                                               contentType: .text(.init(body: "Text: Where the wild things are")))))
+                                                               contentType: .text(.init(body: "Text: Where the wild things are"))), isThread: false))
         }
         .padding(.horizontal)
 
         ScrollView {
             VStack {
-                let replyTypes: [TimelineItemReplyDetails] = [
-                    .loaded(sender: .init(id: "Dave"), contentType: .audio(.init(body: "Audio: Ride the lightning", duration: 100, source: nil, contentType: nil))),
-                    .loaded(sender: .init(id: "James"), contentType: .emote(.init(body: "Emote: James thinks he's the phantom lord"))),
-                    .loaded(sender: .init(id: "Robert"), contentType: .file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil))),
-                    .loaded(sender: .init(id: "Cliff"), contentType: .image(.init(body: "Image: Pushead",
-                                                                                  source: .init(url: .picturesDirectory, mimeType: nil),
-                                                                                  thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
-                    .loaded(sender: .init(id: "Jason"), contentType: .notice(.init(body: "Notice: Too far gone?"))),
-                    .loaded(sender: .init(id: "Kirk"), contentType: .text(.init(body: "Text: Where the wild things are"))),
-                    .loaded(sender: .init(id: "Lars"), contentType: .video(.init(body: "Video: Through the never",
-                                                                                 duration: 100,
-                                                                                 source: nil,
-                                                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil)))),
-                    .loading(eventID: "")
-                ]
-
                 ForEach(replyTypes, id: \.self) { replyDetails in
                     messageComposer(mode: .reply(itemID: .random,
-                                                 replyDetails: replyDetails))
+                                                 replyDetails: replyDetails, isThread: false))
                 }
             }
         }
         .padding(.horizontal)
         .environmentObject(viewModel.context)
         .previewDisplayName("Replying")
+        
+        ScrollView {
+            VStack {
+                ForEach(replyTypes, id: \.self) { replyDetails in
+                    messageComposer(mode: .reply(itemID: .random,
+                                                 replyDetails: replyDetails, isThread: true))
+                }
+            }
+        }
+        .padding(.horizontal)
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Replying in thread")
     }
 }

@@ -51,6 +51,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
 
@@ -58,6 +59,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
             
@@ -65,6 +67,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.txt", source: nil, thumbnailSource: nil, contentType: nil)))
         }

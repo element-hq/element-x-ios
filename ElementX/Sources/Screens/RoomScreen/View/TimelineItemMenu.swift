@@ -46,7 +46,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case edit
     case copyPermalink
     case redact
-    case reply
+    case reply(isThread: Bool)
     case forward(itemID: TimelineItemIdentifier)
     case viewSource
     case retryDecryption(sessionID: String)
@@ -106,8 +106,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionEdit, systemImage: "pencil.line")
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, systemImage: "link")
-        case .reply:
-            Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
+        case .reply(let isThread):
+            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, systemImage: "arrowshape.turn.up.left")
         case .forward:
             Label(L10n.actionForward, systemImage: "arrowshape.turn.up.right")
         case .redact:
@@ -292,7 +292,7 @@ struct TimelineItemMenu_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             if let item = RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol,
-               let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply, .redact], debugActions: [.viewSource]) {
+               let actions = TimelineItemMenuActions(actions: [.copy, .edit, .reply(isThread: false), .redact], debugActions: [.viewSource]) {
                 TimelineItemMenu(item: item, actions: actions)
             }
         }

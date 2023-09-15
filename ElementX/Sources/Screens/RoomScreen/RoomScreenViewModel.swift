@@ -435,7 +435,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.send(.composer(action: .clear))
 
         switch mode {
-        case .reply(let itemId, _):
+        case .reply(let itemId, _, _):
             await timelineController.sendMessage(message, html: html, inReplyTo: itemId)
         case .edit(let originalItemId):
             await timelineController.editMessage(message, html: html, original: originalItemId)
@@ -517,8 +517,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         var actions: [TimelineItemMenuAction] = []
 
-        if item.isMessage {
-            actions.append(.reply)
+        if let messageitem = item as? EventBasedMessageTimelineItemProtocol {
+            actions.append(.reply(isThread: messageitem.isThreaded))
             actions.append(.forward(itemID: itemID))
         }
 
@@ -601,9 +601,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
             }
         case .reply:
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: buildReplyContent(for: eventTimelineItem))
+            let replyInfo = buildReplyInfo(for: eventTimelineItem)
+            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, contentType: replyInfo.type)
 
-            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails))))
+            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -681,12 +682,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func buildReplyContent(for item: EventBasedTimelineItemProtocol) -> EventBasedMessageTimelineItemContentType {
+    private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
         guard let messageItem = item as? EventBasedMessageTimelineItemProtocol else {
-            return .text(.init(body: item.body))
+            return .init(type: .text(.init(body: item.body)), isThread: false)
         }
         
-        return messageItem.contentType
+        return .init(type: messageItem.contentType, isThread: messageItem.isThreaded)
     }
 
     private func handleTappedUser(userID: String) async {
@@ -862,4 +863,9 @@ extension RoomScreenViewModel {
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController)
+}
+
+private struct ReplyInfo {
+    let type: EventBasedMessageTimelineItemContentType
+    let isThread: Bool
 }

@@ -28,8 +28,8 @@ struct ImageRoomTimelineView: View {
                           imageProvider: context.imageProvider) {
                 placeholder
             }
-            .frame(maxHeight: min(300, max(100, timelineItem.content.height ?? .infinity)))
-            .aspectRatio(timelineItem.content.aspectRatio, contentMode: .fit)
+            .timelineMediaFrame(height: timelineItem.content.height,
+                                aspectRatio: timelineItem.content.height)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonImage)
         }
@@ -72,6 +72,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
             
@@ -79,6 +80,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
             
@@ -86,6 +88,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Blurhashed image",
                                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),

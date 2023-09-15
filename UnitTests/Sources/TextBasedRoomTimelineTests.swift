@@ -20,24 +20,24 @@ import XCTest
 final class TextBasedRoomTimelineTests: XCTestCase {
     func testTextRoomTimelineItemWhitespaceEnd() {
         let timestamp = "Now"
-        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, isThreaded: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndLonger() {
         let timestamp = "10:00 AM"
-        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, isThreaded: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndPlain() {
-        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: "Now", isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        let timelineItem = TextRoomTimelineItem(id: .random, timestamp: "Now", isOutgoing: true, isEditable: true, isThreaded: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .plain), 0)
     }
 
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        var timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, isThreaded: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         let editedCount = L10n.commonEditedSuffix.count
         XCTAssertEqual(timelineItem.additionalWhitespaces(timelineStyle: .bubbles), timestamp.count + editedCount + 2)
@@ -45,7 +45,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndWithEditAndAlert() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
+        var timelineItem = TextRoomTimelineItem(id: .random, timestamp: timestamp, isOutgoing: true, isEditable: true, isThreaded: false, sender: .init(id: UUID().uuidString), content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         timelineItem.properties.deliveryStatus = .sendingFailed
         let editedCount = L10n.commonEditedSuffix.count

@@ -48,17 +48,22 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         VStack(alignment: .leading) {
-            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-               let replyDetails = messageTimelineItem.replyDetails {
-                HStack(spacing: 4.0) {
-                    Rectangle()
-                        .foregroundColor(.global.melon)
-                        .frame(width: 4.0)
-                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
+                if messageTimelineItem.isThreaded {
+                    ThreadDecorator()
+                }
+                if let replyDetails = messageTimelineItem.replyDetails {
+                    HStack(spacing: 4.0) {
+                        Rectangle()
+                            .foregroundColor(.global.melon)
+                            .frame(width: 4.0)
+                        TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                    }
                 }
             }
             
             content()
+                .layoutPriority(1)
         }
         .onTapGesture(count: 2) {
             context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
@@ -72,11 +77,12 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
         }
         .swipeRightAction {
-            Image(systemName: "arrowshape.turn.up.left")
+            SwipeToReplyView(timelineItem: timelineItem)
         } shouldStartAction: {
             context.viewState.timelineItemMenuActionProvider?(timelineItem.id)?.canReply ?? false
         } action: {
-            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply))
+            let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
+            context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
         }
         .contextMenu {
             TimelineItemMacContextMenu(item: timelineItem,
@@ -136,6 +142,78 @@ struct TimelineItemPlainStylerView<Content: View>: View {
 
 struct TimelineItemPlainStylerView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
+    
+    // These akwats include a reply
+    static var threads: some View {
+        ScrollView {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             isThreaded: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                   contentType: .text(.init(body: "Short")))), groupStyle: .single))
+
+            AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                      timestamp: "10:42",
+                                                      isOutgoing: true,
+                                                      isEditable: false,
+                                                      isThreaded: true,
+                                                      sender: .init(id: ""),
+                                                      content: .init(body: "audio.ogg",
+                                                                     duration: 100,
+                                                                     source: nil,
+                                                                     contentType: nil),
+                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            contentType: .text(.init(body: "Short")))))
+            FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                     timestamp: "10:42",
+                                                     isOutgoing: false,
+                                                     isEditable: false,
+                                                     isThreaded: true,
+                                                     sender: .init(id: ""),
+                                                     content: .init(body: "File",
+                                                                    source: nil,
+                                                                    thumbnailSource: nil,
+                                                                    contentType: nil),
+                                                     replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                           contentType: .text(.init(body: "Short")))))
+            ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                      timestamp: "10:42",
+                                                      isOutgoing: true,
+                                                      isEditable: true,
+                                                      isThreaded: true,
+                                                      sender: .init(id: ""),
+                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
+                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            contentType: .text(.init(body: "Short")))))
+            LocationRoomTimelineView(timelineItem: .init(id: .random,
+                                                         timestamp: "Now",
+                                                         isOutgoing: false,
+                                                         isEditable: false,
+                                                         isThreaded: true,
+                                                         sender: .init(id: "Bob"),
+                                                         content: .init(body: "Fallback geo uri description",
+                                                                        geoURI: .init(latitude: 41.902782,
+                                                                                      longitude: 12.496366),
+                                                                        description: "Location description description description description description description description description"),
+                                                         replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               contentType: .text(.init(body: "Short")))))
+            LocationRoomTimelineView(timelineItem: .init(id: .random,
+                                                         timestamp: "Now",
+                                                         isOutgoing: false,
+                                                         isEditable: false,
+                                                         isThreaded: true,
+                                                         sender: .init(id: "Bob"),
+                                                         content: .init(body: "Fallback geo uri description",
+                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
+                                                         replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                               contentType: .text(.init(body: "Short")))))
+        }
+        .environmentObject(viewModel.context)
+    }
 
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -148,5 +226,9 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
         .environment(\.timelineStyle, .plain)
         .previewLayout(.sizeThatFits)
         .environmentObject(viewModel.context)
+        threads
+            .padding()
+            .environment(\.timelineStyle, .plain)
+            .previewDisplayName("Threads")
     }
 }

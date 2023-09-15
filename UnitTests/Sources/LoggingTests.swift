@@ -257,6 +257,7 @@ class LoggingTests: XCTestCase {
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
+                                               isThreaded: false,
                                                sender: .init(id: "sender"),
                                                content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
         let noticeAttributedString = "NoticeAttributed"
@@ -264,6 +265,7 @@ class LoggingTests: XCTestCase {
                                                    timestamp: "",
                                                    isOutgoing: false,
                                                    isEditable: false,
+                                                   isThreaded: false,
                                                    sender: .init(id: "sender"),
                                                    content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
         let emoteAttributedString = "EmoteAttributed"
@@ -271,24 +273,28 @@ class LoggingTests: XCTestCase {
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
         let imageMessage = ImageRoomTimelineItem(id: .init(timelineID: "myimagemessage"),
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
         let videoMessage = VideoRoomTimelineItem(id: .random,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
         let fileMessage = FileRoomTimelineItem(id: .random,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
+                                               isThreaded: false,
                                                sender: .init(id: "sender"),
                                                content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
         

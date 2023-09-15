@@ -14,27 +14,27 @@
 // limitations under the License.
 //
 
-struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
-    let id: TimelineItemIdentifier
+import SwiftUI
 
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    let isThreaded: Bool
-    
-    let sender: TimelineItemSender
+import Compound
 
-    let content: LocationRoomTimelineItemContent
-
-    var body: String {
-        content.body
+struct ThreadDecorator: View {
+    var body: some View {
+        Label {
+            Text(L10n.commonThread)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodyXS)
+        } icon: {
+            CompoundIcon(\.threads)
+                .font(.system(size: 16))
+                .foregroundColor(.compound.iconSecondary)
+        }
+        .labelStyle(.custom(spacing: 4))
     }
+}
 
-    var replyDetails: TimelineItemReplyDetails?
-
-    var properties = RoomTimelineItemProperties()
-
-    var contentType: EventBasedMessageTimelineItemContentType {
-        .location(content)
+struct ThreadDecorator_Previews: PreviewProvider {
+    static var previews: some View {
+        ThreadDecorator()
     }
 }

@@ -14,27 +14,12 @@
 // limitations under the License.
 //
 
-struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
-    let id: TimelineItemIdentifier
+import SwiftUI
 
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    let isThreaded: Bool
-    
-    let sender: TimelineItemSender
-
-    let content: LocationRoomTimelineItemContent
-
-    var body: String {
-        content.body
-    }
-
-    var replyDetails: TimelineItemReplyDetails?
-
-    var properties = RoomTimelineItemProperties()
-
-    var contentType: EventBasedMessageTimelineItemContentType {
-        .location(content)
+extension View {
+    /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
+    func timelineMediaFrame(height contentHeight: CGFloat?, aspectRatio contentAspectRatio: CGFloat?) -> some View {
+        aspectRatio(contentAspectRatio, contentMode: .fit)
+            .frame(maxHeight: min(300, max(100, contentHeight ?? .infinity)))
     }
 }

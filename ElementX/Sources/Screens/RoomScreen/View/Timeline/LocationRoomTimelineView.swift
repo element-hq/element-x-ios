@@ -86,20 +86,33 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
-        body
-            .environmentObject(viewModel.context)
-
-        body
-            .environment(\.timelineStyle, .plain)
-            .environmentObject(viewModel.context)
+        ScrollView {
+            VStack {
+                states
+                    .padding(.horizontal)
+            }
+        }
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Bubbles")
+        
+        ScrollView {
+            VStack {
+                states
+                    .padding(.horizontal)
+            }
+        }
+        .environment(\.timelineStyle, .plain)
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Plain")
     }
 
     @ViewBuilder
-    static var body: some View {
+    static var states: some View {
         LocationRoomTimelineView(timelineItem: .init(id: .random,
                                                      timestamp: "Now",
                                                      isOutgoing: false,
                                                      isEditable: false,
+                                                     isThreaded: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description")))
 
@@ -107,8 +120,19 @@ struct LocationRoomTimelineView_Previews: PreviewProvider {
                                                      timestamp: "Now",
                                                      isOutgoing: false,
                                                      isEditable: false,
+                                                     isThreaded: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
+        LocationRoomTimelineView(timelineItem: .init(id: .random,
+                                                     timestamp: "Now",
+                                                     isOutgoing: false,
+                                                     isEditable: false,
+                                                     isThreaded: true,
+                                                     sender: .init(id: "Bob"),
+                                                     content: .init(body: "Fallback geo uri description",
+                                                                    geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
+                                                     replyDetails: .loaded(sender: .init(id: "Someone"),
+                                                                           contentType: .text(.init(body: "The thread content goes 'ere.")))))
     }
 }

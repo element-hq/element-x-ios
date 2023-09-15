@@ -28,8 +28,8 @@ struct StickerRoomTimelineView: View {
                           imageProvider: context.imageProvider) {
                 placeholder
             }
-            .frame(maxHeight: min(300, max(100, timelineItem.height ?? .infinity)))
-            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+            .timelineMediaFrame(height: timelineItem.height,
+                                aspectRatio: timelineItem.aspectRatio)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(L10n.commonSticker), \(timelineItem.body)")
         }

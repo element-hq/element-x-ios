@@ -110,6 +110,8 @@ public enum L10n {
   public static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Reply
   public static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
+  /// Reply in thread
+  public static var actionReplyInThread: String { return L10n.tr("Localizable", "action_reply_in_thread") }
   /// Report bug
   public static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
   /// Report Content
@@ -288,6 +290,8 @@ public enum L10n {
   public static var commonText: String { return L10n.tr("Localizable", "common_text") }
   /// Third-party notices
   public static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
+  /// Thread
+  public static var commonThread: String { return L10n.tr("Localizable", "common_thread") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// What is this room about?

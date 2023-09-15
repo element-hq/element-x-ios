@@ -75,6 +75,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              timestamp: timestamp,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
+                             isThreaded: false,
                              sender: .init(id: senderId),
                              content: .init(body: text))
     }

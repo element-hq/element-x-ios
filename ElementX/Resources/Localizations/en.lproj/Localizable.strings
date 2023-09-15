@@ -47,6 +47,7 @@
 "action_react" = "React";
 "action_remove" = "Remove";
 "action_reply" = "Reply";
+"action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Report bug";
 "action_report_content" = "Report Content";
 "action_retry" = "Retry";
@@ -128,6 +129,7 @@
 "common_syncing" = "Syncing";
 "common_text" = "Text";
 "common_third_party_notices" = "Third-party notices";
+"common_thread" = "Thread";
 "common_topic" = "Topic";
 "common_topic_placeholder" = "What is this room about?";
 "common_unable_to_decrypt" = "Unable to decrypt";
