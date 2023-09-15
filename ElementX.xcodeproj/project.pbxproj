@@ -588,7 +588,6 @@
 		B717A820BE02C6FE2CB53F6E /* WaitlistScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B697816AF93DA06EC58C5D70 /* WaitlistScreenViewModelProtocol.swift */; };
 		B721125D17A0BA86794F29FB /* MockServerSelectionScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E057FB1F07A5C201C89061 /* MockServerSelectionScreenState.swift */; };
 		B796A25F282C0A340D1B9C12 /* ImageRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B5EDCD05D50BA9B815C66C /* ImageRoomTimelineItemContent.swift */; };
-		B80C4FABB5529DF12436FFDA /* AppIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 16DC8C5B2991724903F1FA6A /* AppIcon.pdf */; };
 		B828C600A54B2EE20871A451 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD700E035C85738EE4B97129 /* PerformanceTests.swift */; };
 		B879446FD8E65A711EF8F9F7 /* AdvancedSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B69F9A2BC74DD40DC75C8 /* AdvancedSettingsScreenViewModel.swift */; };
 		B89990DD875B0B603D4D4332 /* NotificationItemProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B927CF5EF7FCCDA5EDC474B /* NotificationItemProxyProtocol.swift */; };
@@ -935,7 +934,6 @@
 		15A657D96779D1DEB8EF1327 /* CreateRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModel.swift; sourceTree = "<group>"; };
 		16037EE9E9A52AF37B7818E3 /* AnalyticsSettingsScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSettingsScreenUITests.swift; sourceTree = "<group>"; };
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
-		16DC8C5B2991724903F1FA6A /* AppIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = AppIcon.pdf; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
@@ -1920,7 +1918,6 @@
 		2774D635E78D8B98390EA694 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				16DC8C5B2991724903F1FA6A /* AppIcon.pdf */,
 				01C4C7DB37597D7D8379511A /* Assets.xcassets */,
 				A0C06C0F6A8621B22BFAEB56 /* Localizations */,
 				8AEA6A91159FA0D3EAFCCB0D /* Sounds */,
@@ -4151,7 +4148,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B80C4FABB5529DF12436FFDA /* AppIcon.pdf in Resources */,
 				992F5E750F5030C4BA2D0D03 /* Assets.xcassets in Resources */,
 				2CA6ABBC9A88EB89EA52FCCB /* ConfettiScene.scn in Resources */,
 				B6DA66EFC13A90846B625836 /* InfoPlist.strings in Resources */,
