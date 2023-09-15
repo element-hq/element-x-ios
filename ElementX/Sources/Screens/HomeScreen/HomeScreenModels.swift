@@ -125,10 +125,20 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var notificationMode: RoomNotificationModeProxy?
     
+    var showUnreadIndicator: Bool {
+        // Do not display the unread indicator if the notification mode is either .mute or .mentionsAndKeywordsOnly
+        switch notificationMode {
+        case .some(let mode) where [.mute, .mentionsAndKeywordsOnly].contains(mode):
+            return false
+        default:
+            return hasUnreads
+        }
+    }
+    
     var hasDecoration: Bool {
         // notification setting is displayed only for .mentionsAndKeywords and .mute
         let showNotificationSettings = notificationMode != nil
-        return hasUnreads || showNotificationSettings
+        return showUnreadIndicator || showNotificationSettings
     }
     
     var isPlaceholder = false

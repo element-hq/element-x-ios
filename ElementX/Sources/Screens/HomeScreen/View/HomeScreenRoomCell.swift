@@ -95,8 +95,8 @@ struct HomeScreenRoomCell: View {
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(room.hasUnreads ? .compound.bodySMSemibold : .compound.bodySM)
-                    .foregroundColor(room.hasUnreads ? .compound.textActionAccent : .compound.textSecondary)
+                    .font(room.showUnreadIndicator ? .compound.bodySMSemibold : .compound.bodySM)
+                    .foregroundColor(room.showUnreadIndicator ? .compound.textActionAccent : .compound.textSecondary)
             }
         }
     }
@@ -118,9 +118,9 @@ struct HomeScreenRoomCell: View {
             
             HStack(spacing: 8) {
                 notificationModeIcon
-                    .foregroundColor(room.hasUnreads ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+                    .foregroundColor(.compound.iconQuaternary)
                 
-                if room.hasUnreads {
+                if room.showUnreadIndicator {
                     Circle()
                         .frame(width: 12, height: 12)
                         .foregroundColor(.compound.iconAccentTertiary)
