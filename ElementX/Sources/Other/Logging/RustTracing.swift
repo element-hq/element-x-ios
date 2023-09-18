@@ -76,7 +76,6 @@ struct TracingConfiguration {
         case matrix_sdk_client = "matrix_sdk::client"
         case matrix_sdk_oidc = "matrix_sdk::oidc"
         case matrix_sdk_http_client = "matrix_sdk::http_client"
-        case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
         case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
@@ -109,7 +108,7 @@ struct TracingConfiguration {
         
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
-            let ignoredTargets: [Target] = [.common, .hyper, .matrix_sdk_client, .matrix_sdk_oidc]
+            let ignoredTargets: [Target] = [.common, .matrix_sdk_ffi, .hyper, .matrix_sdk_client, .matrix_sdk_oidc]
             if ignoredTargets.contains(target) {
                 return
             }
