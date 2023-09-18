@@ -762,9 +762,7 @@ public enum L10n {
   public static var screenNotificationSettingsCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_calls_label") }
   /// Configuration mismatch
   public static var screenNotificationSettingsConfigurationMismatch: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch") }
-  /// We’ve simplified Notifications Settings to make options easier to find.
-  /// 
-  /// Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
+  /// We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
   /// 
   /// If you proceed, some of your settings may change.
   public static var screenNotificationSettingsConfigurationMismatchDescription: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch_description") }
