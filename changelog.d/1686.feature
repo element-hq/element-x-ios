@@ -1,1 +1,0 @@
-Messages that are part of a thread will be marked with a thread decorator.

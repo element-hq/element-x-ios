@@ -1,3 +1,31 @@
+## Changes in 1.2.9 (2023-09-18)
+
+✨ Features
+
+- Messages that are part of a thread will be marked with a thread decorator. ([#1686](https://github.com/vector-im/element-x-ios/issues/1686))
+- Introduce a new advanced settings screen ([#1699](https://github.com/vector-im/element-x-ios/issues/1699))
+
+🙌 Improvements
+
+- Revert to using a Web Authentication Session for OIDC account management. ([#1634](https://github.com/vector-im/element-x-ios/pull/1634))
+- Hook up universal links to the App Coordinator (this doesn't actually handle them yet). ([#1638](https://github.com/vector-im/element-x-ios/pull/1638))
+- Separate Manage account from Manage devices ([#1698](https://github.com/vector-im/element-x-ios/pull/1698))
+- Update app icon. ([#1720](https://github.com/vector-im/element-x-ios/pull/1720))
+- Enable token refresh in the NSE (and notifications for OIDC accounts). ([#1712](https://github.com/vector-im/element-x-ios/issues/1712))
+
+🐛 Bugfixes
+
+- Add default schemes for detected links that don't have any ([#1651](https://github.com/vector-im/element-x-ios/pull/1651))
+- The bloom does not pop in but fades in. ([#1705](https://github.com/vector-im/element-x-ios/pull/1705))
+- Various accessibility fixes: add labels on timeline media, hide swipe to reply button, add sender on all messages, improve replies and reactions ([#1104](https://github.com/vector-im/element-x-ios/issues/1104))
+-  ([#1198](https://github.com/vector-im/element-x-ios/issues/1198))
+- Add copy permalink option for messages that failed decryption ([#1338](https://github.com/vector-im/element-x-ios/issues/1338))
+- Viewing reaction details UI fails to switch between multiple reactions ([#1552](https://github.com/vector-im/element-x-ios/issues/1552))
+- Add missing contacts field to OIDC configuration. ([#1653](https://github.com/vector-im/element-x-ios/issues/1653))
+- Fix avatar button size and make mxid copyable in Room/Member details screens. ([#1669](https://github.com/vector-im/element-x-ios/issues/1669))
+- Correctly parse markdown and html received in push notifications ([#1679](https://github.com/vector-im/element-x-ios/issues/1679))
+
+
 ## Changes in 1.2.8 (2023-09-01)
 
 🙌 Improvements
