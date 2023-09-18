@@ -150,18 +150,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         ServiceLocator.shared.analytics.signpost.beginFirstRooms()
         
-        // Combine together the state and the room list to correctly compute the view state if
-        // data is present in the room list "cold cache"
-        Publishers.CombineLatest(roomSummaryProvider.statePublisher,
-                                 roomSummaryProvider.roomListPublisher)
+        roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state, rooms in
+            .sink { [weak self] state in
                 guard let self else { return }
                 
-                // Rust sends back loaded even when no rooms are loaded yet, check room for empty to be sure
-                let isLoadingData = !state.isLoaded || (state.totalNumberOfRooms != 0 && rooms.isEmpty)
-                
-                let hasNoRooms = state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty
+                let isLoadingData = !state.isLoaded
+                let hasNoRooms = state.isLoaded && state.totalNumberOfRooms == 0
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {
