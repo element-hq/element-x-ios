@@ -17,6 +17,8 @@
 import UIKit
 
 struct TimelineItemSender: Identifiable, Hashable {
+    static let test = TimelineItemSender(id: "@test.matrix.org")
+    
     let id: String
     let displayName: String?
     let avatarURL: URL?

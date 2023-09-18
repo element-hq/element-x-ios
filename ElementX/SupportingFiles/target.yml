@@ -193,6 +193,7 @@ targets:
     - package: Version
     - package: Emojibase
     - package: WysiwygComposer
+    - package: Prefire
 
     sources:
     - path: ../Sources
