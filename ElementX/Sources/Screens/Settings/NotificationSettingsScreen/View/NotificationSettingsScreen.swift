@@ -156,13 +156,12 @@ struct NotificationSettingsScreen: View {
     private var configurationMismatchSection: some View {
         Section {
             ListRow(kind: .custom {
-                VStack(alignment: .leading, spacing: 12) {
-                    Image(systemName: "gearshape")
-                        .font(.compound.headingSMSemibold)
-                    VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text(L10n.screenNotificationSettingsConfigurationMismatch)
-                            .font(.compound.headingSMSemibold)
+                            .font(.compound.bodyLGSemibold)
                         Text(L10n.screenNotificationSettingsConfigurationMismatchDescription)
+                            .font(.compound.bodyMD)
                             .foregroundColor(.compound.textSecondary)
                     }
                     Button {
@@ -175,7 +174,7 @@ struct NotificationSettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
                 }
                 .padding(.horizontal, ListRowPadding.horizontal)
-                .padding(.vertical, ListRowPadding.vertical)
+                .padding(.vertical, 24)
             })
         }
     }
