@@ -149,7 +149,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.setMarkdownContent(text)
+        // Currently the `wysiwygViewModel` breaks when fed with html ending with `\n` (eg `<p><strong>hello</strong></p>\n`)
+        // This requires more investigation to be fixed properly
+        let text = text.trimmingCharacters(in: .newlines)
+        wysiwygViewModel.setHtmlContent(text)
     }
 
     private func createLinkAlert() {
