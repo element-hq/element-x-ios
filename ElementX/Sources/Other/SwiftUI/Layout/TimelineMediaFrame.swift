@@ -18,8 +18,17 @@ import SwiftUI
 
 extension View {
     /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
+    @ViewBuilder
     func timelineMediaFrame(height contentHeight: CGFloat?, aspectRatio contentAspectRatio: CGFloat?) -> some View {
-        frame(maxHeight: min(300, max(100, contentHeight ?? .infinity)))
-            .aspectRatio(contentAspectRatio, contentMode: .fit)
+        let minMediaHeight = 100.0
+        let maxMediaHeight = 300.0
+        
+        if let contentHeight, contentHeight < minMediaHeight { // Special case very small images
+            aspectRatio(contentAspectRatio, contentMode: .fit)
+                .frame(minHeight: minMediaHeight, maxHeight: minMediaHeight)
+        } else {
+            frame(maxHeight: min(maxMediaHeight, max(minMediaHeight, contentHeight ?? .infinity)))
+                .aspectRatio(contentAspectRatio, contentMode: .fit)
+        }
     }
 }
