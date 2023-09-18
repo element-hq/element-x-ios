@@ -46,7 +46,7 @@ struct MessageText: UIViewRepresentable {
         textView.contentInsetAdjustmentBehavior = .never
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
-        textView.layoutManager.usesFontLeading = false
+        textView.textLayoutManager?.usesFontLeading = false
         textView.backgroundColor = .clear
         textView.attributedText = NSAttributedString(attributedString)
         textView.delegate = context.coordinator
