@@ -313,7 +313,7 @@ class RoomProxy: RoomProxyProtocol {
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -323,7 +323,7 @@ class RoomProxy: RoomProxyProtocol {
             progressSubject?.send(progress)
         })
         
-        requestHandle(handle)
+        await requestHandle(handle)
         
         do {
             try await handle.join()
@@ -338,7 +338,7 @@ class RoomProxy: RoomProxyProtocol {
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -348,7 +348,7 @@ class RoomProxy: RoomProxyProtocol {
             progressSubject?.send(progress)
         })
         
-        requestHandle(handle)
+        await requestHandle(handle)
         
         do {
             try await handle.join()
@@ -362,7 +362,7 @@ class RoomProxy: RoomProxyProtocol {
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -372,7 +372,7 @@ class RoomProxy: RoomProxyProtocol {
             progressSubject?.send(progress)
         })
         
-        requestHandle(handle)
+        await requestHandle(handle)
         
         do {
             try await handle.join()
@@ -386,7 +386,7 @@ class RoomProxy: RoomProxyProtocol {
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,
-                  requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -396,7 +396,7 @@ class RoomProxy: RoomProxyProtocol {
             progressSubject?.send(progress)
         })
         
-        requestHandle(handle)
+        await requestHandle(handle)
         
         do {
             try await handle.join()
