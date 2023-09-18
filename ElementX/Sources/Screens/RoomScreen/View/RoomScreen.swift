@@ -36,7 +36,7 @@ struct RoomScreen: View {
                 composerToolbar
                     .padding(.leading, 5)
                     .padding(.trailing, 8)
-                    .padding(.bottom)
+                    .padding(.bottom, composerToolbarContext.composerActionsEnabled ? 8 : 12)
                     .background {
                         if composerToolbarContext.composerActionsEnabled {
                             RoundedRectangle(cornerRadius: 20)
