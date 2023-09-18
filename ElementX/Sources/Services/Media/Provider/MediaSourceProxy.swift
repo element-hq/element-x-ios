@@ -24,30 +24,27 @@ struct MediaSourceProxy: Hashable {
     /// This is optional when loading images and thumbnails in memory.
     let mimeType: String?
     
+    let url: URL!
+    
     init(source: MediaSource, mimeType: String?) {
         underlyingSource = source
+        url = URL(string: underlyingSource.url())
         self.mimeType = mimeType
     }
     
     init(url: URL, mimeType: String?) {
         underlyingSource = mediaSourceFromUrl(url: url.absoluteString)
+        self.url = URL(string: underlyingSource.url())
         self.mimeType = mimeType
     }
-
-    var url: URL! {
-        // Expecting these to always be valid URLs
-        URL(string: underlyingSource.url())
-    }
-}
-
-// MARK: - Hashable
-
-extension MediaSource: Hashable {
-    public static func == (lhs: MediaSource, rhs: MediaSource) -> Bool {
-        lhs.url() == rhs.url()
+    
+    // MARK: - Hashable
+    
+    public static func == (lhs: MediaSourceProxy, rhs: MediaSourceProxy) -> Bool {
+        lhs.url == rhs.url
     }
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(url())
+        hasher.combine(url)
     }
 }
