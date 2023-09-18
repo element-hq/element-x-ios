@@ -103,23 +103,23 @@ protocol RoomProxyProtocol {
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
     
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
-                   requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
     
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,
-                  requestHandle: (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
 
     func sendLocation(body: String,
                       geoURI: GeoURI,
