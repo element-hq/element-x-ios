@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ : %2$d message</string>
+			<string>%1$@ : %2$d message</string>
 			<key>other</key>
-			<string>%1$@ : %2$d messages</string>
+			<string>%1$@ : %2$d messages</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d salle</string>
+			<string>%d salon</string>
 			<key>other</key>
-			<string>%d salles</string>
+			<string>%d salons</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d changement de salle</string>
+			<string>%1$d changement dans le salon</string>
 			<key>other</key>
-			<string>%1$d changements de salle</string>
+			<string>%1$d changements dans le salon</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
