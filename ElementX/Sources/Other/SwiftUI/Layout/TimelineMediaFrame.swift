@@ -27,7 +27,9 @@ extension View {
             aspectRatio(contentAspectRatio, contentMode: .fit)
                 .frame(minHeight: minMediaHeight, maxHeight: minMediaHeight)
         } else {
-            frame(maxHeight: min(maxMediaHeight, max(minMediaHeight, contentHeight ?? .infinity)))
+            aspectRatio(contentAspectRatio, contentMode: .fit)
+                .frame(maxHeight: min(maxMediaHeight, max(minMediaHeight, contentHeight ?? .infinity)))
+                // Required to prevent the reply details to get higher priority in rendering the width of the view.
                 .aspectRatio(contentAspectRatio, contentMode: .fit)
         }
     }
