@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@ : %2$d message</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@ : %2$d messages</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d conversation</string>
+			<string>%d salle</string>
 			<key>other</key>
-			<string>%d conversations</string>
+			<string>%d salles</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d changement dans la conversation</string>
+			<string>%1$d changement de salle</string>
 			<key>other</key>
-			<string>%1$d changements dans la conversation</string>
+			<string>%1$d changements de salle</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -157,25 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membre</string>
+			<string>%1$d personne</string>
 			<key>other</key>
-			<string>%1$d membres</string>
-		</dict>
-	</dict>
-	<key>screen_room_timeline_more_reactions</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$d de plus</string>
-			<key>other</key>
-			<string>%1$d de plus</string>
+			<string>%1$d personnes</string>
 		</dict>
 	</dict>
 </dict>
