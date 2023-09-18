@@ -138,8 +138,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
       "state" : {
-        "revision" : "ee5d0a1b35ee2bff3fbf4592f72dbec2d111dc9e",
-        "version" : "2.11.0"
+        "revision" : "b6c512d64ef9fd1fba9eb15b247c165377a1c325",
+        "version" : "2.12.0"
       }
     },
     {
@@ -217,7 +217,7 @@
     {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
         "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
         "version" : "0.9.2"
