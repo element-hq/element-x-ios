@@ -334,10 +334,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .truncate(let length):
-            let entriesToKeep = rooms.prefix(Int(length))
-        
             for (index, value) in rooms.enumerated() {
-                if entriesToKeep.contains(value) {
+                if index < length {
                     continue
                 }
                 
