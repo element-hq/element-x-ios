@@ -62,8 +62,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .map { actions in
                 FormatType
                     .allCases
-                    // Exclude indent type outside of lists.
-                    .filter { wysiwygViewModel.isInList || !$0.isIndentType }
                     .map { type in
                         FormatItem(type: type,
                                    state: actions[type.composerAction] ?? .disabled)
@@ -256,13 +254,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private func removeLinks() {
         wysiwygViewModel.applyLinkOperation(.removeLinks)
-    }
-}
-
-private extension WysiwygComposerViewModel {
-    /// Return true if the selection of the composer is currently located in a list.
-    var isInList: Bool {
-        actionStates[.orderedList] == .reversed || actionStates[.unorderedList] == .reversed
     }
 }
 

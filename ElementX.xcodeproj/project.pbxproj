@@ -5713,7 +5713,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.10.1;
+				version = 2.11.0;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
@@ -5729,7 +5729,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = cbb4e9edbc6489e883b67d1016eb90705e998ba5;
+				revision = 562988911c79e81c70ecc40ceb469b65e46e82dc;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {

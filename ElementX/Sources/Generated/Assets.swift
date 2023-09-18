@@ -55,6 +55,8 @@ internal enum Asset {
     internal static let locationPin = ImageAsset(name: "images/location-pin")
     internal static let locationPointerFull = ImageAsset(name: "images/location-pointer-full")
     internal static let locationPointer = ImageAsset(name: "images/location-pointer")
+    internal static let closeRte = ImageAsset(name: "images/close-rte")
+    internal static let composerAttachment = ImageAsset(name: "images/composer-attachment")
     internal static let timelineComposerSendMessage = ImageAsset(name: "images/timeline-composer-send-message")
     internal static let timelineEndedPoll = ImageAsset(name: "images/timeline-ended-poll")
     internal static let timelinePollAttachment = ImageAsset(name: "images/timeline-poll-attachment")

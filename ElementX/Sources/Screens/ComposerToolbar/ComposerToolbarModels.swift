@@ -88,6 +88,7 @@ enum FormatType {
     case italic
     case underline
     case strikeThrough
+    case link
     case unorderedList
     case orderedList
     case indent
@@ -95,7 +96,6 @@ enum FormatType {
     case inlineCode
     case codeBlock
     case quote
-    case link
 }
 
 extension FormatType: CaseIterable, Identifiable {
@@ -224,16 +224,6 @@ extension FormatType {
             return .quote
         case .link:
             return .link
-        }
-    }
-
-    /// Return true if the format type is an indentation action.
-    var isIndentType: Bool {
-        switch self {
-        case .indent, .unindent:
-            return true
-        default:
-            return false
         }
     }
 }

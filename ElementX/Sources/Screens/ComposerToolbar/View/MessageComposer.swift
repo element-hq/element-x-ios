@@ -50,8 +50,7 @@ struct MessageComposer: View {
                         roundedRectangle
                             .fill(Color.compound.bgSubtleSecondary)
                         roundedRectangle
-                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 1)
-                            .opacity(focused ? 1 : 0)
+                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 0.5)
                     }
                 }
                 // Explicitly disable all animations to fix weirdness with the header immediately

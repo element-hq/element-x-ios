@@ -24,6 +24,7 @@ struct ComposerToolbar: View {
 
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
+    @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
 
     var body: some View {
         VStack(spacing: 8) {
@@ -36,25 +37,29 @@ struct ComposerToolbar: View {
     }
 
     private var topBar: some View {
-        HStack(alignment: .bottom, spacing: 10) {
+        HStack(alignment: .bottom, spacing: 5) {
             if !context.composerActionsEnabled {
                 RoomAttachmentPicker(context: context)
-                    .padding(.bottom, 5) // centre align with the send button
             }
+
             messageComposer
                 .environmentObject(context)
                 .onTapGesture {
                     guard !composerFocused else { return }
                     composerFocused = true
                 }
+                .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+                .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+
             if !context.composerActionsEnabled {
                 sendButton
+                    .padding(.leading, 3)
             }
         }
     }
 
     private var bottomBar: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .center, spacing: 9) {
             closeRTEButton
 
             FormattingToolbar(formatItems: context.formatItems) { action in
@@ -62,6 +67,7 @@ struct ComposerToolbar: View {
             }
 
             sendButton
+                .padding(.leading, 7)
         }
     }
 
@@ -70,9 +76,11 @@ struct ComposerToolbar: View {
             context.composerActionsEnabled = false
             context.composerExpanded = false
         } label: {
-            Image(systemName: "xmark.circle.fill")
-                .font(.compound.headingLG)
-                .foregroundColor(.compound.textActionPrimary)
+            Image(Asset.Images.closeRte.name)
+                .resizable()
+                .scaledToFit()
+                .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
+                .padding(7)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
@@ -89,11 +97,11 @@ struct ComposerToolbar: View {
                     Circle()
                         .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
                 }
+                .padding(4)
         }
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
-        .padding([.vertical, .trailing], 6)
     }
     
     private var messageComposer: some View {
@@ -133,6 +141,7 @@ struct ComposerToolbar: View {
     
     private var composerView: WysiwygComposerView {
         WysiwygComposerView(placeholder: placeholder,
+                            placeholderColor: .compound.textSecondary,
                             viewModel: wysiwygViewModel,
                             itemProviderHelper: ItemProviderHelper(),
                             keyCommandHandler: keyCommandHandler) { provider in
@@ -151,7 +160,7 @@ struct ComposerToolbar: View {
             Image(asset: Asset.Images.timelineComposerSendMessage)
                 .resizable()
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
-                .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
+                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 9))
                 .opacity(context.viewState.composerMode.isEdit ? 0 : 1)
                 .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
