@@ -2,6 +2,8 @@
 "a11y_hide_password" = "Ascundeți parola";
 "a11y_notifications_mentions_only" = "Doar mențiuni";
 "a11y_notifications_muted" = "Notificări dezactivate";
+"a11y_poll" = "Poll";
+"a11y_poll_end" = "Ended poll";
 "a11y_send_files" = "Trimiteți fișiere";
 "a11y_show_password" = "Afișați parola";
 "a11y_user_menu" = "Meniu utilizator";
@@ -35,6 +37,8 @@
 "action_learn_more" = "Aflați mai multe";
 "action_leave" = "Părăsiți";
 "action_leave_room" = "Părăsiți camera";
+"action_manage_account" = "Manage account";
+"action_manage_devices" = "Manage devices";
 "action_next" = "Următorul";
 "action_no" = "Nu";
 "action_not_now" = "Nu acum";
@@ -45,6 +49,7 @@
 "action_react" = "Reacționați";
 "action_remove" = "Ștergeți";
 "action_reply" = "Răspundeți";
+"action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Raportați o eroare";
 "action_report_content" = "Raportați conținutul";
 "action_retry" = "Reîncercați";
@@ -65,6 +70,7 @@
 "action_yes" = "Da";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
+"common_advanced_settings" = "Advanced settings";
 "common_analytics" = "Analitice";
 "common_audio" = "Audio";
 "common_bubbles" = "Baloane";
@@ -82,6 +88,7 @@
 "common_forward_message" = "Redirecționați mesajul";
 "common_gif" = "GIF";
 "common_image" = "Imagine";
+"common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost trimisă.";
 "common_leaving_room" = "Se părăsește conversația";
 "common_link_copied_to_clipboard" = "Linkul a fost copiat în clipboard";
@@ -96,15 +103,16 @@
 "common_password" = "Parola";
 "common_people" = "Persoane";
 "common_permalink" = "Permalink";
-"common_poll_final_votes" = "Voturi finale: %1$@";
 "common_poll_total_votes" = "Total voturi: %1$@";
 "common_poll_undisclosed_text" = "Rezultatele vor fi afișate după încheierea sondajului";
 "common_privacy_policy" = "Politica de confidențialitate";
+"common_reaction" = "Reaction";
 "common_reactions" = "Reacții";
 "common_refreshing" = "Se actualizează";
 "common_replying_to" = "Răspuns pentru %1$@";
 "common_report_a_bug" = "Raportați o eroare";
 "common_report_submitted" = "Raport trimis";
+"common_rich_text_editor" = "Rich text editor";
 "common_room_name" = "Numele camerei";
 "common_room_name_placeholder" = "de exemplu, numele proiectului dvs.";
 "common_search_for_someone" = "Căutați pe cineva";
@@ -123,6 +131,7 @@
 "common_syncing" = "Se sincronizează…";
 "common_text" = "Text";
 "common_third_party_notices" = "Notificări despre software de la terți";
+"common_thread" = "Thread";
 "common_topic" = "Subiect";
 "common_topic_placeholder" = "Despre ce este vorba în această cameră?";
 "common_unable_to_decrypt" = "Nu s-a putut decripta";
@@ -200,6 +209,7 @@
 "rich_text_editor_numbered_list" = "Comutați lista numerotată";
 "rich_text_editor_open_compose_options" = "Deschideți opțiunile de compunere";
 "rich_text_editor_quote" = "Aplicați citatul";
+"rich_text_editor_remove_link" = "Remove link";
 "rich_text_editor_unindent" = "Dez-identare";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
@@ -262,6 +272,12 @@
 "screen_create_room_public_option_title" = "Cameră publică (oricine)";
 "screen_create_room_room_name_label" = "Numele camerei";
 "screen_create_room_topic_label" = "Subiect (opțional)";
+"screen_edit_profile_display_name" = "Display name";
+"screen_edit_profile_display_name_placeholder" = "Your display name";
+"screen_edit_profile_error" = "An unknown error was encountered and the information couldn't be changed.";
+"screen_edit_profile_error_title" = "Unable to update profile";
+"screen_edit_profile_title" = "Edit profile";
+"screen_edit_profile_updating_details" = "Updating profile…";
 "screen_invites_decline_chat_message" = "Sigur doriți să refuzați alăturarea la %1$@?";
 "screen_invites_decline_chat_title" = "Refuzați invitația";
 "screen_invites_decline_direct_chat_message" = "Sigur doriți să refuzați conversațiile cu %1$@?";

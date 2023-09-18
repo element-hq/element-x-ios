@@ -2,6 +2,8 @@
 "a11y_hide_password" = "Скрыть пароль";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
+"a11y_poll" = "Poll";
+"a11y_poll_end" = "Ended poll";
 "a11y_send_files" = "Отправить файлы";
 "a11y_show_password" = "Показать пароль";
 "a11y_user_menu" = "Меню пользователя";
@@ -35,6 +37,8 @@
 "action_learn_more" = "Подробнее";
 "action_leave" = "Выйти";
 "action_leave_room" = "Покинуть комнату";
+"action_manage_account" = "Manage account";
+"action_manage_devices" = "Manage devices";
 "action_next" = "Далее";
 "action_no" = "Нет";
 "action_not_now" = "Не сейчас";
@@ -45,6 +49,7 @@
 "action_react" = "Реакция";
 "action_remove" = "Удалить";
 "action_reply" = "Ответить";
+"action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Сообщить об ошибке";
 "action_report_content" = "Пожаловаться на содержание";
 "action_retry" = "Повторить";
@@ -65,6 +70,7 @@
 "action_yes" = "Да";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
+"common_advanced_settings" = "Advanced settings";
 "common_analytics" = "Аналитика";
 "common_audio" = "Аудио";
 "common_bubbles" = "Пузыри";
@@ -82,6 +88,7 @@
 "common_forward_message" = "Переслать сообщение";
 "common_gif" = "GIF";
 "common_image" = "Изображения";
+"common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "Идентификатор Matrix ID не найден, приглашение может быть не получено.";
 "common_leaving_room" = "Покинуть комнату";
 "common_link_copied_to_clipboard" = "Ссылка скопирована в буфер обмена";
@@ -96,15 +103,16 @@
 "common_password" = "Пароль";
 "common_people" = "Пользователи";
 "common_permalink" = "Постоянная ссылка";
-"common_poll_final_votes" = "Итоговые голоса: %1$@";
 "common_poll_total_votes" = "Всего голосов: %1$@";
 "common_poll_undisclosed_text" = "Результаты будут показаны после завершения опроса";
 "common_privacy_policy" = "Политика конфиденциальности";
+"common_reaction" = "Reaction";
 "common_reactions" = "Реакции";
 "common_refreshing" = "Обновление...";
 "common_replying_to" = "Отвечает на %1$@";
 "common_report_a_bug" = "Сообщить об ошибке";
 "common_report_submitted" = "Отчет отправлен";
+"common_rich_text_editor" = "Rich text editor";
 "common_room_name" = "Название комнаты";
 "common_room_name_placeholder" = "например, название вашего проекта";
 "common_search_for_someone" = "Поиск человека";
@@ -123,6 +131,7 @@
 "common_syncing" = "Синхронизация";
 "common_text" = "Text";
 "common_third_party_notices" = "Уведомление о третьей стороне";
+"common_thread" = "Thread";
 "common_topic" = "Тема";
 "common_topic_placeholder" = "О чем эта комната?";
 "common_unable_to_decrypt" = "Невозможно расшифровать";
@@ -200,6 +209,7 @@
 "rich_text_editor_numbered_list" = "Переключить нумерованный список";
 "rich_text_editor_open_compose_options" = "Open compose options";
 "rich_text_editor_quote" = "Переключить цитату";
+"rich_text_editor_remove_link" = "Remove link";
 "rich_text_editor_unindent" = "Без отступа";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Прикрепить файл";
@@ -262,6 +272,12 @@
 "screen_create_room_public_option_title" = "Публичная комната (любой)";
 "screen_create_room_room_name_label" = "Название комнаты";
 "screen_create_room_topic_label" = "Тема (необязательно)";
+"screen_edit_profile_display_name" = "Display name";
+"screen_edit_profile_display_name_placeholder" = "Your display name";
+"screen_edit_profile_error" = "An unknown error was encountered and the information couldn't be changed.";
+"screen_edit_profile_error_title" = "Unable to update profile";
+"screen_edit_profile_title" = "Edit profile";
+"screen_edit_profile_updating_details" = "Updating profile…";
 "screen_invites_decline_chat_message" = "Вы уверены, что хотите отклонить приглашение в %1$@?";
 "screen_invites_decline_chat_title" = "Отклонить приглашение";
 "screen_invites_decline_direct_chat_message" = "Вы уверены, что хотите отказаться от приватного общения с %1$@?";
