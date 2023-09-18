@@ -1,3 +1,6 @@
+// Generated using Sourcery 2.0.1 — https://github.com/krzysztofzablocki/Sourcery
+// DO NOT EDIT
+
 // swiftlint:disable all
 // swiftformat:disable all
 
@@ -9,17 +12,11 @@ import Prefire
 #if canImport(AccessibilitySnapshot)
     import AccessibilitySnapshot
 #endif
-{% if argument.mainTarget %}
-@testable import {{ argument.mainTarget }}
-{% endif %}
+@testable import ElementX
 
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
-    private let simulatorDevice = "{{ argument.simulatorDevice|default:"iPhone15,2" }}"
-    {% if argument.file %}
-
-    private var file: StaticString { .init(stringLiteral: "{{ argument.file }}") }
-    {% endif %}
+    private let simulatorDevice = "iPhone14"
 
     override func setUp() {
         super.setUp()
@@ -28,14 +25,12 @@ class PreviewTests: XCTestCase {
         UIView.setAnimationsEnabled(false)
     }
 
-    {% for type in types.types where type.implements.PrefireProvider or type.based.PrefireProvider or type|annotated:"PrefireProvider" %}
-    func test_{{ type.name|lowerFirstLetter|replace:"_Previews", "" }}() {
-        for preview in {{ type.name }}._allPreviews {
+    func test_timelineItemStyler() {
+        for preview in TimelineItemStyler_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
 
-    {% endfor %}
     // MARK: Private
 
     private func assertSnapshots(matching preview: _Preview, testName: String = #function) {
@@ -56,8 +51,7 @@ class PreviewTests: XCTestCase {
         assertSnapshot(
             matching: matchingView,
             as: .prefireImage(precision: { precision }, duration: { delay }, layout: isScreen ? .device(config: device) : .sizeThatFits),
-            named: preview.displayName{% if argument.file %},
-            file: file{% endif %},
+            named: preview.displayName,
             testName: testName
         )
 
@@ -67,8 +61,7 @@ class PreviewTests: XCTestCase {
             assertSnapshot(
                 matching: vc,
                 as: .wait(for: delay, on: .accessibilityImage(showActivationPoints: .always)),
-                named: preview.displayName.map { $0 + ".accessibility" }{% if argument.file %},
-                file: file{% endif %},
+                named: preview.displayName.map { $0 + ".accessibility" },
                 testName: testName
             )
         #endif

@@ -17,6 +17,8 @@
 import Foundation
 import SwiftUI
 
+import Prefire
+
 // MARK: - TimelineStyler
 
 struct TimelineStyler<Content: View>: View {
@@ -35,7 +37,7 @@ struct TimelineStyler<Content: View>: View {
     }
 }
 
-struct TimelineItemStyler_Previews: TestablePreviewProvider {
+struct TimelineItemStyler_Previews: PreviewProvider, PrefireProvider {
     static let viewModel = RoomScreenViewModel.mock
 
     static let base = TextRoomTimelineItem(id: .random, timestamp: "Now", isOutgoing: true, isEditable: false, isThreaded: false, sender: .test, content: .init(body: "Test"))
