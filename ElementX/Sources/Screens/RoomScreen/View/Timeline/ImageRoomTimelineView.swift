@@ -29,7 +29,7 @@ struct ImageRoomTimelineView: View {
                 placeholder
             }
             .timelineMediaFrame(height: timelineItem.content.height,
-                                aspectRatio: timelineItem.content.height)
+                                aspectRatio: timelineItem.content.aspectRatio)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonImage)
         }
