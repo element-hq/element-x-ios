@@ -511,10 +511,13 @@ class RoomProxy: RoomProxyProtocol {
 
     func updateMembers() async {
         do {
-            let roomMembersProxies = try await Task.dispatch(on: .global()) {
-                try self.room.members().map {
-                    RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
-                }
+            let membersIterator = try await room.members()
+            guard let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) else {
+                return
+            }
+            
+            let roomMembersProxies = members.map {
+                RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
             }
             
             membersSubject.value = roomMembersProxies
@@ -528,14 +531,12 @@ class RoomProxy: RoomProxyProtocol {
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
-        return await Task.dispatch(on: lowPriorityDispatchQueue) {
-            do {
-                let member = try self.room.member(userId: userID)
-                return .success(RoomMemberProxy(member: member, backgroundTaskService: self.backgroundTaskService))
-            } catch {
-                return .failure(.failedRetrievingMember)
-            }
+        
+        do {
+            let member = try await room.member(userId: userID)
+            return .success(RoomMemberProxy(member: member, backgroundTaskService: backgroundTaskService))
+        } catch {
+            return .failure(.failedRetrievingMember)
         }
     }
     
@@ -728,12 +729,10 @@ class RoomProxy: RoomProxyProtocol {
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {
-        await Task.dispatch(on: .global()) {
-            do {
-                _ = try self.room.fetchMembers()
-            } catch {
-                MXLog.error("Failed fetching members: \(error)")
-            }
+        do {
+            try await room.fetchMembers()
+        } catch {
+            MXLog.error("Failed fetching members: \(error)")
         }
     }
         

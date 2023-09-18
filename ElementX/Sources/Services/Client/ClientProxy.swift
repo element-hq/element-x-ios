@@ -507,7 +507,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListLoadingStateUpdateObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.syncIndicator(listener: RoomListServiceSyncIndicatorListenerProxy { [weak self] state in
+        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: RoomListServiceSyncIndicatorListenerProxy { [weak self] state in
             guard let self else { return }
             
             switch state {
