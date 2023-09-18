@@ -25,12 +25,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
+    private let roomListPageSize = 200
+    
     private let serialDispatchQueue: DispatchQueue
     
     private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
-    private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicFilterResult?
+    private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var listUpdatesTaskHandle: TaskHandle?
     private var stateUpdatesTaskHandle: TaskHandle?
     
@@ -82,7 +84,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
         
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicFilter(listener: RoomListEntriesListenerProxy { [weak self] updates in
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: UInt32(roomListPageSize), listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
                 MXLog.verbose("\(name): Received list update")
                 diffsPublisher.send(updates)
@@ -124,15 +126,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 MXLog.error("Failed updating visible range with error: \(error)")
             }
         }
+        
+        if range.upperBound >= rooms.count {
+            listUpdatesSubscriptionResult?.controller.addOnePage()
+        } else if range.lowerBound == 0 {
+            listUpdatesSubscriptionResult?.controller.resetToOnePage()
+        }
     }
     
     func updateFilterPattern(_ pattern: String?) {
         guard let pattern, !pattern.isEmpty else {
-            _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .all)
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all)
             return
         }
         
-        _ = listUpdatesSubscriptionResult?.dynamicFilter.set(kind: .normalizedMatchRoomName(pattern: pattern.lowercased()))
+        _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: pattern.lowercased()))
     }
     
     // MARK: - Private
@@ -271,30 +279,41 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
-        case .pushFront(let value):
-            MXLog.verbose("\(name): Push Front \(value.debugIdentifier)")
-            let summary = buildSummaryForRoomListEntry(value)
-            changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
-        case .pushBack(let value):
-            MXLog.verbose("\(name): Push Back \(value.debugIdentifier)")
-            let summary = buildSummaryForRoomListEntry(value)
-            changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
-        case .append(values: let values):
+        case .append(let values):
             let debugIdentifiers = values.map(\.debugIdentifier)
             MXLog.verbose("\(name): Append \(debugIdentifiers)")
             for (index, value) in values.enumerated() {
                 let summary = buildSummaryForRoomListEntry(value)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
-        case .set(let index, let value):
-            MXLog.verbose("\(name): Update \(value.debugIdentifier) at \(index)")
-            let summary = buildSummaryForRoomListEntry(value)
-            changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
-            changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
+        case .clear:
+            MXLog.verbose("\(name): Clear all items")
+            for (index, value) in rooms.enumerated() {
+                changes.append(.remove(offset: index, element: value, associatedWith: nil))
+            }
         case .insert(let index, let value):
             MXLog.verbose("\(name): Insert at \(value.debugIdentifier) at \(index)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
+        case .popBack:
+            MXLog.verbose("\(name): Pop Back")
+            guard let value = rooms.last else {
+                fatalError()
+            }
+            
+            changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
+        case .popFront:
+            MXLog.verbose("\(name): Pop Front")
+            let summary = rooms[0]
+            changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
+        case .pushBack(let value):
+            MXLog.verbose("\(name): Push Back \(value.debugIdentifier)")
+            let summary = buildSummaryForRoomListEntry(value)
+            changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
+        case .pushFront(let value):
+            MXLog.verbose("\(name): Push Front \(value.debugIdentifier)")
+            let summary = buildSummaryForRoomListEntry(value)
+            changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
             MXLog.verbose("\(name): Remove \(summary.id ?? "") from \(index)")
@@ -309,22 +328,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             for (index, value) in values.enumerated() {
                 changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
             }
-        case .clear:
-            MXLog.verbose("\(name): Clear all items")
+        case .set(let index, let value):
+            MXLog.verbose("\(name): Update \(value.debugIdentifier) at \(index)")
+            let summary = buildSummaryForRoomListEntry(value)
+            changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
+            changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
+        case .truncate(let length):
+            let entriesToKeep = rooms.prefix(Int(length))
+        
             for (index, value) in rooms.enumerated() {
+                if entriesToKeep.contains(value) {
+                    continue
+                }
+                
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
-        case .popFront:
-            MXLog.verbose("\(name): Pop Front")
-            let summary = rooms[0]
-            changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
-        case .popBack:
-            MXLog.verbose("\(name): Pop Back")
-            guard let value = rooms.last else {
-                fatalError()
-            }
-            
-            changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
         }
         
         return CollectionDifference(changes)
