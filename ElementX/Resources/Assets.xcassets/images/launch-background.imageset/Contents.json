@@ -1,11 +1,31 @@
 {
   "images" : [
     {
-      "filename" : "LaunchBackgroundTablet-squashed.png",
+      "filename" : "ipad-light.png",
       "idiom" : "universal"
     },
     {
-      "filename" : "LaunchBackgroundPhone-squashed.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "ipad-dark.png",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "iphone-light.png",
+      "idiom" : "iphone"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "iphone-dark.png",
       "idiom" : "iphone"
     }
   ],

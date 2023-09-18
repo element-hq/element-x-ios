@@ -22,7 +22,7 @@ struct PillView: View {
             MXLog.info("TEXT ATTACHMENT TEST")
         } label: {
             HStack {
-                Image(asset: Asset.Images.launchLogo)
+                Image(asset: Asset.Images.appLogo)
                     .resizable()
                     .scaledToFit()
             }
