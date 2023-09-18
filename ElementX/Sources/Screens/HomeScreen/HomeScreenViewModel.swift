@@ -86,7 +86,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         context.$viewState
             .map(\.bindings.searchQuery)
-            .debounceAndRemoveDuplicates()
+            .removeDuplicates()
             .sink { [weak self] searchQuery in
                 self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
             }
