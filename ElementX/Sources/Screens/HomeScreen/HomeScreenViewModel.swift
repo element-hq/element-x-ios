@@ -159,7 +159,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 guard let self else { return }
                 
                 // Rust sends back loaded even when no rooms are loaded yet, check room for empty to be sure
-                let isLoadingData = !state.isLoaded || (state.totalNumberOfRooms != 0 && rooms.isEmpty)
+                let isLoadingData = state.totalNumberOfRooms != 0 && rooms.isEmpty
                 
                 let hasNoRooms = state.isLoaded && state.totalNumberOfRooms == 0 && rooms.isEmpty
                 
