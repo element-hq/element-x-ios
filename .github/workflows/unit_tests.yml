@@ -44,7 +44,8 @@ jobs:
         
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
-        if: always()
+        # We only care about artifcats if the tests fail
+        if: failure()
         with:
             name: test-output
             path: fastlane/test_output
