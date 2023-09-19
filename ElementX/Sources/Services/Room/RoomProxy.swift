@@ -319,7 +319,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendImage(url: url.path(), thumbnailUrl: thumbnailURL.path(), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = room.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -344,7 +344,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendVideo(url: url.path(), thumbnailUrl: thumbnailURL.path(), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = room.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -368,7 +368,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendAudio(url: url.path(), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = room.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -392,7 +392,7 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let handle = room.sendFile(url: url.path(), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = room.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
