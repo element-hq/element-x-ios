@@ -129,8 +129,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "5dcb19d1c502188e566110fd907a32ed1ebf364c",
-        "version" : "1.1.16"
+        "revision" : "5f7b353fc306e21237f71b9e242f7fc086ad00c8",
+        "version" : "1.1.17"
       }
     },
     {
@@ -217,7 +217,7 @@
     {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "revision" : "b94da693e57eaf79d16464b8b7c90d09cba4e290",
         "version" : "0.9.2"
