@@ -165,7 +165,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
 
 private extension Diffing where Value == UIImage {
     static func prefireImage(precision: @escaping () -> Float, scale: CGFloat?) -> Diffing {
-        lazy var originalDiffing = Diffing.image(precision: precision(), scale: scale)
+        lazy var originalDiffing = Diffing.image(precision: precision(), perceptualPrecision: 0.98, scale: scale)
         return Diffing(
             toData: { originalDiffing.toData($0) },
             fromData: { originalDiffing.fromData($0) },
