@@ -17,7 +17,6 @@ import Prefire
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private let simulatorDevice = "iPhone14"
-    private let requiredOSVersion = 16
 
     override func setUp() {
         super.setUp()
@@ -71,12 +70,8 @@ class PreviewTests: XCTestCase {
     /// Check environments to avoid problems with snapshots on different devices or OS.
     private func checkEnvironments() {
         let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
-        let osVersion = ProcessInfo().operatingSystemVersion
         guard deviceModel?.contains(simulatorDevice) ?? false else {
             fatalError("Switch to using \(simulatorDevice) for these tests.")
-        }
-	    guard osVersion.majorVersion == requiredOSVersion else {
-            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
         }
     }
 }
@@ -163,7 +158,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
 
 private extension Diffing where Value == UIImage {
     static func prefireImage(precision: @escaping () -> Float, scale: CGFloat?) -> Diffing {
-        lazy var originalDiffing = Diffing.image(precision: precision(), perceptualPrecision: 0.98, scale: scale)
+        lazy var originalDiffing = Diffing.image(precision: precision(), scale: scale)
         return Diffing(
             toData: { originalDiffing.toData($0) },
             fromData: { originalDiffing.fromData($0) },

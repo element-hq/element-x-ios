@@ -41,7 +41,7 @@ class PreviewTests: XCTestCase {
     private func assertSnapshots(matching preview: _Preview, testName: String = #function) {
         let isScreen = preview.layout == .device
         let device = preview.device?.snapshotDevice() ?? deviceConfig
-        var delay: TimeInterval = 0
+        var delay: TimeInterval = 1.0
         var precision: Float = 0.99
 
         let view = preview.content
