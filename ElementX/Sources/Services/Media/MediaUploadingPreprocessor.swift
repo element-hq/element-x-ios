@@ -144,8 +144,8 @@ struct MediaUploadingPreprocessor {
         case .success(let result):
             switch await generateThumbnailForImage(at: url) {
             case .success(let thumbnailResult):
-                let imageSize = try? UInt64(FileManager.default.sizeForItem(at: result.url))
-                let thumbnailSize = try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))
+                let imageSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
+                let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
                 
                 let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
                                                   width: UInt64(thumbnailResult.width),
@@ -182,8 +182,8 @@ struct MediaUploadingPreprocessor {
         case .success(let result):
             switch await generateThumbnailForVideoAt(result.url) {
             case .success(let thumbnailResult):
-                let videoSize = try? UInt64(FileManager.default.sizeForItem(at: result.url))
-                let thumbnailSize = try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))
+                let videoSize = ((try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0) ?? 0
+                let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
                 
                 let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
                                                   width: UInt64(thumbnailResult.width),
@@ -216,7 +216,7 @@ struct MediaUploadingPreprocessor {
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.audio` containing the file URL plus the corresponding `AudioInfo`
     private func processAudio(at url: URL, mimeType: String?) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        let fileSize = try? UInt64(FileManager.default.sizeForItem(at: url))
+        let fileSize = (try? UInt64(FileManager.default.sizeForItem(at: url))) ?? 0
         
         let asset = AVURLAsset(url: url)
         guard let durationInSeconds = try? await asset.load(.duration).seconds else {
@@ -234,7 +234,7 @@ struct MediaUploadingPreprocessor {
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.file` containing the file URL plus the corresponding `FileInfo`
     private func processFile(at url: URL, mimeType: String?) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        let fileSize = try? UInt64(FileManager.default.sizeForItem(at: url))
+        let fileSize = (try? UInt64(FileManager.default.sizeForItem(at: url))) ?? 0
         
         let fileInfo = FileInfo(mimetype: mimeType, size: fileSize, thumbnailInfo: nil, thumbnailSource: nil)
         return .success(.file(fileURL: url, fileInfo: fileInfo))
