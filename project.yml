@@ -102,7 +102,7 @@ packages:
     minorVersion: 8.6.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.11.0
+    minorVersion: 1.13.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
