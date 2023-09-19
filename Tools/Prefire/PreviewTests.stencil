@@ -77,7 +77,6 @@ class PreviewTests: XCTestCase {
     /// Check environments to avoid problems with snapshots on different devices or OS.
     private func checkEnvironments() {
         let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
-        let osVersion = ProcessInfo().operatingSystemVersion
         guard deviceModel?.contains(simulatorDevice) ?? false else {
             fatalError("Switch to using \(simulatorDevice) for these tests.")
         }
