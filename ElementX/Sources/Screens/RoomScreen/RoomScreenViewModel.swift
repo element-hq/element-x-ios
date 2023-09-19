@@ -517,8 +517,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         var actions: [TimelineItemMenuAction] = []
 
-        if let messageitem = item as? EventBasedMessageTimelineItemProtocol {
-            actions.append(.reply(isThread: messageitem.isThreaded))
+        if let messageItem = item as? EventBasedMessageTimelineItemProtocol, messageItem.isRemoteMessage {
+            actions.append(.reply(isThread: messageItem.isThreaded))
             actions.append(.forward(itemID: itemID))
         }
 
