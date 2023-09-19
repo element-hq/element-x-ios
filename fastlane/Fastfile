@@ -79,7 +79,6 @@ lane :unit_tests do
     scheme: "UnitTests",
     devices: ["iPhone 14"],
     ensure_devices_found: true,
-    prelaunch_simulator: true,
     result_bundle: true,
     number_of_retries: 3,
     xcargs: '-skipPackagePluginValidation',
