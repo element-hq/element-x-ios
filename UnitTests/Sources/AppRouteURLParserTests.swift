@@ -27,7 +27,7 @@ class AppRouteURLParserTests: XCTestCase {
         
         XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: url), AppRoute.genericCallLink(url: url))
         
-        guard let customSchemeURL = URL(string: "element://call?url=https%3A%2F%2Fcall.element.io%2Ftest") else {
+        guard let customSchemeURL = URL(string: "io.element.call:/?url=https%3A%2F%2Fcall.element.io%2Ftest") else {
             XCTFail("URL invalid")
             return
         }

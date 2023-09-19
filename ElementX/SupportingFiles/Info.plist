@@ -41,10 +41,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>$(BASE_BUNDLE_IDENTIFIER)</string>
+			<string>Element Call</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>$(APP_CUSTOM_SCHEME)</string>
+				<string>io.element.call</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Application</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.element</string>
 			</array>
 		</dict>
 	</array>

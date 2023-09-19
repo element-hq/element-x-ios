@@ -57,9 +57,16 @@ targets:
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
-            CFBundleURLName: $(BASE_BUNDLE_IDENTIFIER),
+            CFBundleURLName: "Element Call",
             CFBundleURLSchemes: [
-              $(APP_CUSTOM_SCHEME)
+              io.element.call
+            ]
+          },
+          {
+            CFBundleTypeRole: Editor,
+            CFBundleURLName: "Application",
+            CFBundleURLSchemes: [
+              io.element
             ]
           }
         ]
