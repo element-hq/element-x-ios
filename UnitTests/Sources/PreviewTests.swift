@@ -17,6 +17,7 @@ import Prefire
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private let simulatorDevice = "iPhone14"
+    private let requiredOSVersion = 16
 
     override func setUp() {
         super.setUp()
@@ -70,8 +71,12 @@ class PreviewTests: XCTestCase {
     /// Check environments to avoid problems with snapshots on different devices or OS.
     private func checkEnvironments() {
         let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
+        let osVersion = ProcessInfo().operatingSystemVersion
         guard deviceModel?.contains(simulatorDevice) ?? false else {
             fatalError("Switch to using \(simulatorDevice) for these tests.")
+        }
+	    guard osVersion.majorVersion == requiredOSVersion else {
+            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
         }
     }
 }
