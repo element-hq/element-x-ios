@@ -33,6 +33,7 @@ struct InfoPlistReader {
         static let otlpTracingPassword = "otlpTracingPassword"
         
         static let bundleURLTypes = "CFBundleURLTypes"
+        static let bundleURLName = "CFBundleURLName"
         static let bundleURLSchemes = "CFBundleURLSchemes"
     }
     
@@ -117,14 +118,11 @@ struct InfoPlistReader {
     // MARK: - Custom App Scheme
     
     var appScheme: String {
-        let urlTypes: [[String: Any]] = infoPlistValue(forKey: Keys.bundleURLTypes)
-        
-        guard let urlSchemes = urlTypes.first?[Keys.bundleURLSchemes] as? [String],
-              let scheme = urlSchemes.first else {
-            fatalError("Invalid custon application scheme configuration")
-        }
-        
-        return scheme
+        customSchemeForName("Application")
+    }
+    
+    var elementCallScheme: String {
+        customSchemeForName("Element Call")
     }
     
     // MARK: - Mention Pills
@@ -140,11 +138,23 @@ struct InfoPlistReader {
     }
     
     // MARK: - Private
-
+    
     private func infoPlistValue<T>(forKey key: String) -> T {
         guard let result = bundle.object(forInfoDictionaryKey: key) as? T else {
             fatalError("Add \(key) into your target's Info.plst")
         }
         return result
+    }
+    
+    private func customSchemeForName(_ name: String) -> String {
+        let urlTypes: [[String: Any]] = infoPlistValue(forKey: Keys.bundleURLTypes)
+        
+        guard let urlType = urlTypes.first(where: { $0[Keys.bundleURLName] as? String == name }),
+              let urlSchemes = urlType[Keys.bundleURLSchemes] as? [String],
+              let scheme = urlSchemes.first else {
+            fatalError("Invalid custom application scheme configuration")
+        }
+        
+        return scheme
     }
 }

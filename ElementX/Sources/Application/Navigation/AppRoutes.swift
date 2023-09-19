@@ -80,15 +80,13 @@ struct ElementAppURLParser: URLParser {
 /// The parser for Element Call links. This always returns a `.genericCallLink`
 struct ElementCallURLParser: URLParser {
     private let knownHosts = ["call.element.io"]
-    private let customSchemeHost = "call"
     private let customSchemeURLQueryParameterName = "url"
     
     func route(from url: URL) -> AppRoute? {
         // First try processing URLs with custom schemes
         if let scheme = url.scheme,
-           scheme == InfoPlistReader.app.appScheme {
-            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                  components.host == customSchemeHost else {
+           scheme == InfoPlistReader.app.elementCallScheme {
+            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 return nil
             }
             
