@@ -103,7 +103,7 @@ struct HomeScreen: View {
             let isHidden = isTopController || isSearching
             if let bloomView {
                 bloomView.isHidden = isHidden
-                UIView.transition(with: bloomView, duration: 2.0, options: .curveEaseInOut) {
+                UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
                     bloomView.alpha = isTopController ? 0 : 1
                 }
             }
