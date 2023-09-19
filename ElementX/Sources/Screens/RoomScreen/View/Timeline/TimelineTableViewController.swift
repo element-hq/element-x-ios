@@ -178,8 +178,10 @@ class TimelineTableViewController: UIViewController {
             cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
-
-        dataSource?.defaultRowAnimation = .fade
+        
+        // We only animate when there's a new last message, so its safe
+        // to animate from the bottom (which is the top as we're flipped).
+        dataSource?.defaultRowAnimation = .top
         tableView.delegate = self
     }
     
