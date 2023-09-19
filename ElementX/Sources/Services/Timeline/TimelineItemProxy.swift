@@ -63,7 +63,7 @@ enum TimelineItemDeliveryStatus: Hashable {
 }
 
 /// A light wrapper around event timeline items returned from Rust.
-struct EventTimelineItemProxy {
+class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
     
@@ -72,7 +72,7 @@ struct EventTimelineItemProxy {
         self.id = TimelineItemIdentifier(timelineID: String(id), eventID: item.eventId(), transactionID: item.transactionId())
     }
     
-    var deliveryStatus: TimelineItemDeliveryStatus? {
+    lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
         guard let localSendState = item.localSendState() else {
             return nil
         }
@@ -86,25 +86,17 @@ struct EventTimelineItemProxy {
         case .sent:
             return .sent
         }
-    }
+    }()
         
-    var isRoomState: Bool {
-        content.kind().isRoomState
-    }
+    lazy var isRoomState = content.kind().isRoomState
     
-    var content: TimelineItemContent {
-        item.content()
-    }
+    lazy var content = item.content()
 
-    var isOwn: Bool {
-        item.isOwn()
-    }
+    lazy var isOwn = item.isOwn()
 
-    var isEditable: Bool {
-        item.isEditable()
-    }
+    lazy var isEditable = item.isEditable()
     
-    var sender: TimelineItemSender {
+    lazy var sender: TimelineItemSender = {
         let profile = item.senderProfile()
         
         switch profile {
@@ -117,24 +109,18 @@ struct EventTimelineItemProxy {
                          displayName: nil,
                          avatarURL: nil)
         }
-    }
+    }()
 
-    var reactions: [Reaction] {
-        item.reactions()
-    }
+    lazy var reactions = item.reactions()
     
-    var timestamp: Date {
-        Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
-    }
+    lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     
-    var debugInfo: TimelineItemDebugInfo {
+    lazy var debugInfo: TimelineItemDebugInfo = {
         let debugInfo = item.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
-    }
+    }()
 
-    var readReceipts: [String: Receipt] {
-        item.readReceipts()
-    }
+    lazy var readReceipts = item.readReceipts()
 }
 
 extension TimelineItemContentKind {
