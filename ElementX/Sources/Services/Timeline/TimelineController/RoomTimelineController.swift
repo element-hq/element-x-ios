@@ -36,7 +36,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
-    
+    private var timelineAudioPlaybackViewStates = [TimelineItemIdentifier: VoiceRoomPlaybackViewState]()
+
     var roomID: String {
         roomProxy.id
     }
@@ -219,6 +220,32 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func retryDecryption(for sessionID: String) async {
         await roomProxy.retryDecryption(for: sessionID)
+    }
+    
+    func playbackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState? {
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
+            MXLog.error("timelineItem not found")
+            return .none
+        }
+        
+        switch timelineItem {
+        case let item as VoiceRoomTimelineItem:
+            if let playbackViewState = timelineAudioPlaybackViewStates[itemID] {
+                return playbackViewState
+            }
+            let playbackViewState = VoiceRoomPlaybackViewState(duration: item.content.duration,
+                                                               waveform: item.content.waveform)
+            timelineAudioPlaybackViewStates[itemID] = playbackViewState
+            return playbackViewState
+        default:
+            return .none
+        }
+    }
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
+    
+    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
+        timelineAudioPlaybackViewStates[itemID]?.seekAudio(to: progress)
     }
 
     // MARK: - Private

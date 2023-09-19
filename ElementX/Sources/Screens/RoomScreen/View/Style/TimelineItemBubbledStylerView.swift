@@ -435,6 +435,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                       sender: .init(id: ""),
                                                       content: .init(body: "audio.ogg",
                                                                      duration: 100,
+                                                                     waveform: nil,
                                                                      source: nil,
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),

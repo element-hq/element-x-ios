@@ -69,6 +69,7 @@ enum RoomTimelineItemType: Equatable {
     case group(CollapsibleTimelineItem)
     case location(LocationRoomTimelineItem)
     case poll(PollRoomTimelineItem)
+    case voice(VoiceRoomTimelineItem)
 
     init(item: RoomTimelineItemProtocol) {
         switch item {
@@ -112,6 +113,8 @@ enum RoomTimelineItemType: Equatable {
             self = .location(item)
         case let item as PollRoomTimelineItem:
             self = .poll(item)
+        case let item as VoiceRoomTimelineItem:
+            self = .voice(item)
         default:
             fatalError("Unknown timeline item")
         }
@@ -138,7 +141,8 @@ enum RoomTimelineItemType: Equatable {
              .state(let item as RoomTimelineItemProtocol),
              .group(let item as RoomTimelineItemProtocol),
              .location(let item as RoomTimelineItemProtocol),
-             .poll(let item as RoomTimelineItemProtocol):
+             .poll(let item as RoomTimelineItemProtocol),
+             .voice(let item as RoomTimelineItemProtocol):
             return item.id
         }
     }
@@ -146,7 +150,7 @@ enum RoomTimelineItemType: Equatable {
     /// Whether or not it is possible to send a reaction to this timeline item.
     var isReactable: Bool {
         switch self {
-        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location, .poll:
+        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker, .location, .poll, .voice:
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false
