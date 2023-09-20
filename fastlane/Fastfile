@@ -77,8 +77,11 @@ end
 lane :unit_tests do
   run_tests(
     scheme: "UnitTests",
+    device: 'iPhone 14 (16.4)',
+    ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
+    xcargs: '-skipPackagePluginValidation',
   )
 
   slather(

@@ -47,6 +47,9 @@ cyclomatic_complexity:
 nesting:
   type_level:
     warning: 5
+    
+type_name:
+  allowed_symbols: "_"
 
 custom_rules:
   print_deprecation:

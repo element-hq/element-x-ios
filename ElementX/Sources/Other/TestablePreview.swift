@@ -14,18 +14,8 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
-struct TimelineItemSender: Identifiable, Hashable {
-    static let test = TimelineItemSender(id: "@test.matrix.org")
-    
-    let id: String
-    let displayName: String?
-    let avatarURL: URL?
-    
-    init(id: String, displayName: String? = nil, avatarURL: URL? = nil) {
-        self.id = id
-        self.displayName = displayName
-        self.avatarURL = avatarURL
-    }
-}
+import Prefire
+
+protocol TestablePreviewProvider: PreviewProvider, PrefireProvider { }

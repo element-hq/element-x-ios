@@ -28,9 +28,14 @@ targets:
   UnitTests:
     type: bundle.unit-test
     platform: iOS
+    
+    buildToolPlugins:
+    - plugin: PrefireTestsPlugin
+      package: Prefire
 
     dependencies:
     - target: ElementX
+    - package: SnapshotTesting
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -44,6 +49,8 @@ targets:
 
     sources:
     - path: ../Sources
+      excludes:
+        - "**/__Snapshots__/**"
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
