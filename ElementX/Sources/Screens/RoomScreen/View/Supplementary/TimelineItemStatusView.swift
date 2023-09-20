@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct TimelineItemStatusView: View {
@@ -50,12 +51,10 @@ struct TimelineItemStatusView: View {
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
         case .sendingFailed:
-            // The bubbles handle the failure internally
+            // Bubbles handle the failure internally, but plain items don't.
             if style == .plain {
-                Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
+                CompoundIcon(\.error, size: .custom(16), relativeTo: .compound.bodyMD)
                     .foregroundColor(.compound.iconCriticalPrimary)
-                    .frame(width: 16, height: 16)
                     .onTapGesture {
                         context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)
                     }

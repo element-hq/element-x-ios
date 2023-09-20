@@ -76,7 +76,6 @@ struct SettingsScreen: View {
                         Spacer()
                         
                         CompoundIcon(\.chevronRight)
-                            .font(.system(size: 24))
                             .foregroundColor(.compound.iconTertiaryAlpha)
                             .flipsForRightToLeftLayoutDirection(true)
                     }

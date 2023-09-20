@@ -25,8 +25,7 @@ struct ThreadDecorator: View {
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodyXS)
         } icon: {
-            CompoundIcon(\.threads)
-                .font(.system(size: 16))
+            CompoundIcon(\.threads, size: .custom(16), relativeTo: .compound.bodyXS)
                 .foregroundColor(.compound.iconSecondary)
         }
         .labelStyle(.custom(spacing: 4))

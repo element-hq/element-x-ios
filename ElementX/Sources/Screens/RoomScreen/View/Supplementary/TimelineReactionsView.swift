@@ -156,7 +156,7 @@ struct TimelineReactionAddMoreButtonLabel: View {
     
     var body: some View {
         TimelineReactionButtonLabel {
-            Image(asset: Asset.Images.timelineReactionAddMore)
+            Image(asset: Asset.Images.addReaction)
                 .resizable()
                 .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
                 // Vertical sizing is done by the layout so that the add more button

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 import WysiwygComposer
 
@@ -132,11 +133,11 @@ private struct MessageComposerReplyHeader: View {
             .cornerRadius(13.0)
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
-                    Image(systemName: "xmark")
-                        .font(.compound.bodySM.weight(.medium))
+                    CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)
                         .foregroundColor(.compound.iconTertiary)
-                        .padding(8.0)
+                        .padding(4.0)
                 }
+                .accessibilityLabel(L10n.actionClose)
             }
             .padding(.vertical, 8.0)
             .padding(.horizontal, -4.0)
@@ -148,26 +149,26 @@ private struct MessageComposerEditHeader: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Label(L10n.commonEditing, systemImage: "pencil.line")
+            Label(L10n.commonEditing, iconAsset: Asset.Images.editing)
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {
-                Image(systemName: "xmark")
-                    .font(.compound.bodySM.weight(.medium))
+                CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)
                     .foregroundColor(.compound.iconTertiary)
-                    .padding(EdgeInsets(top: 10, leading: 12, bottom: 12, trailing: 14))
+                    .padding([.leading, .vertical], 6.0)
             }
+            .accessibilityLabel(L10n.actionClose)
         }
     }
 }
 
 private struct MessageComposerHeaderLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 5) {
+        HStack(alignment: .center, spacing: 4) {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodySM)
+        .font(.compound.bodySMSemibold)
         .foregroundColor(.compound.textSecondary)
         .lineLimit(1)
     }

@@ -261,9 +261,9 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .startChat)
         } label: {
-            Image(systemName: "square.and.pencil")
-                .fontWeight(.semibold)
+            CompoundIcon(customImage: Asset.Images.compose.swiftUIImage)
         }
+        .accessibilityLabel(L10n.actionStartChat)
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
     }
     
