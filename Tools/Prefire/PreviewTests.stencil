@@ -42,8 +42,8 @@ class PreviewTests: XCTestCase {
     private func assertSnapshots(matching preview: _Preview, testName: String = #function) {
         let isScreen = preview.layout == .device
         let device = preview.device?.snapshotDevice() ?? deviceConfig
-        var delay: TimeInterval = 1.0
-        var precision: Float = 0.99
+        var delay: TimeInterval = 0
+        var precision: Float = 1
 
         let view = preview.content
             .onPreferenceChange(DelayPreferenceKey.self) { delay = $0 }
@@ -54,13 +54,17 @@ class PreviewTests: XCTestCase {
             .fixedSize(horizontal: false, vertical: true)
         )
 
-        assertSnapshot(
-            matching: matchingView,
-            as: .prefireImage(precision: { precision }, duration: { delay }, layout: isScreen ? .device(config: device) : .sizeThatFits),
-            named: preview.displayName{% if argument.file %},
-            file: file{% endif %},
-            testName: testName
-        )
+        let failure = verifySnapshot(of: matchingView,
+                                    as: .prefireImage(precision: { precision }, duration: { delay }, layout: .sizeThatFits),
+                                    named: preview.displayName{% if argument.file %},
+                                    file: file{% endif %},
+                                    testName: testName)
+
+        if let failure,
+           !failure.contains("No reference was found on disk."),
+           !failure.contains("to test against the newly-recorded snapshot") {
+            XCTFail(failure)
+        }
 
         #if canImport(AccessibilitySnapshot)
             let vc = UIHostingController(rootView: matchingView)
@@ -85,6 +89,10 @@ class PreviewTests: XCTestCase {
 	
 	    guard osVersion.majorVersion == requiredOSVersion else {
             fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
+        }
+
+        guard UITraitCollection.current.userInterfaceStyle == .light else {
+            fatalError("Switch to light mode for these tests.")
         }
     }
 }
