@@ -31,45 +31,25 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         self.member = member
     }
 
-    var userID: String {
-        member.userId()
-    }
+    lazy var userID = member.userId()
 
-    var displayName: String? {
-        member.displayName()
-    }
+    lazy var displayName = member.displayName()
 
-    var avatarURL: URL? {
-        member.avatarUrl().flatMap(URL.init(string:))
-    }
+    lazy var avatarURL = member.avatarUrl().flatMap(URL.init(string:))
 
-    var membership: MembershipState {
-        member.membership()
-    }
+    lazy var membership = member.membership()
 
-    var isNameAmbiguous: Bool {
-        member.isNameAmbiguous()
-    }
+    lazy var isNameAmbiguous = member.isNameAmbiguous()
 
-    var powerLevel: Int {
-        Int(member.powerLevel())
-    }
+    lazy var powerLevel = Int(member.powerLevel())
 
-    var normalizedPowerLevel: Int {
-        Int(member.normalizedPowerLevel())
-    }
+    lazy var normalizedPowerLevel = Int(member.normalizedPowerLevel())
 
-    var isAccountOwner: Bool {
-        member.isAccountUser()
-    }
+    lazy var isAccountOwner = member.isAccountUser()
 
-    var isIgnored: Bool {
-        member.isIgnored()
-    }
+    lazy var isIgnored = member.isIgnored()
     
-    var canInviteUsers: Bool {
-        member.canInvite()
-    }
+    lazy var canInviteUsers = member.canInvite()
     
     func canSendStateEvent(type: StateEventType) -> Bool {
         member.canSendState(stateEvent: type)
