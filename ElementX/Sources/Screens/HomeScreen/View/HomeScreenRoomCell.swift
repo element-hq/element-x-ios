@@ -182,7 +182,7 @@ private extension View {
     }
 }
 
-struct HomeScreenRoomCell_Previews: PreviewProvider {
+struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 
@@ -205,7 +205,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                       roomId: details.id,
                                       name: details.name,
                                       hasUnreads: details.unreadNotificationCount > 0,
-                                      timestamp: Date.now.formattedMinimal(),
+                                      timestamp: Date(timeIntervalSinceReferenceDate: 0).formattedMinimal(),
                                       lastMessage: details.lastMessage,
                                       notificationMode: details.notificationMode)
             }

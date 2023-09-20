@@ -70,7 +70,7 @@ struct WaitlistScreen: View {
 
 // MARK: - Previews
 
-struct WaitlistScreen_Previews: PreviewProvider {
+struct WaitlistScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = WaitlistScreenViewModel(homeserver: .mockMatrixDotOrg)
     static let successViewModel = {
         let viewModel = WaitlistScreenViewModel(homeserver: .mockMatrixDotOrg)

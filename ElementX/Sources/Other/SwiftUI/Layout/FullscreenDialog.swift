@@ -107,7 +107,7 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
     }
 }
 
-struct FullscreenDialog_Previews: PreviewProvider {
+struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {
             content

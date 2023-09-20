@@ -26,7 +26,7 @@ struct LocationMarkerView: View {
     }
 }
 
-struct LocationMarkerView_Previews: PreviewProvider {
+struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 30) {
             LocationMarkerView()

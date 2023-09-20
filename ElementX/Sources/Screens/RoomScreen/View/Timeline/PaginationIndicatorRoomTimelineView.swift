@@ -26,7 +26,7 @@ struct PaginationIndicatorRoomTimelineView: View {
     }
 }
 
-struct PaginationIndicatorRoomTimelineView_Previews: PreviewProvider {
+struct PaginationIndicatorRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let item = PaginationIndicatorRoomTimelineItem()
         PaginationIndicatorRoomTimelineView(timelineItem: item)

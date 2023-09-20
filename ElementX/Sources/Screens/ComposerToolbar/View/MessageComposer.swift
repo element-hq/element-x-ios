@@ -173,7 +173,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
     }
 }
 
-struct MessageComposer_Previews: PreviewProvider {
+struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [

@@ -41,7 +41,7 @@ struct TemplateScreen: View {
 
 // MARK: - Previews
 
-struct TemplateScreen_Previews: PreviewProvider {
+struct TemplateScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TemplateScreenViewModel()
     static var previews: some View {
         NavigationStack {

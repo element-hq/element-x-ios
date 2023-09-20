@@ -148,7 +148,7 @@ private struct ReactionSummarySenderView: View {
     }
 }
 
-struct ReactionsSummaryView_Previews: PreviewProvider {
+struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],

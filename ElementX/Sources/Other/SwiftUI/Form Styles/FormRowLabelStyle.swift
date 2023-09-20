@@ -61,7 +61,7 @@ struct FormRowLabelStyle: LabelStyle {
     }
 }
 
-struct FormRowLabelStyle_Previews: PreviewProvider {
+struct FormRowLabelStyle_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(alignment: .leading) {
             Label("Person", systemImage: "person")

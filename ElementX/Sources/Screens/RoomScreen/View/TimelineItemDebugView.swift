@@ -97,7 +97,7 @@ struct TimelineItemDebugView: View {
     }
 }
 
-struct TimelineItemDebugView_Previews: PreviewProvider {
+struct TimelineItemDebugView_Previews: PreviewProvider, TestablePreview {
     static let smallContent = """
     {
         SomeItem(

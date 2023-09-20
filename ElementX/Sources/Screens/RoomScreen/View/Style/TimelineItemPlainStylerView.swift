@@ -140,7 +140,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     }
 }
 
-struct TimelineItemPlainStylerView_Previews: PreviewProvider {
+struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     // These akwats include a reply

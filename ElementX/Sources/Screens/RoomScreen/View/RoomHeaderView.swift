@@ -47,7 +47,7 @@ struct RoomHeaderView: View {
     }
 }
 
-struct RoomHeaderView_Previews: PreviewProvider {
+struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         bodyPlain
         bodyEncrypted

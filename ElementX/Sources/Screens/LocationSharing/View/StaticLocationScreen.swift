@@ -156,7 +156,7 @@ struct StaticLocationScreen: View {
 
 // MARK: - Previews
 
-struct StaticLocationScreenViewer_Previews: PreviewProvider {
+struct StaticLocationScreenViewer_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .picker).context)

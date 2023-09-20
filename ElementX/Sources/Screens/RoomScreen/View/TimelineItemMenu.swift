@@ -286,7 +286,7 @@ public struct TimelineItemMenu: View {
     }
 }
 
-struct TimelineItemMenu_Previews: PreviewProvider {
+struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {

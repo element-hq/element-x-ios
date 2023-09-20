@@ -228,7 +228,7 @@ struct SessionVerificationScreen: View {
 
 // MARK: - Previews
 
-struct SessionVerification_Previews: PreviewProvider {
+struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
             .previewDisplayName("Initial")

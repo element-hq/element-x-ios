@@ -80,7 +80,7 @@ private struct PollProgressView: View {
     }
 }
 
-struct PollOptionView_Previews: PreviewProvider {
+struct PollOptionView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack {
             Group {

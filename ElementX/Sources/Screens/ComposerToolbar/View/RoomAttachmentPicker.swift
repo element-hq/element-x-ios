@@ -130,7 +130,7 @@ struct RoomAttachmentPicker: View {
     }
 }
 
-struct RoomAttachmentPicker_Previews: PreviewProvider {
+struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ComposerToolbarViewModel(wysiwygViewModel: WysiwygComposerViewModel())
 
     static var previews: some View {

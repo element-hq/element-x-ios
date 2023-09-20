@@ -101,7 +101,7 @@ struct ServerSelectionScreen: View {
 
 // MARK: - Previews
 
-struct ServerSelection_Previews: PreviewProvider {
+struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
             NavigationStack {

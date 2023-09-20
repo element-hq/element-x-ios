@@ -30,7 +30,7 @@ struct StateRoomTimelineView: View {
     }
 }
 
-struct StateRoomTimelineView_Previews: PreviewProvider {
+struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
         body

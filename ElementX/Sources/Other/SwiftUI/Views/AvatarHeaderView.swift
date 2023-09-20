@@ -59,7 +59,7 @@ struct AvatarHeaderView<Footer: View>: View {
     }
 }
 
-struct HeaderView_Previews: PreviewProvider {
+struct HeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Form {
             AvatarHeaderView(avatarUrl: URL.picturesDirectory,

@@ -132,7 +132,7 @@ struct LoginScreen: View {
 
 // MARK: - Previews
 
-struct LoginScreen_Previews: PreviewProvider {
+struct LoginScreen_Previews: PreviewProvider, TestablePreview {
     static let credentialsViewModel: LoginScreenViewModel = {
         let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
         viewModel.context.username = "alice"

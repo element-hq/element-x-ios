@@ -38,7 +38,7 @@ struct UnsupportedRoomTimelineView: View {
     }
 }
 
-struct UnsupportedRoomTimelineView_Previews: PreviewProvider {
+struct UnsupportedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

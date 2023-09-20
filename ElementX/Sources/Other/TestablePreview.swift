@@ -18,4 +18,4 @@ import SwiftUI
 
 import Prefire
 
-protocol TestablePreviewProvider: PreviewProvider, PrefireProvider { }
+protocol TestablePreview: PrefireProvider { }

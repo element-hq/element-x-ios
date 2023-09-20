@@ -101,7 +101,7 @@ struct HomeScreenEmptyStateLayout: Layout {
 
 // MARK: - Previews
 
-struct HomeScreenEmptyStateView_Previews: PreviewProvider {
+struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HomeScreenEmptyStateView(context: viewModel.context)
             .previewDisplayName("View")

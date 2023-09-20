@@ -52,7 +52,7 @@ struct UserIndicatorToastView: View {
     }
 }
 
-struct UserIndicatorToastView_Previews: PreviewProvider {
+struct UserIndicatorToastView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 30) {
             UserIndicatorToastView(indicator: UserIndicator(title: "Successfully logged in",

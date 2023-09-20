@@ -35,7 +35,7 @@ struct TimelineStyler<Content: View>: View {
     }
 }
 
-struct TimelineItemStyler_Previews: TestablePreviewProvider {
+struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static let base = TextRoomTimelineItem(id: .random, timestamp: "Now", isOutgoing: true, isEditable: false, isThreaded: false, sender: .test, content: .init(body: "Test"))

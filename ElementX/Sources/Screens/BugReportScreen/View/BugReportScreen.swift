@@ -139,7 +139,7 @@ struct BugReportScreen: View {
 
 // MARK: - Previews
 
-struct BugReport_Previews: PreviewProvider {
+struct BugReport_Previews: PreviewProvider, TestablePreview {
     static let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
                                                     userID: "@mock.client.com",
                                                     deviceID: nil,

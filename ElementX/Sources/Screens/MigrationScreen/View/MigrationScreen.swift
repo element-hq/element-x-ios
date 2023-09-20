@@ -50,7 +50,7 @@ struct MigrationScreen: View {
 
 // MARK: - Previews
 
-struct MigrationScreen_Previews: PreviewProvider {
+struct MigrationScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = MigrationScreenViewModel()
     static var previews: some View {
         MigrationScreen(context: viewModel.context)

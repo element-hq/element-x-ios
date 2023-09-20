@@ -30,7 +30,7 @@ struct PillView: View {
     }
 }
 
-struct PillView_Previews: PreviewProvider {
+struct PillView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         PillView()
     }

@@ -179,7 +179,7 @@ struct TimelineReplyView: View {
     }
 }
 
-struct TimelineReplyView_Previews: PreviewProvider {
+struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

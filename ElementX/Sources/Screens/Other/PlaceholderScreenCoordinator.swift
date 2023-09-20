@@ -33,7 +33,7 @@ struct PlaceholderScreen: View {
     }
 }
 
-struct PlaceholderScreen_Previews: PreviewProvider {
+struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         PlaceholderScreen()
             .previewDisplayName("Screen")

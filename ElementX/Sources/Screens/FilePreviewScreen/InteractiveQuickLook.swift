@@ -137,7 +137,7 @@ class MediaPreviewItem: NSObject, QLPreviewItem {
 
 // MARK: - Previews
 
-struct PreviewView_Previews: PreviewProvider {
+struct PreviewView_Previews: PreviewProvider, TestablePreview {
     static let previewURL: URL = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
     static let previewItem = MediaPreviewItem(file: .unmanaged(url: previewURL),
                                               title: "Important Document")

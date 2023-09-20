@@ -100,7 +100,7 @@ private struct IsSearching: ViewModifier {
 
 // MARK: - Previews
 
-struct EmojiPickerScreen_Previews: PreviewProvider {
+struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
     
     static var previews: some View {

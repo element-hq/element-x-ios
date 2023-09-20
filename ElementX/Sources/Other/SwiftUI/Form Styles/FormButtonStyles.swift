@@ -145,7 +145,7 @@ struct FormActionButtonStyle: ButtonStyle {
     }
 }
 
-struct FormButtonStyles_Previews: PreviewProvider {
+struct FormButtonStyles_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Form {
             Section {

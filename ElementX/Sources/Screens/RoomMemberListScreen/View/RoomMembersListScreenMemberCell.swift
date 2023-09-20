@@ -46,7 +46,7 @@ struct RoomMembersListScreenMemberCell: View {
     }
 }
 
-struct RoomMembersListMemberCell_Previews: PreviewProvider {
+struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,

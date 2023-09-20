@@ -96,7 +96,7 @@ private struct MessageForwardingRoomCell: View {
 
 // MARK: - Previews
 
-struct MessageForwardingScreen_Previews: PreviewProvider {
+struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
         let viewModel = MessageForwardingScreenViewModel(roomSummaryProvider: summaryProvider, sourceRoomID: "")

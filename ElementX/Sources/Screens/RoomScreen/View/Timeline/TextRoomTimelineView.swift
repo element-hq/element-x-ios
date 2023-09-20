@@ -36,7 +36,7 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     }
 }
 
-struct TextRoomTimelineView_Previews: PreviewProvider {
+struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

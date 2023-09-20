@@ -74,7 +74,7 @@ struct RoomMembersListScreen: View {
 
 // MARK: - Previews
 
-struct RoomMembersListScreen_Previews: PreviewProvider {
+struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,

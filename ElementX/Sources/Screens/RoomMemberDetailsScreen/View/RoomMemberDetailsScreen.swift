@@ -100,7 +100,7 @@ struct RoomMemberDetailsScreen: View {
 
 // MARK: - Previews
 
-struct RoomMemberDetailsScreen_Previews: PreviewProvider {
+struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
     static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan

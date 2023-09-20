@@ -59,7 +59,7 @@ struct CollapsibleRoomTimelineView: View {
     }
 }
 
-struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
+struct CollapsibleRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let item = CollapsibleTimelineItem(items: [
         SeparatorRoomTimelineItem(id: .init(timelineID: "First separator"), text: "This is a separator"),
         SeparatorRoomTimelineItem(id: .init(timelineID: "Second separator"), text: "This is another separator")

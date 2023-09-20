@@ -51,7 +51,7 @@ struct EffectsView: UIViewRepresentable {
     }
 }
 
-struct EffectsView_Previews: PreviewProvider {
+struct EffectsView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         EffectsView(effect: .confetti)
     }
