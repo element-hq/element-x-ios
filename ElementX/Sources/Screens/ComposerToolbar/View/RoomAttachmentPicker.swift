@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 import WysiwygComposer
 
@@ -42,7 +43,8 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayMediaPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceGallery, icon: Image(systemName: "photo.fill"))
+                    Label(L10n.screenRoomAttachmentSourceGallery, iconAsset: Asset.Images.photosLibrary)
+                        .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
                 
@@ -50,7 +52,8 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayDocumentPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceFiles, icon: Image(systemName: "paperclip"))
+                    Label(L10n.screenRoomAttachmentSourceFiles, iconAsset: Asset.Images.attachment)
+                        .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
                 
@@ -58,7 +61,8 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayCameraPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceCamera, icon: Image(systemName: "camera.fill"))
+                    Label(L10n.screenRoomAttachmentSourceCamera, iconAsset: Asset.Images.takePhoto)
+                        .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
 
@@ -66,7 +70,8 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayLocationPicker)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourceLocation, icon: Image(asset: Asset.Images.locationPin))
+                    Label(L10n.screenRoomAttachmentSourceLocation, iconAsset: Asset.Images.addLocation)
+                        .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
 
@@ -74,7 +79,8 @@ struct RoomAttachmentPicker: View {
                     context.showAttachmentPopover = false
                     context.send(viewAction: .displayPollForm)
                 } label: {
-                    PickerLabel(title: L10n.screenRoomAttachmentSourcePoll, icon: Image(asset: Asset.Images.timelinePollAttachment))
+                    Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
+                        .labelStyle(.menuSheet)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
 
@@ -83,7 +89,8 @@ struct RoomAttachmentPicker: View {
                         context.showAttachmentPopover = false
                         context.send(viewAction: .enableTextFormatting)
                     } label: {
-                        PickerLabel(title: L10n.screenRoomAttachmentTextFormatting, icon: Image(asset: Asset.Images.textFormat))
+                        Label(L10n.screenRoomAttachmentTextFormatting, iconAsset: Asset.Images.textFormat)
+                            .labelStyle(.menuSheet)
                     }
                     .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
                 }
@@ -102,30 +109,6 @@ struct RoomAttachmentPicker: View {
             .presentationDetents([.height(sheetContentHeight)])
             .presentationBackground(Color.compound.bgCanvasDefault)
             .presentationDragIndicator(.visible)
-        }
-    }
-    
-    private struct PickerLabel: View {
-        let title: String
-        let icon: Image
-
-        init(title: String, icon: Image) {
-            self.title = title
-            self.icon = icon
-        }
-        
-        var body: some View {
-            Label {
-                Text(title)
-            } icon: {
-                icon
-                    .resizable()
-                    .scaledToFit()
-            }
-            .labelStyle(FixedIconSizeLabelStyle(iconSize: 20))
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
         }
     }
 }

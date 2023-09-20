@@ -101,27 +101,27 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var label: some View {
         switch self {
         case .copy:
-            Label(L10n.actionCopy, systemImage: "doc.on.doc")
+            Label(L10n.actionCopy, iconAsset: Asset.Images.copy)
         case .edit:
-            Label(L10n.actionEdit, systemImage: "pencil.line")
+            Label(L10n.actionEdit, iconAsset: Asset.Images.editOutline)
         case .copyPermalink:
-            Label(L10n.actionCopyLinkToMessage, systemImage: "link")
+            Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
-            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, systemImage: "arrowshape.turn.up.left")
+            Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, iconAsset: Asset.Images.reply)
         case .forward:
-            Label(L10n.actionForward, systemImage: "arrowshape.turn.up.right")
+            Label(L10n.actionForward, iconAsset: Asset.Images.forward)
         case .redact:
-            Label(L10n.actionRemove, systemImage: "trash")
+            Label(L10n.actionRemove, icon: \.delete)
         case .viewSource:
-            Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
+            Label(L10n.actionViewSource, iconAsset: Asset.Images.viewSource)
         case .retryDecryption:
             Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report:
-            Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
+            Label(L10n.actionReportContent, icon: \.chatProblem)
         case .react:
-            Label(L10n.actionReact, systemImage: "hand.thumbsup")
+            Label(L10n.actionReact, iconAsset: Asset.Images.addReaction)
         case .endPoll:
-            Label { Text(L10n.actionEndPoll) } icon: { CompoundIcon(customImage: Asset.Images.endedPoll.swiftUIImage) }
+            Label(L10n.actionEndPoll, iconAsset: Asset.Images.endedPoll)
         }
     }
 }
@@ -227,13 +227,14 @@ public struct TimelineItemMenu: View {
                     context.send(viewAction: .displayEmojiPicker(itemID: item.id))
                 }
             } label: {
-                Image(asset: Asset.Images.timelineReactionAddMore)
+                Image(asset: Asset.Images.addReaction)
                     .resizable()
                     .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
                     .frame(maxHeight: .infinity, alignment: .center)
                     .foregroundColor(.compound.iconSecondary)
                     .padding(10)
             }
+            .accessibilityLabel(L10n.actionReact)
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .center)
@@ -269,10 +270,7 @@ public struct TimelineItemMenu: View {
                 send(action)
             } label: {
                 action.label
-                    .labelStyle(FixedIconSizeLabelStyle())
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                    .labelStyle(.menuSheet)
             }
         }
     }
