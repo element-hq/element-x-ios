@@ -32,7 +32,7 @@ struct EmojiPickerScreenHeaderView: View {
 struct EmojiPickerScreenHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Group {
-            EmojiPickerScreenHeaderView(title: "")
+            EmojiPickerScreenHeaderView(title: "Title")
         }
     }
 }

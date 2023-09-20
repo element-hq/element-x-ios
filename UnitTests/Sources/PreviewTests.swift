@@ -92,12 +92,6 @@ class PreviewTests: XCTestCase {
         }
     }
 
-    func test_effectsView() {
-        for preview in EffectsView_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_emojiPickerScreenHeaderView() {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -352,12 +346,6 @@ class PreviewTests: XCTestCase {
 
     func test_pollRoomTimelineView() {
         for preview in PollRoomTimelineView_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_previewView() {
-        for preview in PreviewView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
