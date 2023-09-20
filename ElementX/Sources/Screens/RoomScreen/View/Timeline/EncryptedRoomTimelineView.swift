@@ -21,8 +21,9 @@ struct EncryptedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, iconAsset: Asset.Images.decryptionError)
+            Label(timelineItem.body, iconAsset: Asset.Images.decryptionError, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
+                .font(.compound.bodyLG)
         }
     }
 }
@@ -35,7 +36,6 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
             configuration.icon
                 .foregroundColor(.compound.iconSecondary)
             configuration.title
-                .font(.body)
                 .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
