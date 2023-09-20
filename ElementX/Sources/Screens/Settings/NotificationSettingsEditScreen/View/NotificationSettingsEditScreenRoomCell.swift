@@ -57,7 +57,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
     }
 }
 
-struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider {
+struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 

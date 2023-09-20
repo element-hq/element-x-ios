@@ -47,7 +47,7 @@ struct StickerRoomTimelineView: View {
     }
 }
 
-struct StickerRoomTimelineView_Previews: PreviewProvider {
+struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

@@ -111,7 +111,7 @@ extension View {
     }
 }
 
-struct SwipeRightAction_Previews: PreviewProvider {
+struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
     static var previews: some View { Preview() }
     
     struct Preview: View {

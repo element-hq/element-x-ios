@@ -155,7 +155,7 @@ struct InvitesScreenCell: View {
     }
 }
 
-struct InvitesScreenCell_Previews: PreviewProvider {
+struct InvitesScreenCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {
             VStack(spacing: 0) {

@@ -82,7 +82,7 @@ struct WaitingDialog<Content: View, BottomContent: View>: View {
     }
 }
 
-struct WaitingDialog_Previews: PreviewProvider {
+struct WaitingDialog_Previews: PreviewProvider, TestablePreview {
     static let viewModel = WaitlistScreenViewModel(homeserver: .mockMatrixDotOrg)
     
     static var previews: some View {

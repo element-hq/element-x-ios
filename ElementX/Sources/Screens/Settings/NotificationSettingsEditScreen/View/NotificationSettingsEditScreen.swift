@@ -68,7 +68,7 @@ struct NotificationSettingsEditScreen: View {
 
 // MARK: - Previews
 
-struct NotificationSettingsEditScreen_Previews: PreviewProvider {
+struct NotificationSettingsEditScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModelGroupChats: NotificationSettingsEditScreenViewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages

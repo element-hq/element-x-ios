@@ -309,7 +309,7 @@ struct HomeScreen: View {
 
 // MARK: - Previews
 
-struct HomeScreen_Previews: PreviewProvider {
+struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static let loadingViewModel = viewModel(.loading)
     static let loadedViewModel = viewModel(.loaded(.mockRooms))
     static let emptyViewModel = viewModel(.loaded([]))

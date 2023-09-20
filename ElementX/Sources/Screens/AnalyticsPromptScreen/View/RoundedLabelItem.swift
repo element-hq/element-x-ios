@@ -64,7 +64,7 @@ private struct CheckmarkLabelStyle: LabelStyle {
 
 // MARK: - Previews
 
-struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider {
+struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider, TestablePreview {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
 
     @ViewBuilder

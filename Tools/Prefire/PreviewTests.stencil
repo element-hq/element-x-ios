@@ -29,7 +29,7 @@ class PreviewTests: XCTestCase {
         UIView.setAnimationsEnabled(false)
     }
 
-    {% for type in types.types where (type.implements.PrefireProvider or type.based.PrefireProvider or type|annotated:"PrefireProvider") and type.name != "TestablePreviewProvider" %}
+    {% for type in types.types where (type.implements.PrefireProvider or type.based.PrefireProvider or type|annotated:"PrefireProvider") and type.name != "TestablePreview" %}
     func test_{{ type.name|lowerFirstLetter|replace:"_Previews", "" }}() {
         for preview in {{ type.name }}._allPreviews {
             assertSnapshots(matching: preview)
@@ -179,3 +179,6 @@ private extension Diffing where Value == UIImage {
         )
     }
 }
+
+// swiftlint:enable all
+// swiftformat:enable all

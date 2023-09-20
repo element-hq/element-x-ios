@@ -62,7 +62,7 @@ extension View {
     }
 }
 
-struct LongPressWithFeedback_Previews: PreviewProvider {
+struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
     static var previews: some View { Preview() }
     
     struct Preview: View {

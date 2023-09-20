@@ -53,7 +53,7 @@ private struct EncryptedHistoryLabelStyle: LabelStyle {
     }
 }
 
-struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider {
+struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let item = EncryptedHistoryRoomTimelineItem(id: .random)
         EncryptedHistoryRoomTimelineView(timelineItem: item)

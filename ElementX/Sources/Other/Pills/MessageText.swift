@@ -88,7 +88,7 @@ struct MessageText: UIViewRepresentable {
 
 // MARK: - Previews
 
-struct MessageText_Previews: PreviewProvider {
+struct MessageText_Previews: PreviewProvider, TestablePreview {
     private static let defaultFontContainer: AttributeContainer = {
         var container = AttributeContainer()
         container.font = UIFont.preferredFont(forTextStyle: .body)

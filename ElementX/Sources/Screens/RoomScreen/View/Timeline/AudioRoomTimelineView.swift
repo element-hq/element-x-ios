@@ -35,7 +35,7 @@ struct AudioRoomTimelineView: View {
     }
 }
 
-struct AudioRoomTimelineView_Previews: PreviewProvider {
+struct AudioRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

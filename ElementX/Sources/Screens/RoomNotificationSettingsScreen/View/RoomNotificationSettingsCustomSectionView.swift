@@ -37,7 +37,7 @@ struct RoomNotificationSettingsCustomSectionView: View {
     }
 }
 
-struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider {
+struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init(defaultRoomMode: .allMessages, roomMode: .mentionsAndKeywordsOnly))
 

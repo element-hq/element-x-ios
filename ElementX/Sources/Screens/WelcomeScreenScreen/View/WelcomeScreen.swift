@@ -99,7 +99,7 @@ struct WelcomeScreen: View {
 
 // MARK: - Previews
 
-struct WelcomeScreen_Previews: PreviewProvider {
+struct WelcomeScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = WelcomeScreenScreenViewModel()
 
     static var previews: some View {

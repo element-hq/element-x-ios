@@ -142,7 +142,7 @@ struct InviteUsersScreen: View {
 
 // MARK: - Previews
 
-struct InviteUsersScreen_Previews: PreviewProvider {
+struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])

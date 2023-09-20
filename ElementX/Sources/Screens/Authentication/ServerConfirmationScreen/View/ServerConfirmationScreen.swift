@@ -73,7 +73,7 @@ struct ServerConfirmationScreen: View {
 
 // MARK: - Previews
 
-struct ServerConfirmationScreen_Previews: PreviewProvider {
+struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static let loginViewModel = ServerConfirmationScreenViewModel(authenticationService: MockAuthenticationServiceProxy(),
                                                                   authenticationFlow: .login)
     static let registerViewModel = ServerConfirmationScreenViewModel(authenticationService: MockAuthenticationServiceProxy(),

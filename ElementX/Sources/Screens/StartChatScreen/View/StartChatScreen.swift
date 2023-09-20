@@ -134,7 +134,7 @@ struct StartChatScreen: View {
 
 // MARK: - Previews
 
-struct StartChatScreen_Previews: PreviewProvider {
+struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())

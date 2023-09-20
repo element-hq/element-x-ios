@@ -113,7 +113,7 @@ private class PreviewItem: NSObject, QLPreviewItem {
 
 // MARK: - Previews
 
-struct MediaUploadPreviewScreen_Previews: PreviewProvider {
+struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
                                                              roomProxy: RoomProxyMock(),
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(),

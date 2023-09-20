@@ -97,7 +97,7 @@ struct OnboardingScreen: View {
 
 // MARK: - Previews
 
-struct OnboardingScreen_Previews: PreviewProvider {
+struct OnboardingScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = OnboardingScreenViewModel()
     
     static var previews: some View {

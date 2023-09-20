@@ -204,7 +204,7 @@ struct CreateRoomScreen: View {
 
 // MARK: - Previews
 
-struct CreateRoom_Previews: PreviewProvider {
+struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())

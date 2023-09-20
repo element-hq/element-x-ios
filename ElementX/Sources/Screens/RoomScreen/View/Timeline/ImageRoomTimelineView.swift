@@ -55,7 +55,7 @@ struct ImageRoomTimelineView: View {
     }
 }
 
-struct ImageRoomTimelineView_Previews: PreviewProvider {
+struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

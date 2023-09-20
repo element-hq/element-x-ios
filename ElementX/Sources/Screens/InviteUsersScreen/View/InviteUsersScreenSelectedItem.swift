@@ -54,7 +54,7 @@ struct InviteUsersScreenSelectedItem: View {
     }
 }
 
-struct InviteUsersScreenSelectedItem_Previews: PreviewProvider {
+struct InviteUsersScreenSelectedItem_Previews: PreviewProvider, TestablePreview {
     static let people: [UserProfileProxy] = [.mockAlice, .mockVerbose]
     
     static var previews: some View {

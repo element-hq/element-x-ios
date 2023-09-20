@@ -164,7 +164,7 @@ struct FormattedBodyText: View {
 
 // MARK: - Previews
 
-struct FormattedBodyText_Previews: PreviewProvider {
+struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
         body

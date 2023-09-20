@@ -64,7 +64,7 @@ struct UserIndicatorModalView: View {
     }
 }
 
-struct UserIndicatorModalView_Previews: PreviewProvider {
+struct UserIndicatorModalView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Group {
             UserIndicatorModalView(indicator: UserIndicator(type: .modal,

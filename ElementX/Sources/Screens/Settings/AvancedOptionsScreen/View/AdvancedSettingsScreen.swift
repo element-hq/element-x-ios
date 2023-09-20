@@ -54,7 +54,7 @@ private extension TimelineStyle {
 
 // MARK: - Previews
 
-struct AdvancedSettingsScreen_Previews: PreviewProvider {
+struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings)
     static var previews: some View {
         NavigationStack {

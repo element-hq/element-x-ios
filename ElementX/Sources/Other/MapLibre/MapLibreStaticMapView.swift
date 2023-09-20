@@ -108,7 +108,7 @@ private extension ColorScheme {
     }
 }
 
-struct MapLibreStaticMapView_Previews: PreviewProvider {
+struct MapLibreStaticMapView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         MapLibreStaticMapView(coordinates: CLLocationCoordinate2D(),
                               zoomLevel: 15,

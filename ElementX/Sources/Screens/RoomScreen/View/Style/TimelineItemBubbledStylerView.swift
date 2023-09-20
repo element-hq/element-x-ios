@@ -396,7 +396,7 @@ private extension EventBasedTimelineItemProtocol {
     }
 }
 
-struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
+struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {

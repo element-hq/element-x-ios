@@ -89,7 +89,7 @@ private extension MembershipState {
     }
 }
 
-struct UserProfileCell_Previews: PreviewProvider {
+struct UserProfileCell_Previews: PreviewProvider, TestablePreview {
     static let action: () -> Void = { }
     
     static var previews: some View {

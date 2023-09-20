@@ -229,7 +229,7 @@ private extension TimelineStyle {
 
 // MARK: - Previews
 
-struct SettingsScreen_Previews: PreviewProvider {
+struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let verificationController = SessionVerificationControllerProxyMock()
         verificationController.isVerified = false

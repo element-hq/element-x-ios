@@ -63,7 +63,7 @@ struct InvitesScreen: View {
 
 // MARK: - Previews
 
-struct InvitesScreen_Previews: PreviewProvider {
+struct InvitesScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationView {
             InvitesScreen(context: InvitesScreenViewModel.noInvites.context)

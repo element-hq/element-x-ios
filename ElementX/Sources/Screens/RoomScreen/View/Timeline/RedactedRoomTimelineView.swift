@@ -29,7 +29,7 @@ struct RedactedRoomTimelineView: View {
     }
 }
 
-struct RedactedRoomTimelineView_Previews: PreviewProvider {
+struct RedactedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
     static var previews: some View {

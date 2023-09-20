@@ -171,6 +171,7 @@
 		36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */; };
 		36AD4DD4C798E22584ED3200 /* Version in Frameworks */ = {isa = PBXBuildFile; productRef = A05AF81DDD14AD58CB0E1B9B /* Version */; };
 		36CD6E11B37396E14F032CB6 /* Emojibase in Frameworks */ = {isa = PBXBuildFile; productRef = C05729B1684C331F5FFE9232 /* Emojibase */; };
+		377980ABF16525114E72DDE2 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 9B68DE8678BF67D4612BCC16 /* Prefire */; };
 		37D789F24199B32E3FD1AA7B /* FileRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */; };
 		383055C6ABE5BE058CEE1DDB /* WelcomeScreenScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FE5EF0AFFE360C66420AAE /* WelcomeScreenScreenCoordinator.swift */; };
 		38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1D2CBAEA5D0BD00B90D1B /* BindableState.swift */; };
@@ -727,6 +728,7 @@
 		DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = F012CB5EE3F2B67359F6CC52 /* target.yml */; };
 		E0A4DCA633D174EB43AD599F /* BackgroundTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA028DCD4157F9A1F999827 /* BackgroundTaskProtocol.swift */; };
 		E0B6A569AC3E81D233B43D60 /* SettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E625B0EB2F86B37C14EF7E6 /* SettingsScreenViewModel.swift */; };
+		E0FB26262689F04D66A949D7 /* TestablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E227F34BE43B08E098796E /* TestablePreview.swift */; };
 		E14E469CD97550D0FC58F3CA /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE52983FAFB4E0998C00EE8A /* CancellableTask.swift */; };
 		E1DF24D085572A55C9758A2D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E89E530A8E92EC44301CA1 /* Bundle.swift */; };
 		E1F446C6B78A3A0FEA15079C /* UnsupportedRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AC3C656E960E15B5905E05 /* UnsupportedRoomTimelineView.swift */; };
@@ -1671,6 +1673,7 @@
 				93A549135E6C027A0D823BFE /* DeviceKit in Frameworks */,
 				6F26CBC84AE87EB4068D398B /* DTCoreText in Frameworks */,
 				0E08BB72B2258652CF501A8B /* LRUCache in Frameworks */,
+				377980ABF16525114E72DDE2 /* Prefire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4109,6 +4112,7 @@
 				385D4C28F9DC5CF53BD9ECDB /* DeviceKit */,
 				593FBBF394712F2963E98A0B /* DTCoreText */,
 				78B28D75FF7AF8E6146DEE2A /* LRUCache */,
+				9B68DE8678BF67D4612BCC16 /* Prefire */,
 			);
 			productName = NSE;
 			productReference = 0D8F620C8B314840D8602E3F /* NSE.appex */;
@@ -4400,6 +4404,7 @@
 				ECA636DAF071C611FDC2BB57 /* Strings+Untranslated.swift in Sources */,
 				6EC7A40A537CFB3D526A111C /* Strings.swift in Sources */,
 				719E7AAD1F8E68F68F30FECD /* Task.swift in Sources */,
+				E0FB26262689F04D66A949D7 /* TestablePreview.swift in Sources */,
 				DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */,
 				281BED345D59A9A6A99E9D98 /* UNNotificationContent.swift in Sources */,
 				518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */,
@@ -5725,7 +5730,7 @@
 			repositoryURL = "https://github.com/nicklockwood/GZIP";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.3.1;
+				minimumVersion = 1.3.0;
 			};
 		};
 		80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
@@ -6028,6 +6033,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */;
 			productName = GZIP;
+		};
+		9B68DE8678BF67D4612BCC16 /* Prefire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22E7BA2ED466B74739AB8567 /* XCRemoteSwiftPackageReference "Prefire" */;
+			productName = Prefire;
 		};
 		9C73F37731C9FDED1BB24C1C /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;

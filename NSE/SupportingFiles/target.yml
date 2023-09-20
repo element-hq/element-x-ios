@@ -41,6 +41,7 @@ targets:
       - package: DeviceKit
       - package: DTCoreText
       - package: LRUCache
+      - package: Prefire
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -94,6 +95,7 @@ targets:
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
+    - path: ../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift

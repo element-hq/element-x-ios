@@ -41,7 +41,7 @@ struct AuthenticationIconImage: View {
 
 // MARK: - Previews
 
-struct AuthenticationIconImage_Previews: PreviewProvider {
+struct AuthenticationIconImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 20) {
             AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)

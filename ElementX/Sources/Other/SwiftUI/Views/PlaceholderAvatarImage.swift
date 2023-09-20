@@ -66,7 +66,7 @@ struct PlaceholderAvatarImage: View {
     }
 }
 
-struct PlaceholderAvatarImage_Previews: PreviewProvider {
+struct PlaceholderAvatarImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 75) {
             PlaceholderAvatarImage(name: "Xavier", contentID: "@userid1:matrix.org")

@@ -257,14 +257,14 @@ struct RoomDetailsScreen: View {
 
 // MARK: - Previews
 
-struct RoomDetailsScreen_Previews: PreviewProvider {
+struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
+        let roomProxy = RoomProxyMock(with: .init(id: "room_a_id", displayName: "Room A",
                                                   topic: "Bacon ipsum dolor amet short ribs buffalo pork loin cupim frankfurter. Burgdoggen pig shankle biltong flank ham jowl sirloin bacon cow. T-bone alcatra boudin beef spare ribs pig fatback jerky swine short ribs shankle chislic frankfurter pork loin. Chicken tri-tip bresaola t-bone pastrami brisket.", // swiftlint:disable:this line_length
                                                   isDirect: false,
                                                   isEncrypted: true,
@@ -289,7 +289,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
             .mockDan
         ]
         
-        let roomProxy = RoomProxyMock(with: .init(displayName: "DM Room",
+        let roomProxy = RoomProxyMock(with: .init(id: "dm_room_id", displayName: "DM Room",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
@@ -312,7 +312,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
+        let roomProxy = RoomProxyMock(with: .init(id: "simple_room_id", displayName: "Room A",
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members))

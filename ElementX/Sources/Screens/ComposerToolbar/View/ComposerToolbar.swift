@@ -174,7 +174,7 @@ struct ComposerToolbar: View {
     }
 }
 
-struct ComposerToolbar_Previews: PreviewProvider {
+struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ComposerToolbar.mock()
     }

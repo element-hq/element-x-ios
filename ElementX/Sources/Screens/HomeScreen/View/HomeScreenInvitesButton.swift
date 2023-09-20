@@ -49,7 +49,7 @@ struct HomeScreenInvitesButton: View {
     }
 }
 
-struct HomeScreenInvitesButton_Previews: PreviewProvider {
+struct HomeScreenInvitesButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HomeScreenInvitesButton(title: "Invites", hasBadge: true, action: { })
             .previewDisplayName("Badge on")

@@ -190,7 +190,7 @@ struct TimelineReactionViewPreviewsContainer: View {
     }
 }
 
-struct TimelineReactionView_Previews: PreviewProvider {
+struct TimelineReactionView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         TimelineReactionViewPreviewsContainer()
     }

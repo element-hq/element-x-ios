@@ -40,7 +40,7 @@ struct TimelineDeliveryStatusView: View {
     }
 }
 
-struct TimelineDeliveryStatusView_Previews: PreviewProvider {
+struct TimelineDeliveryStatusView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack {
             TimelineDeliveryStatusView(deliveryStatus: .sending)
