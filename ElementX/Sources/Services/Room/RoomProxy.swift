@@ -633,7 +633,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+    func setName(_ name: String) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
                 return try .success(self.room.setName(name: name))

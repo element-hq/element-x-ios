@@ -68,9 +68,8 @@ struct RoomEventStringBuilder {
                                           member: sender.id,
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
-        case .poll:
-            // The Rust SDK doesn't support poll events as room summaries yet
-            return nil
+        case .poll(let question, _, _, _, _, _):
+            return prefix(question, with: senderDisplayName)
         }
     }
     

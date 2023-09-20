@@ -159,7 +159,7 @@ protocol RoomProxyProtocol {
     
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
-    func setName(_ name: String?) async -> Result<Void, RoomProxyError>
+    func setName(_ name: String) async -> Result<Void, RoomProxyError>
     
     func setTopic(_ topic: String) async -> Result<Void, RoomProxyError>
     
