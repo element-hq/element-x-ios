@@ -23,7 +23,7 @@ public extension Animation {
 
     /// `noAnimation` if running UI tests, otherwise `default` animation.
     static var elementDefault: Animation {
-        Tests.isRunningUITests ? .noAnimation : .default
+        Tests.isRunningUITests ? .noAnimation : (UIAccessibility.isReduceMotionEnabled ? .noAnimation : .default)
     }
 }
 

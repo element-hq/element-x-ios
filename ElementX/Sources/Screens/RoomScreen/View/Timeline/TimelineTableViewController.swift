@@ -181,8 +181,17 @@ class TimelineTableViewController: UIViewController {
         
         // We only animate when there's a new last message, so its safe
         // to animate from the bottom (which is the top as we're flipped).
-        dataSource?.defaultRowAnimation = .top
+        dataSource?.defaultRowAnimation = (UIAccessibility.isReduceMotionEnabled ? .none : .top)
         tableView.delegate = self
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(accessibilityReduceMotionDidChange),
+                                               name: UIAccessibility.reduceMotionStatusDidChangeNotification,
+                                               object: nil)
+    }
+    
+    @objc private func accessibilityReduceMotionDidChange() {
+        dataSource?.defaultRowAnimation = (UIAccessibility.isReduceMotionEnabled ? .none : .top)
     }
     
     /// Updates the table view with the latest items from the ``timelineItems`` array. After
