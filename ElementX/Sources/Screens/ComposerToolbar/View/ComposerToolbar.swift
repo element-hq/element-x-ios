@@ -83,6 +83,7 @@ struct ComposerToolbar: View {
                 .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
                 .padding(7)
         }
+        .accessibilityLabel(L10n.actionClose)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
 

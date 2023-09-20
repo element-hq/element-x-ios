@@ -36,6 +36,7 @@ struct RoomAttachmentPicker: View {
                 .foregroundColor(.compound.textActionPrimary)
                 .padding(7)
         }
+        .accessibilityLabel(L10n.actionAddToTimeline)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         .popover(isPresented: $context.showAttachmentPopover) {
             VStack(alignment: .leading, spacing: 0.0) {
