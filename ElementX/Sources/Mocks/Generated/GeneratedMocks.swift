@@ -793,11 +793,11 @@ class RoomProxyMock: RoomProxyProtocol {
     var displayName: String?
     var topic: String?
     var avatarURL: URL?
-    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
-        get { return underlyingMembersPublisher }
-        set(value) { underlyingMembersPublisher = value }
+    var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
+        get { return underlyingMembers }
+        set(value) { underlyingMembers = value }
     }
-    var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
+    var underlyingMembers: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
     var invitedMembersCount: Int {
         get { return underlyingInvitedMembersCount }
         set(value) { underlyingInvitedMembersCount = value }

@@ -67,7 +67,7 @@ protocol RoomProxyProtocol {
     
     var avatarURL: URL? { get }
 
-    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
+    var members: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var invitedMembersCount: Int { get }
     
@@ -206,6 +206,6 @@ extension RoomProxyProtocol {
 
     func members() async -> [RoomMemberProxyProtocol]? {
         await updateMembers()
-        return await membersPublisher.values.first()
+        return members.value
     }
 }

@@ -119,9 +119,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             hideLoader()
         }
         
-        roomProxy.membersPublisher
+        roomProxy.members
             .filter { !$0.isEmpty }
             .first()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] members in
                 self?.buildMembershipStateIfNeeded(members: members)
             }

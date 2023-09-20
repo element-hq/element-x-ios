@@ -145,7 +145,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             return
         }
         
-        roomProxy.membersPublisher
+        roomProxy.members
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] members in
                 guard let self else { return }
                 let dmRecipient = members.first(where: { !$0.isAccountOwner })
