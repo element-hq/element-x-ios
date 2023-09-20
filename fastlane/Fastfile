@@ -1,4 +1,5 @@
 require 'yaml'
+require 'semantic'
 require_relative 'changelog'
 
 before_all do
@@ -256,11 +257,14 @@ lane :prepare_next_release do
 
   data = YAML.load_file target_file_path
   current_version = data["settings"]["MARKETING_VERSION"]
-  new_version = current_version.next
+
+  version = Semantic::Version.new(current_version)
+
+  new_version = version.increment!(:patch)
   
   # Bump the patch version. The empty string after -i is so that sed doesn't 
   # create a backup file on macOS
-  sh("sed -i '' 's/#{current_version}/#{new_version}/g' #{target_file_path}")
+  sh("sed -i '' 's/MARKETING_VERSION: #{current_version}/MARKETING_VERSION: #{new_version.to_string}/g' #{target_file_path}")
 
   xcodegen(spec: "project.yml")
 
