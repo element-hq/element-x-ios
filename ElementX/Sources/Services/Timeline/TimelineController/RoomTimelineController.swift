@@ -62,7 +62,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             .store(in: &cancellables)
         
-        updateTimelineItems()
+        serialDispatchQueue.async {
+            self.updateTimelineItems()
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
