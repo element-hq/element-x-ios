@@ -76,6 +76,8 @@ enum RoomScreenViewAction {
     
     case scrolledToBottom
     
+    case enableLongPress(itemID: TimelineItemIdentifier)
+    case disableLongPress(itemID: TimelineItemIdentifier)
     case playPauseAudio(itemID: TimelineItemIdentifier)
     case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
 }
@@ -98,6 +100,7 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
+    var longPressDisabledItemID: TimelineItemIdentifier?
 
     var bindings: RoomScreenViewStateBindings
     

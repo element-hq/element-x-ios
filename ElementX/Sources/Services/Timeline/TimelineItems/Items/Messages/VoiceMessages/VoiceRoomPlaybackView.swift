@@ -18,9 +18,12 @@ import SwiftUI
 
 struct VoiceRoomPlaybackView: View {
     @ObservedObject var playbackViewState: VoiceRoomPlaybackViewState
+
+    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    @State private var sendFeedback = false
     
-    let waveformMaxWidth: CGFloat = 150
-    let playPauseButtonSize = CGSize(width: 32, height: 32)
+    private let waveformMaxWidth: CGFloat = 150
+    private let playPauseButtonSize = CGSize(width: 32, height: 32)
     
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -30,6 +33,42 @@ struct VoiceRoomPlaybackView: View {
     
     var onPlayPause: () -> Void = { }
     var onSeek: (Double) -> Void = { _ in }
+    var onWaveformDragStateChanged: (Bool) -> Void = { _ in }
+    
+    private enum DragState: Equatable {
+        case inactive
+        case pressing
+        case dragging(progress: Double)
+        
+        var progress: Double {
+            switch self {
+            case .inactive, .pressing:
+                return .zero
+            case .dragging(let progress):
+                return progress
+            }
+        }
+        
+        var isActive: Bool {
+            switch self {
+            case .inactive:
+                return false
+            case .pressing, .dragging:
+                return true
+            }
+        }
+        
+        var isDragging: Bool {
+            switch self {
+            case .inactive, .pressing:
+                return false
+            case .dragging:
+                return true
+            }
+        }
+    }
+    
+    @GestureState private var dragState = DragState.inactive
     
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
@@ -49,24 +88,43 @@ struct VoiceRoomPlaybackView: View {
             .padding(.vertical, 6)
             GeometryReader { geometry in
                 WaveformView(waveform: playbackViewState.waveform, progress: playbackViewState.progress)
-                    .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                        .onChanged { value in
-                            let position = value.location.x / geometry.size.width
-                            if abs(position - playbackViewState.progress) > 0.01 {
-                                onSeek(max(0, min(position, 1.0)))
+                    // Add a gesture to drag the waveform
+                    .gesture(LongPressGesture()
+                        .sequenced(before: DragGesture(coordinateSpace: .local))
+                        .updating($dragState) { value, state, _ in
+                            switch value {
+                            // Long press begins.
+                            case .first(true):
+                                state = .pressing
+                            // Long press confirmed, dragging may begin.
+                            case .second(true, let drag):
+                                let progress: Double = (drag?.location.x ?? .zero) / geometry.size.width
+                                state = .dragging(progress: progress)
+                            // Dragging ended or the long press cancelled.
+                            default:
+                                state = .inactive
                             }
-                        }
-                        .onEnded { value in
-                            let position = value.location.x / geometry.size.width
-                            onSeek(max(0, min(position, 1.0)))
                         })
-                    .transaction { transaction in
-                        // Disable waveform transition animation
-                        transaction.animation = nil
-                    }
-                    .zIndex(Double.Magnitude.greatestFiniteMagnitude)
             }
             .frame(maxWidth: waveformMaxWidth)
+        }
+        .onChange(of: dragState) { newDragState in
+            switch newDragState {
+            case .inactive:
+                onWaveformDragStateChanged(false)
+            case .pressing:
+                onWaveformDragStateChanged(true)
+                feedbackGenerator.prepare()
+                sendFeedback = true
+            case .dragging(let progress):
+                if sendFeedback {
+                    feedbackGenerator.impactOccurred()
+                    sendFeedback = false
+                }
+                if abs(progress - playbackViewState.progress) > 0.01 {
+                    onSeek(max(0, min(progress, 1.0)))
+                }
+            }
         }
         .padding(.vertical, 2)
         .padding(.horizontal, 8)
@@ -102,6 +160,7 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider {
     
     static var previews: some View {
         VoiceRoomPlaybackView(playbackViewState: playbackViewState,
+                              // waveformDrag: .constant(false),
                               onPlayPause: { playbackViewState.playing.toggle() },
                               onSeek: { playbackViewState.seekAudio(to: $0) })
             .fixedSize(horizontal: false, vertical: true)

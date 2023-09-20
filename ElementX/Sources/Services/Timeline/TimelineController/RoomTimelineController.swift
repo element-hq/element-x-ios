@@ -245,7 +245,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
     
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        timelineAudioPlaybackViewStates[itemID]?.seekAudio(to: progress)
+        Task {
+            timelineAudioPlaybackViewStates[itemID]?.seekAudio(to: progress)
+        }
     }
 
     // MARK: - Private

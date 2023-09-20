@@ -21,11 +21,11 @@ struct VoiceRoomTimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     let timelineItem: VoiceRoomTimelineItem
     let playbackViewState: VoiceRoomPlaybackViewState
-
+    
     init(timelineItem: VoiceRoomTimelineItem, playbackViewState: VoiceRoomPlaybackViewState?) {
         self.timelineItem = timelineItem
         if playbackViewState == nil {
-            MXLog.error("Voice audio playback state is missing")
+            MXLog.error("[VoiceRoomTimelineView] Voice audio playback state is missing")
         }
         self.playbackViewState = playbackViewState ?? VoiceRoomPlaybackViewState()
     }
@@ -34,7 +34,8 @@ struct VoiceRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VoiceRoomPlaybackView(playbackViewState: playbackViewState,
                                   onPlayPause: onPlaybackPlayPause,
-                                  onSeek: onPlaybackSeek(_:))
+                                  onSeek: onPlaybackSeek(_:),
+                                  onWaveformDragStateChanged: onPlaybackDragStateChanged(_:))
         }
     }
     
@@ -44,6 +45,14 @@ struct VoiceRoomTimelineView: View {
     
     private func onPlaybackSeek(_ progress: Double) {
         context.send(viewAction: .seekAudio(itemID: timelineItem.id, progress: progress))
+    }
+    
+    private func onPlaybackDragStateChanged(_ dragging: Bool) {
+        if dragging {
+            context.send(viewAction: .disableLongPress(itemID: timelineItem.id))
+        } else {
+            context.send(viewAction: .enableLongPress(itemID: timelineItem.id))
+        }
     }
 }
 

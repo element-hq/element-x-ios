@@ -73,7 +73,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         }
         // We need a tap gesture before this long one so that it doesn't
         // steal away the gestures from the scroll view
-        .longPressWithFeedback {
+        .longPressWithFeedback(disabled: context.viewState.longPressDisabledItemID == timelineItem.id) {
             context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
         }
         .swipeRightAction {
