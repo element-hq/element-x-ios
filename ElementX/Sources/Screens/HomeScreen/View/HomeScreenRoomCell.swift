@@ -169,7 +169,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
         configuration.label
             .background(isSelected ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
             .contentShape(Rectangle())
-            .animation(.elementDefault, value: isSelected)
+            .animation(isSelected ? .none : .easeOut(duration: 0.1), value: isSelected)
     }
 }
 
