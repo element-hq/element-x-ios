@@ -69,7 +69,7 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll(let question, _, _, _, _, _):
-            return prefix(question, with: senderDisplayName)
+            return prefix(L10n.commonPollSummary(question), with: senderDisplayName)
         }
     }
     

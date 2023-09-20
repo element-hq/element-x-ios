@@ -28,6 +28,8 @@ public enum L10n {
   public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// Accept
   public static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
+  /// Add to timeline
+  public static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
   public static var actionBack: String { return L10n.tr("Localizable", "action_back") }
   /// Cancel
@@ -230,6 +232,10 @@ public enum L10n {
   public static var commonPeople: String { return L10n.tr("Localizable", "common_people") }
   /// Permalink
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
+  /// Poll: %1$@
+  public static func commonPollSummary(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_poll_summary", String(describing: p1))
+  }
   /// Total votes: %1$@
   public static func commonPollTotalVotes(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_total_votes", String(describing: p1))
@@ -830,7 +836,7 @@ public enum L10n {
   public static var screenRoomAttachmentSourceCamera: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera") }
   /// Take photo
   public static var screenRoomAttachmentSourceCameraPhoto: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_photo") }
-  /// Record a video
+  /// Record video
   public static var screenRoomAttachmentSourceCameraVideo: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_video") }
   /// Attachment
   public static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
