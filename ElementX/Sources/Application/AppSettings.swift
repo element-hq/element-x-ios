@@ -40,6 +40,7 @@ final class AppSettings {
         case readReceiptsEnabled
         case hasShownWelcomeScreen
         case swiftUITimelineEnabled
+        case voiceMessageEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -244,4 +245,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.swiftUITimelineEnabled, defaultValue: false, storageType: .volatile)
     var swiftUITimelineEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.voiceMessageEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var voiceMessageEnabled
 }

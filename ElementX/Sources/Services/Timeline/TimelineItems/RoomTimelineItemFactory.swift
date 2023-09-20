@@ -22,6 +22,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
+    private let appSettings: AppSettings
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -29,11 +30,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         stateEventStringBuilder: RoomStateEventStringBuilder) {
+         stateEventStringBuilder: RoomStateEventStringBuilder,
+         appSettings: AppSettings) {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
+        self.appSettings = appSettings
     }
     
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
@@ -95,7 +98,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .emote(content: let content):
             return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .audio(let content):
-            if content.voice != nil {
+            if appSettings.voiceMessageEnabled, content.voice != nil {
                 return buildVoiceTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
             } else {
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
@@ -612,7 +615,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let replyContent: EventBasedMessageTimelineItemContentType
             switch timelineItem.asMessage()?.msgtype() {
             case .audio(let content):
-                if content.voice != nil {
+                if appSettings.voiceMessageEnabled, content.voice != nil {
                     replyContent = .voice(buildAudioTimelineItemContent(content))
                 } else {
                     replyContent = .audio(buildAudioTimelineItemContent(content))
