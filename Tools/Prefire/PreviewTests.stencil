@@ -87,7 +87,7 @@ class PreviewTests: XCTestCase {
             fatalError("Switch to using \(simulatorDevice) for these tests.")
         }
 	
-	    guard osVersion.majorVersion == requiredOSVersion else {
+        guard osVersion.majorVersion == requiredOSVersion else {
             fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
         }
 
