@@ -5392,7 +5392,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.3.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -5467,7 +5467,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.3.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -5725,7 +5725,7 @@
 			repositoryURL = "https://github.com/nicklockwood/GZIP";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.3.1;
 			};
 		};
 		80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {

@@ -1,3 +1,8 @@
+## Changes in 1.3.0 (2023-09-20)
+
+No significant changes.
+
+
 ## Changes in 1.2.9 (2023-09-18)
 
 ✨ Features
