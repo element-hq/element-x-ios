@@ -64,10 +64,10 @@ extension RoomProxyMock {
         activeMembersCount = configuration.activeMembersCount
         ownUserID = configuration.ownUserID
 
-        if let members = configuration.members {
-            membersPublisher = Just(members).eraseToAnyPublisher()
+        if let configuredMembers = configuration.members {
+            members = CurrentValueSubject(configuredMembers).asCurrentValuePublisher()
         } else {
-            membersPublisher = Just([]).eraseToAnyPublisher()
+            members = CurrentValueSubject([]).asCurrentValuePublisher()
         }
         
         if let inviter = configuration.inviter {

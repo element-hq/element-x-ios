@@ -210,12 +210,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.readReceiptsEnabled, on: self)
             .store(in: &cancellables)
 
-        roomProxy.membersPublisher
+        roomProxy.members
             .map { members in
                 members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
                     dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
                 }
             }
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.members, on: self)
             .store(in: &cancellables)
     }
