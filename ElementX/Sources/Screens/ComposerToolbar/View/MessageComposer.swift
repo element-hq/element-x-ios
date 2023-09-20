@@ -149,7 +149,10 @@ private struct MessageComposerEditHeader: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Label(L10n.commonEditing, iconAsset: Asset.Images.editing)
+            Label(L10n.commonEditing,
+                  iconAsset: Asset.Images.editing,
+                  iconSize: .xSmall,
+                  relativeTo: .compound.bodySMSemibold)
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {

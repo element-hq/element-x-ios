@@ -53,7 +53,7 @@ struct TimelineItemStatusView: View {
         case .sendingFailed:
             // Bubbles handle the failure internally, but plain items don't.
             if style == .plain {
-                CompoundIcon(\.error, size: .custom(16), relativeTo: .compound.bodyMD)
+                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyMD)
                     .foregroundColor(.compound.iconCriticalPrimary)
                     .onTapGesture {
                         context.sendFailedConfirmationDialogInfo = .init(itemID: timelineItem.id)

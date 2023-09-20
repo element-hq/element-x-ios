@@ -38,17 +38,17 @@ extension Label {
     ///   - title: A string used as the label’s title.
     ///   - iconAsset: The asset to use as the custom Compound icon.
     ///   - size: The size of the icon.
-    ///   - font: The font that should be used for scaling with Dynamic Type.
+    ///   - font: The font that the icon will scale relative to for Dynamic Type.
     ///
     /// The supplied asset should have a square frame or it may end up distorted.
     init(_ title: some StringProtocol,
          iconAsset: ImageAsset,
-         size: CompoundIcon.Size,
+         iconSize: CompoundIcon.Size,
          relativeTo font: Font) where Title == Text, Icon == CompoundIcon {
         self.init {
             Text(title)
         } icon: {
-            CompoundIcon(customImage: iconAsset.swiftUIImage, size: size, relativeTo: font)
+            CompoundIcon(customImage: iconAsset.swiftUIImage, size: iconSize, relativeTo: font)
         }
     }
 }
