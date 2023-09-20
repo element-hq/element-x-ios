@@ -55,7 +55,7 @@ class PreviewTests: XCTestCase {
         )
 
         let failure = verifySnapshot(of: matchingView,
-                                    as: .prefireImage(precision: { precision }, duration: { delay }, layout: .sizeThatFits),
+                                    as: .prefireImage(precision: { precision }, duration: { delay }, layout: isScreen ? .device(config: device) : .sizeThatFits),
                                     named: preview.displayName{% if argument.file %},
                                     file: file{% endif %},
                                     testName: testName)
