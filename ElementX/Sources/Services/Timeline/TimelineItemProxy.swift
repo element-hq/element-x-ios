@@ -87,6 +87,8 @@ class EventTimelineItemProxy {
             return .sent
         }
     }()
+    
+    lazy var canBeRepliedTo = item.canBeRepliedTo()
         
     lazy var isRoomState = content.kind().isRoomState
     

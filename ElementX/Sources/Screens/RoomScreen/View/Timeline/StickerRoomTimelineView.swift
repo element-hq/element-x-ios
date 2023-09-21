@@ -64,6 +64,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
                                                                           isEditable: false,
+                                                                          canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
@@ -72,6 +73,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
                                                                           isEditable: false,
+                                                                          canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
@@ -80,6 +82,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
                                                                           isEditable: false,
+                                                                          canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory,
                                                                           aspectRatio: 0.7,

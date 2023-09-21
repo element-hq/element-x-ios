@@ -47,6 +47,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                  timestamp: timestamp,
                                  isOutgoing: false,
                                  isEditable: false,
+                                 canBeRepliedTo: false,
                                  sender: .init(id: senderId))
     }
 }

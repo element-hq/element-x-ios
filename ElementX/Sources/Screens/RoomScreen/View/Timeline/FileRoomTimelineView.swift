@@ -51,6 +51,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
@@ -59,6 +60,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
@@ -67,6 +69,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "document.txt", source: nil, thumbnailSource: nil, contentType: nil)))

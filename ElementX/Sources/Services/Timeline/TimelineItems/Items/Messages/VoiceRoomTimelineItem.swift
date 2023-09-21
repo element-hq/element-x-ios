@@ -21,6 +21,7 @@ struct VoiceRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
+    let canBeRepliedTo: Bool
     let isThreaded: Bool
     let sender: TimelineItemSender
     

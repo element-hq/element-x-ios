@@ -121,6 +121,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
+                                    canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                     sender: eventItemProxy.sender,
                                     properties: RoomTimelineItemProperties())
     }
@@ -142,6 +143,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                        isOutgoing: isOutgoing,
                                        isEditable: eventItemProxy.isEditable,
+                                       canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                        sender: eventItemProxy.sender,
                                        imageURL: imageURL,
                                        width: width,
@@ -172,6 +174,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          isOutgoing: isOutgoing,
                                          isEditable: eventItemProxy.isEditable,
+                                         canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                          sender: eventItemProxy.sender,
                                          properties: RoomTimelineItemProperties())
     }
@@ -183,6 +186,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
+                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                  sender: eventItemProxy.sender,
                                  properties: RoomTimelineItemProperties())
     }
@@ -196,6 +200,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
+                             canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                              isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildTextTimelineItemContent(messageContent),
@@ -215,6 +220,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildImageTimelineItemContent(messageContent),
@@ -234,6 +240,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildVideoTimelineItemContent(messageContent),
@@ -253,6 +260,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(messageContent),
@@ -272,6 +280,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(messageContent),
@@ -291,6 +300,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
+                             canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                              isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
                              content: buildFileTimelineItemContent(messageContent),
@@ -310,6 +320,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                isOutgoing: isOutgoing,
                                isEditable: eventItemProxy.isEditable,
+                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                isThreaded: isThreaded,
                                sender: eventItemProxy.sender,
                                content: buildNoticeTimelineItemContent(messageContent),
@@ -329,6 +340,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               isThreaded: isThreaded,
                               sender: eventItemProxy.sender,
                               content: buildEmoteTimelineItemContent(senderDisplayName: eventItemProxy.sender.displayName, senderID: eventItemProxy.sender.id, messageContent: messageContent),
@@ -348,6 +360,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
+                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                  isThreaded: isThreaded,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(messageContent),
@@ -398,6 +411,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
+                                    canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                     sender: eventItemProxy.sender,
                                     properties: RoomTimelineItemProperties(isEdited: false,
                                                                            reactions: aggregateReactions(eventItemProxy.reactions),
@@ -587,6 +601,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: false,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               sender: eventItemProxy.sender)
     }
     
@@ -614,29 +629,39 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
             
             let replyContent: EventBasedMessageTimelineItemContentType
-            switch timelineItem.asMessage()?.msgtype() {
-            case .audio(let content):
-                if appSettings.voiceMessageEnabled, content.voice != nil {
-                    replyContent = .voice(buildAudioTimelineItemContent(content))
-                } else {
-                    replyContent = .audio(buildAudioTimelineItemContent(content))
+
+            switch timelineItem.kind() {
+            case .message:
+                switch timelineItem.asMessage()?.msgtype() {
+                case .audio(let content):
+                    if appSettings.voiceMessageEnabled, content.voice != nil {
+                        replyContent = .voice(buildAudioTimelineItemContent(content))
+                    } else {
+                        replyContent = .audio(buildAudioTimelineItemContent(content))
+                    }
+                case .emote(let content):
+                    replyContent = .emote(buildEmoteTimelineItemContent(senderDisplayName: sender.displayName, senderID: sender.id, messageContent: content))
+                case .file(let content):
+                    replyContent = .file(buildFileTimelineItemContent(content))
+                case .image(let content):
+                    replyContent = .image(buildImageTimelineItemContent(content))
+                case .notice(let content):
+                    replyContent = .notice(buildNoticeTimelineItemContent(content))
+                case .text(let content):
+                    replyContent = .text(buildTextTimelineItemContent(content))
+                case .video(let content):
+                    replyContent = .video(buildVideoTimelineItemContent(content))
+                case .location(let content):
+                    replyContent = .location(buildLocationTimelineItemContent(content))
+                case .none:
+                    replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
                 }
-            case .emote(let content):
-                replyContent = .emote(buildEmoteTimelineItemContent(senderDisplayName: sender.displayName, senderID: sender.id, messageContent: content))
-            case .file(let content):
-                replyContent = .file(buildFileTimelineItemContent(content))
-            case .image(let content):
-                replyContent = .image(buildImageTimelineItemContent(content))
-            case .notice(let content):
-                replyContent = .notice(buildNoticeTimelineItemContent(content))
-            case .text(let content):
-                replyContent = .text(buildTextTimelineItemContent(content))
-            case .video(let content):
-                replyContent = .video(buildVideoTimelineItemContent(content))
-            case .location(let content):
-                replyContent = .location(buildLocationTimelineItemContent(content))
-            case .none:
-                return nil
+            case .poll(let question, _, _, _, _, _):
+                replyContent = .text(.init(body: question))
+            case .sticker(let body, _, _):
+                replyContent = .text(.init(body: body))
+            default:
+                replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
             }
             
             return .loaded(sender: sender, contentType: replyContent)

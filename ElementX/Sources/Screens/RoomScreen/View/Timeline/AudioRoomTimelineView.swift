@@ -50,6 +50,7 @@ struct AudioRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
                                                                   isEditable: false,
+                                                                  canBeRepliedTo: true,
                                                                   isThreaded: false,
                                                                   sender: .init(id: "Bob"),
                                                                   content: .init(body: "audio.ogg", duration: 300, waveform: nil, source: nil, contentType: nil)))

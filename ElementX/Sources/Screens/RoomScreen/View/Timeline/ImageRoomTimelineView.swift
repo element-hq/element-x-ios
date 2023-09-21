@@ -72,6 +72,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
@@ -80,6 +81,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
@@ -88,6 +90,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
+                                                                      canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(body: "Blurhashed image",

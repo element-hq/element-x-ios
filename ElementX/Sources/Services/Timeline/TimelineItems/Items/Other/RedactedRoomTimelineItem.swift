@@ -23,6 +23,7 @@ struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let timestamp: String
     let isOutgoing: Bool
     let isEditable: Bool
+    let canBeRepliedTo: Bool
     
     let sender: TimelineItemSender
     

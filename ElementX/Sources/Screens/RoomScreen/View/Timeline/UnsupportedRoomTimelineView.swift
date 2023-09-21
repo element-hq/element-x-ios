@@ -70,6 +70,7 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                     timestamp: timestamp,
                                     isOutgoing: isOutgoing,
                                     isEditable: false,
+                                    canBeRepliedTo: true,
                                     sender: .init(id: senderId))
     }
 }
