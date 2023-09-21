@@ -36,6 +36,7 @@ struct VoiceRoomTimelineView: View {
                                   onPlayPause: onPlaybackPlayPause,
                                   onSeek: onPlaybackSeek(_:),
                                   onWaveformDragStateChanged: onPlaybackDragStateChanged(_:))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
     

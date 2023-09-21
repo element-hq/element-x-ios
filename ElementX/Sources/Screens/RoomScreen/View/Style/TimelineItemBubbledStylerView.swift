@@ -435,11 +435,12 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                       sender: .init(id: ""),
                                                       content: .init(body: "audio.ogg",
                                                                      duration: 100,
-                                                                     waveform: nil,
+                                                                     waveform: Waveform.mockWaveform,
                                                                      source: nil,
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                             contentType: .text(.init(body: "Short")))))
+            
             FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
                                                      timestamp: "10:42",
                                                      isOutgoing: false,
@@ -483,6 +484,21 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                contentType: .text(.init(body: "Short")))))
+            
+            VoiceRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                      timestamp: "10:42",
+                                                      isOutgoing: true,
+                                                      isEditable: false,
+                                                      isThreaded: true,
+                                                      sender: .init(id: ""),
+                                                      content: .init(body: "audio.ogg",
+                                                                     duration: 100,
+                                                                     waveform: Waveform.mockWaveform,
+                                                                     source: nil,
+                                                                     contentType: nil),
+                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                            contentType: .text(.init(body: "Short")))),
+                                  playbackViewState: VoiceRoomPlaybackViewState(duration: 10, waveform: Waveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }
