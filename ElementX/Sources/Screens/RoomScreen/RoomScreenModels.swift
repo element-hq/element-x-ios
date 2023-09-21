@@ -75,6 +75,11 @@ enum RoomScreenViewAction {
     case cancelSend(itemID: TimelineItemIdentifier)
     
     case scrolledToBottom
+    
+    case enableLongPress(itemID: TimelineItemIdentifier)
+    case disableLongPress(itemID: TimelineItemIdentifier)
+    case playPauseAudio(itemID: TimelineItemIdentifier)
+    case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
 }
 
 enum RoomScreenComposerAction {
@@ -95,11 +100,15 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
+    var longPressDisabledItemID: TimelineItemIdentifier?
 
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
     var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
+    
+    /// A closure providing the associated audio playback view state for an item in the timeline.
+    var audioPlaybackViewStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState?)?
 }
 
 struct RoomScreenViewStateBindings {

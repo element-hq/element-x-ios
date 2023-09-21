@@ -14,13 +14,27 @@
 // limitations under the License.
 //
 
-import UIKit
-import UniformTypeIdentifiers
+import Foundation
 
-struct AudioRoomTimelineItemContent: Hashable {
-    let body: String
-    let duration: TimeInterval
-    let waveform: Waveform?
-    let source: MediaSourceProxy?
-    let contentType: UTType?
+struct VoiceRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+    let id: TimelineItemIdentifier
+    let timestamp: String
+    let isOutgoing: Bool
+    let isEditable: Bool
+    let isThreaded: Bool
+    let sender: TimelineItemSender
+    
+    let content: AudioRoomTimelineItemContent
+    
+    var replyDetails: TimelineItemReplyDetails?
+
+    var properties = RoomTimelineItemProperties()
+    
+    var body: String {
+        content.body
+    }
+    
+    var contentType: EventBasedMessageTimelineItemContentType {
+        .voice(content)
+    }
 }

@@ -64,6 +64,12 @@ protocol RoomTimelineControllerProtocol {
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
     
     func retryDecryption(for sessionID: String) async
+    
+    func playbackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState?
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async
+    
+    func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async
 }
 
 extension RoomTimelineControllerProtocol {

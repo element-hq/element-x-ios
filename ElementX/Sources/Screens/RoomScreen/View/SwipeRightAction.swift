@@ -24,6 +24,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     @State private var canStartAction = false
+    @State private var animate = false
     @GestureState private var dragGestureActive = false
     
     @State private var hasReachedActionThreshold = false
@@ -39,7 +40,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .offset(x: xOffset, y: 0.0)
-            .animation(.interactiveSpring().speed(0.5), value: xOffset)
+            .animation(.interactiveSpring().speed(0.5), value: animate)
             .gesture(DragGesture()
                 .updating($dragGestureActive) { _, state, _ in
                     // Available actions should be computed on the fly so we use a gesture state change
@@ -68,6 +69,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
                     } else {
                         hasReachedActionThreshold = false
                     }
+                    animate = true
                 }
                 .onEnded { _ in
                     if xOffset > actionThreshold {
@@ -75,6 +77,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
                     }
                     
                     xOffset = 0.0
+                    animate = false
                 }
             )
             .onChange(of: dragGestureActive, perform: { value in

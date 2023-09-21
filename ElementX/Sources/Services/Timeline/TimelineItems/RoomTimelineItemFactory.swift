@@ -22,6 +22,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
+    private let appSettings: AppSettings
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -29,11 +30,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         stateEventStringBuilder: RoomStateEventStringBuilder) {
+         stateEventStringBuilder: RoomStateEventStringBuilder,
+         appSettings: AppSettings) {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
+        self.appSettings = appSettings
     }
     
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy) -> RoomTimelineItemProtocol? {
@@ -95,7 +98,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .emote(content: let content):
             return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .audio(let content):
-            return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
+            if appSettings.voiceMessageEnabled, content.voice != nil {
+                return buildVoiceTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
+            } else {
+                return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
+            }
         case .location(let content):
             return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .none:
@@ -243,6 +250,25 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                         _ isOutgoing: Bool,
                                         _ isThreaded: Bool) -> RoomTimelineItemProtocol {
         AudioRoomTimelineItem(id: eventItemProxy.id,
+                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              isThreaded: isThreaded,
+                              sender: eventItemProxy.sender,
+                              content: buildAudioTimelineItemContent(messageContent),
+                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+    }
+    
+    private func buildVoiceTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                        _ messageTimelineItem: Message,
+                                        _ messageContent: AudioMessageContent,
+                                        _ isOutgoing: Bool,
+                                        _ isThreaded: Bool) -> RoomTimelineItemProtocol {
+        VoiceRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
@@ -428,10 +454,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
-        AudioRoomTimelineItemContent(body: messageContent.body,
-                                     duration: messageContent.info?.duration ?? 0,
-                                     source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
-                                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+        var waveform: Waveform?
+        if let audioWaveform = messageContent.audio?.waveform {
+            waveform = Waveform(data: audioWaveform)
+        }
+
+        return AudioRoomTimelineItemContent(body: messageContent.body,
+                                            duration: messageContent.info?.duration ?? 0,
+                                            waveform: waveform,
+                                            source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                                            contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
@@ -583,7 +615,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let replyContent: EventBasedMessageTimelineItemContentType
             switch timelineItem.asMessage()?.msgtype() {
             case .audio(let content):
-                replyContent = .audio(buildAudioTimelineItemContent(content))
+                if appSettings.voiceMessageEnabled, content.voice != nil {
+                    replyContent = .voice(buildAudioTimelineItemContent(content))
+                } else {
+                    replyContent = .audio(buildAudioTimelineItemContent(content))
+                }
             case .emote(let content):
                 replyContent = .emote(buildEmoteTimelineItemContent(senderDisplayName: sender.displayName, senderID: sender.id, messageContent: content))
             case .file(let content):

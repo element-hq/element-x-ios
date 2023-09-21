@@ -76,6 +76,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return self.timelineItemMenuActionsForItemId(itemId)
         }
 
+        state.audioPlaybackViewStateProvider = { [weak self] itemId -> VoiceRoomPlaybackViewState? in
+            guard let self else { return nil }
+            
+            return self.audioPlaybackViewState(for: itemId)
+        }
+        
         buildTimelineViews()
 
         // Note: beware if we get to e.g. restore a reply / edit,
@@ -139,6 +145,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case let .selectedPollOption(pollStartID, optionID):
             sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+        case .playPauseAudio(let itemID):
+            Task { await timelineController.playPauseAudio(for: itemID) }
+        case .seekAudio(let itemID, let progress):
+            Task { await timelineController.seekAudio(for: itemID, progress: progress) }
+        case .enableLongPress(let itemID):
+            guard state.longPressDisabledItemID == itemID else { return }
+            state.longPressDisabledItemID = nil
+        case .disableLongPress(let itemID):
+            state.longPressDisabledItemID = itemID
         }
     }
 
@@ -844,6 +859,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 displayError(.toast(L10n.errorUnknown))
             }
         }
+    }
+    
+    // MARK: - Audio
+    
+    private func audioPlaybackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState? {
+        timelineController.playbackViewState(for: itemID)
     }
 }
 

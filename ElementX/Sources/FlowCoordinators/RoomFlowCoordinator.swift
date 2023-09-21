@@ -312,7 +312,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
                                                           attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                          appSettings: appSettings)
         
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
