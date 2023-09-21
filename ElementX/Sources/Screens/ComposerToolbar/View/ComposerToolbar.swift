@@ -102,7 +102,7 @@ struct ComposerToolbar: View {
                 .padding(4)
         }
         .disabled(context.viewState.sendButtonDisabled)
-        .animation(.linear(duration: 0.1), value: context.viewState.sendButtonDisabled)
+        .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
     }
     

@@ -41,7 +41,10 @@ struct ShimmerModifier: ViewModifier {
     private let regularColor = Color.white
     
     /// A slow linear animation which auto-repeats after a delay.
-    private let animation: Animation = Tests.isRunningUITests ? .noAnimation : .linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)
+    private let animation: Animation = .linear(duration: 1.75)
+        .delay(0.5)
+        .repeatForever(autoreverses: false)
+        .disabledDuringTests()
     
     func body(content: Content) -> some View {
         content
