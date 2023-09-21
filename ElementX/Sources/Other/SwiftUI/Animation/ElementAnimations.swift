@@ -21,9 +21,22 @@ public extension Animation {
     /// Animation to be used to disable animations.
     static let noAnimation: Animation = .linear(duration: 0)
 
-    /// `noAnimation` if running UI tests, otherwise `default` animation.
+    /// `noAnimation` if running tests, otherwise `default` animation if `UIAccessibility.isReduceMotionEnabled` is false
     static var elementDefault: Animation {
-        Tests.isRunningUITests ? .noAnimation : (UIAccessibility.isReduceMotionEnabled ? .noAnimation : .default)
+        let animation: Animation = Tests.isRunningTests ? .noAnimation : .default
+        return animation.disabledIfReduceMotionEnabled()
+    }
+
+    // `noAnimation` if running tests, otherwise `self` if `UIAccessibility.isReduceMotionEnabled` is false
+    func disabledDuringTests() -> Self {
+        let animation: Animation = Tests.isRunningTests ? .noAnimation : self
+        return animation.disabledIfReduceMotionEnabled()
+    }
+
+    // MARK: - Private
+
+    private func disabledIfReduceMotionEnabled() -> Self {
+        UIAccessibility.isReduceMotionEnabled ? .noAnimation : self
     }
 }
 
@@ -33,8 +46,5 @@ public extension Animation {
 ///   - animation: Animation
 ///   - body: operations to be animated
 public func withElementAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
-    if Tests.isRunningUITests {
-        return try withAnimation(.noAnimation, body)
-    }
-    return try withAnimation(animation, body)
+    try withAnimation(animation?.disabledDuringTests(), body)
 }

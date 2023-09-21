@@ -106,7 +106,7 @@ struct InviteUsersScreen: View {
                 }
                 .onChange(of: context.viewState.scrollToLastID) { lastAddedID in
                     guard let id = lastAddedID else { return }
-                    withAnimation(.easeInOut) {
+                    withElementAnimation(.easeInOut) {
                         scrollView.scrollTo(id)
                     }
                 }

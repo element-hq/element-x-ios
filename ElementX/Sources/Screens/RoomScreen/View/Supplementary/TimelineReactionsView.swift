@@ -61,7 +61,7 @@ struct TimelineReactionsView: View {
             .reactionLayoutItem(.addMore)
         }
         .environment(\.layoutDirection, reactionsLayoutDirection)
-        .animation(.easeInOut(duration: 0.1), value: reactions)
+        .animation(.easeInOut(duration: 0.1).disabledDuringTests(), value: reactions)
         .padding(.leading, 4)
     }
 }

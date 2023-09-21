@@ -34,6 +34,11 @@ public enum Tests {
         false
         #endif
     }
+
+    /// Flag indicating whether the app is running the UI tests or unit tests.
+    static var isRunningTests: Bool {
+        isRunningUITests || isRunningUnitTests
+    }
     
     /// The identifier of the screen to be loaded when running UI tests.
     static var screenID: UITestsScreenIdentifier? {

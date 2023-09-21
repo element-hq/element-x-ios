@@ -31,7 +31,7 @@ struct LongPressWithFeedback: ViewModifier {
             .shadow(color: .black.opacity(isLongPressing ? 0.1 : 0.0), radius: isLongPressing ? 3 : 0)
             .scaleEffect(x: isLongPressing ? 1.05 : 1,
                          y: isLongPressing ? 1.05 : 1)
-            .animation(isLongPressing ? .spring(response: 0.5).delay(0.1) : .spring(response: 0.5),
+            .animation(.spring(response: 0.5).delay(isLongPressing ? 0.1 : 0).disabledDuringTests(),
                        value: isLongPressing)
             // The minimum duration here doesn't actually invoke the perform block when elapsed (thus
             // the implementation below) but it does cancel other system gestures e.g. swipe to reply
