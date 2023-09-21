@@ -21,6 +21,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringC
     var timestamp: String { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
+    var canBeRepliedTo: Bool { get }
     
     var sender: TimelineItemSender { get }
     

@@ -82,6 +82,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                              timestamp: "Now",
                              isOutgoing: true,
                              isEditable: false,
+                             canBeRepliedTo: true,
                              isThreaded: false,
                              sender: .init(id: UUID().uuidString), content: .init(body: "Test"),
                              properties: .init(orderedReadReceipts: receipts))

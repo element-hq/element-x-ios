@@ -47,6 +47,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     timestamp: "",
                                                                     isOutgoing: true,
                                                                     isEditable: false,
+                                                                    canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "1", displayName: "Bob"),
                                                                     content: .init(body: "This is another message"))), groupStyle: .single))
@@ -58,6 +59,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     timestamp: "",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
+                                                                    canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "", displayName: "Alice"),
                                                                     content: .init(body: "This is a message"))), groupStyle: .single))

@@ -64,6 +64,7 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                              timestamp: "Now",
                                                              isOutgoing: false,
                                                              isEditable: false,
+                                                             canBeRepliedTo: true,
                                                              isThreaded: false,
                                                              sender: .init(id: "Bob"),
                                                              content: .init(body: "audio.ogg",

@@ -46,5 +46,6 @@ struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                             timestamp: "Now",
                                             isOutgoing: false,
                                             isEditable: false,
+                                            canBeRepliedTo: true,
                                             sender: .init(id: ""))
 }

@@ -78,6 +78,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                   timestamp: timestamp,
                                   isOutgoing: isOutgoing,
                                   isEditable: false,
+                                  canBeRepliedTo: false,
                                   sender: .init(id: senderId))
     }
 }
