@@ -182,7 +182,7 @@ struct MediaUploadingPreprocessor {
         case .success(let result):
             switch await generateThumbnailForVideoAt(result.url) {
             case .success(let thumbnailResult):
-                let videoSize = ((try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0) ?? 0
+                let videoSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
                 let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
                 
                 let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),

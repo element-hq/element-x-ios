@@ -87,6 +87,12 @@ enum RoomSummary: CustomStringConvertible, Equatable {
     }
 }
 
+enum RoomSummaryProviderFilter {
+    case none
+    case all
+    case normalizedMatchRoomName(String)
+}
+
 protocol RoomSummaryProviderProtocol {
     /// Publishes the currently available room summaries
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> { get }
@@ -100,5 +106,5 @@ protocol RoomSummaryProviderProtocol {
     
     func updateVisibleRange(_ range: Range<Int>)
     
-    func updateFilterPattern(_ pattern: String?)
+    func setFilter(_ filter: RoomSummaryProviderFilter)
 }

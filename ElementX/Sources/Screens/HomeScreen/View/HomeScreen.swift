@@ -23,7 +23,6 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    @State private var isSearching = false
     
     // Bloom components
     @State private var bloomView: UIView?
@@ -56,7 +55,7 @@ struct HomeScreen: View {
                     topSection
                     
                     LazyVStack(spacing: 0) {
-                        HomeScreenRoomList(context: context, isSearching: $isSearching)
+                        HomeScreenRoomList(context: context)
                     }
                     .searchable(text: $context.searchQuery)
                     .compoundSearchField()
@@ -100,7 +99,7 @@ struct HomeScreen: View {
                 }
             }
             let isTopController = controller.navigationController?.topViewController != controller
-            let isHidden = isTopController || isSearching
+            let isHidden = isTopController || context.isSearchFieldFocused
             if let bloomView {
                 bloomView.isHidden = isHidden
                 UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
@@ -196,7 +195,7 @@ struct HomeScreen: View {
             sessionVerificationBanner
         }
         
-        if context.viewState.hasPendingInvitations, !isSearching {
+        if context.viewState.hasPendingInvitations, !context.isSearchFieldFocused {
             HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: context.viewState.hasUnreadPendingInvitations) {
                 context.send(viewAction: .selectInvites)
             }

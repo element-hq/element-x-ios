@@ -98,6 +98,7 @@ struct HomeScreenViewState: BindableState {
 
 struct HomeScreenViewStateBindings {
     var searchQuery = ""
+    var isSearchFieldFocused = false
     
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?

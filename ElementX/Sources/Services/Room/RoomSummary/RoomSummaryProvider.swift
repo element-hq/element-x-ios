@@ -91,7 +91,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             })
             
             // Forces the listener above to be called with the current state
-            updateFilterPattern(nil)
+            setFilter(.all)
             
             listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
@@ -134,13 +134,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func updateFilterPattern(_ pattern: String?) {
-        guard let pattern, !pattern.isEmpty else {
+    func setFilter(_ filter: RoomSummaryProviderFilter) {
+        switch filter {
+        case .none:
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
+        case .all:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all)
-            return
+        case .normalizedMatchRoomName(let query):
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: query.lowercased()))
         }
-        
-        _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: pattern.lowercased()))
     }
     
     // MARK: - Private
