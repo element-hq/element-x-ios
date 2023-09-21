@@ -57,12 +57,8 @@ struct VoiceRoomTimelineView: View {
     }
 }
 
-struct VoiceRoomTimelineView_Previews: PreviewProvider {
+struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
-    static let waveform = Waveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
-                                          334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
-                                          294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
-                                          0, 0, 0, 0, 0, 3])
 
     static let voiceRoomTimelineItem = VoiceRoomTimelineItem(id: .random,
                                                              timestamp: "Now",
@@ -72,19 +68,21 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider {
                                                              sender: .init(id: "Bob"),
                                                              content: .init(body: "audio.ogg",
                                                                             duration: 300,
-                                                                            waveform: waveform,
+                                                                            waveform: Waveform.mockWaveform,
                                                                             source: nil,
                                                                             contentType: nil))
     
     static let playbackViewState = VoiceRoomPlaybackViewState(duration: 10.0,
-                                                              waveform: waveform,
+                                                              waveform: Waveform.mockWaveform,
                                                               progress: 0.4)
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
+            .previewDisplayName("Bubble")
         body
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
+            .previewDisplayName("Plain")
     }
     
     static var body: some View {

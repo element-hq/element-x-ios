@@ -80,7 +80,7 @@ struct WaveformView: View {
     }
 }
 
-struct WaveformView_Previews: PreviewProvider {
+struct WaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         WaveformView(waveform: Waveform.mockWaveform)
             .frame(width: 140, height: 50)
