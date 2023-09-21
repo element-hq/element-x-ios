@@ -83,8 +83,6 @@ class TimelineTableViewController: UIViewController {
     private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
-    /// Whether the scroll and the animations should happen
-    private var shouldAnimate = false
     
     init(coordinator: UITimelineView.Coordinator,
          timelineStyle: TimelineStyle,
@@ -134,10 +132,6 @@ class TimelineTableViewController: UIViewController {
         tableView.contentOffset.y = -1
         hasAppearedOnce = true
         paginateBackwardsPublisher.send()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.shouldAnimate = true
-        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -207,8 +201,8 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         MXLog.verbose("DIFF: \(snapshot.itemIdentifiers.difference(from: currentSnapshot.itemIdentifiers))")
 
-        // We only animate when new items come at the end of the timeline
-        let animated = shouldAnimate &&
+        // We only animate when new items come at the end of the timeline, ignoring transitions through empty.
+        let animated = currentSnapshot.numberOfItems > 0 && snapshot.numberOfItems > 0 &&
             snapshot.itemIdentifiers.first != currentSnapshot.itemIdentifiers.first
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
