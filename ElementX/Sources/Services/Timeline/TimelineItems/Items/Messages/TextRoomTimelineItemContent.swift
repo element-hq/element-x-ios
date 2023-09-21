@@ -19,6 +19,6 @@ import UIKit
 struct TextRoomTimelineItemContent: Hashable {
     let body: String
     var formattedBody: AttributedString?
-    // The textual representation of the formatted body (usually HTML code)
+    // The original textual representation of the formatted body directly from the event (usually HTML code)
     var rawFormattedBody: String?
 }
