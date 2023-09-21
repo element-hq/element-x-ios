@@ -141,11 +141,11 @@ private struct CreatePollOptionView: View {
             if editMode?.wrappedValue == .active {
                 Button(action: deleteAction) {
                     CompoundIcon(\.delete)
-                        .font(.system(size: 24))
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
                 .disabled(!canDeleteItem)
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel(L10n.actionRemove)
             }
             TextField(text: $text) {
                 Text(placeholder)

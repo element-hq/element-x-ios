@@ -16,21 +16,23 @@
 
 import SwiftUI
 
-struct FixedIconSizeLabelStyle: LabelStyle {
-    @ScaledMetric private var iconSize: CGFloat
+extension LabelStyle where Self == MenuSheetLabelStyle {
+    /// A label style for labels that are within a menu that is being presented as a sheet.
+    static var menuSheet: Self { MenuSheetLabelStyle() }
+}
 
-    init(iconSize: Double = 24.0) {
-        _iconSize = .init(wrappedValue: iconSize)
-    }
-    
+/// The style used for labels that are part of a menu that's presented as
+/// a sheet as `TimelineItemMenu` and `RoomAttachmentPicker`.
+struct MenuSheetLabelStyle: LabelStyle {
     var spacing: CGFloat = 16
     
     func makeBody(configuration: Configuration) -> some View {
         HStack(spacing: spacing) {
-            configuration
-                .icon
-                .frame(width: iconSize, height: iconSize)
+            configuration.icon
             configuration.title
         }
+        .multilineTextAlignment(.leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
     }
 }

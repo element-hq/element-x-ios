@@ -21,8 +21,9 @@ struct EncryptedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, systemImage: "lock.shield")
+            Label(timelineItem.body, iconAsset: Asset.Images.decryptionError, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
+                .font(.compound.bodyLG)
         }
     }
 }
@@ -31,11 +32,10 @@ struct RoomTimelineViewLabelStyle: LabelStyle {
     @Environment(\.timelineStyle) private var timelineStyle
     
     func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
+        HStack(alignment: .center, spacing: 8) {
             configuration.icon
                 .foregroundColor(.compound.iconSecondary)
             configuration.title
-                .font(.body)
                 .foregroundColor(.compound.textPrimary)
         }
         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
@@ -60,6 +60,11 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                              senderId: "Bob"))
             
             EncryptedRoomTimelineView(timelineItem: itemWith(text: "Some other text",
+                                                             timestamp: "Later",
+                                                             isOutgoing: true,
+                                                             senderId: "Anne"))
+            
+            EncryptedRoomTimelineView(timelineItem: itemWith(text: "Some other text that is very long and will wrap onto multiple lines.",
                                                              timestamp: "Later",
                                                              isOutgoing: true,
                                                              senderId: "Anne"))

@@ -167,15 +167,6 @@ class RoomProxy: RoomProxyProtocol {
         roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
 
-    var encryptionBadgeImage: UIImage? {
-        guard isEncrypted else {
-            return nil
-        }
-
-        //  return trusted image for now, should be updated after verification status known
-        return Asset.Images.encryptionTrusted.image
-    }
-
     var invitedMembersCount: Int {
         Int(room.invitedMembersCount())
     }

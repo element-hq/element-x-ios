@@ -209,7 +209,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
 
             if timelineItem.hasFailedToSend {
-                Image(systemName: "exclamationmark.circle.fill")
+                CompoundIcon(\.error, size: .xSmall, relativeTo: .compound.bodyXS)
             }
         }
         .font(.compound.bodyXS)

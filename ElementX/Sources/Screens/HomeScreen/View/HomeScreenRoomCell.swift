@@ -143,12 +143,10 @@ struct HomeScreenRoomCell: View {
         case .none, .allMessages:
             EmptyView()
         case .mentionsAndKeywordsOnly:
-            CompoundIcon(\.mention)
-                .font(.system(size: 15))
+            CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
                 .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
         case .mute:
-            CompoundIcon(\.notificationsSolidOff)
-                .font(.system(size: 15))
+            CompoundIcon(\.notificationsSolidOff, size: .custom(15), relativeTo: .compound.bodyMD)
                 .accessibilityLabel(L10n.a11yNotificationsMuted)
         }
     }

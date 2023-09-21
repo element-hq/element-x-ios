@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 /// The item shown when all previous items are un-decryptable due to
@@ -27,7 +28,7 @@ struct EncryptedHistoryRoomTimelineView: View {
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textInfoPrimary)
         } icon: {
-            Image(systemName: "info.circle.fill")
+            CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyMDSemibold)
                 .foregroundColor(.compound.iconInfoPrimary)
         }
         .labelStyle(EncryptedHistoryLabelStyle())
@@ -46,7 +47,7 @@ struct EncryptedHistoryRoomTimelineView: View {
 
 private struct EncryptedHistoryLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             configuration.icon
             configuration.title
         }

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 import WysiwygComposer
 
@@ -82,6 +83,7 @@ struct ComposerToolbar: View {
                 .frame(width: closeRTEButtonSize, height: closeRTEButtonSize)
                 .padding(7)
         }
+        .accessibilityLabel(L10n.actionClose)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
 
@@ -152,12 +154,11 @@ struct ComposerToolbar: View {
     private var submitButtonImage: some View {
         // ZStack with opacity so the button size is consistent.
         ZStack {
-            Image(systemName: "checkmark")
+            CompoundIcon(\.check)
                 .opacity(context.viewState.composerMode.isEdit ? 1 : 0)
-                .fontWeight(.medium)
                 .accessibilityLabel(L10n.actionConfirm)
                 .accessibilityHidden(!context.viewState.composerMode.isEdit)
-            Image(asset: Asset.Images.timelineComposerSendMessage)
+            Image(asset: Asset.Images.sendMessage)
                 .resizable()
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
                 .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 9))
