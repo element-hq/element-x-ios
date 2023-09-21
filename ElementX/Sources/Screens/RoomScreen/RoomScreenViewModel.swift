@@ -581,8 +581,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let text: String
             switch messageTimelineItem.contentType {
             case .text(let textItem):
-                if ServiceLocator.shared.settings.richTextEditorEnabled, let rawFormattedBody = textItem.rawFormattedBody {
-                    text = rawFormattedBody
+                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
+                    text = formattedBodyHTMLString
                 } else {
                     text = messageTimelineItem.body
                 }
