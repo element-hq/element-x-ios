@@ -21,8 +21,8 @@ import Foundation
 class VoiceRoomPlaybackViewState: ObservableObject {
     let duration: Double
     let waveform: Waveform
-    @Published var loading: Bool
-    @Published var playing: Bool
+    @Published private(set) var loading: Bool
+    @Published private(set) var playing: Bool
     @Published private(set) var progress: Double
         
     init(duration: Double = 0.0, waveform: Waveform? = nil, progress: Double = 0.0) {
@@ -33,7 +33,11 @@ class VoiceRoomPlaybackViewState: ObservableObject {
         playing = false
     }
     
-    func seekAudio(to progress: Double) {
+    func updateState(progress: Double) {
         self.progress = max(0.0, min(progress, 1.0))
+    }
+    
+    func updateState(playing: Bool) {
+        self.playing = playing
     }
 }
