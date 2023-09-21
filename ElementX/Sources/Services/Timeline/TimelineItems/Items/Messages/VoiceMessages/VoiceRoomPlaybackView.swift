@@ -160,7 +160,6 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider {
     
     static var previews: some View {
         VoiceRoomPlaybackView(playbackViewState: playbackViewState,
-                              // waveformDrag: .constant(false),
                               onPlayPause: { playbackViewState.playing.toggle() },
                               onSeek: { playbackViewState.seekAudio(to: $0) })
             .fixedSize(horizontal: false, vertical: true)
