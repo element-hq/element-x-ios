@@ -8,6 +8,7 @@
 "a11y_show_password" = "Show password";
 "a11y_user_menu" = "User menu";
 "action_accept" = "Accept";
+"action_add_to_timeline" = "Add to timeline";
 "action_back" = "Back";
 "action_cancel" = "Cancel";
 "action_choose_photo" = "Choose photo";
@@ -144,6 +145,7 @@
 "common_verification_complete" = "Verification complete";
 "common_video" = "Video";
 "common_waiting" = "Waiting…";
+"common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Warning";
@@ -331,7 +333,7 @@
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
 "screen_room_attachment_source_camera" = "Camera";
 "screen_room_attachment_source_camera_photo" = "Take photo";
-"screen_room_attachment_source_camera_video" = "Record a video";
+"screen_room_attachment_source_camera_video" = "Record video";
 "screen_room_attachment_source_files" = "Attachment";
 "screen_room_attachment_source_gallery" = "Photo & Video Library";
 "screen_room_attachment_source_location" = "Location";

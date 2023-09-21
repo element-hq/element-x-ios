@@ -1370,11 +1370,11 @@ class RoomProxyMock: RoomProxyProtocol {
         return setNameCallsCount > 0
     }
     var setNameReceivedName: String?
-    var setNameReceivedInvocations: [String?] = []
+    var setNameReceivedInvocations: [String] = []
     var setNameReturnValue: Result<Void, RoomProxyError>!
-    var setNameClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+    var setNameClosure: ((String) async -> Result<Void, RoomProxyError>)?
 
-    func setName(_ name: String?) async -> Result<Void, RoomProxyError> {
+    func setName(_ name: String) async -> Result<Void, RoomProxyError> {
         setNameCallsCount += 1
         setNameReceivedName = name
         setNameReceivedInvocations.append(name)
