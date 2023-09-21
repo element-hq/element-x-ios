@@ -578,7 +578,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
 
-            actionsSubject.send(.composer(action: .setText(text: messageTimelineItem.body)))
+            let text: String
+            switch messageTimelineItem.contentType {
+            case .text(let textItem):
+                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = textItem.formattedBodyHTMLString {
+                    text = formattedBodyHTMLString
+                } else {
+                    text = messageTimelineItem.body
+                }
+            default:
+                text = messageTimelineItem.body
+            }
+
+            actionsSubject.send(.composer(action: .setText(text: text)))
             actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
             do {

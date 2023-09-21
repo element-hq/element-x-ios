@@ -18,6 +18,11 @@
 import XCTest
 
 class LocalizationTests: XCTestCase {
+    override func tearDown() {
+        super.tearDown()
+        Bundle.overrideLocalizations = nil
+    }
+
     /// Test ElementL10n considers app language changes
     func testAppLanguage() {
         // set app language to English

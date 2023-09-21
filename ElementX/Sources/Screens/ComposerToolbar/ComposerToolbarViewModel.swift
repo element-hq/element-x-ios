@@ -149,7 +149,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.setMarkdownContent(text)
+        wysiwygViewModel.setHtmlContent(text)
     }
 
     private func createLinkAlert() {
