@@ -49,8 +49,6 @@ targets:
 
     sources:
     - path: ../Sources
-      excludes:
-        - "**/__Snapshots__/**"
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit

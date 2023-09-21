@@ -1,5 +1,4 @@
 test_configuration:
-  - test_file_path: UnitTests/Sources/PreviewTests.swift
   - template_file_path: Tools/Prefire/PreviewTests.stencil
   - simulator_device: "iPhone14"
   - required_os: 16

@@ -324,11 +324,13 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
             HomeScreen(context: loadedViewModel.context)
         }
         .previewDisplayName("Loaded")
+        .snapshot(delay: 2.0)
         
         NavigationStack {
             HomeScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")
+        .snapshot(delay: 2.0)
     }
     
     static func viewModel(_ state: MockRoomSummaryProviderState) -> HomeScreenViewModel {
