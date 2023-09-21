@@ -173,6 +173,12 @@ class RoomScreenUITests: XCTestCase {
         try await app.assertScreenshot(.roomWithUndisclosedPolls)
     }
 
+    func testTimelineOutgoingPolls() async throws {
+        let app = Application.launch(.roomWithOutgoingPolls)
+
+        try await app.assertScreenshot(.roomWithOutgoingPolls)
+    }
+
     // MARK: - Helper Methods
     
     private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {

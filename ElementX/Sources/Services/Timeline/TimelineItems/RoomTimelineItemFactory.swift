@@ -389,7 +389,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                         maxSelections: Int(maxSelections),
                         options: options,
                         votes: votes,
-                        endDate: endTime.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) })
+                        endDate: endTime.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) },
+                        createdByAccountOwner: eventItemProxy.sender.id == userID)
 
         return PollRoomTimelineItem(id: eventItemProxy.id,
                                     poll: poll,

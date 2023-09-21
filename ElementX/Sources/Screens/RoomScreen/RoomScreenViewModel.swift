@@ -154,6 +154,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.longPressDisabledItemID = nil
         case .disableLongPress(let itemID):
             state.longPressDisabledItemID = itemID
+        case let .endPoll(pollStartID):
+            endPoll(pollStartID: pollStartID)
         }
     }
 

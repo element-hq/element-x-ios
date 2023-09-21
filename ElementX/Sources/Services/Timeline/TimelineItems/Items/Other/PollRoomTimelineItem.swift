@@ -34,6 +34,8 @@ struct Poll: Equatable {
     let options: [Option]
     let votes: [String: [String]]
     let endDate: Date?
+    /// Whether the poll has been created by the account owner
+    let createdByAccountOwner: Bool
 
     var hasEnded: Bool {
         endDate != nil

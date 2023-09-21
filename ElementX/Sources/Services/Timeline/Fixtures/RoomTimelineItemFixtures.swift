@@ -221,13 +221,17 @@ enum RoomTimelineItemFixtures {
     }
 
     static var disclosedPolls: [RoomTimelineItemProtocol] {
-        [PollRoomTimelineItem.mock(poll: .disclosed),
+        [PollRoomTimelineItem.mock(poll: .disclosed(), isOutgoing: false),
          PollRoomTimelineItem.mock(poll: .endedDisclosed)]
     }
 
     static var undisclosedPolls: [RoomTimelineItemProtocol] {
-        [PollRoomTimelineItem.mock(poll: .undisclosed),
+        [PollRoomTimelineItem.mock(poll: .undisclosed(), isOutgoing: false),
          PollRoomTimelineItem.mock(poll: .endedUndisclosed)]
+    }
+
+    static var outgoingPolls: [RoomTimelineItemProtocol] {
+        [PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true), isOutgoing: true)]
     }
 }
 
