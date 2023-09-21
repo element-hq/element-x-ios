@@ -60,7 +60,8 @@ enum RoomScreenViewAction {
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     case selectedPollOption(pollStartID: String, optionID: String)
-    
+    case endPoll(pollStartID: String)
+
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     

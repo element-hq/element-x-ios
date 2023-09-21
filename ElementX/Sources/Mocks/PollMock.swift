@@ -21,29 +21,33 @@ extension Poll {
                      pollKind: Poll.Kind = .disclosed,
                      options: [Poll.Option],
                      votes: [String: [String]] = [:],
-                     ended: Bool = false) -> Self {
+                     ended: Bool = false,
+                     createdByAccountOwner: Bool = false) -> Self {
         .init(question: question,
               kind: pollKind,
               maxSelections: 1,
               options: options,
               votes: votes,
-              endDate: ended ? Date() : nil)
+              endDate: ended ? Date() : nil,
+              createdByAccountOwner: createdByAccountOwner)
     }
 
-    static var disclosed: Self {
+    static func disclosed(createdByAccountOwner: Bool = false) -> Self {
         mock(question: "What country do you like most?",
              pollKind: .disclosed,
              options: [.mock(text: "Italy 🇮🇹", votes: 5, allVotes: 10, isWinning: true),
                        .mock(text: "China 🇨🇳", votes: 3, allVotes: 10),
-                       .mock(text: "USA 🇺🇸", votes: 2, allVotes: 10)])
+                       .mock(text: "USA 🇺🇸", votes: 2, allVotes: 10)],
+             createdByAccountOwner: createdByAccountOwner)
     }
 
-    static var undisclosed: Self {
+    static func undisclosed(createdByAccountOwner: Bool = false) -> Self {
         mock(question: "What country do you like most?",
              pollKind: .undisclosed,
              options: [.mock(text: "Italy 🇮🇹", votes: 5, allVotes: 10, isWinning: true),
                        .mock(text: "China 🇨🇳", votes: 3, allVotes: 10, isSelected: true),
-                       .mock(text: "USA 🇺🇸", votes: 2, allVotes: 10)])
+                       .mock(text: "USA 🇺🇸", votes: 2, allVotes: 10)],
+             createdByAccountOwner: createdByAccountOwner)
     }
 
     static var endedDisclosed: Self {
@@ -77,12 +81,12 @@ extension Poll.Option {
 }
 
 extension PollRoomTimelineItem {
-    static func mock(poll: Poll) -> Self {
-        .init(id: .random,
+    static func mock(poll: Poll, isOutgoing: Bool = true) -> Self {
+        .init(id: .init(timelineID: UUID().uuidString, eventID: UUID().uuidString),
               poll: poll,
               body: "poll",
               timestamp: "Now",
-              isOutgoing: true,
+              isOutgoing: isOutgoing,
               isEditable: false,
               sender: .init(id: "userID"),
               properties: .init())

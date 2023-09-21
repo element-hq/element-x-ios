@@ -354,11 +354,39 @@ class MockScreen: Identifiable {
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .roomWithDisclosedPolls, .roomWithUndisclosedPolls:
+        case .roomWithDisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
 
             let timelineController = MockRoomTimelineController()
-            timelineController.timelineItems = id == .roomWithDisclosedPolls ? RoomTimelineItemFixtures.disclosedPolls : RoomTimelineItemFixtures.undisclosedPolls
+            timelineController.timelineItems = RoomTimelineItemFixtures.disclosedPolls
+            timelineController.incomingItems = []
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomWithUndisclosedPolls:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.undisclosedPolls
+            timelineController.incomingItems = []
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomWithOutgoingPolls:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.outgoingPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,

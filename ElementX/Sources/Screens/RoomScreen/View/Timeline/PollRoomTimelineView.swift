@@ -29,22 +29,9 @@ struct PollRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 16) {
                 questionView
-
-                ForEach(poll.options, id: \.id) { option in
-                    Button {
-                        guard let eventID, !option.isSelected else { return }
-                        context.send(viewAction: .selectedPollOption(pollStartID: eventID, optionID: option.id))
-                        feedbackGenerator.impactOccurred()
-                    } label: {
-                        PollOptionView(pollOption: option,
-                                       showVotes: showVotes,
-                                       isFinalResult: poll.hasEnded)
-                            .foregroundColor(progressBarColor(for: option))
-                    }
-                    .disabled(poll.hasEnded || eventID == nil)
-                }
-
+                optionsView
                 summaryView
+                toolbarView
             }
             .frame(maxWidth: 450)
         }
@@ -74,6 +61,22 @@ struct PollRoomTimelineView: View {
         }
     }
 
+    private var optionsView: some View {
+        ForEach(poll.options, id: \.id) { option in
+            Button {
+                guard let eventID, !option.isSelected else { return }
+                context.send(viewAction: .selectedPollOption(pollStartID: eventID, optionID: option.id))
+                feedbackGenerator.impactOccurred()
+            } label: {
+                PollOptionView(pollOption: option,
+                               showVotes: showVotes,
+                               isFinalResult: poll.hasEnded)
+                    .foregroundColor(progressBarColor(for: option))
+            }
+            .disabled(poll.hasEnded || eventID == nil)
+        }
+    }
+
     @ViewBuilder
     private var summaryView: some View {
         if let summaryText = poll.summaryText {
@@ -82,6 +85,28 @@ struct PollRoomTimelineView: View {
                 .padding(.leading, showVotes ? 0 : summaryPadding)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
+        }
+    }
+
+    @ViewBuilder
+    private var toolbarView: some View {
+        if !poll.hasEnded, poll.createdByAccountOwner, let eventID {
+            Button {
+                context.send(viewAction: .endPoll(pollStartID: eventID))
+            } label: {
+                Text(L10n.actionEndPoll)
+                    .lineLimit(2, reservesSpace: false)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundColor(.compound.textOnSolidPrimary)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 10)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        Capsule()
+                            .foregroundColor(.compound.bgActionPrimaryRest)
+                    }
+            }
+            .padding(.top, 8)
         }
     }
 
@@ -121,12 +146,12 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
     static var previews: some View {
-        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed))
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isOutgoing: false))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Disclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed))
+        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed(), isOutgoing: false))
             .environment(\.timelineStyle, .bubbles)
             .environmentObject(viewModel.context)
             .previewDisplayName("Undisclosed, Bubble")
@@ -141,12 +166,17 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Undisclosed, Bubble")
 
-        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed))
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(createdByAccountOwner: true)))
+            .environment(\.timelineStyle, .bubbles)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, disclosed, Bubble")
+
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isOutgoing: false))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Disclosed, Plain")
 
-        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed))
+        PollRoomTimelineView(timelineItem: .mock(poll: .undisclosed(), isOutgoing: false))
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Undisclosed, Plain")
@@ -160,5 +190,10 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             .environment(\.timelineStyle, .plain)
             .environmentObject(viewModel.context)
             .previewDisplayName("Ended, Undisclosed, Plain")
+
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(createdByAccountOwner: true)))
+            .environment(\.timelineStyle, .plain)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Creator, disclosed, Plain")
     }
 }
