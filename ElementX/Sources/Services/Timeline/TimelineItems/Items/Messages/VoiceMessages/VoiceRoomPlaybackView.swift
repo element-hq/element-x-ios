@@ -33,11 +33,11 @@ struct VoiceRoomPlaybackView: View {
     
     var onPlayPause: () -> Void = { }
     var onSeek: (Double) -> Void = { _ in }
-    var onWaveformDragStateChanged: (Bool) -> Void = { _ in }
+    var onScrubbing: (Bool) -> Void = { _ in }
     
     private enum DragState: Equatable {
         case inactive
-        case pressing
+        case pressing(progress: Double)
         case dragging(progress: Double)
         
         var progress: Double {
@@ -69,11 +69,16 @@ struct VoiceRoomPlaybackView: View {
     }
     
     @GestureState private var dragState = DragState.inactive
+    @State private var tapProgress: Double = .zero
     
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playbackViewState.progress > 0.0 ? playbackViewState.progress : 1.0
         return Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playbackViewState.duration * percent))
+    }
+    
+    var showWaveformCursor: Bool {
+        playbackViewState.playing || dragState.isDragging
     }
     
     var body: some View {
@@ -87,18 +92,25 @@ struct VoiceRoomPlaybackView: View {
             }
             .padding(.vertical, 6)
             GeometryReader { geometry in
-                WaveformView(waveform: playbackViewState.waveform, progress: playbackViewState.progress)
+                WaveformView(waveform: playbackViewState.waveform, progress: playbackViewState.progress, showCursor: showWaveformCursor)
                     // Add a gesture to drag the waveform
-                    .gesture(LongPressGesture()
+                    .gesture(SpatialTapGesture()
+                        .simultaneously(with: LongPressGesture())
                         .sequenced(before: DragGesture(coordinateSpace: .local))
                         .updating($dragState) { value, state, _ in
                             switch value {
-                            // Long press begins.
-                            case .first(true):
-                                state = .pressing
+                            // (SpatialTap, LongPress) begins.
+                            case .first(let spatialLongPress) where spatialLongPress.second == true:
+                                // Compute the progress with the spatialTap location
+                                let progress = (spatialLongPress.first?.location ?? .zero).x / geometry.size.width
+                                state = .pressing(progress: progress)
                             // Long press confirmed, dragging may begin.
-                            case .second(true, let drag):
-                                let progress: Double = (drag?.location.x ?? .zero) / geometry.size.width
+                            case .second(let spatialLongPress, let drag) where spatialLongPress.second == true:
+                                var progress: Double = tapProgress
+                                // Compute the progress with drag location
+                                if let loc = drag?.location {
+                                    progress = loc.x / geometry.size.width
+                                }
                                 state = .dragging(progress: progress)
                             // Dragging ended or the long press cancelled.
                             default:
@@ -111,9 +123,10 @@ struct VoiceRoomPlaybackView: View {
         .onChange(of: dragState) { newDragState in
             switch newDragState {
             case .inactive:
-                onWaveformDragStateChanged(false)
-            case .pressing:
-                onWaveformDragStateChanged(true)
+                onScrubbing(false)
+            case .pressing(let progress):
+                tapProgress = progress
+                onScrubbing(true)
                 feedbackGenerator.prepare()
                 sendFeedback = true
             case .dragging(let progress):
