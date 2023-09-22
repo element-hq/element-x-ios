@@ -54,6 +54,42 @@ extension XCTestCase {
         }
     }
     
+    /// XCTest utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
+    /// - Parameters:
+    ///   - publisher: The publisher to wait on.
+    ///   - until: callback that evaluates outputs until some condition is reached
+    ///   - timeout: A timeout after which we give up.
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
+    func deferFulfillment<T: Publisher>(_ publisher: T,
+                                        until condition: @escaping (T.Output) -> Bool,
+                                        timeout: TimeInterval = 10,
+                                        message: String? = nil) -> DeferredFulfillment<T.Output> {
+        var result: Result<T.Output, Error>?
+        let expectation = expectation(description: message ?? "Awaiting publisher")
+        let cancellable = publisher
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    result = .failure(error)
+                    expectation.fulfill()
+                case .finished:
+                    break
+                }
+            } receiveValue: { value in
+                if condition(value) {
+                    result = .success(value)
+                    expectation.fulfill()
+                }
+            }
+        
+        return DeferredFulfillment<T.Output> {
+            await self.fulfillment(of: [expectation], timeout: timeout)
+            cancellable.cancel()
+            let unwrappedResult = try XCTUnwrap(result, "Awaited publisher did not produce any output")
+            return try unwrappedResult.get()
+        }
+    }
+    
     struct DeferredFulfillment<T> {
         let closure: () async throws -> T
         @discardableResult func fulfill() async throws -> T {

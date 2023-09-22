@@ -282,11 +282,14 @@ class RoomScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
 
-        // Test
-        let deferred = deferFulfillment(viewModel.context.$viewState.collect(3).first(),
-                                        message: "The existing view state plus one new one should be published.")
+        let deferred = deferFulfillment(viewModel.context.$viewState) {
+            value in value.bindings.alertInfo != nil
+        }
+        
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
+        
         try await deferred.fulfill()
+        
         XCTAssertFalse(viewModel.state.bindings.alertInfo.isNil)
         XCTAssert(roomProxyMock.getMemberUserIDCallsCount == 1)
         XCTAssertEqual(roomProxyMock.getMemberUserIDReceivedUserID, "bob")
@@ -309,7 +312,7 @@ class RoomScreenViewModelTests: XCTestCase {
         // Test
         viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
         await Task.yield()
-        try? await Task.sleep(for: .microseconds(500))
+        try? await Task.sleep(for: .milliseconds(500))
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
     }
@@ -346,7 +349,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         // Test
         viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
-        try? await Task.sleep(for: .microseconds(500))
+        try? await Task.sleep(for: .milliseconds(500))
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
     }
@@ -382,7 +385,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then the receipt should be sent.
         XCTAssertEqual(roomProxy.sendReadReceiptForCalled, true)
@@ -401,13 +404,13 @@ class RoomScreenViewModelTests: XCTestCase {
                      TextRoomTimelineItem(eventID: "t3")]
         let (viewModel, roomProxy, timelineController, _) = readReceiptsConfiguration(with: items)
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
         XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t3")
         
         // When sending a receipt for the first item in the timeline.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then the request should be ignored.
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
@@ -417,10 +420,10 @@ class RoomScreenViewModelTests: XCTestCase {
         let newMessage = TextRoomTimelineItem(eventID: "t4")
         timelineController.timelineItems.append(newMessage)
         timelineController.callbacks.send(.updatedTimelineItems)
-        try await Task.sleep(for: .microseconds(500))
+        try await Task.sleep(for: .milliseconds(500))
         
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then the request should be made.
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 2)
@@ -436,7 +439,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then nothing should be sent.
         XCTAssertEqual(roomProxy.sendReadReceiptForCalled, false)
@@ -451,7 +454,7 @@ class RoomScreenViewModelTests: XCTestCase {
         
         // When sending a read receipt for the last item.
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then a read receipt should be sent for the item before it.
         XCTAssertEqual(roomProxy.sendReadReceiptForCalled, true)
@@ -465,13 +468,13 @@ class RoomScreenViewModelTests: XCTestCase {
                                                  SeparatorRoomTimelineItem(timelineID: "v3")]
         let (viewModel, roomProxy, _, _) = readReceiptsConfiguration(with: items)
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
         XCTAssertEqual(roomProxy.sendReadReceiptForReceivedEventID, "t2")
         
         // When sending the same receipt again
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         
         // Then the second call should be ignored.
         XCTAssertEqual(roomProxy.sendReadReceiptForCallsCount, 1)
