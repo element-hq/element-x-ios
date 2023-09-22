@@ -187,8 +187,8 @@ extension UNMutableNotificationContent {
 
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
-        let isIOS17 = isIOS17()
-        let prefix = "notification_placeholderV2\(isIOS17 ? "iOS17" : "")"
+        let isIOS17Available = isIOS17Available()
+        let prefix = "notification_placeholder\(isIOS17Available ? "V3" : "V2")"
         let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
@@ -231,7 +231,7 @@ extension UNMutableNotificationContent {
         return data
     }
     
-    private func isIOS17() -> Bool {
+    private func isIOS17Available() -> Bool {
         guard let version = Version(UIDevice.current.systemVersion) else {
             return false
         }
