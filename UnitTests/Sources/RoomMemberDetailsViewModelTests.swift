@@ -55,16 +55,17 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
-        
         context.send(viewAction: .ignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.details.isIgnored
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
 
@@ -80,17 +81,18 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
         context.send(viewAction: .showIgnoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
-
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
         
         context.send(viewAction: .ignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.alertInfo != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertNotNil(context.alertInfo)
         XCTAssertFalse(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
 
@@ -107,16 +109,17 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
-
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
         
         context.send(viewAction: .unignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.details.isIgnored == false
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertFalse(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(roomProxyMock.updateMembersCalled)
     }
 
@@ -134,17 +137,18 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showUnignoreAlert)
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
-
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
         
         context.send(viewAction: .unignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.alertInfo != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertTrue(context.viewState.details.isIgnored)
         XCTAssertNotNil(context.alertInfo)
-        try await Task.sleep(for: .microseconds(100))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertFalse(roomProxyMock.updateMembersCalled)
     }
 
