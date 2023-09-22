@@ -212,7 +212,7 @@ extension UNMutableNotificationContent {
         #if targetEnvironment(simulator)
         data = image.pngData()
         #else
-        if ProcessInfo.processInfo.isiOSAppOnMac || isIOS17 {
+        if ProcessInfo.processInfo.isiOSAppOnMac || isIOS17Available {
             data = image.pngData()
         } else {
             data = image.flippedVertically().pngData()
