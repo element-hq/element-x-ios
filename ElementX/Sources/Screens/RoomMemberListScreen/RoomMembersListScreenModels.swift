@@ -32,7 +32,7 @@ struct RoomMembersListScreenViewState: BindableState {
     init(joinedMembersCount: Int,
          joinedMembers: [RoomMemberDetails] = [],
          invitedMembers: [RoomMemberDetails] = [],
-         bindings: RoomMembersListScreenViewStateBindings = .init()) {
+         bindings: RoomMembersListScreenViewStateBindings) {
         self.joinedMembersCount = joinedMembersCount
         self.joinedMembers = joinedMembers
         self.invitedMembers = invitedMembers

@@ -66,6 +66,7 @@ extension XCTestCase {
                                         message: String? = nil) -> DeferredFulfillment<T.Output> {
         var result: Result<T.Output, Error>?
         let expectation = expectation(description: message ?? "Awaiting publisher")
+        var hasFullfilled = false
         let cancellable = publisher
             .sink { completion in
                 switch completion {
@@ -76,9 +77,10 @@ extension XCTestCase {
                     break
                 }
             } receiveValue: { value in
-                if condition(value) {
+                if condition(value), !hasFullfilled {
                     result = .success(value)
                     expectation.fulfill()
+                    hasFullfilled = true
                 }
             }
         
