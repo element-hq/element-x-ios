@@ -194,6 +194,7 @@ targets:
     - package: Emojibase
     - package: WysiwygComposer
     - package: Prefire
+    - package: SwiftOGG
 
     sources:
     - path: ../Sources

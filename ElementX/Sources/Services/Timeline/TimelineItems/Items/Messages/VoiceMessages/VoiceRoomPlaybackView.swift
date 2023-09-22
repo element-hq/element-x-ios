@@ -173,8 +173,8 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VoiceRoomPlaybackView(playbackViewState: playbackViewState,
-                              onPlayPause: { playbackViewState.updateState(playing: !playbackViewState.playing) },
-                              onSeek: { playbackViewState.updateState(progress: $0) })
+                              onPlayPause: { },
+                              onSeek: { value in Task { await playbackViewState.updateState(progress: value) } })
             .fixedSize(horizontal: false, vertical: true)
     }
 }

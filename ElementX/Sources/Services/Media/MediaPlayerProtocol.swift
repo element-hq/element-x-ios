@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +16,25 @@
 
 import Foundation
 
-@MainActor
-protocol RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol,
-                                     mediaPlayerProvider: MediaPlayerProviderProtocol) -> RoomTimelineControllerProtocol
+enum MediaPlayerState {
+    case prepareToPlay
+    case playing
+    case paused
+    case stopped
+}
+
+protocol MediaPlayerProtocol {
+    var mediaSource: MediaSourceProxy? { get }
+    
+    var currentTime: TimeInterval { get }
+    var url: URL? { get }
+    var state: MediaPlayerState { get }
+    
+    func load(mediaSource: MediaSourceProxy, mediaFileHandle: MediaFileHandleProxy) async throws
+    func unloadContent()
+    
+    func play() async throws
+    func pause()
+    func stop()
+    func seek(to progress: Double) async
 }

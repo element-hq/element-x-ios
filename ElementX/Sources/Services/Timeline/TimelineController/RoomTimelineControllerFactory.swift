@@ -19,10 +19,12 @@ import Foundation
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
+                                     mediaProvider: MediaProviderProtocol,
+                                     mediaPlayerProvider: MediaPlayerProviderProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineItemFactory: timelineItemFactory,
                                mediaProvider: mediaProvider,
+                               mediaPlayerProvider: mediaPlayerProvider,
                                appSettings: ServiceLocator.shared.settings)
     }
 }

@@ -23,6 +23,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
@@ -45,11 +46,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
+        self.mediaPlayerProvider = mediaPlayerProvider
         self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
@@ -242,12 +245,46 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("[RoomTimelineController] playPauseAudio(for \(itemID))")
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
+            MXLog.error("timelineItem not found")
+            return
+        }
+
+        switch timelineItem {
+        case let item as VoiceRoomTimelineItem:
+            guard let source = item.content.source else {
+                MXLog.error("[RoomTimelineController] source not defined")
+                return
+            }
+            if let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol {
+                if player.state == .playing {
+                    player.pause()
+                    return
+                }
+                timelineAudioPlaybackViewStates.forEach { key, value in
+                    if key != itemID {
+                        value.detachAudioPlayer()
+                    }
+                }
+                timelineAudioPlaybackViewStates[itemID]?.attachAudioPlayer(player)
+                do {
+                    try await player.play()
+                } catch {
+                    MXLog.error("[RoomTimelineController] Failed to play. \(error)")
+                }
+            } else {
+                MXLog.error("[RoomTimelineController] no audio player")
+            }
+        default:
+            break
+        }
+    }
     
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        Task {
-            timelineAudioPlaybackViewStates[itemID]?.updateState(progress: progress)
-        }
+        MXLog.info("[RoomTimelineController] seekAudio(for \(itemID), progress: \(progress))")
+        await timelineAudioPlaybackViewStates[itemID]?.updateState(progress: progress)
     }
 
     // MARK: - Private

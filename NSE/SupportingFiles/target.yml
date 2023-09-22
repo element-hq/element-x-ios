@@ -103,6 +103,9 @@ targets:
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/Provider
+      excludes:
+        - MediaPlayerProvider.swift
+        - MediaPlayerProviderProtocol.swift
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
     - path: ../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
