@@ -17,6 +17,7 @@
 @testable import ElementX
 
 extension StateStoreViewModel.Context {
+    @available(*, deprecated, message: "Please use deferFulfillment(until:) instead")
     @discardableResult
     func nextViewState() async -> State? {
         await $viewState.nextValue

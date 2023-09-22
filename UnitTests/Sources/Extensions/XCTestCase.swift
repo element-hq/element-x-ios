@@ -30,6 +30,7 @@ extension XCTestCase {
     ///   - publisher: The publisher to wait on.
     ///   - timeout: A timeout after which we give up.
     /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
+    @available(*, deprecated, message: "Please use deferFulfillment(until:) instead")
     func deferFulfillment<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10, message: String? = nil) -> DeferredFulfillment<T.Output> {
         var result: Result<T.Output, Error>?
         let expectation = expectation(description: message ?? "Awaiting publisher")
