@@ -35,7 +35,7 @@ struct VoiceRoomTimelineView: View {
             VoiceRoomPlaybackView(playbackViewState: playbackViewState,
                                   onPlayPause: onPlaybackPlayPause,
                                   onSeek: onPlaybackSeek(_:),
-                                  onWaveformDragStateChanged: onPlaybackDragStateChanged(_:))
+                                  onScrubbing: onPlaybackScrubbing(_:))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -48,7 +48,7 @@ struct VoiceRoomTimelineView: View {
         context.send(viewAction: .seekAudio(itemID: timelineItem.id, progress: progress))
     }
     
-    private func onPlaybackDragStateChanged(_ dragging: Bool) {
+    private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
             context.send(viewAction: .disableLongPress(itemID: timelineItem.id))
         } else {

@@ -283,7 +283,7 @@ class RoomScreenViewModelTests: XCTestCase {
             .store(in: &cancellables)
 
         // Test
-        let deferred = deferFulfillment(viewModel.context.$viewState.collect(2).first(),
+        let deferred = deferFulfillment(viewModel.context.$viewState.collect(3).first(),
                                         message: "The existing view state plus one new one should be published.")
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))
         try await deferred.fulfill()

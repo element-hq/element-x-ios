@@ -40,11 +40,12 @@ extension Waveform {
 }
 
 struct WaveformView: View {
-    let lineWidth: CGFloat = 2
-    let linePadding: CGFloat = 2
+    private let lineWidth: CGFloat = 2
+    private let linePadding: CGFloat = 2
     var waveform: Waveform
-    let minimumGraphAmplitude: CGFloat = 1
+    private let minimumGraphAmplitude: CGFloat = 1
     var progress: CGFloat = 0.0
+    var showCursor = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -64,9 +65,9 @@ struct WaveformView: View {
                     var xOffset: CGFloat = lineWidth / 2
                     var index = 0
                     
-                    while xOffset < width - lineWidth {
+                    while xOffset <= width {
                         let sample = CGFloat(index >= normalisedData.count ? 0 : normalisedData[index])
-                        let drawingAmplitude = max(minimumGraphAmplitude, sample * height)
+                        let drawingAmplitude = max(minimumGraphAmplitude, sample * (height - 2))
 
                         path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
                         path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
@@ -76,13 +77,28 @@ struct WaveformView: View {
                 }
                 .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
             }
+            // Display a cursor
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
+                    .offset(CGSize(width: cursorPosition(progress: progress, width: geometry.size.width), height: 0.0))
+                    .frame(width: lineWidth, height: geometry.size.height)
+                    .opacity(showCursor ? 1 : 0)
+            }
         }
+    }
+    
+    private func cursorPosition(progress: Double, width: Double) -> Double {
+        guard progress > 0 else {
+            return 0
+        }
+        let width = (width * progress)
+        return width - width.truncatingRemainder(dividingBy: lineWidth + linePadding)
     }
 }
 
 struct WaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        WaveformView(waveform: Waveform.mockWaveform)
+        WaveformView(waveform: Waveform.mockWaveform, progress: 0.5)
             .frame(width: 140, height: 50)
     }
 }
