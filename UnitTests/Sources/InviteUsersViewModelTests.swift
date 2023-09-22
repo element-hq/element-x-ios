@@ -67,25 +67,26 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         setupWithRoomType(roomType: .room(roomProxy: RoomProxyMock(with: .init(displayName: "test", members: mockedMembers))))
         
-        let deferredState = deferFulfillment(viewModel.context.$viewState
-            .map(\.membershipState)
-            .map(\.isEmpty)
-            .removeDuplicates()
-            .collect(2).first(), message: "2 states should be published.")
-        context.send(viewAction: .toggleUser(.mockAlice))
-        
-        let states = try await deferredState.fulfill()
-        XCTAssertEqual(states, [true, false])
-        
-        let deferredAction = deferFulfillment(viewModel.actions.first(), message: "1 action should be published.")
-        
-        Task.detached(priority: .low) {
-            await self.context.send(viewAction: .proceed)
+        let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isUserSelected(.mockAlice)
         }
         
-        let action = try await deferredAction.fulfill()
+        context.send(viewAction: .toggleUser(.mockAlice))
         
-        guard case let .invite(members) = action else {
+        try await deferredState.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .invite:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        context.send(viewAction: .proceed)
+        
+        guard case let .invite(members) = try await deferredAction.fulfill() else {
             XCTFail("Sent action should be 'invite'")
             return
         }

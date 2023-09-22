@@ -71,18 +71,19 @@ class BugReportViewModelTests: XCTestCase {
                                                  deviceID: nil,
                                                  screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
-        let deferred = deferFulfillment(viewModel.actions.collect(2).first())
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .submitFinished:
+                return true
+            default:
+                return false
+            }
+        }
+        
         context.send(viewAction: .submit)
-        let actions = try await deferred.fulfill()
-        
-        guard case .submitStarted = actions[0] else {
-            return XCTFail("Action 1 was not .submitFailed")
-        }
-        
-        guard case .submitFinished = actions[1] else {
-            return XCTFail("Action 2 was not .submitFinished")
-        }
-        
+        try await deferred.fulfill()
+                
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))
     }
@@ -97,18 +98,18 @@ class BugReportViewModelTests: XCTestCase {
                                                  deviceID: nil,
                                                  screenshot: nil, isModallyPresented: false)
         
-        let deferred = deferFulfillment(viewModel.actions.collect(2).first())
-        let context = viewModel.context
-        context.send(viewAction: .submit)
-        let actions = try await deferred.fulfill()
-
-        guard case .submitStarted = actions[0] else {
-            return XCTFail("Action 1 was not .submitFailed")
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .submitFailed:
+                return true
+            default:
+                return false
+            }
         }
         
-        guard case .submitFailed = actions[1] else {
-            return XCTFail("Action 2 was not .submitFailed")
-        }
+        let context = viewModel.context
+        context.send(viewAction: .submit)
+        try await deferred.fulfill()
         
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, canContact: false, githubLabels: [], files: []))

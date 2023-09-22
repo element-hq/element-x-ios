@@ -44,8 +44,17 @@ class CreatePollScreenViewModelTests: XCTestCase {
         context.options[1].text = "bla2"
         XCTAssertFalse(context.viewState.bindings.isCreateButtonDisabled)
 
-        let deferred = deferFulfillment(viewModel.actions.first())
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .create:
+                return true
+            default:
+                return false
+            }
+        }
+        
         context.send(viewAction: .create)
+        
         let action = try await deferred.fulfill()
 
         guard case .create(let question, let options, let kind) = action else {

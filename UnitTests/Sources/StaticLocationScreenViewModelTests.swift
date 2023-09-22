@@ -81,7 +81,16 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     func testSendUserLocation() async throws {
         context.mapCenterLocation = .init(latitude: 0, longitude: 0)
         context.geolocationUncertainty = 10
-        let deferred = deferFulfillment(viewModel.actions.first())
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .sendLocation:
+                return true
+            default:
+                return false
+            }
+        }
+        
         context.send(viewAction: .selectLocation)
         guard case .sendLocation(let geoUri, let isUserLocation) = try await deferred.fulfill() else {
             XCTFail("Sent action should be 'sendLocation'")
@@ -95,7 +104,16 @@ class StaticLocationScreenViewModelTests: XCTestCase {
         context.mapCenterLocation = .init(latitude: 0, longitude: 0)
         context.isLocationAuthorized = nil
         context.geolocationUncertainty = 10
-        let deferred = deferFulfillment(viewModel.actions.first())
+
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .sendLocation:
+                return true
+            default:
+                return false
+            }
+        }
+        
         context.send(viewAction: .selectLocation)
         guard case .sendLocation(let geoUri, let isUserLocation) = try await deferred.fulfill() else {
             XCTFail("Sent action should be 'sendLocation'")
