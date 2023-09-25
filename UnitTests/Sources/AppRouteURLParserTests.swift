@@ -34,4 +34,42 @@ class AppRouteURLParserTests: XCTestCase {
         
         XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
     }
+    
+    func testCustomDomainUniversalLinkCallRoutes() {
+        guard let url = URL(string: "https://somecustomdomain.element.io/test") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: url), nil)
+    }
+    
+    func testCustomSchemeLinkCallRoutes() {
+        let urlString = "https://somecustomdomain.element.io/test?param=123"
+        guard let url = URL(string: urlString) else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        guard let encodedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+            XCTFail("Could not encode URL string")
+            return
+        }
+        
+        guard let customSchemeURL = URL(string: "io.element.call:/?url=\(encodedURLString)") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), AppRoute.genericCallLink(url: url))
+    }
+    
+    func testHttpCustomSchemeLinkCallRoutes() {
+        guard let customSchemeURL = URL(string: "io.element.call:/?url=http%3A%2F%2Fcall.element.io%2Ftest") else {
+            XCTFail("URL invalid")
+            return
+        }
+        
+        XCTAssertEqual(AppRouteURLParser(appSettings: ServiceLocator.shared.settings).route(from: customSchemeURL), nil)
+    }
 }
