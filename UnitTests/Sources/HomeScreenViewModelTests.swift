@@ -84,9 +84,9 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "1"
         clientProxy.roomForIdentifierMocks[mockRoomId] = .init(with: .init(id: mockRoomId, displayName: "Some room"))
         
-        let deferred = deferFulfillment(context.$viewState,
-                                        until: { value in value.bindings.leaveRoomAlertItem != nil },
-                                        message: "Alert info should be changed")
+        let deferred = deferFulfillment(context.$viewState) { value in
+            value.bindings.leaveRoomAlertItem != nil
+        }
         
         context.send(viewAction: .leaveRoom(roomIdentifier: mockRoomId))
         
@@ -101,9 +101,9 @@ class HomeScreenViewModelTests: XCTestCase {
         room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
 
-        let deferred = deferFulfillment(context.$viewState,
-                                        until: { value in value.bindings.alertInfo != nil },
-                                        message: "Alert info should be changed")
+        let deferred = deferFulfillment(context.$viewState) { value in
+            value.bindings.alertInfo != nil
+        }
         
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
         

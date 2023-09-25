@@ -259,7 +259,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             state.deletingCustomSetting == false
         }
         
-        let states = try await deferredViewState.fulfill()
+        try await deferredViewState.fulfill()
         
         // an alert is expected
         XCTAssertEqual(viewModel.context.alertInfo?.id, .restoreDefaultFailed)

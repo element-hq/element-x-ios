@@ -282,8 +282,8 @@ class RoomScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
 
-        let deferred = deferFulfillment(viewModel.context.$viewState) {
-            value in value.bindings.alertInfo != nil
+        let deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.bindings.alertInfo != nil
         }
         
         viewModel.context.send(viewAction: .tappedOnUser(userID: "bob"))

@@ -50,13 +50,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        let deferred = deferFulfillment(context.$viewState.collect(2).first())
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.leaveRoomAlertItem != nil
+        }
+        
         context.send(viewAction: .processTapLeave)
-        let states = try await deferred.fulfill()
+        try await deferred.fulfill()
     
-        XCTAssertNil(states[0].bindings.leaveRoomAlertItem)
-        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.state, .public)
-        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
+        XCTAssertEqual(context.viewState.bindings.leaveRoomAlertItem?.state, .public)
+        XCTAssertEqual(context.viewState.bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
     
     func testLeaveRoomTappedWhenRoomNotPublic() async throws {
@@ -67,13 +69,16 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        let deferred = deferFulfillment(context.$viewState.collect(2).first())
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.leaveRoomAlertItem != nil
+        }
+        
         context.send(viewAction: .processTapLeave)
-        let states = try await deferred.fulfill()
-        context.send(viewAction: .processTapLeave)
-        XCTAssertNil(states[0].bindings.leaveRoomAlertItem)
-        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.state, .private)
-        XCTAssertEqual(states[1].bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
+        
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(context.viewState.bindings.leaveRoomAlertItem?.state, .private)
+        XCTAssertEqual(context.viewState.bindings.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
     
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
@@ -82,27 +87,27 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertEmptySubtitle)
     }
     
-    func testLeaveRoomSuccess() async {
-        let expectation = expectation(description: #function)
+    func testLeaveRoomSuccess() async throws {
         roomProxyMock.leaveRoomClosure = {
             .success(())
         }
-        viewModel.actions
-            .sink { action in
-                switch action {
-                case .leftRoom:
-                    break
-                default:
-                    XCTFail("leftRoom expected")
-                }
-                expectation.fulfill()
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .leftRoom:
+                return true
+            default:
+                return false
             }
-            .store(in: &cancellables)
+        }
+        
         context.send(viewAction: .confirmLeave)
-        await fulfillment(of: [expectation])
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
     }
-    
+
     func testLeaveRoomError() async {
         let expectation = expectation(description: #function)
         roomProxyMock.leaveRoomClosure = {
@@ -116,8 +121,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
         XCTAssertNotNil(context.alertInfo)
     }
-    
-    func testInitialDMDetailsState() async {
+
+    func testInitialDMDetailsState() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
@@ -126,16 +131,23 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.dmRecipient != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
     }
-    
+
     func testIgnoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         recipient.ignoreUserClosure = {
             try? await Task.sleep(for: .milliseconds(100))
             return .success(())
         }
+        
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
@@ -143,19 +155,32 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        await context.nextViewState()
+    
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.dmRecipient != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
         context.send(viewAction: .ignoreConfirmed)
         
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == true
+        }
+
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == false
+        }
+
+        try await deferred.fulfill()
+        
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
     }
-    
+
     func testIgnoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         recipient.ignoreUserClosure = {
@@ -169,20 +194,33 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        await context.nextViewState()
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.dmRecipient != nil
+        }
+        
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+
         context.send(viewAction: .ignoreConfirmed)
         
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == true
+        }
+
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == false
+        }
+
+        try await deferred.fulfill()
+        
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
     }
-    
+
     func testUnignoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         recipient.unignoreUserClosure = {
@@ -196,16 +234,29 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        await context.nextViewState()
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.dmRecipient != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
-        
         context.send(viewAction: .unignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == true
+        }
+
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == false
+        }
+
+        try await deferred.fulfill()
+        
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
     }
     
@@ -222,20 +273,33 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        await context.nextViewState()
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.dmRecipient != nil
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
-        
-        let deferred = deferFulfillment(context.$viewState.map(\.isProcessingIgnoreRequest)
-            .removeDuplicates()
-            .collect(3).first())
-        
+
         context.send(viewAction: .unignoreConfirmed)
-        let states = try await deferred.fulfill()
-        XCTAssertEqual(states, [false, true, false])
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == true
+        }
+
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.isProcessingIgnoreRequest == false
+        }
+
+        try await deferred.fulfill()
+        
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
     }
-    
+
     func testCannotInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test",
@@ -248,12 +312,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertFalse(context.viewState.canInviteUsers)
     }
-    
+
     func testInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers, activeMembersCount: mockedMembers.count))
@@ -262,11 +326,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertTrue(context.viewState.canInviteUsers)
-        
+
         var callbackCorrectlyCalled = false
         viewModel.actions
             .sink { action in
@@ -278,12 +342,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                 }
             }
             .store(in: &cancellables)
-        
+
         context.send(viewAction: .processTapInvite)
         await Task.yield()
         XCTAssertTrue(callbackCorrectlyCalled)
     }
-        
+
     func testCanEditAvatar() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomAvatar])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
@@ -293,15 +357,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertTrue(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
         XCTAssertFalse(context.viewState.canEditRoomTopic)
         XCTAssertTrue(context.viewState.canEdit)
     }
-    
+
     func testCanEditName() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomName])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
@@ -311,15 +375,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertTrue(context.viewState.canEditRoomName)
         XCTAssertFalse(context.viewState.canEditRoomTopic)
         XCTAssertTrue(context.viewState.canEdit)
     }
-    
+
     func testCanEditTopic() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [.roomTopic])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
@@ -329,15 +393,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
         XCTAssertTrue(context.viewState.canEditRoomTopic)
         XCTAssertTrue(context.viewState.canEdit)
     }
-    
+
     func testCannotEditRoom() async {
         let owner: RoomMemberProxyMock = .mockOwner(allowedStateEvents: [])
         let mockedMembers: [RoomMemberProxyMock] = [owner, .mockBob, .mockAlice]
@@ -347,15 +411,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
         XCTAssertFalse(context.viewState.canEditRoomTopic)
         XCTAssertFalse(context.viewState.canEdit)
     }
-    
+
     func testCannotEditDirectRoom() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]), .mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isPublic: false, members: mockedMembers))
@@ -364,14 +428,14 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()))
-        
+
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
-        
+
         XCTAssertFalse(context.viewState.canEdit)
     }
-    
+
     // MARK: - Notifications
-    
+
     func testNotificationLoadingSettingsFailure() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
@@ -379,12 +443,21 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                mediaProvider: MockMediaProvider(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock)
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState)
-            .filter(\.isError)
-            .first())
-        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        
+        var deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isError
+        }
+        
         try await deferred.fulfill()
         
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        
+        deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isError
+        }
+        
+        try await deferred.fulfill()
+
         let expectedAlertInfo = AlertInfo(id: RoomDetailsScreenErrorType.alert,
                                           title: L10n.commonError,
                                           message: L10n.screenRoomDetailsErrorLoadingNotificationSettings)
@@ -392,31 +465,43 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.bindings.alertInfo?.title, expectedAlertInfo.title)
         XCTAssertEqual(context.viewState.bindings.alertInfo?.message, expectedAlertInfo.message)
     }
-    
+
     func testNotificationDefaultMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isLoaded
+        }
+        
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
-
+        
         XCTAssertEqual(context.viewState.notificationSettingsState.label, "Default")
     }
     
     func testNotificationCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isCustom))
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isCustom
+        }
+        
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationSettingsState.label, "Custom")
     }
-    
+
     func testNotificationRoomMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isLoaded
+        }
+        
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
-
+        
         _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
         
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
@@ -425,14 +510,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testNotificationRoomNotMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
-        let deferred = deferFulfillment(context.$viewState.map(\.notificationSettingsState).first(where: \.isLoaded))
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.notificationSettingsState.isLoaded
+        }
+        
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
 
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonMute)
         XCTAssertEqual(context.viewState.notificationShortcutButtonImage, Image(systemName: "bell"))
     }
-    
+
     func testUnmuteTappedFailure() async throws {
         try await testNotificationRoomMuted()
         
@@ -460,7 +549,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testMuteTappedFailure() async throws {
         try await testNotificationRoomNotMuted()
-        
+
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.setNotificationModeRoomIdModeClosure = { _, _ in
             defer {
@@ -470,19 +559,19 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .processToogleMuteNotifications)
         await fulfillment(of: [expectation])
-        
+
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonMute)
-        
+
         let expectedAlertInfo = AlertInfo(id: RoomDetailsScreenErrorType.alert,
                                           title: L10n.commonError,
                                           message: L10n.screenRoomDetailsErrorMuting)
-        
+
         XCTAssertEqual(context.viewState.bindings.alertInfo?.id, expectedAlertInfo.id)
         XCTAssertEqual(context.viewState.bindings.alertInfo?.title, expectedAlertInfo.title)
         XCTAssertEqual(context.viewState.bindings.alertInfo?.message, expectedAlertInfo.message)
     }
-    
+
     func testMuteTapped() async throws {
         try await testNotificationRoomNotMuted()
 
@@ -493,15 +582,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         }
         context.send(viewAction: .processToogleMuteNotifications)
         await fulfillment(of: [expectation])
-        
+
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
 
         do {
-            let deferred = deferFulfillment(context.$viewState.first())
+            let deferred = deferFulfillment(context.$viewState) { state in
+                state.notificationSettingsState.isLoaded
+            }
+            
             notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
             try await deferred.fulfill()
         }
-        
+
         if case .loaded(let newNotificationSettingsState) = viewModel.state.notificationSettingsState {
             XCTAssertFalse(newNotificationSettingsState.isDefault)
             XCTAssertEqual(newNotificationSettingsState.mode, .mute)
@@ -509,10 +601,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             XCTFail("invalid state")
         }
     }
-    
+
     func testUnmuteTapped() async throws {
         try await testNotificationRoomMuted()
-
+        
         let expectation = expectation(description: #function)
         notificationSettingsProxyMock.unmuteRoomRoomIdIsEncryptedIsOneToOneClosure = { [weak notificationSettingsProxyMock] _, _, _ in
             notificationSettingsProxyMock?.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
@@ -524,7 +616,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         
         do {
-            let deferred = deferFulfillment(context.$viewState.first())
+            let deferred = deferFulfillment(context.$viewState) { state in
+                state.notificationSettingsState.isLoaded
+            }
+            
             notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
             try await deferred.fulfill()
         }
