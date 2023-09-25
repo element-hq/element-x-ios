@@ -84,10 +84,6 @@ struct DeveloperOptionsScreen: View {
                         .frame(maxWidth: .infinity)
                 }
             }
-            
-            Section {
-                MessageText(attributedString: attributedStringWithAttachment)
-            }
         }
         .overlay(effectsView)
         .compoundList()
@@ -108,25 +104,6 @@ struct DeveloperOptionsScreen: View {
     private func removeConfettiAfterDelay() async {
         try? await Task.sleep(for: .seconds(4))
         showConfetti = false
-    }
-    
-    private let testData = PillTextAttachmentData(type: .user(userId: "@alice:example.com"))
-    
-    private var defaultFontContainer: AttributeContainer {
-        var container = AttributeContainer()
-        container.font = UIFont.preferredFont(forTextStyle: .body)
-        return container
-    }
-    
-    private var attributedStringWithAttachment: AttributedString {
-        guard let attachment = PillTextAttachment(attachmentData: testData) else {
-            return AttributedString()
-        }
-        
-        var attributedString = "Hello " + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
-        attributedString
-            .mergeAttributes(defaultFontContainer)
-        return attributedString
     }
 }
 
