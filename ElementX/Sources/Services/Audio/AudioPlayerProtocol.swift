@@ -29,12 +29,4 @@ enum AudioPlayerCallback {
 
 protocol AudioPlayerProtocol: MediaPlayerProtocol {
     var callbacks: AnyPublisher<AudioPlayerCallback, Never> { get }
-    
-    func loadContent(mediaSource: MediaSourceProxy, mediaFileHandle: MediaFileHandleProxy, displayName: String?) async throws
-}
-
-extension AudioPlayerProtocol {
-    func load(mediaSource: MediaSourceProxy, mediaFileHandle: MediaFileHandleProxy) async throws {
-        try await loadContent(mediaSource: mediaSource, mediaFileHandle: mediaFileHandle, displayName: nil)
-    }
 }

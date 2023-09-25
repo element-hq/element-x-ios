@@ -15,41 +15,44 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private let mediaProvider: MediaProviderProtocol
     private var audioPlayer: AudioPlayerProtocol?
-        
+    private var audioCacheManager: AudioCacheManager
+            
     init(mediaProvider: MediaProviderProtocol) {
         self.mediaProvider = mediaProvider
+        audioCacheManager = AudioCacheManager()
     }
     
-    func player(for mediaSource: MediaSourceProxy) async -> MediaPlayerProtocol? {
-        let audioPlayer = audioPlayer ?? AudioPlayer()
+    deinit {
+        audioPlayer = nil
+        audioCacheManager.clearCache()
+    }
+    
+    func player(for mediaSource: MediaSourceProxy) -> MediaPlayerProtocol? {
+        guard let mimeType = mediaSource.mimeType else {
+            MXLog.error("Unknown mime type")
+            return nil
+        }
         
-        if audioPlayer.url == mediaSource.url {
+        if mimeType.starts(with: "audio/") {
+            if audioPlayer == nil {
+                var cacheManager: AudioCacheManager? = audioCacheManager
+                do {
+                    try audioCacheManager.setupTemporaryFilesFolder()
+                } catch {
+                    MXLog.error("Failed to setup audio cache manager.")
+                    cacheManager = nil
+                }
+                audioPlayer = AudioPlayer(cacheManager: cacheManager)
+            }
             return audioPlayer
+        } else {
+            MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
+            return nil
         }
-        
-        if audioPlayer.url != mediaSource.url {
-            audioPlayer.stop()
-            audioPlayer.unloadContent()
-        }
-        
-        if audioPlayer.url == nil {
-            guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(mediaSource) else {
-                return nil
-            }
-
-            do {
-                try await audioPlayer.load(mediaSource: mediaSource, mediaFileHandle: fileHandle)
-            } catch {
-                MXLog.error("[MediaPlayerProvider] failed to load media: \(error)")
-                return nil
-            }
-        }
-        
-        self.audioPlayer = audioPlayer
-        return audioPlayer
     }
 }

@@ -19,13 +19,32 @@ import Combine
 import Foundation
 import UIKit
 
+private enum InternalAudioPlayerState {
+    case none
+    case loading
+    case readyToPlay
+    case playing
+    case paused
+    case stopped
+    case finishedPlaying
+    case error(Error)
+}
+
 enum AudioPlayerError: Error {
     case genericError
+    case loadFileError
+}
+
+private extension URL {
+    /// Returns true if the URL has a supported audio extension
+    var hasSupportedAudioExtension: Bool {
+        let supportedExtensions = ["mp3", "mp4", "m4a", "wav", "aac"]
+        return supportedExtensions.contains(pathExtension.lowercased())
+    }
 }
 
 class AudioPlayer: NSObject, AudioPlayerProtocol {
     private(set) var mediaSource: MediaSourceProxy?
-    private var mediaFileHandle: MediaFileHandleProxy?
     
     private var playerItem: AVPlayerItem?
     private var audioPlayer: AVQueuePlayer?
@@ -36,19 +55,17 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         callbacksSubject.eraseToAnyPublisher()
     }
     
+    private var internalState = InternalAudioPlayerState.none
+    
     private var statusObserver: NSKeyValueObservation?
-    private var playbackBufferEmptyObserver: NSKeyValueObservation?
     private var rateObserver: NSKeyValueObservation?
     private var playToEndObserver: NSObjectProtocol?
     private var appBackgroundObserver: NSObjectProtocol?
     
-    private var contentURL: URL?
+    private let cacheManager: AudioCacheManager?
+    @CancellableTask private var loadingTask: Task<URL?, Error>?
     
-    var url: URL? {
-        mediaSource?.url
-    }
-    
-    private(set) var displayName: String?
+    private(set) var url: URL?
     
     var duration: TimeInterval {
         abs(CMTimeGetSeconds(audioPlayer?.currentItem?.duration ?? .zero))
@@ -59,132 +76,114 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         return currentTime.isFinite ? currentTime : .zero
     }
     
-    var playerItems: [AVPlayerItem] {
-        guard let audioPlayer else {
-            return []
-        }
-        
-        return audioPlayer.items()
-    }
-    
-    var currentUrl: URL? {
-        (audioPlayer?.currentItem?.asset as? AVURLAsset)?.url
-    }
-    
     var state: MediaPlayerState {
-        if isStopped {
+        if case .loading = internalState {
+            return .loading
+        }
+        if case .stopped = internalState {
             return .stopped
         }
-        if isPlaying {
+        if case .playing = internalState {
             return .playing
         }
-        if isPaused {
+        if case .paused = internalState {
             return .paused
+        }
+        if case .error = internalState {
+            return .error
         }
         return .stopped
     }
     
     private var isStopped = true
     
-    private var isPlaying: Bool {
-        guard let audioPlayer else {
-            return false
-        }
-        
-        return audioPlayer.currentItem != nil && audioPlayer.rate > 0
-    }
-    
-    private var isPaused: Bool {
-        guard let audioPlayer else {
-            return false
-        }
-        
-        return audioPlayer.currentItem != nil && audioPlayer.rate == 0
+    init(cacheManager: AudioCacheManager?) {
+        self.cacheManager = cacheManager
+        super.init()
     }
     
     deinit {
-        removeObservers()
+        stop()
         unloadContent()
+        disableIdleTimer(false)
     }
     
-    func loadContent(mediaSource: MediaSourceProxy, mediaFileHandle: MediaFileHandleProxy, displayName: String? = nil) async throws {
-        if self.mediaFileHandle == mediaFileHandle {
+    func play(mediaSource: MediaSourceProxy, mediaProvider: MediaProviderProtocol) async throws {
+        if state != .error, self.mediaSource == mediaSource {
             return
         }
         
-        self.mediaSource = mediaSource
-        self.mediaFileHandle = mediaFileHandle
-        self.displayName = displayName
-        
-        removeObservers()
-        
-        dispatchCallback(.didStartLoading)
-        
-        // Convert from ogg if needed
-        contentURL = mediaFileHandle.url
-        
-        if !mediaFileHandle.url.hasSupportedAudioExtension {
-            let identifier = UUID().uuidString
-            let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(identifier)
-            var newURL = uniqueFolder.appendingPathComponent(mediaFileHandle.url.lastPathComponent).deletingPathExtension()
-            let fileExtension = newURL.hasSupportedAudioExtension ? newURL.pathExtension : "m4a"
-            newURL.appendPathExtension(fileExtension)
-            
-            do {
-                try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
-                try await AudioConverter.convertToMPEG4AACIfNeeded(sourceURL: mediaFileHandle.url, destinationURL: newURL)
-                contentURL = newURL
-            } catch {
-                throw AudioPlayerError.genericError
+        unloadContent()
+        setInternalState(.loading)
+
+        loadingTask = Task<URL?, Error> {
+            guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(mediaSource) else {
+                throw AudioPlayerError.loadFileError
             }
+
+            var url = fileHandle.url
+
+            // Convert from ogg if needed
+            if !fileHandle.url.hasSupportedAudioExtension {
+                let audioConverter = AudioConverter()
+                                
+                if let cacheManager {
+                    let cacheURL = cacheManager.cacheURL(for: mediaSource, replacingExtension: "m4a")
+                    // Do we already have a converted version?
+                    if !cacheManager.fileExists(at: cacheURL) {
+                        try await audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: cacheURL)
+                    }
+                    url = cacheURL
+                } else {
+                    let tempURL = URL.temporaryDirectory.appendingPathComponent(mediaSource.url.deletingPathExtension().lastPathComponent).appendingPathExtension("m4a")
+                    try await audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: tempURL)
+                    url = tempURL
+                }
+            }
+            
+            guard !Task.isCancelled else {
+                MXLog.debug("loading task has been cancelled.")
+                return nil
+            }
+
+            return url
         }
         
-        guard let contentURL else {
-            throw AudioPlayerError.genericError
+        do {
+            // if the task value is nil, then the task has been cancelled
+            if let url = try await loadingTask?.value {
+                self.mediaSource = mediaSource
+                self.url = url
+                
+                MXLog.debug("loading audio file: \(url.path())")
+                
+                playerItem = AVPlayerItem(url: url)
+                audioPlayer = AVQueuePlayer(playerItem: playerItem)
+                
+                addObservers()
+            }
+        } catch {
+            setInternalState(.error(error))
+            throw error
         }
-        
-        playerItem = AVPlayerItem(url: contentURL)
-        audioPlayer = AVQueuePlayer(playerItem: playerItem)
-        
-        addObservers()
     }
-    
-    func reloadContentIfNeeded() async throws {
-        if let mediaSource, let mediaFileHandle, let audioPlayer, audioPlayer.currentItem == nil {
-            MXLog.debug("[AudioPlayer] reloading content...")
-            self.mediaFileHandle = nil
-            try await loadContent(mediaSource: mediaSource, mediaFileHandle: mediaFileHandle)
-        }
-    }
-    
-    func removeAllPlayerItems() {
-        audioPlayer?.removeAllItems()
-    }
-    
-    func unloadContent() {
-        mediaSource = nil
-        mediaFileHandle = nil
-        contentURL = nil
-        audioPlayer?.replaceCurrentItem(with: nil)
-    }
-    
-    func play() async throws {
+
+    func resume() async throws {
         isStopped = false
-        
-        try await reloadContentIfNeeded()
-        
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            MXLog.error("[AudioPlayer] Could not redirect audio playback to speakers.")
+            MXLog.error("Could not redirect audio playback to speakers.")
         }
-        
-        MXLog.debug("[AudioPlayer] playing...")
         audioPlayer?.play()
     }
     
     func pause() {
+        guard case .playing = internalState else {
+            MXLog.error("Cannot pause playback (not playing)")
+            return
+        }
         audioPlayer?.pause()
     }
     
@@ -199,13 +198,20 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     func seek(to progress: Double) async {
-        MXLog.debug("[AudioPlayer] seek(to: \(progress)")
+        guard let audioPlayer else { return }
         let time = progress * duration
-        await audioPlayer?.seek(to: CMTime(seconds: time, preferredTimescale: 60000))
+        await audioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60000))
     }
     
     // MARK: - Private
     
+    private func unloadContent() {
+        mediaSource = nil
+        url = nil
+        audioPlayer?.replaceCurrentItem(with: nil)
+        removeObservers()
+    }
+
     private func addObservers() {
         guard let audioPlayer, let playerItem else {
             return
@@ -216,63 +222,91 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             
             switch playerItem.status {
             case .failed:
-                self.dispatchCallback(.didFailWithError(error: playerItem.error ?? AudioPlayerError.genericError))
+                self.setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
             case .readyToPlay:
-                self.dispatchCallback(.didFinishLoading)
+                self.setInternalState(.readyToPlay)
             default:
                 break
             }
         }
-        
-        playbackBufferEmptyObserver = playerItem.observe(\.isPlaybackBufferEmpty, options: [.old, .new]) { [weak self] _, _ in
-            guard let self else { return }
-            
-            if playerItem.isPlaybackBufferEmpty {
-                self.dispatchCallback(.didStartLoading)
-            } else {
-                self.dispatchCallback(.didFinishLoading)
-            }
-        }
-        
+                
         rateObserver = audioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] _, _ in
             guard let self else { return }
             
             if audioPlayer.rate == 0.0 {
                 if self.isStopped {
-                    self.dispatchCallback(.didStopPlaying)
+                    self.setInternalState(.stopped)
                 } else {
-                    self.dispatchCallback(.didPausePlaying)
+                    self.setInternalState(.paused)
                 }
             } else {
-                self.dispatchCallback(.didStartPlaying)
+                self.setInternalState(.playing)
             }
         }
                 
         NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.dispatchCallback(.didFinishPlaying)
+                self.setInternalState(.finishedPlaying)
             }
             .store(in: &cancellables)
         
-        // Request authorization uppon UIApplication.didBecomeActiveNotification notification
+        // Pause playback uppon UIApplication.didBecomeActiveNotification notification
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.pause()
-                self.dispatchCallback(.didPausePlaying)
             }
             .store(in: &cancellables)
     }
     
     private func removeObservers() {
         statusObserver?.invalidate()
-        playbackBufferEmptyObserver?.invalidate()
         rateObserver?.invalidate()
         cancellables.removeAll()
     }
     
+    private func setInternalState(_ state: InternalAudioPlayerState) {
+        internalState = state
+        switch state {
+        case .none:
+            break
+        case .loading:
+            dispatchCallback(.didStartLoading)
+        case .readyToPlay:
+            dispatchCallback(.didFinishLoading)
+            audioPlayer?.play()
+        case .playing:
+            dispatchCallback(.didStartPlaying)
+        case .paused:
+            dispatchCallback(.didPausePlaying)
+        case .stopped:
+            dispatchCallback(.didStopPlaying)
+        case .finishedPlaying:
+            dispatchCallback(.didFinishPlaying)
+        case .error(let error):
+            MXLog.error("audio player did fail. \(error)")
+            dispatchCallback(.didFailWithError(error: error))
+        }
+    }
+    
     private func dispatchCallback(_ callback: AudioPlayerCallback) {
+        switch callback {
+        case .didStartLoading, .didFinishLoading:
+            break
+        case .didStartPlaying:
+            disableIdleTimer(true)
+        case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
+            disableIdleTimer(false)
+        case .didFailWithError:
+            disableIdleTimer(false)
+        }
         callbacksSubject.send(callback)
+    }
+    
+    private func disableIdleTimer(_ disabled: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = disabled
+        }
     }
 }

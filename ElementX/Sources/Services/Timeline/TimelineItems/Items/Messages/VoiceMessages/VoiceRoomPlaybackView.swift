@@ -16,16 +16,18 @@
 
 import SwiftUI
 
-struct VoiceRoomPlaybackView: View {
-    @ObservedObject var playbackViewState: VoiceRoomPlaybackViewState
+struct VoiceRoomPlaybackView<AudioPlayerState>: View where AudioPlayerState: AudioPlayerStateProtocol {
+    @ObservedObject var playerState: AudioPlayerState
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @State private var sendFeedback = false
     
+    private let waveformLineWidth = 2.0
+    private let waveformLinePadding = 2.0
     private let waveformMaxWidth: CGFloat = 150
     private let playPauseButtonSize = CGSize(width: 32, height: 32)
     
-    private static let elapsedTimeFormatter: DateFormatter = {
+    private let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "m:ss"
         return dateFormatter
@@ -38,13 +40,13 @@ struct VoiceRoomPlaybackView: View {
     private enum DragState: Equatable {
         case inactive
         case pressing(progress: Double)
-        case dragging(progress: Double)
+        case dragging(progress: Double, totalWidth: Double)
         
         var progress: Double {
             switch self {
             case .inactive, .pressing:
                 return .zero
-            case .dragging(let progress):
+            case .dragging(let progress, _):
                 return progress
             }
         }
@@ -73,12 +75,12 @@ struct VoiceRoomPlaybackView: View {
     
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
-        let percent = playbackViewState.progress > 0.0 ? playbackViewState.progress : 1.0
-        return Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playbackViewState.duration * percent))
+        let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
+        return elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playerState.duration * percent))
     }
     
     var showWaveformCursor: Bool {
-        playbackViewState.playing || dragState.isDragging
+        playerState.playing || dragState.isDragging
     }
     
     var body: some View {
@@ -90,13 +92,12 @@ struct VoiceRoomPlaybackView: View {
                     .foregroundColor(.compound.textSecondary)
                     .monospacedDigit()
             }
-            .padding(.vertical, 6)
             GeometryReader { geometry in
-                WaveformView(waveform: playbackViewState.waveform, progress: playbackViewState.progress, showCursor: showWaveformCursor)
+                WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
                     // Add a gesture to drag the waveform
                     .gesture(SpatialTapGesture()
                         .simultaneously(with: LongPressGesture())
-                        .sequenced(before: DragGesture(coordinateSpace: .local))
+                        .sequenced(before: DragGesture(minimumDistance: waveformLinePadding, coordinateSpace: .local))
                         .updating($dragState) { value, state, _ in
                             switch value {
                             // (SpatialTap, LongPress) begins.
@@ -111,7 +112,7 @@ struct VoiceRoomPlaybackView: View {
                                 if let loc = drag?.location {
                                     progress = loc.x / geometry.size.width
                                 }
-                                state = .dragging(progress: progress)
+                                state = .dragging(progress: progress, totalWidth: geometry.size.width)
                             // Dragging ended or the long press cancelled.
                             default:
                                 state = .inactive
@@ -129,18 +130,21 @@ struct VoiceRoomPlaybackView: View {
                 onScrubbing(true)
                 feedbackGenerator.prepare()
                 sendFeedback = true
-            case .dragging(let progress):
+            case .dragging(let progress, let totalWidth):
                 if sendFeedback {
                     feedbackGenerator.impactOccurred()
                     sendFeedback = false
                 }
-                if abs(progress - playbackViewState.progress) > 0.01 {
+                let minimumProgress = waveformLinePadding / totalWidth
+                let deltaProgress = abs(progress - playerState.progress)
+                let deltaTime = playerState.duration * deltaProgress
+                if deltaProgress == 0 || deltaProgress >= minimumProgress || deltaTime >= 1.0 {
                     onSeek(max(0, min(progress, 1.0)))
                 }
             }
         }
-        .padding(.vertical, 2)
-        .padding(.horizontal, 8)
+        .padding(.leading, 2)
+        .padding(.trailing, 8)
     }
     
     @ViewBuilder
@@ -148,16 +152,22 @@ struct VoiceRoomPlaybackView: View {
         Button {
             onPlayPause()
         } label: {
-            Image(systemName: playbackViewState.playing ? "pause.fill" : "play.fill")
-                .foregroundColor(.compound.iconSecondary)
-                .background(
-                    Circle()
-                        .frame(width: playPauseButtonSize.width,
-                               height: playPauseButtonSize.height)
-                        .foregroundColor(.compound.bgCanvasDefault)
-                )
-                .padding(.trailing, 7)
+            ZStack {
+                Circle()
+                    .foregroundColor(.compound.bgCanvasDefault)
+                if playerState.loading {
+                    ProgressView()
+                } else {
+                    Image(asset: playerState.playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
+                        .offset(x: playerState.playing ? 0 : 2)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.compound.iconSecondary)
+                }
+            }
         }
+        .disabled(playerState.loading)
+        .frame(width: playPauseButtonSize.width,
+               height: playPauseButtonSize.height)
     }
 }
 
@@ -167,14 +177,18 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let playbackViewState = VoiceRoomPlaybackViewState(duration: 10.0,
-                                                              waveform: waveform,
-                                                              progress: 0.3)
+    static let playerState: MockAudioPlayerState = {
+        var state = MockAudioPlayerState(duration: 10.0,
+                                         waveform: waveform,
+                                         progress: 0.3)
+        state.loading = true
+        return state
+    }()
     
     static var previews: some View {
-        VoiceRoomPlaybackView(playbackViewState: playbackViewState,
+        VoiceRoomPlaybackView(playerState: playerState,
                               onPlayPause: { },
-                              onSeek: { value in Task { await playbackViewState.updateState(progress: value) } })
+                              onSeek: { value in Task { await playerState.updateState(progress: value) } })
             .fixedSize(horizontal: false, vertical: true)
     }
 }

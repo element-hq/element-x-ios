@@ -109,8 +109,8 @@ struct RoomScreenViewState: BindableState {
     /// A closure providing the actions to show when long pressing on an item in the timeline.
     var timelineItemMenuActionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     
-    /// A closure providing the associated audio playback view state for an item in the timeline.
-    var audioPlaybackViewStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState?)?
+    /// A closure providing the associated audio player state for an item in the timeline.
+    var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?
 }
 
 struct RoomScreenViewStateBindings {

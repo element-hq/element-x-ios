@@ -505,7 +505,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                      contentType: nil),
                                                       replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                             contentType: .text(.init(body: "Short")))),
-                                  playbackViewState: VoiceRoomPlaybackViewState(duration: 10, waveform: Waveform.mockWaveform))
+                                  playerState: AudioPlayerState(duration: 10, waveform: Waveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

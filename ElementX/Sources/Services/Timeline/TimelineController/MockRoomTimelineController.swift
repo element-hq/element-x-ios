@@ -82,10 +82,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
     func retryDecryption(for sessionID: String) async { }
     
-    func playbackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState? {
-        VoiceRoomPlaybackViewState(duration: 10.0,
-                                   waveform: nil,
-                                   progress: 0.0)
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState? {
+        AudioPlayerState(duration: 10.0,
+                         waveform: nil,
+                         progress: 0.0)
     }
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async { }

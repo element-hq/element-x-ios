@@ -20,19 +20,17 @@ import SwiftUI
 struct VoiceRoomTimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
     let timelineItem: VoiceRoomTimelineItem
-    let playbackViewState: VoiceRoomPlaybackViewState
+    let playerState: AudioPlayerState
+    @State var resumePlaybackAfterScrubbing = false
     
-    init(timelineItem: VoiceRoomTimelineItem, playbackViewState: VoiceRoomPlaybackViewState?) {
+    init(timelineItem: VoiceRoomTimelineItem, playerState: AudioPlayerState?) {
         self.timelineItem = timelineItem
-        if playbackViewState == nil {
-            MXLog.error("[VoiceRoomTimelineView] Voice audio playback state is missing")
-        }
-        self.playbackViewState = playbackViewState ?? VoiceRoomPlaybackViewState()
+        self.playerState = playerState ?? AudioPlayerState(duration: 0)
     }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VoiceRoomPlaybackView(playbackViewState: playbackViewState,
+            VoiceRoomPlaybackView(playerState: playerState,
                                   onPlayPause: onPlaybackPlayPause,
                                   onSeek: onPlaybackSeek(_:),
                                   onScrubbing: onPlaybackScrubbing(_:))
@@ -50,9 +48,17 @@ struct VoiceRoomTimelineView: View {
     
     private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
+            if playerState.playing {
+                resumePlaybackAfterScrubbing = true
+                context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+            }
             context.send(viewAction: .disableLongPress(itemID: timelineItem.id))
         } else {
             context.send(viewAction: .enableLongPress(itemID: timelineItem.id))
+            if resumePlaybackAfterScrubbing {
+                context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
+                resumePlaybackAfterScrubbing = false
+            }
         }
     }
 }
@@ -73,9 +79,9 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                             source: nil,
                                                                             contentType: nil))
     
-    static let playbackViewState = VoiceRoomPlaybackViewState(duration: 10.0,
-                                                              waveform: Waveform.mockWaveform,
-                                                              progress: 0.4)
+    static let playerState = AudioPlayerState(duration: 10.0,
+                                              waveform: Waveform.mockWaveform,
+                                              progress: 0.4)
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
@@ -87,7 +93,7 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     static var body: some View {
-        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem, playbackViewState: playbackViewState)
+        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem, playerState: playerState)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

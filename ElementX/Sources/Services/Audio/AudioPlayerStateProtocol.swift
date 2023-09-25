@@ -16,24 +16,16 @@
 
 import Foundation
 
-enum MediaPlayerState {
-    case loading
-    case playing
-    case paused
-    case stopped
-    case error
-}
+@MainActor
+protocol AudioPlayerStateProtocol: AnyObject, ObservableObject {
+    var duration: Double { get }
+    var waveform: Waveform { get }
 
-protocol MediaPlayerProtocol {
-    var mediaSource: MediaSourceProxy? { get }
+    var loading: Bool { get }
+    var playing: Bool { get }
+    var progress: Double { get }
     
-    var currentTime: TimeInterval { get }
-    var url: URL? { get }
-    var state: MediaPlayerState { get }
-    
-    func play(mediaSource: MediaSourceProxy, mediaProvider: MediaProviderProtocol) async throws
-    func resume() async throws
-    func pause()
-    func stop()
-    func seek(to progress: Double) async
+    func updateState(progress: Double) async
+    func attachAudioPlayer(_ audioPlayer: AudioPlayerProtocol)
+    func detachAudioPlayer()
 }
