@@ -75,16 +75,15 @@ struct SwipeRightAction<Label: View>: ViewModifier {
                     }
                     
                     xOffset = 0.0
-                }
-            )
-            .onChange(of: dragGestureActive, perform: { value in
+                })
+            .onChange(of: dragGestureActive) { value in
                 if value == true {
                     if shouldStartAction() {
                         feedbackGenerator.prepare()
                         canStartAction = true
                     }
                 }
-            })
+            }
             .overlay(alignment: .leading) {
                 // We want the action icon to follow the view translation and gradually fade in
                 label()

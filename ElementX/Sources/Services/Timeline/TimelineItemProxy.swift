@@ -34,7 +34,7 @@ struct TimelineItemIdentifier: Hashable {
 extension TimelineItemIdentifier {
     /// Use only for mocks/tests
     static var random: Self {
-        .init(timelineID: UUID().uuidString)
+        .init(timelineID: UUID().uuidString, eventID: UUID().uuidString)
     }
 }
 
