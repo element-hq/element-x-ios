@@ -20,17 +20,9 @@ struct SwipeToReplyView: View {
     let timelineItem: RoomTimelineItemProtocol
     
     var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: "arrowshape.turn.up.left")
-                .foregroundColor(.compound.iconPrimary)
-            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
-               messageTimelineItem.isThreaded {
-                Text(L10n.actionReplyInThread)
-                    .font(.compound.bodyXS)
-                    .foregroundColor(.compound.textPrimary)
-            }
-        }
-        .accessibilityHidden(true)
+        Image(systemName: "arrowshape.turn.up.left")
+            .foregroundColor(.compound.iconPrimary)
+            .accessibilityHidden(true)
     }
 }
 
@@ -41,16 +33,8 @@ struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
                                                    isEditable: true,
                                                    isThreaded: false, sender: .init(id: ""),
                                                    content: .init(body: ""))
-    static let threadedTimelineItem = TextRoomTimelineItem(id: .init(timelineID: ""),
-                                                           timestamp: "",
-                                                           isOutgoing: true,
-                                                           isEditable: true,
-                                                           isThreaded: true,
-                                                           sender: .init(id: ""),
-                                                           content: .init(body: ""))
     
     static var previews: some View {
         SwipeToReplyView(timelineItem: timelineItem)
-        SwipeToReplyView(timelineItem: threadedTimelineItem)
     }
 }
