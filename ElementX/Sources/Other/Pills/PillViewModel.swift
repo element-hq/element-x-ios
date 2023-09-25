@@ -43,7 +43,7 @@ final class PillViewModel: ObservableObject {
         switch state {
         case .loadingUser:
             return nil
-        case .loadedUser(_, let name,_):
+        case .loadedUser(_, let name, _):
             return name
         }
     }
