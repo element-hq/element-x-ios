@@ -44,6 +44,7 @@
 "action_no" = "No";
 "action_not_now" = "Not now";
 "action_ok" = "OK";
+"action_open_settings" = "Open settings";
 "action_open_with" = "Open with";
 "action_quick_reply" = "Quick reply";
 "action_quote" = "Quote";
@@ -104,6 +105,7 @@
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
+"common_permission" = "Permission";
 "common_poll_total_votes" = "Total votes: %1$@";
 "common_poll_undisclosed_text" = "Results will show after the poll has ended";
 "common_privacy_policy" = "Privacy policy";
@@ -147,6 +149,10 @@
 "common_waiting" = "Waiting…";
 "common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
+"dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
+"dialog_permission_generic" = "Please grant the permission in the system settings.";
+"dialog_permission_microphone" = "In order to let the application use the microphone, please grant the permission in the system settings.";
+"dialog_permission_notification" = "In order to let the application display notifications, please grant the permission in the system settings.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Warning";
 "emoji_picker_category_activity" = "Activities";
