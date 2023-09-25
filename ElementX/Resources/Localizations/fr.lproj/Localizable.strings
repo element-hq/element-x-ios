@@ -8,6 +8,7 @@
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_user_menu" = "Menu utilisateur";
 "action_accept" = "Accepter";
+"action_add_to_timeline" = "Ajouter à la discussion";
 "action_back" = "Retour";
 "action_cancel" = "Annuler";
 "action_choose_photo" = "Choisissez une photo";
@@ -43,6 +44,7 @@
 "action_no" = "Non";
 "action_not_now" = "Pas maintenant";
 "action_ok" = "OK";
+"action_open_settings" = "Ouvrir les paramètres";
 "action_open_with" = "Ouvrir avec";
 "action_quick_reply" = "Réponse rapide";
 "action_quote" = "Citer";
@@ -103,6 +105,7 @@
 "common_password" = "Mot de passe";
 "common_people" = "Personnes";
 "common_permalink" = "Permalien";
+"common_permission" = "Autorisation";
 "common_poll_total_votes" = "Nombre total de votes : %1$@";
 "common_poll_undisclosed_text" = "Les résultats s’afficheront une fois le sondage terminé";
 "common_privacy_policy" = "Politique de confidentialité";
@@ -144,7 +147,12 @@
 "common_verification_complete" = "Vérification terminée";
 "common_video" = "Vidéo";
 "common_waiting" = "En attente...";
+"common_poll_summary" = "Sondage : %1$@";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
+"dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
+"dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
+"dialog_permission_microphone" = "Pour permettre à l'application d’utiliser le microphone, veuillez accorder l’autorisation dans les paramètres du système.";
+"dialog_permission_notification" = "Pour permettre à l’application d’afficher les notifications, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Attention";
 "emoji_picker_category_activity" = "Activités";

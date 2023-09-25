@@ -104,6 +104,8 @@ public enum L10n {
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   public static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
+  /// Open settings
+  public static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
   /// Open with
   public static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
   /// Quick reply
@@ -232,6 +234,8 @@ public enum L10n {
   public static var commonPeople: String { return L10n.tr("Localizable", "common_people") }
   /// Permalink
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
+  /// Permission
+  public static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
   /// Poll: %1$@
   public static func commonPollSummary(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_summary", String(describing: p1))
@@ -330,6 +334,14 @@ public enum L10n {
   public static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
   }
+  /// In order to let the application use the camera, please grant the permission in the system settings.
+  public static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
+  /// Please grant the permission in the system settings.
+  public static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
+  /// In order to let the application use the microphone, please grant the permission in the system settings.
+  public static var dialogPermissionMicrophone: String { return L10n.tr("Localizable", "dialog_permission_microphone") }
+  /// In order to let the application display notifications, please grant the permission in the system settings.
+  public static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
   /// Confirmation
   public static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
   /// Error
