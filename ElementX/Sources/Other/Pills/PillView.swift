@@ -31,7 +31,7 @@ struct PillView: View {
         .padding(.vertical, 4)
         .background(Capsule().foregroundColor(.gray))
         .frame(maxWidth: 250)
-        .onChange(of: viewModel.displayText) { _ in
+        .onChange(of: viewModel.state) { _ in
             updateClosure()
         }
     }

@@ -37,22 +37,22 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
     override func loadView() {
         super.loadView()
 
-        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData else {
+        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData,
+              let roomID = messageTextView?.roomID else {
             MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
             return
         }
         
-        let imageProvider = MockMediaProvider()
         let viewModel: PillViewModel
         if isXcodePreview {
             viewModel = PillViewModel.mockViewModel(type: .user)
         } else if let clientProxy = Self.currentSession?.clientProxy {
-            viewModel = PillViewModel(clientProxy: clientProxy, data: textAttachmentData)
+            viewModel = PillViewModel(clientProxy: clientProxy, roomID: roomID, data: textAttachmentData)
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: client proxy is missing")
             return
         }
-        var view = PillView(imageProvider: imageProvider, viewModel: viewModel) { [weak self] in
+        let view = PillView(imageProvider: Self.currentSession?.mediaProvider, viewModel: viewModel) { [weak self] in
             self?.messageTextView?.invalidateTextAttachmentsDisplay()
         }
         let controller = UIHostingController(rootView: view)

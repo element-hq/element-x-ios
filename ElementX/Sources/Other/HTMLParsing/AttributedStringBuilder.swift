@@ -206,7 +206,16 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if let url = value as? URL {
                     switch PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) {
                     case .userIdentifier(let identifier):
-                        attributedString.addAttributes([.MatrixUserID: identifier], range: range)
+                        let attachmentData = PillTextAttachmentData(type: .user(userId: identifier))
+                        guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
+                            attributedString.addAttributes([.MatrixUserID: identifier], range: range)
+                            return
+                        }
+                        
+                        let attachmentString = NSAttributedString(attachment: attachment)
+                        attributedString.replaceCharacters(in: range, with: attachmentString)
+//                        attributedString.addAttributes([.MatrixUserID: identifier, .link: url], range: range)
+                        
                     case .roomIdentifier(let identifier):
                         attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
                     case .roomAlias(let alias):

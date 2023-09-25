@@ -19,6 +19,7 @@ import SwiftUI
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     @Environment(\.layoutDirection) private var layoutDirection
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     
     private let attributedString: AttributedString
     private let additionalWhitespacesCount: Int
@@ -95,7 +96,7 @@ struct FormattedBodyText: View {
                 } else if component.isBlockquote {
                     // The rendered blockquote with a greedy width. The custom layout prevents the
                     // infinite width from increasing the overall width of the view.
-                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes), roomID: context.viewState.roomID)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 12.0)
@@ -109,7 +110,7 @@ struct FormattedBodyText: View {
                         }
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
-                    MessageText(attributedString: component.attributedString)
+                    MessageText(attributedString: component.attributedString, roomID: context.viewState.roomID)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .layoutPriority(TimelineBubbleLayout.Priority.regularText)
@@ -120,7 +121,7 @@ struct FormattedBodyText: View {
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
+                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes), roomID: context.viewState.roomID)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
@@ -139,11 +140,11 @@ struct FormattedBodyText: View {
                         Rectangle()
                             .foregroundColor(Color.red)
                             .frame(width: 4.0)
-                        MessageText(attributedString: component.attributedString)
+                        MessageText(attributedString: component.attributedString, roomID: context.viewState.roomID)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 } else {
-                    MessageText(attributedString: component.attributedString)
+                    MessageText(attributedString: component.attributedString, roomID: context.viewState.roomID)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                 }

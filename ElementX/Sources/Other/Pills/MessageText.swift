@@ -18,6 +18,7 @@ import Combine
 import SwiftUI
 
 final class MessageTextView: UITextView {
+    var roomID: String?
     var updateClosure: (() -> Void)?
 
     // This prevents the magnifying glass from showing up
@@ -41,9 +42,11 @@ final class MessageTextView: UITextView {
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction: OpenURLAction
     @State var attributedString: AttributedString
+    let roomID: String
 
     func makeUIView(context: Context) -> MessageTextView {
         let textView = MessageTextView(usingTextLayoutManager: false)
+        textView.roomID = roomID
         textView.updateClosure = {
             attributedString = AttributedString(textView.attributedText)
         }
@@ -138,13 +141,13 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     
     @ViewBuilder
     static var attachmentPreview: some View {
-        MessageText(attributedString: attributedStringWithAttachment)
+        MessageText(attributedString: attributedStringWithAttachment, roomID: "")
             .border(Color.purple)
             .previewDisplayName("Custom Attachment")
     }
 
     static var previews: some View {
-        MessageText(attributedString: attributedString)
+        MessageText(attributedString: attributedString, roomID: "")
             .border(Color.purple)
             .previewDisplayName("Custom Text")
         // For comparison
@@ -153,12 +156,12 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("SwiftUI Default Text")
         attachmentPreview
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
-            MessageText(attributedString: attributedString)
+            MessageText(attributedString: attributedString, roomID: "")
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
         }
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
-            MessageText(attributedString: attributedString)
+            MessageText(attributedString: attributedString, roomID: "")
                 .border(Color.purple)
                 .previewDisplayName("With list")
         }

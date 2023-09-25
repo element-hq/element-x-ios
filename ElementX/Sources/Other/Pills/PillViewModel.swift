@@ -16,25 +16,78 @@
 
 import Foundation
 
+enum PillViewState: Equatable {
+    case loadingUser(userID: String)
+    case loadedUser(userID: String, name: String, avatarURL: URL?)
+}
+
 final class PillViewModel: ObservableObject {
     enum MockType {
         case user
     }
     
     private let clientProxy: ClientProxyProtocol
-    @Published private(set) var url: URL?
-    @Published private(set) var name: String
-    @Published private(set) var displayText: String
-    let contentID: String
+    private let roomID: String
+    @Published private(set) var state: PillViewState
     
-    init(clientProxy: ClientProxyProtocol, data: PillTextAttachmentData) {
+    var url: URL? {
+        switch state {
+        case .loadingUser:
+            return nil
+        case .loadedUser(_, _, let url):
+            return url
+        }
+    }
+    
+    var name: String? {
+        switch state {
+        case .loadingUser:
+            return nil
+        case .loadedUser(_, let name,_):
+            return name
+        }
+    }
+    
+    var displayText: String {
+        switch state {
+        case .loadedUser(_, let name, _):
+            return name
+        case .loadingUser(let userID):
+            return userID
+        }
+    }
+    
+    var contentID: String {
+        switch state {
+        case .loadedUser(let userID, _, _):
+            return userID
+        case .loadingUser(let userID):
+            return userID
+        }
+    }
+    
+    init(clientProxy: ClientProxyProtocol, roomID: String, data: PillTextAttachmentData) {
         self.clientProxy = clientProxy
+        self.roomID = roomID
         switch data.type {
         case let .user(id):
-            contentID = id
+            state = .loadingUser(userID: id)
+            Task {
+                guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
+                    MXLog.error("Could not fetch room for mention")
+                    return
+                }
+                
+                switch await roomProxy.getMember(userID: id) {
+                case .success(let profile):
+                    await MainActor.run {
+                        state = .loadedUser(userID: profile.userID, name: profile.displayName ?? profile.userID, avatarURL: profile.avatarURL)
+                    }
+                case .failure(let error):
+                    MXLog.error("Could not fetch mention profile, error: \(error)")
+                }
+            }
         }
-        name = contentID
-        displayText = contentID
     }
     
     static func mockViewModel(type: MockType) -> PillViewModel {
@@ -43,13 +96,11 @@ final class PillViewModel: ObservableObject {
         case .user:
             pillType = .user(userId: "@test:test.com")
         }
-        let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), data: PillTextAttachmentData(type: pillType))
+        let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), roomID: "", data: PillTextAttachmentData(type: pillType))
         Task {
             try? await Task.sleep(for: .seconds(2))
             await MainActor.run {
-                viewModel.url = URL.documentsDirectory
-                viewModel.name = "Test"
-                viewModel.displayText = "Test Longer Display Text"
+                viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
             }
         }
         return viewModel
