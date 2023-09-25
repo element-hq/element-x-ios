@@ -43,7 +43,7 @@ struct MessageText: UIViewRepresentable {
     @State var attributedString: AttributedString
 
     func makeUIView(context: Context) -> MessageTextView {
-        let textView = MessageTextView()
+        let textView = MessageTextView(usingTextLayoutManager: false)
         textView.updateClosure = {
             attributedString = AttributedString(textView.attributedText)
         }
@@ -63,7 +63,7 @@ struct MessageText: UIViewRepresentable {
         textView.contentInsetAdjustmentBehavior = .never
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
-        textView.textLayoutManager?.usesFontLeading = false
+        textView.layoutManager.usesFontLeading = false
         textView.backgroundColor = .clear
         textView.attributedText = NSAttributedString(attributedString)
         textView.delegate = context.coordinator
@@ -115,11 +115,12 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     private static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld", attributes: defaultFontContainer)
     
     private static let attributedStringWithAttachment: AttributedString = {
+        let testData = PillTextAttachmentData(type: .user(userId: "@alice:example.com"))
         guard let attachment = PillTextAttachment(attachmentData: testData) else {
             return AttributedString()
         }
         
-        var attributedString = "Hello " + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
+        var attributedString = "Hello test test test" + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
         attributedString
             .mergeAttributes(defaultFontContainer)
         return attributedString
@@ -134,6 +135,13 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     private static let htmlStringWithList = "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
 
     private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    
+    @ViewBuilder
+    static var attachmentPreview: some View {
+        MessageText(attributedString: attributedStringWithAttachment)
+            .border(Color.purple)
+            .previewDisplayName("Custom Attachment")
+    }
 
     static var previews: some View {
         MessageText(attributedString: attributedString)
@@ -143,9 +151,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
         Text(attributedString)
             .border(Color.purple)
             .previewDisplayName("SwiftUI Default Text")
-        MessageText(attributedString: attributedStringWithAttachment)
-            .border(Color.purple)
-            .previewDisplayName("Custom Attachment")
+        attachmentPreview
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
