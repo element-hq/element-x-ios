@@ -19,6 +19,8 @@ import Intents
 import SwiftUI
 import UserNotifications
 
+import Version
+
 struct NotificationIcon {
     struct GroupInfo {
         let name: String
@@ -185,7 +187,9 @@ extension UNMutableNotificationContent {
 
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
-        let fileName = "notification_placeholderV2_\(name)_\(id).png"
+        let isIOS17Available = isIOS17Available()
+        let prefix = "notification_placeholder\(isIOS17Available ? "V3" : "V2")"
+        let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
             return data
@@ -204,11 +208,11 @@ extension UNMutableNotificationContent {
 
         let data: Data?
         // On simulator and macOS the image is rendered correctly
-        // But on other devices is rendered upside down so we need to flip it
+        // But on other devices before iOS 17 is rendered upside down so we need to flip it
         #if targetEnvironment(simulator)
         data = image.pngData()
         #else
-        if ProcessInfo.processInfo.isiOSAppOnMac {
+        if ProcessInfo.processInfo.isiOSAppOnMac || isIOS17Available {
             data = image.pngData()
         } else {
             data = image.flippedVertically().pngData()
@@ -225,6 +229,14 @@ extension UNMutableNotificationContent {
             }
         }
         return data
+    }
+    
+    private func isIOS17Available() -> Bool {
+        guard let version = Version(UIDevice.current.systemVersion) else {
+            return false
+        }
+        
+        return version.major >= 17
     }
 }
 

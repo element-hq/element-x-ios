@@ -42,6 +42,7 @@ targets:
       - package: DTCoreText
       - package: LRUCache
       - package: Prefire
+      - package: Version
 
     info:
       path: ../SupportingFiles/Info.plist
