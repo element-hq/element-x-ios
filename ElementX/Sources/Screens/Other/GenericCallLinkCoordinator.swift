@@ -17,14 +17,19 @@
 import SwiftUI
 import WebKit
 
-struct GenericLinkCoordinatorParameters {
+struct GenericCallLinkCoordinatorParameters {
     let url: URL
 }
 
+private enum GenericCallLinkQueryParameters {
+    static let appPrompt = "appPrompt"
+    static let confineToRoom = "confineToRoom"
+}
+
 class GenericCallLinkCoordinator: CoordinatorProtocol {
-    private let parameters: GenericLinkCoordinatorParameters
+    private let parameters: GenericCallLinkCoordinatorParameters
     
-    init(parameters: GenericLinkCoordinatorParameters) {
+    init(parameters: GenericCallLinkCoordinatorParameters) {
         self.parameters = parameters
     }
     
@@ -45,7 +50,7 @@ private struct WebView: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(initialURL: url)
+        Coordinator(url: url)
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
@@ -54,11 +59,28 @@ private struct WebView: UIViewRepresentable {
 
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
-        private let initialURL: URL
+        private let url: URL
         private(set) var webView: WKWebView!
 
-        init(initialURL: URL) {
-            self.initialURL = initialURL
+        init(url: URL) {
+            if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) {
+                urlComponents.queryItems?.removeAll { $0.name == GenericCallLinkQueryParameters.appPrompt }
+                urlComponents.queryItems?.removeAll { $0.name == GenericCallLinkQueryParameters.confineToRoom }
+                
+                urlComponents.queryItems?.append(.init(name: GenericCallLinkQueryParameters.appPrompt, value: "false"))
+                urlComponents.queryItems?.append(.init(name: GenericCallLinkQueryParameters.confineToRoom, value: "true"))
+                
+                if let adjustedURL = urlComponents.url {
+                    self.url = adjustedURL
+                } else {
+                    MXLog.error("Failed adjusting URL with components: \(urlComponents)")
+                    self.url = url
+                }
+            } else {
+                MXLog.error("Failed constructing URL components for url: \(url)")
+                self.url = url
+            }
+            
             super.init()
             
             let configuration = WKWebViewConfiguration()
@@ -74,7 +96,7 @@ private struct WebView: UIViewRepresentable {
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
             // Don't allow permissions for domains different than what the call was started on
-            guard origin.host == initialURL.host else {
+            guard origin.host == url.host else {
                 return .deny
             }
             
@@ -85,7 +107,7 @@ private struct WebView: UIViewRepresentable {
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
             // Allow any content from the main URL.
-            if navigationAction.request.url?.host == initialURL.host {
+            if navigationAction.request.url?.host == url.host {
                 return .allow
             }
             
