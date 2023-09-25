@@ -56,6 +56,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             self?.messageTextView?.invalidateTextAttachmentsDisplay()
         }
         let controller = UIHostingController(rootView: view)
+        controller.view.backgroundColor = .clear
         self.view = controller.view
     }
 }

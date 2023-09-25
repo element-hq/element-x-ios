@@ -37,6 +37,11 @@ final class MessageTextView: UITextView {
             updateClosure?()
         }
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        invalidateTextAttachmentsDisplay()
+    }
 }
 
 struct MessageText: UIViewRepresentable {
