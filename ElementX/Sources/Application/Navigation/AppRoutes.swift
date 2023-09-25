@@ -91,7 +91,9 @@ struct ElementCallURLParser: URLParser {
             }
             
             guard let encodedURLString = components.queryItems?.first(where: { $0.name == customSchemeURLQueryParameterName })?.value,
-                  let callURL = URL(string: encodedURLString) else {
+                  let callURL = URL(string: encodedURLString),
+                  callURL.scheme == "https" // Don't allow URLs from potentially unsafe domains
+            else {
                 MXLog.error("Invalid custom scheme call parameters: \(url)")
                 return nil
             }
