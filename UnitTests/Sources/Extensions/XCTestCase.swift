@@ -19,52 +19,15 @@ import XCTest
 
 extension XCTestCase {
     /// XCTest utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
-    ///
-    ///  ```
-    /// let collectedEvents = somePublisher.collect(3).first()
-    /// let awaitDeferred = deferFulfillment(collectedEvents)
-    /// // Do some other work that publishes to somePublisher
-    /// XCTAssertEqual(try await awaitDeferred.execute(), [expected, values, here])
-    ///  ```
     /// - Parameters:
     ///   - publisher: The publisher to wait on.
     ///   - timeout: A timeout after which we give up.
-    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-    @available(*, deprecated, message: "Please use deferFulfillment(until:) instead")
-    func deferFulfillment<T: Publisher>(_ publisher: T, timeout: TimeInterval = 10, message: String? = nil) -> DeferredFulfillment<T.Output> {
-        var result: Result<T.Output, Error>?
-        let expectation = expectation(description: message ?? "Awaiting publisher")
-        let cancellable = publisher
-            .sink { completion in
-                switch completion {
-                case .failure(let error):
-                    result = .failure(error)
-                case .finished:
-                    break
-                }
-                expectation.fulfill()
-            } receiveValue: { value in
-                result = .success(value)
-            }
-        
-        return DeferredFulfillment<T.Output> {
-            await self.fulfillment(of: [expectation], timeout: timeout)
-            cancellable.cancel()
-            let unwrappedResult = try XCTUnwrap(result, "Awaited publisher did not produce any output")
-            return try unwrappedResult.get()
-        }
-    }
-    
-    /// XCTest utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
-    /// - Parameters:
-    ///   - publisher: The publisher to wait on.
     ///   - until: callback that evaluates outputs until some condition is reached
-    ///   - timeout: A timeout after which we give up.
     /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
     func deferFulfillment<T: Publisher>(_ publisher: T,
-                                        until condition: @escaping (T.Output) -> Bool,
                                         timeout: TimeInterval = 10,
-                                        message: String? = nil) -> DeferredFulfillment<T.Output> {
+                                        message: String? = nil,
+                                        until condition: @escaping (T.Output) -> Bool) -> DeferredFulfillment<T.Output> {
         var result: Result<T.Output, Error>?
         let expectation = expectation(description: message ?? "Awaiting publisher")
         var hasFullfilled = false
