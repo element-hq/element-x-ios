@@ -20,11 +20,9 @@ struct SwipeToReplyView: View {
     let timelineItem: RoomTimelineItemProtocol
     
     var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: "arrowshape.turn.up.left")
-                .foregroundColor(.compound.iconPrimary)
-        }
-        .accessibilityHidden(true)
+        Image(systemName: "arrowshape.turn.up.left")
+            .foregroundColor(.compound.iconPrimary)
+            .accessibilityHidden(true)
     }
 }
 
