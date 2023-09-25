@@ -52,7 +52,7 @@ class UserFlowTests: XCTestCase {
         invitesButton.tap()
         
         // Go back to the room list
-        tapOnButton("All Chats")
+        tapOnBackButton("All Chats")
     }
     
     private func checkAttachmentsPicker() {
@@ -84,9 +84,9 @@ class UserFlowTests: XCTestCase {
         
         tapOnButton(A11yIdentifiers.inviteUsersScreen.proceed)
         
-        tapOnButton("Invite people")
+        tapOnBackButton("Invite people")
         
-        tapOnButton("Start chat")
+        tapOnBackButton("Start chat")
         
         tapOnButton("Cancel")
         
@@ -120,16 +120,16 @@ class UserFlowTests: XCTestCase {
         firstRoomMember.tap()
         
         // Go back to the room member details
-        tapOnButton("People")
+        tapOnBackButton("People")
         
         // Go back to the room details
-        tapOnButton("Back")
+        tapOnBackButton()
         
         // Go back to the room
-        tapOnButton("Back")
+        tapOnBackButton()
         
         // Go back to the room list
-        tapOnButton("All Chats")
+        tapOnBackButton("All Chats")
     }
     
     private func checkSettings() {
@@ -145,19 +145,19 @@ class UserFlowTests: XCTestCase {
         tapOnButton(A11yIdentifiers.settingsScreen.analytics)
         
         // Go back to settings
-        tapOnButton("Settings")
+        tapOnBackButton("Settings")
         
         // Open report a bug
         tapOnButton(A11yIdentifiers.settingsScreen.reportBug)
         
         // Go back to settings
-        tapOnButton("Settings")
+        tapOnBackButton("Settings")
         
         // Open about
         tapOnButton(A11yIdentifiers.settingsScreen.about)
         
         // Go back to settings
-        tapOnButton("Settings")
+        tapOnBackButton("Settings")
         
         // Close the settings
         tapOnButton(A11yIdentifiers.settingsScreen.done)
@@ -165,6 +165,16 @@ class UserFlowTests: XCTestCase {
     
     private func tapOnButton(_ identifier: String) {
         let button = app.buttons[identifier]
+        XCTAssertTrue(button.waitForExistence(timeout: 10.0))
+        button.tap()
+    }
+    
+    /// Taps on a back button that the system configured with a label but no identifier.
+    ///
+    /// When there are multiple buttons with the same label in the hierarchy, all the buttons we created
+    /// should have an identifier set, and so this method will ignore those picking the one with only a label.
+    private func tapOnBackButton(_ label: String = "Back") {
+        let button = app.buttons.matching(NSPredicate(format: "label == %@ && identifier == ''", label)).firstMatch
         XCTAssertTrue(button.waitForExistence(timeout: 10.0))
         button.tap()
     }
