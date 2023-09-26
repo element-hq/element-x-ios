@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import Combine
 import SwiftUI
 
 final class MessageTextView: UITextView {
@@ -148,7 +147,6 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
 
     private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
     
-    @ViewBuilder
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
