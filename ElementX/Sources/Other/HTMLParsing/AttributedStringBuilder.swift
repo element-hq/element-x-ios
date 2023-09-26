@@ -206,16 +206,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if let url = value as? URL {
                     switch PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) {
                     case .userIdentifier(let identifier):
-                        let attachmentData = PillTextAttachmentData(type: .user(userId: identifier))
-                        guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
-                            attributedString.addAttributes([.MatrixUserID: identifier], range: range)
-                            return
-                        }
-                        
-                        let attachmentString = NSAttributedString(attachment: attachment)
-                        attributedString.replaceCharacters(in: range, with: attachmentString)
-//                        attributedString.addAttributes([.MatrixUserID: identifier, .link: url], range: range)
-                        
+                        handleUserMention(for: attributedString, in: range, url: url, userID: identifier)
                     case .roomIdentifier(let identifier):
                         attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
                     case .roomAlias(let alias):
@@ -288,4 +279,8 @@ extension NSAttributedString.Key {
     static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
     static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
     static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
+}
+
+protocol MentionBuilder {
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String)
 }

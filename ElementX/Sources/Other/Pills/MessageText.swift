@@ -26,7 +26,7 @@ final class MessageTextView: UITextView {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
     }
     
-    func invalidateTextAttachmentsDisplay() {
+    func invalidateTextAttachmentsDisplay(update: Bool) {
         attributedText.enumerateAttribute(.attachment,
                                           in: NSRange(location: 0, length: attributedText.length),
                                           options: []) { value, range, _ in
@@ -34,13 +34,16 @@ final class MessageTextView: UITextView {
                 return
             }
             self.layoutManager.invalidateDisplay(forCharacterRange: range)
-            updateClosure?()
+            if update {
+                updateClosure?()
+            }
         }
     }
     
+    // Required to setup the first rendering of the pill view
     override func layoutSubviews() {
         super.layoutSubviews()
-        invalidateTextAttachmentsDisplay()
+        invalidateTextAttachmentsDisplay(update: false)
     }
 }
 
@@ -50,6 +53,7 @@ struct MessageText: UIViewRepresentable {
     @State var attributedString: AttributedString
 
     func makeUIView(context: Context) -> MessageTextView {
+        // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
         textView.roomContext = viewModel
         textView.updateClosure = {
@@ -149,12 +153,14 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
             .previewDisplayName("Custom Attachment")
+            .environmentObject(RoomScreenViewModel.mock.context)
     }
 
     static var previews: some View {
         MessageText(attributedString: attributedString)
             .border(Color.purple)
             .previewDisplayName("Custom Text")
+            .environmentObject(RoomScreenViewModel.mock.context)
         // For comparison
         Text(attributedString)
             .border(Color.purple)
@@ -164,11 +170,13 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
+                .environmentObject(RoomScreenViewModel.mock.context)
         }
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With list")
+                .environmentObject(RoomScreenViewModel.mock.context)
         }
     }
 }

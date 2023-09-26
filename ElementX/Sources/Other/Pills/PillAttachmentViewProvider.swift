@@ -38,8 +38,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
     override func loadView() {
         super.loadView()
 
-        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData,
-              let roomContext = messageTextView?.roomContext else {
+        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData else {
             MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
             return
         }
@@ -47,17 +46,20 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         let viewModel: PillViewModel
         if isXcodePreview {
             viewModel = PillViewModel.mockViewModel(type: .user)
-        } else if let clientProxy = Self.currentSession?.clientProxy {
-            viewModel = PillViewModel(clientProxy: clientProxy, roomContext: roomContext, data: textAttachmentData)
+        } else if let roomContext = messageTextView?.roomContext {
+            viewModel = PillViewModel(roomContext: roomContext, data: textAttachmentData)
         } else {
-            MXLog.failure("[PillAttachmentViewProvider]: client proxy is missing")
+            MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
         }
+        
         let view = PillView(imageProvider: Self.currentSession?.mediaProvider, viewModel: viewModel) { [weak self] in
-            self?.messageTextView?.invalidateTextAttachmentsDisplay()
+            self?.messageTextView?.invalidateTextAttachmentsDisplay(update: true)
         }
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = .clear
+        // This allows the text view to handle it as a link
+        controller.view.isUserInteractionEnabled = false
         self.view = controller.view
     }
 }

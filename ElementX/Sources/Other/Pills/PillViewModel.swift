@@ -27,8 +27,6 @@ final class PillViewModel: ObservableObject {
         case user
     }
     
-    private let clientProxy: ClientProxyProtocol
-    private let roomViewModel: RoomScreenViewModel.Context
     @Published private(set) var state: PillViewState
     
     var url: URL? {
@@ -70,9 +68,7 @@ final class PillViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
     
     @MainActor
-    init(clientProxy: ClientProxyProtocol, roomContext: RoomScreenViewModel.Context, data: PillTextAttachmentData) {
-        self.clientProxy = clientProxy
-        roomViewModel = roomContext
+    init(roomContext: RoomScreenViewModel.Context, data: PillTextAttachmentData) {
         switch data.type {
         case let .user(id):
             if let profile = roomContext.viewState.members[id] {
@@ -80,7 +76,7 @@ final class PillViewModel: ObservableObject {
             } else {
                 state = .loadingUser(userID: id)
                 cancellable = roomContext.$viewState.sink { [weak self] viewState in
-                    guard let self = self else {
+                    guard let self else {
                         return
                     }
                     if let profile = viewState.members[id] {
@@ -99,18 +95,10 @@ final class PillViewModel: ObservableObject {
         case .user:
             pillType = .user(userId: "@test:test.com")
         }
-        let mockViewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                                mediaProvider: MockMediaProvider(),
-                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
-                                                appSettings: ServiceLocator.shared.settings,
-                                                analytics: ServiceLocator.shared.analytics,
-                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), roomContext: mockViewModel.context, data: PillTextAttachmentData(type: pillType))
+        let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
         Task {
             try? await Task.sleep(for: .seconds(2))
-            await MainActor.run {
-                viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
-            }
+            viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
         }
         return viewModel
     }
