@@ -36,7 +36,7 @@ struct TimelineView: View {
     var body: some View {
         ScrollViewReader { scrollView in
             timelineScrollView
-                .introspect(.scrollView, on: .iOS(.v16)) { uiScrollView in
+                .introspect(.scrollView, on: .iOS(.v16, .v17)) { uiScrollView in
                     guard uiScrollView != scrollViewAdapter.scrollView else {
                         return
                     }
