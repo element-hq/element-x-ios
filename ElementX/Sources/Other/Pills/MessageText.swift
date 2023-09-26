@@ -20,7 +20,7 @@ import SwiftUI
 final class MessageTextView: UITextView {
     var roomContext: RoomScreenViewModel.Context?
     var updateClosure: (() -> Void)?
-
+    
     // This prevents the magnifying glass from showing up
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
@@ -41,9 +41,9 @@ final class MessageTextView: UITextView {
     }
     
     // Required to setup the first rendering of the pill view
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func willMove(toWindow newWindow: UIWindow?) {
         invalidateTextAttachmentsDisplay(update: false)
+        super.willMove(toWindow: newWindow)
     }
 }
 
@@ -152,7 +152,6 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
-            .previewDisplayName("Custom Attachment")
             .environmentObject(RoomScreenViewModel.mock.context)
     }
 
@@ -166,6 +165,10 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .border(Color.purple)
             .previewDisplayName("SwiftUI Default Text")
         attachmentPreview
+            .previewDisplayName("Custom Attachment")
+        attachmentPreview
+            .previewDisplayName("Custom Attachment 2")
+            .snapshot(delay: 5)
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)

@@ -25,13 +25,15 @@ struct PillView: View {
         HStack(spacing: 4) {
             LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
             Text(viewModel.displayText)
+                .font(.compound.bodyLG)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Capsule().foregroundColor(.compound.bgSubtlePrimary))
-        .frame(maxWidth: 250)
+        // for now design has defined no color so we will just use gray
+        .background(Capsule().foregroundColor(.gray))
+        .frame(maxWidth: 235)
         .onChange(of: viewModel.displayText) { _ in
             // To update the size of the embedding text
             updateClosure()
@@ -42,12 +44,19 @@ struct PillView: View {
 struct PillView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MockMediaProvider()
     
-    static var previews: some View {
+    static var loading: some View {
         PillView(imageProvider: mockMediaProvider,
                  viewModel: PillViewModel.mockViewModel(type: .loadUser)) { }
+    }
+    
+    static var previews: some View {
+        loading
             .previewDisplayName("Loading")
+        loading
+            .previewDisplayName("Loading 2")
+            .snapshot(delay: 5)
         PillView(imageProvider: mockMediaProvider,
                  viewModel: PillViewModel.mockViewModel(type: .loadedUser)) { }
-            .previewDisplayName("Loaded")
+            .previewDisplayName("Loaded Long")
     }
 }

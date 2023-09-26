@@ -15,10 +15,12 @@
 //
 
 import Foundation
+import UIKit
 
 extension AttributedStringBuilder: MentionBuilder {
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
-        let attachmentData = PillTextAttachmentData(type: .user(userId: userID))
+        let font = attributedString.attribute(.font, at: 0, longestEffectiveRange: nil, in: range) as? UIFont ?? UIFont.preferredFont(forTextStyle: .body)
+        let attachmentData = PillTextAttachmentData(type: .user(userId: userID), font: font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
             attributedString.addAttributes([.MatrixUserID: userID], range: range)
             return

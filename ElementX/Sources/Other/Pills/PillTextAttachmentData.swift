@@ -15,18 +15,47 @@
 //
 
 import Foundation
+import UIKit
 
-struct PillTextAttachmentData: Codable {
+struct PillTextAttachmentData {
     // MARK: - Properties
 
     /// Pill type
-    var type: PillType
-    /// Items to render
-    /// Alpha for pill display
+    let type: PillType
+
     /// Font for the display name
-//    var font: UIFont
-    /// Max width
-//    var maxWidth: CGFloat
+    var font: UIFont = .preferredFont(forTextStyle: .body)
+}
+
+extension PillTextAttachmentData: Codable {
+    // MARK: - Codable
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case font
+    }
+    
+    enum PillTextAttachmentDataError: Error {
+        case noFontData
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.decode(PillType.self, forKey: .type)
+        let fontData = try container.decode(Data.self, forKey: .font)
+        if let font = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIFont.self, from: fontData) {
+            self.font = font
+        } else {
+            throw PillTextAttachmentDataError.noFontData
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        let fontData = try NSKeyedArchiver.archivedData(withRootObject: font, requiringSecureCoding: false)
+        try container.encode(fontData, forKey: .font)
+    }
 }
 
 enum PillType: Codable {
