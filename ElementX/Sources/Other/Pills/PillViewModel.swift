@@ -17,17 +17,18 @@
 import Combine
 import Foundation
 
-enum PillViewState: Equatable {
+enum PillViewState {
     case loadingUser(userID: String)
     case loadedUser(userID: String, name: String, avatarURL: URL?)
 }
 
 final class PillViewModel: ObservableObject {
     enum MockType {
-        case user
+        case loadUser
+        case loadedUser
     }
     
-    @Published private(set) var state: PillViewState
+    @Published private var state: PillViewState
     
     var url: URL? {
         switch state {
@@ -92,14 +93,19 @@ final class PillViewModel: ObservableObject {
     static func mockViewModel(type: MockType) -> PillViewModel {
         let pillType: PillType
         switch type {
-        case .user:
+        case .loadUser:
             pillType = .user(userId: "@test:test.com")
+            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
+            }
+            return viewModel
+        case .loadedUser:
+            pillType = .user(userId: "@test:test.com")
+            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
+            viewModel.state = .loadedUser(userID: "@test:test.com", name: "Very Very Long Test Display Text", avatarURL: URL.documentsDirectory)
+            return viewModel
         }
-        let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
-        Task {
-            try? await Task.sleep(for: .seconds(2))
-            viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
-        }
-        return viewModel
     }
 }

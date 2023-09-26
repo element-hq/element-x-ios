@@ -19,7 +19,6 @@ import SwiftUI
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     @Environment(\.layoutDirection) private var layoutDirection
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
     
     private let attributedString: AttributedString
     private let additionalWhitespacesCount: Int

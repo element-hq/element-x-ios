@@ -45,7 +45,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         
         let viewModel: PillViewModel
         if isXcodePreview {
-            viewModel = PillViewModel.mockViewModel(type: .user)
+            viewModel = PillViewModel.mockViewModel(type: .loadUser)
         } else if let roomContext = messageTextView?.roomContext {
             viewModel = PillViewModel(roomContext: roomContext, data: textAttachmentData)
         } else {

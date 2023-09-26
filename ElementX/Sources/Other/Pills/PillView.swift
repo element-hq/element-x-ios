@@ -25,22 +25,29 @@ struct PillView: View {
         HStack(spacing: 4) {
             LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
             Text(viewModel.displayText)
+                .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Capsule().foregroundColor(.gray))
+        .background(Capsule().foregroundColor(.compound.bgSubtlePrimary))
         .frame(maxWidth: 250)
-        .onChange(of: viewModel.state) { _ in
+        .onChange(of: viewModel.displayText) { _ in
+            // To update the size of the embedding text
             updateClosure()
         }
     }
 }
 
-struct PillView_Previews: PreviewProvider {
+struct PillView_Previews: PreviewProvider, TestablePreview {
+    static let mockMediaProvider = MockMediaProvider()
+    
     static var previews: some View {
-        PillView(imageProvider:
-            MockMediaProvider(),
-            viewModel: PillViewModel.mockViewModel(type: .user)) { }
+        PillView(imageProvider: mockMediaProvider,
+            viewModel: PillViewModel.mockViewModel(type: .loadUser)) { }
+            .previewDisplayName("Loading")
+        PillView(imageProvider: mockMediaProvider,
+            viewModel: PillViewModel.mockViewModel(type: .loadedUser)) { }
+            .previewDisplayName("Loaded")
     }
 }
