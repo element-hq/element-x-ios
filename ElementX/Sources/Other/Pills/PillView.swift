@@ -52,9 +52,6 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         loading
             .previewDisplayName("Loading")
-        loading
-            .previewDisplayName("Loading 2")
-            .snapshot(delay: 5)
         PillView(imageProvider: mockMediaProvider,
                  viewModel: PillViewModel.mockViewModel(type: .loadedUser)) { }
             .previewDisplayName("Loaded Long")

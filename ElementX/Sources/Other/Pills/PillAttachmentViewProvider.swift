@@ -44,16 +44,19 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         }
         
         let viewModel: PillViewModel
-        if isXcodePreview {
+        let imageProvider: ImageProviderProtocol?
+        if isXcodePreview || Tests.isRunningTests {
             viewModel = PillViewModel.mockViewModel(type: .loadUser)
+            imageProvider = MockMediaProvider()
         } else if let roomContext = messageTextView?.roomContext {
             viewModel = PillViewModel(roomContext: roomContext, data: textAttachmentData)
+            imageProvider = Self.currentSession?.mediaProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
         }
         
-        let view = PillView(imageProvider: Self.currentSession?.mediaProvider, viewModel: viewModel) { [weak self] in
+        let view = PillView(imageProvider: imageProvider, viewModel: viewModel) { [weak self] in
             self?.messageTextView?.invalidateTextAttachmentsDisplay(update: true)
         }
         let controller = UIHostingController(rootView: view)

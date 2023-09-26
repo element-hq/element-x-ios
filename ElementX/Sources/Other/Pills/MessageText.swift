@@ -41,9 +41,9 @@ final class MessageTextView: UITextView {
     }
     
     // Required to setup the first rendering of the pill view
-    override func willMove(toWindow newWindow: UIWindow?) {
+    override func layoutSubviews() {
         invalidateTextAttachmentsDisplay(update: false)
-        super.willMove(toWindow: newWindow)
+        super.layoutSubviews()
     }
 }
 
@@ -132,7 +132,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             return AttributedString()
         }
         
-        var attributedString = "Hello test test test" + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
+        var attributedString = "Hello test test test " + AttributedString(NSAttributedString(attachment: attachment)) + " World!"
         attributedString
             .mergeAttributes(defaultFontContainer)
         return attributedString
@@ -166,9 +166,6 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("SwiftUI Default Text")
         attachmentPreview
             .previewDisplayName("Custom Attachment")
-        attachmentPreview
-            .previewDisplayName("Custom Attachment 2")
-            .snapshot(delay: 5)
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)

@@ -41,6 +41,7 @@ final class AppSettings {
         case hasShownWelcomeScreen
         case swiftUITimelineEnabled
         case voiceMessageEnabled
+        case mentionsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -248,4 +249,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.voiceMessageEnabled, defaultValue: false, storageType: .userDefaults(store))
     var voiceMessageEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.mentionsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var mentionsEnabled
 }

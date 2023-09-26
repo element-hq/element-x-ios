@@ -50,6 +50,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var readReceiptsEnabled: Bool { get set }
     var swiftUITimelineEnabled: Bool { get set }
     var voiceMessageEnabled: Bool { get set }
+    var mentionsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

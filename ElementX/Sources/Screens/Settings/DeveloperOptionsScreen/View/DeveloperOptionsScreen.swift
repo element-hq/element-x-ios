@@ -45,6 +45,11 @@ struct DeveloperOptionsScreen: View {
                     Text("SwiftUI Timeline")
                     Text("Resets on reboot")
                 }
+                
+                Toggle(isOn: $context.mentionsEnabled) {
+                    Text("Show user mentions")
+                    Text("Requires app reboot")
+                }
             }
             
             Section("Room creation") {

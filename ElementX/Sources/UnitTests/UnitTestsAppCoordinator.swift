@@ -29,6 +29,7 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         ServiceLocator.shared.register(analytics: AnalyticsService(client: AnalyticsClientMock(),
                                                                    appSettings: ServiceLocator.shared.settings,
                                                                    bugReportService: ServiceLocator.shared.bugReportService))
+        NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)
     }
     
     func start() { }
