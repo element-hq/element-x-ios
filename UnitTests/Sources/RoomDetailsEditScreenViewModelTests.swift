@@ -95,9 +95,13 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         setupViewModel(accountOwner: .mockOwner(allowedStateEvents: [.roomAvatar, .roomName, .roomTopic]),
                        roomProxyConfiguration: .init(name: "Some room", displayName: "Some room"))
         
-        let deferred = deferFulfillment(viewModel.actions.first())
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            action == .saveFinished
+        }
+        
         context.name = "name"
         context.send(viewAction: .save)
+        
         let action = try await deferred.fulfill()
         XCTAssertEqual(action, .saveFinished)
     }

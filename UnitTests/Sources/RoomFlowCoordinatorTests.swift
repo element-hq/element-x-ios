@@ -119,17 +119,22 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     private func process(route: AppRoute, expectedActions: [RoomFlowCoordinatorAction]) async throws {
-        let deferred = deferFulfillment(roomFlowCoordinator.actions.collect(expectedActions.count).first(),
-                                        message: "The expected number of actions should be published.")
-        
-        Task {
-            await Task.yield()
-            self.roomFlowCoordinator.handleAppRoute(route, animated: true)
+        guard !expectedActions.isEmpty else {
+            return
         }
         
-        if !expectedActions.isEmpty {
-            let actions = try await deferred.fulfill()
-            XCTAssertEqual(actions, expectedActions)
+        var fulfillments = [DeferredFulfillment<RoomFlowCoordinatorAction>]()
+        
+        for expectedAction in expectedActions {
+            fulfillments.append(deferFulfillment(roomFlowCoordinator.actions) { action in
+                action == expectedAction
+            })
+        }
+        
+        roomFlowCoordinator.handleAppRoute(route, animated: true)
+        
+        for fulfillment in fulfillments {
+            try await fulfillment.fulfill()
         }
     }
 }

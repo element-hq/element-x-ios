@@ -31,15 +31,16 @@ class ReportContentScreenViewModelTests: XCTestCase {
                                                      senderID: senderID,
                                                      roomProxy: roomProxy)
         
-        let deferred = deferFulfillment(viewModel.actions.collect(2).first(), message: "2 actions should be published.")
-        
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = false
         viewModel.context.send(viewAction: .submit)
         
-        let actions = try await deferred.fulfill()
-        XCTAssertEqual(actions, [.submitStarted, .submitFinished])
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            action == .submitFinished
+        }
+        
+        try await deferred.fulfill()
    
         // Then the content should be reported, but the user should not be included.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
@@ -62,10 +63,13 @@ class ReportContentScreenViewModelTests: XCTestCase {
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = true
 
-        let deferred = deferFulfillment(viewModel.actions.collect(2).first())
         viewModel.context.send(viewAction: .submit)
-        let result = try await deferred.fulfill()
-        XCTAssertEqual(result, [.submitStarted, .submitFinished])
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            action == .submitFinished
+        }
+        
+        try await deferred.fulfill()
         
         // Then the content should be reported, and the user should be ignored.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")

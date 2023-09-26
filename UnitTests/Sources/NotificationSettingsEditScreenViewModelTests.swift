@@ -49,9 +49,12 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
 
-        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
-            .first(where: { !$0.isNil }))
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
         viewModel.fetchInitialContent()
+        
         try await deferred.fulfill()
         
         // `getDefaultRoomNotificationModeIsEncryptedIsOneToOne` must have been called twice (for encrypted and unencrypted group chats)
@@ -74,20 +77,19 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
-        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
-            .first(where: { !$0.isNil }))
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
         viewModel.fetchInitialContent()
+        
         try await deferred.fulfill()
         
-        // Set mode to .allMessages
-        let deferredViewState = deferFulfillment(context.$viewState
-            .map(\.pendingMode)
-            .removeDuplicates()
-            .collect(3).first())
+        var deferredViewState = deferFulfillment(viewModel.context.$viewState, keyPath: \.pendingMode, transitionValues: [nil, .allMessages, nil])
+
         context.send(viewAction: .setMode(.allMessages))
-        let pendingModes = try await deferredViewState.fulfill()
         
-        XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
+        try await deferredViewState.fulfill()
         
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
@@ -101,34 +103,36 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         XCTAssertEqual(invocations[1].isOneToOne, false)
         XCTAssertEqual(invocations[1].mode, .allMessages)
         
-        // The default mode should be updated
-        let deferredNewViewState = deferFulfillment(context.$viewState
-            .map(\.defaultMode)
-            .first(where: { $0 == .allMessages }))
-        try await deferredNewViewState.fulfill()
-                                                    
+        deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                             keyPath: \.defaultMode,
+                                             transitionValues: [.allMessages])
+        
+        try await deferredViewState.fulfill()
+
         XCTAssertEqual(context.viewState.defaultMode, .allMessages)
         XCTAssertNil(context.viewState.bindings.alertInfo)
     }
-    
+
     func testSetModeMentions() async throws {
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
-        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
-            .first(where: { !$0.isNil }))
-        viewModel.fetchInitialContent()
-        try await deferred.fulfill()
-
-        // Set mode to .allMessages
-        let deferredViewState = deferFulfillment(context.$viewState
-            .map(\.pendingMode)
-            .removeDuplicates()
-            .collect(3).first())
-        context.send(viewAction: .setMode(.mentionsAndKeywordsOnly))
-        let pendingModes = try await deferredViewState.fulfill()
         
-        XCTAssertEqual(pendingModes, [nil, .mentionsAndKeywordsOnly, nil])
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferred.fulfill()
+        
+        var deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                                 keyPath: \.pendingMode,
+                                                 transitionValues: [nil, .mentionsAndKeywordsOnly, nil])
+                
+        context.send(viewAction: .setMode(.mentionsAndKeywordsOnly))
+        
+        try await deferredViewState.fulfill()
         
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted group chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
@@ -142,37 +146,39 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         XCTAssertEqual(invocations[1].isOneToOne, false)
         XCTAssertEqual(invocations[1].mode, .mentionsAndKeywordsOnly)
         
-        // The default mode should be updated
-        let deferredNewViewState = deferFulfillment(context.$viewState
-            .map(\.defaultMode)
-            .first(where: { $0 == .mentionsAndKeywordsOnly }))
-        try await deferredNewViewState.fulfill()
-                                                    
+        deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                             keyPath: \.defaultMode,
+                                             transitionValues: [.mentionsAndKeywordsOnly])
+        
+        try await deferredViewState.fulfill()
+
         XCTAssertEqual(context.viewState.defaultMode, .mentionsAndKeywordsOnly)
         XCTAssertNil(context.viewState.bindings.alertInfo)
     }
-    
+
     func testSetModeDirectChats() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         // Initialize for direct chats
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
-        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
-            .first(where: { !$0.isNil }))
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
         viewModel.fetchInitialContent()
+        
         try await deferred.fulfill()
-
-        // Set mode to .allMessages
-        let deferredViewState = deferFulfillment(context.$viewState
-            .map(\.pendingMode)
-            .removeDuplicates()
-            .collect(3).first())
+        
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                                 keyPath: \.pendingMode,
+                                                 transitionValues: [nil, .allMessages, nil])
+        
         context.send(viewAction: .setMode(.allMessages))
-        let pendingModes = try await deferredViewState.fulfill()
         
-        XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
-        
+        try await deferredViewState.fulfill()
+
         // `setDefaultRoomNotificationModeIsEncryptedIsOneToOneMode` must have been called twice (for encrypted and unencrypted direct chats)
         let invocations = notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeReceivedInvocations
         XCTAssertEqual(notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeCallsCount, 2)
@@ -185,43 +191,53 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         XCTAssertEqual(invocations[1].isOneToOne, true)
         XCTAssertEqual(invocations[1].mode, .allMessages)
     }
-    
+
     func testSetModeFailure() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
         notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(message: "error")
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
-        let deferred = deferFulfillment(viewModel.context.$viewState.map(\.defaultMode)
-            .first(where: { !$0.isNil }))
-        viewModel.fetchInitialContent()
-        try await deferred.fulfill()
-
-        // Set mode to .allMessages
-        let deferredViewState = deferFulfillment(context.$viewState
-            .map(\.pendingMode)
-            .removeDuplicates()
-            .collect(3).first())
-        context.send(viewAction: .setMode(.allMessages))
-        let pendingModes = try await deferredViewState.fulfill()
         
-        XCTAssertEqual(pendingModes, [nil, .allMessages, nil])
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.defaultMode != nil
+        }
+        
+        viewModel.fetchInitialContent()
+        
+        try await deferred.fulfill()
+        
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                                 keyPath: \.pendingMode,
+                                                 transitionValues: [nil, .allMessages, nil])
+
+        context.send(viewAction: .setMode(.allMessages))
+        
+        try await deferredViewState.fulfill()
+        
         XCTAssertNotNil(context.viewState.bindings.alertInfo)
     }
-    
+
     func testSelectRoom() async throws {
         let roomID = "!roomidentifier:matrix.org"
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)
         
-        let deferredActions = deferFulfillment(viewModel.actions.first())
+        let deferredActions = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .requestRoomNotificationSettingsPresentation:
+                return true
+            }
+        }
+        
         context.send(viewAction: .selectRoom(roomIdentifier: roomID))
-        let sentActions = try await deferredActions.fulfill()
+        
+        let sentAction = try await deferredActions.fulfill()
         
         let expectedAction = NotificationSettingsEditScreenViewModelAction.requestRoomNotificationSettingsPresentation(roomID: roomID)
-        guard case let .requestRoomNotificationSettingsPresentation(roomID: receivedRoomID) = sentActions, receivedRoomID == roomID else {
-            XCTFail("Expected action \(expectedAction), but was \(sentActions)")
+        guard case let .requestRoomNotificationSettingsPresentation(roomID: receivedRoomID) = sentAction, receivedRoomID == roomID else {
+            XCTFail("Expected action \(expectedAction), but was \(sentAction)")
             return
         }
     }

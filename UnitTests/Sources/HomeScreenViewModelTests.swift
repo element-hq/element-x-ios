@@ -83,8 +83,15 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomAlert() async throws {
         let mockRoomId = "1"
         clientProxy.roomForIdentifierMocks[mockRoomId] = .init(with: .init(id: mockRoomId, displayName: "Some room"))
+        
+        let deferred = deferFulfillment(context.$viewState) { value in
+            value.bindings.leaveRoomAlertItem != nil
+        }
+        
         context.send(viewAction: .leaveRoom(roomIdentifier: mockRoomId))
-        await context.nextViewState()
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(context.leaveRoomAlertItem?.roomId, mockRoomId)
     }
     
@@ -93,9 +100,16 @@ class HomeScreenViewModelTests: XCTestCase {
         let room: RoomProxyMock = .init(with: .init(id: mockRoomId, displayName: "Some room"))
         room.leaveRoomClosure = { .failure(.failedLeavingRoom) }
         clientProxy.roomForIdentifierMocks[mockRoomId] = room
+
+        let deferred = deferFulfillment(context.$viewState) { value in
+            value.bindings.alertInfo != nil
+        }
+        
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
-        let state = await context.nextViewState()
-        XCTAssertNotNil(state?.bindings.alertInfo)
+        
+        try await deferred.fulfill()
+                
+        XCTAssertNotNil(context.alertInfo)
     }
     
     func testLeaveRoomSuccess() async throws {

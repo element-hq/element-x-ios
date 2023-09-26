@@ -18,46 +18,55 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 final class EmojiProviderTests: XCTestCase {
-    var sut: EmojiProvider!
-    private var emojiLoaderMock: EmojiLoaderMock!
-    
-    @MainActor override func setUp() {
-        emojiLoaderMock = EmojiLoaderMock()
-        sut = EmojiProvider(loader: emojiLoaderMock)
-    }
-    
-    func test_whenEmojisLoaded_categoriesAreLoadedFromLoader() async throws {
+    func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async throws {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
         let category = EmojiCategory(id: "test", emojis: [item])
+        
+        let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
-        let categories = await sut.getCategories()
+        
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        
+        let categories = await emojiProvider.categories()
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
-    
-    func test_whenEmojisLoadedAndSearchStringEmpty_allCategoriesReturned() async throws {
+
+    func testWhenEmojisLoadedAndSearchStringEmptyAllCategoriesReturned() async throws {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
         let category = EmojiCategory(id: "test", emojis: [item])
+        
+        let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
-        let categories = await sut.getCategories(searchString: "")
+        
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        
+        let categories = await emojiProvider.categories(searchString: "")
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
-    
-    func test_whenEmojisLoadedSecondTime_cachedValuesAreUsed() async throws {
+
+    func testWhenEmojisLoadedSecondTimeCachedValuesAreUsed() async throws {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
         let item2 = EmojiItem(label: "test2", unicode: "test2", keywords: ["3", "4"], shortcodes: ["3", "4"], skins: ["🙂"])
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
                                                     emojis: [item])]
         let categoriesForSecondLoad = [EmojiCategory(id: "test2",
                                                      emojis: [item2])]
+        
+        let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categoriesForFirstLoad
-        _ = await sut.getCategories()
+        
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        
+        _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
-        let categories = await sut.getCategories()
+        
+        let categories = await emojiProvider.categories()
         XCTAssertEqual(categories, categoriesForFirstLoad)
     }
     
-    func test_whenEmojisSearched_correctNumberOfCategoriesReturned() async throws {
+    func testWhenEmojisSearchedCorrectNumberOfCategoriesReturned() async throws {
         let searchString = "smile"
         var categories = [EmojiCategory]()
         let item0WithSearchString = EmojiItem(label: "emoji0", unicode: "\(searchString)_123", keywords: ["key1", "key1"], shortcodes: ["key1", "key1"], skins: ["🙂"])
@@ -74,9 +83,14 @@ final class EmojiProviderTests: XCTestCase {
                                                  item4WithoutSearchString]))
         categories.append(EmojiCategory(id: "test",
                                         emojis: [item5WithSearchString]))
+        
+        let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categories
-        _ = await sut.getCategories()
-        let result = await sut.getCategories(searchString: searchString)
+        
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        
+        _ = await emojiProvider.categories()
+        let result = await emojiProvider.categories(searchString: searchString)
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.first?.emojis.count, 4)
     }

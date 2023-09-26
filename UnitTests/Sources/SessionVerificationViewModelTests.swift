@@ -50,7 +50,11 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
-        await context.nextViewState()
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.verificationState == .cancelled
+        }
+        
+        try await deferred.fulfill()
         
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
         

@@ -56,7 +56,13 @@ class InvitesScreenViewModelTests: XCTestCase {
         }
         setupViewModel(roomSummaries: invites)
         
-        let deferred = deferFulfillment(viewModel.actions.first(), message: "1 action should be published.")
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .openRoom:
+                return true
+            }
+        }
+        
         context.send(viewAction: .accept(.init(roomDetails: details, isUnread: false)))
         let action = try await deferred.fulfill()
 

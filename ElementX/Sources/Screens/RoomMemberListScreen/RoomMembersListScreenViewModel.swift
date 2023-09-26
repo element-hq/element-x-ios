@@ -37,7 +37,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount),
+        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount, bindings: .init()),
                    imageProvider: mediaProvider)
         
         setupMembers()
@@ -83,7 +83,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.members = members
             self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
-                               invitedMembers: roomMembersDetails.invitedMembers)
+                               invitedMembers: roomMembersDetails.invitedMembers,
+                               bindings: state.bindings)
             self.state.canInviteUsers = roomMembersDetails.accountOwner?.canInviteUsers ?? false
             hideLoader()
         }

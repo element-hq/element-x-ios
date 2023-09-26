@@ -24,6 +24,10 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
+    override func tearDown() {
+        appSettings.analyticsConsentState = .unknown
+    }
+    
     @MainActor override func setUpWithError() throws {
         AppSettings.reset()
         appSettings = AppSettings()

@@ -26,49 +26,87 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    func testJoinedMembers() async {
+    func testJoinedMembers() async throws {
         setup(with: [.mockAlice, .mockBob])
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleJoinedMembers.count == 2
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 2)
     }
     
-    func testSearch() async {
+    func testSearch() async throws {
         setup(with: [.mockAlice, .mockBob])
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleJoinedMembers.count == 1
+        }
+        
         context.searchQuery = "alice"
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
     }
     
-    func testEmptySearch() async {
+    func testEmptySearch() async throws {
         setup(with: [.mockAlice, .mockBob])
-        await context.nextViewState()
         context.searchQuery = "WWW"
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.joinedMembersCount == 2
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 2)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
     }
     
-    func testJoinedAndInvitedMembers() async {
+    func testJoinedAndInvitedMembers() async throws {
         setup(with: [.mockInvitedAlice, .mockBob])
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleInvitedMembers.count == 1
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 1)
         XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 1)
     }
     
-    func testInvitedMembers() async {
+    func testInvitedMembers() async throws {
         setup(with: [.mockInvitedAlice])
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleInvitedMembers.count == 1
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
         XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
     }
     
-    func testSearchInvitedMembers() async {
+    func testSearchInvitedMembers() async throws {
         setup(with: [.mockInvitedAlice])
+        
         context.searchQuery = "alice"
-        await context.nextViewState()
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleInvitedMembers.count == 1
+        }
+        
+        try await deferred.fulfill()
+        
         XCTAssertEqual(viewModel.state.joinedMembersCount, 0)
         XCTAssertEqual(viewModel.state.visibleInvitedMembers.count, 1)
         XCTAssertEqual(viewModel.state.visibleJoinedMembers.count, 0)
