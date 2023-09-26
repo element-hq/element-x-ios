@@ -236,6 +236,8 @@ public enum L10n {
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Permission
   public static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
+  /// Are you sure you want to end this poll?
+  public static var commonPollEndConfirmation: String { return L10n.tr("Localizable", "common_poll_end_confirmation") }
   /// Poll: %1$@
   public static func commonPollSummary(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_summary", String(describing: p1))
@@ -1300,6 +1302,11 @@ public enum L10n {
   public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+
+  public enum Action {
+    /// Edit poll
+    public static var editPoll: String { return L10n.tr("Localizable", "action.edit_poll") }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

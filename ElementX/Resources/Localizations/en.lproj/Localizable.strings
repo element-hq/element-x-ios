@@ -70,6 +70,7 @@
 "action_take_photo" = "Take photo";
 "action_view_source" = "View Source";
 "action_yes" = "Yes";
+"action.edit_poll" = "Edit poll";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -147,6 +148,7 @@
 "common_verification_complete" = "Verification complete";
 "common_video" = "Video";
 "common_waiting" = "Waiting…";
+"common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
