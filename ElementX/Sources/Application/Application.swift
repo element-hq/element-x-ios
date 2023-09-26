@@ -19,6 +19,7 @@ import SwiftUI
 @main
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
+    @Environment(\.openURL) private var openURL
     private let appCoordinator: AppCoordinatorProtocol
 
     init() {
@@ -42,7 +43,11 @@ struct Application: App {
 
                     return .systemAction
                 })
-                .onOpenURL { appCoordinator.handleDeepLink($0) }
+                .onOpenURL {
+                    if !appCoordinator.handleDeepLink($0) {
+                        openURL($0)
+                    }
+                }
                 .introspect(.window, on: .iOS(.v16)) { window in
                     // Workaround for SwiftUI not consistently applying the tint colour to Alerts/Confirmation Dialogs.
                     window.tintColor = .compound.textActionPrimary

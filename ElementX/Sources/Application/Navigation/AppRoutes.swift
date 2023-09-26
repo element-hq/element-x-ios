@@ -83,6 +83,12 @@ struct ElementCallURLParser: URLParser {
     private let customSchemeURLQueryParameterName = "url"
     
     func route(from url: URL) -> AppRoute? {
+        // Element Call not supported, WebRTC not available
+        // https://github.com/vector-im/element-x-ios/issues/1794
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return nil
+        }
+        
         // First try processing URLs with custom schemes
         if let scheme = url.scheme,
            scheme == InfoPlistReader.app.elementCallScheme {
