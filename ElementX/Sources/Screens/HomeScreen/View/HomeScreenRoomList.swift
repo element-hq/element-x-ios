@@ -20,39 +20,34 @@ struct HomeScreenRoomList: View {
     @Environment(\.isSearching) var isSearchFieldFocused
     
     @ObservedObject var context: HomeScreenViewModel.Context
-    @Binding var isSearching: Bool
     
     var body: some View {
         content
-            .onChange(of: isSearchFieldFocused) { isSearching = $0 }
+            .onChange(of: isSearchFieldFocused) { context.isSearchFieldFocused = $0 }
     }
     
     @ViewBuilder
     private var content: some View {
-        if isSearchFieldFocused, context.searchQuery.count == 0 {
-            EmptyView()
-        } else {
-            ForEach(context.viewState.visibleRooms) { room in
-                if room.isPlaceholder {
-                    HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                        .redacted(reason: .placeholder)
-                } else {
-                    let isSelected = context.viewState.selectedRoomID == room.id
-                    HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
-                        .contextMenu {
-                            Button {
-                                context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.commonSettings, systemImage: "gearshape")
-                            }
-                            
-                            Button(role: .destructive) {
-                                context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
-                            }
+        ForEach(context.viewState.visibleRooms) { room in
+            if room.isPlaceholder {
+                HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                    .redacted(reason: .placeholder)
+            } else {
+                let isSelected = context.viewState.selectedRoomID == room.id
+                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
+                    .contextMenu {
+                        Button {
+                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
+                        } label: {
+                            Label(L10n.commonSettings, systemImage: "gearshape")
                         }
-                }
+                        
+                        Button(role: .destructive) {
+                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+                        } label: {
+                            Label(L10n.actionLeaveRoom, systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    }
             }
         }
     }

@@ -91,7 +91,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             })
             
             // Forces the listener above to be called with the current state
-            updateFilterPattern(nil)
+            setFilter(.all)
             
             listUpdatesTaskHandle = listUpdatesSubscriptionResult?.entriesStream
             
@@ -134,13 +134,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func updateFilterPattern(_ pattern: String?) {
-        guard let pattern, !pattern.isEmpty else {
+    func setFilter(_ filter: RoomSummaryProviderFilter) {
+        switch filter {
+        case .none:
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .none)
+        case .all:
             _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .all)
-            return
+        case .normalizedMatchRoomName(let query):
+            _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: query.lowercased()))
         }
-        
-        _ = listUpdatesSubscriptionResult?.controller.setFilter(kind: .normalizedMatchRoomName(pattern: pattern.lowercased()))
     }
     
     // MARK: - Private
@@ -156,23 +158,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.verbose("\(name): Received \(diffs.count) diffs, current room list \(rooms.compactMap { $0.id ?? "Empty" })")
         
-        var updatedItems = rooms
-        for diff in diffs {
-            let resetDiffChunkingThreshhold = 50
-            if case .reset(let values) = diff, values.count > resetDiffChunkingThreshhold {
-                // Special case resets in order to prevent large updates from blocking the UI
-                // Render the first resetDiffChunkingThreshhold as a reset and then append the rest to give the UI time to update
-                updatedItems = processDiff(.reset(values: Array(values[..<resetDiffChunkingThreshhold])), on: updatedItems)
-
-                // Once a reset is chunked dispatch the first part to the UI for rendering
-                rooms = updatedItems
-
-                updatedItems = processDiff(.append(values: Array(values.dropFirst(resetDiffChunkingThreshhold))), on: updatedItems)
-            } else {
-                updatedItems = processDiff(diff, on: updatedItems)
-            }
+        rooms = diffs.reduce(rooms) { currentItems, diff in
+            processDiff(diff, on: currentItems)
         }
-        rooms = updatedItems
         
         MXLog.verbose("\(name): Finished applying \(diffs.count) diffs, new room list \(rooms.compactMap { $0.id ?? "Empty" })")
         

@@ -46,7 +46,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func updateVisibleRange(_ range: Range<Int>) { }
     
-    func updateFilterPattern(_ pattern: String?) { }
+    func setFilter(_ filter: RoomSummaryProviderFilter) { }
 }
 
 extension Array where Element == RoomSummary {

@@ -88,7 +88,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .map(\.bindings.searchQuery)
             .removeDuplicates()
             .sink { [weak self] searchQuery in
-                self?.roomSummaryProvider?.updateFilterPattern(searchQuery)
+                guard let self else { return }
+                updateFilter(isSearchFieldFocused: state.bindings.isSearchFieldFocused, searchQuery: searchQuery)
+            }
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.isSearchFieldFocused)
+            .removeDuplicates()
+            .sink { [weak self] isSearchFieldFocused in
+                guard let self else { return }
+                updateFilter(isSearchFieldFocused: isSearchFieldFocused, searchQuery: state.bindings.searchQuery)
             }
             .store(in: &cancellables)
         
@@ -141,6 +151,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func updateFilter(isSearchFieldFocused: Bool, searchQuery: String) {
+        if !isSearchFieldFocused {
+            roomSummaryProvider?.setFilter(.all)
+        } else if searchQuery.isEmpty {
+            roomSummaryProvider?.setFilter(.none)
+        } else {
+            roomSummaryProvider?.setFilter(.normalizedMatchRoomName(searchQuery))
+        }
+    }
     
     private func setupRoomSummaryProviderSubscriptions() {
         guard let roomSummaryProvider, let inviteSummaryProvider else {

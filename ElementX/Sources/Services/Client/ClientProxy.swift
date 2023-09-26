@@ -241,9 +241,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         // Try fetching the room from the cold cache (if available) first
-        var (roomListItem, room) = await Task.dispatch(on: clientQueue) {
-            self.roomTupleForIdentifier(identifier)
-        }
+        var (roomListItem, room) = await roomTupleForIdentifier(identifier)
         
         if let roomListItem, let room {
             return await RoomProxy(roomListItem: roomListItem,
@@ -262,9 +260,7 @@ class ClientProxy: ClientProxyProtocol {
             _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
         }
         
-        (roomListItem, room) = await Task.dispatch(on: clientQueue) {
-            self.roomTupleForIdentifier(identifier)
-        }
+        (roomListItem, room) = await roomTupleForIdentifier(identifier)
         
         guard let roomListItem else {
             MXLog.error("Invalid roomListItem for identifier \(identifier)")
@@ -519,10 +515,10 @@ class ClientProxy: ClientProxyProtocol {
         })
     }
     
-    private func roomTupleForIdentifier(_ identifier: String) -> (RoomListItem?, Room?) {
+    private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
         do {
             let roomListItem = try roomListService?.room(roomId: identifier)
-            let fullRoom = roomListItem?.fullRoom()
+            let fullRoom = await roomListItem?.fullRoom()
             
             return (roomListItem, fullRoom)
         } catch {
