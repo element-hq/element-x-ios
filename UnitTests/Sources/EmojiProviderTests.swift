@@ -18,6 +18,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 final class EmojiProviderTests: XCTestCase {
     func testWhenEmojisLoadedCategoriesAreLoadedFromLoader() async throws {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"], skins: ["🙂"])
@@ -26,9 +27,9 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = await EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
         
-        let categories = await emojiProvider.getCategories()
+        let categories = await emojiProvider.categories()
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
 
@@ -39,9 +40,9 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = await EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
         
-        let categories = await emojiProvider.getCategories(searchString: "")
+        let categories = await emojiProvider.categories(searchString: "")
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
 
@@ -56,12 +57,12 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categoriesForFirstLoad
         
-        let emojiProvider = await EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
         
-        _ = await emojiProvider.getCategories()
+        _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
         
-        let categories = await emojiProvider.getCategories()
+        let categories = await emojiProvider.categories()
         XCTAssertEqual(categories, categoriesForFirstLoad)
     }
     
@@ -86,10 +87,10 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categories
         
-        let emojiProvider = await EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
         
-        _ = await emojiProvider.getCategories()
-        let result = await emojiProvider.getCategories(searchString: searchString)
+        _ = await emojiProvider.categories()
+        let result = await emojiProvider.categories(searchString: searchString)
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.first?.emojis.count, 4)
     }

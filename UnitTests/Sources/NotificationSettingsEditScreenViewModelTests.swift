@@ -133,8 +133,6 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
         viewModel.fetchInitialContent()
         
         try await deferred.fulfill()
-
-        // Set mode to .allMessages
         
         var deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
             state.pendingMode == .mentionsAndKeywordsOnly

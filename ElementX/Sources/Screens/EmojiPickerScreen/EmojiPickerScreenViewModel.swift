@@ -41,7 +41,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         switch viewAction {
         case let .search(searchString: searchString):
             Task {
-                let categories = await emojiProvider.getCategories(searchString: searchString)
+                let categories = await emojiProvider.categories(searchString: searchString)
                 state.categories = convert(emojiCategories: categories)
             }
         case let .emojiTapped(emoji: emoji):
@@ -56,7 +56,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
             guard let self else { return }
-            let categories = await self.emojiProvider.getCategories(searchString: nil)
+            let categories = await self.emojiProvider.categories(searchString: nil)
             self.state.categories = convert(emojiCategories: categories)
         }
     }

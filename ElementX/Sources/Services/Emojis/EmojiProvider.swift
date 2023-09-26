@@ -19,7 +19,7 @@ import Foundation
 
 @MainActor
 protocol EmojiProviderProtocol {
-    func getCategories(searchString: String?) async -> [EmojiCategory]
+    func categories(searchString: String?) async -> [EmojiCategory]
 }
 
 private enum EmojiProviderState {
@@ -39,7 +39,7 @@ class EmojiProvider: EmojiProviderProtocol {
         }
     }
     
-    func getCategories(searchString: String? = nil) async -> [EmojiCategory] {
+    func categories(searchString: String? = nil) async -> [EmojiCategory] {
         let emojiCategories = await loadIfNeeded()
         if let searchString, searchString.isEmpty == false {
             return search(searchString: searchString, emojiCategories: emojiCategories)

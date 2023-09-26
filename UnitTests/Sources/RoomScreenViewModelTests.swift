@@ -298,7 +298,6 @@ class RoomScreenViewModelTests: XCTestCase {
     // MARK: - Sending
 
     func testRetrySend() async throws {
-        // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
@@ -309,16 +308,15 @@ class RoomScreenViewModelTests: XCTestCase {
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
 
-        // Test
         viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
-        await Task.yield()
-        try? await Task.sleep(for: .milliseconds(500))
+        
+        try? await Task.sleep(for: .milliseconds(100))
+        
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.retrySendTransactionIDReceivedInvocations == ["test retry send id"])
     }
 
     func testRetrySendNoTransactionID() async {
-        // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
@@ -329,14 +327,14 @@ class RoomScreenViewModelTests: XCTestCase {
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
 
-        // Test
         viewModel.context.send(viewAction: .retrySend(itemID: .random))
-        await Task.yield()
+        
+        try? await Task.sleep(for: .milliseconds(100))
+        
         XCTAssert(roomProxyMock.retrySendTransactionIDCallsCount == 0)
     }
 
     func testCancelSend() async {
-        // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
@@ -347,15 +345,15 @@ class RoomScreenViewModelTests: XCTestCase {
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
 
-        // Test
         viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
-        try? await Task.sleep(for: .milliseconds(500))
+        
+        try? await Task.sleep(for: .milliseconds(100))
+        
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 1)
         XCTAssert(roomProxyMock.cancelSendTransactionIDReceivedInvocations == ["test cancel send id"])
     }
 
     func testCancelSendNoTransactionID() async {
-        // Setup
         let timelineController = MockRoomTimelineController()
         let roomProxyMock = RoomProxyMock(with: .init(displayName: ""))
 
@@ -366,16 +364,16 @@ class RoomScreenViewModelTests: XCTestCase {
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock)
 
-        // Test
         viewModel.context.send(viewAction: .cancelSend(itemID: .random))
-        await Task.yield()
+
+        try? await Task.sleep(for: .milliseconds(100))
+        
         XCTAssert(roomProxyMock.cancelSendTransactionIDCallsCount == 0)
     }
     
     // MARK: - Read Receipts
     
     // swiftlint:disable force_unwrapping
-    
     func testSendReadReceipt() async throws {
         // Given a room with only text items in the timeline
         let items = [TextRoomTimelineItem(eventID: "t1"),
@@ -420,7 +418,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let newMessage = TextRoomTimelineItem(eventID: "t4")
         timelineController.timelineItems.append(newMessage)
         timelineController.callbacks.send(.updatedTimelineItems)
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(for: .milliseconds(100))
         
         viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
         try await Task.sleep(for: .milliseconds(100))

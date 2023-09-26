@@ -99,10 +99,16 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
+        var deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState) { state in
+            state.isRestoringDefaultSetting == true
+        }
+        
         viewModel.state.bindings.allowCustomSetting = false
         viewModel.context.send(viewAction: .changedAllowCustomSettings)
         
-        let deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState) { state in
+        try await deferredIsRestoringDefaultSettings.fulfill()
+        
+        deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState) { state in
             state.isRestoringDefaultSetting == false
         }
         
@@ -216,9 +222,15 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
+        var deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.deletingCustomSetting == true
+        }
+        
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
-        let deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
+        try await deferredViewState.fulfill()
+        
+        deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
             state.deletingCustomSetting == false
         }
         
@@ -253,9 +265,15 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
+        var deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.deletingCustomSetting == true
+        }
+        
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
-        let deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
+        try await deferredViewState.fulfill()
+        
+        deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
             state.deletingCustomSetting == false
         }
         
