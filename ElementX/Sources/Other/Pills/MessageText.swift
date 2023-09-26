@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 final class MessageTextView: UITextView {
-    var roomID: String?
+    var roomContext: RoomScreenViewModel.Context?
     var updateClosure: (() -> Void)?
 
     // This prevents the magnifying glass from showing up
@@ -46,12 +46,12 @@ final class MessageTextView: UITextView {
 
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction: OpenURLAction
+    @EnvironmentObject private var viewModel: RoomScreenViewModel.Context
     @State var attributedString: AttributedString
-    let roomID: String
 
     func makeUIView(context: Context) -> MessageTextView {
         let textView = MessageTextView(usingTextLayoutManager: false)
-        textView.roomID = roomID
+        textView.roomContext = viewModel
         textView.updateClosure = {
             attributedString = AttributedString(textView.attributedText)
         }
@@ -146,13 +146,13 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     
     @ViewBuilder
     static var attachmentPreview: some View {
-        MessageText(attributedString: attributedStringWithAttachment, roomID: "")
+        MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
             .previewDisplayName("Custom Attachment")
     }
 
     static var previews: some View {
-        MessageText(attributedString: attributedString, roomID: "")
+        MessageText(attributedString: attributedString)
             .border(Color.purple)
             .previewDisplayName("Custom Text")
         // For comparison
@@ -161,12 +161,12 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("SwiftUI Default Text")
         attachmentPreview
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
-            MessageText(attributedString: attributedString, roomID: "")
+            MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
         }
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
-            MessageText(attributedString: attributedString, roomID: "")
+            MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With list")
         }

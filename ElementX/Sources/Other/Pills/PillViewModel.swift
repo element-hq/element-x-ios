@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 enum PillViewState: Equatable {
@@ -27,7 +28,7 @@ final class PillViewModel: ObservableObject {
     }
     
     private let clientProxy: ClientProxyProtocol
-    private let roomID: String
+    private let roomViewModel: RoomScreenViewModel.Context
     @Published private(set) var state: PillViewState
     
     var url: URL? {
@@ -66,37 +67,45 @@ final class PillViewModel: ObservableObject {
         }
     }
     
-    init(clientProxy: ClientProxyProtocol, roomID: String, data: PillTextAttachmentData) {
+    private var cancellable: AnyCancellable?
+    
+    @MainActor
+    init(clientProxy: ClientProxyProtocol, roomContext: RoomScreenViewModel.Context, data: PillTextAttachmentData) {
         self.clientProxy = clientProxy
-        self.roomID = roomID
+        roomViewModel = roomContext
         switch data.type {
         case let .user(id):
-            state = .loadingUser(userID: id)
-            Task {
-                guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
-                    MXLog.error("Could not fetch room for mention")
-                    return
-                }
-                
-                switch await roomProxy.getMember(userID: id) {
-                case .success(let profile):
-                    await MainActor.run {
-                        state = .loadedUser(userID: profile.userID, name: profile.displayName ?? profile.userID, avatarURL: profile.avatarURL)
+            if let profile = roomContext.viewState.members[id] {
+                state = .loadedUser(userID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
+            } else {
+                state = .loadingUser(userID: id)
+                cancellable = roomContext.$viewState.sink { [weak self] viewState in
+                    guard let self = self else {
+                        return
                     }
-                case .failure(let error):
-                    MXLog.error("Could not fetch mention profile, error: \(error)")
+                    if let profile = viewState.members[id] {
+                        state = .loadedUser(userID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
+                        cancellable = nil
+                    }
                 }
             }
         }
     }
     
+    @MainActor
     static func mockViewModel(type: MockType) -> PillViewModel {
         let pillType: PillType
         switch type {
         case .user:
             pillType = .user(userId: "@test:test.com")
         }
-        let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), roomID: "", data: PillTextAttachmentData(type: pillType))
+        let mockViewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                                mediaProvider: MockMediaProvider(),
+                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
+                                                appSettings: ServiceLocator.shared.settings,
+                                                analytics: ServiceLocator.shared.analytics,
+                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        let viewModel = PillViewModel(clientProxy: MockClientProxy(userID: "@test:matrix.org"), roomContext: mockViewModel.context, data: PillTextAttachmentData(type: pillType))
         Task {
             try? await Task.sleep(for: .seconds(2))
             await MainActor.run {
