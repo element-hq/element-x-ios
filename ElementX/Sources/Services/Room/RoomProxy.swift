@@ -271,7 +271,8 @@ class RoomProxy: RoomProxyProtocol {
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
-                    try self.room.sendReply(msg: messageContent, inReplyToEventId: eventID, txnId: transactionId)
+                    let replyItem = try self.room.getEventTimelineItemByEventId(eventId: eventID)
+                    try self.room.sendReply(msg: messageContent, replyItem: replyItem, txnId: transactionId)
                 } else {
                     self.room.send(msg: messageContent, txnId: transactionId)
                 }
