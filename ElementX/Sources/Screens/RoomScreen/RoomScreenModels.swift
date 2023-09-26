@@ -125,6 +125,9 @@ struct RoomScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
 
+    /// An alert info for confirmation actions (e.g. ending a poll)
+    var confirmationAlertInfo: AlertInfo<UUID>?
+
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?

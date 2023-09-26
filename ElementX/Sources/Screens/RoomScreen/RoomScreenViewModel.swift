@@ -155,7 +155,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .disableLongPress(let itemID):
             state.longPressDisabledItemID = itemID
         case let .endPoll(pollStartID):
-            endPoll(pollStartID: pollStartID)
+            state.bindings.confirmationAlertInfo = .init(id: .init(),
+                                                         title: L10n.actionEndPoll,
+                                                         message: L10n.commonPollEndConfirmation,
+                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: L10n.actionOk, action: { self.endPoll(pollStartID: pollStartID) }))
         }
     }
 
