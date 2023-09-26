@@ -98,19 +98,13 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
-        
-        var deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState) { state in
-            state.isRestoringDefaultSetting == true
-        }
+                
+        let deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState,
+                                                                  keyPath: \.isRestoringDefaultSetting,
+                                                                  transitionValues: [false, true, false])
         
         viewModel.state.bindings.allowCustomSetting = false
         viewModel.context.send(viewAction: .changedAllowCustomSettings)
-        
-        try await deferredIsRestoringDefaultSettings.fulfill()
-        
-        deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.$viewState) { state in
-            state.isRestoringDefaultSetting == false
-        }
         
         try await deferredIsRestoringDefaultSettings.fulfill()
         
@@ -222,17 +216,11 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        var deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
-            state.deletingCustomSetting == true
-        }
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                                 keyPath: \.deletingCustomSetting,
+                                                 transitionValues: [false, true, false])
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
-        
-        try await deferredViewState.fulfill()
-        
-        deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
-            state.deletingCustomSetting == false
-        }
         
         try await deferredViewState.fulfill()
         
@@ -265,20 +253,14 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        var deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
-            state.deletingCustomSetting == true
-        }
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState,
+                                                 keyPath: \.deletingCustomSetting,
+                                                 transitionValues: [false, true, false])
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
         try await deferredViewState.fulfill()
-        
-        deferredViewState = deferFulfillment(viewModel.context.$viewState) { state in
-            state.deletingCustomSetting == false
-        }
-        
-        try await deferredViewState.fulfill()
-        
+                
         // an alert is expected
         XCTAssertEqual(viewModel.context.alertInfo?.id, .restoreDefaultFailed)
         // the `dismiss` action must not have been sent

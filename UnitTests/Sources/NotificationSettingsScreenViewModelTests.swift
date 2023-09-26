@@ -162,17 +162,9 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.settings?.directChatsMode, .allMessages)
         XCTAssertEqual(context.viewState.settings?.inconsistentSettings, [.init(chatType: .oneToOneChat, isEncrypted: false)])
         
-        deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.fixingConfigurationMismatch == true
-        }
-
+        deferred = deferFulfillment(viewModel.context.$viewState, keyPath: \.fixingConfigurationMismatch, transitionValues: [false, true, false])
+        
         context.send(viewAction: .fixConfigurationMismatchTapped)
-        
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.fixingConfigurationMismatch == false
-        }
         
         try await deferred.fulfill()
 

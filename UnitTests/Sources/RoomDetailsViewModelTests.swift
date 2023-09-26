@@ -164,17 +164,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        deferred = deferFulfillment(viewModel.context.$viewState,
+                                    keyPath: \.isProcessingIgnoreRequest,
+                                    transitionValues: [false, true, false])
+        
         context.send(viewAction: .ignoreConfirmed)
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == true
-        }
-        
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == false
-        }
         
         try await deferred.fulfill()
         
@@ -203,17 +197,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        deferred = deferFulfillment(viewModel.context.$viewState,
+                                    keyPath: \.isProcessingIgnoreRequest,
+                                    transitionValues: [false, true, false])
+        
         context.send(viewAction: .ignoreConfirmed)
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == true
-        }
-        
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == false
-        }
         
         try await deferred.fulfill()
         
@@ -243,18 +231,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        deferred = deferFulfillment(viewModel.context.$viewState,
+                                    keyPath: \.isProcessingIgnoreRequest,
+                                    transitionValues: [false, true, false])
+        
         context.send(viewAction: .unignoreConfirmed)
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == true
-        }
-        
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == false
-        }
-        
+                
         try await deferred.fulfill()
         
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
@@ -282,18 +264,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
         
+        deferred = deferFulfillment(viewModel.context.$viewState,
+                                    keyPath: \.isProcessingIgnoreRequest,
+                                    transitionValues: [false, true, false])
+        
         context.send(viewAction: .unignoreConfirmed)
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == true
-        }
-        
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.isProcessingIgnoreRequest == false
-        }
-        
+                
         try await deferred.fulfill()
         
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
