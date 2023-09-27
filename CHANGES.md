@@ -1,3 +1,11 @@
+## Changes in 1.3.1 (2023-09-27)
+
+🙌 Improvements
+
+- Removed the `Reply in Thread` string in the swipe to reply action. ([#1795](https://github.com/vector-im/element-x-ios/pull/1795))
+- Update icons to use Compound in more places (bundling some that aren't yet prepared as tokens). ([#1706](https://github.com/vector-im/element-x-ios/issues/1706))
+
+
 ## Changes in 1.3.0 (2023-09-20)
 
 No significant changes.
