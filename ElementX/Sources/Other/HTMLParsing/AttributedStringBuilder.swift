@@ -201,7 +201,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 link.insert(contentsOf: "https://", at: link.startIndex)
             }
             
-            attributedString.addAttribute(.link, value: URL(string: link) as Any, range: match.range)
+            if let url = URL(string: link) {
+                attributedString.addAttribute(.link, value: url, range: match.range)
+            }
         }
     }
     

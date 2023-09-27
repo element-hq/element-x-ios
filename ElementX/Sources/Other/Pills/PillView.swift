@@ -46,14 +46,14 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     
     static var loading: some View {
         PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillContext.mockViewModel(type: .loadUser)) { }
+                 viewModel: PillContext.mock(type: .loadUser)) { }
     }
     
     static var previews: some View {
         loading
             .previewDisplayName("Loading")
         PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillContext.mockViewModel(type: .loadedUser)) { }
+                 viewModel: PillContext.mock(type: .loadedUser)) { }
             .previewDisplayName("Loaded Long")
     }
 }

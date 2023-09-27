@@ -41,7 +41,7 @@ extension ProcessInfo {
     }
     
     /// The identifier of the screen to be loaded when running UI tests.
-    static var screenID: UITestsScreenIdentifier? {
+    static var testScreenID: UITestsScreenIdentifier? {
         #if DEBUG
         processInfo.environment["UI_TESTS_SCREEN"].flatMap(UITestsScreenIdentifier.init)
         #else

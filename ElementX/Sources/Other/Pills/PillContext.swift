@@ -89,7 +89,7 @@ extension PillContext {
         case loadedUser
     }
     
-    static func mockViewModel(type: MockType) -> PillContext {
+    static func mock(type: MockType) -> PillContext {
         let pillType: PillType
         switch type {
         case .loadUser:
