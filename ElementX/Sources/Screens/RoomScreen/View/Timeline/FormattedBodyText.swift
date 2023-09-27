@@ -201,7 +201,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
         ]
         
-        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+        let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled))
         
         ScrollView {
             VStack(alignment: .leading, spacing: 24.0) {
@@ -234,6 +234,7 @@ private struct PreviewBubbleModifier: ViewModifier {
             .padding(timelineStyle == .bubbles ? 8 : 0)
             .background(timelineStyle == .bubbles ? Color.compound._bgBubbleOutgoing : nil)
             .cornerRadius(timelineStyle == .bubbles ? 12 : 0)
+            .environmentObject(RoomScreenViewModel.mock.context)
     }
 }
 

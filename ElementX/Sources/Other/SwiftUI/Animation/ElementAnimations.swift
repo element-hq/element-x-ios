@@ -23,13 +23,13 @@ public extension Animation {
 
     /// `noAnimation` if running tests, otherwise `default` animation if `UIAccessibility.isReduceMotionEnabled` is false
     static var elementDefault: Animation {
-        let animation: Animation = Tests.isRunningTests ? .noAnimation : .default
+        let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : .default
         return animation.disabledIfReduceMotionEnabled()
     }
 
     // `noAnimation` if running tests, otherwise `self` if `UIAccessibility.isReduceMotionEnabled` is false
     func disabledDuringTests() -> Self {
-        let animation: Animation = Tests.isRunningTests ? .noAnimation : self
+        let animation: Animation = ProcessInfo.isRunningTests ? .noAnimation : self
         return animation.disabledIfReduceMotionEnabled()
     }
 

@@ -17,21 +17,43 @@
 import SwiftUI
 
 struct PillView: View {
+    let imageProvider: ImageProviderProtocol?
+    @ObservedObject var viewModel: PillContext
+    /// callback triggerd by changes in the display text
+    let didChangeText: () -> Void
+        
     var body: some View {
-        Button {
-            MXLog.info("TEXT ATTACHMENT TEST")
-        } label: {
-            HStack {
-                Image(asset: Asset.Images.appLogo)
-                    .resizable()
-                    .scaledToFit()
-            }
+        HStack(spacing: 4) {
+            LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
+            Text(viewModel.displayText)
+                .font(.compound.bodyLGSemibold)
+                .foregroundColor(.compound.textOnSolidPrimary)
+                .lineLimit(1)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        // for now design has defined no color so we will just use gray
+        .background(Capsule().foregroundColor(.gray))
+        .frame(maxWidth: 235)
+        .onChange(of: viewModel.displayText) { _ in
+            didChangeText()
         }
     }
 }
 
 struct PillView_Previews: PreviewProvider, TestablePreview {
+    static let mockMediaProvider = MockMediaProvider()
+    
+    static var loading: some View {
+        PillView(imageProvider: mockMediaProvider,
+                 viewModel: PillContext.mock(type: .loadUser)) { }
+    }
+    
     static var previews: some View {
-        PillView()
+        loading
+            .previewDisplayName("Loading")
+        PillView(imageProvider: mockMediaProvider,
+                 viewModel: PillContext.mock(type: .loadedUser)) { }
+            .previewDisplayName("Loaded Long")
     }
 }

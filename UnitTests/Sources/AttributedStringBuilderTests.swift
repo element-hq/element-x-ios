@@ -18,7 +18,7 @@
 import XCTest
 
 class AttributedStringBuilderTests: XCTestCase {
-    let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true))
     let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     func testRenderHTMLStringWithHeaders() {
@@ -411,6 +411,14 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
+    }
+    
+    func testUserMentionAtachment() {
+        let string = "https://matrix.to/#/@test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssert(attributedStringFromPlain?.attachment.isNil == false)
     }
     
     // MARK: - Private

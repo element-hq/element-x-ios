@@ -34,7 +34,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
-            
             if userSession != nil {
                 configureNotificationManager()
                 observeUserSessionChanges()

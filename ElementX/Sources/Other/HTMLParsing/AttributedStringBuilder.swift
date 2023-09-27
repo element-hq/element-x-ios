@@ -23,6 +23,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
+    private let mentionBuilder: MentionBuilderProtocol
     
     private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
 
@@ -30,8 +31,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         cache.removeAllValues()
     }
     
-    init(permalinkBaseURL: URL) {
+    init(permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {
         self.permalinkBaseURL = permalinkBaseURL
+        self.mentionBuilder = mentionBuilder
     }
         
     func fromPlain(_ string: String?) -> AttributedString? {
@@ -45,6 +47,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -97,10 +100,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
-        detectPermalinks(mutableAttributedString)
-        removeLinkColors(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -140,6 +143,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
+                // Codeblocks should not have links
+                attributedString.removeAttribute(.link, range: range)
             }
         }
     }
@@ -177,7 +182,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             guard let matchRange = Range(match.range, in: string) else {
                 return
             }
-            
+                        
             var hasLink = false
             attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
                 if value != nil {
@@ -196,7 +201,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 link.insert(contentsOf: "https://", at: link.startIndex)
             }
             
-            attributedString.addAttribute(.link, value: link as Any, range: match.range)
+            if let url = URL(string: link) {
+                attributedString.addAttribute(.link, value: url, range: match.range)
+            }
         }
     }
     
@@ -206,7 +213,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if let url = value as? URL {
                     switch PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) {
                     case .userIdentifier(let identifier):
-                        attributedString.addAttributes([.MatrixUserID: identifier], range: range)
+                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: identifier)
                     case .roomIdentifier(let identifier):
                         attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
                     case .roomAlias(let alias):
@@ -279,4 +286,8 @@ extension NSAttributedString.Key {
     static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
     static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
     static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
+}
+
+protocol MentionBuilderProtocol {
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String)
 }

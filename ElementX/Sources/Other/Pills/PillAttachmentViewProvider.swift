@@ -15,21 +15,52 @@
 //
 
 import SwiftUI
+import SwiftUIIntrospect
 import UIKit
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
+    private weak var messageTextView: MessageTextView?
+    
     // MARK: - Override
+    
+    override init(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) {
+        super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
 
+        // Keep a reference to the parent text view for size adjustments and pills flushing.
+        messageTextView = parentView?.superview as? MessageTextView
+        tracksTextAttachmentViewBounds = true
+    }
+    
+    @MainActor
     override func loadView() {
         super.loadView()
 
-        guard textAttachment is PillTextAttachment else {
-            MXLog.failure("[PillAttachmentViewProvider]: attachment is missing or not of expected class")
+        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData else {
+            MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
             return
         }
-
-        let view = PillView()
+        
+        let viewModel: PillContext
+        let imageProvider: ImageProviderProtocol?
+        if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
+            // The mock viewModel simulates the loading logic for testing purposes
+            viewModel = PillContext.mock(type: .loadUser)
+            imageProvider = MockMediaProvider()
+        } else if let roomContext = messageTextView?.roomContext {
+            viewModel = PillContext(roomContext: roomContext, data: textAttachmentData)
+            imageProvider = roomContext.imageProvider
+        } else {
+            MXLog.failure("[PillAttachmentViewProvider]: missing room context")
+            return
+        }
+        
+        let view = PillView(imageProvider: imageProvider, viewModel: viewModel) { [weak self] in
+            self?.messageTextView?.invalidateTextAttachmentsDisplay(update: true)
+        }
         let controller = UIHostingController(rootView: view)
+        controller.view.backgroundColor = .clear
+        // This allows the text view to handle it as a link
+        controller.view.isUserInteractionEnabled = false
         self.view = controller.view
     }
 }

@@ -23,9 +23,9 @@ struct Application: App {
     private let appCoordinator: AppCoordinatorProtocol
 
     init() {
-        if Tests.isRunningUITests {
+        if ProcessInfo.isRunningUITests {
             appCoordinator = UITestsAppCoordinator()
-        } else if Tests.isRunningUnitTests {
+        } else if ProcessInfo.isRunningUnitTests {
             appCoordinator = UnitTestsAppCoordinator()
         } else {
             appCoordinator = AppCoordinator()
@@ -59,6 +59,6 @@ struct Application: App {
     }
     
     private var shouldHideStatusBar: Bool {
-        Tests.isRunningUITests
+        ProcessInfo.isRunningUITests
     }
 }
