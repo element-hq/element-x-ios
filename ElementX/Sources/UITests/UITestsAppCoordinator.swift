@@ -50,7 +50,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
             delegate.window??.layer.speed = 0
         }
         
-        guard let screenID = ProcessInfo.screenID else { fatalError("Unable to launch with unknown screen.") }
+        guard let screenID = ProcessInfo.testScreenID else { fatalError("Unable to launch with unknown screen.") }
         
         let mockScreen = MockScreen(id: screenID)
         navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
