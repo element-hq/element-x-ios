@@ -200,7 +200,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 link.insert(contentsOf: "https://", at: link.startIndex)
             }
             
-            attributedString.addAttribute(.link, value: link as Any, range: match.range)
+            attributedString.addAttribute(.link, value: URL(string: link), range: match.range)
         }
     }
     

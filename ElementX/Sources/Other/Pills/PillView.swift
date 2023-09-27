@@ -26,8 +26,8 @@ struct PillView: View {
         HStack(spacing: 4) {
             LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
             Text(viewModel.displayText)
-                .font(.compound.bodyLG)
-                .foregroundColor(.compound.textPrimary)
+                .font(.compound.bodyLGSemibold)
+                .foregroundColor(.compound.textOnSolidPrimary)
                 .lineLimit(1)
         }
         .padding(.horizontal, 8)

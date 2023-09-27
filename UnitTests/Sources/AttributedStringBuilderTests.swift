@@ -413,6 +413,14 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
     }
     
+    func testUserMentionAtachment() {
+        let string = "https://matrix.to/#/@test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssert(attributedStringFromHTML?.attachment.isNil == false)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssert(attributedStringFromPlain?.attachment.isNil == false)
+    }
+    
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
