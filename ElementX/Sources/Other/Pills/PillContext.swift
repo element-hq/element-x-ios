@@ -17,16 +17,11 @@
 import Combine
 import Foundation
 
-enum PillViewState {
-    case loading(contentID: String)
-    case loaded(contentID: String, name: String, avatarURL: URL?)
-}
-
 @MainActor
-final class PillViewModel: ObservableObject {
-    enum MockType {
-        case loadUser
-        case loadedUser
+final class PillContext: ObservableObject {
+    enum PillViewState {
+        case loading(contentID: String)
+        case loaded(contentID: String, name: String, avatarURL: URL?)
     }
     
     @Published private var state: PillViewState
@@ -86,13 +81,20 @@ final class PillViewModel: ObservableObject {
             }
         }
     }
+}
+
+extension PillContext {
+    enum MockType {
+        case loadUser
+        case loadedUser
+    }
     
-    static func mockViewModel(type: MockType) -> PillViewModel {
+    static func mockViewModel(type: MockType) -> PillContext {
         let pillType: PillType
         switch type {
         case .loadUser:
             pillType = .user(userID: "@test:test.com")
-            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             Task {
                 try? await Task.sleep(for: .seconds(2))
                 viewModel.state = .loaded(contentID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
@@ -100,7 +102,7 @@ final class PillViewModel: ObservableObject {
             return viewModel
         case .loadedUser:
             pillType = .user(userID: "@test:test.com")
-            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             viewModel.state = .loaded(contentID: "@test:test.com", name: "Very Very Long Test Display Text", avatarURL: URL.documentsDirectory)
             return viewModel
         }

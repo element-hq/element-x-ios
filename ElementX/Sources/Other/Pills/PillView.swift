@@ -18,7 +18,7 @@ import SwiftUI
 
 struct PillView: View {
     let imageProvider: ImageProviderProtocol?
-    @ObservedObject var viewModel: PillViewModel
+    @ObservedObject var viewModel: PillContext
     /// callback triggerd by changes in the display text
     let didChangeText: () -> Void
         
@@ -46,14 +46,14 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     
     static var loading: some View {
         PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillViewModel.mockViewModel(type: .loadUser)) { }
+                 viewModel: PillContext.mockViewModel(type: .loadUser)) { }
     }
     
     static var previews: some View {
         loading
             .previewDisplayName("Loading")
         PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillViewModel.mockViewModel(type: .loadedUser)) { }
+                 viewModel: PillContext.mockViewModel(type: .loadedUser)) { }
             .previewDisplayName("Loaded Long")
     }
 }

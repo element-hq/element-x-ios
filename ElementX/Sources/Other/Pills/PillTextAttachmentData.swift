@@ -17,6 +17,11 @@
 import Foundation
 import UIKit
 
+enum PillType: Codable {
+    /// A pill that mentions a user
+    case user(userID: String)
+}
+
 struct PillTextAttachmentData {
     // MARK: - Properties
 
@@ -56,9 +61,4 @@ extension PillTextAttachmentData: Codable {
         let fontData = try NSKeyedArchiver.archivedData(withRootObject: font, requiringSecureCoding: false)
         try container.encode(fontData, forKey: .font)
     }
-}
-
-enum PillType: Codable {
-    /// A pill that mentions a user
-    case user(userID: String)
 }
