@@ -39,7 +39,7 @@ struct MentionBuilder: MentionBuilderProtocol {
         
         var attributesToAdd: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID]
         if let blockquote {
-            // mentions can be in blockquotes, so if the replaced string was in on of it we keep the attribute
+            // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
             attributesToAdd[.MatrixBlockquote] = blockquote
         }
         let attachmentString = NSMutableAttributedString(attachment: attachment)
