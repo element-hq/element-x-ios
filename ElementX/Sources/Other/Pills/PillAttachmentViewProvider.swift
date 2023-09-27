@@ -44,7 +44,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         let imageProvider: ImageProviderProtocol?
         if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
             // The mock viewModel simulates the loading logic for testing purposes
-            viewModel = PillContext.mockViewModel(type: .loadUser)
+            viewModel = PillContext.mock(type: .loadUser)
             imageProvider = MockMediaProvider()
         } else if let roomContext = messageTextView?.roomContext {
             viewModel = PillContext(roomContext: roomContext, data: textAttachmentData)
