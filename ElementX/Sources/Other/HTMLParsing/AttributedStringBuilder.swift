@@ -101,9 +101,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
+        replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
-        replaceMarkedCodeBlocks(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -143,6 +143,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
+                // Codeblocks should not have links
+                attributedString.removeAttribute(.link, range: range)
             }
         }
     }
@@ -180,7 +182,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             guard let matchRange = Range(match.range, in: string) else {
                 return
             }
-            
+                        
             var hasLink = false
             attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
                 if value != nil {
