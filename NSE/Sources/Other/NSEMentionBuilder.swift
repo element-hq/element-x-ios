@@ -16,7 +16,7 @@
 
 import Foundation
 
-extension AttributedStringBuilder: MentionBuilder {
+struct NSEMentionBuilder: MentionBuilderProtocol {
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
         attributedString.addAttributes([.MatrixUserID: userID], range: range)
     }

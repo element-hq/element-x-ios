@@ -17,7 +17,10 @@
 import Foundation
 import UIKit
 
-extension AttributedStringBuilder: MentionBuilder {
+struct MentionBuilder: MentionBuilderProtocol {
+    // Can be removed when mentions are enabled by default
+    let mentionsEnabled: Bool
+    
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
         guard mentionsEnabled else {
             attributedString.addAttributes([.MatrixUserID: userID], range: range)

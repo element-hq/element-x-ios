@@ -162,7 +162,7 @@ class MockScreen: Identifiable {
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: true),
+                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true)),
                                                                       bugReportService: BugReportServiceMock(),
                                                                       navigationStackCoordinator: navigationStackCoordinator,
                                                                       selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))

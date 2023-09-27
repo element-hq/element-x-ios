@@ -23,8 +23,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
-    // Can be removed when mentions are enabled by default
-    let mentionsEnabled: Bool
+    private let mentionBuilder: MentionBuilderProtocol
     
     private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
 
@@ -32,9 +31,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         cache.removeAllValues()
     }
     
-    init(permalinkBaseURL: URL, mentionsEnabled: Bool) {
+    init(permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {
         self.permalinkBaseURL = permalinkBaseURL
-        self.mentionsEnabled = mentionsEnabled
+        self.mentionBuilder = mentionBuilder
     }
         
     func fromPlain(_ string: String?) -> AttributedString? {
@@ -200,7 +199,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 link.insert(contentsOf: "https://", at: link.startIndex)
             }
             
-            attributedString.addAttribute(.link, value: URL(string: link), range: match.range)
+            attributedString.addAttribute(.link, value: URL(string: link) as Any, range: match.range)
         }
     }
     
@@ -210,7 +209,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 if let url = value as? URL {
                     switch PermalinkBuilder.detectPermalink(in: url, baseURL: permalinkBaseURL) {
                     case .userIdentifier(let identifier):
-                        handleUserMention(for: attributedString, in: range, url: url, userID: identifier)
+                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: identifier)
                     case .roomIdentifier(let identifier):
                         attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
                     case .roomAlias(let alias):
@@ -285,6 +284,6 @@ extension NSAttributedString.Key {
     static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
 }
 
-protocol MentionBuilder {
+protocol MentionBuilderProtocol {
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String)
 }
