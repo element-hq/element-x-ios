@@ -416,7 +416,7 @@ class AttributedStringBuilderTests: XCTestCase {
     func testUserMentionAtachment() {
         let string = "https://matrix.to/#/@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        XCTAssert(attributedStringFromHTML?.attachment.isNil == false)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
         XCTAssert(attributedStringFromPlain?.attachment.isNil == false)
     }
