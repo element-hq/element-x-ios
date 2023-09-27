@@ -19,10 +19,6 @@ import SwiftUIIntrospect
 import UIKit
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
-    private var isXcodePreview: Bool {
-        ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-    }
-    
     private weak var messageTextView: MessageTextView?
     
     // MARK: - Override
@@ -46,7 +42,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         
         let viewModel: PillViewModel
         let imageProvider: ImageProviderProtocol?
-        if isXcodePreview || Tests.isRunningTests {
+        if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
             viewModel = PillViewModel.mockViewModel(type: .loadUser)
             imageProvider = MockMediaProvider()
         } else if let roomContext = messageTextView?.roomContext {

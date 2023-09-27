@@ -101,9 +101,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
+        replaceMarkedBlockquotes(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
-        replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         

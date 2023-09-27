@@ -18,7 +18,7 @@
 import XCTest
 
 class AttributedStringBuilderTests: XCTestCase {
-    let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: true)
     let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     func testRenderHTMLStringWithHeaders() {

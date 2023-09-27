@@ -24,15 +24,23 @@ extension AttributedStringBuilder: MentionBuilder {
             return
         }
         
-        let font = attributedString.attribute(.font, at: 0, longestEffectiveRange: nil, in: range) as? UIFont ?? .preferredFont(forTextStyle: .body)
+        let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
+        let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
+        let blockquote = attributes[.MatrixBlockquote]
+        
         let attachmentData = PillTextAttachmentData(type: .user(userID: userID), font: font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
             attributedString.addAttributes([.MatrixUserID: userID], range: range)
             return
         }
         
+        var attributesToAdd: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID]
+        if let blockquote {
+            // mentions can be in blockquotes, so if the replaced string was in on of it we keep the attribute
+            attributesToAdd[.MatrixBlockquote] = blockquote
+        }
         let attachmentString = NSMutableAttributedString(attachment: attachment)
-        attachmentString.addAttributes([.link: url, .MatrixUserID: userID], range: NSRange(location: 0, length: attachmentString.length))
+        attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
         attributedString.replaceCharacters(in: range, with: attachmentString)
     }
 }

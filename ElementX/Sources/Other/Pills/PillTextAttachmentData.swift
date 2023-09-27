@@ -59,5 +59,6 @@ extension PillTextAttachmentData: Codable {
 }
 
 enum PillType: Codable {
+    /// A pill that mentions a user
     case user(userID: String)
 }

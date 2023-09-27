@@ -50,7 +50,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
             delegate.window??.layer.speed = 0
         }
         
-        guard let screenID = Tests.screenID else { fatalError("Unable to launch with unknown screen.") }
+        guard let screenID = ProcessInfo.screenID else { fatalError("Unable to launch with unknown screen.") }
         
         let mockScreen = MockScreen(id: screenID)
         navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
@@ -162,7 +162,7 @@ class MockScreen: Identifiable {
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled),
+                                                                      attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: true),
                                                                       bugReportService: BugReportServiceMock(),
                                                                       navigationStackCoordinator: navigationStackCoordinator,
                                                                       selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()))

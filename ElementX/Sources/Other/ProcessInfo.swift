@@ -16,11 +16,11 @@
 
 import Foundation
 
-public enum Tests {
+extension ProcessInfo {
     /// Flag indicating whether the app is running the unit tests.
     static var isRunningUnitTests: Bool {
         #if DEBUG
-        ProcessInfo.processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
+        processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
         #else
         false
         #endif
@@ -29,7 +29,7 @@ public enum Tests {
     /// Flag indicating whether the app is running the UI tests.
     static var isRunningUITests: Bool {
         #if DEBUG
-        ProcessInfo.processInfo.environment["UI_TESTS_SCREEN"] != nil
+        processInfo.environment["UI_TESTS_SCREEN"] != nil
         #else
         false
         #endif
@@ -43,7 +43,7 @@ public enum Tests {
     /// The identifier of the screen to be loaded when running UI tests.
     static var screenID: UITestsScreenIdentifier? {
         #if DEBUG
-        ProcessInfo.processInfo.environment["UI_TESTS_SCREEN"].flatMap(UITestsScreenIdentifier.init)
+        processInfo.environment["UI_TESTS_SCREEN"].flatMap(UITestsScreenIdentifier.init)
         #else
         nil
         #endif
@@ -55,9 +55,17 @@ public enum Tests {
         }
         
         #if DEBUG
-        return ProcessInfo.processInfo.environment["UI_TESTS_DISABLE_TIMELINE_ACCESSIBILITY"] != nil
+        return processInfo.environment["UI_TESTS_DISABLE_TIMELINE_ACCESSIBILITY"] != nil
         #else
         return false
+        #endif
+    }
+    
+    static var isXcodePreview: Bool {
+        #if DEBUG
+        processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+        #else
+        false
         #endif
     }
 }

@@ -31,7 +31,7 @@ class HomeScreenViewModelTests: XCTestCase {
         clientProxy = MockClientProxy(userID: "@mock:client.com")
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
                                                                      mediaProvider: MockMediaProvider()),
-                                        attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL),
+                                        attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: true),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: ServiceLocator.shared.settings,
                                         analytics: ServiceLocator.shared.analytics,

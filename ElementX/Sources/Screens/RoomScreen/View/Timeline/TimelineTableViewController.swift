@@ -104,7 +104,7 @@ class TimelineTableViewController: UIViewController {
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider
         // for each possible cell, causing layout issues
-        tableView.accessibilityElementsHidden = Tests.shouldDisableTimelineAccessibility
+        tableView.accessibilityElementsHidden = ProcessInfo.shouldDisableTimelineAccessibility
         
         scrollToBottomPublisher
             .sink { [weak self] _ in
