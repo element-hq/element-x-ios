@@ -257,6 +257,7 @@ class LoggingTests: XCTestCase {
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
+                                               canBeRepliedTo: true,
                                                isThreaded: false,
                                                sender: .init(id: "sender"),
                                                content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
@@ -265,6 +266,7 @@ class LoggingTests: XCTestCase {
                                                    timestamp: "",
                                                    isOutgoing: false,
                                                    isEditable: false,
+                                                   canBeRepliedTo: true,
                                                    isThreaded: false,
                                                    sender: .init(id: "sender"),
                                                    content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
@@ -273,6 +275,7 @@ class LoggingTests: XCTestCase {
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
@@ -280,6 +283,7 @@ class LoggingTests: XCTestCase {
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
@@ -287,6 +291,7 @@ class LoggingTests: XCTestCase {
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
+                                                 canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
@@ -294,6 +299,7 @@ class LoggingTests: XCTestCase {
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
+                                               canBeRepliedTo: true,
                                                isThreaded: false,
                                                sender: .init(id: "sender"),
                                                content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
