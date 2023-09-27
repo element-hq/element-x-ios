@@ -443,7 +443,8 @@ class ClientProxy: ClientProxyProtocol {
                 .finish()
             let roomListService = syncService.roomListService()
             
-            let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled)))
+            let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: appSettings.permalinkBaseURL,
+                                                                                                                               mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled)))
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                             messageEventStringBuilder: roomMessageEventStringBuilder)
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
