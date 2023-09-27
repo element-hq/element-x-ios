@@ -247,10 +247,8 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let transactionId = genTransactionId()
-        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
-            self.room.send(msg: messageContent, txnId: transactionId)
+            self.room.send(msg: messageContent)
             return .success(())
         }
     }
@@ -261,7 +259,6 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let transactionId = genTransactionId()
         let messageContent: RoomMessageEventContentWithoutRelation
         if let html {
             messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
@@ -272,9 +269,9 @@ class RoomProxy: RoomProxyProtocol {
             do {
                 if let eventID {
                     let replyItem = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                    try self.room.sendReply(msg: messageContent, replyItem: replyItem, txnId: transactionId)
+                    try self.room.sendReply(msg: messageContent, replyItem: replyItem)
                 } else {
-                    self.room.send(msg: messageContent, txnId: transactionId)
+                    self.room.send(msg: messageContent)
                 }
             } catch {
                 return .failure(.failedSendingMessage)
@@ -407,15 +404,12 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
-        let transactionId = genTransactionId()
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             .success(self.room.sendLocation(body: body,
                                             geoUri: geoURI.string,
                                             description: description,
                                             zoomLevel: zoomLevel,
-                                            assetType: assetType,
-                                            txnId: transactionId))
+                                            assetType: assetType))
         }
     }
 
@@ -447,7 +441,6 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
-        let transactionId = genTransactionId()
         let newMessageContent: RoomMessageEventContentWithoutRelation
         if let html {
             newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
@@ -457,7 +450,8 @@ class RoomProxy: RoomProxyProtocol {
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
-                try self.room.edit(newMsg: newMessageContent, originalEventId: eventID, txnId: transactionId)
+                let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
+                try self.room.edit(newContent: newMessageContent, editItem: originalEvent)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -471,11 +465,9 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        let transactionID = genTransactionId()
-        
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
-                try self.room.redact(eventId: eventID, reason: nil, txnId: transactionID)
+                try self.room.redact(eventId: eventID, reason: nil)
                 return .success(())
             } catch {
                 return .failure(.failedRedactingEvent)
@@ -684,7 +676,7 @@ class RoomProxy: RoomProxyProtocol {
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), txnId: genTransactionId()))
+                return try .success(self.room.createPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind)))
             } catch {
                 MXLog.error("Failed creating a poll: \(error)")
                 return .failure(.failedCreatingPoll)
@@ -695,7 +687,7 @@ class RoomProxy: RoomProxyProtocol {
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers, txnId: genTransactionId()))
+                return try .success(self.room.sendPollResponse(pollStartId: pollStartID, answers: answers))
             } catch {
                 MXLog.error("Failed sending a poll vote: \(error), pollStartID: \(pollStartID)")
                 return .failure(.failedSendingPollResponse)
@@ -706,7 +698,7 @@ class RoomProxy: RoomProxyProtocol {
     func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
-                return try .success(self.room.endPoll(pollStartId: pollStartID, text: text, txnId: genTransactionId()))
+                return try .success(self.room.endPoll(pollStartId: pollStartID, text: text))
             } catch {
                 MXLog.error("Failed ending a poll: \(error), pollStartID: \(pollStartID)")
                 return .failure(.failedEndingPoll)
