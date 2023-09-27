@@ -18,10 +18,11 @@ import Combine
 import Foundation
 
 enum PillViewState {
-    case loadingUser(userID: String)
-    case loadedUser(userID: String, name: String, avatarURL: URL?)
+    case loading(contentID: String)
+    case loaded(contentID: String, name: String, avatarURL: URL?)
 }
 
+@MainActor
 final class PillViewModel: ObservableObject {
     enum MockType {
         case loadUser
@@ -32,56 +33,53 @@ final class PillViewModel: ObservableObject {
     
     var url: URL? {
         switch state {
-        case .loadingUser:
+        case .loading:
             return nil
-        case .loadedUser(_, _, let url):
+        case .loaded(_, _, let url):
             return url
         }
     }
     
     var name: String? {
         switch state {
-        case .loadingUser:
+        case .loading:
             return nil
-        case .loadedUser(_, let name, _):
+        case .loaded(_, let name, _):
             return name
         }
     }
     
     var displayText: String {
         switch state {
-        case .loadedUser(_, let name, _):
+        case .loaded(_, let name, _):
             return name
-        case .loadingUser(let userID):
-            return userID
+        case .loading(let contentID):
+            return contentID
         }
     }
     
     var contentID: String {
         switch state {
-        case .loadedUser(let userID, _, _):
-            return userID
-        case .loadingUser(let userID):
-            return userID
+        case .loaded(let contentID, _, _), .loading(let contentID):
+            return contentID
         }
     }
     
     private var cancellable: AnyCancellable?
     
-    @MainActor
     init(roomContext: RoomScreenViewModel.Context, data: PillTextAttachmentData) {
         switch data.type {
         case let .user(id):
             if let profile = roomContext.viewState.members[id] {
-                state = .loadedUser(userID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
+                state = .loaded(contentID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
             } else {
-                state = .loadingUser(userID: id)
+                state = .loading(contentID: id)
                 cancellable = roomContext.$viewState.sink { [weak self] viewState in
                     guard let self else {
                         return
                     }
                     if let profile = viewState.members[id] {
-                        state = .loadedUser(userID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
+                        state = .loaded(contentID: id, name: profile.displayName ?? id, avatarURL: profile.avatarURL)
                         cancellable = nil
                     }
                 }
@@ -89,22 +87,21 @@ final class PillViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     static func mockViewModel(type: MockType) -> PillViewModel {
         let pillType: PillType
         switch type {
         case .loadUser:
-            pillType = .user(userId: "@test:test.com")
-            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
+            pillType = .user(userID: "@test:test.com")
+            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             Task {
                 try? await Task.sleep(for: .seconds(2))
-                viewModel.state = .loadedUser(userID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
+                viewModel.state = .loaded(contentID: "@test:test.com", name: "Test Longer Display Text", avatarURL: URL.documentsDirectory)
             }
             return viewModel
         case .loadedUser:
-            pillType = .user(userId: "@test:test.com")
-            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType))
-            viewModel.state = .loadedUser(userID: "@test:test.com", name: "Very Very Long Test Display Text", avatarURL: URL.documentsDirectory)
+            pillType = .user(userID: "@test:test.com")
+            let viewModel = PillViewModel(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            viewModel.state = .loaded(contentID: "@test:test.com", name: "Very Very Long Test Display Text", avatarURL: URL.documentsDirectory)
             return viewModel
         }
     }

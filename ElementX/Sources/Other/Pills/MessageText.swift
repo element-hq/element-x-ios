@@ -126,7 +126,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     private static let attributedString = AttributedString("Hello World! Hello world! Hello world! Hello world! Hello World! Hellooooooooooooooooooooooo Woooooooooooooooooooooorld", attributes: defaultFontContainer)
     
     private static let attributedStringWithAttachment: AttributedString = {
-        let testData = PillTextAttachmentData(type: .user(userId: "@alice:example.com"))
+        let testData = PillTextAttachmentData(type: .user(userID: "@alice:example.com"), font: .preferredFont(forTextStyle: .body))
         guard let attachment = PillTextAttachment(attachmentData: testData) else {
             return AttributedString()
         }
@@ -145,7 +145,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     
     private static let htmlStringWithList = "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
 
-    private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL)
+    private static let attributedStringBuilder = AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled)
     
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)

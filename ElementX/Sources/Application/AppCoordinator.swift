@@ -39,8 +39,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 observeUserSessionChanges()
                 startSync()
             }
-            
-            PillAttachmentViewProvider.currentSession = userSession
         }
     }
     

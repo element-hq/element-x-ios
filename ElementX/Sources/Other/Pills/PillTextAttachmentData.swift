@@ -24,7 +24,7 @@ struct PillTextAttachmentData {
     let type: PillType
 
     /// Font for the display name
-    var font: UIFont = .preferredFont(forTextStyle: .body)
+    let font: UIFont
 }
 
 extension PillTextAttachmentData: Codable {
@@ -59,5 +59,5 @@ extension PillTextAttachmentData: Codable {
 }
 
 enum PillType: Codable {
-    case user(userId: String) /// userId
+    case user(userID: String)
 }

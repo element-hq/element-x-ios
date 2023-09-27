@@ -23,6 +23,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
+    // Can be removed when mentions are enabled by default
+    let mentionsEnabled: Bool
     
     private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
 
@@ -30,8 +32,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         cache.removeAllValues()
     }
     
-    init(permalinkBaseURL: URL) {
+    init(permalinkBaseURL: URL, mentionsEnabled: Bool) {
         self.permalinkBaseURL = permalinkBaseURL
+        self.mentionsEnabled = mentionsEnabled
     }
         
     func fromPlain(_ string: String?) -> AttributedString? {

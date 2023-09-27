@@ -19,7 +19,8 @@ import SwiftUI
 struct PillView: View {
     let imageProvider: ImageProviderProtocol?
     @ObservedObject var viewModel: PillViewModel
-    let updateClosure: () -> Void
+    /// callback triggerd by changes in the display text
+    let didChangeText: () -> Void
         
     var body: some View {
         HStack(spacing: 4) {
@@ -35,8 +36,7 @@ struct PillView: View {
         .background(Capsule().foregroundColor(.gray))
         .frame(maxWidth: 235)
         .onChange(of: viewModel.displayText) { _ in
-            // To update the size of the embedding text
-            updateClosure()
+            didChangeText()
         }
     }
 }

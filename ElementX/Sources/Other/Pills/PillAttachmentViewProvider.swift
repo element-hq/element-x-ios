@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import SwiftUIIntrospect
 import UIKit
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
@@ -50,7 +51,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             imageProvider = MockMediaProvider()
         } else if let roomContext = messageTextView?.roomContext {
             viewModel = PillViewModel(roomContext: roomContext, data: textAttachmentData)
-            imageProvider = Self.currentSession?.mediaProvider
+            imageProvider = roomContext.imageProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
@@ -65,9 +66,4 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         controller.view.isUserInteractionEnabled = false
         self.view = controller.view
     }
-}
-
-extension PillAttachmentViewProvider {
-    // This is a bit of an hack, since the Provider is instantiated by the system we have no way to pass the current session it, so we need to inject it globally.
-    static var currentSession: UserSessionProtocol?
 }
