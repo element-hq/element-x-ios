@@ -20,7 +20,7 @@ import SwiftUI
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
     @Environment(\.openURL) private var openURL
-    private let appCoordinator: AppCoordinatorProtocol
+    private var appCoordinator: AppCoordinatorProtocol!
 
     init() {
         if ProcessInfo.isRunningUITests {
@@ -28,7 +28,7 @@ struct Application: App {
         } else if ProcessInfo.isRunningUnitTests {
             appCoordinator = UnitTestsAppCoordinator()
         } else {
-            appCoordinator = AppCoordinator()
+            appCoordinator = AppCoordinator(appDelegate: applicationDelegate)
         }
     }
 
@@ -57,7 +57,7 @@ struct Application: App {
                 }
         }
     }
-    
+
     private var shouldHideStatusBar: Bool {
         ProcessInfo.isRunningUITests
     }

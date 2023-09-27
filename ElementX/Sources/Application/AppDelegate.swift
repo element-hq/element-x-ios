@@ -24,12 +24,9 @@ enum AppDelegateCallback {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    private(set) static var shared: AppDelegate!
     let callbacks = PassthroughSubject<AppDelegateCallback, Never>()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        // worst singleton ever
-        Self.shared = self
         NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)
         return true
     }

@@ -25,7 +25,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
-    
+    private let appDelegate: AppDelegate
+
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: BackgroundTaskProtocol?
 
@@ -57,7 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private let appRouteURLParser: AppRouteURLParser
     @Consumable private var storedAppRoute: AppRoute?
 
-    init() {
+    init(appDelegate: AppDelegate) {
         Self.setupEnvironmentVariables()
         
         let appSettings = AppSettings()
@@ -74,6 +75,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             AppSettings.reset()
         }
         
+        self.appDelegate = appDelegate
         self.appSettings = appSettings
         appRouteURLParser = AppRouteURLParser(appSettings: appSettings)
         
@@ -493,20 +495,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         notificationManager.setUserSession(userSession)
         notificationManager.requestAuthorization()
 
-        if let appDelegate = AppDelegate.shared {
-            appDelegateObserver = appDelegate.callbacks
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] callback in
-                    switch callback {
-                    case .registeredNotifications(let deviceToken):
-                        Task { await self?.notificationManager.register(with: deviceToken) }
-                    case .failedToRegisteredNotifications(let error):
-                        self?.notificationManager.registrationFailed(with: error)
-                    }
+        appDelegateObserver = appDelegate.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                switch callback {
+                case .registeredNotifications(let deviceToken):
+                    Task { await self?.notificationManager.register(with: deviceToken) }
+                case .failedToRegisteredNotifications(let error):
+                    self?.notificationManager.registrationFailed(with: error)
                 }
-        } else {
-            MXLog.error("Couldn't register to AppDelegate callbacks")
-        }
+            }
     }
     
     private func observeUserSessionChanges() {
