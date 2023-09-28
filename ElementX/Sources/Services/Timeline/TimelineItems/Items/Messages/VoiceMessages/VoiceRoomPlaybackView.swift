@@ -181,7 +181,6 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
         var state = MockAudioPlayerState(duration: 10.0,
                                          waveform: waveform,
                                          progress: 0.3)
-        state.loading = true
         return state
     }()
     
