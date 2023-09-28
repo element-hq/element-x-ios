@@ -40,6 +40,7 @@ targets:
     - package: Sentry
     - package: SnapshotTesting
     - package: Collections
+    - package: SwiftOGG
 
     info:
       path: ../SupportingFiles/Info.plist
