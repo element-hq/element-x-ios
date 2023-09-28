@@ -43,7 +43,7 @@ struct ServerSelectionScreen: View {
             AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
                 .padding(.bottom, 8)
             
-            Text(L10n.commonSelectYourServer)
+            Text(L10n.screenChangeServerTitle)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)

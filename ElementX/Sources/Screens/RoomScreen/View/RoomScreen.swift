@@ -81,7 +81,7 @@ struct RoomScreen: View {
                 Button(L10n.screenRoomRetrySendMenuSendAgainAction) {
                     context.send(viewAction: .retrySend(itemID: info.itemID))
                 }
-                Button(L10n.screenRoomRetrySendMenuRemoveAction, role: .destructive) {
+                Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .cancelSend(itemID: info.itemID))
                 }
             }
