@@ -17,7 +17,7 @@
 import Combine
 import Foundation
 
-class AudioPlayerState: AudioPlayerStateProtocol {
+class AudioPlayerState: ObservableObject {
     let duration: Double
     let waveform: Waveform
     @Published private(set) var loading: Bool

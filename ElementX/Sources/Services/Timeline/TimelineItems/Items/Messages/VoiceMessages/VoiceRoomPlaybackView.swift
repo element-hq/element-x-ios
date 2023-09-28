@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct VoiceRoomPlaybackView<AudioPlayerState>: View where AudioPlayerState: AudioPlayerStateProtocol {
+struct VoiceRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
@@ -177,10 +177,10 @@ struct VoiceRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let playerState: MockAudioPlayerState = {
-        var state = MockAudioPlayerState(duration: 10.0,
-                                         waveform: waveform,
-                                         progress: 0.3)
+    static let playerState: AudioPlayerState = {
+        var state = AudioPlayerState(duration: 10.0,
+                                     waveform: waveform,
+                                     progress: 0.3)
         return state
     }()
     
