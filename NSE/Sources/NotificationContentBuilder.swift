@@ -33,15 +33,21 @@ struct NotificationContentBuilder {
         case .invite:
             return try await processInvited(notificationItem: notificationItem, mediaProvider: mediaProvider)
         case .timeline(let event):
-            switch try? event.eventType() {
+            guard let eventType = try? event.eventType() else {
+                return processEmpty(notificationItem: notificationItem)
+            }
+
+            switch eventType {
             case let .messageLike(content):
                 switch content {
                 case .roomMessage(let messageType, _):
                     return try await processRoomMessage(notificationItem: notificationItem, messageType: messageType, mediaProvider: mediaProvider)
+                case .poll(let question):
+                    return try await processPollStartEvent(notificationItem: notificationItem, pollQuestion: question, mediaProvider: mediaProvider)
                 default:
                     return processEmpty(notificationItem: notificationItem)
                 }
-            default:
+            case .state:
                 return processEmpty(notificationItem: notificationItem)
             }
         }
@@ -113,6 +119,12 @@ struct NotificationContentBuilder {
             break
         }
         
+        return notification
+    }
+
+    private func processPollStartEvent(notificationItem: NotificationItemProxyProtocol, pollQuestion: String, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        let notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
+        notification.body = L10n.commonPollSummary(pollQuestion)
         return notification
     }
 
