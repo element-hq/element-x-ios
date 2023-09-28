@@ -45,6 +45,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var authenticationCoordinator: AuthenticationCoordinator?
+    private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
@@ -145,6 +146,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
+            case .oidcCallback(let url):
+                if stateMachine.state == .softLogout {
+                    softLogoutCoordinator?.handleOIDCRedirectURL(url)
+                } else {
+                    authenticationCoordinator?.handleOIDCRedirectURL(url)
+                }
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
@@ -158,11 +165,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             return true
         }
         
-        // Until we have an OIDC callback AppRoute, handle it manually.
-        if url.absoluteString.starts(with: appSettings.oidcRedirectURL.absoluteString) {
-            MXLog.error("OIDC callback through Universal Links not implemented.")
-        }
-        
         return false
     }
     
@@ -170,6 +172,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
+        self.authenticationCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
     
@@ -305,8 +308,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 break
             case (_, .signOut(let isSoft), .signingOut):
                 self.logout(isSoft: isSoft)
-            case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
-                self.presentSplashScreen(isSoftLogout: isSoft)
+            case (.signingOut, .completedSigningOut, .signedOut):
+                self.presentSplashScreen(isSoftLogout: false)
+            case (.signingOut, .showSoftLogout, .softLogout):
+                self.presentSplashScreen(isSoftLogout: true)
             case (.signedIn, .clearCache, .initial):
                 self.clearCache()
             default:
@@ -370,7 +375,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                                    keyBackupNeeded: false,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
-            
+            self.softLogoutCoordinator = coordinator
             coordinator.actions
                 .sink { [weak self] action in
                     guard let self else { return }
@@ -378,8 +383,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                     switch action {
                     case .signedIn(let session):
                         self.userSession = session
+                        self.softLogoutCoordinator = nil
                         stateMachine.processEvent(.createdUserSession)
                     case .clearAllData:
+                        self.softLogoutCoordinator = nil
                         stateMachine.processEvent(.signOut(isSoft: false))
                     }
                 }
@@ -437,7 +444,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
-            stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            stateMachine.processEvent(.showSoftLogout)
             hideLoadingIndicator()
             return
         }
@@ -459,7 +466,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             ServiceLocator.shared.analytics.optOut()
             ServiceLocator.shared.analytics.resetConsentState()
             
-            stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
+            stateMachine.processEvent(.completedSigningOut)
             
             // Handle OIDC's RP-Initiated Logout if needed. Don't fallback to an ASWebAuthenticationSession
             // as it looks weird to show an alert to the user asking them to sign in to their provider.

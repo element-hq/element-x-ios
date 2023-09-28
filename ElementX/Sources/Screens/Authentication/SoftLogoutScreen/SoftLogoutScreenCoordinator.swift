@@ -48,6 +48,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
+    private var oidcPresenter: OIDCAuthenticationPresenter?
     
     var actions: AnyPublisher<SoftLogoutScreenCoordinatorResult, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -90,6 +91,15 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(SoftLogoutScreen(context: viewModel.context))
+    }
+    
+    func handleOIDCRedirectURL(_ url: URL) {
+        guard let oidcPresenter else {
+            MXLog.error("Failed to find an OIDC request in progress.")
+            return
+        }
+        
+        oidcPresenter.handleUniversalLinkCallback(url)
     }
     
     // MARK: - Private
@@ -151,12 +161,14 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                 let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
                                                             oidcRedirectURL: ServiceLocator.shared.settings.oidcRedirectURL,
                                                             presentationAnchor: presentationAnchor)
+                self.oidcPresenter = presenter
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
                     actionsSubject.send(.signedIn(userSession))
                 case .failure(let error):
                     handleError(error)
                 }
+                self.oidcPresenter = nil
             }
         }
     }
