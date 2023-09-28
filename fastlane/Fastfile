@@ -76,6 +76,9 @@ lane :alpha do
 end
 
 lane :unit_tests do
+  # Xcode fails to check out Compound snapshots. We don't need them so skip smudging.
+  ENV["GIT_LFS_SKIP_SMUDGE"] = "true"
+  
   run_tests(
     scheme: "UnitTests",
     device: 'iPhone 14 (16.4)',
@@ -93,6 +96,9 @@ lane :unit_tests do
 end
 
 lane :ui_tests do |options|
+  # Xcode fails to check out Compound snapshots. We don't need them so skip smudging.
+  ENV["GIT_LFS_SKIP_SMUDGE"] = "true"
+  
   # Use a fresh simulator state to ensure hardware keyboard isn't attached.
   reset_simulator_contents()
   
@@ -136,6 +142,9 @@ end
 
 
 lane :integration_tests do
+  # Xcode fails to check out Compound snapshots. We don't need them so skip smudging.
+  ENV["GIT_LFS_SKIP_SMUDGE"] = "true"
+  
   clear_derived_data()
   
   create_simulator_if_necessary(
