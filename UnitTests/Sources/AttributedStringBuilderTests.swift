@@ -418,9 +418,59 @@ class AttributedStringBuilderTests: XCTestCase {
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
         XCTAssertNotNil(attributedStringFromHTML?.attachment)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        XCTAssert(attributedStringFromPlain?.attachment.isNil == false)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
     }
     
+    func testAllUsersMentionAttachment() {
+        let string = "@room"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 1)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        checkAttachment(attributedString: attributedStringFromPlain, expectedRuns: 1)
+
+        let string2 = "Hello @room"
+        let attributedStringFromHTML2 = attributedStringBuilder.fromHTML(string2)
+        checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 2)
+        let attributedStringFromPlain2 = attributedStringBuilder.fromPlain(string2)
+        checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 2)
+        
+        let string3 = "Hello @room how are you doing?"
+        let attributedStringFromHTML3 = attributedStringBuilder.fromHTML(string3)
+        checkAttachment(attributedString: attributedStringFromHTML3, expectedRuns: 3)
+        let attributedStringFromPlain3 = attributedStringBuilder.fromPlain(string3)
+        checkAttachment(attributedString: attributedStringFromPlain3, expectedRuns: 3)
+    }
+    
+    func testLinksHavePriorityOverAllUserMention() {
+        let string = "https://test@room.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: string, expectedRuns: 1)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        checkLinkIn(attributedString: attributedStringFromPlain, expectedLink: string, expectedRuns: 1)
+        
+        let string2 = "https://matrix.to/#/@roomusername:matrix.org"
+        let attributedStringFromHTML2 = attributedStringBuilder.fromHTML(string2)
+        checkLinkIn(attributedString: attributedStringFromHTML2, expectedLink: string2, expectedRuns: 1)
+        checkAttachment(attributedString: attributedStringFromHTML2, expectedRuns: 1)
+        let attributedStringFromPlain2 = attributedStringBuilder.fromPlain(string2)
+        checkLinkIn(attributedString: attributedStringFromPlain2, expectedLink: string2, expectedRuns: 1)
+        checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 1)
+    }
+    
+    func testLinksAreIgnoredInCode() {
+        let htmlString = "<pre><code>test https://matrix.org test</code></pre>"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.link)
+    }
+    
+    func testAllUsersIsIgnoredInCode() {
+        let htmlString = "<pre><code>test @room test</code></pre>"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.attachment)
+    }
+
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
@@ -433,6 +483,21 @@ class AttributedStringBuilderTests: XCTestCase {
         
         for run in attributedString.runs where run.link != nil {
             XCTAssertEqual(run.link?.absoluteString, expectedLink)
+            return
+        }
+        
+        XCTFail("Couldn't find expected value.")
+    }
+    
+    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int) {
+        guard let attributedString else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, expectedRuns)
+        
+        for run in attributedString.runs where run.attachment != nil {
             return
         }
         

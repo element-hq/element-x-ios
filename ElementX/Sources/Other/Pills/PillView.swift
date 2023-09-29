@@ -18,14 +18,14 @@ import SwiftUI
 
 struct PillView: View {
     let imageProvider: ImageProviderProtocol?
-    @ObservedObject var viewModel: PillContext
+    @ObservedObject var context: PillContext
     /// callback triggerd by changes in the display text
     let didChangeText: () -> Void
         
     var body: some View {
         HStack(spacing: 4) {
-            LoadableAvatarImage(url: viewModel.url, name: viewModel.name, contentID: viewModel.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
-            Text(viewModel.displayText)
+            LoadableAvatarImage(url: context.viewState.avatarURL, name: context.viewState.name, contentID: context.viewState.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
+            Text(context.viewState.displayText)
                 .font(.compound.bodyLGSemibold)
                 .foregroundColor(.compound.textOnSolidPrimary)
                 .lineLimit(1)
@@ -33,9 +33,9 @@ struct PillView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         // for now design has defined no color so we will just use gray
-        .background(Capsule().foregroundColor(.gray))
+        .background(Capsule().foregroundColor(context.viewState.isOwnMention ? .compound.bgCriticalPrimary : .gray))
         .frame(maxWidth: 235)
-        .onChange(of: viewModel.displayText) { _ in
+        .onChange(of: context.viewState.displayText) { _ in
             didChangeText()
         }
     }
@@ -44,16 +44,21 @@ struct PillView: View {
 struct PillView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MockMediaProvider()
     
-    static var loading: some View {
-        PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillContext.mock(type: .loadUser)) { }
-    }
-    
     static var previews: some View {
-        loading
+        PillView(imageProvider: mockMediaProvider,
+                 context: PillContext.mock(type: .loadUser(isOwn: false))) { }
             .previewDisplayName("Loading")
         PillView(imageProvider: mockMediaProvider,
-                 viewModel: PillContext.mock(type: .loadedUser)) { }
+                 context: PillContext.mock(type: .loadUser(isOwn: true))) { }
+            .previewDisplayName("Loading Own")
+        PillView(imageProvider: mockMediaProvider,
+                 context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
             .previewDisplayName("Loaded Long")
+        PillView(imageProvider: mockMediaProvider,
+                 context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
+            .previewDisplayName("Loaded Long Own")
+        PillView(imageProvider: mockMediaProvider,
+                 context: PillContext.mock(type: .allUsers)) { }
+            .previewDisplayName("All Users")
     }
 }

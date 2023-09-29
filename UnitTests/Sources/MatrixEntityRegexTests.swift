@@ -64,4 +64,13 @@ class MatrixEntityRegexTests: XCTestCase {
         XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg:"))
         XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg?"))
     }
+    
+    func testAllUsers() {
+        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room"))
+        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("a@rooma"))
+        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("a @room a"))
+        XCTAssertFalse(MatrixEntityRegex.containsMatrixAllUsers("a @roaom a"))
+        XCTAssertFalse(MatrixEntityRegex.containsMatrixAllUsers("@roaom"))
+        XCTAssertTrue(MatrixEntityRegex.containsMatrixAllUsers("@room\n"))
+    }
 }

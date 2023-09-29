@@ -36,6 +36,11 @@ enum RoomAliasAttribute: AttributedStringKey {
     public static var name = "MXRoomAliasAttribute"
 }
 
+enum AllUsersMentionAttribute: AttributedStringKey {
+    typealias Value = Bool
+    public static var name = "MXAllUsersMentionAttribute"
+}
+
 struct EventIDAttributeValue: Hashable {
     let roomID: String
     let eventID: String
@@ -54,6 +59,8 @@ extension AttributeScopes {
         let roomID: RoomIDAttribute
         let roomAlias: RoomAliasAttribute
         let eventID: EventIDAttribute
+        
+        let allUsersMention: AllUsersMentionAttribute
         
         let swiftUI: SwiftUIAttributes
         let uiKit: UIKitAttributes
