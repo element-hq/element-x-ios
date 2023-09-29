@@ -54,21 +54,25 @@ private struct WebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        webView.load(URLRequest(url: url))
+        webView.load(URLRequest(url: context.coordinator.url))
     }
 
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
-        private let url: URL
+        let url: URL
         private(set) var webView: WKWebView!
 
         init(url: URL) {
             if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) {
-                urlComponents.queryItems?.removeAll { $0.name == GenericCallLinkQueryParameters.appPrompt }
-                urlComponents.queryItems?.removeAll { $0.name == GenericCallLinkQueryParameters.confineToRoom }
+                var fragmentQueryItems = urlComponents.fragmentQueryItems ?? []
                 
-                urlComponents.queryItems?.append(.init(name: GenericCallLinkQueryParameters.appPrompt, value: "false"))
-                urlComponents.queryItems?.append(.init(name: GenericCallLinkQueryParameters.confineToRoom, value: "true"))
+                fragmentQueryItems.removeAll { $0.name == GenericCallLinkQueryParameters.appPrompt }
+                fragmentQueryItems.removeAll { $0.name == GenericCallLinkQueryParameters.confineToRoom }
+                
+                fragmentQueryItems.append(.init(name: GenericCallLinkQueryParameters.appPrompt, value: "false"))
+                fragmentQueryItems.append(.init(name: GenericCallLinkQueryParameters.confineToRoom, value: "true"))
+                
+                urlComponents.fragmentQueryItems = fragmentQueryItems
                 
                 if let adjustedURL = urlComponents.url {
                     self.url = adjustedURL
