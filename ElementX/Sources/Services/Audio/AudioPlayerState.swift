@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 
+@MainActor
 class AudioPlayerState: ObservableObject {
     let duration: Double
     let waveform: Waveform

@@ -17,10 +17,10 @@
 import Foundation
 
 class AudioCacheManager {
-    private var temporaryFilesFolderURL: URL {
+    var temporaryFilesFolderURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("media/audio")
     }
-        
+    
     func cacheURL(for mediaSource: MediaSourceProxy, replacingExtension newExtension: String? = nil) -> URL {
         var newURL = temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent)
         if let newExtension {
@@ -29,13 +29,26 @@ class AudioCacheManager {
         return newURL
     }
     
-    func fileExists(at url: URL) -> Bool {
-        FileManager.default.fileExists(atPath: url.path())
+    func fileExists(for mediaSource: MediaSourceProxy, withExtension fileExtension: String? = nil) -> Bool {
+        var url = temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent)
+        if let fileExtension {
+            url = url.deletingPathExtension().appendingPathExtension(fileExtension)
+        }
+        return FileManager.default.fileExists(atPath: url.path())
     }
 
-    func setupTemporaryFilesFolder() throws {
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL) throws {
+        let url = cacheURL(for: mediaSource)
+        try FileManager.default.copyItem(at: fileURL, to: url)
+    }
+    
+    func setupTemporaryFilesFolder() {
         let url = temporaryFilesFolderURL
-        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        do {
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            MXLog.error("Failed to setup audio cache manager.")
+        }
     }
     
     func clearCache() {

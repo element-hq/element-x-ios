@@ -62,7 +62,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var playToEndObserver: NSObjectProtocol?
     private var appBackgroundObserver: NSObjectProtocol?
     
-    private let cacheManager: AudioCacheManager?
+    private let cacheManager: AudioCacheManager
     @CancellableTask private var loadingTask: Task<URL?, Error>?
     
     private(set) var url: URL?
@@ -97,7 +97,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private var isStopped = true
     
-    init(cacheManager: AudioCacheManager?) {
+    init(cacheManager: AudioCacheManager) {
         self.cacheManager = cacheManager
         super.init()
     }
@@ -117,28 +117,27 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         setInternalState(.loading)
 
         loadingTask = Task<URL?, Error> {
-            guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(mediaSource) else {
-                throw AudioPlayerError.loadFileError
-            }
-
-            var url = fileHandle.url
-
-            // Convert from ogg if needed
-            if !fileHandle.url.hasSupportedAudioExtension {
-                let audioConverter = AudioConverter()
-                                
-                if let cacheManager {
-                    let cacheURL = cacheManager.cacheURL(for: mediaSource, replacingExtension: "m4a")
-                    // Do we already have a converted version?
-                    if !cacheManager.fileExists(at: cacheURL) {
-                        try await audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: cacheURL)
-                    }
-                    url = cacheURL
-                } else {
-                    let tempURL = URL.temporaryDirectory.appendingPathComponent(mediaSource.url.deletingPathExtension().lastPathComponent).appendingPathExtension("m4a")
-                    try await audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: tempURL)
-                    url = tempURL
+            if !cacheManager.fileExists(for: mediaSource) {
+                guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(mediaSource) else {
+                    throw AudioPlayerError.loadFileError
                 }
+                
+                try cacheManager.cache(mediaSource: mediaSource, using: fileHandle.url)
+            }
+            var url = cacheManager.cacheURL(for: mediaSource)
+            
+            // Convert from ogg if needed
+            if !url.hasSupportedAudioExtension {
+                let audioConverter = AudioConverter()
+                let originalURL = url
+                url = cacheManager.cacheURL(for: mediaSource, replacingExtension: "m4a")
+                // Do we already have a converted version?
+                if !cacheManager.fileExists(for: mediaSource, withExtension: "m4a") {
+                    try await audioConverter.convertToMPEG4AAC(sourceURL: originalURL, destinationURL: url)
+                }
+                
+                // we don't need the original file anymore
+                try? FileManager.default.removeItem(at: originalURL)
             }
             
             guard !Task.isCancelled else {
@@ -154,9 +153,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             if let url = try await loadingTask?.value {
                 self.mediaSource = mediaSource
                 self.url = url
-                
-                MXLog.debug("loading audio file: \(url.path())")
-                
                 playerItem = AVPlayerItem(url: url)
                 audioPlayer = AVQueuePlayer(playerItem: playerItem)
                 

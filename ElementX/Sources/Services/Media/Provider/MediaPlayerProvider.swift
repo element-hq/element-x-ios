@@ -20,11 +20,10 @@ import UniformTypeIdentifiers
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private let mediaProvider: MediaProviderProtocol
     private var audioPlayer: AudioPlayerProtocol?
-    private var audioCacheManager: AudioCacheManager
+    private var audioCacheManager = AudioCacheManager()
             
     init(mediaProvider: MediaProviderProtocol) {
         self.mediaProvider = mediaProvider
-        audioCacheManager = AudioCacheManager()
     }
     
     deinit {
@@ -40,14 +39,8 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         
         if mimeType.starts(with: "audio/") {
             if audioPlayer == nil {
-                var cacheManager: AudioCacheManager? = audioCacheManager
-                do {
-                    try audioCacheManager.setupTemporaryFilesFolder()
-                } catch {
-                    MXLog.error("Failed to setup audio cache manager.")
-                    cacheManager = nil
-                }
-                audioPlayer = AudioPlayer(cacheManager: cacheManager)
+                audioCacheManager.setupTemporaryFilesFolder()
+                audioPlayer = AudioPlayer(cacheManager: audioCacheManager)
             }
             return audioPlayer
         } else {
