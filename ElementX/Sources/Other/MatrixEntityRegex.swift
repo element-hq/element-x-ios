@@ -93,7 +93,7 @@ enum MatrixEntityRegex: String {
     }
     
     static func containsMatrixAllUsers(_ string: String) -> Bool {
-        guard let match = allUsersRegex.firstMatch(in: string) else {
+        guard allUsersRegex.firstMatch(in: string) != nil else {
             return false
         }
         
