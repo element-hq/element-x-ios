@@ -660,7 +660,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
     @objc
     private func didChangeContentSizeCategory() {
-        AttributedStringBuilder.invalidateCache()
+        AttributedStringBuilder.invalidateCaches()
     }
 
     @objc
