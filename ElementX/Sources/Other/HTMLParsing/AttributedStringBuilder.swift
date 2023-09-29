@@ -19,19 +19,29 @@ import Foundation
 import LRUCache
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
+    private let cacheKey: String
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     private let permalinkBaseURL: URL
     private let mentionBuilder: MentionBuilderProtocol
     
-    private static var cache = LRUCache<String, AttributedString>(countLimit: 1000)
+    private static let defaultKey = "default"
+    private static var caches: [String: LRUCache<String, AttributedString>] = [:]
 
-    static func invalidateCache() {
-        cache.removeAllValues()
+    static func invalidateCaches() {
+        caches.removeAll()
     }
     
-    init(permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {
+    static func invalidateCache(for key: String = defaultKey) {
+        caches[key]?.removeAllValues()
+    }
+    
+    init(cacheKey: String = defaultKey, permalinkBaseURL: URL, mentionBuilder: MentionBuilderProtocol) {
+        self.cacheKey = cacheKey
+        if Self.caches[cacheKey] == nil {
+            Self.caches[cacheKey] = LRUCache<String, AttributedString>(countLimit: 1000)
+        }
         self.permalinkBaseURL = permalinkBaseURL
         self.mentionBuilder = mentionBuilder
     }
@@ -41,7 +51,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.cache.value(forKey: string) {
+        if let cached = Self.caches[cacheKey]?.value(forKey: string) {
             return cached
         }
 
@@ -51,7 +61,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeLinkColors(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
-        Self.cache.setValue(result, forKey: string)
+        Self.caches[cacheKey]?.setValue(result, forKey: string)
         return result
     }
         
@@ -67,7 +77,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        if let cached = Self.cache.value(forKey: htmlString) {
+        if let cached = Self.caches[cacheKey]?.value(forKey: htmlString) {
             return cached
         }
         
@@ -107,7 +117,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
-        Self.cache.setValue(result, forKey: htmlString)
+        Self.caches[cacheKey]?.setValue(result, forKey: htmlString)
         return result
     }
     

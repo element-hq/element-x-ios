@@ -16,10 +16,9 @@
 
 import Foundation
 
-struct NSEMentionBuilder: MentionBuilderProtocol {
+// In the future we might use this to do some customisation in what is plain text used to represent mentions.
+struct PlainMentionBuilder: MentionBuilderProtocol {
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) { }
     
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) {
-        attributedString.addAttributes([.MatrixUserID: userID], range: range)
-    }
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String) { }
 }
