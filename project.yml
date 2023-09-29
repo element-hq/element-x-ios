@@ -20,6 +20,7 @@ options:
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
+  GIT_LFS_SKIP_SMUDGE: "on"
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   ENABLE_BITCODE: NO
@@ -51,7 +52,7 @@ packages:
     path: DesignKit
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: e8c097e545a06a2ef3036af33192a07c58fafd1b
+    revision: 4d6300e7d9f5fd7e5c448605bd6bf89537add4b8
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

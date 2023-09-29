@@ -131,7 +131,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                     }
                     .onTapGesture { isFocused = true } // Set focus with taps outside of the text field
                 }
-                .introspect(.textField, on: .iOS(.v16)) { textField in
+                .introspect(.textField, on: .iOS(.v16, .v17)) { textField in
                     textField.clearButtonMode = .whileEditing
                     textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                          attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
