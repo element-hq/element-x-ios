@@ -1,0 +1,1 @@
+@room mention pill, and own mentions are red.
