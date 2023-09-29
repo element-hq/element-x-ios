@@ -46,4 +46,28 @@ struct MentionBuilder: MentionBuilderProtocol {
         attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
         attributedString.replaceCharacters(in: range, with: attachmentString)
     }
+    
+    func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) {
+        guard mentionsEnabled else {
+            return
+        }
+        
+        let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
+        let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
+        let blockquote = attributes[.MatrixBlockquote]
+        
+        let attachmentData = PillTextAttachmentData(type: .allUsers, font: font)
+        guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
+            return
+        }
+        
+        var attributesToAdd: [NSAttributedString.Key: Any] = [:]
+        if let blockquote {
+            // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
+            attributesToAdd[.MatrixBlockquote] = blockquote
+        }
+        let attachmentString = NSMutableAttributedString(attachment: attachment)
+        attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
+        attributedString.replaceCharacters(in: range, with: attachmentString)
+    }
 }

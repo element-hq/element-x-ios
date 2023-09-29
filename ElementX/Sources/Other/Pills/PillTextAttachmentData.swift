@@ -20,6 +20,8 @@ import UIKit
 enum PillType: Codable {
     /// A pill that mentions a user
     case user(userID: String)
+    /// A pill that mentions all users in a room
+    case allUsers
 }
 
 struct PillTextAttachmentData {

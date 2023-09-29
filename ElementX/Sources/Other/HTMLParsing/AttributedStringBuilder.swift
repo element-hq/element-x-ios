@@ -143,8 +143,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
                 attributedString.addAttribute(.backgroundColor, value: UIColor(.compound._bgCodeBlock) as Any, range: range)
-                // Codeblocks should not have links
+                // Codeblocks should not have links and all users mentions
                 attributedString.removeAttribute(.link, range: range)
+                attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
             }
         }
     }
@@ -173,36 +174,40 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         let linkMatches = MatrixEntityRegex.linkRegex.matches(in: string, options: [])
         matches.append(contentsOf: linkMatches)
-        guard matches.count > 0 else {
-            return
-        }
-        
-        // Sort the links by length so the longest one always takes priority
-        matches.sorted { $0.range.length > $1.range.length }.forEach { match in
-            guard let matchRange = Range(match.range, in: string) else {
-                return
-            }
-                        
-            var hasLink = false
-            attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
-                if value != nil {
-                    hasLink = true
-                    stop.pointee = true
+        if matches.count > 0 {
+            // Sort the links by length so the longest one always takes priority
+            matches.sorted { $0.range.length > $1.range.length }.forEach { match in
+                guard let matchRange = Range(match.range, in: string) else {
+                    return
+                }
+                
+                var hasLink = false
+                attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
+                    if value != nil {
+                        hasLink = true
+                        stop.pointee = true
+                    }
+                }
+                
+                if hasLink {
+                    return
+                }
+                
+                var link = String(string[matchRange])
+                
+                if linkMatches.contains(match), !link.contains("://") {
+                    link.insert(contentsOf: "https://", at: link.startIndex)
+                }
+                
+                if let url = URL(string: link) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
                 }
             }
-            
-            if hasLink {
-                return
-            }
-            
-            var link = String(string[matchRange])
-            
-            if linkMatches.contains(match), !link.contains("://") {
-                link.insert(contentsOf: "https://", at: link.startIndex)
-            }
-            
-            if let url = URL(string: link) {
-                attributedString.addAttribute(.link, value: url, range: match.range)
+        }
+        
+        MatrixEntityRegex.allUsersRegex.matches(in: string, options: []).forEach { match in
+            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) == nil {
+                attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
         }
     }
@@ -224,6 +229,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                         break
                     }
                 }
+            }
+        }
+        
+        attributedString.enumerateAttribute(.MatrixAllUsersMention, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if let value = value as? Bool,
+               value {
+                mentionBuilder.handleAllUsersMention(for: attributedString, in: range)
             }
         }
     }
@@ -286,8 +298,10 @@ extension NSAttributedString.Key {
     static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
     static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
     static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
+    static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
 }
 
 protocol MentionBuilderProtocol {
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String)
+    func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange)
 }

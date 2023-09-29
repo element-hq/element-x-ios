@@ -23,6 +23,7 @@ enum MatrixEntityRegex: String {
     case roomAlias
     case roomId
     case eventId
+    case allUsers
     
     var rawValue: String {
         switch self {
@@ -36,6 +37,8 @@ enum MatrixEntityRegex: String {
             return "![A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
         case .eventId:
             return "\\$[a-z0-9_\\-\\/]+(:[a-z0-9]+\\.[a-z0-9]+)?"
+        case .allUsers:
+            return "@room"
         }
     }
     
@@ -45,6 +48,7 @@ enum MatrixEntityRegex: String {
     static var roomAliasRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
     static var roomIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomId.rawValue, options: .caseInsensitive)
     static var eventIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.eventId.rawValue, options: .caseInsensitive)
+    static var allUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.allUsers.rawValue)
     static var linkRegex = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
     // swiftlint:enable force_try
     
@@ -86,5 +90,13 @@ enum MatrixEntityRegex: String {
         }
         
         return match.range.length == identifier.count
+    }
+    
+    static func containsMatrixAllUsers(_ string: String) -> Bool {
+        guard allUsersRegex.firstMatch(in: string) != nil else {
+            return false
+        }
+        
+        return true
     }
 }
