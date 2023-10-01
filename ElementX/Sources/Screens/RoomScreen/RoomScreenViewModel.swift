@@ -21,7 +21,6 @@ import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
-// swiftlint:disable type_body_length
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationEventLimit: UInt = 20
@@ -888,8 +887,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         timelineController.playbackViewState(for: itemID)
     }
 }
-
-// swiftlint:enable type_body_length
 
 private extension RoomProxyProtocol {
     /// Checks if the other person left the room in a direct chat
