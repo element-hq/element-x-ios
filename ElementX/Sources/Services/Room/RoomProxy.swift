@@ -253,17 +253,34 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func checkEmote(body: inout String, htmlBody: inout String?) -> Bool {
+        if body.starts(with: "/me ") {
+            body = body.replacing("/me ", with: "")
+            let html = htmlBody
+            if let html {
+                htmlBody = html.replacing("/me ", with: "")
+            }
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
+        var body: String = message
+        var htmlBody: String? = html
+        var emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
+        
         let messageContent: RoomMessageEventContentWithoutRelation
-        if let html {
-            messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
+        if let htmlBody {
+            messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: emote)
         } else {
-            messageContent = messageEventContentFromMarkdown(md: message)
+            messageContent = messageEventContentFromMarkdown(md: body, emote: emote)
         }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -441,11 +458,15 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
 
+        var body: String = newMessage
+        var htmlBody: String? = html
+        let emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
+    
         let newMessageContent: RoomMessageEventContentWithoutRelation
-        if let html {
-            newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
+        if let htmlBody {
+            newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: emote)
         } else {
-            newMessageContent = messageEventContentFromMarkdown(md: newMessage)
+            newMessageContent = messageEventContentFromMarkdown(md: body, emote: emote)
         }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {

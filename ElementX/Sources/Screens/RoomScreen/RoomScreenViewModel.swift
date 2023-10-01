@@ -21,6 +21,7 @@ import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
+// swiftlint:disable type_body_length
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationEventLimit: UInt = 20
@@ -615,10 +616,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 } else {
                     text = messageTimelineItem.body
                 }
+            case .emote(let emoteItem):
+                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
+                    text = "/me " + formattedBodyHTMLString
+                } else {
+                    text = "/me " + messageTimelineItem.body
+                }
             default:
                 text = messageTimelineItem.body
             }
-
+            
             actionsSubject.send(.composer(action: .setText(text: text)))
             actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
@@ -881,6 +888,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         timelineController.playbackViewState(for: itemID)
     }
 }
+
+// swiftlint:enable type_body_length
 
 private extension RoomProxyProtocol {
     /// Checks if the other person left the room in a direct chat
