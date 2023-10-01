@@ -274,7 +274,7 @@ class RoomProxy: RoomProxyProtocol {
         
         var body: String = message
         var htmlBody: String? = html
-        var emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
+        let emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
         
         let messageContent: RoomMessageEventContentWithoutRelation
         if let htmlBody {
