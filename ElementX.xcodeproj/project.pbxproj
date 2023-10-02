@@ -780,6 +780,7 @@
 		EC280623A42904341363EAAF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = A20EA00CCB9DBE0FFB17DD09 /* Collections */; };
 		EC658A57E715699C52DFBC77 /* CreatePollScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB1D0C69FEDD93404DF927E /* CreatePollScreenViewModelTests.swift */; };
 		ECA636DAF071C611FDC2BB57 /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
+		ED564C8C7C43CF5F67000368 /* PlatformViewVersionPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */; };
 		EDF8919F15DE0FF00EF99E70 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5567A7EF6F2AB9473236F6 /* DocumentPicker.swift */; };
 		EE4E2C1922BBF5169E213555 /* PillAttachmentViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B53D6C5C0D14B04D3AB3F6E /* PillAttachmentViewProvider.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
@@ -1526,6 +1527,7 @@
 		D1897720266C036471AD9D1B /* FormRowLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowLabelStyle.swift; sourceTree = "<group>"; };
 		D1BC84BA0AF11C2128D58ABD /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		D263254AFE5B7993FFBBF324 /* NSE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NSE.entitlements; sourceTree = "<group>"; };
+		D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewVersionPredicate.swift; sourceTree = "<group>"; };
 		D316BB02636AF2174F2580E6 /* SoftLogoutScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		D33116993D54FADC0C721C1F /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		D38391154120264910D19528 /* PollMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollMock.swift; sourceTree = "<group>"; };
@@ -2320,6 +2322,7 @@
 				4151163F666ED94FD959475A /* NotificationName.swift */,
 				F72EFC8C634469F9262659C7 /* NSItemProvider.swift */,
 				95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */,
+				D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */,
 				7310D8DFE01AF45F0689C3AA /* Publisher.swift */,
 				584A61D9C459FAFEF038A7C0 /* Section.swift */,
 				40B21E611DADDEF00307E7AC /* String.swift */,
@@ -4878,6 +4881,7 @@
 				9D79B94493FB32249F7E472F /* PlaceholderAvatarImage.swift in Sources */,
 				1BA04D05EBC6646958B1BE60 /* PlaceholderScreenCoordinator.swift in Sources */,
 				EF0D0155DD104C7A41A2EB0E /* PlainMentionBuilder.swift in Sources */,
+				ED564C8C7C43CF5F67000368 /* PlatformViewVersionPredicate.swift in Sources */,
 				16CBD087038DE3815CDA512C /* PollMock.swift in Sources */,
 				6B4BF4A6450F55939B49FAEF /* PollOptionView.swift in Sources */,
 				864C0D3A4077BF433DBC691F /* PollRoomTimelineItem.swift in Sources */,
@@ -5829,7 +5833,7 @@
 			repositoryURL = "https://github.com/vector-im/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 4d6300e7d9f5fd7e5c448605bd6bf89537add4b8;
+				revision = 0966ff92b2670e3a96259c87016edd92d7ea7797;
 			};
 		};
 		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {

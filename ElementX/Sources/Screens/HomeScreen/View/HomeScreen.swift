@@ -62,7 +62,7 @@ struct HomeScreen: View {
                     .disableAutocorrection(true)
                 }
             }
-            .introspect(.scrollView, on: .iOS(.v16, .v17)) { scrollView in
+            .introspect(.scrollView, on: .supportedVersions) { scrollView in
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
@@ -92,7 +92,7 @@ struct HomeScreen: View {
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .track(screen: .home)
-        .introspect(.viewController, on: .iOS(.v16, .v17)) { controller in
+        .introspect(.viewController, on: .supportedVersions) { controller in
             Task {
                 if bloomView == nil {
                     makeBloomView(controller: controller)

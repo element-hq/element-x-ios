@@ -52,7 +52,7 @@ struct CreatePollScreen: View {
                 Text(L10n.screenCreatePollQuestionHint)
                     .compoundFormTextFieldPlaceholder()
             }
-            .introspect(.textField, on: .iOS(.v16, .v17)) { textField in
+            .introspect(.textField, on: .supportedVersions) { textField in
                 textField.clearButtonMode = .whileEditing
             }
             .textFieldStyle(.compoundForm)
@@ -151,7 +151,7 @@ private struct CreatePollOptionView: View {
                 Text(placeholder)
                     .compoundFormTextFieldPlaceholder()
             }
-            .introspect(.textField, on: .iOS(.v16, .v17)) { textField in
+            .introspect(.textField, on: .supportedVersions) { textField in
                 textField.clearButtonMode = .whileEditing
             }
             .textFieldStyle(.compoundForm)
