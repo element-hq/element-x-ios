@@ -268,9 +268,17 @@ class RoomProxy: RoomProxyProtocol {
         
         let messageContent: RoomMessageEventContentWithoutRelation
         if let htmlBody {
-            messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: isEmote)
+            if isEmote {
+                messageContent = messageEventContentFromHtmlAsEmote(body: body, htmlBody: htmlBody)
+            } else {
+                messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody)
+            }
         } else {
-            messageContent = messageEventContentFromMarkdown(md: body, emote: isEmote)
+            if isEmote {
+                messageContent = messageEventContentFromMarkdownAsEmote(md: body)
+            } else {
+                messageContent = messageEventContentFromMarkdown(md: body)
+            }
         }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -457,11 +465,18 @@ class RoomProxy: RoomProxyProtocol {
 
         let newMessageContent: RoomMessageEventContentWithoutRelation
         if let htmlBody {
-            newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: isEmote)
+            if isEmote {
+                newMessageContent = messageEventContentFromHtmlAsEmote(body: body, htmlBody: htmlBody)
+            } else {
+                newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody)
+            }
         } else {
-            newMessageContent = messageEventContentFromMarkdown(md: body, emote: isEmote)
+            if isEmote {
+                newMessageContent = messageEventContentFromMarkdownAsEmote(md: body)
+            } else {
+                newMessageContent = messageEventContentFromMarkdown(md: body)
+            }
         }
-
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
