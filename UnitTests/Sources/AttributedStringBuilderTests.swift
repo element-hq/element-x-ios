@@ -543,7 +543,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         foundAttachments = 0
         foundLink = nil
-        for run in attributedStringFromHTML.runs {
+        for run in attributedStringFromPlain.runs {
             if run.attachment != nil {
                 foundAttachments += 1
             }
