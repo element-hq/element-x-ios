@@ -81,7 +81,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.tryEvent(.presentRoomDetails(roomID: roomID), userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
-        case .userDetails(let userID):
+        case .roomMemberDetails(let userID):
             Task {
                 switch await roomProxy?.getMember(userID: userID) {
                 case .success(let member):

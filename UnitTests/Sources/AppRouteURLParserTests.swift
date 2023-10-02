@@ -118,6 +118,6 @@ class AppRouteURLParserTests: XCTestCase {
         
         let route = appRouteURLParser.route(from: url)
         
-        XCTAssertEqual(route, .userDetails(userID: userID))
+        XCTAssertEqual(route, .roomMemberDetails(userID: userID))
     }
 }

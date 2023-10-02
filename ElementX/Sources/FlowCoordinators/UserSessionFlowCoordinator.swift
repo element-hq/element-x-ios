@@ -115,7 +115,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch appRoute {
-            case .room, .roomDetails, .roomList, .userDetails:
+            case .room, .roomDetails, .roomList, .roomMemberDetails:
                 self.roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             case .invites:
                 if UIDevice.current.isPhone {
