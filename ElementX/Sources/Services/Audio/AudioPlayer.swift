@@ -229,7 +229,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         rateObserver = audioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] _, _ in
             guard let self else { return }
             
-            if audioPlayer.rate == 0.0 {
+            if audioPlayer.rate == 0 {
                 if self.isStopped {
                     self.setInternalState(.stopped)
                 } else {
