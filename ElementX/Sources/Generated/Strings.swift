@@ -86,6 +86,8 @@ public enum L10n {
   }
   /// Invites
   public static var actionInvitesList: String { return L10n.tr("Localizable", "action_invites_list") }
+  /// Join
+  public static var actionJoin: String { return L10n.tr("Localizable", "action_join") }
   /// Learn more
   public static var actionLearnMore: String { return L10n.tr("Localizable", "action_learn_more") }
   /// Leave
@@ -576,6 +578,12 @@ public enum L10n {
   public static func screenAccountProviderSignupTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signup_title", String(describing: p1))
   }
+  /// Developer mode
+  public static var screenAdvancedSettingsDeveloperMode: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode") }
+  /// Enable to have access to features and functionality for developers.
+  public static var screenAdvancedSettingsDeveloperModeDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode_description") }
+  /// Disable the rich text editor to type Markdown manually.
+  public static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// We won't record or profile any personal data
   public static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
   /// Share anonymous usage data to help us identify issues.

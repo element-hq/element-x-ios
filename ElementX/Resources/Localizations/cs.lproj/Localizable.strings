@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Pozvat přátele do %1$@";
 "action_invite_people_to_app" = "Pozvat lidi na %1$@";
 "action_invites_list" = "Pozvánky";
+"action_join" = "Vstoupit";
 "action_learn_more" = "Zjistit více";
 "action_leave" = "Odejít";
 "action_leave_room" = "Opustit místnost";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Vyfotit";
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
+"action.edit_poll" = "Upravit hlasování";
 "common_about" = "O aplikaci";
 "common_acceptable_use_policy" = "Zásady používání";
 "common_advanced_settings" = "Pokročilá nastavení";
@@ -147,6 +149,7 @@
 "common_verification_complete" = "Ověření dokončeno";
 "common_video" = "Video";
 "common_waiting" = "Čekání...";
+"common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Chystáte se přihlásit do %@";
 "screen_account_provider_signup_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
 "screen_account_provider_signup_title" = "Chystáte se vytvořit účet na %@";
+"screen_advanced_settings_developer_mode" = "Vývojářský režim";
+"screen_advanced_settings_developer_mode_description" = "Povolením získáte přístup k funkcím a funkcím pro vývojáře.";
+"screen_advanced_settings_rich_text_editor_description" = "Vypněte editor formátovaného textu pro ruční zadání Markdown.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenáváme ani neprofilujeme žádné údaje o účtu";
 "screen_analytics_prompt_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
 "screen_analytics_prompt_read_terms" = "Můžete si přečíst všechny naše podmínky %1$@.";

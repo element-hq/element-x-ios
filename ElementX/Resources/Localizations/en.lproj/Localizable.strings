@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Invite friends to %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";
+"action_join" = "Join";
 "action_learn_more" = "Learn more";
 "action_leave" = "Leave";
 "action_leave_room" = "Leave room";
@@ -235,6 +236,9 @@
 "screen_account_provider_signin_title" = "You’re about to sign in to %@";
 "screen_account_provider_signup_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_title" = "You’re about to create an account on %@";
+"screen_advanced_settings_developer_mode" = "Developer mode";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Disable the rich text editor to type Markdown manually.";
 "screen_analytics_prompt_data_usage" = "We won't record or profile any personal data";
 "screen_analytics_prompt_help_us_improve" = "Share anonymous usage data to help us identify issues.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";

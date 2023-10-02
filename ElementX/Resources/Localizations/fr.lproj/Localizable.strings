@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Inviter des amis à %1$@";
 "action_invite_people_to_app" = "Invitez des personnes à %1$@";
 "action_invites_list" = "Invitations";
+"action_join" = "Rejoindre";
 "action_learn_more" = "En savoir plus";
 "action_leave" = "Quitter";
 "action_leave_room" = "Quitter le salon";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Prendre une photo";
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
+"action.edit_poll" = "Modifier le sondage";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
 "common_advanced_settings" = "Paramètres avancés";
@@ -147,11 +149,12 @@
 "common_verification_complete" = "Vérification terminée";
 "common_video" = "Vidéo";
 "common_waiting" = "En attente...";
+"common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
 "common_poll_summary" = "Sondage : %1$@";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
-"dialog_permission_microphone" = "Pour permettre à l'application d’utiliser le microphone, veuillez accorder l’autorisation dans les paramètres du système.";
+"dialog_permission_microphone" = "Pour permettre à l’application d’utiliser le microphone, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_notification" = "Pour permettre à l’application d’afficher les notifications, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Attention";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Vous êtes sur le point de vous connecter à %@";
 "screen_account_provider_signup_subtitle" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";
 "screen_account_provider_signup_title" = "Vous êtes sur le point de créer un compte sur %@";
+"screen_advanced_settings_developer_mode" = "Mode développeur";
+"screen_advanced_settings_developer_mode_description" = "En vous permettant d'accéder aux fonctionnalités et aux fonctions destinées aux développeurs.";
+"screen_advanced_settings_rich_text_editor_description" = "Désactivez l'éditeur de texte enrichi pour saisir manuellement Markdown.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
 "screen_analytics_prompt_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
 "screen_analytics_prompt_read_terms" = "Vous pouvez lire toutes nos conditions %1$@.";

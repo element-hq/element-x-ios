@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Freunde einladen %1$@";
 "action_invite_people_to_app" = "Lade Personen in %1$@ ein";
 "action_invites_list" = "Einladungen";
+"action_join" = "Beitreten";
 "action_learn_more" = "Mehr erfahren";
 "action_leave" = "Verlassen";
 "action_leave_room" = "Raum verlassen";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Foto machen";
 "action_view_source" = "Quelle anzeigen";
 "action_yes" = "Ja";
+"action.edit_poll" = "Umfrage bearbeiten";
 "common_about" = "Über";
 "common_acceptable_use_policy" = "Nutzungsrichtlinie";
 "common_advanced_settings" = "Erweiterte Einstellungen";
@@ -147,6 +149,7 @@
 "common_verification_complete" = "Verifizierung abgeschlossen";
 "common_video" = "Video";
 "common_waiting" = "Warten…";
+"common_poll_end_confirmation" = "Sind Sie sicher, dass Sie diese Umfrage beenden möchten?";
 "common_poll_summary" = "Umfrage: %1$@";
 "crash_detection_dialog_content" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
 "dialog_permission_camera" = "Damit die Anwendung die Kamera verwenden kann, erteilen Sie bitte die Erlaubnis in den Systemeinstellungen.";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Du bist dabei, dich bei %@ anzumelden";
 "screen_account_provider_signup_subtitle" = "Hier werden deine Gespräche gespeichert – genau so, wie du einen E-Mail-Anbieter nutzen würdest, um deine E-Mails aufzubewahren.";
 "screen_account_provider_signup_title" = "Du bist dabei, ein Konto bei %@ zu erstellen";
+"screen_advanced_settings_developer_mode" = "Entwickler-Modus";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Deaktivieren Sie den Rich-Text-Editor, um Markdown manuell einzugeben.";
 "screen_analytics_prompt_data_usage" = "Wir zeichnen keine persönlichen Daten auf und erstellen keine Profile.";
 "screen_analytics_prompt_help_us_improve" = "Teile anonyme Nutzungsdaten, um uns bei der Identifizierung von Problemen zu helfen.";
 "screen_analytics_prompt_read_terms" = "Du kannst alle unsere Bedingungen lesen %1$@.";
