@@ -108,4 +108,16 @@ class AppRouteURLParserTests: XCTestCase {
         // Then the route shouldn't be considered valid and should be ignored.
         XCTAssertEqual(route, nil)
     }
+    
+    func testMatrixUserURL() {
+        let userID = "@test:matrix.org"
+        guard let url = URL(string: "\(appSettings.permalinkBaseURL)/#/\(userID)") else {
+            XCTFail("Invalid url")
+            return
+        }
+        
+        let route = appRouteURLParser.route(from: url)
+        
+        XCTAssertEqual(route, .userDetails(userID: userID))
+    }
 }

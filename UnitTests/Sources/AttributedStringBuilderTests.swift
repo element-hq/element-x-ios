@@ -417,8 +417,26 @@ class AttributedStringBuilderTests: XCTestCase {
         let string = "https://matrix.to/#/@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
         XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertNotNil(attributedStringFromHTML?.link)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
         XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertNotNil(attributedStringFromHTML?.link)
+    }
+    
+    func testUserMentionAtachmentInBlockQuotes() {
+        let link = "https://matrix.to/#/@test:matrix.org"
+        let string = "<blockquote>hello \(link) how are you?</blockquote>"
+        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        for run in attributedStringFromHTML.runs {
+            XCTAssertNotNil(run.blockquote)
+        }
+        
+        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: link, expectedRuns: 3)
     }
     
     func testAllUsersMentionAttachment() {

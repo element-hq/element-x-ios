@@ -43,7 +43,7 @@ struct MentionBuilder: MentionBuilderProtocol {
             attributesToAdd[.MatrixBlockquote] = blockquote
         }
         let attachmentString = NSMutableAttributedString(attachment: attachment)
-        attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
+        attachmentString.addAttributes(attributesToAdd, range: NSRange(location: 0, length: attachmentString.length))
         attributedString.replaceCharacters(in: range, with: attachmentString)
     }
     

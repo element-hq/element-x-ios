@@ -158,6 +158,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 } else {
                     navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
                 }
+            case .userDetails:
+                userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
             default:
                 break
             }
