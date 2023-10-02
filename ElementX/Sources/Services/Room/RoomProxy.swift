@@ -252,20 +252,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         }
     }
-    
-    func checkEmote(body: inout String, htmlBody: inout String?) -> Bool {
-        if body.starts(with: "/me ") {
-            body = body.replacing("/me ", with: "")
-            let html = htmlBody
-            if let html {
-                htmlBody = html.replacing("/me ", with: "")
-            }
-            return true
-        } else {
-            return false
-        }
-    }
-    
+        
     func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
@@ -274,13 +261,16 @@ class RoomProxy: RoomProxyProtocol {
         
         var body: String = message
         var htmlBody: String? = html
-        let emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
+        let isEmote: Bool = isEmote(body: body, htmlBody: htmlBody)
+        if isEmote {
+            (body, htmlBody) = buildEmote(body: body, htmlBody: htmlBody)
+        }
         
         let messageContent: RoomMessageEventContentWithoutRelation
         if let htmlBody {
-            messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: emote)
+            messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: isEmote)
         } else {
-            messageContent = messageEventContentFromMarkdown(md: body, emote: emote)
+            messageContent = messageEventContentFromMarkdown(md: body, emote: isEmote)
         }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -460,13 +450,16 @@ class RoomProxy: RoomProxyProtocol {
 
         var body: String = newMessage
         var htmlBody: String? = html
-        let emote: Bool = checkEmote(body: &body, htmlBody: &htmlBody)
-    
+        let isEmote: Bool = isEmote(body: body, htmlBody: htmlBody)
+        if isEmote {
+            (body, htmlBody) = buildEmote(body: body, htmlBody: htmlBody)
+        }
+
         let newMessageContent: RoomMessageEventContentWithoutRelation
         if let htmlBody {
-            newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: emote)
+            newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody, emote: isEmote)
         } else {
-            newMessageContent = messageEventContentFromMarkdown(md: body, emote: emote)
+            newMessageContent = messageEventContentFromMarkdown(md: body, emote: isEmote)
         }
 
         return await Task.dispatch(on: messageSendingDispatchQueue) {
@@ -728,7 +721,20 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     // MARK: - Private
+
+    private func isEmote(body: String, htmlBody: String?) -> Bool {
+        body.starts(with: "/me ")
+    }
     
+    private func buildEmote(body: String, htmlBody: String?) -> (String, String?) {
+        let newBody = body.replacing("/me ", with: "")
+        var newHtmlBody = htmlBody
+        if let htmlBody {
+            newHtmlBody = htmlBody.replacing("/me ", with: "")
+        }
+        return (newBody, newHtmlBody)
+    }
+
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {
