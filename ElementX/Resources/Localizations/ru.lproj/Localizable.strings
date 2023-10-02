@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Пригласить друзей в %1$@";
 "action_invite_people_to_app" = "Пригласите пользователей в %1$@";
 "action_invites_list" = "Приглашения";
+"action_join" = "Join";
 "action_learn_more" = "Подробнее";
 "action_leave" = "Выйти";
 "action_leave_room" = "Покинуть комнату";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Сделать фото";
 "action_view_source" = "Показать источник";
 "action_yes" = "Да";
+"action.edit_poll" = "Edit poll";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
 "common_advanced_settings" = "Дополнительные параметры";
@@ -147,6 +149,7 @@
 "common_verification_complete" = "Проверка завершена";
 "common_video" = "Видео";
 "common_waiting" = "Ожидание...";
+"common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Опрос: %1$@";
 "crash_detection_dialog_content" = "При последнем использовании %1$@ произошел сбой. Хотите поделиться отчетом о сбое?";
 "dialog_permission_camera" = "Чтобы приложение могло использовать камеру, предоставьте разрешение в системных настройках.";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Вы собираетесь войти в %@";
 "screen_account_provider_signup_subtitle" = "Здесь будут храниться ваши разговоры - точно так же, как вы используете почтового провайдера для хранения своих писем.";
 "screen_account_provider_signup_title" = "Вы собираетесь создать учетную запись на %@";
+"screen_advanced_settings_developer_mode" = "Developer mode";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Disable the rich text editor to type Markdown manually.";
 "screen_analytics_prompt_data_usage" = "Мы не будем записывать или профилировать какие-либо персональные данные";
 "screen_analytics_prompt_help_us_improve" = "Предоставлять анонимные данные об использовании, чтобы помочь нам выявить проблемы.";
 "screen_analytics_prompt_read_terms" = "Вы можете ознакомиться со всеми нашими условиями %1$@.";

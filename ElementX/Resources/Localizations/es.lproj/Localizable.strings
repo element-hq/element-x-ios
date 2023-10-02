@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Invitar amigos a %1$@";
 "action_invite_people_to_app" = "Invite people to %1$@";
 "action_invites_list" = "Invites";
+"action_join" = "Join";
 "action_learn_more" = "Más información";
 "action_leave" = "Salir";
 "action_leave_room" = "Salir de la sala";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Take photo";
 "action_view_source" = "Ver Fuente";
 "action_yes" = "Sí";
+"action.edit_poll" = "Edit poll";
 "common_about" = "Acerca de";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -147,6 +149,7 @@
 "common_verification_complete" = "Verificación completada";
 "common_video" = "Vídeo";
 "common_waiting" = "Esperando…";
+"common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "You’re about to sign in to %@";
 "screen_account_provider_signup_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_title" = "You’re about to create an account on %@";
+"screen_advanced_settings_developer_mode" = "Developer mode";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Disable the rich text editor to type Markdown manually.";
 "screen_analytics_prompt_data_usage" = "We won't record or profile any personal data";
 "screen_analytics_prompt_help_us_improve" = "Share anonymous usage data to help us identify issues.";
 "screen_analytics_prompt_read_terms" = "You can read all our terms %1$@.";

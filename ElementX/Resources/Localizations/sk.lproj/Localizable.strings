@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Pozvať priateľov do %1$@";
 "action_invite_people_to_app" = "Pozvať ľudí do %1$@";
 "action_invites_list" = "Pozvánky";
+"action_join" = "Join";
 "action_learn_more" = "Zistiť viac";
 "action_leave" = "Opustiť";
 "action_leave_room" = "Opustiť miestnosť";
@@ -44,7 +45,7 @@
 "action_no" = "Nie";
 "action_not_now" = "Teraz nie";
 "action_ok" = "OK";
-"action_open_settings" = "Open settings";
+"action_open_settings" = "Otvoriť nastavenia";
 "action_open_with" = "Otvoriť pomocou";
 "action_quick_reply" = "Rýchla odpoveď";
 "action_quote" = "Citovať";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Urobiť fotku";
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
+"action.edit_poll" = "Upraviť anketu";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
 "common_advanced_settings" = "Pokročilé nastavenia";
@@ -105,7 +107,7 @@
 "common_password" = "Heslo";
 "common_people" = "Ľudia";
 "common_permalink" = "Trvalý odkaz";
-"common_permission" = "Permission";
+"common_permission" = "Povolenie";
 "common_poll_total_votes" = "Celkový počet hlasov: %1$@";
 "common_poll_undisclosed_text" = "Výsledky sa zobrazia po ukončení ankety";
 "common_privacy_policy" = "Zásady ochrany osobných údajov";
@@ -147,12 +149,13 @@
 "common_verification_complete" = "Overovanie je dokončené";
 "common_video" = "Video";
 "common_waiting" = "Čaká sa…";
-"common_poll_summary" = "Poll: %1$@";
+"common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
+"common_poll_summary" = "Anketa: %1$@";
 "crash_detection_dialog_content" = "%1$@ zlyhal pri poslednom použití. Chcete zdieľať správu o páde s našim tímom?";
-"dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
-"dialog_permission_generic" = "Please grant the permission in the system settings.";
-"dialog_permission_microphone" = "In order to let the application use the microphone, please grant the permission in the system settings.";
-"dialog_permission_notification" = "In order to let the application display notifications, please grant the permission in the system settings.";
+"dialog_permission_camera" = "Aby aplikácia mohla používať fotoaparát, udeľte povolenie v systémových nastaveniach.";
+"dialog_permission_generic" = "Udeľte prosím povolenie v systémových nastaveniach.";
+"dialog_permission_microphone" = "Aby aplikácia mohla používať mikrofón, udeľte povolenie v systémových nastaveniach.";
+"dialog_permission_notification" = "Ak chcete, aby aplikácia zobrazovala oznámenia, udeľte povolenie v nastaveniach systému.";
 "dialog_title_confirmation" = "Potvrdenie";
 "dialog_title_warning" = "Upozornenie";
 "emoji_picker_category_activity" = "Aktivity";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Chystáte sa prihlásiť do %@";
 "screen_account_provider_signup_subtitle" = "Tu budú žiť vaše konverzácie — podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";
 "screen_account_provider_signup_title" = "Chystáte sa vytvoriť účet na %@";
+"screen_advanced_settings_developer_mode" = "Developer mode";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Disable the rich text editor to type Markdown manually.";
 "screen_analytics_prompt_data_usage" = "Nezaznamenávame ani neprofilujeme žiadne osobné údaje";
 "screen_analytics_prompt_help_us_improve" = "Zdieľajte anonymné údaje o používaní, aby sme mohli identifikovať problémy.";
 "screen_analytics_prompt_read_terms" = "Môžete si prečítať všetky naše podmienky %1$@.";

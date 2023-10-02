@@ -35,6 +35,7 @@
 "action_invite_friends_to_app" = "Invitați prieteni în %1$@";
 "action_invite_people_to_app" = "Invitați persoane la %1$@";
 "action_invites_list" = "Invitații";
+"action_join" = "Join";
 "action_learn_more" = "Aflați mai multe";
 "action_leave" = "Părăsiți";
 "action_leave_room" = "Părăsiți camera";
@@ -70,6 +71,7 @@
 "action_take_photo" = "Faceți o fotografie";
 "action_view_source" = "Vedeți sursă";
 "action_yes" = "Da";
+"action.edit_poll" = "Edit poll";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
 "common_advanced_settings" = "Advanced settings";
@@ -147,6 +149,7 @@
 "common_verification_complete" = "Verificare completă";
 "common_video" = "Video";
 "common_waiting" = "Se aşteaptă…";
+"common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
@@ -233,6 +236,9 @@
 "screen_account_provider_signin_title" = "Sunteți pe cale să vă conectați la %@";
 "screen_account_provider_signup_subtitle" = "Aici vor trăi conversațiile dumneavoastră - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";
 "screen_account_provider_signup_title" = "Sunteți pe cale să creați un cont pe %@";
+"screen_advanced_settings_developer_mode" = "Developer mode";
+"screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_rich_text_editor_description" = "Disable the rich text editor to type Markdown manually.";
 "screen_analytics_prompt_data_usage" = "Nu vom înregistra și nu vom face profiluri cu privire la datele personale.";
 "screen_analytics_prompt_help_us_improve" = "Distribuiți date anonime de utilizare pentru a ne ajuta să identificăm probleme.";
 "screen_analytics_prompt_read_terms" = "Puteți citi toate condițiile noastre %1$@.";
