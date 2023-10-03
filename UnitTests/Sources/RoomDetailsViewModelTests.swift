@@ -561,14 +561,17 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         
-        do {
-            let deferred = deferFulfillment(context.$viewState) { state in
-                state.notificationSettingsState.isLoaded
+        let deferred = deferFulfillment(context.$viewState) { state in
+            switch state.notificationSettingsState {
+            case .loaded(settings: let settings):
+                return settings.mode == .mute
+            default:
+                return false
             }
-            
-            notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
-            try await deferred.fulfill()
         }
+        
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
         
         if case .loaded(let newNotificationSettingsState) = viewModel.state.notificationSettingsState {
             XCTAssertFalse(newNotificationSettingsState.isDefault)
@@ -591,14 +594,17 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         
-        do {
-            let deferred = deferFulfillment(context.$viewState) { state in
-                state.notificationSettingsState.isLoaded
+        let deferred = deferFulfillment(context.$viewState) { state in
+            switch state.notificationSettingsState {
+            case .loaded(settings: let settings):
+                return settings.mode == .allMessages
+            default:
+                return false
             }
-            
-            notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
-            try await deferred.fulfill()
         }
+        
+        notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
+        try await deferred.fulfill()
         
         if case .loaded(let newNotificationSettingsState) = viewModel.state.notificationSettingsState {
             XCTAssertFalse(newNotificationSettingsState.isDefault)

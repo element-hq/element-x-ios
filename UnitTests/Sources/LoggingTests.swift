@@ -24,6 +24,9 @@ class LoggingTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
+        // Force MXLogger to flush stderr and clean up after itself
+        MXLog.configure(logLevel: .info, redirectToFiles: false)
+        
         MXLogger.deleteLogFiles()
     }
 

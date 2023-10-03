@@ -20,6 +20,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
     private let clientProxy = MockClientProxy(userID: "@test:user.net")
@@ -36,6 +37,8 @@ final class NotificationManagerTests: XCTestCase {
     override func setUp() {
         AppSettings.reset()
         notificationCenter = UserNotificationCenterMock()
+        notificationCenter.requestAuthorizationOptionsReturnValue = true
+        
         notificationManager = NotificationManager(notificationCenter: notificationCenter, appSettings: appSettings)
         notificationManager.start()
         notificationManager.setUserSession(mockUserSession)
@@ -55,7 +58,7 @@ final class NotificationManagerTests: XCTestCase {
         let success = await notificationManager.register(with: Data())
         XCTAssertTrue(success)
     }
-    
+
     func test_whenRegisteredAndPusherThrowsError_completionFalseIsCalled() async throws {
         enum TestError: Error {
             case someError
@@ -65,7 +68,6 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertFalse(success)
     }
     
-    @MainActor
     func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
         _ = await notificationManager.register(with: pushkeyData)
@@ -87,27 +89,26 @@ final class NotificationManagerTests: XCTestCase {
                                          pusherNotificationClientIdentifier: nil)
         XCTAssertEqual(data.defaultPayload, try defaultPayload.toJsonString())
     }
-    
+
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {
         appSettings.pusherProfileTag = nil
         _ = await notificationManager.register(with: Data())
         XCTAssertNotNil(appSettings.pusherProfileTag)
     }
-    
+
     func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async throws {
-        notificationCenter.requestAuthorizationOptionsReturnValue = true
         appSettings.pusherProfileTag = "12345"
         _ = await notificationManager.register(with: Data())
         XCTAssertEqual(appSettings.pusherProfileTag, "12345")
     }
-    
+
     func test_whenShowLocalNotification_notificationRequestGetsAdded() async throws {
         await notificationManager.showLocalNotification(with: "Title", subtitle: "Subtitle")
         let request = try XCTUnwrap(notificationCenter.addReceivedRequest)
         XCTAssertEqual(request.content.title, "Title")
         XCTAssertEqual(request.content.subtitle, "Subtitle")
     }
-    
+
     func test_whenStart_notificationCategoriesAreSet() throws {
         //        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
         //                                                        title: L10n.actionQuickReply,
@@ -122,12 +123,12 @@ final class NotificationManagerTests: XCTestCase {
                                                     options: [])
         XCTAssertEqual(notificationCenter.setNotificationCategoriesReceivedCategories, [messageCategory, inviteCategory])
     }
-    
+
     func test_whenStart_delegateIsSet() throws {
         let delegate = try XCTUnwrap(notificationCenter.delegate)
         XCTAssertTrue(delegate.isEqual(notificationManager))
     }
-    
+
     func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
         let expectation = expectation(description: "requestAuthorization should be called")
         notificationCenter.requestAuthorizationOptionsClosure = { _ in
@@ -138,10 +139,9 @@ final class NotificationManagerTests: XCTestCase {
         await fulfillment(of: [expectation])
         XCTAssertEqual(notificationCenter.requestAuthorizationOptionsReceivedOptions, [.alert, .sound, .badge])
     }
-    
+
     func test_whenStartAndAuthorizationGranted_delegateCalled() async throws {
         authorizationStatusWasGranted = false
-        notificationCenter.requestAuthorizationOptionsReturnValue = true
         notificationManager.delegate = self
         let expectation: XCTestExpectation = expectation(description: "registerForRemoteNotifications delegate function should be called")
         expectation.assertForOverFulfill = false
@@ -152,14 +152,14 @@ final class NotificationManagerTests: XCTestCase {
         await fulfillment(of: [expectation])
         XCTAssertTrue(authorizationStatusWasGranted)
     }
-    
+
     func test_whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
         let archiver = MockCoder(requiringSecureCoding: false)
         let notification = try XCTUnwrap(UNNotification(coder: archiver))
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
     }
-    
+
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudNotBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = false
         notificationManager.delegate = self
@@ -168,7 +168,7 @@ final class NotificationManagerTests: XCTestCase {
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [])
     }
-    
+
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = true
         notificationManager.delegate = self
@@ -177,7 +177,7 @@ final class NotificationManagerTests: XCTestCase {
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
     }
-    
+
     func test_whenNotificationCenterReceivedResponseInLineReply_delegateIsCalled() async throws {
         handleInlineReplyDelegateCalled = false
         notificationManager.delegate = self
@@ -185,7 +185,7 @@ final class NotificationManagerTests: XCTestCase {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(handleInlineReplyDelegateCalled)
     }
-    
+
     func test_whenNotificationCenterReceivedResponseWithActionIdentifier_delegateIsCalled() async throws {
         notificationTappedDelegateCalled = false
         notificationManager.delegate = self
@@ -210,7 +210,6 @@ final class NotificationManagerTests: XCTestCase {
 
         // The center calls the delivered and the removal functions when an id is passed
         notificationCenter.deliveredNotificationsClosure = nil
-        notificationCenter.requestAuthorizationOptionsReturnValue = true
         notificationCenter.deliveredNotificationsReturnValue = []
         let expectation = expectation(description: "Notification should be removed")
         notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
@@ -224,7 +223,6 @@ final class NotificationManagerTests: XCTestCase {
 
     func test_InvitesNotificationsRemoval() async {
         let expectation = expectation(description: "Notification should be removed")
-        notificationCenter.requestAuthorizationOptionsReturnValue = true
         notificationCenter.deliveredNotificationsReturnValue = []
         notificationCenter.removeDeliveredNotificationsWithIdentifiersClosure = { _ in
             expectation.fulfill()
