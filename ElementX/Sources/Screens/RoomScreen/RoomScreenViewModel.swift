@@ -78,7 +78,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
-            guard let self else { return nil }
+            guard let self else {
+                return nil
+            }
             
             return self.audioPlayerState(for: itemId)
         }
@@ -883,7 +885,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Audio
     
-    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState? {
+    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
         timelineController.audioPlayerState(for: itemID)
     }
 }

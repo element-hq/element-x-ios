@@ -225,71 +225,68 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         await roomProxy.retryDecryption(for: sessionID)
     }
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState? {
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
         guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            MXLog.error("timelineItem not found")
-            return .none
+            fatalError("TimelineItem \(itemID) not found")
         }
         
-        switch timelineItem {
-        case let item as VoiceMessageRoomTimelineItem:
-            if let playerState = timelineAudioPlayerStates[itemID] {
-                return playerState
-            }
-            let playerState = AudioPlayerState(duration: item.content.duration,
-                                               waveform: item.content.waveform)
-            timelineAudioPlayerStates[itemID] = playerState
-            return playerState
-        default:
-            return .none
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
         }
+        
+        if let playerState = timelineAudioPlayerStates[itemID] {
+            return playerState
+        }
+        let playerState = AudioPlayerState(duration: voiceMessageRoomTimelineItem.content.duration,
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+        timelineAudioPlayerStates[itemID] = playerState
+        return playerState
     }
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
         guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            MXLog.error("timelineItem not found")
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        guard let source = voiceMessageRoomTimelineItem.content.source else {
+            MXLog.error("Cannot start voice message playback, source is not defined")
             return
         }
-
-        switch timelineItem {
-        case let item as VoiceMessageRoomTimelineItem:
-            guard let source = item.content.source else {
-                MXLog.error("Cannot start voice message playback, source is not defined")
-                return
+        
+        guard let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
+            MXLog.error("Cannot play a voice message without an audio player")
+            return
+        }
+        
+        guard player.mediaSource == source, player.state != .error else {
+            timelineAudioPlayerStates.forEach { itemID, playerState in
+                if itemID != timelineItem.id {
+                    playerState.detachAudioPlayer()
+                }
             }
-            if let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol {
-                if player.mediaSource == source, player.state != .error {
-                    MXLog.debug("already the correct media source")
-                    if player.state == .playing {
-                        MXLog.debug("pausing...")
-                        player.pause()
-                    } else {
-                        do {
-                            try await player.resume()
-                        } catch {
-                            MXLog.error("Failed to play voice message. \(error)")
-                        }
-                    }
-                    return
-                }
-                
-                timelineAudioPlayerStates.forEach { itemID, playerState in
-                    if itemID != timelineItem.id {
-                        playerState.detachAudioPlayer()
-                    }
-                }
-                timelineAudioPlayerStates[itemID]?.attachAudioPlayer(player)
-                do {
-                    // Load content
-                    try await player.play(mediaSource: source, mediaProvider: mediaProvider)
-                } catch {
-                    MXLog.error("Failed to play voice message. \(error)")
-                }
-            } else {
-                MXLog.error("Cannot play a voice message without an audio player")
+            timelineAudioPlayerStates[itemID]?.attachAudioPlayer(player)
+            do {
+                // Load content
+                try await player.play(mediaSource: source, mediaProvider: mediaProvider)
+            } catch {
+                MXLog.error("Failed to play voice message. \(error)")
             }
-        default:
-            break
+            
+            return
+        }
+        
+        if player.state == .playing {
+            player.pause()
+        } else {
+            do {
+                try await player.resume()
+            } catch {
+                MXLog.error("Failed to play voice message. \(error)")
+            }
         }
     }
     

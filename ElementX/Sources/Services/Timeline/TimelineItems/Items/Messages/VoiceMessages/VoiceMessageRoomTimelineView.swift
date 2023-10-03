@@ -19,13 +19,13 @@ import SwiftUI
 
 struct VoiceMessageRoomTimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    let timelineItem: VoiceMessageRoomTimelineItem
-    let playerState: AudioPlayerState
-    @State var resumePlaybackAfterScrubbing = false
+    private let timelineItem: VoiceMessageRoomTimelineItem
+    private let playerState: AudioPlayerState
+    @State private var resumePlaybackAfterScrubbing = false
     
-    init(timelineItem: VoiceMessageRoomTimelineItem, playerState: AudioPlayerState?) {
+    init(timelineItem: VoiceMessageRoomTimelineItem, playerState: AudioPlayerState) {
         self.timelineItem = timelineItem
-        self.playerState = playerState ?? AudioPlayerState(duration: 0)
+        self.playerState = playerState
     }
     
     var body: some View {

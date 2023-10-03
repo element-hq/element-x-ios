@@ -65,7 +65,7 @@ protocol RoomTimelineControllerProtocol {
     
     func retryDecryption(for sessionID: String) async
     
-    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState?
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async
     
