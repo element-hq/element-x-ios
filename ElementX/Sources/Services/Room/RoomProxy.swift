@@ -252,19 +252,15 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         }
     }
-    
+        
     func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
-        let messageContent: RoomMessageEventContentWithoutRelation
-        if let html {
-            messageContent = messageEventContentFromHtml(body: message, htmlBody: html)
-        } else {
-            messageContent = messageEventContentFromMarkdown(md: message)
-        }
+        let messageContent = buildMessageContentFor(message, html: html)
+        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
@@ -435,23 +431,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ message: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
-        let newMessageContent: RoomMessageEventContentWithoutRelation
-        if let html {
-            newMessageContent = messageEventContentFromHtml(body: newMessage, htmlBody: html)
-        } else {
-            newMessageContent = messageEventContentFromMarkdown(md: newMessage)
-        }
-
+        let messageContent = buildMessageContentFor(message, html: html)
+        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                try self.room.edit(newContent: newMessageContent, editItem: originalEvent)
+                try self.room.edit(newContent: messageContent, editItem: originalEvent)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -707,7 +698,37 @@ class RoomProxy: RoomProxyProtocol {
     }
 
     // MARK: - Private
+
+    private func buildMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+        let emoteSlashCommand = "/me "
+        let isEmote: Bool = message.starts(with: emoteSlashCommand)
+        
+        guard isEmote else {
+            if let html {
+                return messageEventContentFromHtml(body: message, htmlBody: html)
+            } else {
+                return messageEventContentFromMarkdown(md: message)
+            }
+        }
+        
+        let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
+        
+        var emoteHtml: String?
+        if let html {
+            emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+        }
+        
+        return buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
+    }
     
+    private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+        if let html {
+            return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
+        } else {
+            return messageEventContentFromMarkdownAsEmote(md: message)
+        }
+    }
+
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
     /// This should become automatic on the RustSDK side at some point
     private func fetchMembers() async {

@@ -558,7 +558,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             formattedBody = attributedStringBuilder.fromPlain(L10n.commonEmote(name, messageContent.body))
         }
         
-        return .init(body: messageContent.body, formattedBody: formattedBody)
+        return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
     }
     
     // MARK: - State Events

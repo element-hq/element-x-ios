@@ -615,10 +615,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 } else {
                     text = messageTimelineItem.body
                 }
+            case .emote(let emoteItem):
+                if ServiceLocator.shared.settings.richTextEditorEnabled, let formattedBodyHTMLString = emoteItem.formattedBodyHTMLString {
+                    text = "/me " + formattedBodyHTMLString
+                } else {
+                    text = "/me " + messageTimelineItem.body
+                }
             default:
                 text = messageTimelineItem.body
             }
-
+            
             actionsSubject.send(.composer(action: .setText(text: text)))
             actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
         case .copyPermalink:
