@@ -50,9 +50,9 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var audioPlayer: AVQueuePlayer?
     
     private var cancellables = Set<AnyCancellable>()
-    private let callbacksSubject: PassthroughSubject<AudioPlayerCallback, Never> = .init()
-    var callbacks: AnyPublisher<AudioPlayerCallback, Never> {
-        callbacksSubject.eraseToAnyPublisher()
+    private let actionsSubject: PassthroughSubject<AudioPlayerAction, Never> = .init()
+    var actions: AnyPublisher<AudioPlayerAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
     }
     
     private var internalState = InternalAudioPlayerState.none
@@ -268,25 +268,25 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         case .none:
             break
         case .loading:
-            dispatchCallback(.didStartLoading)
+            dispatchAction(.didStartLoading)
         case .readyToPlay:
-            dispatchCallback(.didFinishLoading)
+            dispatchAction(.didFinishLoading)
             audioPlayer?.play()
         case .playing:
-            dispatchCallback(.didStartPlaying)
+            dispatchAction(.didStartPlaying)
         case .paused:
-            dispatchCallback(.didPausePlaying)
+            dispatchAction(.didPausePlaying)
         case .stopped:
-            dispatchCallback(.didStopPlaying)
+            dispatchAction(.didStopPlaying)
         case .finishedPlaying:
-            dispatchCallback(.didFinishPlaying)
+            dispatchAction(.didFinishPlaying)
         case .error(let error):
             MXLog.error("audio player did fail. \(error)")
-            dispatchCallback(.didFailWithError(error: error))
+            dispatchAction(.didFailWithError(error: error))
         }
     }
     
-    private func dispatchCallback(_ callback: AudioPlayerCallback) {
+    private func dispatchAction(_ callback: AudioPlayerAction) {
         switch callback {
         case .didStartLoading, .didFinishLoading:
             break
@@ -297,7 +297,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         case .didFailWithError:
             disableIdleTimer(false)
         }
-        callbacksSubject.send(callback)
+        actionsSubject.send(callback)
     }
     
     private func disableIdleTimer(_ disabled: Bool) {

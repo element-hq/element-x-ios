@@ -17,7 +17,7 @@
 import Combine
 import Foundation
 
-enum AudioPlayerCallback {
+enum AudioPlayerAction {
     case didStartLoading
     case didFinishLoading
     case didStartPlaying
@@ -28,5 +28,5 @@ enum AudioPlayerCallback {
 }
 
 protocol AudioPlayerProtocol: MediaPlayerProtocol {
-    var callbacks: AnyPublisher<AudioPlayerCallback, Never> { get }
+    var actions: AnyPublisher<AudioPlayerAction, Never> { get }
 }

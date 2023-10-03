@@ -64,21 +64,21 @@ class AudioPlayerState: ObservableObject {
     // MARK: - Private
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {
-        audioPlayer.callbacks
+        audioPlayer.actions
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
+            .sink { [weak self] action in
                 guard let self else {
                     return
                 }
-                self.handleAudioPlayerCallback(callback)
+                self.handleAudioPlayerAction(action)
             }
             .store(in: &cancellables)
     }
     
-    private func handleAudioPlayerCallback(_ callback: AudioPlayerCallback) {
+    private func handleAudioPlayerAction(_ action: AudioPlayerAction) {
         loading = false
         playing = false
-        switch callback {
+        switch action {
         case .didStartLoading:
             loading = true
         case .didFinishLoading:
