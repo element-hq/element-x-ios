@@ -158,7 +158,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 } else {
                     navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
                 }
-            case .roomMemberDetails:
+            case .roomMemberDetails, .room:
                 userSessionFlowCoordinator?.handleAppRoute(route, animated: true)
             default:
                 break
