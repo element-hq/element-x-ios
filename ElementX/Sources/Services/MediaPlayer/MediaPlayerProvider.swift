@@ -15,7 +15,6 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private let mediaProvider: MediaProviderProtocol

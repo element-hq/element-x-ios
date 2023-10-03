@@ -48,7 +48,7 @@ struct VoiceMessageRoomTimelineView: View {
     
     private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
-            if playerState.playing {
+            if playerState.playbackState == .playing {
                 resumePlaybackAfterScrubbing = true
                 context.send(viewAction: .playPauseAudio(itemID: timelineItem.id))
             }

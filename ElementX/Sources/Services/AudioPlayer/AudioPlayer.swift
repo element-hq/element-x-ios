@@ -105,10 +105,9 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     deinit {
         stop()
         unloadContent()
-        disableIdleTimer(false)
     }
     
-    func play(mediaSource: MediaSourceProxy, mediaProvider: MediaProviderProtocol) async throws {
+    func load(from mediaSource: MediaSourceProxy, using mediaProvider: MediaProviderProtocol) async throws {
         if state != .error, self.mediaSource == mediaSource {
             return
         }
@@ -164,7 +163,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         }
     }
 
-    func resume() async throws {
+    func play() async throws {
         isStopped = false
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
@@ -268,41 +267,21 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         case .none:
             break
         case .loading:
-            dispatchAction(.didStartLoading)
+            actionsSubject.send(.didStartLoading)
         case .readyToPlay:
-            dispatchAction(.didFinishLoading)
+            actionsSubject.send(.didFinishLoading)
             audioPlayer?.play()
         case .playing:
-            dispatchAction(.didStartPlaying)
+            actionsSubject.send(.didStartPlaying)
         case .paused:
-            dispatchAction(.didPausePlaying)
+            actionsSubject.send(.didPausePlaying)
         case .stopped:
-            dispatchAction(.didStopPlaying)
+            actionsSubject.send(.didStopPlaying)
         case .finishedPlaying:
-            dispatchAction(.didFinishPlaying)
+            actionsSubject.send(.didFinishPlaying)
         case .error(let error):
             MXLog.error("audio player did fail. \(error)")
-            dispatchAction(.didFailWithError(error: error))
-        }
-    }
-    
-    private func dispatchAction(_ callback: AudioPlayerAction) {
-        switch callback {
-        case .didStartLoading, .didFinishLoading:
-            break
-        case .didStartPlaying:
-            disableIdleTimer(true)
-        case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
-            disableIdleTimer(false)
-        case .didFailWithError:
-            disableIdleTimer(false)
-        }
-        actionsSubject.send(callback)
-    }
-    
-    private func disableIdleTimer(_ disabled: Bool) {
-        DispatchQueue.main.async {
-            UIApplication.shared.isIdleTimerDisabled = disabled
+            actionsSubject.send(.didFailWithError(error: error))
         }
     }
 }

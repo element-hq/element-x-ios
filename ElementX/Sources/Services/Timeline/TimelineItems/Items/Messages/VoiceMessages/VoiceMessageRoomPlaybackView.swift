@@ -46,7 +46,7 @@ struct VoiceMessageRoomPlaybackView: View {
     }
     
     var showWaveformCursor: Bool {
-        playerState.playing || dragState.isDragging
+        playerState.playbackState == .playing || dragState.isDragging
     }
     
     var body: some View {
@@ -121,17 +121,17 @@ struct VoiceMessageRoomPlaybackView: View {
             ZStack {
                 Circle()
                     .foregroundColor(.compound.bgCanvasDefault)
-                if playerState.loading {
+                if playerState.playbackState == .loading {
                     ProgressView()
                 } else {
-                    Image(asset: playerState.playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
-                        .offset(x: playerState.playing ? 0 : 2)
+                    Image(asset: playerState.playbackState == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
+                        .offset(x: playerState.playbackState == .playing ? 0 : 2)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.compound.iconSecondary)
                 }
             }
         }
-        .disabled(playerState.loading)
+        .disabled(playerState.playbackState == .loading)
         .frame(width: playPauseButtonSize.width,
                height: playPauseButtonSize.height)
     }

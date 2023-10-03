@@ -271,7 +271,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             timelineAudioPlayerStates[itemID]?.attachAudioPlayer(player)
             do {
                 // Load content
-                try await player.play(mediaSource: source, mediaProvider: mediaProvider)
+                try await player.load(from: source, using: mediaProvider)
             } catch {
                 MXLog.error("Failed to play voice message. \(error)")
             }
@@ -283,7 +283,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             player.pause()
         } else {
             do {
-                try await player.resume()
+                try await player.play()
             } catch {
                 MXLog.error("Failed to play voice message. \(error)")
             }

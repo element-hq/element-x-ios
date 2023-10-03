@@ -16,13 +16,21 @@
 
 import Combine
 import Foundation
+import UIKit
+
+enum AudioPlayerPlaybackState {
+    case loading
+    case readyToPlay
+    case playing
+    case stopped
+    case error
+}
 
 @MainActor
 class AudioPlayerState: ObservableObject {
     let duration: Double
     let waveform: Waveform
-    @Published private(set) var loading: Bool
-    @Published private(set) var playing: Bool
+    @Published private(set) var playbackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
 
     private var audioPlayer: AudioPlayerProtocol?
@@ -33,8 +41,7 @@ class AudioPlayerState: ObservableObject {
         self.duration = duration
         self.waveform = waveform ?? Waveform(data: [])
         self.progress = progress
-        loading = false
-        playing = false
+        playbackState = .stopped
     }
     
     func updateState(progress: Double) async {
@@ -57,8 +64,7 @@ class AudioPlayerState: ObservableObject {
         stopPublishProgression()
         cancellables = []
         audioPlayer = nil
-        loading = false
-        playing = false
+        playbackState = .stopped
     }
     
     // MARK: - Private
@@ -76,33 +82,33 @@ class AudioPlayerState: ObservableObject {
     }
     
     private func handleAudioPlayerAction(_ action: AudioPlayerAction) {
-        loading = false
-        playing = false
         switch action {
         case .didStartLoading:
-            loading = true
+            playbackState = .loading
         case .didFinishLoading:
             if let audioPlayer {
                 Task {
                     await restoreAudioPlayerState(audioPlayer: audioPlayer)
                 }
             }
+            playbackState = .readyToPlay
         case .didStartPlaying:
-            playing = true
-            startPublishProgression()
-        case .didPausePlaying:
+            playbackState = .playing
+            startPublishProgress()
+            disableIdleTimer(true)
+        case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
             stopPublishProgression()
-        case .didStopPlaying:
-            stopPublishProgression()
-        case .didFinishPlaying:
-            stopPublishProgression()
-            progress = 0.0
+            playbackState = .stopped
+            disableIdleTimer(false)
+            if case .didFinishPlaying = action {
+                progress = 0.0
+            }
         case .didFailWithError:
             stopPublishProgression()
         }
     }
     
-    private func startPublishProgression() {
+    private func startPublishProgress() {
         cancellableTimer?.cancel()
 
         cancellableTimer = Timer.publish(every: 0.2, on: .main, in: .default)
@@ -122,5 +128,11 @@ class AudioPlayerState: ObservableObject {
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {
         await audioPlayer.seek(to: progress)
+    }
+    
+    private func disableIdleTimer(_ disabled: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = disabled
+        }
     }
 }
