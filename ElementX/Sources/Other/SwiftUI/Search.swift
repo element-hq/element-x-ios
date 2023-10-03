@@ -38,7 +38,7 @@ extension View {
     ///   This modifier may be moved into Compound once styles for the various configuration options have been defined.
     func searchableConfiguration(hidesNavigationBar: Bool = true,
                                  showsCancelButton: Bool = true) -> some View {
-        introspect(.navigationStack, on: .iOS(.v16), scope: .ancestor) { navigationController in
+        introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
             guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
             searchController.hidesNavigationBarDuringPresentation = hidesNavigationBar
             searchController.automaticallyShowsCancelButton = showsCancelButton

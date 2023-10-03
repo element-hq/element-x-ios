@@ -45,7 +45,7 @@ struct SettingsScreen: View {
         .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .introspect(.window, on: .iOS(.v16, .v17)) { window in
+        .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
     }

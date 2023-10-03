@@ -49,7 +49,7 @@ struct SoftLogoutScreen: View {
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
-        .introspect(.window, on: .iOS(.v16, .v17)) { window in
+        .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
     }

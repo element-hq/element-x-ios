@@ -27,7 +27,7 @@ struct ServerConfirmationScreen: View {
         }
         .background()
         .environment(\.backgroundStyle, AnyShapeStyle(Color.compound.bgCanvasDefault))
-        .introspect(.window, on: .iOS(.v16, .v17)) { window in
+        .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
     }
