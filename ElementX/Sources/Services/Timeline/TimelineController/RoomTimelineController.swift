@@ -232,7 +232,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         switch timelineItem {
-        case let item as VoiceRoomTimelineItem:
+        case let item as VoiceMessageRoomTimelineItem:
             if let playerState = timelineAudioPlayerStates[itemID] {
                 return playerState
             }
@@ -252,7 +252,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         switch timelineItem {
-        case let item as VoiceRoomTimelineItem:
+        case let item as VoiceMessageRoomTimelineItem:
             guard let source = item.content.source else {
                 MXLog.error("Cannot start voice message playback, source is not defined")
                 return

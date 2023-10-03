@@ -17,23 +17,23 @@
 import Foundation
 import SwiftUI
 
-struct VoiceRoomTimelineView: View {
+struct VoiceMessageRoomTimelineView: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    let timelineItem: VoiceRoomTimelineItem
+    let timelineItem: VoiceMessageRoomTimelineItem
     let playerState: AudioPlayerState
     @State var resumePlaybackAfterScrubbing = false
     
-    init(timelineItem: VoiceRoomTimelineItem, playerState: AudioPlayerState?) {
+    init(timelineItem: VoiceMessageRoomTimelineItem, playerState: AudioPlayerState?) {
         self.timelineItem = timelineItem
         self.playerState = playerState ?? AudioPlayerState(duration: 0)
     }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VoiceRoomPlaybackView(playerState: playerState,
-                                  onPlayPause: onPlaybackPlayPause,
-                                  onSeek: onPlaybackSeek(_:),
-                                  onScrubbing: onPlaybackScrubbing(_:))
+            VoiceMessageRoomPlaybackView(playerState: playerState,
+                                         onPlayPause: onPlaybackPlayPause,
+                                         onSeek: onPlaybackSeek(_:),
+                                         onScrubbing: onPlaybackScrubbing(_:))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -63,21 +63,21 @@ struct VoiceRoomTimelineView: View {
     }
 }
 
-struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
+struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
 
-    static let voiceRoomTimelineItem = VoiceRoomTimelineItem(id: .random,
-                                                             timestamp: "Now",
-                                                             isOutgoing: false,
-                                                             isEditable: false,
-                                                             canBeRepliedTo: true,
-                                                             isThreaded: false,
-                                                             sender: .init(id: "Bob"),
-                                                             content: .init(body: "audio.ogg",
-                                                                            duration: 300,
-                                                                            waveform: Waveform.mockWaveform,
-                                                                            source: nil,
-                                                                            contentType: nil))
+    static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: .random,
+                                                                    timestamp: "Now",
+                                                                    isOutgoing: false,
+                                                                    isEditable: false,
+                                                                    canBeRepliedTo: true,
+                                                                    isThreaded: false,
+                                                                    sender: .init(id: "Bob"),
+                                                                    content: .init(body: "audio.ogg",
+                                                                                   duration: 300,
+                                                                                   waveform: Waveform.mockWaveform,
+                                                                                   source: nil,
+                                                                                   contentType: nil))
     
     static let playerState = AudioPlayerState(duration: 10.0,
                                               waveform: Waveform.mockWaveform,
@@ -93,7 +93,7 @@ struct VoiceRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     static var body: some View {
-        VoiceRoomTimelineView(timelineItem: voiceRoomTimelineItem, playerState: playerState)
+        VoiceMessageRoomTimelineView(timelineItem: voiceRoomTimelineItem, playerState: playerState)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

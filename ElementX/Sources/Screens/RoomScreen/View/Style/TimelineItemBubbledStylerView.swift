@@ -491,21 +491,21 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                          replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                contentType: .text(.init(body: "Short")))))
             
-            VoiceRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
-                                                      timestamp: "10:42",
-                                                      isOutgoing: true,
-                                                      isEditable: false,
-                                                      canBeRepliedTo: true,
-                                                      isThreaded: true,
-                                                      sender: .init(id: ""),
-                                                      content: .init(body: "audio.ogg",
-                                                                     duration: 100,
-                                                                     waveform: Waveform.mockWaveform,
-                                                                     source: nil,
-                                                                     contentType: nil),
-                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                            contentType: .text(.init(body: "Short")))),
-                                  playerState: AudioPlayerState(duration: 10, waveform: Waveform.mockWaveform))
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+                                                             timestamp: "10:42",
+                                                             isOutgoing: true,
+                                                             isEditable: false,
+                                                             canBeRepliedTo: true,
+                                                             isThreaded: true,
+                                                             sender: .init(id: ""),
+                                                             content: .init(body: "audio.ogg",
+                                                                            duration: 100,
+                                                                            waveform: Waveform.mockWaveform,
+                                                                            source: nil,
+                                                                            contentType: nil),
+                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                   contentType: .text(.init(body: "Short")))),
+                                         playerState: AudioPlayerState(duration: 10, waveform: Waveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

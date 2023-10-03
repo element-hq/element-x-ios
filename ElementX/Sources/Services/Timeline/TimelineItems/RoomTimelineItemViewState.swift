@@ -69,7 +69,7 @@ enum RoomTimelineItemType: Equatable {
     case group(CollapsibleTimelineItem)
     case location(LocationRoomTimelineItem)
     case poll(PollRoomTimelineItem)
-    case voice(VoiceRoomTimelineItem)
+    case voice(VoiceMessageRoomTimelineItem)
 
     init(item: RoomTimelineItemProtocol) {
         switch item {
@@ -113,7 +113,7 @@ enum RoomTimelineItemType: Equatable {
             self = .location(item)
         case let item as PollRoomTimelineItem:
             self = .poll(item)
-        case let item as VoiceRoomTimelineItem:
+        case let item as VoiceMessageRoomTimelineItem:
             self = .voice(item)
         default:
             fatalError("Unknown timeline item")

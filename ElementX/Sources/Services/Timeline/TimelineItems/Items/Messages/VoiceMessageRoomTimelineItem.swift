@@ -16,7 +16,7 @@
 
 import Foundation
 
-struct VoiceRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+struct VoiceMessageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: String
     let isOutgoing: Bool
