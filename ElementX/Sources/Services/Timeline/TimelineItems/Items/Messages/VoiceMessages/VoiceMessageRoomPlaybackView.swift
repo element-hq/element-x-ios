@@ -18,65 +18,31 @@ import SwiftUI
 
 struct VoiceMessageRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
+    let onPlayPause: () -> Void
+    let onSeek: (Double) -> Void
+    let onScrubbing: (Bool) -> Void
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @State private var sendFeedback = false
     
-    private let waveformLineWidth = 2.0
-    private let waveformLinePadding = 2.0
+    @ScaledMetric private var waveformLineWidth = 2.0
+    @ScaledMetric private var waveformLinePadding = 2.0
     private let waveformMaxWidth: CGFloat = 150
     private let playPauseButtonSize = CGSize(width: 32, height: 32)
     
-    private let elapsedTimeFormatter: DateFormatter = {
+    private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "m:ss"
         return dateFormatter
     }()
-    
-    var onPlayPause: () -> Void = { }
-    var onSeek: (Double) -> Void = { _ in }
-    var onScrubbing: (Bool) -> Void = { _ in }
-    
-    private enum DragState: Equatable {
-        case inactive
-        case pressing(progress: Double)
-        case dragging(progress: Double, totalWidth: Double)
         
-        var progress: Double {
-            switch self {
-            case .inactive, .pressing:
-                return .zero
-            case .dragging(let progress, _):
-                return progress
-            }
-        }
-        
-        var isActive: Bool {
-            switch self {
-            case .inactive:
-                return false
-            case .pressing, .dragging:
-                return true
-            }
-        }
-        
-        var isDragging: Bool {
-            switch self {
-            case .inactive, .pressing:
-                return false
-            case .dragging:
-                return true
-            }
-        }
-    }
-    
     @GestureState private var dragState = DragState.inactive
     @State private var tapProgress: Double = .zero
     
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
-        return elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playerState.duration * percent))
+        return Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playerState.duration * percent))
     }
     
     var showWaveformCursor: Bool {
@@ -112,7 +78,7 @@ struct VoiceMessageRoomPlaybackView: View {
                                 if let loc = drag?.location {
                                     progress = loc.x / geometry.size.width
                                 }
-                                state = .dragging(progress: progress, totalWidth: geometry.size.width)
+                                state = .dragging(progress: progress, distance: geometry.size.width)
                             // Dragging ended or the long press cancelled.
                             default:
                                 state = .inactive
@@ -171,6 +137,39 @@ struct VoiceMessageRoomPlaybackView: View {
     }
 }
 
+private enum DragState: Equatable {
+    case inactive
+    case pressing(progress: Double)
+    case dragging(progress: Double, distance: Double)
+    
+    var progress: Double {
+        switch self {
+        case .inactive, .pressing:
+            return .zero
+        case .dragging(let progress, _):
+            return progress
+        }
+    }
+    
+    var isActive: Bool {
+        switch self {
+        case .inactive:
+            return false
+        case .pressing, .dragging:
+            return true
+        }
+    }
+    
+    var isDragging: Bool {
+        switch self {
+        case .inactive, .pressing:
+            return false
+        case .dragging:
+            return true
+        }
+    }
+}
+
 struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
     static let waveform = Waveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
                                           334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
@@ -187,7 +186,8 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
                                      onPlayPause: { },
-                                     onSeek: { value in Task { await playerState.updateState(progress: value) } })
-            .fixedSize(horizontal: false, vertical: true)
+                                     onSeek: { value in Task { await playerState.updateState(progress: value) } },
+                                     onScrubbing: { _ in })
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
