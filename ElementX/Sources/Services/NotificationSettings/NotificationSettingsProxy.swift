@@ -72,8 +72,16 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
         let backgroundTask = await backgroundTaskService?.startBackgroundTask(withName: "setDefaultRoomNotificationMode")
         defer { backgroundTask?.stop() }
-        
-        try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
+
+        do {
+            try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
+        } catch NotificationSettingsError.RuleNotFound(let ruleId) {
+            // `setDefaultRoomNotificationMode` updates multiple rules including unstable rules (e.g. the polls push rules defined in the MSC3930)
+            // since production home servers may not have these rules yet, we drop the RuleNotFound error
+            MXLog.warning("Unable to find the rule: \(ruleId)")
+            return
+        }
+
         await updatedSettings()
     }
     
