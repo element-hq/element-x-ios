@@ -259,27 +259,8 @@ class RoomProxy: RoomProxyProtocol {
             sendMessageBackgroundTask?.stop()
         }
         
-        var body: String = message
-        var htmlBody: String? = html
-        let isEmote: Bool = isEmote(body: body, htmlBody: htmlBody)
-        if isEmote {
-            (body, htmlBody) = buildEmote(body: body, htmlBody: htmlBody)
-        }
+        let messageContent = buildMessageContentFor(message, html: html)
         
-        let messageContent: RoomMessageEventContentWithoutRelation
-        if let htmlBody {
-            if isEmote {
-                messageContent = messageEventContentFromHtmlAsEmote(body: body, htmlBody: htmlBody)
-            } else {
-                messageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody)
-            }
-        } else {
-            if isEmote {
-                messageContent = messageEventContentFromMarkdownAsEmote(md: body)
-            } else {
-                messageContent = messageEventContentFromMarkdown(md: body)
-            }
-        }
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 if let eventID {
@@ -450,37 +431,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ message: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
-        var body: String = newMessage
-        var htmlBody: String? = html
-        let isEmote: Bool = isEmote(body: body, htmlBody: htmlBody)
-        if isEmote {
-            (body, htmlBody) = buildEmote(body: body, htmlBody: htmlBody)
-        }
-
-        let newMessageContent: RoomMessageEventContentWithoutRelation
-        if let htmlBody {
-            if isEmote {
-                newMessageContent = messageEventContentFromHtmlAsEmote(body: body, htmlBody: htmlBody)
-            } else {
-                newMessageContent = messageEventContentFromHtml(body: body, htmlBody: htmlBody)
-            }
-        } else {
-            if isEmote {
-                newMessageContent = messageEventContentFromMarkdownAsEmote(md: body)
-            } else {
-                newMessageContent = messageEventContentFromMarkdown(md: body)
-            }
-        }
+        let messageContent = buildMessageContentFor(message, html: html)
+        
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
                 let originalEvent = try self.room.getEventTimelineItemByEventId(eventId: eventID)
-                try self.room.edit(newContent: newMessageContent, editItem: originalEvent)
+                try self.room.edit(newContent: messageContent, editItem: originalEvent)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -737,17 +699,34 @@ class RoomProxy: RoomProxyProtocol {
 
     // MARK: - Private
 
-    private func isEmote(body: String, htmlBody: String?) -> Bool {
-        body.starts(with: "/me ")
+    private func buildMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+        let emoteSlashCommand = "/me "
+        let isEmote: Bool = message.starts(with: emoteSlashCommand)
+        
+        guard isEmote else {
+            if let html {
+                return messageEventContentFromHtml(body: message, htmlBody: html)
+            } else {
+                return messageEventContentFromMarkdown(md: message)
+            }
+        }
+        
+        let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
+        
+        var emoteHtml: String?
+        if let html {
+            emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+        }
+        
+        return buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
     }
     
-    private func buildEmote(body: String, htmlBody: String?) -> (String, String?) {
-        let newBody = body.replacing("/me ", with: "")
-        var newHtmlBody = htmlBody
-        if let htmlBody {
-            newHtmlBody = htmlBody.replacing("/me ", with: "")
+    private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+        if let html {
+            return messageEventContentFromHtmlAsEmote(body: message, htmlBody: html)
+        } else {
+            return messageEventContentFromMarkdownAsEmote(md: message)
         }
-        return (newBody, newHtmlBody)
     }
 
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
