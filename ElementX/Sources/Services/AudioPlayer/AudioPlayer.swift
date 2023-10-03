@@ -35,16 +35,8 @@ enum AudioPlayerError: Error {
     case loadFileError
 }
 
-private extension URL {
-    /// Returns true if the URL has a supported audio extension
-    var hasSupportedAudioExtension: Bool {
-        let supportedExtensions = ["mp3", "mp4", "m4a", "wav", "aac"]
-        return supportedExtensions.contains(pathExtension.lowercased())
-    }
-}
-
 class AudioPlayer: NSObject, AudioPlayerProtocol {
-    private(set) var mediaSource: MediaSourceProxy?
+    var mediaSource: MediaSourceProxy?
     
     private var playerItem: AVPlayerItem?
     private var audioPlayer: AVQueuePlayer?
@@ -61,9 +53,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var rateObserver: NSKeyValueObservation?
     private var playToEndObserver: NSObjectProtocol?
     private var appBackgroundObserver: NSObjectProtocol?
-    
-    private let cacheManager: AudioCacheManager
-    @CancellableTask private var loadingTask: Task<URL?, Error>?
     
     private(set) var url: URL?
     
@@ -97,73 +86,22 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private var isStopped = true
     
-    init(cacheManager: AudioCacheManager) {
-        self.cacheManager = cacheManager
-        super.init()
-    }
-    
     deinit {
         stop()
         unloadContent()
     }
     
-    func load(from mediaSource: MediaSourceProxy, using mediaProvider: MediaProviderProtocol) async throws {
-        if state != .error, self.mediaSource == mediaSource {
-            return
-        }
-        
+    func load(mediaSource: MediaSourceProxy, using url: URL) {
         unloadContent()
         setInternalState(.loading)
-
-        loadingTask = Task<URL?, Error> {
-            if !cacheManager.fileExists(for: mediaSource) {
-                guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(mediaSource) else {
-                    throw AudioPlayerError.loadFileError
-                }
-                
-                try cacheManager.cache(mediaSource: mediaSource, using: fileHandle.url)
-            }
-            var url = cacheManager.cacheURL(for: mediaSource)
-            
-            // Convert from ogg if needed
-            if !url.hasSupportedAudioExtension {
-                let audioConverter = AudioConverter()
-                let originalURL = url
-                url = cacheManager.cacheURL(for: mediaSource, replacingExtension: "m4a")
-                // Do we already have a converted version?
-                if !cacheManager.fileExists(for: mediaSource, withExtension: "m4a") {
-                    try await audioConverter.convertToMPEG4AAC(sourceURL: originalURL, destinationURL: url)
-                }
-                
-                // we don't need the original file anymore
-                try? FileManager.default.removeItem(at: originalURL)
-            }
-            
-            guard !Task.isCancelled else {
-                MXLog.debug("loading task has been cancelled.")
-                return nil
-            }
-
-            return url
-        }
-        
-        do {
-            // if the task value is nil, then the task has been cancelled
-            if let url = try await loadingTask?.value {
-                self.mediaSource = mediaSource
-                self.url = url
-                playerItem = AVPlayerItem(url: url)
-                audioPlayer = AVQueuePlayer(playerItem: playerItem)
-                
-                addObservers()
-            }
-        } catch {
-            setInternalState(.error(error))
-            throw error
-        }
+        self.mediaSource = mediaSource
+        self.url = url
+        playerItem = AVPlayerItem(url: url)
+        audioPlayer = AVQueuePlayer(playerItem: playerItem)
+        addObservers()
     }
-
-    func play() async throws {
+    
+    func play() {
         isStopped = false
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
@@ -175,18 +113,12 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     func pause() {
-        guard case .playing = internalState else {
-            MXLog.error("Cannot pause playback (not playing)")
-            return
-        }
+        guard case .playing = internalState else { return }
         audioPlayer?.pause()
     }
     
     func stop() {
-        if isStopped {
-            return
-        }
-        
+        guard !isStopped else { return }
         isStopped = true
         audioPlayer?.pause()
         audioPlayer?.seek(to: .zero)
@@ -204,6 +136,8 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         mediaSource = nil
         url = nil
         audioPlayer?.replaceCurrentItem(with: nil)
+        audioPlayer = nil
+        playerItem = nil
         removeObservers()
     }
 
@@ -219,6 +153,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             case .failed:
                 self.setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
             case .readyToPlay:
+                guard state == .loading else { return }
                 self.setInternalState(.readyToPlay)
             default:
                 break
@@ -270,7 +205,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             actionsSubject.send(.didStartLoading)
         case .readyToPlay:
             actionsSubject.send(.didFinishLoading)
-            audioPlayer?.play()
+            play()
         case .playing:
             actionsSubject.send(.didStartPlaying)
         case .paused:
@@ -279,6 +214,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             actionsSubject.send(.didStopPlaying)
         case .finishedPlaying:
             actionsSubject.send(.didFinishPlaying)
+            unloadContent()
         case .error(let error):
             MXLog.error("audio player did fail. \(error)")
             actionsSubject.send(.didFailWithError(error: error))

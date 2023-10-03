@@ -19,7 +19,6 @@ import Foundation
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private let mediaProvider: MediaProviderProtocol
     private var audioPlayer: AudioPlayerProtocol?
-    private var audioCacheManager = AudioCacheManager()
             
     init(mediaProvider: MediaProviderProtocol) {
         self.mediaProvider = mediaProvider
@@ -27,7 +26,6 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
     
     deinit {
         audioPlayer = nil
-        audioCacheManager.clearCache()
     }
     
     func player(for mediaSource: MediaSourceProxy) -> MediaPlayerProtocol? {
@@ -38,8 +36,7 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         
         if mimeType.starts(with: "audio/") {
             if audioPlayer == nil {
-                audioCacheManager.setupTemporaryFilesFolder()
-                audioPlayer = AudioPlayer(cacheManager: audioCacheManager)
+                audioPlayer = AudioPlayer()
             }
             return audioPlayer
         } else {

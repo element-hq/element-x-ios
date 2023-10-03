@@ -24,6 +24,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
@@ -47,12 +48,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
+         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
+        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
@@ -249,11 +252,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
-            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
         }
         
         guard let source = voiceMessageRoomTimelineItem.content.source else {
-            MXLog.error("Cannot start voice message playback, source is not defined")
+            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
             return
         }
         
@@ -262,18 +265,26 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
+        let playerState = audioPlayerState(for: itemID)
+        
         guard player.mediaSource == source, player.state != .error else {
             timelineAudioPlayerStates.forEach { itemID, playerState in
                 if itemID != timelineItem.id {
                     playerState.detachAudioPlayer()
                 }
             }
-            timelineAudioPlayerStates[itemID]?.attachAudioPlayer(player)
+            playerState.attachAudioPlayer(player)
+            
+            // Load content
             do {
-                // Load content
-                try await player.load(from: source, using: mediaProvider)
+                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
+                if playerState.isAttached {
+                    player.load(mediaSource: source, using: url)
+                }
             } catch {
-                MXLog.error("Failed to play voice message. \(error)")
+                MXLog.error("Failed to load voice message: \(error)")
+                playerState.reportError(error)
             }
             
             return
@@ -282,11 +293,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if player.state == .playing {
             player.pause()
         } else {
-            do {
-                try await player.play()
-            } catch {
-                MXLog.error("Failed to play voice message. \(error)")
-            }
+            player.play()
         }
     }
     

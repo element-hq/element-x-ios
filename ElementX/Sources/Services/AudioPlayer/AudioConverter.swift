@@ -23,7 +23,7 @@ enum AudioConverterError: Error {
 }
 
 struct AudioConverter {
-    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) async throws {
+    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
             try OGGConverter.convertM4aFileToOpusOGG(src: sourceURL, dest: destinationURL)
         } catch {
@@ -32,7 +32,7 @@ struct AudioConverter {
         }
     }
     
-    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) async throws {
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws {
         do {
             try OGGConverter.convertOpusOGGToM4aFile(src: sourceURL, dest: destinationURL)
         } catch {

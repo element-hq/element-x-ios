@@ -20,11 +20,13 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      mediaProvider: MediaProviderProtocol,
-                                     mediaPlayerProvider: MediaPlayerProviderProtocol) -> RoomTimelineControllerProtocol {
+                                     mediaPlayerProvider: MediaPlayerProviderProtocol,
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineItemFactory: timelineItemFactory,
                                mediaProvider: mediaProvider,
                                mediaPlayerProvider: mediaPlayerProvider,
+                               voiceMessageMediaManager: voiceMessageMediaManager,
                                appSettings: ServiceLocator.shared.settings)
     }
 }

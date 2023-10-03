@@ -31,8 +31,8 @@ protocol MediaPlayerProtocol {
     var url: URL? { get }
     var state: MediaPlayerState { get }
     
-    func load(from mediaSource: MediaSourceProxy, using mediaProvider: MediaProviderProtocol) async throws
-    func play() async throws
+    func load(mediaSource: MediaSourceProxy, using url: URL)
+    func play()
     func pause()
     func stop()
     func seek(to progress: Double) async

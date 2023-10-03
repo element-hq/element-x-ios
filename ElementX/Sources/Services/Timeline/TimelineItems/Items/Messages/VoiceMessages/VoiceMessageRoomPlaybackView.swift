@@ -188,6 +188,6 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                      onPlayPause: { },
                                      onSeek: { value in Task { await playerState.updateState(progress: value) } },
                                      onScrubbing: { _ in })
-        .fixedSize(horizontal: false, vertical: true)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

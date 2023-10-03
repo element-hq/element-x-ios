@@ -16,9 +16,9 @@
 
 import Foundation
 
-class AudioCacheManager {
+class VoiceMessageCache {
     var temporaryFilesFolderURL: URL {
-        FileManager.default.temporaryDirectory.appendingPathComponent("media/audio")
+        FileManager.default.temporaryDirectory.appendingPathComponent("media/voice-message")
     }
     
     func cacheURL(for mediaSource: MediaSourceProxy, replacingExtension newExtension: String? = nil) -> URL {

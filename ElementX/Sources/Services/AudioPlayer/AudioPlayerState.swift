@@ -36,7 +36,11 @@ class AudioPlayerState: ObservableObject {
     private var audioPlayer: AudioPlayerProtocol?
     private var cancellables: Set<AnyCancellable> = []
     private var cancellableTimer: AnyCancellable?
-    
+
+    var isAttached: Bool {
+        audioPlayer != nil
+    }
+
     init(duration: Double, waveform: Waveform? = nil, progress: Double = 0.0) {
         self.duration = duration
         self.waveform = waveform ?? Waveform(data: [])
@@ -51,20 +55,27 @@ class AudioPlayerState: ObservableObject {
             await audioPlayer.seek(to: progress)
         }
     }
-        
+    
     func attachAudioPlayer(_ audioPlayer: AudioPlayerProtocol) {
         if self.audioPlayer != nil {
             detachAudioPlayer()
         }
+        playbackState = .loading
         self.audioPlayer = audioPlayer
         subscribeToAudioPlayer(audioPlayer: audioPlayer)
     }
     
     func detachAudioPlayer() {
-        stopPublishProgression()
+        guard audioPlayer != nil else { return }
+        audioPlayer?.stop()
+        stopPublishProgress()
         cancellables = []
         audioPlayer = nil
         playbackState = .stopped
+    }
+    
+    func reportError(_ error: Error) {
+        playbackState = .error
     }
     
     // MARK: - Private
@@ -97,14 +108,14 @@ class AudioPlayerState: ObservableObject {
             startPublishProgress()
             disableIdleTimer(true)
         case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
-            stopPublishProgression()
+            stopPublishProgress()
             playbackState = .stopped
             disableIdleTimer(false)
             if case .didFinishPlaying = action {
                 progress = 0.0
             }
         case .didFailWithError:
-            stopPublishProgression()
+            stopPublishProgress()
         }
     }
     
@@ -122,7 +133,7 @@ class AudioPlayerState: ObservableObject {
             })
     }
     
-    private func stopPublishProgression() {
+    private func stopPublishProgress() {
         cancellableTimer?.cancel()
     }
     
