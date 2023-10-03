@@ -81,6 +81,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.tryEvent(.presentRoomDetails(roomID: roomID), userInfo: EventUserInfo(animated: animated))
         case .roomList:
             stateMachine.tryEvent(.dismissRoom, userInfo: EventUserInfo(animated: animated))
+        case .roomMemberDetails(let userID):
+            Task {
+                switch await roomProxy?.getMember(userID: userID) {
+                case .success(let member):
+                    stateMachine.tryEvent(.presentRoomMemberDetails(member: .init(value: member)))
+                case .failure(let error):
+                    MXLog.error("[RoomFlowCoordinator] Failed to get member: \(error)")
+                case .none:
+                    MXLog.error("[RoomFlowCoordinator] Failed to get member: RoomProxy is nil")
+                }
+            }
         case .invites:
             break
         case .genericCallLink, .oidcCallback:

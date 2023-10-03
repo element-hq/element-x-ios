@@ -417,8 +417,40 @@ class AttributedStringBuilderTests: XCTestCase {
         let string = "https://matrix.to/#/@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
         XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertNotNil(attributedStringFromHTML?.link)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
         XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertNotNil(attributedStringFromHTML?.link)
+    }
+    
+    func testUserMentionAtachmentInBlockQuotes() {
+        let link = "https://matrix.to/#/@test:matrix.org"
+        let string = "<blockquote>hello \(link) how are you?</blockquote>"
+        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        for run in attributedStringFromHTML.runs {
+            XCTAssertNotNil(run.blockquote)
+        }
+        
+        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
+        checkLinkIn(attributedString: attributedStringFromHTML, expectedLink: link, expectedRuns: 3)
+    }
+    
+    func testAllUsersMentionAtachmentInBlockQuotes() {
+        let string = "<blockquote>hello @room how are you?</blockquote>"
+        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        for run in attributedStringFromHTML.runs {
+            XCTAssertNotNil(run.blockquote)
+        }
+        
+        checkAttachment(attributedString: attributedStringFromHTML, expectedRuns: 3)
     }
     
     func testAllUsersMentionAttachment() {
@@ -464,11 +496,64 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNil(attributedStringFromHTML?.link)
     }
     
+    func testUserMentionIsIgnoredInCode() {
+        let htmlString = "<pre><code>test https://matrix.org/#/@test:matrix.org test</code></pre>"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.attachment)
+    }
+    
     func testAllUsersIsIgnoredInCode() {
         let htmlString = "<pre><code>test @room test</code></pre>"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
         XCTAssert(attributedStringFromHTML?.runs.count == 1)
         XCTAssertNil(attributedStringFromHTML?.attachment)
+    }
+    
+    func testMultipleMentions() {
+        guard let url = URL(string: "https://matrix.to/#/@test:matrix.org") else {
+            XCTFail("Invalid url")
+            return
+        }
+        
+        let string = "Hello @room, but especially hello to you \(url)"
+        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        var foundAttachments = 0
+        var foundLink: URL?
+        for run in attributedStringFromHTML.runs {
+            if run.attachment != nil {
+                foundAttachments += 1
+            }
+            
+            if let link = run.link {
+                foundLink = link
+            }
+        }
+        XCTAssertEqual(foundLink, url)
+        XCTAssertEqual(foundAttachments, 2)
+        
+        guard let attributedStringFromPlain = attributedStringBuilder.fromPlain(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        foundAttachments = 0
+        foundLink = nil
+        for run in attributedStringFromPlain.runs {
+            if run.attachment != nil {
+                foundAttachments += 1
+            }
+            
+            if let link = run.link {
+                foundLink = link
+            }
+        }
+        XCTAssertEqual(foundLink, url)
+        XCTAssertEqual(foundAttachments, 2)
     }
 
     // MARK: - Private
@@ -489,7 +574,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTFail("Couldn't find expected value.")
     }
     
-    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int) {
+    private func checkAttachment(attributedString: AttributedString?, expectedRuns: Int, expectedAttachments: Int = 1) {
         guard let attributedString else {
             XCTFail("Could not build the attributed string")
             return

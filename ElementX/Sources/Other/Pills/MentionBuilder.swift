@@ -37,13 +37,13 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attributesToAdd: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID]
         if let blockquote {
             // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
-            attributesToAdd[.MatrixBlockquote] = blockquote
+            attachmentAttributes[.MatrixBlockquote] = blockquote
         }
         let attachmentString = NSMutableAttributedString(attachment: attachment)
-        attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
+        attachmentString.addAttributes(attachmentAttributes, range: NSRange(location: 0, length: attachmentString.length))
         attributedString.replaceCharacters(in: range, with: attachmentString)
     }
     
@@ -61,13 +61,13 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attributesToAdd: [NSAttributedString.Key: Any] = [:]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [:]
         if let blockquote {
             // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
-            attributesToAdd[.MatrixBlockquote] = blockquote
+            attachmentAttributes[.MatrixBlockquote] = blockquote
         }
         let attachmentString = NSMutableAttributedString(attachment: attachment)
-        attachmentString.addAttributes(attributes, range: NSRange(location: 0, length: attachmentString.length))
+        attachmentString.addAttributes(attachmentAttributes, range: NSRange(location: 0, length: attachmentString.length))
         attributedString.replaceCharacters(in: range, with: attachmentString)
     }
 }

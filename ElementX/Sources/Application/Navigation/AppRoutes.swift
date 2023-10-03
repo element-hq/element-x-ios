@@ -21,6 +21,7 @@ enum AppRoute: Equatable {
     case roomList
     case room(roomID: String)
     case roomDetails(roomID: String)
+    case roomMemberDetails(userID: String)
     case invites
     case genericCallLink(url: URL)
 }
@@ -30,6 +31,7 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
+            MatrixPermalinkParser(appSettings: appSettings),
             OIDCCallbackURLParser(appSettings: appSettings),
             ElementCallURLParser()
         ]
@@ -103,5 +105,19 @@ struct ElementCallURLParser: URLParser {
         }
         
         return .genericCallLink(url: url)
+    }
+}
+
+struct MatrixPermalinkParser: URLParser {
+    let appSettings: AppSettings
+    
+    func route(from url: URL) -> AppRoute? {
+        switch PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL) {
+        case .userIdentifier(let userID):
+            return .roomMemberDetails(userID: userID)
+        // Other cases will be handled in the future
+        default:
+            return nil
+        }
     }
 }

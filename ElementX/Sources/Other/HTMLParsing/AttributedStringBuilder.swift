@@ -57,6 +57,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinks(mutableAttributedString)
+        addAllUsersMention(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         
@@ -110,6 +111,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
+        addAllUsersMention(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
@@ -184,38 +186,42 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         let linkMatches = MatrixEntityRegex.linkRegex.matches(in: string, options: [])
         matches.append(contentsOf: linkMatches)
-        if matches.count > 0 {
-            // Sort the links by length so the longest one always takes priority
-            matches.sorted { $0.range.length > $1.range.length }.forEach { match in
-                guard let matchRange = Range(match.range, in: string) else {
-                    return
-                }
-                
-                var hasLink = false
-                attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
-                    if value != nil {
-                        hasLink = true
-                        stop.pointee = true
-                    }
-                }
-                
-                if hasLink {
-                    return
-                }
-                
-                var link = String(string[matchRange])
-                
-                if linkMatches.contains(match), !link.contains("://") {
-                    link.insert(contentsOf: "https://", at: link.startIndex)
-                }
-                
-                if let url = URL(string: link) {
-                    attributedString.addAttribute(.link, value: url, range: match.range)
+        
+        guard matches.count > 0 else {
+            return
+        }
+        // Sort the links by length so the longest one always takes priority
+        matches.sorted { $0.range.length > $1.range.length }.forEach { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return
+            }
+            
+            var hasLink = false
+            attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
+                if value != nil {
+                    hasLink = true
+                    stop.pointee = true
                 }
             }
+            
+            if hasLink {
+                return
+            }
+            
+            var link = String(string[matchRange])
+            
+            if linkMatches.contains(match), !link.contains("://") {
+                link.insert(contentsOf: "https://", at: link.startIndex)
+            }
+            
+            if let url = URL(string: link) {
+                attributedString.addAttribute(.link, value: url, range: match.range)
+            }
         }
-        
-        MatrixEntityRegex.allUsersRegex.matches(in: string, options: []).forEach { match in
+    }
+    
+    private func addAllUsersMention(_ attributedString: NSMutableAttributedString) {
+        MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).forEach { match in
             if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) == nil {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
