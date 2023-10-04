@@ -276,19 +276,19 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                         _ messageContent: AudioMessageContent,
                                         _ isOutgoing: Bool,
                                         _ isThreaded: Bool) -> RoomTimelineItemProtocol {
-        VoiceRoomTimelineItem(id: eventItemProxy.id,
-                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
-                              isOutgoing: isOutgoing,
-                              isEditable: eventItemProxy.isEditable,
-                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
-                              isThreaded: isThreaded,
-                              sender: eventItemProxy.sender,
-                              content: buildAudioTimelineItemContent(messageContent),
-                              replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
-                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
-                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
-                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
-                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
+        VoiceMessageRoomTimelineItem(id: eventItemProxy.id,
+                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                                     isOutgoing: isOutgoing,
+                                     isEditable: eventItemProxy.isEditable,
+                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                     isThreaded: isThreaded,
+                                     sender: eventItemProxy.sender,
+                                     content: buildAudioTimelineItemContent(messageContent),
+                                     replyDetails: buildReplyToDetailsFrom(details: messageTimelineItem.inReplyTo()),
+                                     properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                            reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                            deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                            orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts)))
     }
     
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,

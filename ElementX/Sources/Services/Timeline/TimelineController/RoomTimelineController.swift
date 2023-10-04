@@ -23,6 +23,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
     
@@ -36,7 +38,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
-    private var timelineAudioPlaybackViewStates = [TimelineItemIdentifier: VoiceRoomPlaybackViewState]()
+    private var timelineAudioPlayerStates = [TimelineItemIdentifier: AudioPlayerState]()
 
     var roomID: String {
         roomProxy.id
@@ -45,11 +47,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(roomProxy: RoomProxyProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
+         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
+        self.mediaPlayerProvider = mediaPlayerProvider
+        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.appSettings = appSettings
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
@@ -222,32 +228,77 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         await roomProxy.retryDecryption(for: sessionID)
     }
     
-    func playbackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState? {
+    func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
         guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
-            MXLog.error("timelineItem not found")
-            return .none
+            fatalError("TimelineItem \(itemID) not found")
         }
         
-        switch timelineItem {
-        case let item as VoiceRoomTimelineItem:
-            if let playbackViewState = timelineAudioPlaybackViewStates[itemID] {
-                return playbackViewState
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        if let playerState = timelineAudioPlayerStates[itemID] {
+            return playerState
+        }
+        let playerState = AudioPlayerState(duration: voiceMessageRoomTimelineItem.content.duration,
+                                           waveform: voiceMessageRoomTimelineItem.content.waveform)
+        timelineAudioPlayerStates[itemID] = playerState
+        return playerState
+    }
+    
+    func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
+            fatalError("TimelineItem \(itemID) not found")
+        }
+        
+        guard let voiceMessageRoomTimelineItem = timelineItem as? VoiceMessageRoomTimelineItem else {
+            fatalError("Invalid TimelineItem type for itemID \(itemID) (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
+        }
+        
+        guard let source = voiceMessageRoomTimelineItem.content.source else {
+            MXLog.error("Cannot start voice message playback, source is not defined for itemID \(itemID)")
+            return
+        }
+        
+        guard let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
+            MXLog.error("Cannot play a voice message without an audio player")
+            return
+        }
+        
+        let playerState = audioPlayerState(for: itemID)
+        
+        guard player.mediaSource == source, player.state != .error else {
+            timelineAudioPlayerStates.forEach { itemID, playerState in
+                if itemID != timelineItem.id {
+                    playerState.detachAudioPlayer()
+                }
             }
-            let playbackViewState = VoiceRoomPlaybackViewState(duration: item.content.duration,
-                                                               waveform: item.content.waveform)
-            timelineAudioPlaybackViewStates[itemID] = playbackViewState
-            return playbackViewState
-        default:
-            return .none
+            playerState.attachAudioPlayer(player)
+            
+            // Load content
+            do {
+                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+                // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
+                if playerState.isAttached {
+                    player.load(mediaSource: source, using: url)
+                }
+            } catch {
+                MXLog.error("Failed to load voice message: \(error)")
+                playerState.reportError(error)
+            }
+            
+            return
+        }
+        
+        if player.state == .playing {
+            player.pause()
+        } else {
+            player.play()
         }
     }
     
-    func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
-    
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        Task {
-            timelineAudioPlaybackViewStates[itemID]?.updateState(progress: progress)
-        }
+        await timelineAudioPlayerStates[itemID]?.updateState(progress: progress)
     }
 
     // MARK: - Private

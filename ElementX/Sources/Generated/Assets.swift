@@ -63,6 +63,8 @@ internal enum Asset {
     internal static let locationPin = ImageAsset(name: "images/location-pin")
     internal static let locationPointerFull = ImageAsset(name: "images/location-pointer-full")
     internal static let locationPointer = ImageAsset(name: "images/location-pointer")
+    internal static let mediaPause = ImageAsset(name: "images/media-pause")
+    internal static let mediaPlay = ImageAsset(name: "images/media-play")
     internal static let addReaction = ImageAsset(name: "images/add-reaction")
     internal static let copy = ImageAsset(name: "images/copy")
     internal static let editOutline = ImageAsset(name: "images/edit-outline")

@@ -77,10 +77,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return self.timelineItemMenuActionsForItemId(itemId)
         }
 
-        state.audioPlaybackViewStateProvider = { [weak self] itemId -> VoiceRoomPlaybackViewState? in
-            guard let self else { return nil }
+        state.audioPlayerStateProvider = { [weak self] itemId -> AudioPlayerState? in
+            guard let self else {
+                return nil
+            }
             
-            return self.audioPlaybackViewState(for: itemId)
+            return self.audioPlayerState(for: itemId)
         }
         
         buildTimelineViews()
@@ -883,8 +885,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Audio
     
-    private func audioPlaybackViewState(for itemID: TimelineItemIdentifier) -> VoiceRoomPlaybackViewState? {
-        timelineController.playbackViewState(for: itemID)
+    private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
+        timelineController.audioPlayerState(for: itemID)
     }
 }
 

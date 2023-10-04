@@ -40,8 +40,8 @@ extension Waveform {
 }
 
 struct WaveformView: View {
-    private let lineWidth: CGFloat = 2
-    private let linePadding: CGFloat = 2
+    var lineWidth: CGFloat = 2
+    var linePadding: CGFloat = 2
     var waveform: Waveform
     private let minimumGraphAmplitude: CGFloat = 1
     var progress: CGFloat = 0.0

@@ -14,28 +14,19 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
-struct VoiceRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
-    let id: TimelineItemIdentifier
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    let canBeRepliedTo: Bool
-    let isThreaded: Bool
-    let sender: TimelineItemSender
-    
-    let content: AudioRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
+enum AudioPlayerAction {
+    case didStartLoading
+    case didFinishLoading
+    case didStartPlaying
+    case didPausePlaying
+    case didStopPlaying
+    case didFinishPlaying
+    case didFailWithError(error: Error)
+}
 
-    var properties = RoomTimelineItemProperties()
-    
-    var body: String {
-        content.body
-    }
-    
-    var contentType: EventBasedMessageTimelineItemContentType {
-        .voice(content)
-    }
+protocol AudioPlayerProtocol: MediaPlayerProtocol {
+    var actions: AnyPublisher<AudioPlayerAction, Never> { get }
 }
