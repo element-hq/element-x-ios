@@ -24,10 +24,9 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let cache: VoiceMessageCache
 
-    private let supportedMimeTypePrefix = "audio/"
-    /// File extensions supported for playing voice messages without conversion
-    private let supportedAudioExtensions = ["mp3", "mp4", "m4a", "wav", "aac"]
-    /// Preferred audio file extension
+    private let supportedVoiceMessageMimeType = "audio/ogg"
+
+    /// Preferred audio file extension after conversion
     private let preferredAudioExtension = "m4a"
 
     init(mediaProvider: MediaProviderProtocol) {
@@ -40,40 +39,29 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     }
     
     func loadVoiceMessageFromSource(_ source: MediaSourceProxy, body: String?) async throws -> URL {
-        guard let mimeType = source.mimeType, mimeType.starts(with: supportedMimeTypePrefix) else {
+        guard let mimeType = source.mimeType, mimeType == supportedVoiceMessageMimeType else {
             throw VoiceMessageMediaManagerError.unsupportedMimeTye
         }
         
-        if !cache.fileExists(for: source) {
-            guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(source, body: body) else {
-                throw MediaProviderError.failedRetrievingFile
-            }
-            try cache.cache(mediaSource: source, using: fileHandle.url)
+        // Do we already have a converted version?
+        if let fileURL = cache.fileURL(for: source, withExtension: preferredAudioExtension) {
+            return fileURL
         }
         
-        var url = cache.cacheURL(for: source)
-    
-        // Convert from ogg if needed
-        if !hasSupportedAudioExtension(url) {
-            let audioConverter = AudioConverter()
-            let originalURL = url
-            url = cache.cacheURL(for: source, replacingExtension: preferredAudioExtension)
-            // Do we already have a converted version?
-            if !cache.fileExists(for: source, withExtension: preferredAudioExtension) {
-                try audioConverter.convertToMPEG4AAC(sourceURL: originalURL, destinationURL: url)
-            }
-            
-            // we don't need the original file anymore
-            try? FileManager.default.removeItem(at: originalURL)
+        // Otherwise, load the file from source
+        guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(source, body: body) else {
+            throw MediaProviderError.failedRetrievingFile
         }
+        let fileURL = try cache.cache(mediaSource: source, using: fileHandle.url)
+                
+        // Convert from ogg
+        let audioConverter = AudioConverter()
+        let convertedFileURL = cache.cacheURL(for: source, replacingExtension: preferredAudioExtension)
+        try audioConverter.convertToMPEG4AAC(sourceURL: fileURL, destinationURL: convertedFileURL)
         
-        return url
-    }
-    
-    // MARK: - Private
-    
-    /// Returns true if the URL has a supported audio extension
-    private func hasSupportedAudioExtension(_ url: URL) -> Bool {
-        supportedAudioExtensions.contains(url.pathExtension.lowercased())
+        // we don't need the original file anymore
+        try? FileManager.default.removeItem(at: fileURL)
+        
+        return convertedFileURL
     }
 }

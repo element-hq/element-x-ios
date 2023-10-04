@@ -29,18 +29,20 @@ class VoiceMessageCache {
         return newURL
     }
     
-    func fileExists(for mediaSource: MediaSourceProxy, withExtension fileExtension: String? = nil) -> Bool {
+    func fileURL(for mediaSource: MediaSourceProxy, withExtension fileExtension: String? = nil) -> URL? {
         var url = temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent)
         if let fileExtension {
             url = url.deletingPathExtension().appendingPathExtension(fileExtension)
         }
-        return FileManager.default.fileExists(atPath: url.path())
+        return FileManager.default.fileExists(atPath: url.path()) ? url : nil
     }
 
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL) throws {
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL) throws -> URL {
         setupTemporaryFilesFolder()
         let url = cacheURL(for: mediaSource)
+        try? FileManager.default.removeItem(at: url)
         try FileManager.default.copyItem(at: fileURL, to: url)
+        return url
     }
     
     func clearCache() {
@@ -56,12 +58,8 @@ class VoiceMessageCache {
     // MARK: - Private
     
     private func setupTemporaryFilesFolder() {
-        let url = temporaryFilesFolderURL
-        guard !FileManager.default.directoryExists(at: url) else {
-            return
-        }
         do {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectoryIfNeeded(at: temporaryFilesFolderURL, withIntermediateDirectories: true)
         } catch {
             MXLog.error("Failed to setup audio cache manager.")
         }
