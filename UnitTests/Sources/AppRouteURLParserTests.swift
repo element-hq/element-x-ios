@@ -120,4 +120,16 @@ class AppRouteURLParserTests: XCTestCase {
         
         XCTAssertEqual(route, .roomMemberDetails(userID: userID))
     }
+    
+    func testMatrixRoomIdentifierURL() {
+        let id = "!abcdefghijklmnopqrstuvwxyz1234567890:matrix.org"
+        guard let url = URL(string: "\(appSettings.permalinkBaseURL)/#/\(id)") else {
+            XCTFail("Invalid url")
+            return
+        }
+        
+        let route = appRouteURLParser.route(from: url)
+        
+        XCTAssertEqual(route, .room(roomID: id))
+    }
 }

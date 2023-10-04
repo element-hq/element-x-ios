@@ -115,7 +115,8 @@ struct MatrixPermalinkParser: URLParser {
         switch PermalinkBuilder.detectPermalink(in: url, baseURL: appSettings.permalinkBaseURL) {
         case .userIdentifier(let userID):
             return .roomMemberDetails(userID: userID)
-        // Other cases will be handled in the future
+        case .roomIdentifier(let roomID):
+            return .room(roomID: roomID)
         default:
             return nil
         }
