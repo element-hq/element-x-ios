@@ -38,17 +38,9 @@ class VoiceMessageCache {
     }
 
     func cache(mediaSource: MediaSourceProxy, using fileURL: URL) throws {
+        setupTemporaryFilesFolder()
         let url = cacheURL(for: mediaSource)
         try FileManager.default.copyItem(at: fileURL, to: url)
-    }
-    
-    func setupTemporaryFilesFolder() {
-        let url = temporaryFilesFolderURL
-        do {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            MXLog.error("Failed to setup audio cache manager.")
-        }
     }
     
     func clearCache() {
@@ -58,6 +50,20 @@ class VoiceMessageCache {
             } catch {
                 MXLog.error("Failed clearing cached disk files", context: error)
             }
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func setupTemporaryFilesFolder() {
+        let url = temporaryFilesFolderURL
+        guard !FileManager.default.directoryExists(at: url) else {
+            return
+        }
+        do {
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            MXLog.error("Failed to setup audio cache manager.")
         }
     }
 }

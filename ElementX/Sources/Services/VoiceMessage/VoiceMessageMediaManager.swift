@@ -33,7 +33,6 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     init(mediaProvider: MediaProviderProtocol) {
         self.mediaProvider = mediaProvider
         cache = VoiceMessageCache()
-        cache.setupTemporaryFilesFolder()
     }
     
     deinit {
