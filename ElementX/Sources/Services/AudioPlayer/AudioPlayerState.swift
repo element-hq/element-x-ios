@@ -106,11 +106,9 @@ class AudioPlayerState: ObservableObject {
         case .didStartPlaying:
             playbackState = .playing
             startPublishProgress()
-            disableIdleTimer(true)
         case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
             stopPublishProgress()
             playbackState = .stopped
-            disableIdleTimer(false)
             if case .didFinishPlaying = action {
                 progress = 0.0
             }
@@ -139,11 +137,5 @@ class AudioPlayerState: ObservableObject {
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {
         await audioPlayer.seek(to: progress)
-    }
-    
-    private func disableIdleTimer(_ disabled: Bool) {
-        DispatchQueue.main.async {
-            UIApplication.shared.isIdleTimerDisabled = disabled
-        }
     }
 }
