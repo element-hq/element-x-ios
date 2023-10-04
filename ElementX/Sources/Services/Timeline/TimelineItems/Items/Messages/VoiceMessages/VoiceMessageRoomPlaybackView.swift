@@ -67,12 +67,12 @@ struct VoiceMessageRoomPlaybackView: View {
                         .updating($dragState) { value, state, _ in
                             switch value {
                             // (SpatialTap, LongPress) begins.
-                            case .first(let spatialLongPress) where spatialLongPress.second == true:
+                            case .first(let spatialLongPress) where spatialLongPress.second ?? false:
                                 // Compute the progress with the spatialTap location
                                 let progress = (spatialLongPress.first?.location ?? .zero).x / geometry.size.width
                                 state = .pressing(progress: progress)
                             // Long press confirmed, dragging may begin.
-                            case .second(let spatialLongPress, let drag) where spatialLongPress.second == true:
+                            case .second(let spatialLongPress, let drag) where spatialLongPress.second ?? false:
                                 var progress: Double = tapProgress
                                 // Compute the progress with drag location
                                 if let loc = drag?.location {
@@ -176,12 +176,9 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let playerState: AudioPlayerState = {
-        var state = AudioPlayerState(duration: 10.0,
-                                     waveform: waveform,
-                                     progress: 0.3)
-        return state
-    }()
+    static let playerState = AudioPlayerState(duration: 10.0,
+                                              waveform: waveform,
+                                              progress: 0.3)
     
     static var previews: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,

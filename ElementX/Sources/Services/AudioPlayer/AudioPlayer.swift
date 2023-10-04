@@ -39,7 +39,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     var mediaSource: MediaSourceProxy?
     
     private var playerItem: AVPlayerItem?
-    private var audioPlayer: AVQueuePlayer?
+    private var internalAudioPlayer: AVQueuePlayer?
     
     private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioPlayerAction, Never> = .init()
@@ -57,11 +57,11 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private(set) var url: URL?
     
     var duration: TimeInterval {
-        abs(CMTimeGetSeconds(audioPlayer?.currentItem?.duration ?? .zero))
+        abs(CMTimeGetSeconds(internalAudioPlayer?.currentItem?.duration ?? .zero))
     }
     
     var currentTime: TimeInterval {
-        let currentTime = abs(CMTimeGetSeconds(audioPlayer?.currentTime() ?? .zero))
+        let currentTime = abs(CMTimeGetSeconds(internalAudioPlayer?.currentTime() ?? .zero))
         return currentTime.isFinite ? currentTime : .zero
     }
     
@@ -97,7 +97,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         self.mediaSource = mediaSource
         self.url = url
         playerItem = AVPlayerItem(url: url)
-        audioPlayer = AVQueuePlayer(playerItem: playerItem)
+        internalAudioPlayer = AVQueuePlayer(playerItem: playerItem)
         addObservers()
     }
     
@@ -109,25 +109,25 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         } catch {
             MXLog.error("Could not redirect audio playback to speakers.")
         }
-        audioPlayer?.play()
+        internalAudioPlayer?.play()
     }
     
     func pause() {
         guard case .playing = internalState else { return }
-        audioPlayer?.pause()
+        internalAudioPlayer?.pause()
     }
     
     func stop() {
         guard !isStopped else { return }
         isStopped = true
-        audioPlayer?.pause()
-        audioPlayer?.seek(to: .zero)
+        internalAudioPlayer?.pause()
+        internalAudioPlayer?.seek(to: .zero)
     }
     
     func seek(to progress: Double) async {
-        guard let audioPlayer else { return }
+        guard let internalAudioPlayer else { return }
         let time = progress * duration
-        await audioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60000))
+        await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60000))
     }
     
     // MARK: - Private
@@ -135,14 +135,14 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private func unloadContent() {
         mediaSource = nil
         url = nil
-        audioPlayer?.replaceCurrentItem(with: nil)
-        audioPlayer = nil
+        internalAudioPlayer?.replaceCurrentItem(with: nil)
+        internalAudioPlayer = nil
         playerItem = nil
         removeObservers()
     }
 
     private func addObservers() {
-        guard let audioPlayer, let playerItem else {
+        guard let internalAudioPlayer, let playerItem else {
             return
         }
         
@@ -160,10 +160,10 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             }
         }
                 
-        rateObserver = audioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] _, _ in
+        rateObserver = internalAudioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] _, _ in
             guard let self else { return }
             
-            if audioPlayer.rate == 0 {
+            if internalAudioPlayer.rate == 0 {
                 if self.isStopped {
                     self.setInternalState(.stopped)
                 } else {

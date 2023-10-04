@@ -32,8 +32,8 @@ struct VoiceMessageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VoiceMessageRoomPlaybackView(playerState: playerState,
                                          onPlayPause: onPlaybackPlayPause,
-                                         onSeek: onPlaybackSeek(_:),
-                                         onScrubbing: onPlaybackScrubbing(_:))
+                                         onSeek: { onPlaybackSeek($0) },
+                                         onScrubbing: { onPlaybackScrubbing($0) })
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
