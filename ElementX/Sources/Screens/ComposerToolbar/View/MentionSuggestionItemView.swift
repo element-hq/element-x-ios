@@ -36,6 +36,7 @@ struct MentionSuggestionItemView: View {
                     Text(item.id)
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
+                        .lineLimit(1)
                 }
             }
         }

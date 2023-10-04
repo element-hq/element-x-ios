@@ -40,17 +40,23 @@ struct CompletionSuggestionView: View {
     // MARK: Public
     
     var showBackgroundShadow = true
+    @State private var prototypeListItemFrame: CGRect = .zero
     
     var body: some View {
         if items.isEmpty {
             EmptyView()
         } else {
-            if showBackgroundShadow {
-                BackgroundView {
+            ZStack {
+                MentionSuggestionItemView(imageProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil))
+                    .background(ViewFrameReader(frame: $prototypeListItemFrame))
+                    .hidden()
+                if showBackgroundShadow {
+                    BackgroundView {
+                        list()
+                    }
+                } else {
                     list()
                 }
-            } else {
-                list()
             }
         }
     }
@@ -66,6 +72,13 @@ struct CompletionSuggestionView: View {
             .modifier(ListItemPaddingModifier(isFirst: items.first?.id == item.id))
         }
         .listStyle(PlainListStyle())
+        .frame(height: min(Constants.maxHeight,
+                           min(contentHeightForRowCount(Constants.maxVisibleRows),
+                               contentHeightForRowCount(items.count))))
+    }
+    
+    private func contentHeightForRowCount(_ count: Int) -> CGFloat {
+        (prototypeListItemFrame.height + (Constants.listItemPadding * 2) + Constants.lineSpacing) * CGFloat(count) + Constants.topPadding
     }
 
     private struct ListItemPaddingModifier: ViewModifier {
@@ -112,10 +125,11 @@ private struct BackgroundView<Content: View>: View {
 // MARK: - Previews
 
 struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
-    static let testValue = MentionSuggestionItem(id: "Test", displayName: "Test", avatarURL: nil)
+    static let items: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "1", displayName: "1", avatarURL: nil)),
+                                          .user(item: MentionSuggestionItem(id: "2", displayName: "2", avatarURL: nil))]
     
     static var previews: some View {
-        CompletionSuggestionView(imageProvider: MockMediaProvider(), items: .init(repeating: .user(item: testValue), count: 5))
+        CompletionSuggestionView(imageProvider: MockMediaProvider(), items: items)
     }
 }
 
