@@ -19,8 +19,8 @@ import Foundation
 
 import WysiwygComposer
 
-struct SuggestionTrigger {
-    enum SuggestionType {
+struct SuggestionTrigger: Equatable {
+    enum SuggestionType: Equatable {
         case user
     }
     

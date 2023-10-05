@@ -25,6 +25,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     private var appSettings: AppSettings!
     private var wysiwygViewModel: WysiwygComposerViewModel!
     private var viewModel: ComposerToolbarViewModel!
+    private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
 
     override func setUp() {
         AppSettings.reset()
@@ -32,8 +33,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
+        completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
+                                             completionSuggestionService: completionSuggestionServiceMock)
     }
 
     func testComposerFocus() {
@@ -104,5 +106,13 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService)
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
+    }
+    
+    func testSuggestionTrigger() {
+        wysiwygViewModel.setMarkdownContent("@test")
+        wysiwygViewModel.setMarkdownContent("#not_implemented_yey")
+        
+        // The first one is nil because when initialised the view model is empty
+        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test"), nil])
     }
 }

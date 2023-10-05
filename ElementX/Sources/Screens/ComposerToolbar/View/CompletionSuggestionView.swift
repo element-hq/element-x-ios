@@ -131,11 +131,16 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
     }
     
     static var previews: some View {
-        CompletionSuggestionView(imageProvider: MockMediaProvider(),
-                                 items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
-                                         .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))])
-        CompletionSuggestionView(imageProvider: MockMediaProvider(),
-                                 items: multipleItems)
+        // Putting them is VStack allows the preview to work properly in tests
+        VStack {
+            CompletionSuggestionView(imageProvider: MockMediaProvider(),
+                                     items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))])
+        }
+        VStack {
+            CompletionSuggestionView(imageProvider: MockMediaProvider(),
+                                     items: multipleItems)
+        }
     }
 }
 

@@ -14,4 +14,40 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
+import XCTest
+
+@testable import ElementX
+
+final class CompletionSuggestionServiceTests: XCTestCase {
+    private var cancellables = Set<AnyCancellable>()
+    
+    override func setUp() {
+        cancellables.removeAll()
+    }
+    
+    func testUserSuggestons() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
+        
+        var result: [SuggestionItem] = []
+        service.suggestionsPublisher
+            .sink { value in
+                result = value
+            }
+            .store(in: &cancellables)
+        try await Task.sleep(for: .seconds(1.0))
+        XCTAssertEqual(result, [])
+                
+        service.setSuggestionTrigger(.init(type: .user, text: "ali"))
+        try await Task.sleep(for: .seconds(1.0))
+        XCTAssertEqual(result, [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL))])
+        
+        // Since the meMock is flagged as account owner it should be ignored
+        service.setSuggestionTrigger(.init(type: .user, text: "me"))
+        try await Task.sleep(for: .seconds(1.0))
+        XCTAssertEqual(result, [])
+    }
+}

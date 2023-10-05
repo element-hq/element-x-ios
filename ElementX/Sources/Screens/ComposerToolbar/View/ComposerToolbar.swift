@@ -205,11 +205,14 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ComposerToolbar.mock()
         
-        // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
-        ComposerToolbar(context: composerViewModel.context,
-                        wysiwygViewModel: wysiwygViewModel,
-                        keyCommandHandler: { _ in false })
-            .previewDisplayName("With Suggestions")
+        // Putting them is VStack allows the completion suggestion preview to work properly in tests
+        VStack {
+            // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
+            ComposerToolbar(context: composerViewModel.context,
+                            wysiwygViewModel: wysiwygViewModel,
+                            keyCommandHandler: { _ in false })
+        }
+        .previewDisplayName("With Suggestions")
     }
 }
 
