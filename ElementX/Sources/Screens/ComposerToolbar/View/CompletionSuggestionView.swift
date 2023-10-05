@@ -139,7 +139,7 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-enum SuggestionItem: Identifiable {
+enum SuggestionItem: Identifiable, Equatable {
     case user(item: MentionSuggestionItem)
     
     var id: String {

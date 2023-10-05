@@ -79,7 +79,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
         
         completionSuggestionService.suggestionsPublisher
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
     }

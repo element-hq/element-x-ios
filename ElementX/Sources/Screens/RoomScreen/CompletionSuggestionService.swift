@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Foundation
 
 import WysiwygComposer
 
@@ -34,7 +35,6 @@ protocol CompletionSuggestionServiceProtocol {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?)
-    func setMembers(_ members: [RoomMemberProxyProtocol])
 }
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
@@ -42,13 +42,12 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     let suggestionsPublisher: AnyPublisher<[SuggestionItem], Never>
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
-    private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     
-    init(areSuggestionsEnabled: Bool) {
+    init(roomProxy: RoomProxyProtocol, areSuggestionsEnabled: Bool) {
         self.areSuggestionsEnabled = areSuggestionsEnabled
         if areSuggestionsEnabled {
             suggestionsPublisher = suggestionTriggerSubject
-                .combineLatest(membersSubject)
+                .combineLatest(roomProxy.members)
                 .map { suggestionTrigger, members -> [SuggestionItem] in
                     guard let suggestionTrigger else {
                         return []
@@ -57,6 +56,10 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                     switch suggestionTrigger.type {
                     case .user:
                         return members.filter { member in
+                            guard !member.isAccountOwner && member.membership == .join else {
+                                return false
+                            }
+                            
                             let containedInUserID = member.userID.lowercased().contains(suggestionTrigger.text.lowercased())
                             let containedInDisplayName = (member.displayName ?? "").lowercased().contains(suggestionTrigger.text.lowercased())
                             
@@ -65,6 +68,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                         .map { SuggestionItem.user(item: .init(id: $0.userID, displayName: $0.displayName, avatarURL: $0.avatarURL)) }
                     }
                 }
+                .debounce(for: 0.5, scheduler: DispatchQueue.main)
                 .eraseToAnyPublisher()
         } else {
             suggestionsPublisher = Empty().eraseToAnyPublisher()
@@ -73,10 +77,6 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
         suggestionTriggerSubject.value = suggestionTrigger
-    }
-    
-    func setMembers(_ members: [RoomMemberProxyProtocol]) {
-        membersSubject.value = members
     }
 }
 

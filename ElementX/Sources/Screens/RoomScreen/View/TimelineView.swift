@@ -173,7 +173,7 @@ struct TimelineView_Previews: PreviewProvider, TestablePreview {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
 
     static var previews: some View {
         NavigationStack {

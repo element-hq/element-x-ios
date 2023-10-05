@@ -340,7 +340,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
-        let completionSuggestionService = CompletionSuggestionService(areSuggestionsEnabled: appSettings.mentionsEnabled)
+        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy, areSuggestionsEnabled: appSettings.mentionsEnabled)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,

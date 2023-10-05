@@ -197,13 +197,18 @@ struct ComposerToolbar: View {
 }
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
+    static let wysiwygViewModel = WysiwygComposerViewModel()
+    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)))
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
     static var previews: some View {
         ComposerToolbar.mock()
-            .previewDisplayName("Default")
-        ComposerToolbar.mock(with: suggestions)
+        
+        // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
+        ComposerToolbar(context: composerViewModel.context,
+                        wysiwygViewModel: wysiwygViewModel,
+                        keyCommandHandler: { _ in false })
             .previewDisplayName("With Suggestions")
     }
 }
@@ -211,9 +216,9 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
 // MARK: - Mock
 
 extension ComposerToolbar {
-    static func mock(with suggestions: [SuggestionItem] = []) -> ComposerToolbar {
+    static func mock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)))
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })

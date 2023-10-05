@@ -225,22 +225,6 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
-    //MARK: - setMembers
-
-    var setMembersCallsCount = 0
-    var setMembersCalled: Bool {
-        return setMembersCallsCount > 0
-    }
-    var setMembersReceivedMembers: [RoomMemberProxyProtocol]?
-    var setMembersReceivedInvocations: [[RoomMemberProxyProtocol]] = []
-    var setMembersClosure: (([RoomMemberProxyProtocol]) -> Void)?
-
-    func setMembers(_ members: [RoomMemberProxyProtocol]) {
-        setMembersCallsCount += 1
-        setMembersReceivedMembers = members
-        setMembersReceivedInvocations.append(members)
-        setMembersClosure?(members)
-    }
 }
 class NotificationCenterMock: NotificationCenterProtocol {
 

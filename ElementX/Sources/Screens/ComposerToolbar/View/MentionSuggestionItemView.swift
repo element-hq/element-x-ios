@@ -52,7 +52,7 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-struct MentionSuggestionItem: Identifiable {
+struct MentionSuggestionItem: Identifiable, Equatable {
     let id: String
     let displayName: String?
     let avatarURL: URL?

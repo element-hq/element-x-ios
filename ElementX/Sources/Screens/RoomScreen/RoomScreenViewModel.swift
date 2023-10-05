@@ -28,7 +28,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         static let toastErrorID = "RoomScreenToastError"
     }
 
-    private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let roomProxy: RoomProxyProtocol
     private let appSettings: AppSettings
@@ -49,7 +48,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         completionSuggestionService: CompletionSuggestionServiceProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
@@ -57,7 +55,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
-        self.completionSuggestionService = completionSuggestionService
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -238,9 +235,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         roomProxy.members
-            .handleEvents(receiveOutput: { [weak self] members in
-                self?.completionSuggestionService.setMembers(members.filter { $0.membership == .join })
-            })
             .map { members in
                 members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
                     dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
@@ -924,7 +918,7 @@ extension RoomScreenViewModel {
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
 }
 
 private struct ReplyInfo {

@@ -14,9 +14,11 @@
 // limitations under the License.
 //
 
+import Combine
 @testable import ElementX
-import WysiwygComposer
 import XCTest
+
+import WysiwygComposer
 
 @MainActor
 class ComposerToolbarViewModelTests: XCTestCase {
@@ -30,7 +32,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
-        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
     }
 
     func testComposerFocus() {
@@ -91,5 +94,15 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.process(viewAction: .enableTextFormatting)
         viewModel.process(viewAction: .composerAction(action: .link))
         XCTAssertNotNil(viewModel.state.bindings.alertInfo)
+    }
+    
+    func testSuggestions() {
+        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService)
+        
+        XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
 }
