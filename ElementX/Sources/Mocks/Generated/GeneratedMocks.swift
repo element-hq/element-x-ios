@@ -197,6 +197,51 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
+    var areSuggestionsEnabled: Bool {
+        get { return underlyingAreSuggestionsEnabled }
+        set(value) { underlyingAreSuggestionsEnabled = value }
+    }
+    var underlyingAreSuggestionsEnabled: Bool!
+    var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
+        get { return underlyingSuggestionsPublisher }
+        set(value) { underlyingSuggestionsPublisher = value }
+    }
+    var underlyingSuggestionsPublisher: AnyPublisher<[SuggestionItem], Never>!
+
+    //MARK: - setSuggestionTrigger
+
+    var setSuggestionTriggerCallsCount = 0
+    var setSuggestionTriggerCalled: Bool {
+        return setSuggestionTriggerCallsCount > 0
+    }
+    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionTrigger?
+    var setSuggestionTriggerReceivedInvocations: [SuggestionTrigger?] = []
+    var setSuggestionTriggerClosure: ((SuggestionTrigger?) -> Void)?
+
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
+        setSuggestionTriggerCallsCount += 1
+        setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
+        setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)
+        setSuggestionTriggerClosure?(suggestionTrigger)
+    }
+    //MARK: - setMembers
+
+    var setMembersCallsCount = 0
+    var setMembersCalled: Bool {
+        return setMembersCallsCount > 0
+    }
+    var setMembersReceivedMembers: [RoomMemberProxyProtocol]?
+    var setMembersReceivedInvocations: [[RoomMemberProxyProtocol]] = []
+    var setMembersClosure: (([RoomMemberProxyProtocol]) -> Void)?
+
+    func setMembers(_ members: [RoomMemberProxyProtocol]) {
+        setMembersCallsCount += 1
+        setMembersReceivedMembers = members
+        setMembersReceivedInvocations.append(members)
+        setMembersClosure?(members)
+    }
+}
 class NotificationCenterMock: NotificationCenterProtocol {
 
     //MARK: - post

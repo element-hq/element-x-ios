@@ -60,7 +60,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                             roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name", avatarURL: URL.picturesDirectory)),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -74,7 +74,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                             roomProxy: RoomProxyMock(with: .init(displayName: "Some Room name")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

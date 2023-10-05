@@ -126,11 +126,16 @@ private struct BackgroundView<Content: View>: View {
 // MARK: - Previews
 
 struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
-    static let items: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "1", displayName: "1", avatarURL: nil)),
-                                          .user(item: MentionSuggestionItem(id: "2", displayName: "2", avatarURL: nil))]
+    static let multipleItems: [SuggestionItem] = (0...10).map { index in
+        SuggestionItem.user(item: MentionSuggestionItem(id: "\(index)", displayName: "\(index)", avatarURL: nil))
+    }
     
     static var previews: some View {
-        CompletionSuggestionView(imageProvider: MockMediaProvider(), items: items)
+        CompletionSuggestionView(imageProvider: MockMediaProvider(),
+                                 items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                         .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))])
+        CompletionSuggestionView(imageProvider: MockMediaProvider(),
+                                 items: multipleItems)
     }
 }
 

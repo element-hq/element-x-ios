@@ -340,11 +340,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
         
+        let completionSuggestionService = CompletionSuggestionService(areSuggestionsEnabled: appSettings.mentionsEnabled)
+        
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          emojiProvider: emojiProvider,
-                                                         appSettings: appSettings)
+                                                         completionSuggestionService: completionSuggestionService)
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in

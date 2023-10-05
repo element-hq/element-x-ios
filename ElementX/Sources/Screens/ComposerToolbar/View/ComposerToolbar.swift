@@ -36,7 +36,6 @@ struct ComposerToolbar: View {
                 bottomBar
             }
         }
-        .alert(item: $context.alertInfo)
         .background {
             GeometryReader { geometryProxy in
                 Color.clear
@@ -52,10 +51,11 @@ struct ComposerToolbar: View {
                     .offset(y: -composerHeight)
             }
         }
+        .alert(item: $context.alertInfo)
     }
     
     private var suggestionView: some View {
-        CompletionSuggestionView(imageProvider: context.imageProvider, items: CompletionSuggestion_Previews.items)
+        CompletionSuggestionView(imageProvider: context.imageProvider, items: context.viewState.suggestions)
     }
 
     private var topBar: some View {
@@ -197,17 +197,23 @@ struct ComposerToolbar: View {
 }
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
+    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+    
     static var previews: some View {
         ComposerToolbar.mock()
+            .previewDisplayName("Default")
+        ComposerToolbar.mock(with: suggestions)
+            .previewDisplayName("With Suggestions")
     }
 }
 
 // MARK: - Mock
 
 extension ComposerToolbar {
-    static func mock() -> ComposerToolbar {
+    static func mock(with suggestions: [SuggestionItem] = []) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)))
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })

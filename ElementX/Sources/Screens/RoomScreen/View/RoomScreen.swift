@@ -170,7 +170,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
     
     static var previews: some View {
         NavigationStack {

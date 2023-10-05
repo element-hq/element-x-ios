@@ -51,6 +51,7 @@ struct ComposerToolbarViewState: BindableState {
     var composerMode: RoomScreenComposerMode = .default
     var composerEmpty = true
     var areSuggestionsEnabled = true
+    var suggestions: [SuggestionItem] = []
 
     var bindings: ComposerToolbarViewStateBindings
 

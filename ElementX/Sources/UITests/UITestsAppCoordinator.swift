@@ -236,7 +236,7 @@ class MockScreen: Identifiable {
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -246,7 +246,7 @@ class MockScreen: Identifiable {
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -258,7 +258,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -270,7 +270,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -283,7 +283,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -298,7 +298,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -313,7 +313,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -328,7 +328,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -344,7 +344,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -359,7 +359,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -374,7 +374,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -389,7 +389,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -404,7 +404,7 @@ class MockScreen: Identifiable {
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider(),
-                                                             appSettings: ServiceLocator.shared.settings)
+                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)

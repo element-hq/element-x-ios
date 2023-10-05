@@ -23,6 +23,7 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     private let wysiwygViewModel: WysiwygComposerViewModel
+    private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -37,10 +38,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, areSuggestionsSuggestions: Bool = true) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
+        self.completionSuggestionService = completionSuggestionService
 
-        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: areSuggestionsSuggestions, bindings: .init()))
+        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()))
 
         context.$viewState
             .map(\.composerMode)
@@ -68,6 +70,17 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     }
             }
             .weakAssign(to: \.state.bindings.formatItems, on: self)
+            .store(in: &cancellables)
+        
+        wysiwygViewModel.$suggestionPattern
+            .sink { [weak self] suggestionPattern in
+                self?.completionSuggestionService.setSuggestionTrigger(suggestionPattern?.toTrigger)
+            }
+            .store(in: &cancellables)
+        
+        completionSuggestionService.suggestionsPublisher
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
     }
 
