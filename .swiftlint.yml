@@ -34,7 +34,7 @@ type_name:
     error: 1000
 
 type_body_length:
-  warning: 700
+  warning: 1000
   error: 1000
 
 function_body_length:

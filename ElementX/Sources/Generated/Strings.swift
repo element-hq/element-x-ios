@@ -124,7 +124,7 @@ public enum L10n {
   public static var actionReplyInThread: String { return L10n.tr("Localizable", "action_reply_in_thread") }
   /// Report bug
   public static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
-  /// Report Content
+  /// Report content
   public static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
   /// Retry
   public static var actionRetry: String { return L10n.tr("Localizable", "action_retry") }
@@ -154,7 +154,7 @@ public enum L10n {
   public static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
   /// Take photo
   public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
-  /// View Source
+  /// View source
   public static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
   public static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
@@ -280,6 +280,8 @@ public enum L10n {
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
   public static var commonSearchResults: String { return L10n.tr("Localizable", "common_search_results") }
+  /// Secure backup
+  public static var commonSecureBackup: String { return L10n.tr("Localizable", "common_secure_backup") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Select your server

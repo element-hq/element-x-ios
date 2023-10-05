@@ -54,7 +54,7 @@
 "action_reply" = "Reply";
 "action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Report bug";
-"action_report_content" = "Report Content";
+"action_report_content" = "Report content";
 "action_retry" = "Retry";
 "action_retry_decryption" = "Retry decryption";
 "action_save" = "Save";
@@ -69,7 +69,7 @@
 "action_start_verification" = "Start verification";
 "action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
-"action_view_source" = "View Source";
+"action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.edit_poll" = "Edit poll";
 "common_about" = "About";
@@ -122,6 +122,7 @@
 "common_room_name_placeholder" = "e.g. your project name";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
+"common_secure_backup" = "Secure backup";
 "common_security" = "Security";
 "common_select_your_server" = "Select your server";
 "common_sending" = "Sending…";
