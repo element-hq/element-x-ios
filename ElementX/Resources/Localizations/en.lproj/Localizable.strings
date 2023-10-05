@@ -148,6 +148,7 @@
 "common_verification_cancelled" = "Verification cancelled";
 "common_verification_complete" = "Verification complete";
 "common_video" = "Video";
+"common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";

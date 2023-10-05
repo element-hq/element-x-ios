@@ -332,6 +332,8 @@ public enum L10n {
   public static var commonVerificationComplete: String { return L10n.tr("Localizable", "common_verification_complete") }
   /// Video
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
+  /// Voice message
+  public static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
