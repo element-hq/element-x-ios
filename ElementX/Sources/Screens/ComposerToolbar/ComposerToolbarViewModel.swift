@@ -37,10 +37,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, areSuggestionsSuggestions: Bool = true) {
         self.wysiwygViewModel = wysiwygViewModel
 
-        super.init(initialViewState: ComposerToolbarViewState(bindings: .init()))
+        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: areSuggestionsSuggestions, bindings: .init()))
 
         context.$viewState
             .map(\.composerMode)

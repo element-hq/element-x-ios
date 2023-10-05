@@ -75,6 +75,7 @@ struct CompletionSuggestionView: View {
         .frame(height: min(Constants.maxHeight,
                            min(contentHeightForRowCount(Constants.maxVisibleRows),
                                contentHeightForRowCount(items.count))))
+        .background(Color.compound.bgCanvasDefault)
     }
     
     private func contentHeightForRowCount(_ count: Int) -> CGFloat {
