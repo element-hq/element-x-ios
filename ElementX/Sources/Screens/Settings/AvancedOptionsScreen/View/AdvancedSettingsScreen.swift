@@ -28,11 +28,11 @@ struct AdvancedSettingsScreen: View {
                         kind: .picker(selection: $context.timelineStyle,
                                       items: TimelineStyle.allCases.map { (title: $0.name, tag: $0) }))
                 
-                ListRow(label: .default(title: L10n.actionViewSource, systemIcon: .mailAndTextMagnifyingglass),
-                        kind: .toggle($context.viewSourceEnabled))
-                
                 ListRow(label: .default(title: L10n.commonRichTextEditor, icon: Image(asset: Asset.Images.textFormat)),
                         kind: .toggle($context.richTextEditorEnabled))
+                
+                ListRow(label: .default(title: L10n.actionViewSource, systemIcon: .mailAndTextMagnifyingglass),
+                        kind: .toggle($context.viewSourceEnabled))
             }
         }
         .compoundList()
