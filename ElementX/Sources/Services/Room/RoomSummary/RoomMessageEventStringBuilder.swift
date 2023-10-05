@@ -31,8 +31,9 @@ struct RoomMessageEventStringBuilder {
                 return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
             }
         // Message types that should be prefixed with the sender's name.
-        case .audio:
-            message = L10n.commonAudio
+        case .audio(content: let content):
+            let isVoiceMessage = content.voice != nil
+            message = isVoiceMessage ? L10n.commonVoiceMessage : L10n.commonAudio
         case .image:
             message = L10n.commonImage
         case .video:
