@@ -27,6 +27,20 @@ enum SuggestionItem: Identifiable, Equatable {
             return user.id
         }
     }
+    
+    var mentionType: WysiwygMentionType {
+        switch self {
+        case .user:
+            return .user
+        }
+    }
+    
+    func getURL(baseURL: URL) -> URL? {
+        switch self {
+        case let .user(item):
+            return try? PermalinkBuilder.permalinkTo(userIdentifier: item.id, baseURL: baseURL)
+        }
+    }
 }
 
 struct MentionSuggestionItem: Identifiable, Equatable {

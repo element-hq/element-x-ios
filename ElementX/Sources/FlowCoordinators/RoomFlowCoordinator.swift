@@ -346,7 +346,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          emojiProvider: emojiProvider,
-                                                         completionSuggestionService: completionSuggestionService)
+                                                         completionSuggestionService: completionSuggestionService,
+                                                         appSettings: appSettings)
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in

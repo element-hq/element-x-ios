@@ -19,6 +19,7 @@ import SwiftUI
 struct CompletionSuggestionView: View {
     let imageProvider: ImageProviderProtocol?
     let items: [SuggestionItem]
+    let onTap: (SuggestionItem) -> Void
     
     private enum Constants {
         static let topPadding: CGFloat = 8.0
@@ -63,7 +64,9 @@ struct CompletionSuggestionView: View {
 
     private func list() -> some View {
         List(items) { item in
-            Button { } label: {
+            Button {
+                onTap(item)
+            } label: {
                 switch item {
                 case .user(let mention):
                     MentionSuggestionItemView(imageProvider: imageProvider, item: mention)
@@ -135,11 +138,11 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
         VStack {
             CompletionSuggestionView(imageProvider: MockMediaProvider(),
                                      items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
-                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))])
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]) { _ in }
         }
         VStack {
             CompletionSuggestionView(imageProvider: MockMediaProvider(),
-                                     items: multipleItems)
+                                     items: multipleItems) { _ in }
         }
     }
 }
