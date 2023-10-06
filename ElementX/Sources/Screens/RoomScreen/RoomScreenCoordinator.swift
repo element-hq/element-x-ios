@@ -67,7 +67,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: parameters.completionSuggestionService)
+        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: parameters.completionSuggestionService, mediaProvider: parameters.mediaProvider)
     }
     
     // MARK: - Public

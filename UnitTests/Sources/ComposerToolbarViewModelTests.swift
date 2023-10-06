@@ -35,7 +35,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                             completionSuggestionService: completionSuggestionServiceMock)
+                                             completionSuggestionService: completionSuggestionServiceMock,
+                                             mediaProvider: MockMediaProvider())
     }
 
     func testComposerFocus() {

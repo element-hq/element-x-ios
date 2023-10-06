@@ -198,7 +198,9 @@ struct ComposerToolbar: View {
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
-    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)))
+    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                            completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
+                                                            mediaProvider: MockMediaProvider())
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
@@ -221,7 +223,9 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
 extension ComposerToolbar {
     static func mock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()))
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                         completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                         mediaProvider: MockMediaProvider())
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
