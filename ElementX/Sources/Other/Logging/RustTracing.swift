@@ -133,18 +133,24 @@ struct TracingConfiguration {
     }
 }
 
-func setupTracing(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
-    if let otlpConfiguration {
-        setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
-                                       user: otlpConfiguration.username,
-                                       password: otlpConfiguration.password,
-                                       otlpEndpoint: otlpConfiguration.url,
-                                       filter: configuration.filter,
+enum RustTracing {
+    private(set) static var currentTracingConfiguration: TracingConfiguration?
+    
+    static func setup(configuration: TracingConfiguration, otlpConfiguration: OTLPConfiguration?) {
+        currentTracingConfiguration = configuration
+        
+        if let otlpConfiguration {
+            setupOtlpTracing(config: .init(clientName: "ElementX-iOS",
+                                           user: otlpConfiguration.username,
+                                           password: otlpConfiguration.password,
+                                           otlpEndpoint: otlpConfiguration.url,
+                                           filter: configuration.filter,
+                                           writeToStdoutOrSystem: true,
+                                           writeToFiles: nil))
+        } else {
+            setupTracing(config: .init(filter: configuration.filter,
                                        writeToStdoutOrSystem: true,
                                        writeToFiles: nil))
-    } else {
-        setupTracing(config: .init(filter: configuration.filter,
-                                   writeToStdoutOrSystem: true,
-                                   writeToFiles: nil))
+        }
     }
 }
