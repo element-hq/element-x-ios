@@ -75,7 +75,8 @@ struct WaitlistScreen_Previews: PreviewProvider, TestablePreview {
     static let successViewModel = {
         let viewModel = WaitlistScreenViewModel(homeserver: .mockMatrixDotOrg)
         viewModel.update(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@alice:matrix.org"),
-                                                      mediaProvider: MockMediaProvider()))
+                                                      mediaProvider: MockMediaProvider(),
+                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock()))
         return viewModel
     }()
     

@@ -20,20 +20,29 @@ enum VoiceMessageMediaManagerError: Error {
     case unsupportedMimeTye
 }
 
+private final class VoiceMessageConversionRequest {
+    var continuations: [CheckedContinuation<URL, Error>] = []
+}
+
 class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let cache: VoiceMessageCache
-
+    
+    private let backgroundTaskService: BackgroundTaskServiceProtocol?
+    private let processingQueue: DispatchQueue
+    private var ongoingRequests = [MediaSourceProxy: VoiceMessageConversionRequest]()
+    
     private let supportedVoiceMessageMimeType = "audio/ogg"
-
-    /// Preferred audio file extension after conversion
-    private let preferredAudioExtension = "m4a"
-
-    init(mediaProvider: MediaProviderProtocol) {
+    
+    init(mediaProvider: MediaProviderProtocol,
+         processingQueue: DispatchQueue = .global(),
+         backgroundTaskService: BackgroundTaskServiceProtocol?) {
         self.mediaProvider = mediaProvider
         cache = VoiceMessageCache()
+        self.processingQueue = processingQueue
+        self.backgroundTaskService = backgroundTaskService
     }
-    
+
     deinit {
         cache.clearCache()
     }
@@ -44,7 +53,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         }
         
         // Do we already have a converted version?
-        if let fileURL = cache.fileURL(for: source, withExtension: preferredAudioExtension) {
+        if let fileURL = cache.fileURL(for: source) {
             return fileURL
         }
         
@@ -52,16 +61,46 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(source, body: body) else {
             throw MediaProviderError.failedRetrievingFile
         }
-        let fileURL = try cache.cache(mediaSource: source, using: fileHandle.url)
-                
-        // Convert from ogg
-        let audioConverter = AudioConverter()
-        let convertedFileURL = cache.cacheURL(for: source, replacingExtension: preferredAudioExtension)
-        try audioConverter.convertToMPEG4AAC(sourceURL: fileURL, destinationURL: convertedFileURL)
         
-        // we don't need the original file anymore
-        try? FileManager.default.removeItem(at: fileURL)
+        let url = try await enqueueVoiceMessageConversionRequest(forSource: source) { [cache] in
+            // Convert from ogg
+            let convertedFileURL = try AudioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url)
+
+            // Cache the file and return the url
+            return try cache.cache(mediaSource: source, using: convertedFileURL, move: true)
+        }
         
-        return convertedFileURL
+        return url
+    }
+    
+    // MARK: - Private
+    
+    private func enqueueVoiceMessageConversionRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> URL) async throws -> URL {
+        if let ongoingRequest = ongoingRequests[source] {
+            return try await withCheckedThrowingContinuation { continuation in
+                ongoingRequest.continuations.append(continuation)
+            }
+        }
+        
+        let ongoingRequest = VoiceMessageConversionRequest()
+        ongoingRequests[source] = ongoingRequest
+        
+        defer {
+            ongoingRequests[source] = nil
+        }
+        
+        do {
+            let result = try await Task.dispatch(on: processingQueue) {
+                try operation()
+            }
+            
+            ongoingRequest.continuations.forEach { $0.resume(returning: result) }
+            
+            return result
+            
+        } catch {
+            ongoingRequest.continuations.forEach { $0.resume(throwing: error) }
+            throw error
+        }
     }
 }

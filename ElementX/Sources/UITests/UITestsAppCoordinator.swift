@@ -164,7 +164,8 @@ class MockScreen: Identifiable {
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
                                                                       attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true)),
                                                                       bugReportService: BugReportServiceMock(),
@@ -177,7 +178,7 @@ class MockScreen: Identifiable {
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: nil,
-                                                                          userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
+                                                                          userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                                           bugReportService: BugReportServiceMock(),
                                                                           notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                           appSettings: ServiceLocator.shared.settings))
@@ -207,7 +208,8 @@ class MockScreen: Identifiable {
             let userNotificationCenter = UserNotificationCenterMock()
             userNotificationCenter.authorizationStatusReturnValue = .denied
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let parameters = NotificationSettingsScreenCoordinatorParameters(userSession: session,
                                                                              userNotificationCenter: userNotificationCenter,
                                                                              notificationSettings: NotificationSettingsProxyMock(with: .init()),
@@ -217,7 +219,8 @@ class MockScreen: Identifiable {
             let userNotificationCenter = UserNotificationCenterMock()
             userNotificationCenter.authorizationStatusReturnValue = .denied
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let notificationSettings = NotificationSettingsProxyMock(with: .init())
             notificationSettings.getDefaultRoomNotificationModeIsEncryptedIsOneToOneClosure = { isEncrypted, isOneToOne in
                 switch (isEncrypted, isOneToOne) {
@@ -439,7 +442,7 @@ class MockScreen: Identifiable {
             ServiceLocator.shared.settings.migratedAccounts[clientProxy.userID] = true
             ServiceLocator.shared.settings.hasShownWelcomeScreen = true
             
-            let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
+            let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
                                                          bugReportService: BugReportServiceMock(),
                                                          roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
@@ -614,7 +617,7 @@ class MockScreen: Identifiable {
             let userDiscoveryMock = UserDiscoveryServiceMock()
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([.mockAlice, .mockBob, .mockCharlie])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([])
-            let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())
+            let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let parameters: StartChatScreenCoordinatorParameters = .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock)
             let coordinator = StartChatScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -625,7 +628,7 @@ class MockScreen: Identifiable {
             let userDiscoveryMock = UserDiscoveryServiceMock()
             userDiscoveryMock.fetchSuggestionsReturnValue = .success([])
             userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
-            let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+            let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let coordinator = StartChatScreenCoordinator(parameters: .init(userSession: userSession, navigationStackCoordinator: navigationStackCoordinator, userDiscoveryService: userDiscoveryMock))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -662,7 +665,7 @@ class MockScreen: Identifiable {
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
             clientProxy.inviteSummaryProvider = summaryProvider
             
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .invites:
@@ -674,13 +677,13 @@ class MockScreen: Identifiable {
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
             clientProxy.inviteSummaryProvider = summaryProvider
             
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .invitesNoInvites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            let coordinator = InvitesScreenCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .inviteUsers, .inviteUsersInRoom, .inviteUsersInRoomExistingMembers:
@@ -715,7 +718,7 @@ class MockScreen: Identifiable {
         case .createRoom:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+            let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let createRoomParameters = CreateRoomFlowParameters()
             let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: nil, createRoomParameters: .init(createRoomParameters), selectedUsers: .init(selectedUsers))
@@ -725,7 +728,7 @@ class MockScreen: Identifiable {
         case .createRoomNoUsers:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+            let mockUserSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock())
             let createRoomParameters = CreateRoomFlowParameters()
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession, userIndicatorController: nil, createRoomParameters: .init(createRoomParameters), selectedUsers: .init([]))
             let coordinator = CreateRoomCoordinator(parameters: parameters)

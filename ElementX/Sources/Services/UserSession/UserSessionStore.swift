@@ -94,10 +94,16 @@ class UserSessionStore: UserSessionStoreProtocol {
         let imageCache = ImageCache.onlyInMemory
         imageCache.memoryStorage.config.keepWhenEnteringBackground = true
         
+        let mediaProvider = MediaProvider(mediaLoader: clientProxy,
+                                          imageCache: imageCache,
+                                          backgroundTaskService: backgroundTaskService)
+        
+        let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
+                                                                backgroundTaskService: backgroundTaskService)
+        
         return UserSession(clientProxy: clientProxy,
-                           mediaProvider: MediaProvider(mediaLoader: clientProxy,
-                                                        imageCache: imageCache,
-                                                        backgroundTaskService: backgroundTaskService))
+                           mediaProvider: mediaProvider,
+                           voiceMessageMediaManager: voiceMessageMediaManager)
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

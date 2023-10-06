@@ -62,7 +62,8 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []

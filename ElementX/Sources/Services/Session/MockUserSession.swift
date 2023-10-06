@@ -24,4 +24,5 @@ struct MockUserSession: UserSessionProtocol {
     var homeserver: String { clientProxy.homeserver }
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
 }
