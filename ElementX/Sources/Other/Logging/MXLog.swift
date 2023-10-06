@@ -59,7 +59,7 @@ enum MXLog {
             return
         }
         
-        setupTracing(configuration: .init(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
+        RustTracing.setup(configuration: .init(logLevel: logLevel), otlpConfiguration: otlpConfiguration)
         
         if let target {
             self.target = target
