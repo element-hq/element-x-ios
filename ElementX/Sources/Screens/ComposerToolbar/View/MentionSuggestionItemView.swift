@@ -51,9 +51,3 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
         MentionSuggestionItemView(imageProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil))
     }
 }
-
-struct MentionSuggestionItem: Identifiable, Equatable {
-    let id: String
-    let displayName: String?
-    let avatarURL: URL?
-}

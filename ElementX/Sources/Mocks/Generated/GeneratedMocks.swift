@@ -215,11 +215,11 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
     var setSuggestionTriggerCalled: Bool {
         return setSuggestionTriggerCallsCount > 0
     }
-    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionTrigger?
-    var setSuggestionTriggerReceivedInvocations: [SuggestionTrigger?] = []
-    var setSuggestionTriggerClosure: ((SuggestionTrigger?) -> Void)?
+    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionPattern?
+    var setSuggestionTriggerReceivedInvocations: [SuggestionPattern?] = []
+    var setSuggestionTriggerClosure: ((SuggestionPattern?) -> Void)?
 
-    func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
         setSuggestionTriggerCallsCount += 1
         setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
         setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)

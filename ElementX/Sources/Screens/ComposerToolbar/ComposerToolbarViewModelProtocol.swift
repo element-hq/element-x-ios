@@ -16,6 +16,15 @@
 
 import Combine
 
+struct SuggestionPattern: Equatable {
+    enum SuggestionType: Equatable {
+        case user
+    }
+    
+    let type: SuggestionType
+    let text: String
+}
+
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }

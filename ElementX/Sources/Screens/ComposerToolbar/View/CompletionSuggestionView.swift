@@ -143,14 +143,3 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
         }
     }
 }
-
-enum SuggestionItem: Identifiable, Equatable {
-    case user(item: MentionSuggestionItem)
-    
-    var id: String {
-        switch self {
-        case .user(let user):
-            return user.id
-        }
-    }
-}

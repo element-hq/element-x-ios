@@ -555,6 +555,8 @@
 		A78643F22ACDBAEF005B2BFB /* MentionSuggestionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78643F12ACDBAEF005B2BFB /* MentionSuggestionItemView.swift */; };
 		A7AD63BA2ACED2FA00E1B12F /* CompletionSuggestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AD63B92ACED2FA00E1B12F /* CompletionSuggestionService.swift */; };
 		A7AD63BC2ACF0B4D00E1B12F /* CompletionSuggestionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AD63BB2ACF0B4D00E1B12F /* CompletionSuggestionServiceTests.swift */; };
+		A7AD63BE2AD019AD00E1B12F /* CompletionSuggestionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AD63BD2AD019AD00E1B12F /* CompletionSuggestionServiceProtocol.swift */; };
+		A7AD63C02AD01A1000E1B12F /* CompletionSuggestionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AD63BF2AD01A1000E1B12F /* CompletionSuggestionModels.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
@@ -1401,6 +1403,8 @@
 		A78643F12ACDBAEF005B2BFB /* MentionSuggestionItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionSuggestionItemView.swift; sourceTree = "<group>"; };
 		A7AD63B92ACED2FA00E1B12F /* CompletionSuggestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionSuggestionService.swift; sourceTree = "<group>"; };
 		A7AD63BB2ACF0B4D00E1B12F /* CompletionSuggestionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionSuggestionServiceTests.swift; sourceTree = "<group>"; };
+		A7AD63BD2AD019AD00E1B12F /* CompletionSuggestionServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionSuggestionServiceProtocol.swift; sourceTree = "<group>"; };
+		A7AD63BF2AD01A1000E1B12F /* CompletionSuggestionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionSuggestionModels.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8903A9F615BBD0E6D7CD133 /* ApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationProtocol.swift; sourceTree = "<group>"; };
@@ -2030,8 +2034,11 @@
 			children = (
 				BA188BB0A216D763E46E3279 /* ComposerToolbarModels.swift */,
 				CD95B3714F806AC9CF9A557B /* ComposerToolbarViewModel.swift */,
+				A7AD63B92ACED2FA00E1B12F /* CompletionSuggestionService.swift */,
 				E44928D844E16EE48A311FCA /* ComposerToolbarViewModelProtocol.swift */,
 				4BBA16517DB72736545D0F6E /* View */,
+				A7AD63BD2AD019AD00E1B12F /* CompletionSuggestionServiceProtocol.swift */,
+				A7AD63BF2AD01A1000E1B12F /* CompletionSuggestionModels.swift */,
 			);
 			path = ComposerToolbar;
 			sourceTree = "<group>";
@@ -2639,7 +2646,6 @@
 				9CE3C90E487B255B735D73C8 /* RoomScreenViewModel.swift */,
 				A00C7A331B72C0F05C00392F /* RoomScreenViewModelProtocol.swift */,
 				79023E5904B155E8E2B8B502 /* View */,
-				A7AD63B92ACED2FA00E1B12F /* CompletionSuggestionService.swift */,
 			);
 			path = RoomScreen;
 			sourceTree = "<group>";
@@ -4648,6 +4654,7 @@
 				62910B515BCB4B455E24D7C1 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */,
 				53C1E7F6A7D6409D89F36ED7 /* AggregatedReactionMock.swift in Sources */,
 				4219391CD2351E410554B3E8 /* AggregratedReaction.swift in Sources */,
+				A7AD63BE2AD019AD00E1B12F /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				64D05250CEDE8B604119F6E6 /* Alert.swift in Sources */,
 				39929D29B265C3F6606047DE /* AlignedScrollView.swift in Sources */,
 				155063E980E763D4910EA3CF /* Analytics+SwiftUI.swift in Sources */,
@@ -5190,6 +5197,7 @@
 				8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */,
 				4A618590DEB72C4F186BFED4 /* UserSessionFlowCoordinator.swift in Sources */,
 				3113065AABBC14CEAE6843FA /* UserSessionFlowCoordinatorStateMachine.swift in Sources */,
+				A7AD63C02AD01A1000E1B12F /* CompletionSuggestionModels.swift in Sources */,
 				978BB24F2A5D31EE59EEC249 /* UserSessionProtocol.swift in Sources */,
 				7E91BAC17963ED41208F489B /* UserSessionStore.swift in Sources */,
 				AC69B6DF15FC451AB2945036 /* UserSessionStoreProtocol.swift in Sources */,

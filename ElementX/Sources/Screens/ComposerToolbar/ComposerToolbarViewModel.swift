@@ -74,7 +74,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         wysiwygViewModel.$suggestionPattern
             .sink { [weak self] suggestionPattern in
-                self?.completionSuggestionService.setSuggestionTrigger(suggestionPattern?.toTrigger)
+                self?.completionSuggestionService.setSuggestionTrigger(suggestionPattern?.toElementPattern)
             }
             .store(in: &cancellables)
         

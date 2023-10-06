@@ -27,7 +27,7 @@ struct ComposerToolbar: View {
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
-    @State var composerHeight = CGFloat.zero
+    @State private var frame: CGRect = .zero
 
     var body: some View {
         VStack(spacing: 8) {
@@ -37,18 +37,12 @@ struct ComposerToolbar: View {
             }
         }
         .background {
-            GeometryReader { geometryProxy in
-                Color.clear
-                    .preference(key: HeightPreferenceKey.self, value: geometryProxy.size.height)
-            }
-        }
-        .onPreferenceChange(HeightPreferenceKey.self) { newHeight in
-            composerHeight = newHeight
+            ViewFrameReader(frame: $frame)
         }
         .overlay(alignment: .bottom) {
             if context.viewState.areSuggestionsEnabled {
                 suggestionView
-                    .offset(y: -composerHeight)
+                    .offset(y: -frame.height)
             }
         }
         .alert(item: $context.alertInfo)
@@ -230,9 +224,4 @@ extension ComposerToolbar {
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
     }
-}
-
-private struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = .zero
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { }
 }
