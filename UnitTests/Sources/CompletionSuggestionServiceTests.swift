@@ -32,22 +32,22 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
         
-        var result: [SuggestionItem] = []
-        service.suggestionsPublisher
-            .sink { value in
-                result = value
-            }
-            .store(in: &cancellables)
-        try await Task.sleep(for: .seconds(1.0))
-        XCTAssertEqual(result, [])
-                
-        service.setSuggestionTrigger(.init(type: .user, text: "ali"))
-        try await Task.sleep(for: .seconds(1.0))
-        XCTAssertEqual(result, [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL))])
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
         
-        // Since the meMock is flagged as account owner it should be ignored
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL))]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "ali"))
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
         service.setSuggestionTrigger(.init(type: .user, text: "me"))
-        try await Task.sleep(for: .seconds(1.0))
-        XCTAssertEqual(result, [])
+        try await deferred.fulfill()
     }
 }
