@@ -78,7 +78,7 @@ struct VoiceMessageRoomPlaybackView: View {
                                 if let loc = drag?.location {
                                     progress = loc.x / geometry.size.width
                                 }
-                                state = .dragging(progress: progress, distance: geometry.size.width)
+                                state = .dragging(progress: progress)
                             // Dragging ended or the long press cancelled.
                             default:
                                 state = .inactive
@@ -96,17 +96,12 @@ struct VoiceMessageRoomPlaybackView: View {
                 onScrubbing(true)
                 feedbackGenerator.prepare()
                 sendFeedback = true
-            case .dragging(let progress, let totalWidth):
+            case .dragging(let progress):
                 if sendFeedback {
                     feedbackGenerator.impactOccurred()
                     sendFeedback = false
                 }
-                let minimumProgress = waveformLinePadding / totalWidth
-                let deltaProgress = abs(progress - playerState.progress)
-                let deltaTime = playerState.duration * deltaProgress
-                if deltaProgress == 0 || deltaProgress >= minimumProgress || deltaTime >= 1.0 {
-                    onSeek(max(0, min(progress, 1.0)))
-                }
+                onSeek(max(0, min(progress, 1.0)))
             }
         }
         .padding(.leading, 2)
@@ -140,13 +135,13 @@ struct VoiceMessageRoomPlaybackView: View {
 private enum DragState: Equatable {
     case inactive
     case pressing(progress: Double)
-    case dragging(progress: Double, distance: Double)
+    case dragging(progress: Double)
     
     var progress: Double {
         switch self {
         case .inactive, .pressing:
             return .zero
-        case .dragging(let progress, _):
+        case .dragging(let progress):
             return progress
         }
     }

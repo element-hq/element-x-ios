@@ -46,6 +46,9 @@ struct WaveformView: View {
     private let minimumGraphAmplitude: CGFloat = 1
     var progress: CGFloat = 0.0
     var showCursor = false
+
+    @State private var waveformPathSize: CGSize = .zero
+    @State private var waveformPath: Path?
     
     var body: some View {
         GeometryReader { geometry in
@@ -56,43 +59,49 @@ struct WaveformView: View {
                     .frame(width: max(0.0, geometry.size.width * progress), height: geometry.size.height)
             }
             .mask(alignment: .leading) {
-                Path { path in
-                    let width = geometry.size.width
-                    let height = geometry.size.height
-                    let centerY = geometry.size.height / 2
-                    let visibleSamplesCount = Int(width / (lineWidth + linePadding))
-                    let normalisedData = waveform.normalisedData(count: visibleSamplesCount)
-                    var xOffset: CGFloat = lineWidth / 2
-                    var index = 0
-                    
-                    while xOffset <= width {
-                        let sample = CGFloat(index >= normalisedData.count ? 0 : normalisedData[index])
-                        let drawingAmplitude = max(minimumGraphAmplitude, sample * (height - 2))
-
-                        path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
-                        path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
-                        xOffset += lineWidth + linePadding
-                        index += 1
-                    }
-                }
-                .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                WaveformShape(lineWidth: lineWidth,
+                              linePadding: linePadding,
+                              waveform: waveform)
+                    .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
             }
             // Display a cursor
             .overlay(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
-                    .offset(CGSize(width: cursorPosition(progress: progress, width: geometry.size.width), height: 0.0))
+                    .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
                     .frame(width: lineWidth, height: geometry.size.height)
                     .opacity(showCursor ? 1 : 0)
             }
         }
     }
+}
+
+private struct WaveformShape: Shape {
+    let lineWidth: CGFloat
+    let linePadding: CGFloat
+    let waveform: Waveform
+    var minimumGraphAmplitude: CGFloat = 1.0
     
-    private func cursorPosition(progress: Double, width: Double) -> Double {
-        guard progress > 0 else {
-            return 0
+    func path(in rect: CGRect) -> Path {
+        let width = rect.size.width
+        let height = rect.size.height
+        let centerY = rect.size.height / 2
+        let visibleSamplesCount = Int(width / (lineWidth + linePadding))
+        let normalisedData = waveform.normalisedData(count: visibleSamplesCount)
+        var xOffset: CGFloat = lineWidth / 2
+        var index = 0
+        
+        var path = Path()
+        while xOffset <= width {
+            let sample = CGFloat(index >= normalisedData.count ? 0 : normalisedData[index])
+            let drawingAmplitude = max(minimumGraphAmplitude, sample * (height - 2))
+
+            path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
+            path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
+            xOffset += lineWidth + linePadding
+            index += 1
         }
-        let width = (width * progress)
-        return width - width.truncatingRemainder(dividingBy: lineWidth + linePadding)
+        
+        return path
     }
 }
 
