@@ -42,7 +42,7 @@ struct AnalyticsPromptScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(systemName: "chart.bar"))
+            HeroImage(image: Image(systemName: "chart.bar"))
                 .symbolVariant(.fill)
                 .padding(.bottom, 8)
             

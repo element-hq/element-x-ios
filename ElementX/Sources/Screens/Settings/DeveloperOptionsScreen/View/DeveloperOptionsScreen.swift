@@ -31,6 +31,18 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Security") {
+                Toggle(isOn: $context.chatBackupEnabled) {
+                    Text("Chat backup")
+                    Text("Requires app reboot")
+                }
+                
+                Toggle(isOn: $context.appLockFlowEnabled) {
+                    Text("PIN/Biometric lock")
+                    Text("Resets on reboot")
+                }
+            }
+            
             Section("Timeline") {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
@@ -52,7 +64,7 @@ struct DeveloperOptionsScreen: View {
                 }
                 
                 Toggle(isOn: $context.elementCallEnabled) {
-                    Text("Elemement Call")
+                    Text("Element Call")
                 }
             }
             
@@ -65,13 +77,6 @@ struct DeveloperOptionsScreen: View {
             Section("Voice message") {
                 Toggle(isOn: $context.voiceMessageEnabled) {
                     Text("Enable voice messages")
-                }
-            }
-            
-            Section("Security") {
-                Toggle(isOn: $context.appLockFlowEnabled) {
-                    Text("PIN/Biometric lock")
-                    Text("Resets on reboot")
                 }
             }
 

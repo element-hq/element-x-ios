@@ -71,6 +71,8 @@ struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     var showSessionVerificationBanner = false
+    var showUserMenuBadge = false
+    var showSettingsMenuOptionBadge = false
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     

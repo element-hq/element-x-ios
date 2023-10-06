@@ -88,7 +88,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             case .success(.image):
                 state.localMedia = try? mediaResult.get()
             case .failure, .success:
-                userIndicatorController?.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+                userIndicatorController?.alertInfo = .init(id: .init())
             }
         }
     }

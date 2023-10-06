@@ -35,7 +35,7 @@ struct ServerConfirmationScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(systemName: "person.crop.circle.fill"))
+            HeroImage(image: Image(systemName: "person.crop.circle.fill"))
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)

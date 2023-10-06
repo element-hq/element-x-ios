@@ -2241,6 +2241,91 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var underlyingBackPaginationState: BackPaginationStatus!
 
 }
+class SecureBackupControllerMock: SecureBackupControllerProtocol {
+    var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
+        get { return underlyingRecoveryKeyState }
+        set(value) { underlyingRecoveryKeyState = value }
+    }
+    var underlyingRecoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never>!
+    var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> {
+        get { return underlyingKeyBackupState }
+        set(value) { underlyingKeyBackupState = value }
+    }
+    var underlyingKeyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never>!
+
+    //MARK: - enableBackup
+
+    var enableBackupCallsCount = 0
+    var enableBackupCalled: Bool {
+        return enableBackupCallsCount > 0
+    }
+    var enableBackupReturnValue: Result<Void, SecureBackupControllerError>!
+    var enableBackupClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+
+    func enableBackup() async -> Result<Void, SecureBackupControllerError> {
+        enableBackupCallsCount += 1
+        if let enableBackupClosure = enableBackupClosure {
+            return await enableBackupClosure()
+        } else {
+            return enableBackupReturnValue
+        }
+    }
+    //MARK: - disableBackup
+
+    var disableBackupCallsCount = 0
+    var disableBackupCalled: Bool {
+        return disableBackupCallsCount > 0
+    }
+    var disableBackupReturnValue: Result<Void, SecureBackupControllerError>!
+    var disableBackupClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+
+    func disableBackup() async -> Result<Void, SecureBackupControllerError> {
+        disableBackupCallsCount += 1
+        if let disableBackupClosure = disableBackupClosure {
+            return await disableBackupClosure()
+        } else {
+            return disableBackupReturnValue
+        }
+    }
+    //MARK: - generateRecoveryKey
+
+    var generateRecoveryKeyCallsCount = 0
+    var generateRecoveryKeyCalled: Bool {
+        return generateRecoveryKeyCallsCount > 0
+    }
+    var generateRecoveryKeyReturnValue: Result<String, SecureBackupControllerError>!
+    var generateRecoveryKeyClosure: (() async -> Result<String, SecureBackupControllerError>)?
+
+    func generateRecoveryKey() async -> Result<String, SecureBackupControllerError> {
+        generateRecoveryKeyCallsCount += 1
+        if let generateRecoveryKeyClosure = generateRecoveryKeyClosure {
+            return await generateRecoveryKeyClosure()
+        } else {
+            return generateRecoveryKeyReturnValue
+        }
+    }
+    //MARK: - confirmRecoveryKey
+
+    var confirmRecoveryKeyCallsCount = 0
+    var confirmRecoveryKeyCalled: Bool {
+        return confirmRecoveryKeyCallsCount > 0
+    }
+    var confirmRecoveryKeyReceivedKey: String?
+    var confirmRecoveryKeyReceivedInvocations: [String] = []
+    var confirmRecoveryKeyReturnValue: Result<Void, SecureBackupControllerError>!
+    var confirmRecoveryKeyClosure: ((String) async -> Result<Void, SecureBackupControllerError>)?
+
+    func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
+        confirmRecoveryKeyCallsCount += 1
+        confirmRecoveryKeyReceivedKey = key
+        confirmRecoveryKeyReceivedInvocations.append(key)
+        if let confirmRecoveryKeyClosure = confirmRecoveryKeyClosure {
+            return await confirmRecoveryKeyClosure(key)
+        } else {
+            return confirmRecoveryKeyReturnValue
+        }
+    }
+}
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
         get { return underlyingCallbacks }

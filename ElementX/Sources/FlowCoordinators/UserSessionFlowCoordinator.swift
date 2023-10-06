@@ -334,6 +334,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                              appLockService: appLockService,
                                                              bugReportService: bugReportService,
                                                              notificationSettings: userSession.clientProxy.notificationSettings,
+                                                             secureBackupController: userSession.clientProxy.secureBackupController,
                                                              appSettings: appSettings)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
         

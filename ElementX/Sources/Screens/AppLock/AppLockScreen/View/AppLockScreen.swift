@@ -25,7 +25,7 @@ struct AppLockScreen: View {
     var body: some View {
         FullscreenDialog {
             VStack(spacing: 8) {
-                AuthenticationIconImage(image: Image(systemSymbol: .lock))
+                HeroImage(image: Image(systemSymbol: .lock))
                     .symbolVariant(.fill)
                     .padding(.bottom, 8)
                 

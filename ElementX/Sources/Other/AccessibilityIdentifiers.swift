@@ -170,6 +170,7 @@ struct A11yIdentifiers {
     struct SettingsScreen {
         let done = "settings-done"
         let account = "settings-account"
+        let secureBackup = "settings-secure_backup"
         let notifications = "settings-notifications"
         let analytics = "settings-analytics"
         let reportBug = "settings-report_bug"

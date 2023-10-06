@@ -191,6 +191,7 @@ class MockScreen: Identifiable {
                                                                                                          appSettings: ServiceLocator.shared.settings),
                                                                           bugReportService: BugReportServiceMock(),
                                                                           notificationSettings: NotificationSettingsProxyMock(with: .init()),
+                                                                          secureBackupController: SecureBackupControllerMock(),
                                                                           appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

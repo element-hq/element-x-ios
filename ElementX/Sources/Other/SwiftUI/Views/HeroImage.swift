@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-/// An image that is styled for use as the screen icon in the onboarding flow.
-struct AuthenticationIconImage: View {
+/// An image that is styled for use as the main/top/hero screen icon.
+struct HeroImage: View {
     /// The icon that is shown.
     let image: Image
     /// The amount of padding between the icon and the borders. Defaults to 16.
@@ -41,11 +41,11 @@ struct AuthenticationIconImage: View {
 
 // MARK: - Previews
 
-struct AuthenticationIconImage_Previews: PreviewProvider, TestablePreview {
+struct HeroImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 20) {
-            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
-            AuthenticationIconImage(image: Image(systemName: "hourglass"))
+            HeroImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
+            HeroImage(image: Image(systemName: "hourglass"))
         }
     }
 }
