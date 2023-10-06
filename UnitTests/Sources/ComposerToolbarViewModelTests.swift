@@ -104,7 +104,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                             completionSuggestionService: mockCompletionSuggestionService)
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MockMediaProvider())
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
