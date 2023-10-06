@@ -23,6 +23,7 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     private let wysiwygViewModel: WysiwygComposerViewModel
+    private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -37,10 +38,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
+        self.completionSuggestionService = completionSuggestionService
 
-        super.init(initialViewState: ComposerToolbarViewState(bindings: .init()))
+        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
 
         context.$viewState
             .map(\.composerMode)
@@ -68,6 +70,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     }
             }
             .weakAssign(to: \.state.bindings.formatItems, on: self)
+            .store(in: &cancellables)
+        
+        wysiwygViewModel.$suggestionPattern
+            .sink { [weak self] suggestionPattern in
+                self?.completionSuggestionService.setSuggestionTrigger(suggestionPattern?.toElementPattern)
+            }
+            .store(in: &cancellables)
+        
+        completionSuggestionService.suggestionsPublisher
+            .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
     }
 

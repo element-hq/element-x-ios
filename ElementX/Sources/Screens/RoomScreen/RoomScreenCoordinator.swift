@@ -24,6 +24,7 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let emojiProvider: EmojiProviderProtocol
+    let completionSuggestionService: CompletionSuggestionServiceProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -54,7 +55,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
-
+        
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         mediaProvider: parameters.mediaProvider,
                                         roomProxy: parameters.roomProxy,
@@ -66,7 +67,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel, completionSuggestionService: parameters.completionSuggestionService, mediaProvider: parameters.mediaProvider)
     }
     
     // MARK: - Public

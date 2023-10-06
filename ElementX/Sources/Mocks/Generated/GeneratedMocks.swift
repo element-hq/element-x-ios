@@ -197,6 +197,35 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
+    var areSuggestionsEnabled: Bool {
+        get { return underlyingAreSuggestionsEnabled }
+        set(value) { underlyingAreSuggestionsEnabled = value }
+    }
+    var underlyingAreSuggestionsEnabled: Bool!
+    var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
+        get { return underlyingSuggestionsPublisher }
+        set(value) { underlyingSuggestionsPublisher = value }
+    }
+    var underlyingSuggestionsPublisher: AnyPublisher<[SuggestionItem], Never>!
+
+    //MARK: - setSuggestionTrigger
+
+    var setSuggestionTriggerCallsCount = 0
+    var setSuggestionTriggerCalled: Bool {
+        return setSuggestionTriggerCallsCount > 0
+    }
+    var setSuggestionTriggerReceivedSuggestionTrigger: SuggestionPattern?
+    var setSuggestionTriggerReceivedInvocations: [SuggestionPattern?] = []
+    var setSuggestionTriggerClosure: ((SuggestionPattern?) -> Void)?
+
+    func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
+        setSuggestionTriggerCallsCount += 1
+        setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
+        setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)
+        setSuggestionTriggerClosure?(suggestionTrigger)
+    }
+}
 class NotificationCenterMock: NotificationCenterProtocol {
 
     //MARK: - post

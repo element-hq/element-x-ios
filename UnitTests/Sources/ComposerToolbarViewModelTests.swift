@@ -14,15 +14,18 @@
 // limitations under the License.
 //
 
+import Combine
 @testable import ElementX
-import WysiwygComposer
 import XCTest
+
+import WysiwygComposer
 
 @MainActor
 class ComposerToolbarViewModelTests: XCTestCase {
     private var appSettings: AppSettings!
     private var wysiwygViewModel: WysiwygComposerViewModel!
     private var viewModel: ComposerToolbarViewModel!
+    private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
 
     override func setUp() {
         AppSettings.reset()
@@ -30,7 +33,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
         appSettings.richTextEditorEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
-        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: completionSuggestionServiceMock,
+                                             mediaProvider: MockMediaProvider())
     }
 
     func testComposerFocus() {
@@ -91,5 +97,24 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.process(viewAction: .enableTextFormatting)
         viewModel.process(viewAction: .composerAction(action: .link))
         XCTAssertNotNil(viewModel.state.bindings.alertInfo)
+    }
+    
+    func testSuggestions() {
+        let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
+        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MockMediaProvider())
+        
+        XCTAssertEqual(viewModel.state.suggestions, suggestions)
+    }
+    
+    func testSuggestionTrigger() {
+        wysiwygViewModel.setMarkdownContent("@test")
+        wysiwygViewModel.setMarkdownContent("#not_implemented_yey")
+        
+        // The first one is nil because when initialised the view model is empty
+        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test"), nil])
     }
 }

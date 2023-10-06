@@ -26,6 +26,8 @@ struct ComposerToolbar: View {
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
+    
+    @State private var frame: CGRect = .zero
 
     var body: some View {
         VStack(spacing: 8) {
@@ -34,7 +36,20 @@ struct ComposerToolbar: View {
                 bottomBar
             }
         }
+        .background {
+            ViewFrameReader(frame: $frame)
+        }
+        .overlay(alignment: .bottom) {
+            if context.viewState.areSuggestionsEnabled {
+                suggestionView
+                    .offset(y: -frame.height)
+            }
+        }
         .alert(item: $context.alertInfo)
+    }
+    
+    private var suggestionView: some View {
+        CompletionSuggestionView(imageProvider: context.imageProvider, items: context.viewState.suggestions)
     }
 
     private var topBar: some View {
@@ -176,8 +191,24 @@ struct ComposerToolbar: View {
 }
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
+    static let wysiwygViewModel = WysiwygComposerViewModel()
+    static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                            completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
+                                                            mediaProvider: MockMediaProvider())
+    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
+                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
+    
     static var previews: some View {
         ComposerToolbar.mock()
+        
+        // Putting them is VStack allows the completion suggestion preview to work properly in tests
+        VStack {
+            // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
+            ComposerToolbar(context: composerViewModel.context,
+                            wysiwygViewModel: wysiwygViewModel,
+                            keyCommandHandler: { _ in false })
+        }
+        .previewDisplayName("With Suggestions")
     }
 }
 
@@ -186,7 +217,9 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
 extension ComposerToolbar {
     static func mock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel)
+        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                         completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                         mediaProvider: MockMediaProvider())
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
