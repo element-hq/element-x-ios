@@ -56,12 +56,6 @@ struct RoomScreen: View {
             .alert(item: $context.alertInfo)
             .alert(item: $context.confirmationAlertInfo)
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
-            .sheet(item: $context.actionMenuInfo) { info in
-                context.viewState.timelineItemMenuActionProvider?(info.item.id).map { actions in
-                    TimelineItemMenu(item: info.item, actions: actions)
-                        .environmentObject(context)
-                }
-            }
             .sheet(item: $context.reactionSummaryInfo) {
                 ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])

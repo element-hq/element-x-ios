@@ -17,37 +17,35 @@
 import SwiftUI
 
 /// The contents of the context menu shown when right clicking an item in the timeline on a Mac
-struct TimelineItemMacContextMenu: View {
+struct TimelineItemContextMenu: View {
     let item: RoomTimelineItemProtocol
     let actionProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> TimelineItemMenuActions?)?
     let send: (TimelineItemMenuAction) -> Void
     
     var body: some View {
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            if let menuActions = actionProvider?(item.id) {
-                Section {
-                    if item.isReactable {
-                        Button { send(.react) } label: {
-                            TimelineItemMenuAction.react.label
-                        }
-                    }
-                    
-                    ForEach(menuActions.actions) { action in
-                        Button(role: action.isDestructive ? .destructive : nil) {
-                            send(action)
-                        } label: {
-                            action.label
-                        }
+        if let menuActions = actionProvider?(item.id) {
+            Section {
+                if item.isReactable {
+                    Button { send(.react) } label: {
+                        TimelineItemMenuAction.react.label
                     }
                 }
                 
-                Section {
-                    ForEach(menuActions.debugActions) { action in
-                        Button(role: action.isDestructive ? .destructive : nil) {
-                            send(action)
-                        } label: {
-                            action.label
-                        }
+                ForEach(menuActions.actions) { action in
+                    Button(role: action.isDestructive ? .destructive : nil) {
+                        send(action)
+                    } label: {
+                        action.label
+                    }
+                }
+            }
+            
+            Section {
+                ForEach(menuActions.debugActions) { action in
+                    Button(role: action.isDestructive ? .destructive : nil) {
+                        send(action)
+                    } label: {
+                        action.label
                     }
                 }
             }

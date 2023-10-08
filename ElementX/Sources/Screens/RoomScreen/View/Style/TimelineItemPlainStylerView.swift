@@ -71,11 +71,6 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         .onTapGesture {
             context.send(viewAction: .itemTapped(itemID: timelineItem.id))
         }
-        // We need a tap gesture before this long one so that it doesn't
-        // steal away the gestures from the scroll view
-        .longPressWithFeedback(disabled: context.viewState.longPressDisabledItemID == timelineItem.id) {
-            context.send(viewAction: .timelineItemMenu(itemID: timelineItem.id))
-        }
         .swipeRightAction {
             SwipeToReplyView(timelineItem: timelineItem)
         } shouldStartAction: {
@@ -83,12 +78,13 @@ struct TimelineItemPlainStylerView<Content: View>: View {
         } action: {
             let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
             context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
-        }
-        .contextMenu {
-            TimelineItemMacContextMenu(item: timelineItem,
+        }.contextMenu {
+            TimelineItemContextMenu(item: timelineItem,
                                        actionProvider: context.viewState.timelineItemMenuActionProvider) { action in
                 context.send(viewAction: .timelineItemMenuAction(itemID: timelineItem.id, action: action))
             }
+        } preview: {
+            content().environmentObject(context)
         }
     }
     
