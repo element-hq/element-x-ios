@@ -40,9 +40,14 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.selectedRoomID, "2")
     }
     
-    func testSearching() {
+    func testSearching() async throws {
+        let defered = deferFulfillment(context.$viewState) { state in
+            state.rooms.count == 1
+        }
+        
         context.searchQuery = "Second"
-        XCTAssertEqual(context.viewState.visibleRooms.count, 1)
+            
+        try await defered.fulfill()
     }
     
     func testForwarding() {
