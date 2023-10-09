@@ -47,7 +47,10 @@ public extension Bundle {
         }
         
         let bundle = Bundle(url: lprojURL)
-        cachedLocalizationBundles[language] = bundle
+        
+        DispatchQueue.main.async {
+            cachedLocalizationBundles[language] = bundle
+        }
         
         return bundle
     }
