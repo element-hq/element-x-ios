@@ -37,3 +37,6 @@ protocol MediaPlayerProtocol {
     func stop()
     func seek(to progress: Double) async
 }
+
+// sourcery: AutoMockable
+extension MediaPlayerProtocol { }

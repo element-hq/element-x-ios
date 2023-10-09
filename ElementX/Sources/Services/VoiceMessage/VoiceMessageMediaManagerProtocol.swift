@@ -19,3 +19,6 @@ import Foundation
 protocol VoiceMessageMediaManagerProtocol {
     func loadVoiceMessageFromSource(_ source: MediaSourceProxy, body: String?) async throws -> URL
 }
+
+// sourcery: AutoMockable
+extension VoiceMessageMediaManagerProtocol { }
