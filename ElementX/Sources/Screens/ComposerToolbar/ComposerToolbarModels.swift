@@ -45,6 +45,7 @@ enum ComposerToolbarViewAction {
     case handlePasteOrDrop(provider: NSItemProvider)
     case enableTextFormatting
     case composerAction(action: ComposerAction)
+    case selectedSuggestion(_ suggestion: SuggestionItem)
 }
 
 struct ComposerToolbarViewState: BindableState {

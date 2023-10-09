@@ -24,6 +24,8 @@ typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarView
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
+    private let appSettings: AppSettings
+
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -38,9 +40,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
+        self.appSettings = appSettings
 
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
 
@@ -121,6 +124,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 wysiwygViewModel.apply(action)
             }
+        case .selectedSuggestion(let suggestion):
+            handleSuggestion(suggestion)
         }
     }
 
@@ -149,6 +154,17 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     // MARK: - Private
+    
+    private func handleSuggestion(_ suggestion: SuggestionItem) {
+        switch suggestion {
+        case let .user(item):
+            guard let url = try? PermalinkBuilder.permalinkTo(userIdentifier: item.id, baseURL: appSettings.permalinkBaseURL) else {
+                MXLog.error("Could not build user permalink")
+                return
+            }
+            wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+        }
+    }
 
     private func set(mode: RoomScreenComposerMode) {
         guard mode != state.composerMode else { return }

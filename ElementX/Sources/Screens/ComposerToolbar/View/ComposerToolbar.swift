@@ -49,7 +49,9 @@ struct ComposerToolbar: View {
     }
     
     private var suggestionView: some View {
-        CompletionSuggestionView(imageProvider: context.imageProvider, items: context.viewState.suggestions)
+        CompletionSuggestionView(imageProvider: context.imageProvider, items: context.viewState.suggestions) { suggestion in
+            context.send(viewAction: .selectedSuggestion(suggestion))
+        }
     }
 
     private var topBar: some View {
@@ -194,7 +196,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
     static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
-                                                            mediaProvider: MockMediaProvider())
+                                                            mediaProvider: MockMediaProvider(),
+                                                            appSettings: ServiceLocator.shared.settings)
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
@@ -219,7 +222,8 @@ extension ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                         mediaProvider: MockMediaProvider())
+                                                         mediaProvider: MockMediaProvider(),
+                                                         appSettings: ServiceLocator.shared.settings)
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })

@@ -36,7 +36,8 @@ class ComposerToolbarViewModelTests: XCTestCase {
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
-                                             mediaProvider: MockMediaProvider())
+                                             mediaProvider: MockMediaProvider(),
+                                             appSettings: ServiceLocator.shared.settings)
     }
 
     func testComposerFocus() {
@@ -105,16 +106,24 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MockMediaProvider())
+                                             mediaProvider: MockMediaProvider(),
+                                             appSettings: ServiceLocator.shared.settings)
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
     
     func testSuggestionTrigger() {
         wysiwygViewModel.setMarkdownContent("@test")
-        wysiwygViewModel.setMarkdownContent("#not_implemented_yey")
+        wysiwygViewModel.setMarkdownContent("#not_implemented_yay")
         
         // The first one is nil because when initialised the view model is empty
         XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test"), nil])
+    }
+    
+    func testSelectedSuggestion() {
+        let suggestion = SuggestionItem.user(item: .init(id: "@test:matrix.org", displayName: "Test", avatarURL: nil))
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        XCTAssertEqual(wysiwygViewModel.content.html, "<a data-mention-type=\"user\" href=\"https://matrix.to/#/@test:matrix.org\" contenteditable=\"false\">Test</a> ")
     }
 }
