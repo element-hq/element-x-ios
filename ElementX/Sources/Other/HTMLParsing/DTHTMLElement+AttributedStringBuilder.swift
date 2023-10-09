@@ -64,7 +64,7 @@ public extension DTHTMLElement {
         }
     }
     
-    private static var allowedHTMLTags = ["font", // custom to matrix for IRC-style font coloring
+    private static let allowedHTMLTags = ["font", // custom to matrix for IRC-style font coloring
                                           "del", // for markdown
                                           "body", // added internally by DTCoreText
                                           "mx-reply",

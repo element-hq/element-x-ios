@@ -26,7 +26,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let roomListPageSize = 40
+    private let roomListPageSize = 200
     
     private let serialDispatchQueue: DispatchQueue
     
@@ -57,6 +57,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
+    /// Build a new summary provider with the given parameters
+    /// - Parameters:
+    ///   - shouldUpdateVisibleRange: whether this summary provider should foward visible ranges
+    ///   to the room list service through the `applyInput(input: .viewport(ranges` api. Only useful for
+    ///   lists that need to update the visible range on Sliding Sync
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,

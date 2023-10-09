@@ -35,8 +35,11 @@ class ClientProxy: ClientProxyProtocol {
     private var syncService: SyncService?
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
+    // These following summary providers both operate on the same allRooms() list but
+    // can apply their own filtering and pagination
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
     private(set) var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol?
+    
     private(set) var inviteSummaryProvider: RoomSummaryProviderProtocol?
     
     let notificationSettings: NotificationSettingsProxyProtocol

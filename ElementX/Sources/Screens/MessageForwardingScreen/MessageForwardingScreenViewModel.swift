@@ -106,7 +106,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     }
     
     /// The actual range values don't matter as long as they contain the lower
-    /// or upper bounds
+    /// or upper bounds. updateVisibleRange is a hybrid API that powers both
+    /// sliding sync visible range update and list paginations
+    /// For lists other than the home screen one we don't care about visible ranges,
+    /// we just need the respective bounds to be there to trigger a next page load or
+    /// a reset to just one page
     private func updateVisibleRange(edge: UIRectEdge) {
         guard let roomSummaryProvider else {
             return

@@ -26,6 +26,7 @@ struct MessageForwardingScreen: View {
                     MessageForwardingRoomCell(room: room, context: context)
                         .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
                 }
+                // Replace these with ScrollView's `scrollPosition` when dropping iOS 16.
             } header: {
                 Rectangle().hidden().onAppear {
                     context.send(viewAction: .reachedTop)
