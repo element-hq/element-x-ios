@@ -35,10 +35,14 @@ class ClientProxy: ClientProxyProtocol {
     private var syncService: SyncService?
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol?
-    var inviteSummaryProvider: RoomSummaryProviderProtocol?
+    // These following summary providers both operate on the same allRooms() list but
+    // can apply their own filtering and pagination
+    private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
+    private(set) var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol?
     
-    var notificationSettings: NotificationSettingsProxyProtocol
+    private(set) var inviteSummaryProvider: RoomSummaryProviderProtocol?
+    
+    let notificationSettings: NotificationSettingsProxyProtocol
 
     private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
@@ -451,9 +455,17 @@ class ClientProxy: ClientProxyProtocol {
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
+                                                      shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
                                                       backgroundTaskService: backgroundTaskService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
+            
+            messageForwardingRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                                       eventStringBuilder: eventStringBuilder,
+                                                                       name: "MessageForwarding",
+                                                                       notificationSettings: notificationSettings,
+                                                                       backgroundTaskService: backgroundTaskService)
+            try await messageForwardingRoomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             inviteSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,

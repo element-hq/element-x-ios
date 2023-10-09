@@ -89,6 +89,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
+    var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    
     var inviteSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     var notificationSettings: NotificationSettingsProxyProtocol { get }

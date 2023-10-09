@@ -24,8 +24,17 @@ enum MockRoomSummaryProviderState {
 }
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
-    let roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>
-    let statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>
+    private let initialRooms: [RoomSummary]
+    
+    private let roomListSubject: CurrentValueSubject<[RoomSummary], Never>
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+        roomListSubject.asCurrentValuePublisher()
+    }
+    
+    private let stateSuject: CurrentValueSubject<RoomSummaryProviderState, Never>
+    var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
+        stateSuject.asCurrentValuePublisher()
+    }
     
     convenience init() {
         self.init(state: .loading)
@@ -34,11 +43,15 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     init(state: MockRoomSummaryProviderState) {
         switch state {
         case .loading:
-            roomListPublisher = .init([])
-            statePublisher = .init(.notLoaded)
+            initialRooms = []
+            roomListSubject = .init(initialRooms)
+            roomListSubject.send(initialRooms)
+            stateSuject = .init(.notLoaded)
         case .loaded(let rooms):
-            roomListPublisher = .init(rooms)
-            statePublisher = .init(.loaded(totalNumberOfRooms: UInt(rooms.count)))
+            initialRooms = rooms
+            roomListSubject = .init(initialRooms)
+            roomListSubject.send(initialRooms)
+            stateSuject = .init(.loaded(totalNumberOfRooms: UInt(initialRooms.count)))
         }
     }
     
@@ -46,7 +59,20 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func updateVisibleRange(_ range: Range<Int>) { }
     
-    func setFilter(_ filter: RoomSummaryProviderFilter) { }
+    func setFilter(_ filter: RoomSummaryProviderFilter) {
+        switch filter {
+        case .all:
+            roomListSubject.send(initialRooms)
+        case .none:
+            roomListSubject.send([])
+        case .normalizedMatchRoomName(let filter):
+            if filter.isEmpty {
+                roomListSubject.send(initialRooms)
+            } else {
+                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter) ?? false })
+            }
+        }
+    }
 }
 
 extension Array where Element == RoomSummary {
