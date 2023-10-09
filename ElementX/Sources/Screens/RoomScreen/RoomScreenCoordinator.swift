@@ -71,7 +71,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
-                                                     appSetting: parameters.appSettings)
+                                                     appSettings: parameters.appSettings)
     }
     
     // MARK: - Public
