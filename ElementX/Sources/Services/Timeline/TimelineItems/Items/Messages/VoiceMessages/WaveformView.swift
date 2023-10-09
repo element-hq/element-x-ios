@@ -25,10 +25,21 @@ extension Waveform {
         guard count > 0 else {
             return []
         }
-        let stride = max(1, Int(data.count / count))
-        let data = data.striding(by: stride)
-        let max = data.max().flatMap { Float($0) } ?? 0
-        return data.map { Float($0) / max }
+        // Filter the data to keep only the expected number of samples
+        let originalCount = Double(data.count)
+        let expectedCount = Double(count)
+        var filteredData: [UInt16] = []
+        if expectedCount < originalCount {
+            for index in 0..<count {
+                let targetIndex = (Double(index) * (originalCount / expectedCount)).rounded()
+                filteredData.append(UInt16(data[Int(targetIndex)]))
+            }
+        } else {
+            filteredData = data
+        }
+        // Normalize the sample
+        let max = max(1.0, filteredData.max().flatMap { Float($0) } ?? 1.0)
+        return filteredData.map { Float($0) / max }
     }
 }
 
