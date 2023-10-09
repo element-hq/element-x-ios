@@ -37,7 +37,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MockMediaProvider(),
-                                             appSetting: ServiceLocator.shared.settings)
+                                             appSettings: ServiceLocator.shared.settings)
     }
 
     func testComposerFocus() {
@@ -107,7 +107,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MockMediaProvider(),
-                                             appSetting: ServiceLocator.shared.settings)
+                                             appSettings: ServiceLocator.shared.settings)
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }

@@ -22,9 +22,10 @@ import WysiwygComposer
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
-    private let appSettings: AppSettings
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
+    private let appSettings: AppSettings
+
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -39,10 +40,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSetting: AppSettings) {
-        appSettings = appSetting
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
+        self.appSettings = appSettings
 
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
 
