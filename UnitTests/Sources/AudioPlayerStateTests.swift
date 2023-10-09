@@ -20,23 +20,33 @@ import Foundation
 import XCTest
 
 @MainActor
-class AudioPlayerTests: XCTestCase {
+class AudioPlayerStateTests: XCTestCase {
     private var audioPlayerState: AudioPlayerState!
     private var audioPlayerMock: AudioPlayerMock!
     
-    private let audioPlayerActionsSubject: PassthroughSubject<AudioPlayerAction, Never> = .init()
-    var audioPlayerActions: AnyPublisher<AudioPlayerAction, Never> {
+    private var audioPlayerActionsSubject: PassthroughSubject<AudioPlayerAction, Never>!
+    private var audioPlayerActions: AnyPublisher<AudioPlayerAction, Never> {
         audioPlayerActionsSubject.eraseToAnyPublisher()
+    }
+    
+    private var audioPlayerSeekCallsSubject: PassthroughSubject<Double, Never>!
+    private var audioPlayerSeekCalls: AnyPublisher<Double, Never> {
+        audioPlayerSeekCallsSubject.eraseToAnyPublisher()
     }
     
     private func buildAudioPlayerMock() -> AudioPlayerMock {
         let audioPlayerMock = AudioPlayerMock()
         audioPlayerMock.underlyingActions = audioPlayerActions
         audioPlayerMock.currentTime = 0.0
+        audioPlayerMock.seekToClosure = { [audioPlayerSeekCallsSubject] progress in
+            audioPlayerSeekCallsSubject?.send(progress)
+        }
         return audioPlayerMock
     }
     
     override func setUp() async throws {
+        audioPlayerActionsSubject = .init()
+        audioPlayerSeekCallsSubject = .init()
         audioPlayerState = AudioPlayerState(duration: 10.0)
         audioPlayerMock = buildAudioPlayerMock()
     }
@@ -116,15 +126,15 @@ class AudioPlayerTests: XCTestCase {
                 return false
             }
         }
+        // The progress should be restored
+        let deferedProgress = deferFulfillment(audioPlayerSeekCalls) { progress in
+            progress == 0.4
+        }
         
         audioPlayerActionsSubject.send(.didFinishLoading)
         try await deferred.fulfill()
-                
-        // The progress should be restored
-        // wait for the task to be completed
-        try await Task.sleep(for: .milliseconds(100))
-        XCTAssert(audioPlayerMock.seekToCalled)
-        XCTAssertEqual(audioPlayerMock.seekToReceivedProgress, 0.4)
+        try await deferedProgress.fulfill()
+        
         // The state is expected to be .readyToPlay
         XCTAssertEqual(audioPlayerState.playbackState, .readyToPlay)
     }
