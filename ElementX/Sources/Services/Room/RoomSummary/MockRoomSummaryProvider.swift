@@ -45,10 +45,12 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         case .loading:
             initialRooms = []
             roomListSubject = .init(initialRooms)
+            roomListSubject.send(initialRooms)
             stateSuject = .init(.notLoaded)
         case .loaded(let rooms):
             initialRooms = rooms
             roomListSubject = .init(initialRooms)
+            roomListSubject.send(initialRooms)
             stateSuject = .init(.loaded(totalNumberOfRooms: UInt(initialRooms.count)))
         }
     }
@@ -64,7 +66,11 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         case .none:
             roomListSubject.send([])
         case .normalizedMatchRoomName(let filter):
-            roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter) ?? false })
+            if filter.isEmpty {
+                roomListSubject.send(initialRooms)
+            } else {
+                roomListSubject.send(initialRooms.filter { $0.name?.localizedCaseInsensitiveContains(filter) ?? false })
+            }
         }
     }
 }
