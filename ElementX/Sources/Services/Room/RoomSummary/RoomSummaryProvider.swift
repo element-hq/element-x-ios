@@ -22,10 +22,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let roomListService: RoomListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
+    private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let roomListPageSize = 200
+    private let roomListPageSize = 40
     
     private let serialDispatchQueue: DispatchQueue
     
@@ -59,12 +60,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
+         shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
+        self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.backgroundTaskService = backgroundTaskService
         
@@ -110,6 +113,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateVisibleRange(_ range: Range<Int>) {
+        if range.upperBound >= rooms.count {
+            listUpdatesSubscriptionResult?.controller.addOnePage()
+        } else if range.lowerBound == 0 {
+            listUpdatesSubscriptionResult?.controller.resetToOnePage()
+        }
+        
+        guard shouldUpdateVisibleRange else {
+            return
+        }
+        
         Task {
             do {
                 // The scroll view content size based visible range calculations might create large ranges
@@ -125,12 +138,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             } catch {
                 MXLog.error("Failed updating visible range with error: \(error)")
             }
-        }
-        
-        if range.upperBound >= rooms.count {
-            listUpdatesSubscriptionResult?.controller.addOnePage()
-        } else if range.lowerBound == 0 {
-            listUpdatesSubscriptionResult?.controller.resetToOnePage()
         }
     }
     

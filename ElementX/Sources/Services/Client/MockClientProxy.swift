@@ -30,6 +30,8 @@ class MockClientProxy: ClientProxyProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
+    var messageForwardingRoomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    
     var inviteSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
     var userAvatarURL: CurrentValuePublisher<URL?, Never> { CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher() }

@@ -22,9 +22,17 @@ struct MessageForwardingScreen: View {
     var body: some View {
         Form {
             Section {
-                ForEach(context.viewState.visibleRooms) { room in
+                ForEach(context.viewState.rooms) { room in
                     MessageForwardingRoomCell(room: room, context: context)
                         .buttonStyle(FormButtonStyle(accessory: .singleSelection(isSelected: context.viewState.selectedRoomID == room.id)))
+                }
+            } header: {
+                Rectangle().hidden().onAppear {
+                    context.send(viewAction: .reachedTop)
+                }
+            } footer: {
+                Rectangle().hidden().onAppear {
+                    context.send(viewAction: .reachedBottom)
                 }
             }
             .compoundFormSection()

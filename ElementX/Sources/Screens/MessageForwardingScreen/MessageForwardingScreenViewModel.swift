@@ -43,6 +43,15 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             }
             .store(in: &cancellables)
         
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .removeDuplicates()
+            .sink { [weak self] searchQuery in
+                guard let self else { return }
+                self.roomSummaryProvider?.setFilter(.normalizedMatchRoomName(searchQuery))
+            }
+            .store(in: &cancellables)
+        
         updateRooms()
     }
     
@@ -58,6 +67,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             actionsSubject.send(.send(roomID: roomID))
         case .selectRoom(let roomID):
             state.selectedRoomID = roomID
+        case .reachedTop:
+            updateVisibleRange(edge: .top)
+        case .reachedBottom:
+            updateVisibleRange(edge: .bottom)
         }
     }
     
@@ -90,5 +103,23 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         state.rooms = rooms
         
         MXLog.verbose("Finished updating rooms")
+    }
+    
+    /// The actual range values don't matter as long as they contain the lower
+    /// or upper bounds
+    private func updateVisibleRange(edge: UIRectEdge) {
+        guard let roomSummaryProvider else {
+            return
+        }
+        
+        switch edge {
+        case .top:
+            roomSummaryProvider.updateVisibleRange(0..<0)
+        case .bottom:
+            let roomCount = roomSummaryProvider.roomListPublisher.value.count
+            roomSummaryProvider.updateVisibleRange(roomCount..<roomCount)
+        default:
+            break
+        }
     }
 }
