@@ -115,7 +115,8 @@ class AudioPlayerStateTests: XCTestCase {
     }
 
     func testHandlingAudioPlayerActionDidFinishLoading() async throws {
-        await audioPlayerState.updateState(progress: 0.4)
+        let originalStateProgress = 0.4
+        await audioPlayerState.updateState(progress: originalStateProgress)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
         let deferred = deferFulfillment(audioPlayerActions) { action in
@@ -128,7 +129,7 @@ class AudioPlayerStateTests: XCTestCase {
         }
         // The progress should be restored
         let deferedProgress = deferFulfillment(audioPlayerSeekCalls) { progress in
-            progress == 0.4
+            progress == originalStateProgress
         }
         
         audioPlayerActionsSubject.send(.didFinishLoading)
