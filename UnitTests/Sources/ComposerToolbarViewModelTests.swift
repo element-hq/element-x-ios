@@ -31,13 +31,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
         AppSettings.reset()
         appSettings = AppSettings()
         appSettings.richTextEditorEnabled = true
+        appSettings.mentionsEnabled = true
         ServiceLocator.shared.register(appSettings: appSettings)
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MockMediaProvider(),
-                                             appSettings: ServiceLocator.shared.settings,
+                                             appSettings: appSettings,
                                              roomContext: RoomScreenViewModel.mock.context)
     }
 
@@ -127,5 +128,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         XCTAssertEqual(wysiwygViewModel.content.html, "<a data-mention-type=\"user\" href=\"https://matrix.to/#/@test:matrix.org\" contenteditable=\"false\">Test</a> ")
+    }
+    
+    func testMentionInRTE() {
+        let userID = "@test:matrix.org"
+        let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
+        XCTAssertEqual(attachment?.pillData?.type, .user(userID: userID))
     }
 }
