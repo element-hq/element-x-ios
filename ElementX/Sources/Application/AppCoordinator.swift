@@ -20,7 +20,7 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -43,8 +43,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
     }
     
-    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var authenticationCoordinator: AuthenticationCoordinator?
+    private let appLockFlowCoordinator: AppLockFlowCoordinator
+    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -54,6 +55,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
+    let windowManager = WindowManager()
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
@@ -94,10 +96,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             UIApplication.shared
         }
 
-        userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
-
+        let keychainController = KeychainController(service: .sessions,
+                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        userSessionStore = UserSessionStore(keychainController: keychainController,
+                                            backgroundTaskService: backgroundTaskService)
+        
+        appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: AppLockService(keychainController: keychainController),
+                                                        navigationCoordinator: NavigationRootCoordinator())
+        
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
+        
+        windowManager.delegate = self
+        
         notificationManager.delegate = self
         notificationManager.start()
         
@@ -176,6 +187,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         self.userSession = userSession
         self.authenticationCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
+    }
+    
+    // MARK: - WindowManagerDelegate
+    
+    func windowManager(_ windowManager: WindowManager, didConfigureWith windowScene: UIWindowScene) {
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
+        
+        appLockFlowCoordinator.actions.sink { action in
+            switch action {
+            case .lockApp:
+                windowManager.switchToAlternate()
+            case .unlockApp:
+                windowManager.switchToMain()
+            }
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - NotificationManagerDelegate

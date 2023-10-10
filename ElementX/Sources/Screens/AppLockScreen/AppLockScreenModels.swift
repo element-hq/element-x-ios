@@ -15,18 +15,26 @@
 //
 
 import Foundation
-import MatrixRustSDK
 
-struct KeychainCredentials {
-    let userID: String
-    let restorationToken: RestorationToken
+enum AppLockScreenViewModelAction {
+    /// The user has successfully unlocked the app.
+    case appUnlocked
 }
 
-// sourcery: AutoMockable
-protocol KeychainControllerProtocol: ClientSessionDelegate {
-    func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String)
-    func restorationTokenForUsername(_ username: String) -> RestorationToken?
-    func restorationTokens() -> [KeychainCredentials]
-    func removeRestorationTokenForUsername(_ username: String)
-    func removeAllRestorationTokens()
+struct AppLockScreenViewState: BindableState {
+    var bindings: AppLockScreenViewStateBindings
+}
+
+struct AppLockScreenViewStateBindings { }
+
+enum AppLockScreenViewAction: CustomStringConvertible {
+    /// Attempt to unlock the app with the supplied PIN code.
+    case submitPINCode(String)
+    
+    var description: String {
+        switch self {
+        case .submitPINCode:
+            return "submitPINCode"
+        }
+    }
 }

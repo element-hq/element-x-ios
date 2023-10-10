@@ -314,6 +314,91 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
+class KeychainControllerMock: KeychainControllerProtocol {
+
+    //MARK: - setRestorationToken
+
+    var setRestorationTokenForUsernameCallsCount = 0
+    var setRestorationTokenForUsernameCalled: Bool {
+        return setRestorationTokenForUsernameCallsCount > 0
+    }
+    var setRestorationTokenForUsernameReceivedArguments: (restorationToken: RestorationToken, forUsername: String)?
+    var setRestorationTokenForUsernameReceivedInvocations: [(restorationToken: RestorationToken, forUsername: String)] = []
+    var setRestorationTokenForUsernameClosure: ((RestorationToken, String) -> Void)?
+
+    func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String) {
+        setRestorationTokenForUsernameCallsCount += 1
+        setRestorationTokenForUsernameReceivedArguments = (restorationToken: restorationToken, forUsername: forUsername)
+        setRestorationTokenForUsernameReceivedInvocations.append((restorationToken: restorationToken, forUsername: forUsername))
+        setRestorationTokenForUsernameClosure?(restorationToken, forUsername)
+    }
+    //MARK: - restorationTokenForUsername
+
+    var restorationTokenForUsernameCallsCount = 0
+    var restorationTokenForUsernameCalled: Bool {
+        return restorationTokenForUsernameCallsCount > 0
+    }
+    var restorationTokenForUsernameReceivedUsername: String?
+    var restorationTokenForUsernameReceivedInvocations: [String] = []
+    var restorationTokenForUsernameReturnValue: RestorationToken?
+    var restorationTokenForUsernameClosure: ((String) -> RestorationToken?)?
+
+    func restorationTokenForUsername(_ username: String) -> RestorationToken? {
+        restorationTokenForUsernameCallsCount += 1
+        restorationTokenForUsernameReceivedUsername = username
+        restorationTokenForUsernameReceivedInvocations.append(username)
+        if let restorationTokenForUsernameClosure = restorationTokenForUsernameClosure {
+            return restorationTokenForUsernameClosure(username)
+        } else {
+            return restorationTokenForUsernameReturnValue
+        }
+    }
+    //MARK: - restorationTokens
+
+    var restorationTokensCallsCount = 0
+    var restorationTokensCalled: Bool {
+        return restorationTokensCallsCount > 0
+    }
+    var restorationTokensReturnValue: [KeychainCredentials]!
+    var restorationTokensClosure: (() -> [KeychainCredentials])?
+
+    func restorationTokens() -> [KeychainCredentials] {
+        restorationTokensCallsCount += 1
+        if let restorationTokensClosure = restorationTokensClosure {
+            return restorationTokensClosure()
+        } else {
+            return restorationTokensReturnValue
+        }
+    }
+    //MARK: - removeRestorationTokenForUsername
+
+    var removeRestorationTokenForUsernameCallsCount = 0
+    var removeRestorationTokenForUsernameCalled: Bool {
+        return removeRestorationTokenForUsernameCallsCount > 0
+    }
+    var removeRestorationTokenForUsernameReceivedUsername: String?
+    var removeRestorationTokenForUsernameReceivedInvocations: [String] = []
+    var removeRestorationTokenForUsernameClosure: ((String) -> Void)?
+
+    func removeRestorationTokenForUsername(_ username: String) {
+        removeRestorationTokenForUsernameCallsCount += 1
+        removeRestorationTokenForUsernameReceivedUsername = username
+        removeRestorationTokenForUsernameReceivedInvocations.append(username)
+        removeRestorationTokenForUsernameClosure?(username)
+    }
+    //MARK: - removeAllRestorationTokens
+
+    var removeAllRestorationTokensCallsCount = 0
+    var removeAllRestorationTokensCalled: Bool {
+        return removeAllRestorationTokensCallsCount > 0
+    }
+    var removeAllRestorationTokensClosure: (() -> Void)?
+
+    func removeAllRestorationTokens() {
+        removeAllRestorationTokensCallsCount += 1
+        removeAllRestorationTokensClosure?()
+    }
+}
 class MediaPlayerMock: MediaPlayerProtocol {
     var mediaSource: MediaSourceProxy?
     var currentTime: TimeInterval {

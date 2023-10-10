@@ -33,9 +33,8 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     var clientSessionDelegate: ClientSessionDelegate { keychainController }
     
-    init(backgroundTaskService: BackgroundTaskServiceProtocol) {
-        keychainController = KeychainController(service: .sessions,
-                                                accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+    init(keychainController: KeychainControllerProtocol, backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.keychainController = keychainController
         self.backgroundTaskService = backgroundTaskService
         baseDirectory = .sessionsBaseDirectory
         MXLog.info("Setup base directory at: \(baseDirectory)")

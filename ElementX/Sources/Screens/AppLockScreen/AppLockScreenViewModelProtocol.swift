@@ -14,19 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
-import MatrixRustSDK
+import Combine
 
-struct KeychainCredentials {
-    let userID: String
-    let restorationToken: RestorationToken
-}
-
-// sourcery: AutoMockable
-protocol KeychainControllerProtocol: ClientSessionDelegate {
-    func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String)
-    func restorationTokenForUsername(_ username: String) -> RestorationToken?
-    func restorationTokens() -> [KeychainCredentials]
-    func removeRestorationTokenForUsername(_ username: String)
-    func removeAllRestorationTokens()
+@MainActor
+protocol AppLockScreenViewModelProtocol {
+    var actions: AnyPublisher<AppLockScreenViewModelAction, Never> { get }
+    var context: AppLockScreenViewModelType.Context { get }
 }

@@ -157,6 +157,10 @@ class MockScreen: Identifiable {
             let coordinator = TemplateScreenCoordinator(parameters: .init())
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .appLockScreen:
+            let parameters = AppLockScreenCoordinatorParameters(appLockService: AppLockService(keychainController: KeychainControllerMock()))
+            let coordinator = AppLockScreenCoordinator(parameters: parameters)
+            return coordinator
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),

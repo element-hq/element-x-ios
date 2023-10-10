@@ -18,8 +18,9 @@ import SwiftUI
 
 @main
 struct Application: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
+    
     private var appCoordinator: AppCoordinatorProtocol!
 
     init() {
@@ -28,7 +29,9 @@ struct Application: App {
         } else if ProcessInfo.isRunningUnitTests {
             appCoordinator = UnitTestsAppCoordinator()
         } else {
-            appCoordinator = AppCoordinator(appDelegate: applicationDelegate)
+            let coordinator = AppCoordinator(appDelegate: appDelegate)
+            SceneDelegate.windowManager = coordinator.windowManager
+            appCoordinator = coordinator
         }
     }
 
