@@ -25,7 +25,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
-    private let attributedStringBuilder: AttributedStringBuilder
 
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
@@ -45,7 +44,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
-        attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled))
         
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
 
@@ -165,48 +163,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let composerMentionDisplayHelper = ComposerMentionDisplayHelper(roomContext: roomContext)
         wysiwygViewModel.textView.mentionDisplayHelper = composerMentionDisplayHelper
         
-        wysiwygViewModel.mentionReplacer = ComposerMentionReplacer(postProcessMarkdownClosure: { [weak self] attributedString in
-            guard let self else {
-                return attributedString
+        let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled))
+        
+        wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { urlString, string in
+            let attributedString: NSMutableAttributedString
+            // This is the all room mention case
+            if urlString == "#" {
+                attributedString = NSMutableAttributedString(string: string, attributes: [.MatrixAllUsersMention: true])
+            } else {
+                attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
             }
-            let mutableString = NSMutableAttributedString(attributedString: attributedString)
-            attributedStringBuilder.addAllUsersMention(mutableString)
-            attributedStringBuilder.detectPermalinks(mutableString)
-            return mutableString
-        }, restoreMarkdownClosure: { [weak self, weak roomContext] attributedString in
-            guard let self else {
-                return attributedString.string
-            }
-            
-            let range = NSRange(location: 0, length: attributedString.length)
-            let mutableString = NSMutableAttributedString(attributedString: attributedString)
-            mutableString.enumerateAttribute(.attachment, in: range) { value, range, _ in
-                guard let attachment = value as? PillTextAttachment,
-                      let data = attachment.pillData else {
-                    return
-                }
-                
-                let newString: NSAttributedString
-                switch data.type {
-                case .allUsers:
-                    newString = NSAttributedString(string: "@room")
-                case .user(let userID):
-                    let displayName = roomContext?.viewState.members[userID]?.displayName ?? userID
-                    let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userID, baseURL: self.appSettings.permalinkBaseURL)
-                    newString = NSAttributedString(string: "[\(displayName)](\(permalink ?? ""))")
-                }
-            
-                mutableString.replaceCharacters(in: range, with: newString)
-            }
-            return mutableString.string
-        }, replacementForMentionClosure: { [weak self] urlString, string in
-            guard let self else {
-                return nil
-            }
-            let attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
             attributedStringBuilder.detectPermalinks(attributedString)
+            
+            // In RTE mentions don't need to be handled as links
+            attributedString.removeAttribute(.link, range: NSRange(location: 0, length: attributedString.length))
             return attributedString
-        })
+        }
     }
     
     private func handleSuggestion(_ suggestion: SuggestionItem) {
@@ -231,8 +203,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
 
     private func set(text: String) {
-        wysiwygViewModel.setHtmlContent(text)
         wysiwygViewModel.textView.flushPills()
+        wysiwygViewModel.setHtmlContent(text)
     }
 
     private func createLinkAlert() {
@@ -350,24 +322,20 @@ private extension LinkAction {
 }
 
 private final class ComposerMentionReplacer: MentionReplacer {
-    let postProcessMarkdownClosure: (NSAttributedString) -> (NSAttributedString)
-    let restoreMarkdownClosure: (NSAttributedString) -> (String)
     let replacementForMentionClosure: (String, String) -> (NSAttributedString?)
     
-    init(postProcessMarkdownClosure: @escaping (NSAttributedString) -> (NSAttributedString),
-         restoreMarkdownClosure: @escaping (NSAttributedString) -> (String),
-         replacementForMentionClosure: @escaping (String, String) -> (NSAttributedString?)) {
-        self.postProcessMarkdownClosure = postProcessMarkdownClosure
-        self.restoreMarkdownClosure = restoreMarkdownClosure
+    init(replacementForMentionClosure: @escaping (String, String) -> (NSAttributedString?)) {
         self.replacementForMentionClosure = replacementForMentionClosure
     }
     
+    // There is no internal Markdown to RTE switch implemented yet in the room so this one is never called
     func postProcessMarkdown(in attributedString: NSAttributedString) -> NSAttributedString {
-        postProcessMarkdownClosure(attributedString)
+        attributedString
     }
     
+    // There is no internal RTE to Markdown switch implemented yet in the room so this one is never called
     func restoreMarkdown(in attributedString: NSAttributedString) -> String {
-        restoreMarkdownClosure(attributedString)
+        attributedString.string
     }
     
     func replacementForMention(_ url: String, text: String) -> NSAttributedString? {

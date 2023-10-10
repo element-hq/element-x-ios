@@ -222,7 +222,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     func addAllUsersMention(_ attributedString: NSMutableAttributedString) {
         MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).forEach { match in
-            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) == nil {
+            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) as? URL == nil {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
         }
