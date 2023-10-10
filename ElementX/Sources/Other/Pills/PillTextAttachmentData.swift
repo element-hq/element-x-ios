@@ -29,7 +29,7 @@ struct PillTextAttachmentData {
 
     /// Pill type
     let type: PillType
-
+    
     /// Font for the display name
     let font: UIFont
 }

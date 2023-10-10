@@ -25,6 +25,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let appSettings: AppSettings
+    private let attributedStringBuilder: AttributedStringBuilder
 
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
@@ -40,11 +41,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, roomContext: RoomScreenViewModel.Context) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
-
+        attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled))
+        
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
 
         context.$viewState
@@ -84,6 +86,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         completionSuggestionService.suggestionsPublisher
             .weakAssign(to: \.state.suggestions, on: self)
             .store(in: &cancellables)
+        
+        if appSettings.mentionsEnabled {
+            setupMentionsHandling(roomContext: roomContext)
+        }
     }
 
     // MARK: - Public
@@ -155,6 +161,54 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     // MARK: - Private
     
+    private func setupMentionsHandling(roomContext: RoomScreenViewModel.Context) {
+        let composerMentionDisplayHelper = ComposerMentionDisplayHelper(roomContext: roomContext)
+        wysiwygViewModel.textView.mentionDisplayHelper = composerMentionDisplayHelper
+        
+        wysiwygViewModel.mentionReplacer = ComposerMentionReplacer(postProcessMarkdownClosure: { [weak self] attributedString in
+            guard let self else {
+                return attributedString
+            }
+            let mutableString = NSMutableAttributedString(attributedString: attributedString)
+            attributedStringBuilder.addAllUsersMention(mutableString)
+            attributedStringBuilder.detectPermalinks(mutableString)
+            return mutableString
+        }, restoreMarkdownClosure: { [weak self, weak roomContext] attributedString in
+            guard let self else {
+                return attributedString.string
+            }
+            
+            let range = NSRange(location: 0, length: attributedString.length)
+            let mutableString = NSMutableAttributedString(attributedString: attributedString)
+            mutableString.enumerateAttribute(.attachment, in: range) { value, range, _ in
+                guard let attachment = value as? PillTextAttachment,
+                      let data = attachment.pillData else {
+                    return
+                }
+                
+                let newString: NSAttributedString
+                switch data.type {
+                case .allUsers:
+                    newString = NSAttributedString(string: "@room")
+                case .user(let userID):
+                    let displayName = roomContext?.viewState.members[userID]?.displayName ?? userID
+                    let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userID, baseURL: self.appSettings.permalinkBaseURL)
+                    newString = NSAttributedString(string: "[\(displayName)](\(permalink ?? ""))")
+                }
+            
+                mutableString.replaceCharacters(in: range, with: newString)
+            }
+            return mutableString.string
+        }, replacementForMentionClosure: { [weak self] urlString, string in
+            guard let self else {
+                return nil
+            }
+            let attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
+            attributedStringBuilder.detectPermalinks(attributedString)
+            return attributedString
+        })
+    }
+    
     private func handleSuggestion(_ suggestion: SuggestionItem) {
         switch suggestion {
         case let .user(item):
@@ -178,6 +232,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private func set(text: String) {
         wysiwygViewModel.setHtmlContent(text)
+        wysiwygViewModel.textView.flushPills()
     }
 
     private func createLinkAlert() {
@@ -291,5 +346,39 @@ private extension LinkAction {
             return nil
         }
         return url
+    }
+}
+
+private final class ComposerMentionReplacer: MentionReplacer {
+    let postProcessMarkdownClosure: (NSAttributedString) -> (NSAttributedString)
+    let restoreMarkdownClosure: (NSAttributedString) -> (String)
+    let replacementForMentionClosure: (String, String) -> (NSAttributedString?)
+    
+    init(postProcessMarkdownClosure: @escaping (NSAttributedString) -> (NSAttributedString),
+         restoreMarkdownClosure: @escaping (NSAttributedString) -> (String),
+         replacementForMentionClosure: @escaping (String, String) -> (NSAttributedString?)) {
+        self.postProcessMarkdownClosure = postProcessMarkdownClosure
+        self.restoreMarkdownClosure = restoreMarkdownClosure
+        self.replacementForMentionClosure = replacementForMentionClosure
+    }
+    
+    func postProcessMarkdown(in attributedString: NSAttributedString) -> NSAttributedString {
+        postProcessMarkdownClosure(attributedString)
+    }
+    
+    func restoreMarkdown(in attributedString: NSAttributedString) -> String {
+        restoreMarkdownClosure(attributedString)
+    }
+    
+    func replacementForMention(_ url: String, text: String) -> NSAttributedString? {
+        replacementForMentionClosure(url, text)
+    }
+}
+
+final class ComposerMentionDisplayHelper: MentionDisplayHelper {
+    weak var roomContext: RoomScreenViewModel.Context?
+    
+    init(roomContext: RoomScreenViewModel.Context) {
+        self.roomContext = roomContext
     }
 }

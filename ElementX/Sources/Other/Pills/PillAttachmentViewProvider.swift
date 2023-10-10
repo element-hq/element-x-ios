@@ -18,8 +18,10 @@ import SwiftUI
 import SwiftUIIntrospect
 import UIKit
 
+import WysiwygComposer
+
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
-    private weak var messageTextView: MessageTextView?
+    private weak var textView: UIView?
     
     // MARK: - Override
     
@@ -27,7 +29,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
 
         // Keep a reference to the parent text view for size adjustments and pills flushing.
-        messageTextView = parentView?.superview as? MessageTextView
+        textView = parentView?.superview
         tracksTextAttachmentViewBounds = true
     }
     
@@ -46,7 +48,11 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             // The mock viewModel simulates the loading logic for testing purposes
             context = PillContext.mock(type: .loadUser(isOwn: false))
             imageProvider = MockMediaProvider()
-        } else if let roomContext = messageTextView?.roomContext {
+        } else if let roomContext = (textView as? MessageTextView)?.roomContext {
+            context = PillContext(roomContext: roomContext, data: textAttachmentData)
+            imageProvider = roomContext.imageProvider
+        } else if let wysiwigTextView = (textView as? WysiwygTextView),
+                  let roomContext = (wysiwigTextView.mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext {
             context = PillContext(roomContext: roomContext, data: textAttachmentData)
             imageProvider = roomContext.imageProvider
         } else {
@@ -55,12 +61,18 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         }
         
         let view = PillView(imageProvider: imageProvider, context: context) { [weak self] in
-            self?.messageTextView?.invalidateTextAttachmentsDisplay(update: true)
+            guard let messageTextView = self?.textView as? MessageTextView else {
+                return
+            }
+            messageTextView.invalidateTextAttachmentsDisplay(update: true)
         }
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = .clear
         // This allows the text view to handle it as a link
         controller.view.isUserInteractionEnabled = false
         self.view = controller.view
+        if let wysywygView = textView as? WysiwygTextView {
+            wysywygView.registerPillView(controller.view)
+        }
     }
 }

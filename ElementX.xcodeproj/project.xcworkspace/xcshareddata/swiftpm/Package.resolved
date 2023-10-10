@@ -134,15 +134,6 @@
       }
     },
     {
-      "identity" : "matrix-wysiwyg-composer-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/matrix-org/matrix-wysiwyg-composer-swift",
-      "state" : {
-        "revision" : "6e1a77e6061c4148caa087221bc1750ceeb37724",
-        "version" : "2.14.1"
-      }
-    },
-    {
       "identity" : "ogg-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/ogg-swift.git",
@@ -165,8 +156,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "3a6afc24d6bde730a19470d4e6b713f44d076ad9",
-        "version" : "2.0.3"
+        "revision" : "9298825fe26899a58b976d400254e0b050daa578",
+        "version" : "2.0.5"
       }
     },
     {
@@ -210,8 +201,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
-        "version" : "1.0.4"
+        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
+        "version" : "1.0.5"
       }
     },
     {
