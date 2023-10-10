@@ -1,1 +1,0 @@
-User mentions pills (behind a Feature Flag).

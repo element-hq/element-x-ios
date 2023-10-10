@@ -1,1 +1,0 @@
-Tapping on matrix room id link brings you to that room.

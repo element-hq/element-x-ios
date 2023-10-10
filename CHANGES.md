@@ -1,3 +1,25 @@
+## Changes in 1.3.2 (2023-10-10)
+
+✨ Features
+
+- Tapping on matrix room id link brings you to that room. ([#1853](https://github.com/vector-im/element-x-ios/pull/1853))
+- User mentions pills (behind a Feature Flag). ([#1804](https://github.com/vector-im/element-x-ios/issues/1804))
+- Added the user suggestions view when trying to mention a user (but it doesn't react to tap yet). ([#1826](https://github.com/vector-im/element-x-ios/issues/1826))
+- @room mention pill, and own mentions are red. ([#1829](https://github.com/vector-im/element-x-ios/issues/1829))
+- Implement /me ([#1841](https://github.com/vector-im/element-x-ios/issues/1841))
+- Report rust tracing configuration filter in rageshakes ([#1861](https://github.com/vector-im/element-x-ios/issues/1861))
+
+🙌 Improvements
+
+- Use a universal link for OIDC callbacks. ([#1734](https://github.com/vector-im/element-x-ios/issues/1734))
+
+🐛 Bugfixes
+
+- Add remaining iOS 17 introspections. ([#1798](https://github.com/vector-im/element-x-ios/issues/1798))
+- Redirect universal links directly to the browser if they're not supported ([#1824](https://github.com/vector-im/element-x-ios/issues/1824))
+- Fix message forwarding room list filtering and pagination problems ([#1864](https://github.com/vector-im/element-x-ios/issues/1864))
+
+
 ## Changes in 1.3.1 (2023-09-27)
 
 🙌 Improvements

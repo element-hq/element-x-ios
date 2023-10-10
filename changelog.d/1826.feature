@@ -1,1 +1,0 @@
-Added the user suggestions view when trying to mention a user (but it doesn't react to tap yet).
