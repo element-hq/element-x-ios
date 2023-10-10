@@ -59,8 +59,6 @@ struct WaveformView: View {
     var showCursor = false
     
     @State private var normalizedWaveformData: [Float] = []
-    @State private var waveformPathSize: CGSize = .zero
-    @State private var waveformPath: Path?
     
     var body: some View {
         GeometryReader { geometry in
@@ -86,12 +84,12 @@ struct WaveformView: View {
             }
         }
         .onPreferenceChange(ViewSizeKey.self) { size in
-            let count = Int(size.width / (lineWidth + linePadding))
-            buildNormalizedWaveform(count: count)
+            buildNormalizedWaveformData(size: size)
         }
     }
     
-    private func buildNormalizedWaveform(count: Int) {
+    private func buildNormalizedWaveformData(size: CGSize) {
+        let count = Int(size.width / (lineWidth + linePadding))
         // Rebuild the normalized waveform data only if the count has changed
         if normalizedWaveformData.count == count {
             return
@@ -137,7 +135,10 @@ private struct WaveformShape: Shape {
 
 struct WaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        WaveformView(waveform: Waveform.mockWaveform, progress: 0.5)
-            .frame(width: 140, height: 50)
+        // Wrap the WaveformView in a VStack otherwise the preview test will fail (because of Prefire / GeometryReader)
+        VStack {
+            WaveformView(waveform: Waveform.mockWaveform, progress: 0.5)
+                .frame(width: 140, height: 50)
+        }
     }
 }
