@@ -128,7 +128,7 @@ class AudioPlayerState: ObservableObject {
     
     private func startPublishProgress() {
         if displayLink != nil {
-            displayLink?.invalidate()
+            stopPublishProgress()
         }
         displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         displayLink?.preferredFrameRateRange = .init(minimum: 10, maximum: 20)
