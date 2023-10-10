@@ -24,7 +24,7 @@ enum MediaPlayerState {
     case error
 }
 
-protocol MediaPlayerProtocol {
+protocol MediaPlayerProtocol: AnyObject {
     var mediaSource: MediaSourceProxy? { get }
     
     var currentTime: TimeInterval { get }
