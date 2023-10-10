@@ -30,3 +30,6 @@ enum AudioPlayerAction {
 protocol AudioPlayerProtocol: MediaPlayerProtocol {
     var actions: AnyPublisher<AudioPlayerAction, Never> { get }
 }
+
+// sourcery: AutoMockable
+extension AudioPlayerProtocol { }

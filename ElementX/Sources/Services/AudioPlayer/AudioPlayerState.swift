@@ -40,6 +40,10 @@ class AudioPlayerState: ObservableObject {
     var isAttached: Bool {
         audioPlayer != nil
     }
+    
+    var isPublishingProgress: Bool {
+        cancellableTimer != nil
+    }
 
     init(duration: Double, waveform: Waveform? = nil, progress: Double = 0.0) {
         self.duration = duration
@@ -133,6 +137,7 @@ class AudioPlayerState: ObservableObject {
     
     private func stopPublishProgress() {
         cancellableTimer?.cancel()
+        cancellableTimer = nil
     }
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {

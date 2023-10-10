@@ -115,6 +115,94 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         updateUserPropertiesClosure?(userProperties)
     }
 }
+class AudioPlayerMock: AudioPlayerProtocol {
+    var actions: AnyPublisher<AudioPlayerAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<AudioPlayerAction, Never>!
+    var mediaSource: MediaSourceProxy?
+    var currentTime: TimeInterval {
+        get { return underlyingCurrentTime }
+        set(value) { underlyingCurrentTime = value }
+    }
+    var underlyingCurrentTime: TimeInterval!
+    var url: URL?
+    var state: MediaPlayerState {
+        get { return underlyingState }
+        set(value) { underlyingState = value }
+    }
+    var underlyingState: MediaPlayerState!
+
+    //MARK: - load
+
+    var loadMediaSourceUsingCallsCount = 0
+    var loadMediaSourceUsingCalled: Bool {
+        return loadMediaSourceUsingCallsCount > 0
+    }
+    var loadMediaSourceUsingReceivedArguments: (mediaSource: MediaSourceProxy, url: URL)?
+    var loadMediaSourceUsingReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL)] = []
+    var loadMediaSourceUsingClosure: ((MediaSourceProxy, URL) -> Void)?
+
+    func load(mediaSource: MediaSourceProxy, using url: URL) {
+        loadMediaSourceUsingCallsCount += 1
+        loadMediaSourceUsingReceivedArguments = (mediaSource: mediaSource, url: url)
+        loadMediaSourceUsingReceivedInvocations.append((mediaSource: mediaSource, url: url))
+        loadMediaSourceUsingClosure?(mediaSource, url)
+    }
+    //MARK: - play
+
+    var playCallsCount = 0
+    var playCalled: Bool {
+        return playCallsCount > 0
+    }
+    var playClosure: (() -> Void)?
+
+    func play() {
+        playCallsCount += 1
+        playClosure?()
+    }
+    //MARK: - pause
+
+    var pauseCallsCount = 0
+    var pauseCalled: Bool {
+        return pauseCallsCount > 0
+    }
+    var pauseClosure: (() -> Void)?
+
+    func pause() {
+        pauseCallsCount += 1
+        pauseClosure?()
+    }
+    //MARK: - stop
+
+    var stopCallsCount = 0
+    var stopCalled: Bool {
+        return stopCallsCount > 0
+    }
+    var stopClosure: (() -> Void)?
+
+    func stop() {
+        stopCallsCount += 1
+        stopClosure?()
+    }
+    //MARK: - seek
+
+    var seekToCallsCount = 0
+    var seekToCalled: Bool {
+        return seekToCallsCount > 0
+    }
+    var seekToReceivedProgress: Double?
+    var seekToReceivedInvocations: [Double] = []
+    var seekToClosure: ((Double) async -> Void)?
+
+    func seek(to progress: Double) async {
+        seekToCallsCount += 1
+        seekToReceivedProgress = progress
+        seekToReceivedInvocations.append(progress)
+        await seekToClosure?(progress)
+    }
+}
 class BugReportServiceMock: BugReportServiceProtocol {
     var isRunning: Bool {
         get { return underlyingIsRunning }
@@ -224,6 +312,89 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerReceivedSuggestionTrigger = suggestionTrigger
         setSuggestionTriggerReceivedInvocations.append(suggestionTrigger)
         setSuggestionTriggerClosure?(suggestionTrigger)
+    }
+}
+class MediaPlayerMock: MediaPlayerProtocol {
+    var mediaSource: MediaSourceProxy?
+    var currentTime: TimeInterval {
+        get { return underlyingCurrentTime }
+        set(value) { underlyingCurrentTime = value }
+    }
+    var underlyingCurrentTime: TimeInterval!
+    var url: URL?
+    var state: MediaPlayerState {
+        get { return underlyingState }
+        set(value) { underlyingState = value }
+    }
+    var underlyingState: MediaPlayerState!
+
+    //MARK: - load
+
+    var loadMediaSourceUsingCallsCount = 0
+    var loadMediaSourceUsingCalled: Bool {
+        return loadMediaSourceUsingCallsCount > 0
+    }
+    var loadMediaSourceUsingReceivedArguments: (mediaSource: MediaSourceProxy, url: URL)?
+    var loadMediaSourceUsingReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL)] = []
+    var loadMediaSourceUsingClosure: ((MediaSourceProxy, URL) -> Void)?
+
+    func load(mediaSource: MediaSourceProxy, using url: URL) {
+        loadMediaSourceUsingCallsCount += 1
+        loadMediaSourceUsingReceivedArguments = (mediaSource: mediaSource, url: url)
+        loadMediaSourceUsingReceivedInvocations.append((mediaSource: mediaSource, url: url))
+        loadMediaSourceUsingClosure?(mediaSource, url)
+    }
+    //MARK: - play
+
+    var playCallsCount = 0
+    var playCalled: Bool {
+        return playCallsCount > 0
+    }
+    var playClosure: (() -> Void)?
+
+    func play() {
+        playCallsCount += 1
+        playClosure?()
+    }
+    //MARK: - pause
+
+    var pauseCallsCount = 0
+    var pauseCalled: Bool {
+        return pauseCallsCount > 0
+    }
+    var pauseClosure: (() -> Void)?
+
+    func pause() {
+        pauseCallsCount += 1
+        pauseClosure?()
+    }
+    //MARK: - stop
+
+    var stopCallsCount = 0
+    var stopCalled: Bool {
+        return stopCallsCount > 0
+    }
+    var stopClosure: (() -> Void)?
+
+    func stop() {
+        stopCallsCount += 1
+        stopClosure?()
+    }
+    //MARK: - seek
+
+    var seekToCallsCount = 0
+    var seekToCalled: Bool {
+        return seekToCallsCount > 0
+    }
+    var seekToReceivedProgress: Double?
+    var seekToReceivedInvocations: [Double] = []
+    var seekToClosure: ((Double) async -> Void)?
+
+    func seek(to progress: Double) async {
+        seekToCallsCount += 1
+        seekToReceivedProgress = progress
+        seekToReceivedInvocations.append(progress)
+        await seekToClosure?(progress)
     }
 }
 class NotificationCenterMock: NotificationCenterProtocol {
@@ -1911,6 +2082,34 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
             return await authorizationStatusClosure()
         } else {
             return authorizationStatusReturnValue
+        }
+    }
+}
+class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
+
+    //MARK: - loadVoiceMessageFromSource
+
+    var loadVoiceMessageFromSourceBodyThrowableError: Error?
+    var loadVoiceMessageFromSourceBodyCallsCount = 0
+    var loadVoiceMessageFromSourceBodyCalled: Bool {
+        return loadVoiceMessageFromSourceBodyCallsCount > 0
+    }
+    var loadVoiceMessageFromSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
+    var loadVoiceMessageFromSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+    var loadVoiceMessageFromSourceBodyReturnValue: URL!
+    var loadVoiceMessageFromSourceBodyClosure: ((MediaSourceProxy, String?) async throws -> URL)?
+
+    func loadVoiceMessageFromSource(_ source: MediaSourceProxy, body: String?) async throws -> URL {
+        if let error = loadVoiceMessageFromSourceBodyThrowableError {
+            throw error
+        }
+        loadVoiceMessageFromSourceBodyCallsCount += 1
+        loadVoiceMessageFromSourceBodyReceivedArguments = (source: source, body: body)
+        loadVoiceMessageFromSourceBodyReceivedInvocations.append((source: source, body: body))
+        if let loadVoiceMessageFromSourceBodyClosure = loadVoiceMessageFromSourceBodyClosure {
+            return try await loadVoiceMessageFromSourceBodyClosure(source, body)
+        } else {
+            return loadVoiceMessageFromSourceBodyReturnValue
         }
     }
 }
