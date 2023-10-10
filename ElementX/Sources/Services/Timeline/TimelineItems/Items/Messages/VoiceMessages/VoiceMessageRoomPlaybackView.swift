@@ -35,6 +35,12 @@ struct VoiceMessageRoomPlaybackView: View {
         dateFormatter.dateFormat = "m:ss"
         return dateFormatter
     }()
+    
+    private static let longElapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        return dateFormatter
+    }()
         
     @GestureState private var dragState = DragState.inactive
     @State private var tapProgress: Double = .zero
@@ -42,7 +48,13 @@ struct VoiceMessageRoomPlaybackView: View {
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
-        return Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playerState.duration * percent))
+        // If the duration is greater or equal 10 minutes, use the long format
+        let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
+        if playerState.duration >= 600 {
+            return Self.longElapsedTimeFormatter.string(from: elapsed)
+        } else {
+            return Self.elapsedTimeFormatter.string(from: elapsed)
+        }
     }
     
     var showWaveformCursor: Bool {
