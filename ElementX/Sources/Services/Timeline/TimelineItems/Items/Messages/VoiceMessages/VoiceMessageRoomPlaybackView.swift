@@ -28,7 +28,8 @@ struct VoiceMessageRoomPlaybackView: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     private let waveformMaxWidth: CGFloat = 150
-    private let playPauseButtonSize = CGSize(width: 32, height: 32)
+    @ScaledMetric private var playPauseButtonSize = 32
+    @ScaledMetric private var playPauseImagePadding = 8
     
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -69,6 +70,7 @@ struct VoiceMessageRoomPlaybackView: View {
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textSecondary)
                     .monospacedDigit()
+                    .fixedSize(horizontal: true, vertical: true)
             }
             GeometryReader { geometry in
                 WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
@@ -132,6 +134,8 @@ struct VoiceMessageRoomPlaybackView: View {
                     ProgressView()
                 } else {
                     Image(asset: playerState.playbackState == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
+                        .resizable()
+                        .padding(playPauseImagePadding)
                         .offset(x: playerState.playbackState == .playing ? 0 : 2)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.compound.iconSecondary)
@@ -139,8 +143,8 @@ struct VoiceMessageRoomPlaybackView: View {
             }
         }
         .disabled(playerState.playbackState == .loading)
-        .frame(width: playPauseButtonSize.width,
-               height: playPauseButtonSize.height)
+        .frame(width: playPauseButtonSize,
+               height: playPauseButtonSize)
     }
 }
 
@@ -183,7 +187,7 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let playerState = AudioPlayerState(duration: 10.0,
+    static var playerState = AudioPlayerState(duration: 10.0,
                                               waveform: waveform,
                                               progress: 0.3)
     
