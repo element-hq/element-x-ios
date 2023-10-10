@@ -113,8 +113,8 @@ class AudioPlayerState: ObservableObject {
             if let audioPlayer {
                 await restoreAudioPlayerState(audioPlayer: audioPlayer)
             }
-            playbackState = .playing
             startPublishProgress()
+            playbackState = .playing
         case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
             stopPublishProgress()
             playbackState = .stopped
