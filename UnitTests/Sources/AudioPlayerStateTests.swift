@@ -100,9 +100,9 @@ class AudioPlayerStateTests: XCTestCase {
     func testHandlingAudioPlayerActionDidStartLoading() async throws {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didStartLoading:
+            case .loading:
                 return true
             default:
                 return false
@@ -119,33 +119,29 @@ class AudioPlayerStateTests: XCTestCase {
         await audioPlayerState.updateState(progress: originalStateProgress)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didFinishLoading:
+            case .readyToPlay:
                 return true
             default:
                 return false
             }
         }
-        // The progress should be restored
-        let deferedProgress = deferFulfillment(audioPlayerSeekCalls) { progress in
-            progress == originalStateProgress
-        }
         
         audioPlayerActionsSubject.send(.didFinishLoading)
         try await deferred.fulfill()
-        try await deferedProgress.fulfill()
         
         // The state is expected to be .readyToPlay
         XCTAssertEqual(audioPlayerState.playbackState, .readyToPlay)
     }
     
     func testHandlingAudioPlayerActionDidStartPlaying() async throws {
+        await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didStartPlaying:
+            case .playing:
                 return true
             default:
                 return false
@@ -154,6 +150,7 @@ class AudioPlayerStateTests: XCTestCase {
         
         audioPlayerActionsSubject.send(.didStartPlaying)
         try await deferred.fulfill()
+        XCTAssertEqual(audioPlayerMock.seekToReceivedProgress, 0.4)
         XCTAssertEqual(audioPlayerState.playbackState, .playing)
         XCTAssert(audioPlayerState.isPublishingProgress)
     }
@@ -162,9 +159,9 @@ class AudioPlayerStateTests: XCTestCase {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didPausePlaying:
+            case .stopped:
                 return true
             default:
                 return false
@@ -182,9 +179,9 @@ class AudioPlayerStateTests: XCTestCase {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didStopPlaying:
+            case .stopped:
                 return true
             default:
                 return false
@@ -202,9 +199,9 @@ class AudioPlayerStateTests: XCTestCase {
         await audioPlayerState.updateState(progress: 0.4)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
-        let deferred = deferFulfillment(audioPlayerActions) { action in
+        let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in
             switch action {
-            case .didFinishPlaying:
+            case .stopped:
                 return true
             default:
                 return false

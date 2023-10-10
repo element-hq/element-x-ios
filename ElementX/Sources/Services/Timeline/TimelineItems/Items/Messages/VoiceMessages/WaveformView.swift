@@ -21,14 +21,25 @@ struct Waveform: Equatable, Hashable {
 }
 
 extension Waveform {
-    func normalisedData(count: Int) -> [Float] {
-        guard count > 0 else {
+    func normalisedData(keepSamplesCount: Int) -> [Float] {
+        guard keepSamplesCount > 0 else {
             return []
         }
-        let stride = max(1, Int(data.count / count))
-        let data = data.striding(by: stride)
-        let max = data.max().flatMap { Float($0) } ?? 0
-        return data.map { Float($0) / max }
+        // Filter the data to keep only the expected number of samples
+        let originalCount = Double(data.count)
+        let expectedCount = Double(keepSamplesCount)
+        var filteredData: [UInt16] = []
+        if expectedCount < originalCount {
+            for index in 0..<keepSamplesCount {
+                let targetIndex = (Double(index) * (originalCount / expectedCount)).rounded()
+                filteredData.append(UInt16(data[Int(targetIndex)]))
+            }
+        } else {
+            filteredData = data
+        }
+        // Normalize the sample
+        let max = max(1.0, filteredData.max().flatMap { Float($0) } ?? 1.0)
+        return filteredData.map { Float($0) / max }
     }
 }
 
@@ -47,6 +58,8 @@ struct WaveformView: View {
     var progress: CGFloat = 0.0
     var showCursor = false
     
+    @State private var normalizedWaveformData: [Float] = []
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -55,50 +68,77 @@ struct WaveformView: View {
                 Rectangle().fill(Color.compound.iconSecondary)
                     .frame(width: max(0.0, geometry.size.width * progress), height: geometry.size.height)
             }
+            .preference(key: ViewSizeKey.self, value: geometry.size)
             .mask(alignment: .leading) {
-                Path { path in
-                    let width = geometry.size.width
-                    let height = geometry.size.height
-                    let centerY = geometry.size.height / 2
-                    let visibleSamplesCount = Int(width / (lineWidth + linePadding))
-                    let normalisedData = waveform.normalisedData(count: visibleSamplesCount)
-                    var xOffset: CGFloat = lineWidth / 2
-                    var index = 0
-                    
-                    while xOffset <= width {
-                        let sample = CGFloat(index >= normalisedData.count ? 0 : normalisedData[index])
-                        let drawingAmplitude = max(minimumGraphAmplitude, sample * (height - 2))
-
-                        path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
-                        path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
-                        xOffset += lineWidth + linePadding
-                        index += 1
-                    }
-                }
-                .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                WaveformShape(lineWidth: lineWidth,
+                              linePadding: linePadding,
+                              waveformData: normalizedWaveformData)
+                    .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
             }
             // Display a cursor
             .overlay(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
-                    .offset(CGSize(width: cursorPosition(progress: progress, width: geometry.size.width), height: 0.0))
+                    .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
                     .frame(width: lineWidth, height: geometry.size.height)
                     .opacity(showCursor ? 1 : 0)
             }
         }
+        .onPreferenceChange(ViewSizeKey.self) { size in
+            buildNormalizedWaveformData(size: size)
+        }
     }
     
-    private func cursorPosition(progress: Double, width: Double) -> Double {
-        guard progress > 0 else {
-            return 0
+    private func buildNormalizedWaveformData(size: CGSize) {
+        let count = Int(size.width / (lineWidth + linePadding))
+        // Rebuild the normalized waveform data only if the count has changed
+        if normalizedWaveformData.count == count {
+            return
         }
-        let width = (width * progress)
-        return width - width.truncatingRemainder(dividingBy: lineWidth + linePadding)
+        normalizedWaveformData = waveform.normalisedData(keepSamplesCount: count)
+    }
+}
+
+private struct ViewSizeKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
+    }
+}
+
+private struct WaveformShape: Shape {
+    let lineWidth: CGFloat
+    let linePadding: CGFloat
+    let waveformData: [Float]
+    var minimumGraphAmplitude: CGFloat = 1.0
+    
+    func path(in rect: CGRect) -> Path {
+        let width = rect.size.width
+        let height = rect.size.height
+        let centerY = rect.size.height / 2
+        var xOffset: CGFloat = lineWidth / 2
+        var index = 0
+        
+        var path = Path()
+        while xOffset <= width {
+            let sample = CGFloat(index >= waveformData.count ? 0 : waveformData[index])
+            let drawingAmplitude = max(minimumGraphAmplitude, sample * (height - 2))
+
+            path.move(to: CGPoint(x: xOffset, y: centerY - drawingAmplitude / 2))
+            path.addLine(to: CGPoint(x: xOffset, y: centerY + drawingAmplitude / 2))
+            xOffset += lineWidth + linePadding
+            index += 1
+        }
+        
+        return path
     }
 }
 
 struct WaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        WaveformView(waveform: Waveform.mockWaveform, progress: 0.5)
-            .frame(width: 140, height: 50)
+        // Wrap the WaveformView in a VStack otherwise the preview test will fail (because of Prefire / GeometryReader)
+        VStack {
+            WaveformView(waveform: Waveform.mockWaveform, progress: 0.5)
+                .frame(width: 140, height: 50)
+        }
     }
 }

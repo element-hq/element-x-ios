@@ -28,11 +28,18 @@ struct VoiceMessageRoomPlaybackView: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     private let waveformMaxWidth: CGFloat = 150
-    private let playPauseButtonSize = CGSize(width: 32, height: 32)
+    @ScaledMetric private var playPauseButtonSize = 32
+    @ScaledMetric private var playPauseImagePadding = 8
     
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "m:ss"
+        return dateFormatter
+    }()
+    
+    private static let longElapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
         return dateFormatter
     }()
         
@@ -42,7 +49,13 @@ struct VoiceMessageRoomPlaybackView: View {
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
-        return Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: playerState.duration * percent))
+        // If the duration is greater or equal 10 minutes, use the long format
+        let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
+        if playerState.duration >= 600 {
+            return Self.longElapsedTimeFormatter.string(from: elapsed)
+        } else {
+            return Self.elapsedTimeFormatter.string(from: elapsed)
+        }
     }
     
     var showWaveformCursor: Bool {
@@ -57,6 +70,7 @@ struct VoiceMessageRoomPlaybackView: View {
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textSecondary)
                     .monospacedDigit()
+                    .fixedSize(horizontal: true, vertical: true)
             }
             GeometryReader { geometry in
                 WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
@@ -78,7 +92,7 @@ struct VoiceMessageRoomPlaybackView: View {
                                 if let loc = drag?.location {
                                     progress = loc.x / geometry.size.width
                                 }
-                                state = .dragging(progress: progress, distance: geometry.size.width)
+                                state = .dragging(progress: progress)
                             // Dragging ended or the long press cancelled.
                             default:
                                 state = .inactive
@@ -96,17 +110,12 @@ struct VoiceMessageRoomPlaybackView: View {
                 onScrubbing(true)
                 feedbackGenerator.prepare()
                 sendFeedback = true
-            case .dragging(let progress, let totalWidth):
+            case .dragging(let progress):
                 if sendFeedback {
                     feedbackGenerator.impactOccurred()
                     sendFeedback = false
                 }
-                let minimumProgress = waveformLinePadding / totalWidth
-                let deltaProgress = abs(progress - playerState.progress)
-                let deltaTime = playerState.duration * deltaProgress
-                if deltaProgress == 0 || deltaProgress >= minimumProgress || deltaTime >= 1.0 {
-                    onSeek(max(0, min(progress, 1.0)))
-                }
+                onSeek(max(0, min(progress, 1.0)))
             }
         }
         .padding(.leading, 2)
@@ -125,6 +134,8 @@ struct VoiceMessageRoomPlaybackView: View {
                     ProgressView()
                 } else {
                     Image(asset: playerState.playbackState == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
+                        .resizable()
+                        .padding(playPauseImagePadding)
                         .offset(x: playerState.playbackState == .playing ? 0 : 2)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.compound.iconSecondary)
@@ -132,21 +143,21 @@ struct VoiceMessageRoomPlaybackView: View {
             }
         }
         .disabled(playerState.playbackState == .loading)
-        .frame(width: playPauseButtonSize.width,
-               height: playPauseButtonSize.height)
+        .frame(width: playPauseButtonSize,
+               height: playPauseButtonSize)
     }
 }
 
 private enum DragState: Equatable {
     case inactive
     case pressing(progress: Double)
-    case dragging(progress: Double, distance: Double)
+    case dragging(progress: Double)
     
     var progress: Double {
         switch self {
         case .inactive, .pressing:
             return .zero
-        case .dragging(let progress, _):
+        case .dragging(let progress):
             return progress
         }
     }
@@ -176,7 +187,7 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                           294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                           0, 0, 0, 0, 0, 3])
     
-    static let playerState = AudioPlayerState(duration: 10.0,
+    static var playerState = AudioPlayerState(duration: 10.0,
                                               waveform: waveform,
                                               progress: 0.3)
     

@@ -33,16 +33,16 @@ class AudioPlayerState: ObservableObject {
     @Published private(set) var playbackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
 
-    private var audioPlayer: AudioPlayerProtocol?
+    private weak var audioPlayer: AudioPlayerProtocol?
     private var cancellables: Set<AnyCancellable> = []
-    private var cancellableTimer: AnyCancellable?
+    private var displayLink: CADisplayLink?
 
     var isAttached: Bool {
         audioPlayer != nil
     }
     
     var isPublishingProgress: Bool {
-        cancellableTimer != nil
+        displayLink != nil
     }
 
     init(duration: Double, waveform: Waveform? = nil, progress: Double = 0.0) {
@@ -50,6 +50,11 @@ class AudioPlayerState: ObservableObject {
         self.waveform = waveform ?? Waveform(data: [])
         self.progress = progress
         playbackState = .stopped
+    }
+    
+    deinit {
+        displayLink?.invalidate()
+        displayLink = nil
     }
     
     func updateState(progress: Double) async {
@@ -91,25 +96,25 @@ class AudioPlayerState: ObservableObject {
                 guard let self else {
                     return
                 }
-                self.handleAudioPlayerAction(action)
+                Task {
+                    await self.handleAudioPlayerAction(action)
+                }
             }
             .store(in: &cancellables)
     }
     
-    private func handleAudioPlayerAction(_ action: AudioPlayerAction) {
+    private func handleAudioPlayerAction(_ action: AudioPlayerAction) async {
         switch action {
         case .didStartLoading:
             playbackState = .loading
         case .didFinishLoading:
-            if let audioPlayer {
-                Task {
-                    await restoreAudioPlayerState(audioPlayer: audioPlayer)
-                }
-            }
             playbackState = .readyToPlay
         case .didStartPlaying:
-            playbackState = .playing
+            if let audioPlayer {
+                await restoreAudioPlayerState(audioPlayer: audioPlayer)
+            }
             startPublishProgress()
+            playbackState = .playing
         case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
             stopPublishProgress()
             playbackState = .stopped
@@ -122,22 +127,23 @@ class AudioPlayerState: ObservableObject {
     }
     
     private func startPublishProgress() {
-        cancellableTimer?.cancel()
-
-        cancellableTimer = Timer.publish(every: 0.2, on: .main, in: .default)
-            .autoconnect()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                guard let self else { return }
-                if let currentTime = self.audioPlayer?.currentTime, self.duration > 0 {
-                    self.progress = currentTime / self.duration
-                }
-            })
+        if displayLink != nil {
+            stopPublishProgress()
+        }
+        displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        displayLink?.preferredFrameRateRange = .init(minimum: 10, maximum: 20)
+        displayLink?.add(to: .current, forMode: .common)
+    }
+    
+    @objc private func updateProgress(displayLink: CADisplayLink) {
+        if let currentTime = audioPlayer?.currentTime, duration > 0 {
+            progress = currentTime / duration
+        }
     }
     
     private func stopPublishProgress() {
-        cancellableTimer?.cancel()
-        cancellableTimer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {
