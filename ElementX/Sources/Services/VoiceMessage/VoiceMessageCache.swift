@@ -20,7 +20,7 @@ enum VoiceMessageCacheError: Error {
     case invalidFileExtension
 }
 
-class VoiceMessageCache {
+class VoiceMessageCache: VoiceMessageCacheProtocol {
     private let preferredFileExtension = "m4a"
     private var temporaryFilesFolderURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("media/voice-message")

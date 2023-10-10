@@ -47,7 +47,11 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .success(data)
     }
     
+    var loadFileFromSourceReturnValue: MediaFileHandleProxy?
     func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        .failure(.failedRetrievingFile)
+        if let loadFileFromSourceReturnValue {
+            return .success(loadFileFromSourceReturnValue)
+        }
+        return .failure(.failedRetrievingFile)
     }
 }

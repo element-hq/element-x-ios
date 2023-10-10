@@ -26,34 +26,41 @@ private final class VoiceMessageConversionRequest {
 
 class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     private let mediaProvider: MediaProviderProtocol
-    private let cache: VoiceMessageCache
+    private let voiceMessageCache: VoiceMessageCacheProtocol
+    private let audioConverter: AudioConverterProtocol
     
     private let backgroundTaskService: BackgroundTaskServiceProtocol?
     private let processingQueue: DispatchQueue
-    private var ongoingRequests = [MediaSourceProxy: VoiceMessageConversionRequest]()
+    private var conversionRequests = [MediaSourceProxy: VoiceMessageConversionRequest]()
     
     private let supportedVoiceMessageMimeType = "audio/ogg"
     
     init(mediaProvider: MediaProviderProtocol,
+         voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache(),
+         audioConverter: AudioConverterProtocol = AudioConverter(),
          processingQueue: DispatchQueue = .global(),
          backgroundTaskService: BackgroundTaskServiceProtocol?) {
         self.mediaProvider = mediaProvider
-        cache = VoiceMessageCache()
+        self.voiceMessageCache = voiceMessageCache
+        self.audioConverter = audioConverter
         self.processingQueue = processingQueue
         self.backgroundTaskService = backgroundTaskService
     }
 
     deinit {
-        cache.clearCache()
+        voiceMessageCache.clearCache()
     }
     
     func loadVoiceMessageFromSource(_ source: MediaSourceProxy, body: String?) async throws -> URL {
+        let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
+        defer { loadFileBgTask?.stop() }
+
         guard let mimeType = source.mimeType, mimeType == supportedVoiceMessageMimeType else {
             throw VoiceMessageMediaManagerError.unsupportedMimeTye
         }
         
         // Do we already have a converted version?
-        if let fileURL = cache.fileURL(for: source) {
+        if let fileURL = voiceMessageCache.fileURL(for: source) {
             return fileURL
         }
         
@@ -62,31 +69,34 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
             throw MediaProviderError.failedRetrievingFile
         }
         
-        let url = try await enqueueVoiceMessageConversionRequest(forSource: source) { [cache] in
+        return try await enqueueVoiceMessageConversionRequest(forSource: source) { [audioConverter, voiceMessageCache] in
+            // Do we already have a converted version?
+            if let fileURL = voiceMessageCache.fileURL(for: source) {
+                return fileURL
+            }
+
             // Convert from ogg
-            let convertedFileURL = try AudioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url)
+            let convertedFileURL = try audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url)
 
             // Cache the file and return the url
-            return try cache.cache(mediaSource: source, using: convertedFileURL, move: true)
+            return try voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)
         }
-        
-        return url
     }
     
     // MARK: - Private
     
     private func enqueueVoiceMessageConversionRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> URL) async throws -> URL {
-        if let ongoingRequest = ongoingRequests[source] {
+        if let conversionRequests = conversionRequests[source] {
             return try await withCheckedThrowingContinuation { continuation in
-                ongoingRequest.continuations.append(continuation)
+                conversionRequests.continuations.append(continuation)
             }
         }
         
-        let ongoingRequest = VoiceMessageConversionRequest()
-        ongoingRequests[source] = ongoingRequest
+        let conversionRequest = VoiceMessageConversionRequest()
+        conversionRequests[source] = conversionRequest
         
         defer {
-            ongoingRequests[source] = nil
+            conversionRequests[source] = nil
         }
         
         do {
@@ -94,12 +104,12 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
                 try operation()
             }
             
-            ongoingRequest.continuations.forEach { $0.resume(returning: result) }
+            conversionRequest.continuations.forEach { $0.resume(returning: result) }
             
             return result
             
         } catch {
-            ongoingRequest.continuations.forEach { $0.resume(throwing: error) }
+            conversionRequest.continuations.forEach { $0.resume(throwing: error) }
             throw error
         }
     }

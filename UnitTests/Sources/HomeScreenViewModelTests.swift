@@ -30,7 +30,8 @@ class HomeScreenViewModelTests: XCTestCase {
         cancellables.removeAll()
         clientProxy = MockClientProxy(userID: "@mock:client.com")
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: clientProxy,
-                                                                     mediaProvider: MockMediaProvider()),
+                                                                     mediaProvider: MockMediaProvider(),
+                                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                         attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: true)),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: ServiceLocator.shared.settings,

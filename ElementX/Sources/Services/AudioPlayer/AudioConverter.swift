@@ -22,8 +22,8 @@ enum AudioConverterError: Error {
     case conversionFailed(Error?)
 }
 
-enum AudioConverter {
-    static func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
+struct AudioConverter: AudioConverterProtocol {
+    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
             try OGGConverter.convertM4aFileToOpusOGG(src: sourceURL, dest: destinationURL)
         } catch {
@@ -32,7 +32,7 @@ enum AudioConverter {
         }
     }
     
-    static func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL? = nil) throws -> URL {
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL?) throws -> URL {
         let url: URL
         if let destinationURL {
             url = destinationURL
