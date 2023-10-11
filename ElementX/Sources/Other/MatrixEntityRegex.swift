@@ -38,7 +38,7 @@ enum MatrixEntityRegex: String {
         case .eventId:
             return "\\$[a-z0-9_\\-\\/]+(:[a-z0-9]+\\.[a-z0-9]+)?"
         case .allUsers:
-            return "@room"
+            return PillConstants.atRoom
         }
     }
     

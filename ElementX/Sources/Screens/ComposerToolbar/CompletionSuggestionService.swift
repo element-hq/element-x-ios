@@ -18,47 +18,55 @@ import Combine
 import Foundation
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
+    private var canMentionAllUsers = false
     let areSuggestionsEnabled: Bool
-    let suggestionsPublisher: AnyPublisher<[SuggestionItem], Never>
+    private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
     
     init(roomProxy: RoomProxyProtocol, areSuggestionsEnabled: Bool) {
         self.areSuggestionsEnabled = areSuggestionsEnabled
         guard areSuggestionsEnabled else {
-            suggestionsPublisher = Empty().eraseToAnyPublisher()
             return
         }
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
-            .map { suggestionTrigger, members -> [SuggestionItem] in
+            .map { [weak self] suggestionTrigger, members -> [SuggestionItem] in
                 guard let suggestionTrigger else {
                     return []
                 }
                 
                 switch suggestionTrigger.type {
                 case .user:
-                    return members.filter { member in
-                        guard !member.isAccountOwner && member.membership == .join else {
-                            return false
+                    return members
+                        .filter { !$0.isAccountOwner && $0.membership == .join }
+                        .map { SuggestionItem.user(item: .init(id: $0.userID, displayName: $0.displayName, avatarURL: $0.avatarURL)) }
+                        .appending(self?.canMentionAllUsers ?? false ? [SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL))] : [])
+                        .filter { member in
+                            let containedInUserID = member.id.localizedStandardContains(suggestionTrigger.text.lowercased())
+                            
+                            let containedInDisplayName: Bool
+                            if let displayName = member.name {
+                                containedInDisplayName = displayName.localizedStandardContains(suggestionTrigger.text.lowercased())
+                            } else {
+                                containedInDisplayName = false
+                            }
+                            
+                            return containedInUserID || containedInDisplayName
                         }
-                        
-                        let containedInUserID = member.userID.localizedStandardContains(suggestionTrigger.text.lowercased())
-                        
-                        let containedInDisplayName: Bool
-                        if let displayName = member.displayName {
-                            containedInDisplayName = displayName.localizedStandardContains(suggestionTrigger.text.lowercased())
-                        } else {
-                            containedInDisplayName = false
-                        }
-                        
-                        return containedInUserID || containedInDisplayName
-                    }
-                    .map { SuggestionItem.user(item: .init(id: $0.userID, displayName: $0.displayName, avatarURL: $0.avatarURL)) }
                 }
             }
             .debounce(for: 0.5, scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
+        
+        Task {
+            switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {
+            case .success(let value):
+                canMentionAllUsers = value
+            case .failure:
+                canMentionAllUsers = false
+            }
+        }
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {

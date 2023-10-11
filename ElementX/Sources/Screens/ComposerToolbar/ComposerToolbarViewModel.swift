@@ -166,8 +166,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         wysiwygViewModel.mentionReplacer = ComposerMentionReplacer { urlString, string in
             let attributedString: NSMutableAttributedString
-            // This is the all room mention case
-            if urlString == "#" {
+            // This is the all room mention special case
+            if urlString == PillConstants.composerAtRoomURLString {
                 attributedString = NSMutableAttributedString(string: string, attributes: [.MatrixAllUsersMention: true])
             } else {
                 attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
@@ -188,6 +188,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 return
             }
             wysiwygViewModel.setMention(url: url.absoluteString, name: item.displayName ?? item.id, mentionType: .user)
+        case .allUsers:
+            wysiwygViewModel.setAtRoomMention()
         }
     }
 

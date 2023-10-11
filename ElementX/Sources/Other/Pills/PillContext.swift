@@ -52,7 +52,7 @@ final class PillContext: ObservableObject {
                 }
             }
         case .allUsers:
-            viewState = PillViewState(contentID: roomContext.viewState.roomID, isOwnMention: true, name: roomContext.viewState.roomTitle, displayText: "@room", avatarURL: roomContext.viewState.roomAvatarURL)
+            viewState = PillViewState(contentID: roomContext.viewState.roomID, isOwnMention: true, name: roomContext.viewState.roomTitle, displayText: PillConstants.atRoom, avatarURL: roomContext.viewState.roomAvatarURL)
         }
     }
 }

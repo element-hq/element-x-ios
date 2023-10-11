@@ -1749,6 +1749,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return canUserRedactUserIDReturnValue
         }
     }
+    //MARK: - canUserTriggerRoomNotification
+
+    var canUserTriggerRoomNotificationUserIDCallsCount = 0
+    var canUserTriggerRoomNotificationUserIDCalled: Bool {
+        return canUserTriggerRoomNotificationUserIDCallsCount > 0
+    }
+    var canUserTriggerRoomNotificationUserIDReceivedUserID: String?
+    var canUserTriggerRoomNotificationUserIDReceivedInvocations: [String] = []
+    var canUserTriggerRoomNotificationUserIDReturnValue: Result<Bool, RoomProxyError>!
+    var canUserTriggerRoomNotificationUserIDClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
+        canUserTriggerRoomNotificationUserIDCallsCount += 1
+        canUserTriggerRoomNotificationUserIDReceivedUserID = userID
+        canUserTriggerRoomNotificationUserIDReceivedInvocations.append(userID)
+        if let canUserTriggerRoomNotificationUserIDClosure = canUserTriggerRoomNotificationUserIDClosure {
+            return await canUserTriggerRoomNotificationUserIDClosure(userID)
+        } else {
+            return canUserTriggerRoomNotificationUserIDReturnValue
+        }
+    }
     //MARK: - createPoll
 
     var createPollQuestionAnswersPollKindCallsCount = 0

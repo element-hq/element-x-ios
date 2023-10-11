@@ -35,6 +35,7 @@ struct RoomProxyMockConfiguration {
     var inviter: RoomMemberProxyMock?
     var memberForID: RoomMemberProxyMock = .mockMe
     var ownUserID = "@alice:somewhere.org"
+    var canUserTriggerRoomNotification = false
     
     var invitedMembersCount = 100
     var joinedMembersCount = 50
@@ -81,5 +82,6 @@ extension RoomProxyMock {
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDReturnValue = .success(configuration.memberForID)
         canUserRedactUserIDReturnValue = .success(false)
+        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
     }
 }

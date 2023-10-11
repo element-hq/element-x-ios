@@ -661,6 +661,15 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedCheckingPermission)
         }
     }
+    
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserTriggerRoomNotification(userId: userID))
+        } catch {
+            MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
+            return .failure(.failedCheckingPermission)
+        }
+    }
 
     // MARK: - Polls
 

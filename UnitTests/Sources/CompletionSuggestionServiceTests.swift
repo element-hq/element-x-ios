@@ -31,7 +31,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
-        
+                
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
@@ -48,6 +48,43 @@ final class CompletionSuggestionServiceTests: XCTestCase {
             suggestions == []
         }
         service.setSuggestionTrigger(.init(type: .user, text: "me"))
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "room"))
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "everyon"))
+        try await deferred.fulfill()
+    }
+    
+    func testUserSuggestonsIncludingAllUsers() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members, canUserTriggerRoomNotification: true))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
+                
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil))]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "ro"))
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.allUsers(item: .allUsersMention(roomAvatar: nil))]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "every"))
         try await deferred.fulfill()
     }
 }
