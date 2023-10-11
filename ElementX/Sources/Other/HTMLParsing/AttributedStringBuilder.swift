@@ -220,15 +220,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func addAllUsersMention(_ attributedString: NSMutableAttributedString) {
+    func addAllUsersMention(_ attributedString: NSMutableAttributedString) {
         MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).forEach { match in
-            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) == nil {
+            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) as? URL == nil {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
         }
     }
     
-    private func detectPermalinks(_ attributedString: NSMutableAttributedString) {
+    func detectPermalinks(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 if let url = value as? URL {

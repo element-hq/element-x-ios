@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-final class MessageTextView: UITextView {
+final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
     var roomContext: RoomScreenViewModel.Context?
     var updateClosure: (() -> Void)?
     
@@ -43,6 +43,10 @@ final class MessageTextView: UITextView {
     override func layoutSubviews() {
         invalidateTextAttachmentsDisplay(update: false)
         super.layoutSubviews()
+    }
+    
+    func registerPillView(_ pillView: UIView) {
+        // No need to be implemented in this view
     }
 }
 

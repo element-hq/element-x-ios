@@ -197,7 +197,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                             mediaProvider: MockMediaProvider(),
-                                                            appSettings: ServiceLocator.shared.settings)
+                                                            appSettings: ServiceLocator.shared.settings,
+                                                            mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)),
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
@@ -223,7 +224,8 @@ extension ComposerToolbar {
         let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                          mediaProvider: MockMediaProvider(),
-                                                         appSettings: ServiceLocator.shared.settings)
+                                                         appSettings: ServiceLocator.shared.settings,
+                                                         mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })
