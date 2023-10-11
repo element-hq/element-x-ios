@@ -34,6 +34,40 @@ struct TimelineReactionsView: View {
     }
         
     var body: some View {
+        if reactions.count < 5 {
+            nonCollapsibleBody
+        } else {
+            collapsibleBody
+        }
+    }
+    
+    // MARK: - Private
+    
+    private var nonCollapsibleBody: some View {
+        HStack(spacing: 4) {
+            ForEach(reactions, id: \.self) { reaction in
+                TimelineReactionButton(reaction: reaction) { key in
+                    feedbackGenerator.impactOccurred()
+                    context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
+                } showReactionSummary: { key in
+                    context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
+                }
+                .reactionLayoutItem(.reaction)
+                .environment(\.layoutDirection, layoutDirection)
+            }
+            
+            Button {
+                context.send(viewAction: .displayEmojiPicker(itemID: itemID))
+            } label: {
+                TimelineReactionAddMoreButtonLabel()
+            }
+        }
+        .environment(\.layoutDirection, reactionsLayoutDirection)
+        .animation(.easeInOut(duration: 0.1).disabledDuringTests(), value: reactions)
+        .padding(.leading, 4)
+    }
+    
+    private var collapsibleBody: some View {
         CollapsibleReactionLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(reaction: reaction) { key in
