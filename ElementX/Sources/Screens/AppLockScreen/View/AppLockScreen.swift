@@ -34,13 +34,13 @@ struct AppLockScreen: View {
                     .symbolVariant(.fill)
                     .padding(.bottom, 8)
                 
-                Text("\(InfoPlistReader.main.bundleDisplayName) is locked")
+                Text(UntranslatedL10n.screenAppLockTitle(InfoPlistReader.main.bundleDisplayName))
                     .font(.compound.headingMDBold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.compound.textPrimary)
             }
         } bottomContent: {
-            Button("Unlock") {
+            Button(UntranslatedL10n.commonUnlock) {
                 context.send(viewAction: .submitPINCode("0000"))
             }
             .buttonStyle(.elementAction(.xLarge))

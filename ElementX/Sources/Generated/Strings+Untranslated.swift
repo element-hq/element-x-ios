@@ -10,6 +10,12 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
+  /// Unlock
+  public static var commonUnlock: String { return UntranslatedL10n.tr("Untranslated", "common_unlock") }
+  /// %@ is locked
+  public static func screenAppLockTitle(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_app_lock_title", String(describing: p1))
+  }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

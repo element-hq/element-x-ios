@@ -129,6 +129,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
         observeApplicationState()
         observeNetworkState()
+        observeAppLockChanges()
         
         registerBackgroundAppRefresh()
     }
@@ -194,16 +195,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     func windowManager(_ windowManager: WindowManager, didConfigureWith windowScene: UIWindowScene) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
-        
-        appLockFlowCoordinator.actions.sink { action in
-            switch action {
-            case .lockApp:
-                windowManager.switchToAlternate()
-            case .unlockApp:
-                windowManager.switchToMain()
-            }
-        }
-        .store(in: &cancellables)
     }
     
     // MARK: - NotificationManagerDelegate
@@ -579,6 +570,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func observeAppLockChanges() {
+        appLockFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .lockApp:
+                windowManager.switchToAlternate()
+            case .unlockApp:
+                windowManager.switchToMain()
+            }
+        }
+        .store(in: &cancellables)
     }
     
     private func handleAppRoute(_ appRoute: AppRoute) {
