@@ -63,6 +63,13 @@ struct DeveloperOptionsScreen: View {
                     Text("Enable voice messages")
                 }
             }
+            
+            Section("Security") {
+                Toggle(isOn: $context.appLockFlowEnabled) {
+                    Text("PIN/Biometric lock")
+                    Text("Resets on reboot")
+                }
+            }
 
             Section {
                 Button {

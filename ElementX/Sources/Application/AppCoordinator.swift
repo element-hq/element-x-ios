@@ -101,7 +101,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         userSessionStore = UserSessionStore(keychainController: keychainController,
                                             backgroundTaskService: backgroundTaskService)
         
-        appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: AppLockService(keychainController: keychainController),
+        let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
+        appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
                                                         navigationCoordinator: NavigationRootCoordinator())
         
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),

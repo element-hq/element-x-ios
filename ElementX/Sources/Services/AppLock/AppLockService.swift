@@ -33,13 +33,15 @@ protocol AppLockServiceProtocol {
 
 class AppLockService: AppLockServiceProtocol {
     private let keychainController: KeychainControllerProtocol
+    private let appSettings: AppSettings
     
-    var isEnabled: Bool { true }
+    var isEnabled: Bool { appSettings.appLockFlowEnabled }
     var supportsBiometrics: Bool { true }
     var needsUnlock: Bool { true }
     
-    init(keychainController: KeychainControllerProtocol) {
+    init(keychainController: KeychainControllerProtocol, appSettings: AppSettings) {
         self.keychainController = keychainController
+        self.appSettings = appSettings
     }
     
     func unlock(with pinCode: String) -> Bool {

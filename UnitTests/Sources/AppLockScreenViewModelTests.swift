@@ -20,12 +20,14 @@ import XCTest
 
 @MainActor
 class AppLockScreenViewModelTests: XCTestCase {
-    let appLockService = AppLockService(keychainController: KeychainControllerMock())
+    var appLockService: AppLockService!
     var viewModel: AppLockScreenViewModelProtocol!
     
     var context: AppLockScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
+        AppSettings.reset()
+        appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: AppSettings())
         viewModel = AppLockScreenViewModel(appLockService: appLockService)
     }
     

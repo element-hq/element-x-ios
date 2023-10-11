@@ -69,7 +69,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     /// Displays the unlock flow with the main unlock screen.
     private func showUnlockScreenIfNeeded() {
-        guard appLockService.needsUnlock else { return }
+        guard appLockService.isEnabled, appLockService.needsUnlock else { return }
         
         let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
         coordinator.actions.sink { [weak self] action in
