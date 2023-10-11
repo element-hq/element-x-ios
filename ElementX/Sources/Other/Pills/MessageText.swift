@@ -49,7 +49,13 @@ final class MessageTextView: UITextView {
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction: OpenURLAction
     @EnvironmentObject private var viewModel: RoomScreenViewModel.Context
-    @State var attributedString: AttributedString
+    @State private var computedSizes = [Double: CGSize]()
+    
+    @State var attributedString: AttributedString {
+        didSet {
+            computedSizes.removeAll()
+        }
+    }
 
     func makeUIView(context: Context) -> MessageTextView {
         // Need to use TextKit 1 for mentions
@@ -81,13 +87,20 @@ struct MessageText: UIViewRepresentable {
         return textView
     }
 
-    func updateUIView(_ uiView: MessageTextView, context: Context) {
-        uiView.attributedText = NSAttributedString(attributedString)
-        context.coordinator.openURLAction = openURLAction
-    }
+    func updateUIView(_ uiView: MessageTextView, context: Context) { }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
-        uiView.sizeThatFits(CGSize(width: proposal.width ?? UIView.layoutFittingExpandedSize.width, height: UIView.layoutFittingCompressedSize.height))
+        let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
+        
+        if let size = computedSizes[proposalWidth] {
+            return size
+        }
+        
+        let size = uiView.sizeThatFits(CGSize(width: proposalWidth, height: UIView.layoutFittingCompressedSize.height))
+        DispatchQueue.main.async {
+            computedSizes[proposalWidth] = size
+        }
+        return size
     }
 
     func makeCoordinator() -> Coordinator {
