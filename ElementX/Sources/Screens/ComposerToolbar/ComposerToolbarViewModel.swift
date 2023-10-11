@@ -40,7 +40,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     private var currentLinkData: WysiwygLinkData?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, roomContext: RoomScreenViewModel.Context) {
+    init(wysiwygViewModel: WysiwygComposerViewModel, completionSuggestionService: CompletionSuggestionServiceProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings, mentionDisplayHelper: MentionDisplayHelper) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
@@ -86,7 +86,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .store(in: &cancellables)
         
         if appSettings.mentionsEnabled {
-            setupMentionsHandling(roomContext: roomContext)
+            setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
         }
     }
 
@@ -159,9 +159,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     // MARK: - Private
     
-    private func setupMentionsHandling(roomContext: RoomScreenViewModel.Context) {
-        let composerMentionDisplayHelper = ComposerMentionDisplayHelper(roomContext: roomContext)
-        wysiwygViewModel.textView.mentionDisplayHelper = composerMentionDisplayHelper
+    private func setupMentionsHandling(mentionDisplayHelper: MentionDisplayHelper) {
+        wysiwygViewModel.textView.mentionDisplayHelper = mentionDisplayHelper
         
         let attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", permalinkBaseURL: appSettings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled))
         
@@ -340,13 +339,5 @@ private final class ComposerMentionReplacer: MentionReplacer {
     
     func replacementForMention(_ url: String, text: String) -> NSAttributedString? {
         replacementForMentionClosure(url, text)
-    }
-}
-
-final class ComposerMentionDisplayHelper: MentionDisplayHelper {
-    weak var roomContext: RoomScreenViewModel.Context?
-    
-    init(roomContext: RoomScreenViewModel.Context) {
-        self.roomContext = roomContext
     }
 }

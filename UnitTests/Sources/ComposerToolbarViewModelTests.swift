@@ -39,7 +39,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MockMediaProvider(),
                                              appSettings: appSettings,
-                                             roomContext: RoomScreenViewModel.mock.context)
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
     }
 
     func testComposerFocus() {
@@ -110,7 +110,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MockMediaProvider(),
                                              appSettings: ServiceLocator.shared.settings,
-                                             roomContext: RoomScreenViewModel.mock.context)
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
         
         XCTAssertEqual(viewModel.state.suggestions, suggestions)
     }
@@ -130,7 +130,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(wysiwygViewModel.content.html, "<a data-mention-type=\"user\" href=\"https://matrix.to/#/@test:matrix.org\" contenteditable=\"false\">Test</a> ")
     }
     
-    func testMentionInRTE() {
+    func testUserMentionInRTE() {
         let userID = "@test:matrix.org"
         let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))

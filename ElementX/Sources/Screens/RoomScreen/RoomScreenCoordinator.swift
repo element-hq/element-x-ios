@@ -72,7 +72,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
                                                      appSettings: parameters.appSettings,
-                                                     roomContext: viewModel.context)
+                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(roomContext: viewModel.context))
     }
     
     // MARK: - Public

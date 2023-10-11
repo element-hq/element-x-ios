@@ -20,8 +20,15 @@ import UIKit
 
 import WysiwygComposer
 
+protocol PillAttachmentViewProviderDelegate: AnyObject {
+    var roomContext: RoomScreenViewModel.Context? { get }
+    
+    func registerPillView(_ pillView: UIView)
+    func invalidateTextAttachmentsDisplay(update: Bool)
+}
+
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
-    private weak var textView: UIView?
+    private weak var delegate: PillAttachmentViewProviderDelegate?
     
     // MARK: - Override
     
@@ -29,7 +36,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
 
         // Keep a reference to the parent text view for size adjustments and pills flushing.
-        textView = parentView?.superview
+        delegate = parentView?.superview as? PillAttachmentViewProviderDelegate
         tracksTextAttachmentViewBounds = true
     }
     
@@ -48,11 +55,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             // The mock viewModel simulates the loading logic for testing purposes
             context = PillContext.mock(type: .loadUser(isOwn: false))
             imageProvider = MockMediaProvider()
-        } else if let roomContext = (textView as? MessageTextView)?.roomContext {
-            context = PillContext(roomContext: roomContext, data: textAttachmentData)
-            imageProvider = roomContext.imageProvider
-        } else if let wysiwigTextView = (textView as? WysiwygTextView),
-                  let roomContext = (wysiwigTextView.mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext {
+        } else if let roomContext = delegate?.roomContext {
             context = PillContext(roomContext: roomContext, data: textAttachmentData)
             imageProvider = roomContext.imageProvider
         } else {
@@ -61,18 +64,37 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         }
         
         let view = PillView(imageProvider: imageProvider, context: context) { [weak self] in
-            guard let messageTextView = self?.textView as? MessageTextView else {
-                return
-            }
-            messageTextView.invalidateTextAttachmentsDisplay(update: true)
+            self?.delegate?.invalidateTextAttachmentsDisplay(update: true)
         }
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = .clear
         // This allows the text view to handle it as a link
         controller.view.isUserInteractionEnabled = false
         self.view = controller.view
-        if let wysywygView = textView as? WysiwygTextView {
-            wysywygView.registerPillView(controller.view)
-        }
+        delegate?.registerPillView(controller.view)
     }
+}
+
+final class ComposerMentionDisplayHelper: MentionDisplayHelper {
+    weak var roomContext: RoomScreenViewModel.Context?
+
+    init(roomContext: RoomScreenViewModel.Context) {
+        self.roomContext = roomContext
+    }
+    
+    private init() {
+        roomContext = nil
+    }
+    
+    static var mock: Self {
+        Self()
+    }
+}
+
+extension WysiwygTextView: PillAttachmentViewProviderDelegate {
+    var roomContext: RoomScreenViewModel.Context? {
+        (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext
+    }
+    
+    func invalidateTextAttachmentsDisplay(update: Bool) { }
 }
