@@ -25,6 +25,13 @@ enum AppDelegateCallback {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let callbacks = PassthroughSubject<AppDelegateCallback, Never>()
+    
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        // Add a SceneDelegate to the SwiftUI scene so that we can connect up the WindowManager.
+        let configuration = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        configuration.delegateClass = SceneDelegate.self
+        return configuration
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)

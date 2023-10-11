@@ -51,6 +51,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var swiftUITimelineEnabled: Bool { get set }
     var voiceMessageEnabled: Bool { get set }
     var mentionsEnabled: Bool { get set }
+    var appLockFlowEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

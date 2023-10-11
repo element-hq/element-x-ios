@@ -57,13 +57,18 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     
     /// Sets or replaces the presented coordinator
     /// - Parameter coordinator: the coordinator to display
-    func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
-        guard let coordinator else {
-            rootModule = nil
-            return
-        }
+    func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
         
-        rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        withTransaction(transaction) {
+            guard let coordinator else {
+                rootModule = nil
+                return
+            }
+            
+            rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
     }
     
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise

@@ -42,6 +42,7 @@ final class AppSettings {
         case swiftUITimelineEnabled
         case voiceMessageEnabled
         case mentionsEnabled
+        case appLockFlowEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -257,4 +258,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.mentionsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var mentionsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.appLockFlowEnabled, defaultValue: false, storageType: .volatile)
+    var appLockFlowEnabled
 }

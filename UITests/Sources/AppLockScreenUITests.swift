@@ -14,19 +14,13 @@
 // limitations under the License.
 //
 
-import Foundation
-import MatrixRustSDK
+import ElementX
+import XCTest
 
-struct KeychainCredentials {
-    let userID: String
-    let restorationToken: RestorationToken
-}
-
-// sourcery: AutoMockable
-protocol KeychainControllerProtocol: ClientSessionDelegate {
-    func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String)
-    func restorationTokenForUsername(_ username: String) -> RestorationToken?
-    func restorationTokens() -> [KeychainCredentials]
-    func removeRestorationTokenForUsername(_ username: String)
-    func removeAllRestorationTokens()
+@MainActor
+class AppLockScreenUITests: XCTestCase {
+    func testScreen() async throws {
+        let app = Application.launch(.appLockScreen)
+        try await app.assertScreenshot(.appLockScreen)
+    }
 }

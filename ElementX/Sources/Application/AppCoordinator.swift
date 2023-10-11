@@ -20,7 +20,7 @@ import MatrixRustSDK
 import SwiftUI
 import Version
 
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate, NotificationManagerDelegate, WindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
@@ -43,8 +43,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         }
     }
     
-    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var authenticationCoordinator: AuthenticationCoordinator?
+    private let appLockFlowCoordinator: AppLockFlowCoordinator
+    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -54,6 +55,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
+    let windowManager = WindowManager()
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
@@ -94,10 +96,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
             UIApplication.shared
         }
 
-        userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
-
+        let keychainController = KeychainController(service: .sessions,
+                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        userSessionStore = UserSessionStore(keychainController: keychainController,
+                                            backgroundTaskService: backgroundTaskService)
+        
+        let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
+        appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
+                                                        navigationCoordinator: NavigationRootCoordinator())
+        
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
+        
+        windowManager.delegate = self
+        
         notificationManager.delegate = self
         notificationManager.start()
         
@@ -117,6 +129,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
 
         observeApplicationState()
         observeNetworkState()
+        observeAppLockChanges()
         
         registerBackgroundAppRefresh()
     }
@@ -176,6 +189,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         self.userSession = userSession
         self.authenticationCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
+    }
+    
+    // MARK: - WindowManagerDelegate
+    
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
+        windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
     }
     
     // MARK: - NotificationManagerDelegate
@@ -551,6 +570,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func observeAppLockChanges() {
+        appLockFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .lockApp:
+                windowManager.switchToAlternate()
+            case .unlockApp:
+                windowManager.switchToMain()
+            }
+        }
+        .store(in: &cancellables)
     }
     
     private func handleAppRoute(_ appRoute: AppRoute) {
