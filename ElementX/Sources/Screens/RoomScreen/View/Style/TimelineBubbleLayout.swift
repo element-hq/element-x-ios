@@ -55,7 +55,7 @@ struct TimelineBubbleLayout: Layout {
         // Calculate the natural size using the regular text and non-greedy quote bubbles.
         let layoutSubviews = subviews.filter { $0.priority != Priority.visibleQuote }
 
-        let subviewSizes = layoutSubviews.map { cachedSizeFor(subview: $0, subviews: subviews, proposedSize: proposal, cache: &cache) }
+        let subviewSizes = layoutSubviews.map { size(for: $0, subviews: subviews, proposedSize: proposal, cache: &cache) }
         
         let maxWidth = subviewSizes.map(\.width).reduce(0, max)
         let totalHeight = subviewSizes.map(\.height).reduce(0, +)
@@ -69,12 +69,12 @@ struct TimelineBubbleLayout: Layout {
         
         // Calculate the width using the regular text and the non-greedy quote bubbles.
         let layoutSubviews = subviews.filter { $0.priority != Priority.visibleQuote }
+        let maxWidth = layoutSubviews.map { size(for: $0, subviews: subviews, proposedSize: proposal, cache: &cache).width }.reduce(0, max)
         
-        let maxWidth = layoutSubviews.map { cachedSizeFor(subview: $0, subviews: subviews, proposedSize: proposal, cache: &cache).width }.reduce(0, max)
-        
+        // Place the regular text and greedy quote bubbles using the calculated width.
         let visibleSubviews = subviews.filter { $0.priority != Priority.hiddenQuote }
 
-        let subviewSizes = visibleSubviews.map { cachedSizeFor(subview: $0, subviews: subviews, proposedSize: ProposedViewSize(width: maxWidth, height: proposal.height), cache: &cache) }
+        let subviewSizes = visibleSubviews.map { size(for: $0, subviews: subviews, proposedSize: ProposedViewSize(width: maxWidth, height: proposal.height), cache: &cache) }
         
         var y = bounds.minY
         for index in visibleSubviews.indices {
@@ -88,7 +88,7 @@ struct TimelineBubbleLayout: Layout {
     
     // MARK: - Private
     
-    private func cachedSizeFor(subview: LayoutSubview, subviews: LayoutSubviews, proposedSize: ProposedViewSize, cache: inout Cache) -> CGSize {
+    private func size(for subview: LayoutSubview, subviews: LayoutSubviews, proposedSize: ProposedViewSize, cache: inout Cache) -> CGSize {
         guard let index = subviews.firstIndex(of: subview) else {
             fatalError()
         }

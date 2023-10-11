@@ -32,19 +32,9 @@ struct TimelineReactionsView: View {
         guard isLayoutRTL else { return layoutDirection }
         return layoutDirection == .leftToRight ? .rightToLeft : .leftToRight
     }
-        
+    
     var body: some View {
-        if reactions.count < 5 {
-            nonCollapsibleBody
-        } else {
-            collapsibleBody
-        }
-    }
-    
-    // MARK: - Private
-    
-    private var nonCollapsibleBody: some View {
-        HStack(spacing: 4) {
+        layout {
             ForEach(reactions, id: \.self) { reaction in
                 TimelineReactionButton(reaction: reaction) { key in
                     feedbackGenerator.impactOccurred()
@@ -56,37 +46,17 @@ struct TimelineReactionsView: View {
                 .environment(\.layoutDirection, layoutDirection)
             }
             
-            Button {
-                context.send(viewAction: .displayEmojiPicker(itemID: itemID))
-            } label: {
-                TimelineReactionAddMoreButtonLabel()
-            }
-        }
-        .environment(\.layoutDirection, reactionsLayoutDirection)
-        .animation(.easeInOut(duration: 0.1).disabledDuringTests(), value: reactions)
-        .padding(.leading, 4)
-    }
-    
-    private var collapsibleBody: some View {
-        CollapsibleReactionLayout(itemSpacing: 4, rowSpacing: 4, collapsed: collapsed, rowsBeforeCollapsible: 2) {
-            ForEach(reactions, id: \.self) { reaction in
-                TimelineReactionButton(reaction: reaction) { key in
-                    feedbackGenerator.impactOccurred()
-                    context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
-                } showReactionSummary: { key in
-                    context.send(viewAction: .reactionSummary(itemID: itemID, key: key))
+            if isCollapsible {
+                Button {
+                    collapsed.toggle()
+                } label: {
+                    TimelineCollapseButtonLabel(collapsed: collapsed)
+                        .transaction { $0.animation = nil }
                 }
-                .reactionLayoutItem(.reaction)
+                .reactionLayoutItem(.expandCollapse)
                 .environment(\.layoutDirection, layoutDirection)
             }
-            Button {
-                collapsed.toggle()
-            } label: {
-                TimelineCollapseButtonLabel(collapsed: collapsed)
-                    .transaction { $0.animation = nil }
-            }
-            .reactionLayoutItem(.expandCollapse)
-            .environment(\.layoutDirection, layoutDirection)
+            
             Button {
                 context.send(viewAction: .displayEmojiPicker(itemID: itemID))
             } label: {
@@ -97,6 +67,23 @@ struct TimelineReactionsView: View {
         .environment(\.layoutDirection, reactionsLayoutDirection)
         .animation(.easeInOut(duration: 0.1).disabledDuringTests(), value: reactions)
         .padding(.leading, 4)
+    }
+    
+    // MARK: - Private
+    
+    private var isCollapsible: Bool {
+        reactions.count > 5
+    }
+    
+    private var layout: AnyLayout {
+        if isCollapsible {
+            return AnyLayout(CollapsibleReactionLayout(itemSpacing: 4,
+                                                       rowSpacing: 4,
+                                                       collapsed: collapsed,
+                                                       rowsBeforeCollapsible: 2))
+        }
+        
+        return AnyLayout(HStackLayout(spacing: 4.0))
     }
 }
 
@@ -193,10 +180,8 @@ struct TimelineReactionAddMoreButtonLabel: View {
             Image(asset: Asset.Images.addReaction)
                 .resizable()
                 .frame(width: addMoreButtonIconSize, height: addMoreButtonIconSize)
-                // Vertical sizing is done by the layout so that the add more button
-                // matches the height of the text based buttons.
-                .padding(.horizontal, 10)
-                .frame(maxHeight: .infinity, alignment: .center)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
                 .foregroundColor(.compound.iconSecondary)
         }
     }
