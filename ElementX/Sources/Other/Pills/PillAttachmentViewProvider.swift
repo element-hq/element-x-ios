@@ -82,12 +82,9 @@ final class ComposerMentionDisplayHelper: MentionDisplayHelper {
         self.roomContext = roomContext
     }
     
-    private init() {
-        roomContext = nil
-    }
-    
+    @MainActor
     static var mock: Self {
-        Self()
+        Self(roomContext: RoomScreenViewModel.mock.context)
     }
 }
 

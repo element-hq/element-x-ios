@@ -321,7 +321,7 @@ private extension LinkAction {
 }
 
 private final class ComposerMentionReplacer: MentionReplacer {
-    let replacementForMentionClosure: (String, String) -> (NSAttributedString?)
+    let replacementForMentionClosure: (_ urlString: String, _ text: String) -> (NSAttributedString?)
     
     init(replacementForMentionClosure: @escaping (String, String) -> (NSAttributedString?)) {
         self.replacementForMentionClosure = replacementForMentionClosure
