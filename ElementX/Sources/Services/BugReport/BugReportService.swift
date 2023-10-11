@@ -69,6 +69,14 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             
             options.dsn = self.sentryURL.absoluteString
             
+            // Sentry swizzling shows up quite often as the heaviest stack trace when profiling
+            // We don't need any of the features it powers (see docs)
+            options.enableSwizzling = false
+            
+            // WatchdogTermination is currently the top issue but we've had zero complaints
+            // so it might very well just all be false positives
+            options.enableWatchdogTerminationTracking = false
+            
             // Disabled as it seems to report a lot of false positives
             options.enableAppHangTracking = false
             
@@ -79,7 +87,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             options.enableAutoBreadcrumbTracking = false
             
             // Experimental. Stitches stack traces of asynchronous code together
-            options.stitchAsyncCode = true
+            options.swiftAsyncStacktraces = true
 
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
