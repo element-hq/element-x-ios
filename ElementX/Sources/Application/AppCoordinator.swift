@@ -193,7 +193,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     
     // MARK: - WindowManagerDelegate
     
-    func windowManager(_ windowManager: WindowManager, didConfigureWith windowScene: UIWindowScene) {
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManager) {
         windowManager.alternateWindow.rootViewController = UIHostingController(rootView: appLockFlowCoordinator.toPresentable())
     }
     

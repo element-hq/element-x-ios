@@ -18,8 +18,8 @@ import Combine
 import SwiftUI
 
 protocol WindowManagerDelegate: AnyObject {
-    /// The window manager has been configured with the following scene.
-    func windowManager(_ windowManager: WindowManager, didConfigureWith windowScene: UIWindowScene)
+    /// The window manager has configured its windows.
+    func windowManagerDidConfigureWindows(_ windowManager: WindowManager)
 }
 
 @MainActor
@@ -48,7 +48,7 @@ class WindowManager {
         
         alternateWindow = UIWindow(windowScene: windowScene)
         
-        delegate?.windowManager(self, didConfigureWith: windowScene)
+        delegate?.windowManagerDidConfigureWindows(self)
     }
     
     /// Shows the main and overlay window combo, hiding the alternate window.
