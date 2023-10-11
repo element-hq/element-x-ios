@@ -134,7 +134,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let suggestion = SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
-        XCTAssertEqual(wysiwygViewModel.content.html, "@room ")
+        var string = "@room"
+        // swiftlint:disable:next force_unwrapping
+        string.unicodeScalars.append(UnicodeScalar(String.nbsp)!)
+        XCTAssertEqual(wysiwygViewModel.content.html, string)
     }
     
     func testUserMentionPillInRTE() {
