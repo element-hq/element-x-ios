@@ -17,31 +17,41 @@
 import Compound
 import SwiftUI
 
-#warning("Move this elsewhere.")
+// Move this to Compound.
 extension ShapeStyle where Self == Color {
     static var compound: CompoundColors { Self.compound }
 }
+
+// This implementation is only for development purposes.
 
 struct AppLockScreen: View {
     @ObservedObject var context: AppLockScreenViewModel.Context
     
     var body: some View {
-        VStack {
-            Text("The app is locked 🔒")
-                .font(.compound.headingLGBold)
-                .foregroundStyle(.compound.textPrimary)
-            
+        FullscreenDialog {
+            VStack(spacing: 8) {
+                AuthenticationIconImage(image: Image(systemSymbol: .lock))
+                    .symbolVariant(.fill)
+                    .padding(.bottom, 8)
+                
+                Text("\(InfoPlistReader.main.bundleDisplayName) is locked")
+                    .font(.compound.headingMDBold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.compound.textPrimary)
+            }
+        } bottomContent: {
             Button("Unlock") {
                 context.send(viewAction: .submitPINCode("0000"))
             }
-            .font(.compound.bodyLG)
+            .buttonStyle(.elementAction(.xLarge))
         }
     }
 }
 
 // MARK: - Previews
 
-struct AppLockScreen_Previews: PreviewProvider, TestablePreview {
+// Add TestablePreview conformance once we have designs.
+struct AppLockScreen_Previews: PreviewProvider {
     static let viewModel = AppLockScreenViewModel(appLockService: AppLockService(keychainController: KeychainControllerMock()))
     
     static var previews: some View {

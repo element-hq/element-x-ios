@@ -21,7 +21,6 @@ import XCTest
 class AppLockScreenUITests: XCTestCase {
     func testScreen() async throws {
         let app = Application.launch(.appLockScreen)
-        // Enable screenshots when the view is implemented properly
-        // try await app.assertScreenshot(.appLockScreen)
+        try await app.assertScreenshot(.appLockScreen)
     }
 }
