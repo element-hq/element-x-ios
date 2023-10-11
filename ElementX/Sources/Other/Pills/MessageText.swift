@@ -91,7 +91,10 @@ struct MessageText: UIViewRepresentable {
         return textView
     }
 
-    func updateUIView(_ uiView: MessageTextView, context: Context) { }
+    func updateUIView(_ uiView: MessageTextView, context: Context) {
+        uiView.attributedText = NSAttributedString(attributedString)
+        context.coordinator.openURLAction = openURLAction
+    }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
         let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
