@@ -23,6 +23,7 @@ class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let appSettings: AppSettings
+    private let networkMonitor: NetworkMonitorProtocol
     
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     private let mediaLoader: MediaLoaderProtocol
@@ -77,10 +78,14 @@ class ClientProxy: ClientProxyProtocol {
         loadingStateSubject.asCurrentValuePublisher()
     }
     
-    init(client: ClientProtocol, backgroundTaskService: BackgroundTaskServiceProtocol, appSettings: AppSettings) async {
+    init(client: ClientProtocol,
+         backgroundTaskService: BackgroundTaskServiceProtocol,
+         appSettings: AppSettings,
+         networkMonitor: NetworkMonitorProtocol) async {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
         self.appSettings = appSettings
+        self.networkMonitor = networkMonitor
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
@@ -93,6 +98,16 @@ class ClientProxy: ClientProxyProtocol {
             self?.hasEncounteredAuthError = true
             self?.callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
         })
+        
+        networkMonitor.reachabilityPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] reachability in
+                if reachability == .reachable {
+                    self?.startSync()
+                }
+            }
+            .store(in: &cancellables)
         
         await configureAppService()
 
@@ -133,6 +148,11 @@ class ClientProxy: ClientProxyProtocol {
     func startSync() {
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
+            return
+        }
+        
+        guard networkMonitor.reachabilityPublisher.value == .reachable else {
+            MXLog.warning("Ignoring request, network unreachable.")
             return
         }
         

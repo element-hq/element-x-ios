@@ -142,7 +142,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let clientProxy = await ClientProxy(client: client,
                                             backgroundTaskService: backgroundTaskService,
-                                            appSettings: ServiceLocator.shared.settings)
+                                            appSettings: ServiceLocator.shared.settings,
+                                            networkMonitor: ServiceLocator.shared.networkMonitor)
         
         return .success(clientProxy)
     }
