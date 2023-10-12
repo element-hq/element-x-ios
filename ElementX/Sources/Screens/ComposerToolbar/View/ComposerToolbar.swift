@@ -66,10 +66,10 @@ struct ComposerToolbar: View {
     private var topBar: some View {
         HStack(alignment: .bottom, spacing: 5) {
             switch context.viewState.composerMode {
-            case .recordVoiceMessage(let state):
+            case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 VoiceMessageRecorderComposer(recorderState: state)
                     .padding(.leading, 12)
-            case .previewVoiceMessage(let state):
+            case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 voiceMessageTrashButton
                 VoiceMessagePreviewComposer(playerState: state)
             default:
@@ -90,7 +90,7 @@ struct ComposerToolbar: View {
                 if context.viewState.showSendButton {
                     sendButton
                         .padding(.leading, 3)
-                } else {
+                } else if context.viewState.enableVoiceMessageComposer {
                     voiceMessageRecordButton
                         .padding(.leading, 4)
                 }

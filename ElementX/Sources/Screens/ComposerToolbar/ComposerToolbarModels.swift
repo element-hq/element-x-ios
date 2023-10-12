@@ -62,6 +62,7 @@ struct ComposerToolbarViewState: BindableState {
     var areSuggestionsEnabled = true
     var suggestions: [SuggestionItem] = []
     
+    var enableVoiceMessageComposer: Bool
     var audioPlayerState: AudioPlayerState
     var audioRecorderState: AudioRecorderState
     
@@ -74,7 +75,11 @@ struct ComposerToolbarViewState: BindableState {
         case .previewVoiceMessage:
             return true
         default:
-            return !composerEmpty
+            if enableVoiceMessageComposer {
+                return !composerEmpty
+            } else {
+                return true
+            }
         }
     }
     
