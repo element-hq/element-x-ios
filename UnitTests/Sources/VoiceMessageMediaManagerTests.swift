@@ -25,6 +25,9 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     private var voiceMessageCache: VoiceMessageCacheMock!
     private var mediaProvider: MockMediaProvider!
     
+    private let someURL = URL("/some/url")
+    private let audioOGGMimeType = "audio/ogg"
+    
     override func setUp() async throws {
         voiceMessageCache = VoiceMessageCacheMock()
         mediaProvider = MockMediaProvider()
@@ -35,7 +38,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     
     func testLoadVoiceMessageFromSourceUnsupportedMedia() async throws {
         // Only "audio/ogg" file are supported
-        let unsupportedMediaSource = MediaSourceProxy(url: URL("/some/url"), mimeType: "audio/wav")
+        let unsupportedMediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/wav")
         do {
             _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(unsupportedMediaSource, body: nil)
             XCTFail("A `VoiceMessageMediaManagerError.unsupportedMimeTye` error is expected")
@@ -52,7 +55,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     func testLoadVoiceMessageFromSourceAlreadyCached() async throws {
         // Check if the file is already present in cache
         voiceMessageCache.fileURLForReturnValue = URL("/converted_file/url")
-        let mediaSource = MediaSourceProxy(url: URL("/some/url"), mimeType: "audio/ogg")
+        let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
         XCTAssertEqual(url, URL("/converted_file/url"))
         // The file must have be search in the cache
@@ -66,7 +69,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         // An error must be reported if the file cannot be retrieved
         do {
             voiceMessageCache.fileURLForReturnValue = nil
-            let mediaSource = MediaSourceProxy(url: URL("/some/url"), mimeType: "audio/ogg")
+            let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
             _ = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
             XCTFail("A `MediaProviderError.failedRetrievingFile` error is expected")
         } catch {
@@ -89,7 +92,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
 
         // Check if the file is not already present in cache
         voiceMessageCache.fileURLForReturnValue = nil
-        let mediaSource = MediaSourceProxy(url: URL("/some/url"), mimeType: "audio/ogg")
+        let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
         let audioConverter = AudioConverterMock()
         audioConverter.convertToMPEG4AACSourceURLDestinationURLReturnValue = convertedFileURL
@@ -139,7 +142,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
                                                             audioConverter: audioConverter,
                                                             backgroundTaskService: MockBackgroundTaskService())
         
-        let mediaSource = MediaSourceProxy(url: URL("/some/url"), mimeType: "audio/ogg")
+        let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         for _ in 0..<10 {
             let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(mediaSource, body: nil)
             XCTAssertEqual(url, cachedConvertedFileURL)
