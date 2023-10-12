@@ -13,7 +13,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-ios",
       "state" : {
-        "revision" : "0966ff92b2670e3a96259c87016edd92d7ea7797"
+        "revision" : "3daf2cc662eb10181cf15d717745e0f2ba744372"
       }
     },
     {
@@ -41,15 +41,6 @@
       "state" : {
         "revision" : "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
         "version" : "1.7.18"
-      }
-    },
-    {
-      "identity" : "element-design-tokens",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/element-design-tokens.git",
-      "state" : {
-        "revision" : "63e40f10b336c136d6d05f7967e4565e37d3d760",
-        "version" : "0.0.3"
       }
     },
     {
