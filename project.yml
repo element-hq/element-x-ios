@@ -112,9 +112,9 @@ packages:
     url: https://github.com/mxcl/Version
     minorVersion: 2.0.0
   WysiwygComposer:
-#    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
-#    exactVersion: 2.14.2
-    path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
+    url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
+    exactVersion: 2.14.3
+#    path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
   SwiftOGG:
     url: https://github.com/vector-im/swift-ogg
     branch: 0.0.1

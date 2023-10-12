@@ -1093,7 +1093,6 @@
 		35AFCF4C05DEED04E3DB1A16 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		35FA991289149D31F4286747 /* UserPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreference.swift; sourceTree = "<group>"; };
 		36FD673E24FBFCFDF398716A /* RoomMemberProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberProxyMock.swift; sourceTree = "<group>"; };
-		3734F087987F1B4ABD2A6166 /* WysiwygComposer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WysiwygComposer; path = "../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer"; sourceTree = SOURCE_ROOT; };
 		376D941BF8BB294389C0DE24 /* MapTilerURLBuildersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTilerURLBuildersTests.swift; sourceTree = "<group>"; };
 		37A243E04B58DC6E41FDCD82 /* EmojiItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiItem.swift; sourceTree = "<group>"; };
 		37CA26F55123E36B50DB0B3A /* AttributedStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringTests.swift; sourceTree = "<group>"; };
@@ -3252,7 +3251,6 @@
 			isa = PBXGroup;
 			children = (
 				478BE8591BD13E908EF70C0C /* DesignKit */,
-				3734F087987F1B4ABD2A6166 /* WysiwygComposer */,
 			);
 			name = Packages;
 			sourceTree = SOURCE_ROOT;
@@ -4394,6 +4392,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
+				945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -5998,6 +5997,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.14.3;
+			};
+		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
@@ -6383,6 +6390,7 @@
 		};
 		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 945C99D66CE013061F6A3C71 /* XCRemoteSwiftPackageReference "matrix-wysiwyg-composer-swift" */;
 			productName = WysiwygComposer;
 		};
 		CCE5BF78B125320CBF3BB834 /* PostHog */ = {
