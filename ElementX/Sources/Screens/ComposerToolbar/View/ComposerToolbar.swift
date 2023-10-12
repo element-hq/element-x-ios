@@ -266,13 +266,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
     static var previews: some View {
-        VStack {
-            ComposerToolbar.mock(focused: false)
-            ComposerToolbar.mock(focused: true)
-            ComposerToolbar.voiceMessageRecordMock(recording: true)
-            ComposerToolbar.voiceMessagePreviewMock(recording: false)
-        }
-        .previewDisplayName("Text")
+        ComposerToolbar.mock(focused: true)
         
         // Putting them is VStack allows the completion suggestion preview to work properly in tests
         VStack {
@@ -282,6 +276,14 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                             keyCommandHandler: { _ in false })
         }
         .previewDisplayName("With Suggestions")
+        
+        VStack {
+            ComposerToolbar.textWithVoiceMessage(focused: false)
+            ComposerToolbar.textWithVoiceMessage(focused: true)
+            ComposerToolbar.voiceMessageRecordMock(recording: true)
+            ComposerToolbar.voiceMessagePreviewMock(recording: false)
+        }
+        .previewDisplayName("Voice Message")
     }
 }
 
@@ -304,6 +306,23 @@ extension ComposerToolbar {
                                keyCommandHandler: { _ in false })
     }
 
+    static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+            model.state.composerEmpty = focused
+            model.state.enableVoiceMessageComposer = true
+            return model
+        }
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
+    }
+    
     static func voiceMessageRecordMock(recording: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
@@ -313,6 +332,7 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
+            model.state.enableVoiceMessageComposer = true
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,
@@ -329,6 +349,7 @@ extension ComposerToolbar {
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0))
+            model.state.enableVoiceMessageComposer = true
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,
