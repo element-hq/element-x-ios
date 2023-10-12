@@ -1,3 +1,10 @@
+## Changes in 1.3.3 (2023-10-12)
+
+🚧 In development 🚧
+
+- Initial setup for PIN/Biometric app lock. ([#1876](https://github.com/vector-im/element-x-ios/pull/1876))
+
+
 ## Changes in 1.3.2 (2023-10-10)
 
 ✨ Features
