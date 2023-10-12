@@ -42,13 +42,13 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                         .compactMap { member -> SuggestionItem? in
                             guard !member.isAccountOwner,
                                   member.membership == .join,
-                                  Self.isIncluded(suggestionPattern: suggestionPattern, userID: member.userID, displayName: member.displayName) else {
+                                  Self.isIncluded(searchText: suggestionPattern.text, userID: member.userID, displayName: member.displayName) else {
                                 return nil
                             }
                             return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
                         }
                     if self?.canMentionAllUsers == true,
-                       Self.isIncluded(suggestionPattern: suggestionPattern, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
+                       Self.isIncluded(searchText: suggestionPattern.text, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
                         membersSuggestion
                             .append(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL)))
                     }
@@ -72,12 +72,12 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         suggestionTriggerSubject.value = suggestionTrigger
     }
     
-    private static func isIncluded(suggestionPattern: SuggestionPattern, userID: String, displayName: String?) -> Bool {
-        let containedInUserID = userID.localizedStandardContains(suggestionPattern.text.lowercased())
+    private static func isIncluded(searchText: String, userID: String, displayName: String?) -> Bool {
+        let containedInUserID = userID.localizedStandardContains(searchText.lowercased())
         
         let containedInDisplayName: Bool
         if let displayName {
-            containedInDisplayName = displayName.localizedStandardContains(suggestionPattern.text.lowercased())
+            containedInDisplayName = displayName.localizedStandardContains(searchText.lowercased())
         } else {
             containedInDisplayName = false
         }
