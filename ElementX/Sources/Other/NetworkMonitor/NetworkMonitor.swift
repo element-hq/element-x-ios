@@ -18,12 +18,7 @@ import Combine
 import Foundation
 import Network
 
-enum NetworkMonitorReachability {
-    case reachable
-    case unreachable
-}
-
-class NetworkMonitor {
+class NetworkMonitor: NetworkMonitorProtocol {
     private let pathMonitor: NWPathMonitor
     private let queue: DispatchQueue
     
