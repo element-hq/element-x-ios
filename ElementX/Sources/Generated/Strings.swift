@@ -10,12 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
+  /// Delete
+  public static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Mentions only
   public static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
   public static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
+  /// Pause
+  public static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
+  /// Play
+  public static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
   /// Poll
   public static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
@@ -26,6 +32,8 @@ public enum L10n {
   public static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// User menu
   public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// Record voice message. Double tap and hold to record. Release to end recording.
+  public static var a11yVoiceMessageRecord: String { return L10n.tr("Localizable", "a11y_voice_message_record") }
   /// Accept
   public static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
   /// Add to timeline
@@ -142,6 +150,8 @@ public enum L10n {
   public static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
   public static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
+  /// Sign in again
+  public static var actionSignInAgain: String { return L10n.tr("Localizable", "action_sign_in_again") }
   /// Skip
   public static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
   /// Start
@@ -192,6 +202,8 @@ public enum L10n {
   public static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
   /// Error
   public static var commonError: String { return L10n.tr("Localizable", "common_error") }
+  /// Everyone
+  public static var commonEveryone: String { return L10n.tr("Localizable", "common_everyone") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
@@ -284,8 +296,6 @@ public enum L10n {
   public static var commonSecureBackup: String { return L10n.tr("Localizable", "common_secure_backup") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
-  /// Select your server
-  public static var commonSelectYourServer: String { return L10n.tr("Localizable", "common_select_your_server") }
   /// Sending…
   public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
   /// Server not supported
@@ -498,8 +508,6 @@ public enum L10n {
   public static var preferenceRageshake: String { return L10n.tr("Localizable", "preference_rageshake") }
   /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
   public static var rageshakeDetectionDialogContent: String { return L10n.tr("Localizable", "rageshake_detection_dialog_content") }
-  /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
-  public static var rageshakeDialogContent: String { return L10n.tr("Localizable", "rageshake_dialog_content") }
   /// This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
@@ -560,8 +568,6 @@ public enum L10n {
   }
   /// Change account provider
   public static var screenAccountProviderChange: String { return L10n.tr("Localizable", "screen_account_provider_change") }
-  /// Continue
-  public static var screenAccountProviderContinue: String { return L10n.tr("Localizable", "screen_account_provider_continue") }
   /// Homeserver address
   public static var screenAccountProviderFormHint: String { return L10n.tr("Localizable", "screen_account_provider_form_hint") }
   /// Enter a search term or a domain address.
@@ -660,8 +666,6 @@ public enum L10n {
   public static func screenChangeServerFormNotice(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_form_notice", String(describing: p1))
   }
-  /// Continue
-  public static var screenChangeServerSubmit: String { return L10n.tr("Localizable", "screen_change_server_submit") }
   /// What is the address of your server?
   public static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
@@ -760,10 +764,6 @@ public enum L10n {
   public static var screenLoginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "screen_login_error_unsupported_authentication") }
   /// Enter your details
   public static var screenLoginFormHeader: String { return L10n.tr("Localizable", "screen_login_form_header") }
-  /// Password
-  public static var screenLoginPasswordHint: String { return L10n.tr("Localizable", "screen_login_password_hint") }
-  /// Continue
-  public static var screenLoginSubmit: String { return L10n.tr("Localizable", "screen_login_submit") }
   /// Matrix is an open network for secure, decentralised communication.
   public static var screenLoginSubtitle: String { return L10n.tr("Localizable", "screen_login_subtitle") }
   /// Welcome back!
@@ -772,8 +772,6 @@ public enum L10n {
   public static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
   }
-  /// Username
-  public static var screenLoginUsernameHint: String { return L10n.tr("Localizable", "screen_login_username_hint") }
   /// Failed selecting media, please try again.
   public static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
   /// Failed processing media to upload, please try again.
@@ -844,8 +842,6 @@ public enum L10n {
   public static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
   public static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
-  /// Communicate and collaborate securely
-  public static var screenOnboardingSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_subtitle") }
   /// Welcome to the fastest Element ever. Supercharged for speed and simplicity.
   public static var screenOnboardingWelcomeMessage: String { return L10n.tr("Localizable", "screen_onboarding_welcome_message") }
   /// Welcome to %1$@. Supercharged, for speed and simplicity.
@@ -906,8 +902,6 @@ public enum L10n {
   public static var screenRoomDetailsNotificationModeDefault: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_default") }
   /// Notifications
   public static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
-  /// People
-  public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
   /// Room name
   public static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security
@@ -984,8 +978,6 @@ public enum L10n {
   public static var screenRoomReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_reactions_show_less") }
   /// Show more
   public static var screenRoomReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_reactions_show_more") }
-  /// Remove
-  public static var screenRoomRetrySendMenuRemoveAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_remove_action") }
   /// Send again
   public static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
   /// Your message failed to send
@@ -1020,8 +1012,6 @@ public enum L10n {
   }
   /// Something doesn’t seem right. Either the request timed out or the request was denied.
   public static var screenSessionVerificationCancelledSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_cancelled_subtitle") }
-  /// Verification cancelled
-  public static var screenSessionVerificationCancelledTitle: String { return L10n.tr("Localizable", "screen_session_verification_cancelled_title") }
   /// Confirm that the emojis below match those shown on your other session.
   public static var screenSessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_subtitle") }
   /// Compare emojis
@@ -1036,8 +1026,6 @@ public enum L10n {
   public static var screenSessionVerificationPositiveButtonCanceled: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_canceled") }
   /// I am ready
   public static var screenSessionVerificationPositiveButtonInitial: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_initial") }
-  /// Start
-  public static var screenSessionVerificationPositiveButtonReady: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_ready") }
   /// Waiting to match
   public static var screenSessionVerificationPositiveButtonVerifyingOngoing: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_verifying_ongoing") }
   /// Compare the unique emoji, ensuring they appear in the same order.
@@ -1050,8 +1038,6 @@ public enum L10n {
   public static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   public static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
-  /// Account and devices
-  public static var screenSettingsOidcAccount: String { return L10n.tr("Localizable", "screen_settings_oidc_account") }
   /// Share location
   public static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
   /// Share my location
@@ -1064,6 +1050,18 @@ public enum L10n {
   public static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
   /// Share this location
   public static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
+  /// You’ve changed your password on another session
+  public static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
+  /// You have deleted the session from another session
+  public static var screenSignedOutReason2: String { return L10n.tr("Localizable", "screen_signed_out_reason_2") }
+  /// Your server’s administrator has invalidated your access
+  public static var screenSignedOutReason3: String { return L10n.tr("Localizable", "screen_signed_out_reason_3") }
+  /// You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.
+  public static func screenSignedOutSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_signed_out_subtitle", String(describing: p1))
+  }
+  /// You’re signed out
+  public static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
   /// Are you sure you want to sign out?
   public static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
   /// Sign out
@@ -1114,8 +1112,6 @@ public enum L10n {
   public static var settingsRageshake: String { return L10n.tr("Localizable", "settings_rageshake") }
   /// Detection threshold
   public static var settingsRageshakeDetectionThreshold: String { return L10n.tr("Localizable", "settings_rageshake_detection_threshold") }
-  /// General
-  public static var settingsTitleGeneral: String { return L10n.tr("Localizable", "settings_title_general") }
   /// Version: %1$@ (%2$@)
   public static func settingsVersionNumber(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "settings_version_number", String(describing: p1), String(describing: p2))

@@ -168,6 +168,8 @@ protocol RoomProxyProtocol {
     func uploadAvatar(media: MediaInfo) async -> Result<Void, RoomProxyError>
 
     func canUserRedact(userID: String) async -> Result<Bool, RoomProxyError>
+    
+    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
 
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, RoomProxyError>
 

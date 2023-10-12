@@ -68,7 +68,7 @@ struct CompletionSuggestionView: View {
                 onTap(item)
             } label: {
                 switch item {
-                case .user(let mention):
+                case .user(let mention), .allUsers(let mention):
                     MentionSuggestionItemView(imageProvider: imageProvider, item: mention)
                 }
             }

@@ -20,11 +20,23 @@ import WysiwygComposer
 
 enum SuggestionItem: Identifiable, Equatable {
     case user(item: MentionSuggestionItem)
+    case allUsers(item: MentionSuggestionItem)
     
     var id: String {
         switch self {
         case .user(let user):
             return user.id
+        case .allUsers:
+            return PillConstants.atRoom
+        }
+    }
+    
+    var name: String? {
+        switch self {
+        case .user(let user):
+            return user.displayName
+        case .allUsers:
+            return PillConstants.everyone
         }
     }
 }
@@ -33,6 +45,10 @@ struct MentionSuggestionItem: Identifiable, Equatable {
     let id: String
     let displayName: String?
     let avatarURL: URL?
+    
+    static func allUsersMention(roomAvatar: URL?) -> Self {
+        MentionSuggestionItem(id: PillConstants.atRoom, displayName: PillConstants.everyone, avatarURL: roomAvatar)
+    }
 }
 
 extension WysiwygComposer.SuggestionPattern {

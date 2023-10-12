@@ -18,50 +18,70 @@ import Combine
 import Foundation
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
+    private var canMentionAllUsers = false
     let areSuggestionsEnabled: Bool
-    let suggestionsPublisher: AnyPublisher<[SuggestionItem], Never>
+    private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
     
     init(roomProxy: RoomProxyProtocol, areSuggestionsEnabled: Bool) {
         self.areSuggestionsEnabled = areSuggestionsEnabled
         guard areSuggestionsEnabled else {
-            suggestionsPublisher = Empty().eraseToAnyPublisher()
             return
         }
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
-            .map { suggestionTrigger, members -> [SuggestionItem] in
-                guard let suggestionTrigger else {
+            .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
+                guard let suggestionPattern else {
                     return []
                 }
                 
-                switch suggestionTrigger.type {
+                switch suggestionPattern.type {
                 case .user:
-                    return members.filter { member in
-                        guard !member.isAccountOwner && member.membership == .join else {
-                            return false
+                    var membersSuggestion = members
+                        .compactMap { member -> SuggestionItem? in
+                            guard !member.isAccountOwner,
+                                  member.membership == .join,
+                                  Self.isIncluded(searchText: suggestionPattern.text, userID: member.userID, displayName: member.displayName) else {
+                                return nil
+                            }
+                            return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
                         }
-                        
-                        let containedInUserID = member.userID.localizedStandardContains(suggestionTrigger.text.lowercased())
-                        
-                        let containedInDisplayName: Bool
-                        if let displayName = member.displayName {
-                            containedInDisplayName = displayName.localizedStandardContains(suggestionTrigger.text.lowercased())
-                        } else {
-                            containedInDisplayName = false
-                        }
-                        
-                        return containedInUserID || containedInDisplayName
+                    if self?.canMentionAllUsers == true,
+                       Self.isIncluded(searchText: suggestionPattern.text, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
+                        membersSuggestion
+                            .append(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL)))
                     }
-                    .map { SuggestionItem.user(item: .init(id: $0.userID, displayName: $0.displayName, avatarURL: $0.avatarURL)) }
+                    return membersSuggestion
                 }
             }
             .debounce(for: 0.5, scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
+        
+        Task {
+            switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {
+            case .success(let value):
+                canMentionAllUsers = value
+            case .failure:
+                canMentionAllUsers = false
+            }
+        }
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
         suggestionTriggerSubject.value = suggestionTrigger
+    }
+    
+    private static func isIncluded(searchText: String, userID: String, displayName: String?) -> Bool {
+        let containedInUserID = userID.localizedStandardContains(searchText.lowercased())
+        
+        let containedInDisplayName: Bool
+        if let displayName {
+            containedInDisplayName = displayName.localizedStandardContains(searchText.lowercased())
+        } else {
+            containedInDisplayName = false
+        }
+        
+        return containedInUserID || containedInDisplayName
     }
 }

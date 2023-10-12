@@ -123,19 +123,37 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test"), nil])
     }
     
-    func testSelectedSuggestion() {
+    func testSelectedUserSuggestion() {
         let suggestion = SuggestionItem.user(item: .init(id: "@test:matrix.org", displayName: "Test", avatarURL: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
-        XCTAssertEqual(wysiwygViewModel.content.html, "<a data-mention-type=\"user\" href=\"https://matrix.to/#/@test:matrix.org\" contenteditable=\"false\">Test</a> ")
+        XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/@test:matrix.org\">Test</a> ")
     }
     
-    func testUserMentionInRTE() {
+    func testAllUsersSuggestion() {
+        let suggestion = SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: nil))
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        var string = "@room"
+        // swiftlint:disable:next force_unwrapping
+        string.unicodeScalars.append(UnicodeScalar(String.nbsp)!)
+        XCTAssertEqual(wysiwygViewModel.content.html, string)
+    }
+    
+    func testUserMentionPillInRTE() {
         let userID = "@test:matrix.org"
         let suggestion = SuggestionItem.user(item: .init(id: userID, displayName: "Test", avatarURL: nil))
         viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
         
         let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
         XCTAssertEqual(attachment?.pillData?.type, .user(userID: userID))
+    }
+    
+    func testAllUsersMentionPillInRTE() {
+        let suggestion = SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: nil))
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
+        XCTAssertEqual(attachment?.pillData?.type, .allUsers)
     }
 }
