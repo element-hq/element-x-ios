@@ -47,7 +47,7 @@ struct MentionSuggestionItem: Identifiable, Equatable {
     let avatarURL: URL?
     
     static func allUsersMention(roomAvatar: URL?) -> Self {
-        MentionSuggestionItem(id: PillConstants.atRoom, displayName: "Everyone", avatarURL: roomAvatar)
+        MentionSuggestionItem(id: PillConstants.atRoom, displayName: PillConstants.everyone, avatarURL: roomAvatar)
     }
 }
 

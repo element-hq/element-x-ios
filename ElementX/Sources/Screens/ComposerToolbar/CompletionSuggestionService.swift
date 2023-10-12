@@ -31,29 +31,28 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         }
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
-            .map { [weak self] suggestionTrigger, members -> [SuggestionItem] in
-                guard let suggestionTrigger else {
+            .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
+                guard let suggestionPattern else {
                     return []
                 }
                 
-                switch suggestionTrigger.type {
+                switch suggestionPattern.type {
                 case .user:
-                    return members
-                        .filter { !$0.isAccountOwner && $0.membership == .join }
-                        .map { SuggestionItem.user(item: .init(id: $0.userID, displayName: $0.displayName, avatarURL: $0.avatarURL)) }
-                        .appending(self?.canMentionAllUsers ?? false ? [SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL))] : [])
-                        .filter { member in
-                            let containedInUserID = member.id.localizedStandardContains(suggestionTrigger.text.lowercased())
-                            
-                            let containedInDisplayName: Bool
-                            if let displayName = member.name {
-                                containedInDisplayName = displayName.localizedStandardContains(suggestionTrigger.text.lowercased())
-                            } else {
-                                containedInDisplayName = false
+                    var membersSuggestion = members
+                        .compactMap { member -> SuggestionItem? in
+                            guard !member.isAccountOwner,
+                                  member.membership == .join,
+                                  Self.isIncluded(suggestionPattern: suggestionPattern, userID: member.userID, displayName: member.displayName) else {
+                                return nil
                             }
-                            
-                            return containedInUserID || containedInDisplayName
+                            return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
                         }
+                    if self?.canMentionAllUsers == true,
+                       Self.isIncluded(suggestionPattern: suggestionPattern, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
+                        membersSuggestion
+                            .append(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL)))
+                    }
+                    return membersSuggestion
                 }
             }
             .debounce(for: 0.5, scheduler: DispatchQueue.main)
@@ -71,5 +70,18 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionPattern?) {
         suggestionTriggerSubject.value = suggestionTrigger
+    }
+    
+    private static func isIncluded(suggestionPattern: SuggestionPattern, userID: String, displayName: String?) -> Bool {
+        let containedInUserID = userID.localizedStandardContains(suggestionPattern.text.lowercased())
+        
+        let containedInDisplayName: Bool
+        if let displayName {
+            containedInDisplayName = displayName.localizedStandardContains(suggestionPattern.text.lowercased())
+        } else {
+            containedInDisplayName = false
+        }
+        
+        return containedInUserID || containedInDisplayName
     }
 }
