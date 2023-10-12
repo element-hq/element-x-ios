@@ -14,10 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
-
 import Compound
-import DesignKit
+import SwiftUI
 
 struct PlaceholderAvatarImage: View {
     @Environment(\.redactionReasons) private var redactionReasons

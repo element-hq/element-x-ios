@@ -92,7 +92,7 @@ struct CreateRoomScreen: View {
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-                        .background(Color.element.formRowBackground)
+                        .background(Color.compound.bgCanvasDefaultLevel1)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
@@ -188,7 +188,7 @@ struct CreateRoomScreen: View {
                 .padding(.top, 40)
         }
         .listRowSeparatorTint(.compound.borderDisabled)
-        .listRowBackground(Color.element.formRowBackground)
+        .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
     }
     
     private var createButton: some View {

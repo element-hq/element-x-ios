@@ -232,7 +232,7 @@ struct HomeScreen: View {
                 context.send(viewAction: .verifySession)
             }
             .frame(maxWidth: .infinity)
-            .buttonStyle(.elementCapsuleProminent)
+            .buttonStyle(.compound(.primary, size: .medium))
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.verificationBannerContinue)
         }
         .padding(16)

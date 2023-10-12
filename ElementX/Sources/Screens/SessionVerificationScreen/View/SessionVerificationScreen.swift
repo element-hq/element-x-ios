@@ -130,20 +130,20 @@ struct SessionVerificationScreen: View {
             Button(L10n.actionStartVerification) {
                 context.send(viewAction: .requestVerification)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
         
         case .cancelled:
             Button(L10n.actionRetry) {
                 context.send(viewAction: .restart)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             
         case .verificationRequestAccepted:
             Button(L10n.actionStart) {
                 context.send(viewAction: .startSasVerification)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
@@ -151,7 +151,7 @@ struct SessionVerificationScreen: View {
                 Button { context.send(viewAction: .accept) } label: {
                     Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                 }
-                .buttonStyle(.elementAction(.xLarge))
+                .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
@@ -170,7 +170,7 @@ struct SessionVerificationScreen: View {
                         Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                     }
                 }
-                .buttonStyle(.elementAction(.xLarge))
+                .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
 

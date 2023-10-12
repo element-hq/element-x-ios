@@ -17,11 +17,6 @@
 import Compound
 import SwiftUI
 
-// Move this to Compound.
-extension ShapeStyle where Self == Color {
-    static var compound: CompoundColors { Self.compound }
-}
-
 // This implementation is only for development purposes.
 
 struct AppLockScreen: View {
@@ -43,7 +38,7 @@ struct AppLockScreen: View {
             Button(UntranslatedL10n.commonUnlock) {
                 context.send(viewAction: .submitPINCode("0000"))
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
         }
     }
 }

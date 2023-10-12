@@ -48,11 +48,9 @@ packages:
     url: https://github.com/matrix-org/matrix-rust-components-swift
     exactVersion: 1.1.22
     # path: ../matrix-rust-sdk
-  DesignKit:
-    path: DesignKit
   Compound:
     url: https://github.com/vector-im/compound-ios
-    revision: 0966ff92b2670e3a96259c87016edd92d7ea7797
+    revision: 3daf2cc662eb10181cf15d717745e0f2ba744372
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

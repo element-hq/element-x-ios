@@ -14,38 +14,35 @@
 // limitations under the License.
 //
 
-import DesignTokens
+import Compound
 import SwiftUI
 import SwiftUIIntrospect
 
-public extension TextFieldStyle where Self == ElementTextFieldStyle {
-    static func elementInput(labelText: String? = nil,
-                             footerText: String? = nil,
-                             isError: Bool = false,
-                             accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
-        ElementTextFieldStyle(labelText: labelText.map(Text.init),
-                              footerText: footerText.map(Text.init),
-                              isError: isError,
-                              accessibilityIdentifier: accessibilityIdentifier)
+public extension TextFieldStyle where Self == AuthenticationTextFieldStyle {
+    static func authentication(labelText: String? = nil,
+                               footerText: String? = nil,
+                               isError: Bool = false,
+                               accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
+        AuthenticationTextFieldStyle(labelText: labelText.map(Text.init),
+                                     footerText: footerText.map(Text.init),
+                                     isError: isError,
+                                     accessibilityIdentifier: accessibilityIdentifier)
     }
     
     @_disfavoredOverload
-    static func elementInput(labelText: Text? = nil,
-                             footerText: Text? = nil,
-                             isError: Bool = false,
-                             accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
-        ElementTextFieldStyle(labelText: labelText,
-                              footerText: footerText,
-                              isError: isError,
-                              accessibilityIdentifier: accessibilityIdentifier)
+    static func authentication(labelText: Text? = nil,
+                               footerText: Text? = nil,
+                               isError: Bool = false,
+                               accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
+        AuthenticationTextFieldStyle(labelText: labelText,
+                                     footerText: footerText,
+                                     isError: isError,
+                                     accessibilityIdentifier: accessibilityIdentifier)
     }
 }
 
-/// A bordered style of text input with a label and a footer
-///
-/// As defined in:
-/// https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=2039%3A26415
-public struct ElementTextFieldStyle: TextFieldStyle {
+/// The text field style used in authentication screens.
+public struct AuthenticationTextFieldStyle: TextFieldStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
     
@@ -153,24 +150,24 @@ struct ElementTextFieldStyle_Previews: PreviewProvider {
             VStack(spacing: 20) {
                 // Plain text field.
                 TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.elementInput())
+                    .textFieldStyle(.authentication())
                 TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.elementInput())
+                    .textFieldStyle(.authentication())
                 TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.elementInput())
+                    .textFieldStyle(.authentication())
                     .disabled(true)
                 TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.elementInput(isError: true))
+                    .textFieldStyle(.authentication(isError: true))
                 
                 // Text field with labels
                 TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.elementInput(labelText: "Label", footerText: "Footer"))
+                    .textFieldStyle(.authentication(labelText: "Label", footerText: "Footer"))
                 TextField("Placeholder", text: .constant("Input text"))
-                    .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer"))
+                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
                 TextField("Placeholder", text: .constant("Bad text"))
-                    .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer", isError: true))
+                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", isError: true))
                 TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer"))
+                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
                     .disabled(true)
             }
             .padding()

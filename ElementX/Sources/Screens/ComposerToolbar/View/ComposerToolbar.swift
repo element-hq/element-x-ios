@@ -111,7 +111,7 @@ struct ComposerToolbar: View {
             submitButtonImage
                 .symbolVariant(.fill)
                 .font(.compound.bodyLG)
-                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .global.white)
+                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
                 .background {
                     Circle()
                         .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)

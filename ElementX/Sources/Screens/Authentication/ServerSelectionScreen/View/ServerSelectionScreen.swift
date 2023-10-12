@@ -60,10 +60,10 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: Text(L10n.screenChangeServerFormHeader),
-                                              footerText: Text(context.viewState.footerMessage),
-                                              isError: context.viewState.isShowingFooterError,
-                                              accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
+                .textFieldStyle(.authentication(labelText: Text(L10n.screenChangeServerFormHeader),
+                                                footerText: Text(context.viewState.footerMessage),
+                                                isError: context.viewState.isShowingFooterError,
+                                                accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
@@ -74,7 +74,7 @@ struct ServerSelectionScreen: View {
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .disabled(context.viewState.hasValidationError)
             .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
         }

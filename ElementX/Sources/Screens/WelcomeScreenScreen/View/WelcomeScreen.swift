@@ -92,7 +92,7 @@ struct WelcomeScreen: View {
         } label: {
             Text(context.viewState.buttonTitle)
         }
-        .buttonStyle(.elementAction(.xLarge))
+        .buttonStyle(.compound(.primary))
         .accessibilityIdentifier(A11yIdentifiers.welcomeScreen.letsGo)
     }
 }

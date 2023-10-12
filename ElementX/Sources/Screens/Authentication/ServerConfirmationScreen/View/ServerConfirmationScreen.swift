@@ -58,7 +58,7 @@ struct ServerConfirmationScreen: View {
             Button { context.send(viewAction: .confirm) } label: {
                 Text(L10n.actionContinue)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
             
             Button { context.send(viewAction: .changeServer) } label: {

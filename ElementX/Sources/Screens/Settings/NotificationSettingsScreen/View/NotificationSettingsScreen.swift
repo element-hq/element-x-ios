@@ -169,7 +169,7 @@ struct NotificationSettingsScreen: View {
                     } label: {
                         Text(L10n.actionContinue)
                     }
-                    .buttonStyle(.elementCapsuleProminent)
+                    .buttonStyle(.compound(.primary, size: .medium))
                     .disabled(context.viewState.fixingConfigurationMismatch)
                     .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
                 }

@@ -83,7 +83,7 @@ struct SoftLogoutScreen: View {
         VStack(spacing: 14) {
             SecureField(L10n.commonPassword, text: $context.password)
                 .focused($isPasswordFocused)
-                .textFieldStyle(.elementInput())
+                .textFieldStyle(.authentication())
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
@@ -100,7 +100,7 @@ struct SoftLogoutScreen: View {
             Button(action: submit) {
                 Text(L10n.actionNext)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .disabled(!context.viewState.canSubmit)
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.next)
         }
@@ -111,7 +111,7 @@ struct SoftLogoutScreen: View {
         Button { context.send(viewAction: .continueWithOIDC) } label: {
             Text(L10n.actionContinue)
         }
-        .buttonStyle(.elementAction(.xLarge))
+        .buttonStyle(.compound(.primary))
     }
 
     /// Text shown if neither password or OIDC login is supported.
@@ -139,10 +139,10 @@ struct SoftLogoutScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataMessage)
                 .padding(.bottom, 12)
 
-            Button(action: clearData) {
+            Button(role: .destructive, action: clearData) {
                 Text(UntranslatedL10n.softLogoutClearDataSubmit)
             }
-            .buttonStyle(.elementAction(.xLarge, color: .compound.textCriticalPrimary))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(UntranslatedL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
