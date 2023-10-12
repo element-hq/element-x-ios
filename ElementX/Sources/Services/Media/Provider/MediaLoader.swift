@@ -56,7 +56,7 @@ actor MediaLoader: MediaLoaderProtocol {
     
     // MARK: - Private
     
-    private func enqueueLoadMediaRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> [UInt8]) async throws -> Data {
+    private func enqueueLoadMediaRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> Data) async throws -> Data {
         if let ongoingRequest = ongoingRequests[source] {
             return try await withCheckedThrowingContinuation { continuation in
                 ongoingRequest.continuations.append(continuation)
@@ -72,8 +72,7 @@ actor MediaLoader: MediaLoaderProtocol {
         
         do {
             let result = try await Task.dispatch(on: clientQueue) {
-                let bytes = try operation()
-                return Data(bytes: bytes, count: bytes.count)
+                try operation()
             }
             
             ongoingRequest.continuations.forEach { $0.resume(returning: result) }

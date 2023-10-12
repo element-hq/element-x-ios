@@ -210,7 +210,7 @@ class ClientProxy: ClientProxyProtocol {
         return await Task.dispatch(on: clientQueue) {
             do {
                 let data = try Data(contentsOf: media.url)
-                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: [UInt8](data), progressWatcher: nil)
+                let matrixUrl = try self.client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
                 return .success(matrixUrl)
             } catch let error as ClientError {
                 return .failure(ClientProxyError.failedUploadingMedia(error.code))
@@ -328,7 +328,7 @@ class ClientProxy: ClientProxyProtocol {
             
             do {
                 let data = try Data(contentsOf: imageURL)
-                try self.client.uploadAvatar(mimeType: mimeType, data: [UInt8](data))
+                try self.client.uploadAvatar(mimeType: mimeType, data: data)
                 Task {
                     await self.loadUserAvatarURL()
                 }
