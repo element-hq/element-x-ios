@@ -149,7 +149,7 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
                 Text("Continue")
                     .font(.compound.bodyLGSemibold)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             
             Button { } label: {
                 Text("More options")

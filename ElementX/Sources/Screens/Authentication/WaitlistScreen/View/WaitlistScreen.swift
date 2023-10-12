@@ -32,7 +32,7 @@ struct WaitlistScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var content: some View {
         VStack(spacing: 16) {
-            Text(context.viewState.title.tinting(".", color: .element.brand))
+            Text(context.viewState.title.tinting(".", color: Asset.Colors.brandColor.swiftUIColor))
                 .font(.compound.headingXLBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
@@ -52,7 +52,7 @@ struct WaitlistScreen: View {
             Button { context.send(viewAction: .continue(userSession)) } label: {
                 Text(L10n.actionContinue)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
         }
     }
     

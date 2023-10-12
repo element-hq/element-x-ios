@@ -105,11 +105,11 @@ struct InvitesScreenCell: View {
     private var buttons: some View {
         HStack(spacing: 12) {
             Button(L10n.actionDecline, action: declineAction)
-                .buttonStyle(.elementCapsule)
+                .buttonStyle(.compound(.secondary, size: .medium))
                 .accessibilityIdentifier(A11yIdentifiers.invitesScreen.decline)
             
             Button(L10n.actionAccept, action: acceptAction)
-                .buttonStyle(.elementCapsuleProminent)
+                .buttonStyle(.compound(.primary, size: .medium))
                 .accessibilityIdentifier(A11yIdentifiers.invitesScreen.accept)
         }
     }

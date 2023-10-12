@@ -92,7 +92,7 @@ struct AnalyticsPromptScreen: View {
                 Text(L10n.actionOk)
                     .font(.compound.bodyLGSemibold)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
             
             Button { context.send(viewAction: .disable) } label: {

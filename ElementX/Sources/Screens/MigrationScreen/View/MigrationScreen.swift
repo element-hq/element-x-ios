@@ -34,7 +34,7 @@ struct MigrationScreen: View {
                 .tint(.compound.iconPrimary)
                 .padding(.bottom, 4)
             
-            Text(L10n.screenMigrationTitle.tinting(".", color: .element.brand))
+            Text(L10n.screenMigrationTitle.tinting(".", color: Asset.Colors.brandColor.swiftUIColor))
                 .font(.compound.headingXLBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)

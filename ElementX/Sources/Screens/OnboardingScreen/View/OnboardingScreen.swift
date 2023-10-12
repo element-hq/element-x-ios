@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import DesignKit
 import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
@@ -87,7 +86,7 @@ struct OnboardingScreen: View {
             Button { context.send(viewAction: .login) } label: {
                 Text(L10n.actionContinue)
             }
-            .buttonStyle(.elementAction(.xLarge))
+            .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.signIn)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
