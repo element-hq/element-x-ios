@@ -68,7 +68,7 @@ struct VoiceMessageRecordButton: View {
             .frame(width: buttonIconSize, height: buttonIconSize)
             .foregroundColor(.compound.iconSecondary)
             .padding(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6))
-            .accessibilityLabel(UntranslatedL10n.actionSendVoiceMessage)
+            .accessibilityLabel(L10n.a11yVoiceMessageRecord)
     }
 }
 

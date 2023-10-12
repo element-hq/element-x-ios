@@ -235,7 +235,7 @@ struct ComposerToolbar: View {
                 .frame(width: trashButtonIconSize, height: trashButtonIconSize)
                 .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
                 .fixedSize()
-                .accessibilityLabel(UntranslatedL10n.actionRecordVoiceMessage)
+                .accessibilityLabel(L10n.a11yDelete)
         }
     }
     

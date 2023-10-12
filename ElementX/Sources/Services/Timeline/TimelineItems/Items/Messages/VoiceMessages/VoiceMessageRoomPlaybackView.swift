@@ -140,6 +140,7 @@ struct VoiceMessageRoomPlaybackView: View {
                         .offset(x: playerState.playbackState == .playing ? 0 : 2)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.compound.iconSecondary)
+                        .accessibilityLabel(playerState.playbackState == .playing ? L10n.a11yPause : L10n.a11yPlay)
                 }
             }
         }

@@ -19,6 +19,4 @@
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
 
 // MARK: - Voice messages
-"action_record_voice_message" = "Record a voice message";
-"action_send_voice_message" = "Send the voice message";
 "voice_message_button_tap_tooltip" = "Hold to record";
