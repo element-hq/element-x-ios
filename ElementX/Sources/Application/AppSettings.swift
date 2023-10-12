@@ -124,7 +124,12 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC. The bundle ID suffix avoids app association conflicts between Element X, Nightly and PR builds.
-    let oidcRedirectURL = URL(string: "https://mobile.element.io/oidc/elementx")!
+    let oidcRedirectURL = {
+        guard let bundleIDSuffix = InfoPlistReader.main.bundleIdentifier.split(separator: ".").last,
+              let redirectURL = URL(string: "https://mobile.element.io/oidc/\(bundleIDSuffix)")
+        else { fatalError("Failed creating a valid OIDC redirect URL.") }
+        return redirectURL
+    }()
 
     /// The date that the call to `/login` completed successfully. This is used to put
     /// a hard wall on the history of encrypted messages until we have key backup.
