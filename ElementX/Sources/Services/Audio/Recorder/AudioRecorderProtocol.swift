@@ -14,12 +14,25 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
-protocol AudioConverterProtocol {
-    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws
-    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws
+enum AudioRecorderAction {
+    case didStartRecording
+    case didStopRecording
+    case didFailWithError(error: Error)
+}
+
+protocol AudioRecorderProtocol: AnyObject {
+    var actions: AnyPublisher<AudioRecorderAction, Never> { get }
+    var currentTime: TimeInterval { get }
+    var isRecording: Bool { get }
+    var url: URL? { get }
+    
+    func recordWithOutputURL(_ url: URL)
+    func stopRecording(releaseAudioSession: Bool)
+    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
 }
 
 // sourcery: AutoMockable
-extension AudioConverterProtocol { }
+extension AudioRecorderProtocol { }

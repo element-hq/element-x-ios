@@ -40,6 +40,8 @@ enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(itemID: TimelineItemIdentifier, replyDetails: TimelineItemReplyDetails, isThread: Bool)
     case edit(originalItemId: TimelineItemIdentifier)
+    case recordVoiceMessage(state: AudioRecorderState)
+    case previewVoiceMessage(state: AudioPlayerState)
     
     var isEdit: Bool {
         switch self {

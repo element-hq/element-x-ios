@@ -67,7 +67,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction { .none }
     
     func sendMessage(_ message: String, html: String?, inReplyTo itemID: TimelineItemIdentifier?) async { }
-    
+        
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
 
     func editMessage(_ newMessage: String, html: String?, original itemID: TimelineItemIdentifier) async { }
@@ -89,6 +89,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async { }
+    
+    func pauseAudio() { }
     
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async { }
     

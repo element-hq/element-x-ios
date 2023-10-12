@@ -90,7 +90,7 @@ struct MessageComposer: View {
             MessageComposerReplyHeader(replyDetails: replyDetails, action: replyCancellationAction)
         case .edit:
             MessageComposerEditHeader(action: editCancellationAction)
-        case .default:
+        case .recordVoiceMessage, .previewVoiceMessage, .default:
             EmptyView()
         }
     }

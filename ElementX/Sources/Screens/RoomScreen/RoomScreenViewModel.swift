@@ -186,6 +186,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
+        case .startRecordingVoiceMessage:
+            timelineController.pauseAudio()
+            startRecordingVoiceMessage()
+        case .stopRecordingVoiceMessage:
+            stopRecordingVoiceMessage()
+        case .deleteRecordedVoiceMessage:
+            deleteCurrentVoiceMessage()
+        case .sendVoiceMessage:
+            Task { await sendCurrentVoiceMessage() }
         }
     }
     
@@ -466,9 +475,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await timelineController.editMessage(message, html: html, original: originalItemId)
         case .default:
             await timelineController.sendMessage(message, html: html)
+        case .recordVoiceMessage, .previewVoiceMessage:
+            fatalError("invalid composer mode.")
         }
     }
-    
+        
     private func trackComposerMode(_ mode: RoomScreenComposerMode) {
         var isEdit = false
         var isReply = false
@@ -887,6 +898,34 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState {
         timelineController.audioPlayerState(for: itemID)
+    }
+    
+    // MARK: - Voice message
+    
+    private func startRecordingVoiceMessage() {
+        // Partially implemented
+
+        let audioRecordState = AudioRecorderState()
+        actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+    }
+    
+    private func stopRecordingVoiceMessage() {
+        // Partially implemented
+
+        let audioPlayerState = AudioPlayerState(duration: 0)
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
+    }
+    
+    private func deleteCurrentVoiceMessage() {
+        // Partially implemented
+
+        actionsSubject.send(.composer(action: .setMode(mode: .default)))
+    }
+    
+    private func sendCurrentVoiceMessage() async {
+        // Partially implemented
+        
+        actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
 }
 

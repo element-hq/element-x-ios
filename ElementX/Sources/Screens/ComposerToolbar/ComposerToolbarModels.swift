@@ -30,6 +30,11 @@ enum ComposerToolbarViewModelAction {
 
     case composerModeChanged(mode: RoomScreenComposerMode)
     case composerFocusedChanged(isFocused: Bool)
+    
+    case startRecordingVoiceMessage
+    case stopRecordingVoiceMessage
+    case deleteRecordedVoiceMessage
+    case sendVoiceMessage
 }
 
 enum ComposerToolbarViewAction {
@@ -46,6 +51,9 @@ enum ComposerToolbarViewAction {
     case enableTextFormatting
     case composerAction(action: ComposerAction)
     case selectedSuggestion(_ suggestion: SuggestionItem)
+    case startRecordingVoiceMessage
+    case stopRecordingVoiceMessage
+    case deleteRecordedVoiceMessage
 }
 
 struct ComposerToolbarViewState: BindableState {
@@ -53,11 +61,28 @@ struct ComposerToolbarViewState: BindableState {
     var composerEmpty = true
     var areSuggestionsEnabled = true
     var suggestions: [SuggestionItem] = []
-
+    
+    var audioPlayerState: AudioPlayerState
+    var audioRecorderState: AudioRecorderState
+    
     var bindings: ComposerToolbarViewStateBindings
 
+    var showSendButton: Bool {
+        switch composerMode {
+        case .recordVoiceMessage:
+            return false
+        case .previewVoiceMessage:
+            return true
+        default:
+            return !composerEmpty
+        }
+    }
+    
     var sendButtonDisabled: Bool {
-        composerEmpty
+        if case .previewVoiceMessage = composerMode {
+            return false
+        }
+        return composerEmpty
     }
 }
 

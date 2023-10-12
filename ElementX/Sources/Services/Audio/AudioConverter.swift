@@ -30,6 +30,7 @@ enum AudioConverterPreferredFileExtension: String {
 struct AudioConverter: AudioConverterProtocol {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
+            MXLog.debug("converting \(sourceURL) to \(destinationURL)")
             try OGGConverter.convertM4aFileToOpusOGG(src: sourceURL, dest: destinationURL)
         } catch {
             MXLog.error("failed to convert to OpusOgg: \(error)")

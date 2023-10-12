@@ -27,7 +27,8 @@ enum AudioPlayerPlaybackState {
 }
 
 @MainActor
-class AudioPlayerState: ObservableObject {
+class AudioPlayerState: ObservableObject, Identifiable {
+    let id = UUID()
     let duration: Double
     let waveform: Waveform
     @Published private(set) var playbackState: AudioPlayerPlaybackState
@@ -148,5 +149,11 @@ class AudioPlayerState: ObservableObject {
     
     private func restoreAudioPlayerState(audioPlayer: AudioPlayerProtocol) async {
         await audioPlayer.seek(to: progress)
+    }
+}
+
+extension AudioPlayerState: Equatable {
+    nonisolated static func == (lhs: AudioPlayerState, rhs: AudioPlayerState) -> Bool {
+        lhs.id == rhs.id
     }
 }

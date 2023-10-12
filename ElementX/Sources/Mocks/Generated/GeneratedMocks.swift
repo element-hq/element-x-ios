@@ -246,6 +246,78 @@ class AudioPlayerMock: AudioPlayerProtocol {
         await seekToClosure?(progress)
     }
 }
+class AudioRecorderMock: AudioRecorderProtocol {
+    var actions: AnyPublisher<AudioRecorderAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<AudioRecorderAction, Never>!
+    var currentTime: TimeInterval {
+        get { return underlyingCurrentTime }
+        set(value) { underlyingCurrentTime = value }
+    }
+    var underlyingCurrentTime: TimeInterval!
+    var isRecording: Bool {
+        get { return underlyingIsRecording }
+        set(value) { underlyingIsRecording = value }
+    }
+    var underlyingIsRecording: Bool!
+    var url: URL?
+
+    //MARK: - recordWithOutputURL
+
+    var recordWithOutputURLCallsCount = 0
+    var recordWithOutputURLCalled: Bool {
+        return recordWithOutputURLCallsCount > 0
+    }
+    var recordWithOutputURLReceivedUrl: URL?
+    var recordWithOutputURLReceivedInvocations: [URL] = []
+    var recordWithOutputURLClosure: ((URL) -> Void)?
+
+    func recordWithOutputURL(_ url: URL) {
+        recordWithOutputURLCallsCount += 1
+        recordWithOutputURLReceivedUrl = url
+        recordWithOutputURLReceivedInvocations.append(url)
+        recordWithOutputURLClosure?(url)
+    }
+    //MARK: - stopRecording
+
+    var stopRecordingReleaseAudioSessionCallsCount = 0
+    var stopRecordingReleaseAudioSessionCalled: Bool {
+        return stopRecordingReleaseAudioSessionCallsCount > 0
+    }
+    var stopRecordingReleaseAudioSessionReceivedReleaseAudioSession: Bool?
+    var stopRecordingReleaseAudioSessionReceivedInvocations: [Bool] = []
+    var stopRecordingReleaseAudioSessionClosure: ((Bool) -> Void)?
+
+    func stopRecording(releaseAudioSession: Bool) {
+        stopRecordingReleaseAudioSessionCallsCount += 1
+        stopRecordingReleaseAudioSessionReceivedReleaseAudioSession = releaseAudioSession
+        stopRecordingReleaseAudioSessionReceivedInvocations.append(releaseAudioSession)
+        stopRecordingReleaseAudioSessionClosure?(releaseAudioSession)
+    }
+    //MARK: - averagePowerForChannelNumber
+
+    var averagePowerForChannelNumberCallsCount = 0
+    var averagePowerForChannelNumberCalled: Bool {
+        return averagePowerForChannelNumberCallsCount > 0
+    }
+    var averagePowerForChannelNumberReceivedChannelNumber: Int?
+    var averagePowerForChannelNumberReceivedInvocations: [Int] = []
+    var averagePowerForChannelNumberReturnValue: Float!
+    var averagePowerForChannelNumberClosure: ((Int) -> Float)?
+
+    func averagePowerForChannelNumber(_ channelNumber: Int) -> Float {
+        averagePowerForChannelNumberCallsCount += 1
+        averagePowerForChannelNumberReceivedChannelNumber = channelNumber
+        averagePowerForChannelNumberReceivedInvocations.append(channelNumber)
+        if let averagePowerForChannelNumberClosure = averagePowerForChannelNumberClosure {
+            return averagePowerForChannelNumberClosure(channelNumber)
+        } else {
+            return averagePowerForChannelNumberReturnValue
+        }
+    }
+}
 class BugReportServiceMock: BugReportServiceProtocol {
     var isRunning: Bool {
         get { return underlyingIsRunning }

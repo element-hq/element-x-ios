@@ -18,16 +18,17 @@ import SwiftUI
 
 struct VoiceMessageRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
+    @ScaledMetric private var waveformLineWidth = 2.0
+    @ScaledMetric private var waveformLinePadding = 2.0
+    var waveformMaxWidth: CGFloat = 150
+
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     @State private var sendFeedback = false
-    
-    @ScaledMetric private var waveformLineWidth = 2.0
-    @ScaledMetric private var waveformLinePadding = 2.0
-    private let waveformMaxWidth: CGFloat = 150
+        
     @ScaledMetric private var playPauseButtonSize = 32
     @ScaledMetric private var playPauseImagePadding = 8
     
@@ -99,7 +100,7 @@ struct VoiceMessageRoomPlaybackView: View {
                             }
                         })
             }
-            .frame(maxWidth: waveformMaxWidth)
+            .frame(maxWidth: waveformMaxWidth == 0 ? .infinity : waveformMaxWidth)
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {
