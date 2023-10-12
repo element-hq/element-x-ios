@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.0.3 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.1.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -199,10 +199,10 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var getMediaContentMediaSourceReceivedMediaSource: MediaSource?
     public var getMediaContentMediaSourceReceivedInvocations: [MediaSource] = []
-    public var getMediaContentMediaSourceReturnValue: [UInt8]!
-    public var getMediaContentMediaSourceClosure: ((MediaSource) throws -> [UInt8])?
+    public var getMediaContentMediaSourceReturnValue: Data!
+    public var getMediaContentMediaSourceClosure: ((MediaSource) throws -> Data)?
 
-    public func getMediaContent(mediaSource: MediaSource) throws -> [UInt8] {
+    public func getMediaContent(mediaSource: MediaSource) throws -> Data {
         if let error = getMediaContentMediaSourceThrowableError {
             throw error
         }
@@ -249,10 +249,10 @@ class SDKClientMock: SDKClientProtocol {
     }
     public var getMediaThumbnailMediaSourceWidthHeightReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64)?
     public var getMediaThumbnailMediaSourceWidthHeightReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64)] = []
-    public var getMediaThumbnailMediaSourceWidthHeightReturnValue: [UInt8]!
-    public var getMediaThumbnailMediaSourceWidthHeightClosure: ((MediaSource, UInt64, UInt64) throws -> [UInt8])?
+    public var getMediaThumbnailMediaSourceWidthHeightReturnValue: Data!
+    public var getMediaThumbnailMediaSourceWidthHeightClosure: ((MediaSource, UInt64, UInt64) throws -> Data)?
 
-    public func getMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64) throws -> [UInt8] {
+    public func getMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64) throws -> Data {
         if let error = getMediaThumbnailMediaSourceWidthHeightThrowableError {
             throw error
         }
@@ -650,11 +650,11 @@ class SDKClientMock: SDKClientProtocol {
     public var uploadAvatarMimeTypeDataCalled: Bool {
         return uploadAvatarMimeTypeDataCallsCount > 0
     }
-    public var uploadAvatarMimeTypeDataReceivedArguments: (mimeType: String, data: [UInt8])?
-    public var uploadAvatarMimeTypeDataReceivedInvocations: [(mimeType: String, data: [UInt8])] = []
-    public var uploadAvatarMimeTypeDataClosure: ((String, [UInt8]) throws -> Void)?
+    public var uploadAvatarMimeTypeDataReceivedArguments: (mimeType: String, data: Data)?
+    public var uploadAvatarMimeTypeDataReceivedInvocations: [(mimeType: String, data: Data)] = []
+    public var uploadAvatarMimeTypeDataClosure: ((String, Data) throws -> Void)?
 
-    public func uploadAvatar(mimeType: String, data: [UInt8]) throws {
+    public func uploadAvatar(mimeType: String, data: Data) throws {
         if let error = uploadAvatarMimeTypeDataThrowableError {
             throw error
         }
@@ -670,12 +670,12 @@ class SDKClientMock: SDKClientProtocol {
     public var uploadMediaMimeTypeDataProgressWatcherCalled: Bool {
         return uploadMediaMimeTypeDataProgressWatcherCallsCount > 0
     }
-    public var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (mimeType: String, data: [UInt8], progressWatcher: ProgressWatcher?)?
-    public var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(mimeType: String, data: [UInt8], progressWatcher: ProgressWatcher?)] = []
+    public var uploadMediaMimeTypeDataProgressWatcherReceivedArguments: (mimeType: String, data: Data, progressWatcher: ProgressWatcher?)?
+    public var uploadMediaMimeTypeDataProgressWatcherReceivedInvocations: [(mimeType: String, data: Data, progressWatcher: ProgressWatcher?)] = []
     public var uploadMediaMimeTypeDataProgressWatcherReturnValue: String!
-    public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, [UInt8], ProgressWatcher?) throws -> String)?
+    public var uploadMediaMimeTypeDataProgressWatcherClosure: ((String, Data, ProgressWatcher?) throws -> String)?
 
-    public func uploadMedia(mimeType: String, data: [UInt8], progressWatcher: ProgressWatcher?) throws -> String {
+    public func uploadMedia(mimeType: String, data: Data, progressWatcher: ProgressWatcher?) throws -> String {
         if let error = uploadMediaMimeTypeDataProgressWatcherThrowableError {
             throw error
         }

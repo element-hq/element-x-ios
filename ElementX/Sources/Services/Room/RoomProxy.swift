@@ -646,7 +646,7 @@ class RoomProxy: RoomProxyProtocol {
 
             do {
                 let data = try Data(contentsOf: imageURL)
-                return try .success(self.room.uploadAvatar(mimeType: mimeType, data: [UInt8](data), mediaInfo: nil))
+                return try .success(self.room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
             } catch {
                 return .failure(.failedUploadingAvatar)
             }
