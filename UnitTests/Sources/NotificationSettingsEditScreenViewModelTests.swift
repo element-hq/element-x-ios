@@ -194,7 +194,7 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
 
     func testSetModeFailure() async throws {
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .mentionsAndKeywordsOnly
-        notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(message: "error")
+        notificationSettingsProxy.setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = NotificationSettingsEditScreenViewModel(chatType: .oneToOneChat,
                                                             userSession: userSession,
                                                             notificationSettingsProxy: notificationSettingsProxy)

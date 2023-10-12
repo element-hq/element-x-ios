@@ -413,7 +413,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     // MARK: - Notifications
     
     func testNotificationLoadingSettingsFailure() async throws {
-        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(message: "error")
+        notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = RoomDetailsScreenViewModel(accountUserID: "@owner:somewhere.com",
                                                roomProxy: roomProxyMock,
                                                mediaProvider: MockMediaProvider(),
@@ -506,7 +506,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             defer {
                 expectation.fulfill()
             }
-            throw NotificationSettingsError.Generic(message: "unmute error")
+            throw NotificationSettingsError.Generic(msg: "unmute error")
         }
         context.send(viewAction: .processToogleMuteNotifications)
         await fulfillment(of: [expectation])
@@ -531,7 +531,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             defer {
                 expectation.fulfill()
             }
-            throw NotificationSettingsError.Generic(message: "mute error")
+            throw NotificationSettingsError.Generic(msg: "mute error")
         }
         context.send(viewAction: .processToogleMuteNotifications)
         await fulfillment(of: [expectation])

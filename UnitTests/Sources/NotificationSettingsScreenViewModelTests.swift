@@ -277,7 +277,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     }
 
     func testToggleRoomMentionFailure() async throws {
-        notificationSettingsProxy.setRoomMentionEnabledEnabledThrowableError = NotificationSettingsError.Generic(message: "error")
+        notificationSettingsProxy.setRoomMentionEnabledEnabledThrowableError = NotificationSettingsError.Generic(msg: "error")
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = false
         
         let deferredInitialFetch = deferFulfillment(viewModel.context.$viewState) { state in
@@ -357,7 +357,7 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
     }
 
     func testToggleCallsFailure() async throws {
-        notificationSettingsProxy.setCallEnabledEnabledThrowableError = NotificationSettingsError.Generic(message: "error")
+        notificationSettingsProxy.setCallEnabledEnabledThrowableError = NotificationSettingsError.Generic(msg: "error")
         notificationSettingsProxy.isCallEnabledReturnValue = false
         
         let deferredInitialFetch = deferFulfillment(viewModel.context.$viewState) { state in
