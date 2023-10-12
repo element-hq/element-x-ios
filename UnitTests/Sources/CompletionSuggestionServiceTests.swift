@@ -31,7 +31,7 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
-                
+        
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
         }
