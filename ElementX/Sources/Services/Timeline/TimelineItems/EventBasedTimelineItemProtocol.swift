@@ -43,10 +43,6 @@ extension EventBasedTimelineItemProtocol {
         properties.deliveryStatus == .sendingFailed
     }
 
-    var isLocation: Bool {
-        self is LocationRoomTimelineItem
-    }
-
     var pollIfAvailable: Poll? {
         (self as? PollRoomTimelineItem)?.poll
     }
