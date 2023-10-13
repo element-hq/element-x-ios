@@ -22,6 +22,11 @@ enum AudioConverterError: Error {
     case conversionFailed(Error?)
 }
 
+enum AudioConverterPreferredFileExtension: String {
+    case mpeg4aac = "m4a"
+    case ogg
+}
+
 struct AudioConverter: AudioConverterProtocol {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
@@ -32,19 +37,12 @@ struct AudioConverter: AudioConverterProtocol {
         }
     }
     
-    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL?) throws -> URL {
-        let url: URL
-        if let destinationURL {
-            url = destinationURL
-        } else {
-            url = URL.temporaryDirectory.appendingPathComponent(sourceURL.deletingPathExtension().lastPathComponent).appendingPathExtension("m4a")
-        }
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws {
         do {
-            try OGGConverter.convertOpusOGGToM4aFile(src: sourceURL, dest: url)
+            try OGGConverter.convertOpusOGGToM4aFile(src: sourceURL, dest: destinationURL)
         } catch {
             MXLog.error("failed to convert to MPEG4AAC: \(error)")
             throw AudioConverterError.conversionFailed(error)
         }
-        return url
     }
 }

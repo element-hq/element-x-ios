@@ -76,7 +76,8 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
             }
 
             // Convert from ogg
-            let convertedFileURL = try audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url)
+            let convertedFileURL = URL.temporaryDirectory.appendingPathComponent(fileHandle.url.deletingPathExtension().lastPathComponent).appendingPathExtension(AudioConverterPreferredFileExtension.mpeg4aac.rawValue)
+            try audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: convertedFileURL)
 
             // Cache the file and return the url
             return try voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)

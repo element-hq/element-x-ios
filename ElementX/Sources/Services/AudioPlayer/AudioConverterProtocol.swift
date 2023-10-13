@@ -18,13 +18,7 @@ import Foundation
 
 protocol AudioConverterProtocol {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws
-    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL?) throws -> URL
-}
-
-extension AudioConverterProtocol {
-    func convertToMPEG4AAC(sourceURL: URL) throws -> URL {
-        try convertToMPEG4AAC(sourceURL: sourceURL, destinationURL: nil)
-    }
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws
 }
 
 // sourcery: AutoMockable

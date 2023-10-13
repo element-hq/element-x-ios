@@ -85,8 +85,6 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     func testLoadVoiceMessageFromSourceSingleCall() async throws {
         // URL representing the file loaded by the media provider
         let loadedFile = URL("/some/url/loaded_file")
-        // URL representing the file converted by the audioConverter
-        let convertedFileURL = URL("/some/url/converted_file")
         // URL representing the final cached file
         let cachedConvertedFileURL = URL("/some/url/cached_converted_file")
 
@@ -95,7 +93,6 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
         let audioConverter = AudioConverterMock()
-        audioConverter.convertToMPEG4AACSourceURLDestinationURLReturnValue = convertedFileURL
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = cachedConvertedFileURL
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,
@@ -108,7 +105,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         // The converted file must have been cached
         XCTAssert(voiceMessageCache.cacheMediaSourceUsingMoveCalled)
         XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.mediaSource, mediaSource)
-        XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.fileURL, convertedFileURL)
+        XCTAssertEqual(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.fileURL.pathExtension, "m4a")
         XCTAssertTrue(voiceMessageCache.cacheMediaSourceUsingMoveReceivedArguments?.move ?? false)
         // The returned URL must point to the cached converted file
         XCTAssertEqual(url, cachedConvertedFileURL)
@@ -117,8 +114,6 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     func testLoadVoiceMessageFromSourceMultipleCalls() async throws {
         // URL representing the file loaded by the media provider
         let loadedFile = URL("/some/url/loaded_file")
-        // URL representing the file converted by the audioConverter
-        let convertedFileURL = URL("/some/url/converted_file")
         // URL representing the final cached file
         let cachedConvertedFileURL = URL("/some/url/cached_converted_file")
         
@@ -133,8 +128,6 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         }
         
         let audioConverter = AudioConverterMock()
-        audioConverter.convertToMPEG4AACSourceURLDestinationURLReturnValue = convertedFileURL
-
         mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
 
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,

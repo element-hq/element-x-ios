@@ -144,23 +144,18 @@ class AudioConverterMock: AudioConverterProtocol {
     var convertToMPEG4AACSourceURLDestinationURLCalled: Bool {
         return convertToMPEG4AACSourceURLDestinationURLCallsCount > 0
     }
-    var convertToMPEG4AACSourceURLDestinationURLReceivedArguments: (sourceURL: URL, destinationURL: URL?)?
-    var convertToMPEG4AACSourceURLDestinationURLReceivedInvocations: [(sourceURL: URL, destinationURL: URL?)] = []
-    var convertToMPEG4AACSourceURLDestinationURLReturnValue: URL!
-    var convertToMPEG4AACSourceURLDestinationURLClosure: ((URL, URL?) throws -> URL)?
+    var convertToMPEG4AACSourceURLDestinationURLReceivedArguments: (sourceURL: URL, destinationURL: URL)?
+    var convertToMPEG4AACSourceURLDestinationURLReceivedInvocations: [(sourceURL: URL, destinationURL: URL)] = []
+    var convertToMPEG4AACSourceURLDestinationURLClosure: ((URL, URL) throws -> Void)?
 
-    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL?) throws -> URL {
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws {
         if let error = convertToMPEG4AACSourceURLDestinationURLThrowableError {
             throw error
         }
         convertToMPEG4AACSourceURLDestinationURLCallsCount += 1
         convertToMPEG4AACSourceURLDestinationURLReceivedArguments = (sourceURL: sourceURL, destinationURL: destinationURL)
         convertToMPEG4AACSourceURLDestinationURLReceivedInvocations.append((sourceURL: sourceURL, destinationURL: destinationURL))
-        if let convertToMPEG4AACSourceURLDestinationURLClosure = convertToMPEG4AACSourceURLDestinationURLClosure {
-            return try convertToMPEG4AACSourceURLDestinationURLClosure(sourceURL, destinationURL)
-        } else {
-            return convertToMPEG4AACSourceURLDestinationURLReturnValue
-        }
+        try convertToMPEG4AACSourceURLDestinationURLClosure?(sourceURL, destinationURL)
     }
 }
 class AudioPlayerMock: AudioPlayerProtocol {
