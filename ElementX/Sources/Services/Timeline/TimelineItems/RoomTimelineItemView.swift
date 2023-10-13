@@ -16,7 +16,7 @@
 import SwiftUI
 
 struct RoomTimelineItemView: View {
-    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @Environment(\.roomContext) var context: RoomScreenViewModel.Context
     @ObservedObject var viewState: RoomTimelineItemViewState
     
     var body: some View {
