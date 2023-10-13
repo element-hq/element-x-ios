@@ -46,10 +46,7 @@ struct RoomEventStringBuilder {
                 fatalError("Invalid message timeline item: \(eventItemProxy)")
             }
             
-            guard let messageType = messageContent.msgtype() else {
-                return prefix(messageContent.body(), with: senderDisplayName)
-            }
-            
+            let messageType = messageContent.msgtype()
             return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: senderDisplayName, prefixWithSenderName: true)
         case .state(let stateKey, let state):
             return stateEventStringBuilder

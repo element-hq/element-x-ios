@@ -105,7 +105,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
         case .location(let content):
             return buildLocationTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
-        case .none:
+        case .other:
             return nil
         }
     }
@@ -653,7 +653,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     replyContent = .video(buildVideoTimelineItemContent(content))
                 case .location(let content):
                     replyContent = .location(buildLocationTimelineItemContent(content))
-                case .none:
+                case .other, .none:
                     replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
                 }
             case .poll(let question, _, _, _, _, _):
