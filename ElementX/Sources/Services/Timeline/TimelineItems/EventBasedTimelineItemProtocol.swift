@@ -43,14 +43,6 @@ extension EventBasedTimelineItemProtocol {
         properties.deliveryStatus == .sendingFailed
     }
 
-    var isMessage: Bool {
-        self is EventBasedMessageTimelineItemProtocol
-    }
-
-    var isLocation: Bool {
-        self is LocationRoomTimelineItem
-    }
-
     var pollIfAvailable: Poll? {
         (self as? PollRoomTimelineItem)?.poll
     }
@@ -88,5 +80,18 @@ extension EventBasedTimelineItemProtocol {
             start = "\(L10n.commonEditedSuffix) "
         }
         return start + timestamp
+    }
+
+    var isCopyable: Bool {
+        guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else {
+            return false
+        }
+
+        switch messageBasedItem.contentType {
+        case .audio, .file, .image, .video, .location, .voice:
+            return false
+        case .text, .emote, .notice:
+            return true
+        }
     }
 }
