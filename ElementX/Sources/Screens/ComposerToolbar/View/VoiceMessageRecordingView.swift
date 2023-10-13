@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import Foundation
 import SwiftUI
 
@@ -37,18 +38,18 @@ struct VoiceMessageRecordingView: View {
     
     var body: some View {
         HStack {
-            HStack {
-                Circle()
-                    .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
-                    .foregroundColor(.red)
-                Text(timeLabelContent)
-                    .font(.compound.bodySMSemibold)
-                    .foregroundColor(.compound.textSecondary)
-                    .monospacedDigit()
-                WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
-            }
-            .frame(maxWidth: waveformMaxWidth == 0 ? .infinity : waveformMaxWidth)
+            Circle()
+                .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
+                .foregroundColor(.red)
+            Text(timeLabelContent)
+                .lineLimit(1)
+                .font(.compound.bodySMSemibold)
+                .foregroundColor(.compound.textSecondary)
+                .monospacedDigit()
+                .fixedSize()
+            WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
         }
+        .frame(maxWidth: waveformMaxWidth == 0 ? .infinity : waveformMaxWidth)
         .padding(.leading, 2)
         .padding(.trailing, 8)
     }

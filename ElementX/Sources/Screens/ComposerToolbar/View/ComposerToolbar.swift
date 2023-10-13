@@ -29,6 +29,7 @@ struct ComposerToolbar: View {
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
     @State private var showVoiceMessageRecordTooltip = false
+    @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
     
     @State private var frame: CGRect = .zero
             
@@ -51,7 +52,7 @@ struct ComposerToolbar: View {
         }
         .overlay(alignment: .bottomTrailing) {
             voiceMessageRecordButtonTooltipView
-                .offset(y: -frame.height - 4.0)
+                .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
         }
         .alert(item: $context.alertInfo)
     }
@@ -238,7 +239,7 @@ struct ComposerToolbar: View {
     }
     
     private var voiceMessageRecordButtonTooltipView: some View {
-        VoiceMessageRecordButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip)
+        VoiceMessageRecordButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
             .allowsHitTesting(false)
             .opacity(showVoiceMessageRecordTooltip ? 1.0 : 0.0)
             .animation(.elementDefault, value: showVoiceMessageRecordTooltip)

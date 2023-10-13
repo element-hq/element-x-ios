@@ -68,6 +68,7 @@ struct VoiceMessageRoomPlaybackView: View {
             HStack {
                 playPauseButton
                 Text(timeLabelContent)
+                    .lineLimit(1)
                     .font(.compound.bodySMSemibold)
                     .foregroundColor(.compound.textSecondary)
                     .monospacedDigit()

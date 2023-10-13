@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 struct VoiceMessagePreviewComposer: View {
-    let playerState: AudioPlayerState
+    @ObservedObject var playerState: AudioPlayerState
     
     @State private var resumePlaybackAfterScrubbing = false
     
@@ -29,7 +29,7 @@ struct VoiceMessagePreviewComposer: View {
                                      onSeek: { onPlaybackSeek($0) },
                                      onScrubbing: { onPlaybackScrubbing($0) })
             .padding(.vertical, 4.0)
-            .padding(.horizontal, 12.0)
+            .padding(.horizontal, 6.0)
             .background {
                 let roundedRectangle = RoundedRectangle(cornerRadius: 12)
                 ZStack {

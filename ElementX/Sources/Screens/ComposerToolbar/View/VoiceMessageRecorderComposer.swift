@@ -14,11 +14,12 @@
 // limitations under the License.
 //
 
+import Compound
 import Foundation
 import SwiftUI
 
 struct VoiceMessageRecorderComposer: View {
-    let recorderState: AudioRecorderState
+    @ObservedObject var recorderState: AudioRecorderState
     
     var body: some View {
         VoiceMessageRecordingView(recorderState: recorderState,
