@@ -28,7 +28,6 @@ struct ComposerToolbar: View {
     @ScaledMetric private var trashButtonIconSize = 24
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
-    @State private var voiceMessageRecordTooltipOffset: CGSize = .zero
     @State private var showVoiceMessageRecordTooltip = false
     
     @State private var frame: CGRect = .zero
@@ -51,8 +50,8 @@ struct ComposerToolbar: View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            voiceRecordButtonTooltipView
-                .offset(y: -frame.height)
+            voiceMessageRecordButtonTooltipView
+                .offset(y: -frame.height - 4.0)
         }
         .alert(item: $context.alertInfo)
     }
@@ -221,7 +220,6 @@ struct ComposerToolbar: View {
         }, stopRecording: {
             context.send(viewAction: .stopRecordingVoiceMessage)
         })
-        .id("voice-message-record-button")
         .padding(4)
     }
         
@@ -239,19 +237,11 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var voiceRecordButtonTooltipView: some View {
-        ZStack(alignment: .topTrailing) {
-            Text(UntranslatedL10n.voiceMessageButtonTapTooltip)
-                .font(.compound.bodySMSemibold)
-                .foregroundColor(.compound.textOnSolidPrimary)
-                .padding(6)
-                .background(.compound.bgActionPrimaryRest)
-                .cornerRadius(4)
-                .padding(.trailing, 8)
-        }
-        .allowsHitTesting(false)
-        .opacity(showVoiceMessageRecordTooltip ? 1.0 : 0.0)
-        .animation(.elementDefault, value: showVoiceMessageRecordTooltip)
+    private var voiceMessageRecordButtonTooltipView: some View {
+        VoiceMessageRecordButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip)
+            .allowsHitTesting(false)
+            .opacity(showVoiceMessageRecordTooltip ? 1.0 : 0.0)
+            .animation(.elementDefault, value: showVoiceMessageRecordTooltip)
     }
 }
 

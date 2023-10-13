@@ -24,10 +24,9 @@ struct VoiceMessageRecordButton: View {
     @State private var longPressTask = VoiceMessageButtonTask()
 
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    private let delayBeforeRecording = 500
 
-    let delayBeforeRecording = 750
     @Binding var showRecordTooltip: Bool
-    
     var startRecording: (() -> Void)?
     var stopRecording: (() -> Void)?
     
