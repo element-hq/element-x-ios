@@ -163,6 +163,7 @@ class TimelineTableViewController: UIViewController {
                     .id(id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
+                    .environment(\.roomContext, coordinator.context)
             }
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)

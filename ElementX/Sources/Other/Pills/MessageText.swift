@@ -16,9 +16,12 @@
 
 import SwiftUI
 
+import Collections
+
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
     var roomContext: RoomScreenViewModel.Context?
     var updateClosure: (() -> Void)?
+    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     // This prevents the magnifying glass from showing up
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -38,21 +41,23 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
             }
         }
     }
-    
-    // Required to setup the first rendering of the pill view
-    override func layoutSubviews() {
-        invalidateTextAttachmentsDisplay(update: false)
-        super.layoutSubviews()
-    }
-    
+
     func registerPillView(_ pillView: UIView) {
-        // No need to be implemented in this view
+        pillViews.add(pillView)
+    }
+
+    func flushPills() {
+        for view in pillViews.allObjects {
+            view.alpha = 0.0
+            view.removeFromSuperview()
+        }
+        pillViews.removeAllObjects()
     }
 }
 
 struct MessageText: UIViewRepresentable {
-    @Environment(\.openURL) private var openURLAction: OpenURLAction
-    @EnvironmentObject private var viewModel: RoomScreenViewModel.Context
+    @Environment(\.openURL) private var openURLAction
+    @Environment(\.roomContext) private var viewModel
     @State private var computedSizes = [Double: CGSize]()
     
     @State var attributedString: AttributedString {
@@ -92,7 +97,11 @@ struct MessageText: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: MessageTextView, context: Context) {
-        uiView.attributedText = NSAttributedString(attributedString)
+        let newAttributedText = NSAttributedString(attributedString)
+        if uiView.attributedText != newAttributedText {
+            uiView.flushPills()
+            uiView.attributedText = newAttributedText
+        }
         context.coordinator.openURLAction = openURLAction
     }
 
@@ -177,7 +186,6 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
         MessageText(attributedString: attributedString)
             .border(Color.purple)
             .previewDisplayName("Custom Text")
-            .environmentObject(RoomScreenViewModel.mock.context)
         // For comparison
         Text(attributedString)
             .border(Color.purple)
@@ -188,13 +196,11 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
-                .environmentObject(RoomScreenViewModel.mock.context)
         }
         if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With list")
-                .environmentObject(RoomScreenViewModel.mock.context)
         }
     }
 }

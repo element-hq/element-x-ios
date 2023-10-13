@@ -24,43 +24,22 @@ enum PillType: Codable, Equatable {
     case allUsers
 }
 
-struct PillTextAttachmentData {
-    // MARK: - Properties
+struct EnclosingFontData: Codable, Equatable {
+    let descender: CGFloat
+    let lineHeight: CGFloat
+}
 
+struct PillTextAttachmentData: Codable, Equatable {
     /// Pill type
     let type: PillType
     
     /// Font for the display name
-    let font: UIFont
+    let fontData: EnclosingFontData
 }
 
-extension PillTextAttachmentData: Codable {
-    // MARK: - Codable
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case font
-    }
-    
-    enum PillTextAttachmentDataError: Error {
-        case noFontData
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(PillType.self, forKey: .type)
-        let fontData = try container.decode(Data.self, forKey: .font)
-        if let font = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIFont.self, from: fontData) {
-            self.font = font
-        } else {
-            throw PillTextAttachmentDataError.noFontData
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        let fontData = try NSKeyedArchiver.archivedData(withRootObject: font, requiringSecureCoding: false)
-        try container.encode(fontData, forKey: .font)
+extension PillTextAttachmentData {
+    init(type: PillType, font: UIFont) {
+        self.type = type
+        fontData = EnclosingFontData(descender: font.descender, lineHeight: font.lineHeight)
     }
 }
