@@ -44,7 +44,8 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
     override func loadView() {
         super.loadView()
 
-        guard let textAttachmentData = (textAttachment as? PillTextAttachment)?.pillData else {
+        guard let textAttachment = textAttachment as? PillTextAttachment,
+              let pillData = textAttachment.pillData else {
             MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
             return
         }
@@ -56,14 +57,15 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
             context = PillContext.mock(type: .loadUser(isOwn: false))
             imageProvider = MockMediaProvider()
         } else if let roomContext = delegate?.roomContext {
-            context = PillContext(roomContext: roomContext, data: textAttachmentData)
+            context = PillContext(roomContext: roomContext, data: pillData)
             imageProvider = roomContext.imageProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
         }
         
-        let view = PillView(imageProvider: imageProvider, context: context) { [weak self] in
+        let view = PillView(imageProvider: imageProvider, context: context) { [weak self, weak textAttachment] in
+            textAttachment?.invalidateLastBounds()
             self?.delegate?.invalidateTextAttachmentsDisplay(update: true)
         }
         let controller = UIHostingController(rootView: view)
