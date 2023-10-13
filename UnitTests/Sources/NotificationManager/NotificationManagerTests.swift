@@ -24,7 +24,7 @@ import XCTest
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
     private let clientProxy = MockClientProxy(userID: "@test:user.net")
-    private lazy var mockUserSession = MockUserSession(clientProxy: clientProxy, 
+    private lazy var mockUserSession = MockUserSession(clientProxy: clientProxy,
                                                        mediaProvider: MockMediaProvider(),
                                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock())
     private var notificationCenter: UserNotificationCenterMock!
