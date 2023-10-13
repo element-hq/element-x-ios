@@ -54,6 +54,10 @@ class AudioRecorderState: ObservableObject, Identifiable {
         recordingState = .stopped
     }
     
+    func reportError(_ error: Error) {
+        recordingState = .error
+    }
+    
     // MARK: - Private
     
     private func subscribeToAudioRecorder(_ audioRecorder: AudioRecorderProtocol) {
