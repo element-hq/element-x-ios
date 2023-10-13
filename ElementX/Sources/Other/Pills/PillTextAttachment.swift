@@ -22,22 +22,17 @@ final class PillTextAttachment: NSTextAttachment {
         let encoder = JSONEncoder()
         guard let encodedData = try? encoder.encode(attachmentData) else { return nil }
         self.init(data: encodedData, ofType: InfoPlistReader.main.pillsUTType)
+        pillData = attachmentData
     }
     
-    var pillData: PillTextAttachmentData? {
-        guard let contents else {
-            return nil
-        }
-        let decoder = JSONDecoder()
-        return try? decoder.decode(PillTextAttachmentData.self, from: contents)
-    }
+    private(set) var pillData: PillTextAttachmentData!
     
     override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
         var rect = super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
-        if let font = pillData?.font {
-            // Align the pill text vertically with the surrounding text.
-            rect.origin.y = font.descender + (font.lineHeight - rect.height) / 2.0
-        }
+        
+        let fontData = pillData.fontData
+        // Align the pill text vertically with the surrounding text.
+        rect.origin.y = fontData.descender + (fontData.lineHeight - rect.height) / 2.0
         return rect
     }
 }

@@ -925,3 +925,16 @@ private struct ReplyInfo {
     let type: EventBasedMessageTimelineItemContentType
     let isThread: Bool
 }
+
+private struct RoomContextKey: EnvironmentKey {
+    @MainActor
+    static let defaultValue = RoomScreenViewModel.mock.context
+}
+
+extension EnvironmentValues {
+    /// Used to access and inject and access the room context without observing it
+    var roomContext: RoomScreenViewModel.Context {
+        get { self[RoomContextKey.self] }
+        set { self[RoomContextKey.self] = newValue }
+    }
+}
