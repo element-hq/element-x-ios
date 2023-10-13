@@ -558,7 +558,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.edit)
         }
 
-        if item.isMessage, !item.isLocation {
+        if item.isCopyable {
             actions.append(.copy)
         }
         
