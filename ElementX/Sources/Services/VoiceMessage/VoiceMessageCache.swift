@@ -16,32 +16,33 @@
 
 import Foundation
 
-class VoiceMessageCache {
-    var temporaryFilesFolderURL: URL {
+enum VoiceMessageCacheError: Error {
+    case invalidFileExtension
+}
+
+class VoiceMessageCache: VoiceMessageCacheProtocol {
+    private let preferredFileExtension = "m4a"
+    private var temporaryFilesFolderURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("media/voice-message")
     }
-    
-    func cacheURL(for mediaSource: MediaSourceProxy, replacingExtension newExtension: String? = nil) -> URL {
-        var newURL = temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent)
-        if let newExtension {
-            newURL = newURL.deletingPathExtension().appendingPathExtension(newExtension)
-        }
-        return newURL
-    }
-    
-    func fileURL(for mediaSource: MediaSourceProxy, withExtension fileExtension: String? = nil) -> URL? {
-        var url = temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent)
-        if let fileExtension {
-            url = url.deletingPathExtension().appendingPathExtension(fileExtension)
-        }
+        
+    func fileURL(for mediaSource: MediaSourceProxy) -> URL? {
+        let url = cacheURL(for: mediaSource)
         return FileManager.default.fileExists(atPath: url.path()) ? url : nil
     }
 
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL) throws -> URL {
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool = false) throws -> URL {
+        guard fileURL.pathExtension == preferredFileExtension else {
+            throw VoiceMessageCacheError.invalidFileExtension
+        }
         setupTemporaryFilesFolder()
         let url = cacheURL(for: mediaSource)
         try? FileManager.default.removeItem(at: url)
-        try FileManager.default.copyItem(at: fileURL, to: url)
+        if move {
+            try FileManager.default.moveItem(at: fileURL, to: url)
+        } else {
+            try FileManager.default.copyItem(at: fileURL, to: url)
+        }
         return url
     }
     
@@ -63,5 +64,9 @@ class VoiceMessageCache {
         } catch {
             MXLog.error("Failed to setup audio cache manager.")
         }
+    }
+    
+    private func cacheURL(for mediaSource: MediaSourceProxy) -> URL {
+        temporaryFilesFolderURL.appendingPathComponent(mediaSource.url.lastPathComponent).appendingPathExtension(preferredFileExtension)
     }
 }

@@ -80,7 +80,8 @@ struct InvitesScreen_Previews: PreviewProvider, TestablePreview {
 private extension InvitesScreenViewModel {
     static let noInvites: InvitesScreenViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         let regularViewModel = InvitesScreenViewModel(userSession: userSession,
                                                       appSettings: ServiceLocator.shared.settings,
                                                       analytics: ServiceLocator.shared.analytics,
@@ -93,7 +94,8 @@ private extension InvitesScreenViewModel {
         clientProxy.inviteSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         clientProxy.roomSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         let userSession = MockUserSession(clientProxy: clientProxy,
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         let regularViewModel = InvitesScreenViewModel(userSession: userSession,
                                                       appSettings: ServiceLocator.shared.settings,
                                                       analytics: ServiceLocator.shared.analytics,

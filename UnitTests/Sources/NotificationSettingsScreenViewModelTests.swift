@@ -40,7 +40,9 @@ class NotificationSettingsScreenViewModelTests: XCTestCase {
         notificationSettingsProxy.isCallEnabledReturnValue = true
 
         let clientProxy = MockClientProxy(userID: "@a:b.com")
-        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        userSession = MockUserSession(clientProxy: clientProxy,
+                                      mediaProvider: MockMediaProvider(),
+                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         viewModel = NotificationSettingsScreenViewModel(userSession: userSession,
                                                         appSettings: appSettings,

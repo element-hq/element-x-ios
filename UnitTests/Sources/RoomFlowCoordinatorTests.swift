@@ -29,7 +29,10 @@ class RoomFlowCoordinatorTests: XCTestCase {
         cancellables.removeAll()
         let clientProxy = MockClientProxy(userID: "hi@bob", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
         let mediaProvider = MockMediaProvider()
-        let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: mediaProvider)
+        let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
+        let userSession = MockUserSession(clientProxy: clientProxy,
+                                          mediaProvider: mediaProvider,
+                                          voiceMessageMediaManager: voiceMessageMediaManager)
         
         let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         navigationStackCoordinator = NavigationStackCoordinator()

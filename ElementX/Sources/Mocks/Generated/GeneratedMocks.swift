@@ -115,6 +115,49 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         updateUserPropertiesClosure?(userProperties)
     }
 }
+class AudioConverterMock: AudioConverterProtocol {
+
+    //MARK: - convertToOpusOgg
+
+    var convertToOpusOggSourceURLDestinationURLThrowableError: Error?
+    var convertToOpusOggSourceURLDestinationURLCallsCount = 0
+    var convertToOpusOggSourceURLDestinationURLCalled: Bool {
+        return convertToOpusOggSourceURLDestinationURLCallsCount > 0
+    }
+    var convertToOpusOggSourceURLDestinationURLReceivedArguments: (sourceURL: URL, destinationURL: URL)?
+    var convertToOpusOggSourceURLDestinationURLReceivedInvocations: [(sourceURL: URL, destinationURL: URL)] = []
+    var convertToOpusOggSourceURLDestinationURLClosure: ((URL, URL) throws -> Void)?
+
+    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
+        if let error = convertToOpusOggSourceURLDestinationURLThrowableError {
+            throw error
+        }
+        convertToOpusOggSourceURLDestinationURLCallsCount += 1
+        convertToOpusOggSourceURLDestinationURLReceivedArguments = (sourceURL: sourceURL, destinationURL: destinationURL)
+        convertToOpusOggSourceURLDestinationURLReceivedInvocations.append((sourceURL: sourceURL, destinationURL: destinationURL))
+        try convertToOpusOggSourceURLDestinationURLClosure?(sourceURL, destinationURL)
+    }
+    //MARK: - convertToMPEG4AAC
+
+    var convertToMPEG4AACSourceURLDestinationURLThrowableError: Error?
+    var convertToMPEG4AACSourceURLDestinationURLCallsCount = 0
+    var convertToMPEG4AACSourceURLDestinationURLCalled: Bool {
+        return convertToMPEG4AACSourceURLDestinationURLCallsCount > 0
+    }
+    var convertToMPEG4AACSourceURLDestinationURLReceivedArguments: (sourceURL: URL, destinationURL: URL)?
+    var convertToMPEG4AACSourceURLDestinationURLReceivedInvocations: [(sourceURL: URL, destinationURL: URL)] = []
+    var convertToMPEG4AACSourceURLDestinationURLClosure: ((URL, URL) throws -> Void)?
+
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws {
+        if let error = convertToMPEG4AACSourceURLDestinationURLThrowableError {
+            throw error
+        }
+        convertToMPEG4AACSourceURLDestinationURLCallsCount += 1
+        convertToMPEG4AACSourceURLDestinationURLReceivedArguments = (sourceURL: sourceURL, destinationURL: destinationURL)
+        convertToMPEG4AACSourceURLDestinationURLReceivedInvocations.append((sourceURL: sourceURL, destinationURL: destinationURL))
+        try convertToMPEG4AACSourceURLDestinationURLClosure?(sourceURL, destinationURL)
+    }
+}
 class AudioPlayerMock: AudioPlayerProtocol {
     var actions: AnyPublisher<AudioPlayerAction, Never> {
         get { return underlyingActions }
@@ -2189,6 +2232,67 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         } else {
             return authorizationStatusReturnValue
         }
+    }
+}
+class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
+
+    //MARK: - fileURL
+
+    var fileURLForCallsCount = 0
+    var fileURLForCalled: Bool {
+        return fileURLForCallsCount > 0
+    }
+    var fileURLForReceivedMediaSource: MediaSourceProxy?
+    var fileURLForReceivedInvocations: [MediaSourceProxy] = []
+    var fileURLForReturnValue: URL?
+    var fileURLForClosure: ((MediaSourceProxy) -> URL?)?
+
+    func fileURL(for mediaSource: MediaSourceProxy) -> URL? {
+        fileURLForCallsCount += 1
+        fileURLForReceivedMediaSource = mediaSource
+        fileURLForReceivedInvocations.append(mediaSource)
+        if let fileURLForClosure = fileURLForClosure {
+            return fileURLForClosure(mediaSource)
+        } else {
+            return fileURLForReturnValue
+        }
+    }
+    //MARK: - cache
+
+    var cacheMediaSourceUsingMoveThrowableError: Error?
+    var cacheMediaSourceUsingMoveCallsCount = 0
+    var cacheMediaSourceUsingMoveCalled: Bool {
+        return cacheMediaSourceUsingMoveCallsCount > 0
+    }
+    var cacheMediaSourceUsingMoveReceivedArguments: (mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)?
+    var cacheMediaSourceUsingMoveReceivedInvocations: [(mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)] = []
+    var cacheMediaSourceUsingMoveReturnValue: URL!
+    var cacheMediaSourceUsingMoveClosure: ((MediaSourceProxy, URL, Bool) throws -> URL)?
+
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL {
+        if let error = cacheMediaSourceUsingMoveThrowableError {
+            throw error
+        }
+        cacheMediaSourceUsingMoveCallsCount += 1
+        cacheMediaSourceUsingMoveReceivedArguments = (mediaSource: mediaSource, fileURL: fileURL, move: move)
+        cacheMediaSourceUsingMoveReceivedInvocations.append((mediaSource: mediaSource, fileURL: fileURL, move: move))
+        if let cacheMediaSourceUsingMoveClosure = cacheMediaSourceUsingMoveClosure {
+            return try cacheMediaSourceUsingMoveClosure(mediaSource, fileURL, move)
+        } else {
+            return cacheMediaSourceUsingMoveReturnValue
+        }
+    }
+    //MARK: - clearCache
+
+    var clearCacheCallsCount = 0
+    var clearCacheCalled: Bool {
+        return clearCacheCallsCount > 0
+    }
+    var clearCacheClosure: (() -> Void)?
+
+    func clearCache() {
+        clearCacheCallsCount += 1
+        clearCacheClosure?()
     }
 }
 class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,12 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    var sessionVerificationController: SessionVerificationControllerProxyProtocol?
-    var userID: String { clientProxy.userID }
-    var deviceID: String? { clientProxy.deviceID }
-    var homeserver: String { clientProxy.homeserver }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
+protocol AudioConverterProtocol {
+    func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws
+    func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws
 }
+
+// sourcery: AutoMockable
+extension AudioConverterProtocol { }

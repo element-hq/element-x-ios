@@ -31,7 +31,9 @@ class NotificationSettingsEditScreenViewModelTests: XCTestCase {
     
     @MainActor override func setUpWithError() throws {
         let clientProxy = MockClientProxy(userID: "@a:b.com")
-        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        userSession = MockUserSession(clientProxy: clientProxy,
+                                      mediaProvider: MockMediaProvider(),
+                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
     }

@@ -185,7 +185,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
 
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL,

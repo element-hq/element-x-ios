@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    var sessionVerificationController: SessionVerificationControllerProxyProtocol?
-    var userID: String { clientProxy.userID }
-    var deviceID: String? { clientProxy.deviceID }
-    var homeserver: String { clientProxy.homeserver }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
+protocol VoiceMessageCacheProtocol {
+    func fileURL(for mediaSource: MediaSourceProxy) -> URL?
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL
+    func clearCache()
 }
+
+// sourcery: AutoMockable
+extension VoiceMessageCacheProtocol { }

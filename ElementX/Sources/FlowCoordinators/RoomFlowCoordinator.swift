@@ -328,14 +328,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                                            mentionBuilder: MentionBuilder(mentionsEnabled: appSettings.mentionsEnabled)),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           appSettings: appSettings)
-        
-        let voiceMesssageMediaManager = VoiceMessageMediaManager(mediaProvider: userSession.mediaProvider)
-        
+                
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider,
                                                                                            mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: voiceMesssageMediaManager)
+                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager)
         self.timelineController = timelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)

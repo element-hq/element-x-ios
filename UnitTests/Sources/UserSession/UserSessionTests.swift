@@ -25,7 +25,9 @@ final class UserSessionTests: XCTestCase {
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        userSession = UserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        userSession = UserSession(clientProxy: clientProxy,
+                                  mediaProvider: MockMediaProvider(),
+                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock())
     }
 
     func test_whenUserSessionReceivesSyncUpdateAndSessionControllerRetrievedAndSessionNotVerified_sessionVerificationNeededEventReceived() throws {

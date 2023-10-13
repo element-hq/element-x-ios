@@ -30,6 +30,7 @@ protocol UserSessionProtocol {
     
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }
+    var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     

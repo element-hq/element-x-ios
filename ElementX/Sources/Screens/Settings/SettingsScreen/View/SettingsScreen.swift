@@ -235,7 +235,8 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = MockUserSession(sessionVerificationController: verificationController,
                                           clientProxy: MockClientProxy(userID: "@userid:example.com",
                                                                        deviceID: "AAAAAAAAAAA"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: ServiceLocator.shared.settings)
     }()

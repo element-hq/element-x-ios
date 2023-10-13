@@ -137,7 +137,8 @@ struct StartChatScreen: View {
 struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.fetchSuggestionsReturnValue = .success([.mockAlice])
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])

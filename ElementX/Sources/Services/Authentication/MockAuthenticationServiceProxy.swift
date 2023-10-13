@@ -63,7 +63,8 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
         
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: username),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         return .success(userSession)
     }
 }

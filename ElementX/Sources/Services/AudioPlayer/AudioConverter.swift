@@ -22,7 +22,12 @@ enum AudioConverterError: Error {
     case conversionFailed(Error?)
 }
 
-struct AudioConverter {
+enum AudioConverterPreferredFileExtension: String {
+    case mpeg4aac = "m4a"
+    case ogg
+}
+
+struct AudioConverter: AudioConverterProtocol {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
             try OGGConverter.convertM4aFileToOpusOGG(src: sourceURL, dest: destinationURL)

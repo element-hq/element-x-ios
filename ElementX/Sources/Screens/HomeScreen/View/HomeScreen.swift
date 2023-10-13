@@ -335,7 +335,8 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static func viewModel(_ state: MockRoomSummaryProviderState) -> HomeScreenViewModel {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@alice:example.com",
                                                                        roomSummaryProvider: MockRoomSummaryProvider(state: state)),
-                                          mediaProvider: MockMediaProvider())
+                                          mediaProvider: MockMediaProvider(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock())
         
         return HomeScreenViewModel(userSession: userSession,
                                    attributedStringBuilder: AttributedStringBuilder(permalinkBaseURL: ServiceLocator.shared.settings.permalinkBaseURL, mentionBuilder: MentionBuilder(mentionsEnabled: ServiceLocator.shared.settings.mentionsEnabled)),

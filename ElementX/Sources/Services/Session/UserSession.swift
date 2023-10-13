@@ -28,12 +28,14 @@ class UserSession: UserSessionProtocol {
 
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
     
-    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
+        self.voiceMessageMediaManager = voiceMessageMediaManager
         
         setupSessionVerificationWatchdog()
         setupAuthErrorWatchdog()
