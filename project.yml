@@ -20,7 +20,6 @@ options:
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
-  GIT_LFS_SKIP_SMUDGE: "on"
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   ENABLE_BITCODE: NO
