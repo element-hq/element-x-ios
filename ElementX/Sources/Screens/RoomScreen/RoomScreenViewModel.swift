@@ -932,6 +932,7 @@ private struct RoomContextKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
+    /// Used to access and inject and access the room context without observing it
     var roomContext: RoomScreenViewModel.Context {
         get { self[RoomContextKey.self] }
         set { self[RoomContextKey.self] = newValue }

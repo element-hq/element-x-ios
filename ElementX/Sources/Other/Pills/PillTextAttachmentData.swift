@@ -24,22 +24,22 @@ enum PillType: Codable, Equatable {
     case allUsers
 }
 
-struct EnclosingFontData: Codable, Equatable {
-    let descender: CGFloat
-    let lineHeight: CGFloat
-}
-
 struct PillTextAttachmentData: Codable, Equatable {
+    struct Font: Codable, Equatable {
+        let descender: CGFloat
+        let lineHeight: CGFloat
+    }
+    
     /// Pill type
     let type: PillType
     
     /// Font for the display name
-    let fontData: EnclosingFontData
+    let fontData: Font
 }
 
 extension PillTextAttachmentData {
     init(type: PillType, font: UIFont) {
         self.type = type
-        fontData = EnclosingFontData(descender: font.descender, lineHeight: font.lineHeight)
+        fontData = Font(descender: font.descender, lineHeight: font.lineHeight)
     }
 }

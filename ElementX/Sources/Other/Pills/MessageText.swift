@@ -16,8 +16,6 @@
 
 import SwiftUI
 
-import Collections
-
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
     var roomContext: RoomScreenViewModel.Context?
     var updateClosure: (() -> Void)?
