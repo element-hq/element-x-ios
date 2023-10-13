@@ -54,8 +54,10 @@ struct RoomMessageEventStringBuilder {
             } else {
                 message = content.body
             }
+        case .other(_, let body):
+            message = body
         }
-        
+
         if prefixWithSenderName {
             return prefix(message, with: senderDisplayName)
         } else {
