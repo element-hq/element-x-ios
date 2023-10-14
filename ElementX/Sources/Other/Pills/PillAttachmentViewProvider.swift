@@ -24,7 +24,7 @@ protocol PillAttachmentViewProviderDelegate: AnyObject {
     var roomContext: RoomScreenViewModel.Context? { get }
     
     func registerPillView(_ pillView: UIView)
-    func invalidateTextAttachmentsDisplay(update: Bool)
+    func invalidateTextAttachmentsDisplay()
 }
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
@@ -66,7 +66,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         
         let view = PillView(imageProvider: imageProvider, context: context) { [weak self, weak textAttachment] in
             textAttachment?.invalidateLastBounds()
-            self?.delegate?.invalidateTextAttachmentsDisplay(update: true)
+            self?.delegate?.invalidateTextAttachmentsDisplay()
         }
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = .clear
@@ -95,5 +95,5 @@ extension WysiwygTextView: PillAttachmentViewProviderDelegate {
         (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext
     }
     
-    func invalidateTextAttachmentsDisplay(update: Bool) { }
+    func invalidateTextAttachmentsDisplay() { }
 }

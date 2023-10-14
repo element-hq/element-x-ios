@@ -26,7 +26,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
     }
     
-    func invalidateTextAttachmentsDisplay(update: Bool) {
+    func invalidateTextAttachmentsDisplay() {
         attributedText.enumerateAttribute(.attachment,
                                           in: NSRange(location: 0, length: attributedText.length),
                                           options: []) { value, range, _ in
@@ -34,9 +34,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
                 return
             }
             self.layoutManager.invalidateDisplay(forCharacterRange: range)
-            if update {
-                updateClosure?()
-            }
+            updateClosure?()
         }
     }
 
