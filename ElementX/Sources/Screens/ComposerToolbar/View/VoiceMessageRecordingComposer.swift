@@ -22,8 +22,7 @@ struct VoiceMessageRecordingComposer: View {
     @ObservedObject var recorderState: AudioRecorderState
     
     var body: some View {
-        VoiceMessageRecordingView(recorderState: recorderState,
-                                  waveformMaxWidth: 0)
+        VoiceMessageRecordingView(recorderState: recorderState)
             .padding(.vertical, 8.0)
             .padding(.horizontal, 12.0)
             .background {

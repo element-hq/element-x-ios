@@ -23,7 +23,6 @@ struct VoiceMessageRecordingView: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     @ScaledMetric private var recordingIndicatorSize = 8
-    var waveformMaxWidth: CGFloat = 150
 
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -49,7 +48,6 @@ struct VoiceMessageRecordingView: View {
                 .fixedSize()
             WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
         }
-        .frame(maxWidth: waveformMaxWidth == 0 ? .infinity : waveformMaxWidth)
         .padding(.leading, 2)
         .padding(.trailing, 8)
     }

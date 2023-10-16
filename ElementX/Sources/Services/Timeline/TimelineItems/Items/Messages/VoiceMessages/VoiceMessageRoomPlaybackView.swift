@@ -20,7 +20,6 @@ struct VoiceMessageRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
-    var waveformMaxWidth: CGFloat = 150
 
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
@@ -101,7 +100,6 @@ struct VoiceMessageRoomPlaybackView: View {
                             }
                         })
             }
-            .frame(maxWidth: waveformMaxWidth == 0 ? .infinity : waveformMaxWidth)
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {

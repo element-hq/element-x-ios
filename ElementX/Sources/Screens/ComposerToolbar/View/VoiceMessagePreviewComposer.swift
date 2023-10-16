@@ -24,7 +24,6 @@ struct VoiceMessagePreviewComposer: View {
     
     var body: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
-                                     waveformMaxWidth: 0,
                                      onPlayPause: onPlaybackPlayPause,
                                      onSeek: { onPlaybackSeek($0) },
                                      onScrubbing: { onPlaybackScrubbing($0) })
