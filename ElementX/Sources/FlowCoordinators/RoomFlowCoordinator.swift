@@ -19,10 +19,23 @@ import Foundation
 import SwiftState
 import UserNotifications
 
-enum RoomFlowCoordinatorAction {
+enum RoomFlowCoordinatorAction: Equatable {
     case presentedRoom(String)
     case dismissedRoom
     case presentCallScreen(roomProxy: RoomProxyProtocol)
+    
+    static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.presentedRoom(let lhsRoomID), .presentedRoom(let rhsRoomID)):
+            return lhsRoomID == rhsRoomID
+        case (.dismissedRoom, .dismissedRoom):
+            return true
+        case (.presentCallScreen(let lhsRoomProxy), .presentCallScreen(let rhsRoomProxy)):
+            return lhsRoomProxy.id == rhsRoomProxy.id
+        default:
+            return false
+        }
+    }
 }
 
 class RoomFlowCoordinator: FlowCoordinatorProtocol {

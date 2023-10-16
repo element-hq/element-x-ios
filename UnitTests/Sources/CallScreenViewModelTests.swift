@@ -19,14 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class CallScreenViewModelTests: XCTestCase {
-    var viewModel: CallScreenViewModelProtocol!
-    
-    var context: CallScreenViewModelType.Context {
-        viewModel.context
-    }
-    
-    override func setUpWithError() throws {
-        viewModel = CallScreenViewModel()
-    }
-}
+class CallScreenViewModelTests: XCTestCase { }
