@@ -24,4 +24,6 @@ enum PillConstants {
 
     /// Used by the WYSIWYG as the urlString value to identify @room mentions
     static let composerAtRoomURLString = "#"
+    
+    static let maxWidth: CGFloat = 235
 }
