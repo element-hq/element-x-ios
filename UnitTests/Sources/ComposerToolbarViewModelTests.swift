@@ -41,6 +41,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              appSettings: appSettings,
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
     }
+    
+    override func tearDown() {
+        AppSettings.reset()
+    }
 
     func testComposerFocus() {
         viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))

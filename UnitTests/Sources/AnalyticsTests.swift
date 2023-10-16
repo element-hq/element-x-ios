@@ -37,6 +37,10 @@ class AnalyticsTests: XCTestCase {
                                                                    bugReportService: ServiceLocator.shared.bugReportService))
     }
     
+    override func tearDown() {
+        AppSettings.reset()
+    }
+    
     func testAnalyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
