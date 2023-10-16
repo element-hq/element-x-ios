@@ -100,7 +100,7 @@ class UserFlowTests: XCTestCase {
         lastMessage.press(forDuration: 2.0)
         
         // Hide the bottom sheet
-        let timelineItemActionMenu = app.otherElements[A11yIdentifiers.roomScreen.timelineItemActionMenu].firstMatch
+        let timelineItemActionMenu = app.scrollViews[A11yIdentifiers.roomScreen.timelineItemActionMenu].firstMatch
         XCTAssertTrue(timelineItemActionMenu.waitForExistence(timeout: 10.0))
         timelineItemActionMenu.swipeDown(velocity: .fast)
     }
