@@ -50,6 +50,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Show user mentions")
                     Text("Requires app reboot")
                 }
+                
+                Toggle(isOn: $context.elementCallEnabled) {
+                    Text("Elemement Call")
+                }
             }
             
             Section("Room creation") {

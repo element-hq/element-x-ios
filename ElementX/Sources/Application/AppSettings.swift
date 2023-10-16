@@ -43,6 +43,7 @@ final class AppSettings {
         case voiceMessageEnabled
         case mentionsEnabled
         case appLockFlowEnabled
+        case elementCallEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -265,4 +266,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.appLockFlowEnabled, defaultValue: false, storageType: .volatile)
     var appLockFlowEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: false, storageType: .volatile)
+    var elementCallEnabled
 }

@@ -111,6 +111,7 @@ struct RoomScreenViewState: BindableState {
     var longPressDisabledItemID: TimelineItemIdentifier?
     var ownUserID: String
 
+    var showCallButton = false
     var isCallOngoing = false
 
     var bindings: RoomScreenViewStateBindings

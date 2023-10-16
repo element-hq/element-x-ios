@@ -246,6 +246,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.readReceiptsEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$elementCallEnabled
+            .weakAssign(to: \.state.showCallButton, on: self)
+            .store(in: &cancellables)
+        
         roomProxy.members
             .map { members in
                 members.reduce(into: [String: RoomMemberState]()) { dictionary, member in

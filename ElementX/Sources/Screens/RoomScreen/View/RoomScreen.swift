@@ -158,6 +158,13 @@ struct RoomScreen: View {
         }
         
         ToolbarItem(placement: .primaryAction) {
+            callButton
+        }
+    }
+    
+    @ViewBuilder
+    private var callButton: some View {
+        if context.viewState.showCallButton {
             Button {
                 context.send(viewAction: .presentCall)
             } label: {
