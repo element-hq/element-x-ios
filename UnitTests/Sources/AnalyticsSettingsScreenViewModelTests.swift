@@ -25,7 +25,7 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
     override func tearDown() {
-        appSettings.analyticsConsentState = .unknown
+        AppSettings.reset()
     }
     
     @MainActor override func setUpWithError() throws {
