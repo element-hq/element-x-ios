@@ -127,7 +127,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     func seek(to progress: Double) async {
         guard let internalAudioPlayer else { return }
         let time = progress * duration
-        await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60000))
+        await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60))
     }
     
     // MARK: - Private
