@@ -475,7 +475,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
 
         return AudioRoomTimelineItemContent(body: messageContent.body,
-                                            duration: (messageContent.audio?.duration ?? 0) / 1000.0,
+                                            duration: messageContent.audio?.duration ?? 0,
                                             waveform: waveform,
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
