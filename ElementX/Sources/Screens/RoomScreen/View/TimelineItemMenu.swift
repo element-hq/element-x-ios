@@ -172,7 +172,6 @@ public struct TimelineItemMenu: View {
                 }
             }
         }
-        .accessibilityElement(children: .combine)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.timelineItemActionMenu)
         .presentationDetents([.medium, .large])
         .presentationBackground(Color.compound.bgCanvasDefault)
