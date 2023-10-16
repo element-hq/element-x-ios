@@ -26,13 +26,22 @@ final class PillTextAttachment: NSTextAttachment {
     }
     
     private(set) var pillData: PillTextAttachmentData!
+    private var lastBounds: CGRect?
+    
+    func invalidateLastBounds() {
+        lastBounds = nil
+    }
     
     override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+        if let lastBounds {
+            return lastBounds
+        }
         var rect = super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
         
         let fontData = pillData.fontData
         // Align the pill text vertically with the surrounding text.
         rect.origin.y = fontData.descender + (fontData.lineHeight - rect.height) / 2.0
+        lastBounds = rect
         return rect
     }
 }
