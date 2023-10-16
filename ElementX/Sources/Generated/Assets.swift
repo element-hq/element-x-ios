@@ -49,6 +49,8 @@ internal enum Asset {
     internal static let inlineCode = ImageAsset(name: "images/inline-code")
     internal static let italic = ImageAsset(name: "images/italic")
     internal static let link = ImageAsset(name: "images/link")
+    internal static let micFill = ImageAsset(name: "images/mic-fill")
+    internal static let mic = ImageAsset(name: "images/mic")
     internal static let numberedList = ImageAsset(name: "images/numbered-list")
     internal static let quote = ImageAsset(name: "images/quote")
     internal static let sendMessage = ImageAsset(name: "images/send-message")

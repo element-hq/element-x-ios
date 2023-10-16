@@ -240,6 +240,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if let playerState = timelineAudioPlayerStates[itemID] {
             return playerState
         }
+        
         let playerState = AudioPlayerState(duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform)
         timelineAudioPlayerStates[itemID] = playerState
@@ -278,6 +279,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             // Load content
             do {
                 let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if playerState.isAttached {
                     player.load(mediaSource: source, using: url)
@@ -297,10 +299,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    func pauseAudio() {
+        timelineAudioPlayerStates.forEach { _, playerState in
+            playerState.detachAudioPlayer()
+        }
+    }
+    
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
         await timelineAudioPlayerStates[itemID]?.updateState(progress: progress)
     }
-
+    
     // MARK: - Private
     
     @objc private func contentSizeCategoryDidChange() {

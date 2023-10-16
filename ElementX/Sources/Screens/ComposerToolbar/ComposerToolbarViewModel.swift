@@ -45,7 +45,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.completionSuggestionService = completionSuggestionService
         self.appSettings = appSettings
         
-        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled, bindings: .init()), imageProvider: mediaProvider)
+        super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled,
+                                                              enableVoiceMessageComposer: appSettings.voiceMessageEnabled,
+                                                              audioPlayerState: .init(duration: 0),
+                                                              audioRecorderState: .init(),
+                                                              bindings: .init()),
+                   imageProvider: mediaProvider)
 
         context.$viewState
             .map(\.composerMode)
@@ -98,10 +103,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             wysiwygViewModel.setup()
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
-            let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
-            actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
-                                             html: sendHTML ? wysiwygViewModel.content.html : nil,
-                                             mode: state.composerMode))
+
+            switch state.composerMode {
+            case .previewVoiceMessage:
+                actionsSubject.send(.sendVoiceMessage)
+            default:
+                let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
+                actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
+                                                 html: sendHTML ? wysiwygViewModel.content.html : nil,
+                                                 mode: state.composerMode))
+            }
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
@@ -130,6 +141,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         case .selectedSuggestion(let suggestion):
             handleSuggestion(suggestion)
+        case .startRecordingVoiceMessage:
+            state.bindings.composerActionsEnabled = false
+            actionsSubject.send(.startRecordingVoiceMessage)
+        case .stopRecordingVoiceMessage:
+            actionsSubject.send(.stopRecordingVoiceMessage)
+        case .deleteRecordedVoiceMessage:
+            actionsSubject.send(.deleteRecordedVoiceMessage)
         }
     }
 
@@ -197,7 +215,15 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         guard mode != state.composerMode else { return }
 
         state.composerMode = mode
-        if mode != .default {
+        switch mode {
+        case .default:
+            break
+        case .recordVoiceMessage(let audioRecorderState):
+            state.bindings.composerFocused = false
+            state.audioRecorderState = audioRecorderState
+        case .previewVoiceMessage(let audioPlayerState):
+            state.audioPlayerState = audioPlayerState
+        case .edit, .reply:
             // Focus composer when switching to reply/edit
             state.bindings.composerFocused = true
         }

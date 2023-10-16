@@ -63,7 +63,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
         if let fileURL = voiceMessageCache.fileURL(for: source) {
             return fileURL
         }
-        
+                
         // Otherwise, load the file from source
         guard case .success(let fileHandle) = await mediaProvider.loadFileFromSource(source, body: body) else {
             throw MediaProviderError.failedRetrievingFile

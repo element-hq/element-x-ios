@@ -52,7 +52,7 @@ protocol RoomTimelineControllerProtocol {
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError>
     
     func sendMessage(_ message: String, html: String?, inReplyTo itemID: TimelineItemIdentifier?) async
-
+    
     func editMessage(_ newMessage: String, html: String?, original itemID: TimelineItemIdentifier) async
     
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
@@ -68,6 +68,8 @@ protocol RoomTimelineControllerProtocol {
     func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async
+    
+    func pauseAudio()
     
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async
 }

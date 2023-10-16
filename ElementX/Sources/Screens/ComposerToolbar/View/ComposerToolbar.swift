@@ -22,16 +22,21 @@ struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     let wysiwygViewModel: WysiwygComposerViewModel
     let keyCommandHandler: KeyCommandHandler
-
+    
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
+    @ScaledMetric private var trashButtonIconSize = 24
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
+    @State private var showVoiceMessageRecordingTooltip = false
+    @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
+    
     @State private var frame: CGRect = .zero
-
+            
     var body: some View {
         VStack(spacing: 8) {
             topBar
+            
             if context.composerActionsEnabled {
                 bottomBar
             }
@@ -45,6 +50,10 @@ struct ComposerToolbar: View {
                     .offset(y: -frame.height)
             }
         }
+        .overlay(alignment: .bottomTrailing) {
+            voiceMessageRecordingButtonTooltipView
+                .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
+        }
         .alert(item: $context.alertInfo)
     }
     
@@ -53,42 +62,55 @@ struct ComposerToolbar: View {
             context.send(viewAction: .selectedSuggestion(suggestion))
         }
     }
-
+    
     private var topBar: some View {
         HStack(alignment: .bottom, spacing: 5) {
-            if !context.composerActionsEnabled {
-                RoomAttachmentPicker(context: context)
+            switch context.viewState.composerMode {
+            case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+                VoiceMessageRecordingComposer(recorderState: state)
+                    .padding(.leading, 12)
+            case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+                voiceMessageTrashButton
+                VoiceMessagePreviewComposer(playerState: state)
+            default:
+                if !context.composerActionsEnabled {
+                    RoomAttachmentPicker(context: context)
+                }
+                messageComposer
+                    .environmentObject(context)
+                    .onTapGesture {
+                        guard !composerFocused else { return }
+                        composerFocused = true
+                    }
+                    .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+                    .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
             }
 
-            messageComposer
-                .environmentObject(context)
-                .onTapGesture {
-                    guard !composerFocused else { return }
-                    composerFocused = true
-                }
-                .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-                .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
-
             if !context.composerActionsEnabled {
-                sendButton
-                    .padding(.leading, 3)
+                if context.viewState.showSendButton {
+                    sendButton
+                        .padding(.leading, 3)
+                } else if context.viewState.enableVoiceMessageComposer {
+                    voiceMessageRecordingButton
+                        .padding(.leading, 4)
+                }
             }
         }
     }
-
+    
     private var bottomBar: some View {
         HStack(alignment: .center, spacing: 9) {
             closeRTEButton
-
+            
             FormattingToolbar(formatItems: context.formatItems) { action in
                 context.send(viewAction: .composerAction(action: action.composerAction))
             }
-
+            
             sendButton
                 .padding(.leading, 7)
         }
     }
-
+    
     private var closeRTEButton: some View {
         Button {
             context.composerActionsEnabled = false
@@ -103,7 +125,7 @@ struct ComposerToolbar: View {
         .accessibilityLabel(L10n.actionClose)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
-
+    
     private var sendButton: some View {
         Button {
             context.send(viewAction: .sendMessage)
@@ -141,7 +163,7 @@ struct ComposerToolbar: View {
         .focused($composerFocused)
         .onChange(of: context.composerFocused) { newValue in
             guard composerFocused != newValue else { return }
-
+            
             composerFocused = newValue
         }
         .onChange(of: composerFocused) { newValue in
@@ -167,7 +189,7 @@ struct ComposerToolbar: View {
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
         }
     }
-
+    
     private var submitButtonImage: some View {
         // ZStack with opacity so the button size is consistent.
         ZStack {
@@ -184,11 +206,43 @@ struct ComposerToolbar: View {
                 .accessibilityHidden(context.viewState.composerMode.isEdit)
         }
     }
-
+    
     private class ItemProviderHelper: WysiwygItemProviderHelper {
         func isPasteSupported(for itemProvider: NSItemProvider) -> Bool {
             itemProvider.isSupportedForPasteOrDrop
         }
+    }
+    
+    // MARK: - Voice message
+
+    private var voiceMessageRecordingButton: some View {
+        VoiceMessageRecordingButton(showRecordTooltip: $showVoiceMessageRecordingTooltip, startRecording: {
+            context.send(viewAction: .startRecordingVoiceMessage)
+        }, stopRecording: {
+            context.send(viewAction: .stopRecordingVoiceMessage)
+        })
+        .padding(4)
+    }
+        
+    private var voiceMessageTrashButton: some View {
+        Button {
+            context.send(viewAction: .deleteRecordedVoiceMessage)
+        } label: {
+            CompoundIcon(\.delete)
+                .font(.compound.bodyLG)
+                .foregroundColor(.compound.textCriticalPrimary)
+                .frame(width: trashButtonIconSize, height: trashButtonIconSize)
+                .padding(EdgeInsets(top: 10, leading: 11, bottom: 10, trailing: 11))
+                .fixedSize()
+                .accessibilityLabel(L10n.a11yDelete)
+        }
+    }
+    
+    private var voiceMessageRecordingButtonTooltipView: some View {
+        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
+            .allowsHitTesting(false)
+            .opacity(showVoiceMessageRecordingTooltip ? 1.0 : 0.0)
+            .animation(.elementDefault, value: showVoiceMessageRecordingTooltip)
     }
 }
 
@@ -203,7 +257,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                 .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory))]
     
     static var previews: some View {
-        ComposerToolbar.mock()
+        ComposerToolbar.mock(focused: true)
         
         // Putting them is VStack allows the completion suggestion preview to work properly in tests
         VStack {
@@ -213,19 +267,82 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                             keyCommandHandler: { _ in false })
         }
         .previewDisplayName("With Suggestions")
+        
+        VStack {
+            ComposerToolbar.textWithVoiceMessage(focused: false)
+            ComposerToolbar.textWithVoiceMessage(focused: true)
+            ComposerToolbar.voiceMessageRecordingMock(recording: true)
+            ComposerToolbar.voiceMessagePreviewMock(recording: false)
+        }
+        .previewDisplayName("Voice Message")
     }
 }
 
 // MARK: - Mock
 
 extension ComposerToolbar {
-    static func mock() -> ComposerToolbar {
+    static func mock(focused: Bool = true) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                                         completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                         mediaProvider: MockMediaProvider(),
-                                                         appSettings: ServiceLocator.shared.settings,
-                                                         mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+            model.state.composerEmpty = focused
+            return model
+        }
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
+    }
+
+    static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+            model.state.composerEmpty = focused
+            model.state.enableVoiceMessageComposer = true
+            return model
+        }
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
+    }
+    
+    static func voiceMessageRecordingMock(recording: Bool) -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+            model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
+            model.state.enableVoiceMessageComposer = true
+            return model
+        }
+        return ComposerToolbar(context: composerViewModel.context,
+                               wysiwygViewModel: wysiwygViewModel,
+                               keyCommandHandler: { _ in false })
+    }
+    
+    static func voiceMessagePreviewMock(recording: Bool) -> ComposerToolbar {
+        let wysiwygViewModel = WysiwygComposerViewModel()
+        var composerViewModel: ComposerToolbarViewModel {
+            let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+                                                 completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                 mediaProvider: MockMediaProvider(),
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0))
+            model.state.enableVoiceMessageComposer = true
+            return model
+        }
         return ComposerToolbar(context: composerViewModel.context,
                                wysiwygViewModel: wysiwygViewModel,
                                keyCommandHandler: { _ in false })

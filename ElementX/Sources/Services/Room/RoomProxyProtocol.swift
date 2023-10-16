@@ -115,7 +115,7 @@ protocol RoomProxyProtocol {
                    audioInfo: AudioInfo,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>
-    
+
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,
