@@ -31,7 +31,6 @@ struct VoiceMessageRecordingView: View {
     }()
             
     var timeLabelContent: String {
-        // Display the duration if progress is 0.0
         Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: recorderState.duration))
     }
     
