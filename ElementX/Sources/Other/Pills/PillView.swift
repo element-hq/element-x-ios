@@ -34,7 +34,6 @@ struct PillView: View {
         .padding(.vertical, 4)
         // for now design has defined no color so we will just use gray
         .background(Capsule().foregroundColor(context.viewState.isOwnMention ? .compound.bgCriticalPrimary : .gray))
-        .frame(maxWidth: 235)
         .onChange(of: context.viewState.displayText) { _ in
             didChangeText()
         }

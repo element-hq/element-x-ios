@@ -73,6 +73,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider {
         // This allows the text view to handle it as a link
         controller.view.isUserInteractionEnabled = false
         self.view = controller.view
+        textAttachment.view = controller.view
         delegate?.registerPillView(controller.view)
     }
 }
