@@ -18,7 +18,7 @@ import Compound
 import Foundation
 import SwiftUI
 
-struct VoiceMessageRecorderComposer: View {
+struct VoiceMessageRecordingComposer: View {
     @ObservedObject var recorderState: AudioRecorderState
     
     var body: some View {
@@ -46,12 +46,12 @@ struct VoiceMessageRecorderComposer: View {
     private func onPlaybackScrubbing(_ dragging: Bool) { }
 }
 
-struct VoiceMessageRecorderComposer_Previews: PreviewProvider, TestablePreview {
+struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview {
     static let recorderState = AudioRecorderState()
     
     static var previews: some View {
         VStack {
-            VoiceMessageRecorderComposer(recorderState: recorderState)
+            VoiceMessageRecordingComposer(recorderState: recorderState)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

@@ -18,7 +18,7 @@ import Compound
 import Foundation
 import SwiftUI
 
-struct VoiceMessageRecordButtonTooltipView: View {
+struct VoiceMessageRecordingButtonTooltipView: View {
     var text: String
     var radius: CGFloat = 4
     var corners: UIRectCorner = .allCorners
@@ -93,9 +93,9 @@ private struct TooltipShape: Shape {
     }
 }
 
-struct VoiceMessageRecordButtonTooltipView_Previews: PreviewProvider, TestablePreview {
+struct VoiceMessageRecordingButtonTooltipView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VoiceMessageRecordButtonTooltipView(text: "Hold to record")
+        VoiceMessageRecordingButtonTooltipView(text: "Hold to record")
             .fixedSize()
     }
 }

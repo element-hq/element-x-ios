@@ -17,7 +17,7 @@
 import Compound
 import SwiftUI
 
-struct VoiceMessageRecordButton: View {
+struct VoiceMessageRecordingButton: View {
     @ScaledMetric private var buttonIconSize = 24
     @State private var longPressConfirmed = false
     @State private var buttonPressed = false
@@ -75,9 +75,9 @@ private class VoiceMessageButtonTask {
     @CancellableTask var task: Task<Void, Never>?
 }
 
-struct VoiceMessageRecordButton_Previews: PreviewProvider, TestablePreview {
+struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VoiceMessageRecordButton(showRecordTooltip: .constant(false))
+        VoiceMessageRecordingButton(showRecordTooltip: .constant(false))
             .fixedSize(horizontal: true, vertical: true)
     }
 }

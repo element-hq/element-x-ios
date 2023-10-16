@@ -28,7 +28,7 @@ struct ComposerToolbar: View {
     @ScaledMetric private var trashButtonIconSize = 24
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
-    @State private var showVoiceMessageRecordTooltip = false
+    @State private var showVoiceMessageRecordingTooltip = false
     @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
     
     @State private var frame: CGRect = .zero
@@ -51,7 +51,7 @@ struct ComposerToolbar: View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            voiceMessageRecordButtonTooltipView
+            voiceMessageRecordingButtonTooltipView
                 .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
         }
         .alert(item: $context.alertInfo)
@@ -67,7 +67,7 @@ struct ComposerToolbar: View {
         HStack(alignment: .bottom, spacing: 5) {
             switch context.viewState.composerMode {
             case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
-                VoiceMessageRecorderComposer(recorderState: state)
+                VoiceMessageRecordingComposer(recorderState: state)
                     .padding(.leading, 12)
             case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 voiceMessageTrashButton
@@ -91,7 +91,7 @@ struct ComposerToolbar: View {
                     sendButton
                         .padding(.leading, 3)
                 } else if context.viewState.enableVoiceMessageComposer {
-                    voiceMessageRecordButton
+                    voiceMessageRecordingButton
                         .padding(.leading, 4)
                 }
             }
@@ -215,8 +215,8 @@ struct ComposerToolbar: View {
     
     // MARK: - Voice message
 
-    private var voiceMessageRecordButton: some View {
-        VoiceMessageRecordButton(showRecordTooltip: $showVoiceMessageRecordTooltip, startRecording: {
+    private var voiceMessageRecordingButton: some View {
+        VoiceMessageRecordingButton(showRecordTooltip: $showVoiceMessageRecordingTooltip, startRecording: {
             context.send(viewAction: .startRecordingVoiceMessage)
         }, stopRecording: {
             context.send(viewAction: .stopRecordingVoiceMessage)
@@ -238,11 +238,11 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var voiceMessageRecordButtonTooltipView: some View {
-        VoiceMessageRecordButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
+    private var voiceMessageRecordingButtonTooltipView: some View {
+        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
             .allowsHitTesting(false)
-            .opacity(showVoiceMessageRecordTooltip ? 1.0 : 0.0)
-            .animation(.elementDefault, value: showVoiceMessageRecordTooltip)
+            .opacity(showVoiceMessageRecordingTooltip ? 1.0 : 0.0)
+            .animation(.elementDefault, value: showVoiceMessageRecordingTooltip)
     }
 }
 
@@ -271,7 +271,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         VStack {
             ComposerToolbar.textWithVoiceMessage(focused: false)
             ComposerToolbar.textWithVoiceMessage(focused: true)
-            ComposerToolbar.voiceMessageRecordMock(recording: true)
+            ComposerToolbar.voiceMessageRecordingMock(recording: true)
             ComposerToolbar.voiceMessagePreviewMock(recording: false)
         }
         .previewDisplayName("Voice Message")
@@ -314,7 +314,7 @@ extension ComposerToolbar {
                                keyCommandHandler: { _ in false })
     }
     
-    static func voiceMessageRecordMock(recording: Bool) -> ComposerToolbar {
+    static func voiceMessageRecordingMock(recording: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
