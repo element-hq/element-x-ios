@@ -379,7 +379,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 if timelineItem is EncryptedHistoryRoomTimelineItem {
                     lastEncryptedHistoryItemIndex = newTimelineItems.endIndex
                 }
-                
+
+                // Stops the audio player when a voice message is redacted.
+                if timelineItem is RedactedRoomTimelineItem {
+                    guard let audioState = timelineAudioPlayerStates[timelineItem.id] else {
+                        continue
+                    }
+                    audioState.detachAudioPlayer()
+                    timelineAudioPlayerStates.removeValue(forKey: timelineItem.id)
+                }
+
                 newTimelineItems.append(timelineItem)
             } else {
                 newTimelineItems.append(CollapsibleTimelineItem(items: items))
