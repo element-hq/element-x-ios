@@ -52,7 +52,7 @@ class AudioRecorderStateTests: XCTestCase {
         audioRecorderState.attachAudioRecorder(audioRecorderMock)
         
         audioRecorderState.detachAudioRecorder()
-        XCTAssert(audioRecorderMock.stopRecordingReleaseAudioSessionCalled)
+        XCTAssert(audioRecorderMock.stopRecordingCalled)
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
     }
     

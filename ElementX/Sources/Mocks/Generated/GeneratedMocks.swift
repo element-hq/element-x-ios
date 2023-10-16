@@ -282,19 +282,15 @@ class AudioRecorderMock: AudioRecorderProtocol {
     }
     //MARK: - stopRecording
 
-    var stopRecordingReleaseAudioSessionCallsCount = 0
-    var stopRecordingReleaseAudioSessionCalled: Bool {
-        return stopRecordingReleaseAudioSessionCallsCount > 0
+    var stopRecordingCallsCount = 0
+    var stopRecordingCalled: Bool {
+        return stopRecordingCallsCount > 0
     }
-    var stopRecordingReleaseAudioSessionReceivedReleaseAudioSession: Bool?
-    var stopRecordingReleaseAudioSessionReceivedInvocations: [Bool] = []
-    var stopRecordingReleaseAudioSessionClosure: ((Bool) -> Void)?
+    var stopRecordingClosure: (() -> Void)?
 
-    func stopRecording(releaseAudioSession: Bool) {
-        stopRecordingReleaseAudioSessionCallsCount += 1
-        stopRecordingReleaseAudioSessionReceivedReleaseAudioSession = releaseAudioSession
-        stopRecordingReleaseAudioSessionReceivedInvocations.append(releaseAudioSession)
-        stopRecordingReleaseAudioSessionClosure?(releaseAudioSession)
+    func stopRecording() {
+        stopRecordingCallsCount += 1
+        stopRecordingClosure?()
     }
     //MARK: - averagePowerForChannelNumber
 

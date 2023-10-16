@@ -47,7 +47,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
     
     func detachAudioRecorder() {
         guard audioRecorder != nil else { return }
-        audioRecorder?.stopRecording(releaseAudioSession: true)
+        audioRecorder?.stopRecording()
         stopPublishUpdates()
         cancellables = []
         audioRecorder = nil

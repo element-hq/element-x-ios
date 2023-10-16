@@ -65,11 +65,9 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
 
-    func stopRecording(releaseAudioSession: Bool = true) {
+    func stopRecording() {
         audioRecorder?.stop()
 
-        // Release audio session if requested
-        guard releaseAudioSession else { return }
         do {
             try AVAudioSession.sharedInstance().setActive(false)
         } catch {
