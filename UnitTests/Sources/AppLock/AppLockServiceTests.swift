@@ -62,7 +62,7 @@ class AppLockServiceTests: XCTestCase {
         XCTAssertFalse(service.isEnabled, "The service shouldn't be enabled to begin with.")
         
         // When setting a PIN code that is in the block list.
-        guard let pinCode = appSettings.appLockPINCodeBlockList.first else { fatalError() }
+        let pinCode = appSettings.appLockPINCodeBlockList[0]
         let result = service.setupPINCode(pinCode)
         
         // Then the setup should fail and the service be left as disabled.
@@ -101,7 +101,7 @@ class AppLockServiceTests: XCTestCase {
     func testInvalidChangePINCode() {
         // Given a service that is already enabled with a PIN.
         let pinCode = "2023"
-        let invalidPIN = appSettings.appLockPINCodeBlockList.first!
+        let invalidPIN = appSettings.appLockPINCodeBlockList[0]
         guard case .success = service.setupPINCode(pinCode) else {
             XCTFail("The PIN should be valid.")
             return
