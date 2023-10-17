@@ -128,7 +128,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     func seek(to progress: Double) async {
-        MXLog.debug("seek(to: \(progress))")
         guard let internalAudioPlayer else { return }
         let time = progress * duration
         await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60))

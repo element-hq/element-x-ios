@@ -23,6 +23,9 @@ enum VoiceMessageRecorderError: Error {
 
 protocol VoiceMessageRecorderProtocol {
     var previewPlayerState: AudioPlayerState? { get }
+    var recordingURL: URL? { get }
+    var recordingDuration: TimeInterval { get }
+    var recordingWaveform: [UInt16] { get }
     
     @MainActor func startRecording() -> AudioRecorderProtocol
     func stopRecording() async throws
@@ -37,6 +40,13 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private let audioConverter: AudioConverterProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
     var audioPlayer: AudioPlayerProtocol?
+    
+    var recordingURL: URL? {
+        audioRecorder.url
+    }
+    
+    private(set) var recordingDuration: TimeInterval = 0.0
+    private(set) var recordingWaveform: [UInt16] = []
     
     private(set) var previewPlayerState: AudioPlayerState?
     
@@ -57,14 +67,14 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func stopRecording() async throws {
-        let duration = audioRecorder.currentTime
+        recordingDuration = audioRecorder.currentTime
         audioRecorder.stopRecording()
                         
         // TODO: waveform analysis
         let waveform: [UInt16] = []
         
         // Build the preview audio player state
-        let audioPlayerState = await AudioPlayerState(duration: duration, waveform: Waveform(data: waveform))
+        let audioPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: Waveform(data: waveform))
         previewPlayerState = audioPlayerState
     }
     

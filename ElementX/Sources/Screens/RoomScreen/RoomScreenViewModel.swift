@@ -16,6 +16,7 @@
 
 import Algorithms
 import Combine
+import MatrixRustSDK
 import OrderedCollections
 import SwiftUI
 
@@ -953,10 +954,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("no preview available")
             return
         }
-//
-//        let audioPlayer = AudioPlayer()
-//        audioPlayerState.attachAudioPlayer(audioPlayer)
-//        audioPlayer.load(pending: pendingVoiceMessage, using: pendingVoiceMessage.temporaryURL, autoplay: false)
         
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
         MXLog.debug("stop recording voice message: DONE")
@@ -969,12 +966,38 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func sendCurrentVoiceMessage() async {
-        // Partially implemented
-        // TODO:
-        //  - convert file
-        //  - delete pending file if send succeeds
+        guard let url = voiceMessageRecorder.recordingURL else {
+            MXLog.error("failed to send the voice message: no recorded file")
+            return
+        }
         
-        actionsSubject.send(.composer(action: .setMode(mode: .default)))
+        do {
+            // convert the file
+            let oggFile = URL.temporaryDirectory.appendingPathComponent("voice-message.ogg")
+            try AudioConverter().convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
+
+            // send it
+            let size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
+            let duration = voiceMessageRecorder.recordingDuration
+            let audioInfo = AudioInfo(duration: duration, size: size, mimetype: "audio/ogg")
+            let waveform = voiceMessageRecorder.recordingWaveform
+            
+            let result = await roomProxy.sendVoiceMessage(url: oggFile,
+                                                          audioInfo: audioInfo,
+                                                          waveform: waveform,
+                                                          progressSubject: nil) { _ in }
+            
+            // delete the temporary file
+            try? FileManager.default.removeItem(at: oggFile)
+            
+            if case .failure(let failure) = result {
+                throw failure
+            } else {
+                actionsSubject.send(.composer(action: .setMode(mode: .default)))
+            }
+        } catch {
+            MXLog.error("failed to send the voice message: \(error)")
+        }
     }
     
     private func startPlayingRecordedVoiceMessage() async {
