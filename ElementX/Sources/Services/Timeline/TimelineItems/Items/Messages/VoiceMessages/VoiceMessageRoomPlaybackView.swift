@@ -77,6 +77,14 @@ struct VoiceMessageRoomPlaybackView: View {
             }
             GeometryReader { geometry in
                 waveformView
+                    .overlay(alignment: .leading) {
+                        // Display a cursor
+                        RoundedRectangle(cornerRadius: 1)
+                            .fill(Color.compound.iconAccentTertiary)
+                            .offset(CGSize(width: playerState.progress * geometry.size.width, height: 0.0))
+                            .frame(width: waveformLineWidth, height: geometry.size.height)
+                            .opacity(showWaveformCursor ? 1 : 0)
+                    }
                     // Add a gesture to drag the waveform
                     .gesture(SpatialTapGesture()
                         .simultaneously(with: LongPressGesture())
@@ -160,8 +168,7 @@ struct VoiceMessageRoomPlaybackView: View {
             EstimatedWaveformView(lineWidth: waveformLineWidth,
                                   linePadding: waveformLinePadding,
                                   waveform: playerState.waveform,
-                                  progress: playerState.progress,
-                                  showCursor: showWaveformCursor)
+                                  progress: playerState.progress)
         }
     }
 }

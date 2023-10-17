@@ -56,7 +56,6 @@ struct EstimatedWaveformView: View {
     var waveform: EstimatedWaveform
     private let minimumGraphAmplitude: CGFloat = 1
     var progress: CGFloat = 0.0
-    var showCursor = false
     
     @State private var normalizedWaveformData: [Float] = []
     
@@ -67,13 +66,6 @@ struct EstimatedWaveformView: View {
                           waveformData: normalizedWaveformData)
                 .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .progressMask(progress: progress)
-                .overlay(alignment: .leading) {
-                    // Display a cursor
-                    RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
-                        .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
-                        .frame(width: lineWidth, height: geometry.size.height)
-                        .opacity(showCursor ? 1 : 0)
-                }
                 .preference(key: ViewSizeKey.self, value: geometry.size)
         }
         .onPreferenceChange(ViewSizeKey.self) { size in

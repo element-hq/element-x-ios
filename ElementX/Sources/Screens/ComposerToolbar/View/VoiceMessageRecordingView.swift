@@ -45,7 +45,7 @@ struct VoiceMessageRecordingView: View {
                 .foregroundColor(.compound.textSecondary)
                 .monospacedDigit()
                 .fixedSize()
-            EstimatedWaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
+            EstimatedWaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
