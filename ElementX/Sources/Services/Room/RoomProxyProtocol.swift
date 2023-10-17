@@ -55,6 +55,7 @@ protocol RoomProxyProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     var isTombstoned: Bool { get }
+    var isCallOngoing: Bool { get }
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var hasUnreadNotifications: Bool { get }
@@ -176,6 +177,10 @@ protocol RoomProxyProtocol {
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, RoomProxyError>
 
     func endPoll(pollStartID: String, text: String) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Element Call
+    
+    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
 }
 
 extension RoomProxyProtocol {

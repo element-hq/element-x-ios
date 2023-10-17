@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 import WysiwygComposer
 
@@ -155,8 +156,33 @@ struct RoomScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
         }
+        
+        ToolbarItem(placement: .primaryAction) {
+            callButton
+        }
     }
-
+    
+    @ViewBuilder
+    private var callButton: some View {
+        if context.viewState.showCallButton {
+            if context.viewState.isCallOngoing {
+                Button {
+                    context.send(viewAction: .presentCall)
+                } label: {
+                    Label(L10n.actionJoin, icon: \.videoCall)
+                        .labelStyle(.titleAndIcon)
+                }
+                .buttonStyle(ElementCallButtonStyle())
+            } else {
+                Button {
+                    context.send(viewAction: .presentCall)
+                } label: {
+                    CompoundIcon(\.videoCall)
+                }
+            }
+        }
+    }
+    
     private var isNavigationBarHidden: Bool {
         composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
@@ -167,11 +193,11 @@ struct RoomScreen: View {
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                                mediaProvider: MockMediaProvider(),
-                                               roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
+                                               roomProxy: RoomProxyMock(with: .init(displayName: "Preview room", isCallOngoing: true)),
                                                appSettings: ServiceLocator.shared.settings,
                                                analytics: ServiceLocator.shared.analytics,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    
+
     static var previews: some View {
         NavigationStack {
             RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())

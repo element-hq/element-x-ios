@@ -425,6 +425,61 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
+class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
+    var messagePublisher: PassthroughSubject<String, Never> {
+        get { return underlyingMessagePublisher }
+        set(value) { underlyingMessagePublisher = value }
+    }
+    var underlyingMessagePublisher: PassthroughSubject<String, Never>!
+    var actions: AnyPublisher<ElementCallWidgetDriverAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<ElementCallWidgetDriverAction, Never>!
+
+    //MARK: - start
+
+    var startBaseURLClientIDCallsCount = 0
+    var startBaseURLClientIDCalled: Bool {
+        return startBaseURLClientIDCallsCount > 0
+    }
+    var startBaseURLClientIDReceivedArguments: (baseURL: URL, clientID: String)?
+    var startBaseURLClientIDReceivedInvocations: [(baseURL: URL, clientID: String)] = []
+    var startBaseURLClientIDReturnValue: Result<URL, ElementCallWidgetDriverError>!
+    var startBaseURLClientIDClosure: ((URL, String) async -> Result<URL, ElementCallWidgetDriverError>)?
+
+    func start(baseURL: URL, clientID: String) async -> Result<URL, ElementCallWidgetDriverError> {
+        startBaseURLClientIDCallsCount += 1
+        startBaseURLClientIDReceivedArguments = (baseURL: baseURL, clientID: clientID)
+        startBaseURLClientIDReceivedInvocations.append((baseURL: baseURL, clientID: clientID))
+        if let startBaseURLClientIDClosure = startBaseURLClientIDClosure {
+            return await startBaseURLClientIDClosure(baseURL, clientID)
+        } else {
+            return startBaseURLClientIDReturnValue
+        }
+    }
+    //MARK: - sendMessage
+
+    var sendMessageCallsCount = 0
+    var sendMessageCalled: Bool {
+        return sendMessageCallsCount > 0
+    }
+    var sendMessageReceivedMessage: String?
+    var sendMessageReceivedInvocations: [String] = []
+    var sendMessageReturnValue: Result<Bool, ElementCallWidgetDriverError>!
+    var sendMessageClosure: ((String) async -> Result<Bool, ElementCallWidgetDriverError>)?
+
+    func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
+        sendMessageCallsCount += 1
+        sendMessageReceivedMessage = message
+        sendMessageReceivedInvocations.append(message)
+        if let sendMessageClosure = sendMessageClosure {
+            return await sendMessageClosure(message)
+        } else {
+            return sendMessageReturnValue
+        }
+    }
+}
 class KeychainControllerMock: KeychainControllerProtocol {
 
     //MARK: - setRestorationToken
@@ -1173,6 +1228,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingIsTombstoned = value }
     }
     var underlyingIsTombstoned: Bool!
+    var isCallOngoing: Bool {
+        get { return underlyingIsCallOngoing }
+        set(value) { underlyingIsCallOngoing = value }
+    }
+    var underlyingIsCallOngoing: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications: Bool {
@@ -1942,6 +2002,23 @@ class RoomProxyMock: RoomProxyProtocol {
             return await endPollPollStartIDTextClosure(pollStartID, text)
         } else {
             return endPollPollStartIDTextReturnValue
+        }
+    }
+    //MARK: - elementCallWidgetDriver
+
+    var elementCallWidgetDriverCallsCount = 0
+    var elementCallWidgetDriverCalled: Bool {
+        return elementCallWidgetDriverCallsCount > 0
+    }
+    var elementCallWidgetDriverReturnValue: ElementCallWidgetDriverProtocol!
+    var elementCallWidgetDriverClosure: (() -> ElementCallWidgetDriverProtocol)?
+
+    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
+        elementCallWidgetDriverCallsCount += 1
+        if let elementCallWidgetDriverClosure = elementCallWidgetDriverClosure {
+            return elementCallWidgetDriverClosure()
+        } else {
+            return elementCallWidgetDriverReturnValue
         }
     }
 }

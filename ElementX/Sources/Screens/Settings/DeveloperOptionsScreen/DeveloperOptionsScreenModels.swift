@@ -52,6 +52,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var voiceMessageEnabled: Bool { get set }
     var mentionsEnabled: Bool { get set }
     var appLockFlowEnabled: Bool { get set }
+    var elementCallEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

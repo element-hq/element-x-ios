@@ -151,6 +151,10 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
+    var isCallOngoing: Bool {
+        false
+    }
+    
     var canonicalAlias: String? {
         room.canonicalAlias()
     }
@@ -252,7 +256,7 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         }
     }
-        
+    
     func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
@@ -430,13 +434,13 @@ class RoomProxy: RoomProxyProtocol {
             self.room.cancelSend(txnId: transactionID)
         }
     }
-
+    
     func editMessage(_ message: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
-
+        
         let messageContent = buildMessageContentFor(message, html: html)
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
@@ -704,6 +708,12 @@ class RoomProxy: RoomProxyProtocol {
                 return .failure(.failedEndingPoll)
             }
         }
+    }
+    
+    // MARK: - Element Call
+    
+    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
+        ElementCallWidgetDriver(room: room)
     }
 
     // MARK: - Private

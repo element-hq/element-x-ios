@@ -63,6 +63,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          readReceiptsEnabled: appSettings.readReceiptsEnabled,
                                                          isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                          ownUserID: roomProxy.ownUserID,
+                                                         isCallOngoing: roomProxy.isCallOngoing,
                                                          bindings: .init(reactionsCollapsed: [:])),
                    imageProvider: mediaProvider)
         
@@ -163,6 +164,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          message: L10n.commonPollEndConfirmation,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                                          secondaryButton: .init(title: L10n.actionOk, action: { self.endPoll(pollStartID: pollStartID) }))
+        case .presentCall:
+            actionsSubject.send(.displayCallScreen)
         }
     }
 
@@ -241,6 +244,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         appSettings.$readReceiptsEnabled
             .weakAssign(to: \.state.readReceiptsEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$elementCallEnabled
+            .weakAssign(to: \.state.showCallButton, on: self)
             .store(in: &cancellables)
         
         roomProxy.members

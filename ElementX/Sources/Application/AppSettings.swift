@@ -43,6 +43,7 @@ final class AppSettings {
         case voiceMessageEnabled
         case mentionsEnabled
         case appLockFlowEnabled
+        case elementCallEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -203,6 +204,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.richTextEditorEnabled, defaultValue: true, storageType: .userDefaults(store))
     var richTextEditorEnabled
     
+    // MARK: - Element Call
+    
+    let elementCallBaseURL: URL = "https://call.element.io"
+    
     // MARK: - Notifications
 
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
@@ -261,4 +266,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.appLockFlowEnabled, defaultValue: false, storageType: .volatile)
     var appLockFlowEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var elementCallEnabled
 }
