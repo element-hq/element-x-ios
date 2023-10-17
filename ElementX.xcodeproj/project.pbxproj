@@ -594,6 +594,7 @@
 		A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */; };
 		A8771F5975A82759FA5138AE /* RoomMemberDetailsScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F19DBE940499D3E3DD405D8 /* RoomMemberDetailsScreenUITests.swift */; };
 		A896998A6784DB6F16E912F4 /* MockMediaLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB7D7DAAAF662DED9D02379 /* MockMediaLoader.swift */; };
+		A93661C962B12942C08864B6 /* DSWaveformImageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */; };
 		A9482B967FC85DA611514D35 /* VoiceMessageRoomPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD41CD67DB5DA0D436BFE9 /* VoiceMessageRoomPlaybackView.swift */; };
 		A969147E0EEE0E27EE226570 /* MediaUploadPreviewScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F29139BC2A804CE5E0757E /* MediaUploadPreviewScreenViewModel.swift */; };
 		A975D60EA49F6AF73308809F /* RoomMembersListScreenMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC03209FDE8CE0810617BFFF /* RoomMembersListScreenMemberCell.swift */; };
@@ -1859,6 +1860,7 @@
 				36CD6E11B37396E14F032CB6 /* WysiwygComposer in Frameworks */,
 				A0D7E5BD0298A97DCBDCE40B /* Prefire in Frameworks */,
 				44F0E1B576C7599DF8022071 /* SwiftOGG in Frameworks */,
+				A93661C962B12942C08864B6 /* DSWaveformImageViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4363,6 +4365,7 @@
 				CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */,
 				2629CF48B33643CD5F69C612 /* Prefire */,
 				391D11F92DFC91666AA1503F /* SwiftOGG */,
+				2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -4481,6 +4484,7 @@
 				AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */,
 				F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */,
 				9754C4B03F6255F67FC15E52 /* XCRemoteSwiftPackageReference "compound-ios" */,
+				4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
 				C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */,
 				D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */,
 				821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */,
@@ -6087,6 +6091,14 @@
 				kind = branch;
 			};
 		};
+		4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dmrschmidt/DSWaveformImage";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 14.0.0;
+			};
+		};
 		61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -6309,6 +6321,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */;
 			productName = AnalyticsEvents;
+		};
+		2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */;
+			productName = DSWaveformImageViews;
 		};
 		2B43F2AF7456567FE37270A7 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

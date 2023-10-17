@@ -26,6 +26,15 @@
       }
     },
     {
+      "identity" : "dswaveformimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dmrschmidt/DSWaveformImage",
+      "state" : {
+        "revision" : "730021fa5bab91aae2f77d90e1c1c8c4985c0756",
+        "version" : "14.0.0"
+      }
+    },
+    {
       "identity" : "dtcoretext",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Cocoanetics/DTCoreText",
