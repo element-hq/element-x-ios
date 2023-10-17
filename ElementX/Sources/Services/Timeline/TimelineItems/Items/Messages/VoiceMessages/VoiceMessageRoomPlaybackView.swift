@@ -76,7 +76,7 @@ struct VoiceMessageRoomPlaybackView: View {
                     .fixedSize(horizontal: true, vertical: true)
             }
             GeometryReader { geometry in
-                WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
+                waveformView
                     // Add a gesture to drag the waveform
                     .gesture(SpatialTapGesture()
                         .simultaneously(with: LongPressGesture())
@@ -103,6 +103,7 @@ struct VoiceMessageRoomPlaybackView: View {
                         })
             }
         }
+        .animation(.elementDefault, value: playerState.playingURL)
         .onChange(of: dragState) { newDragState in
             switch newDragState {
             case .inactive:
@@ -148,6 +149,20 @@ struct VoiceMessageRoomPlaybackView: View {
         .disabled(playerState.playbackState == .loading)
         .frame(width: playPauseButtonSize,
                height: playPauseButtonSize)
+    }
+
+    @ViewBuilder
+    private var waveformView: some View {
+        if let url = playerState.playingURL {
+            WaveformView(audioURL: url, configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding))))
+                .progressMask(progress: playerState.progress)
+        } else {
+            EstimatedWaveformView(lineWidth: waveformLineWidth,
+                                  linePadding: waveformLinePadding,
+                                  waveform: playerState.waveform,
+                                  progress: playerState.progress,
+                                  showCursor: showWaveformCursor)
+        }
     }
 }
 
