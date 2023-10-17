@@ -712,7 +712,7 @@ class RoomProxy: RoomProxyProtocol {
     
     // MARK: - Element Call
     
-    func elementCallWidgetDriver() -> ElementCallWidgetDriver {
+    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol {
         ElementCallWidgetDriver(room: room)
     }
 

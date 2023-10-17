@@ -26,11 +26,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let callBaseURL: URL
     private let clientID: String
     
-    private let widgetDriver: ElementCallWidgetDriver
+    private let widgetDriver: ElementCallWidgetDriverProtocol
     
     private let callController = CXCallController()
     private let callProvider = CXProvider(configuration: .init())
-    private let callIdentifier = UUID()
+    private let callID = UUID()
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CallScreenViewModelAction, Never> {
@@ -38,9 +38,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     deinit {
-        tearDownVoipSession(callIdentifier: callIdentifier)
+        tearDownVoIPSession(callID: callID)
     }
     
+    /// Designated initialiser
+    /// - Parameters:
+    ///   - roomProxy: The room in which the call should be created
+    ///   - callBaseURL: Which Element Call instance should be used
+    ///   - clientID: Something to identify the current client on the Element Call side
     init(roomProxy: RoomProxyProtocol, callBaseURL: URL, clientID: String) {
         self.roomProxy = roomProxy
         self.callBaseURL = callBaseURL
@@ -58,7 +63,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             
             Task {
-                await self.widgetDriver.processMessage(message)
+                await self.widgetDriver.sendMessage(message)
             }
         }
         
@@ -71,9 +76,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                     do {
                         let message = "postMessage(\(receivedMessage), '*')"
                         let result = try await self.state.bindings.javaScriptEvaluator?(message)
-                        MXLog.debug("Evaluated java script: \(message) with result: \(String(describing: result))")
+                        MXLog.debug("Evaluated javascript: \(message) with result: \(String(describing: result))")
                     } catch {
-                        MXLog.error("Received java script evaluation error: \(error)")
+                        MXLog.error("Received javascript evaluation error: \(error)")
                     }
                 }
             }
@@ -86,7 +91,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 
                 switch action {
                 case .callEnded:
-                    actionsSubject.send(.callEnded)
+                    actionsSubject.send(.dismiss)
                 default:
                     break
                 }
@@ -99,10 +104,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 state.url = url
             case .failure(let error):
                 MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
+                state.bindings.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, primaryButton: .init(title: L10n.actionOk, action: { [weak self] in
+                    self?.actionsSubject.send(.dismiss)
+                }))
+                
+                return
             }
             
             do {
-                try await setupVoipSession(callIdentifier: callIdentifier)
+                try await setupVoIPSession(callID: callID)
             } catch {
                 MXLog.error("Failed setting up VoIP session with error: \(error)")
             }
@@ -164,12 +174,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    private func setupVoipSession(callIdentifier: UUID) async throws {
+    private func setupVoIPSession(callID: UUID) async throws {
         try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [])
         try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
         
         let handle = CXHandle(type: .generic, value: roomProxy.roomTitle)
-        let startCallAction = CXStartCallAction(call: callIdentifier, handle: handle)
+        let startCallAction = CXStartCallAction(call: callID, handle: handle)
         startCallAction.isVideo = true
         
         let transaction = CXTransaction(action: startCallAction)
@@ -177,21 +187,19 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         try await callController.request(transaction)
     }
     
-    private nonisolated func tearDownVoipSession(callIdentifier: UUID?) {
-        guard let callIdentifier else {
+    private nonisolated func tearDownVoIPSession(callID: UUID?) {
+        guard let callID else {
             return
         }
         
         try? AVAudioSession.sharedInstance().setActive(false)
             
-        let endCallAction = CXEndCallAction(call: callIdentifier)
+        let endCallAction = CXEndCallAction(call: callID)
         let transaction = CXTransaction(action: endCallAction)
         
         callController.request(transaction) { error in
             if let error {
                 MXLog.error("Failed transaction with error: \(error)")
-            } else {
-                MXLog.error("Failed transaction")
             }
         }
     }

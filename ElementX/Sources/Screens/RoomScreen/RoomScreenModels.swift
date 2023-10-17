@@ -64,7 +64,7 @@ enum RoomScreenViewAction {
     case paginateBackwards
     case selectedPollOption(pollStartID: String, optionID: String)
     case endPoll(pollStartID: String)
-
+    
     case timelineItemMenu(itemID: TimelineItemIdentifier)
     case timelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
@@ -74,15 +74,15 @@ enum RoomScreenViewAction {
     case tappedOnUser(userID: String)
     
     case reactionSummary(itemID: TimelineItemIdentifier, key: String)
-
+    
     case retrySend(itemID: TimelineItemIdentifier)
     case cancelSend(itemID: TimelineItemIdentifier)
     
     case scrolledToBottom
-
+    
     case enableLongPress(itemID: TimelineItemIdentifier)
     case disableLongPress(itemID: TimelineItemIdentifier)
-
+    
     case playPauseAudio(itemID: TimelineItemIdentifier)
     case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
     
@@ -107,13 +107,13 @@ struct RoomScreenViewState: BindableState {
     var isEncryptedOneToOneRoom = false
     var timelineViewState = TimelineViewState() // check the doc before changing this
     var swiftUITimelineEnabled = false
-
+    
     var longPressDisabledItemID: TimelineItemIdentifier?
     var ownUserID: String
-
+    
     var showCallButton = false
     var isCallOngoing = false
-
+    
     var bindings: RoomScreenViewStateBindings
     
     /// A closure providing the actions to show when long pressing on an item in the timeline.
@@ -135,14 +135,14 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
-
+    
     /// An alert info for confirmation actions (e.g. ending a poll)
     var confirmationAlertInfo: AlertInfo<UUID>?
-
+    
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
-
+    
     var sendFailedConfirmationDialogInfo: SendFailedConfirmationDialogInfo?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
@@ -152,7 +152,7 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     static func == (lhs: TimelineItemActionMenuInfo, rhs: TimelineItemActionMenuInfo) -> Bool {
         lhs.id == rhs.id
     }
-
+    
     let item: EventBasedTimelineItemProtocol
     
     var id: TimelineItemIdentifier {
@@ -162,7 +162,7 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
 
 struct SendFailedConfirmationDialogInfo: ConfirmationDialogProtocol {
     let title = L10n.screenRoomRetrySendMenuTitle
-
+    
     let itemID: TimelineItemIdentifier
 }
 
@@ -192,19 +192,19 @@ struct RoomMemberState {
 struct TimelineViewState {
     var canBackPaginate = true
     var isBackPaginating = false
-
+    
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-
+    
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
     
     var renderedTimelineIDs = [String]()
     var pendingTimelineIDs = [String]()
-
+    
     var timelineIDs: [String] {
         itemsDictionary.keys.elements
     }
-
+    
     var itemViewStates: [RoomTimelineItemViewState] {
         renderedTimelineIDs.compactMap { itemsDictionary[$0] }
     }

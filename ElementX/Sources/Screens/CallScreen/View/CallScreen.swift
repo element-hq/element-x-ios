@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 import WebKit
 
@@ -26,6 +27,8 @@ struct CallScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .ignoresSafeArea(edges: .bottom)
             .presentationDragIndicator(.visible)
+            .environment(\.colorScheme, .dark)
+            .alert(item: $context.alertInfo)
     }
 }
 
@@ -43,6 +46,7 @@ private struct WebView: UIViewRepresentable {
     
     func updateUIView(_ webView: WKWebView, context: Context) {
         if let url {
+            context.coordinator.url = url
             let request = URLRequest(url: url)
             webView.load(request)
         }
@@ -54,6 +58,8 @@ private struct WebView: UIViewRepresentable {
         private var webViewURLObservation: NSKeyValueObservation?
         
         private(set) var webView: WKWebView!
+        
+        var url: URL!
         
         init(viewModelContext: CallScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
@@ -85,8 +91,8 @@ private struct WebView: UIViewRepresentable {
             
             // Try matching Element Call colors
             webView.isOpaque = false
-            webView.backgroundColor = UIColor(.compound.bgActionPrimaryRest)
-            webView.scrollView.backgroundColor = UIColor(.compound.bgActionPrimaryRest)
+            webView.backgroundColor = .compound.bgCanvasDefault
+            webView.scrollView.backgroundColor = .compound.bgCanvasDefault
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
@@ -112,14 +118,34 @@ private struct WebView: UIViewRepresentable {
                 viewModelContext.javaScriptMessageHandler?(message.body)
             }
         }
-                
+        
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
-            .grant
+            // Don't allow permissions for domains different than what the call was started on
+            guard origin.host == url.host else {
+                return .deny
+            }
+            
+            return .grant
         }
         
         // MARK: - WKNavigationDelegate
+        
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+            // Allow any content from the main URL.
+            if navigationAction.request.url?.host == url.host {
+                return .allow
+            }
+            
+            // Additionally allow any embedded content such as captchas.
+            if let targetFrame = navigationAction.targetFrame, !targetFrame.isMainFrame {
+                return .allow
+            }
+            
+            // Otherwise the request is invalid.
+            return .cancel
+        }
         
         nonisolated func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             Task { @MainActor in
@@ -132,9 +158,21 @@ private struct WebView: UIViewRepresentable {
 // MARK: - Previews
 
 struct CallScreen_Previews: PreviewProvider {
-    static let viewModel = CallScreenViewModel(roomProxy: RoomProxyMock(),
-                                               callBaseURL: "https://call.element.io",
-                                               clientID: "io.element.elementx")
+    static let viewModel = {
+        let roomProxy = RoomProxyMock()
+        
+        let widgetDriver = ElementCallWidgetDriverMock()
+        widgetDriver.underlyingMessagePublisher = .init()
+        widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
+        widgetDriver.startBaseURLClientIDReturnValue = .success(URL.userDirectory)
+        
+        roomProxy.elementCallWidgetDriverReturnValue = widgetDriver
+        
+        return CallScreenViewModel(roomProxy: roomProxy,
+                                   callBaseURL: "https://call.element.io",
+                                   clientID: "io.element.elementx")
+    }()
+    
     static var previews: some View {
         NavigationStack {
             CallScreen(context: viewModel.context)

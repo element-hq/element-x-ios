@@ -186,6 +186,7 @@
 		36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */; };
 		36AD4DD4C798E22584ED3200 /* Emojibase in Frameworks */ = {isa = PBXBuildFile; productRef = C05729B1684C331F5FFE9232 /* Emojibase */; };
 		36CD6E11B37396E14F032CB6 /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */; };
+		370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */; };
 		377980ABF16525114E72DDE2 /* Version in Frameworks */ = {isa = PBXBuildFile; productRef = 2B9ACE4FCACB5A8812154424 /* Version */; };
 		37D789F24199B32E3FD1AA7B /* FileRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */; };
 		383055C6ABE5BE058CEE1DDB /* WelcomeScreenScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FE5EF0AFFE360C66420AAE /* WelcomeScreenScreenCoordinator.swift */; };
@@ -366,6 +367,7 @@
 		6AD722DD92E465E56D2885AB /* BugReportScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA919F521E9F0EE3638AFC85 /* BugReportScreen.swift */; };
 		6B31508C6334C617360C2EAB /* RoomMemberDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC589E641AE46EFB2962534D /* RoomMemberDetailsViewModelTests.swift */; };
 		6B4BF4A6450F55939B49FAEF /* PollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67779D9A1B797285A09B7720 /* PollOptionView.swift */; };
+		6BAD956B909A6E29F6CC6E7C /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC23C63849452BC86EA2852 /* ButtonStyle.swift */; };
 		6BB6944443C421C722ED1E7D /* portrait_test_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2D513D2477B57F90E98EEC0 /* portrait_test_video.mp4 */; };
 		6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D55702474F279D910D2D162 /* RoomStateEventStringBuilder.swift */; };
 		6C5A2C454E6C198AB39ED760 /* SharedUserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA8DC95C079805B0B56E8A9 /* SharedUserDefaultsKeys.swift */; };
@@ -1382,6 +1384,7 @@
 		8AFCE895ECFFA53FEE64D62B /* MediaLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLoader.swift; sourceTree = "<group>"; };
 		8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSharingScreenModels.swift; sourceTree = "<group>"; };
 		8C8616254EE40CA8BA5E9BC2 /* VideoRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRoomTimelineItemContent.swift; sourceTree = "<group>"; };
+		8CC23C63849452BC86EA2852 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		8D168471461717AF5689F64B /* OnboardingScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreenUITests.swift; sourceTree = "<group>"; };
 		8D55702474F279D910D2D162 /* RoomStateEventStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateEventStringBuilder.swift; sourceTree = "<group>"; };
 		8D8169443E5AC5FF71BFB3DB /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1458,6 +1461,7 @@
 		A5DDF245FA51CF75F89E58A4 /* CreatePollScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePollScreenUITests.swift; sourceTree = "<group>"; };
 		A65F140F9FE5E8D4DAEFF354 /* RoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		A6B891A6DA826E2461DBB40F /* PHGPostHogConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHGPostHogConfiguration.swift; sourceTree = "<group>"; };
+		A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementCallWidgetDriverProtocol.swift; sourceTree = "<group>"; };
 		A73A07BAEDD74C48795A996A /* AsyncSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSequence.swift; sourceTree = "<group>"; };
 		A7C4EA55DA62F9D0F984A2AE /* CollapsibleTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTimelineItem.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -2254,6 +2258,7 @@
 			children = (
 				8F21ED7205048668BEB44A38 /* AppActivityView.swift */,
 				CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */,
+				8CC23C63849452BC86EA2852 /* ButtonStyle.swift */,
 				0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */,
 				B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */,
 				C352359663A0E52BA20761EE /* LoadableImage.swift */,
@@ -3339,6 +3344,7 @@
 			isa = PBXGroup;
 			children = (
 				309AD8BAE6437C31BA7157BF /* ElementCallWidgetDriver.swift */,
+				A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */,
 			);
 			path = ElementCall;
 			sourceTree = "<group>";
@@ -4913,6 +4919,7 @@
 				3DA57CA0D609A6B37CA1DC2F /* BugReportService.swift in Sources */,
 				172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */,
 				E1DF24D085572A55C9758A2D /* Bundle.swift in Sources */,
+				6BAD956B909A6E29F6CC6E7C /* ButtonStyle.swift in Sources */,
 				D19A748E95E2FAB2940570F0 /* CallScreen.swift in Sources */,
 				763D69741D58D2B650BC1FC9 /* CallScreenCoordinator.swift in Sources */,
 				B7C9E07F4F9CCC8DD7156A20 /* CallScreenModels.swift in Sources */,
@@ -4969,6 +4976,7 @@
 				AE1160076F663BF14E0E893A /* EffectsView.swift in Sources */,
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				07CC13C5729C24255348CBBD /* ElementCallWidgetDriver.swift in Sources */,
+				370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */,
 				D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */,
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
 				7361B011A79BF723D8C9782B /* EmojiCategory.swift in Sources */,

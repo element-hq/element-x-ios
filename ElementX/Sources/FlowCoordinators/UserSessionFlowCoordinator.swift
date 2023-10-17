@@ -86,7 +86,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.processEvent(.deselectRoom)
                 analytics.signpost.endRoomFlow()
             case .presentCallScreen(let roomProxy):
-                self.presentCallScreen(roomProxy: roomProxy)
+                presentCallScreen(roomProxy: roomProxy)
             }
         }
         .store(in: &cancellables)

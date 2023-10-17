@@ -148,7 +148,7 @@ struct RoomScreen: View {
                 .cornerRadius(8)
         }
     }
-        
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
@@ -165,25 +165,24 @@ struct RoomScreen: View {
     @ViewBuilder
     private var callButton: some View {
         if context.viewState.showCallButton {
-            Button {
-                context.send(viewAction: .presentCall)
-            } label: {
-                if context.viewState.isCallOngoing {
+            if context.viewState.isCallOngoing {
+                Button {
+                    context.send(viewAction: .presentCall)
+                } label: {
                     Label(L10n.actionJoin, icon: \.videoCall)
-                        .padding(.horizontal, 16.0)
-                        .padding(.vertical, 4.0)
-                        .foregroundColor(.compound.bgCanvasDefault)
-                        .background(Color.compound.iconAccentTertiary)
-                        .clipShape(Capsule())
                         .labelStyle(.titleAndIcon)
-                    
-                } else {
+                }
+                .buttonStyle(ElementCallButtonStyle())
+            } else {
+                Button {
+                    context.send(viewAction: .presentCall)
+                } label: {
                     CompoundIcon(\.videoCall)
                 }
             }
         }
     }
-
+    
     private var isNavigationBarHidden: Bool {
         composerToolbarContext.composerActionsEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }

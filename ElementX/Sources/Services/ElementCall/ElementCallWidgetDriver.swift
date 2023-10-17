@@ -18,20 +18,6 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum ElementCallWidgetDriverError: Error {
-    case roomInvalid
-    case failedBuildingCallURL
-    case failedBuildingWidgetSettings
-    case failedBuildingWidgetDriver
-    case failedParsingCallURL
-    case driverNotSetup
-}
-
-enum ElementCallWidgetDriverAction {
-    case callEnded
-    case errorReceived(ElementCallWidgetDriverError)
-}
-
 private struct ElementCallWidgetMessage: Codable {
     enum Direction: String, Codable {
         case fromWidget
@@ -51,7 +37,7 @@ private struct ElementCallWidgetMessage: Codable {
     }
 }
 
-class ElementCallWidgetDriver: WidgetPermissionsProvider {
+class ElementCallWidgetDriver: WidgetPermissionsProvider, ElementCallWidgetDriverProtocol {
     private let room: RoomProtocol
     private var widgetDriver: WidgetDriverAndHandle?
     
@@ -117,7 +103,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider {
                 messagePublisher.send(receivedMessage)
                 MXLog.debug("Received message: \(receivedMessage)")
                 
-                self?.interceptAndProcessMessage(receivedMessage)
+                self?.handleMessageIfNeeded(receivedMessage)
             }
         }
         
@@ -134,7 +120,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider {
         return .success(url)
     }
     
-    func processMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
+    func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
         guard let widgetDriver else {
             return .failure(.driverNotSetup)
         }
@@ -142,7 +128,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider {
         let result = await widgetDriver.handle.send(msg: message)
         MXLog.debug("Sent message: \(message) with result: \(result)")
         
-        interceptAndProcessMessage(message)
+        handleMessageIfNeeded(message)
         
         return .success(result)
     }
@@ -155,7 +141,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider {
     
     // MARK: - Private
     
-    func interceptAndProcessMessage(_ message: String) {
+    func handleMessageIfNeeded(_ message: String) {
         guard let data = message.data(using: .utf8),
               let widgetMessage = try? JSONDecoder().decode(ElementCallWidgetMessage.self, from: data) else {
             return

@@ -180,7 +180,7 @@ protocol RoomProxyProtocol {
     
     // MARK: - Element Call
     
-    func elementCallWidgetDriver() -> ElementCallWidgetDriver
+    func elementCallWidgetDriver() -> ElementCallWidgetDriverProtocol
 }
 
 extension RoomProxyProtocol {

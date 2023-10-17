@@ -19,7 +19,9 @@ import SwiftUI
 
 struct CallScreenCoordinatorParameters {
     let roomProxy: RoomProxyProtocol
+    /// Which Element Call instance should be used
     let callBaseURL: URL
+    /// A way to identify the current client against Element Call
     let clientID: String
 }
 
@@ -50,7 +52,7 @@ final class CallScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .callEnded:
+            case .dismiss:
                 actionsSubject.send(.dismiss)
             }
         }

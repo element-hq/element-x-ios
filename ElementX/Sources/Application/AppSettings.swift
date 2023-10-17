@@ -267,6 +267,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.appLockFlowEnabled, defaultValue: false, storageType: .volatile)
     var appLockFlowEnabled
     
-    @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: false, storageType: .volatile)
+    @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: false, storageType: .userDefaults(store))
     var elementCallEnabled
 }
