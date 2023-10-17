@@ -71,7 +71,7 @@ struct ComposerToolbar: View {
                     .padding(.leading, 12)
             case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 voiceMessageTrashButton
-                VoiceMessagePreviewComposer(playerState: state)
+                voiceMessagePreviewComposer(audioPlayerState: state)
             default:
                 if !context.composerActionsEnabled {
                     RoomAttachmentPicker(context: context)
@@ -243,6 +243,17 @@ struct ComposerToolbar: View {
             .allowsHitTesting(false)
             .opacity(showVoiceMessageRecordingTooltip ? 1.0 : 0.0)
             .animation(.elementDefault, value: showVoiceMessageRecordingTooltip)
+    }
+    
+    private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState) -> some View {
+        VoiceMessagePreviewComposer(playerState: audioPlayerState, onPlay: {
+            context.send(viewAction: .startPlayingRecordedVoiceMessage)
+        },
+        onPause: {
+            context.send(viewAction: .stopPlayingRecordedVoiceMessage)
+        }, onSeek: { progress in
+            context.send(viewAction: .seekRecordedVoiceMessage(progress: progress))
+        })
     }
 }
 

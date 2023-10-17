@@ -43,6 +43,9 @@ class AudioRecorderState: ObservableObject, Identifiable {
         recordingState = .stopped
         self.audioRecorder = audioRecorder
         subscribeToAudioRecorder(audioRecorder)
+        if audioRecorder.isRecording {
+            startPublishUpdates()
+        }
     }
     
     func detachAudioRecorder() {

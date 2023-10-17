@@ -19,14 +19,17 @@ import SwiftUI
 
 struct VoiceMessagePreviewComposer: View {
     @ObservedObject var playerState: AudioPlayerState
-    
     @State private var resumePlaybackAfterScrubbing = false
+    
+    let onPlay: () -> Void
+    let onPause: () -> Void
+    let onSeek: (Double) -> Void
     
     var body: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
-                                     onPlayPause: onPlaybackPlayPause,
-                                     onSeek: { onPlaybackSeek($0) },
-                                     onScrubbing: { onPlaybackScrubbing($0) })
+                                     onPlayPause: onPlayPause,
+                                     onSeek: onSeek,
+                                     onScrubbing: onScrubbing(scrubbing:))
             .padding(.vertical, 4.0)
             .padding(.horizontal, 6.0)
             .background {
@@ -42,11 +45,27 @@ struct VoiceMessagePreviewComposer: View {
             .fixedSize(horizontal: false, vertical: true)
     }
     
-    private func onPlaybackPlayPause() { }
+    private func onPlayPause() {
+        if playerState.playbackState == .playing {
+            onPause()
+        } else {
+            onPlay()
+        }
+    }
     
-    private func onPlaybackSeek(_ progress: Double) { }
-    
-    private func onPlaybackScrubbing(_ dragging: Bool) { }
+    private func onScrubbing(scrubbing: Bool) {
+        if scrubbing {
+            if playerState.playbackState == .playing {
+                resumePlaybackAfterScrubbing = true
+                onPause()
+            }
+        } else {
+            if resumePlaybackAfterScrubbing {
+                onPlay()
+                resumePlaybackAfterScrubbing = false
+            }
+        }
+    }
 }
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
@@ -56,7 +75,7 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VStack {
-            VoiceMessagePreviewComposer(playerState: playerState)
+            VoiceMessagePreviewComposer(playerState: playerState, onPlay: { }, onPause: { }, onSeek: { _ in })
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

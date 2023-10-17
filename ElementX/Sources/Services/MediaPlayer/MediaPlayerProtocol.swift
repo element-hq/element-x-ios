@@ -31,7 +31,7 @@ protocol MediaPlayerProtocol: AnyObject {
     var url: URL? { get }
     var state: MediaPlayerState { get }
     
-    func load(mediaSource: MediaSourceProxy, using url: URL)
+    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool)
     func play()
     func pause()
     func stop()

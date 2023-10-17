@@ -17,6 +17,7 @@
 import AVFoundation
 import Combine
 import Foundation
+import UIKit
 
 enum AudioRecorderError: Error {
     case genericError
@@ -27,6 +28,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     
     private var audioRecorder: AVAudioRecorder?
     
+    private var cancellables = Set<AnyCancellable>()
     private let actionsSubject: PassthroughSubject<AudioRecorderAction, Never> = .init()
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -44,7 +46,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
-    func recordWithOutputURL(_ url: URL) {
+    func record() {
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: 48000,
                         AVEncoderBitRateKey: 128_000,
@@ -54,6 +56,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
+            let url = URL.temporaryDirectory.appendingPathComponent("voice-message.m4a")
             audioRecorder = try AVAudioRecorder(url: url, settings: settings)
             audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true
@@ -75,6 +78,10 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
     }
     
+    func deleteRecording() {
+        audioRecorder?.deleteRecording()
+    }
+    
     func peakPowerForChannelNumber(_ channelNumber: Int) -> Float {
         guard isRecording, let audioRecorder else {
             return 0.0
@@ -93,6 +100,22 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder.updateMeters()
         
         return normalizedPowerLevelFromDecibels(audioRecorder.averagePower(forChannel: channelNumber))
+    }
+    
+    // MARK: - Private
+    
+    private func addObservers() {
+        // Stop recording uppon UIApplication.didBecomeActiveNotification notification
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.stopRecording()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func removeObservers() {
+        cancellables.removeAll()
     }
         
     // MARK: - AVAudioRecorderDelegate

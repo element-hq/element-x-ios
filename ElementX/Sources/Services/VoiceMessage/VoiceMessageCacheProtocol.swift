@@ -17,8 +17,20 @@
 import Foundation
 
 protocol VoiceMessageCacheProtocol {
+    /// Returns the URL of the cached audio file for a given media source
+    /// - Parameter mediaSource: the media source
+    /// - Returns: the URL of the cached audio file or nil if the file doesn't exist
     func fileURL(for mediaSource: MediaSourceProxy) -> URL?
+    
+    /// Adds a file in the cache
+    /// - Parameters:
+    ///   - mediaSource: the media source
+    ///   - fileURL: the source file
+    ///   - move: wheter to move or copy the source file
+    /// - Returns: the cached URL
     func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL
+        
+    /// Clears the cache
     func clearCache()
 }
 

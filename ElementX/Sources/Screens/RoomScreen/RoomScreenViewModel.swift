@@ -21,6 +21,7 @@ import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
+// swiftlint:disable file_length
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationEventLimit: UInt = 20
@@ -34,6 +35,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
+    private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
 
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
@@ -55,6 +57,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
+        voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder())
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -196,13 +199,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             composerFocusedSubject.send(isFocused)
         case .startRecordingVoiceMessage:
             timelineController.pauseAudio()
-            startRecordingVoiceMessage()
+            Task { await startRecordingVoiceMessage() }
         case .stopRecordingVoiceMessage:
-            stopRecordingVoiceMessage()
+            Task { await stopRecordingVoiceMessage() }
         case .deleteRecordedVoiceMessage:
             deleteCurrentVoiceMessage()
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
+        case .startPlayingRecordedVoiceMessage:
+            Task { await startPlayingRecordedVoiceMessage() }
+        case .stopPlayingRecordedVoiceMessage:
+            stopPlayingRecordedVoiceMessage()
+        case .seekRecordedVoiceMessage(let progress):
+            Task { await seekRecordedVoiceMessage(to: progress) }
         }
     }
     
@@ -922,30 +931,62 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Voice message
     
-    private func startRecordingVoiceMessage() {
-        // Partially implemented
-
+    private func startRecordingVoiceMessage() async {
+        MXLog.debug("start recording voice message")
+        let audioRecorder = voiceMessageRecorder.startRecording()
         let audioRecordState = AudioRecorderState()
+        audioRecordState.attachAudioRecorder(audioRecorder)
         actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        MXLog.debug("start recording voice message: DONE")
     }
     
-    private func stopRecordingVoiceMessage() {
-        // Partially implemented
+    private func stopRecordingVoiceMessage() async {
+        MXLog.debug("stop recording voice message")
+        do {
+            try await voiceMessageRecorder.stopRecording()
+        } catch {
+            MXLog.error("failed to stop voice message recording: \(error)")
+            return
+        }
 
-        let audioPlayerState = AudioPlayerState(duration: 0)
+        guard let audioPlayerState = voiceMessageRecorder.previewPlayerState else {
+            MXLog.error("no preview available")
+            return
+        }
+//
+//        let audioPlayer = AudioPlayer()
+//        audioPlayerState.attachAudioPlayer(audioPlayer)
+//        audioPlayer.load(pending: pendingVoiceMessage, using: pendingVoiceMessage.temporaryURL, autoplay: false)
+        
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
+        MXLog.debug("stop recording voice message: DONE")
     }
     
     private func deleteCurrentVoiceMessage() {
-        // Partially implemented
+        voiceMessageRecorder.deleteRecordedVoiceMessage()
 
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
     private func sendCurrentVoiceMessage() async {
         // Partially implemented
+        // TODO:
+        //  - convert file
+        //  - delete pending file if send succeeds
         
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
+    }
+    
+    private func startPlayingRecordedVoiceMessage() async {
+        await voiceMessageRecorder.startPlayingRecordedVoiceMessage()
+    }
+    
+    private func stopPlayingRecordedVoiceMessage() {
+        voiceMessageRecorder.stopPlayingRecordedVoiceMessage()
+    }
+    
+    private func seekRecordedVoiceMessage(to progress: Double) async {
+        await voiceMessageRecorder.seekRecordedVoiceMessage(to: progress)
     }
 }
 

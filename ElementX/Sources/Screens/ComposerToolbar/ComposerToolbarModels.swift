@@ -35,6 +35,9 @@ enum ComposerToolbarViewModelAction {
     case stopRecordingVoiceMessage
     case deleteRecordedVoiceMessage
     case sendVoiceMessage
+    case startPlayingRecordedVoiceMessage
+    case stopPlayingRecordedVoiceMessage
+    case seekRecordedVoiceMessage(progress: Double)
 }
 
 enum ComposerToolbarViewAction {
@@ -54,6 +57,9 @@ enum ComposerToolbarViewAction {
     case startRecordingVoiceMessage
     case stopRecordingVoiceMessage
     case deleteRecordedVoiceMessage
+    case startPlayingRecordedVoiceMessage
+    case stopPlayingRecordedVoiceMessage
+    case seekRecordedVoiceMessage(progress: Double)
 }
 
 struct ComposerToolbarViewState: BindableState {

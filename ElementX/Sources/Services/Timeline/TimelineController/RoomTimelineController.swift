@@ -294,7 +294,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if playerState.isAttached {
-                    player.load(mediaSource: source, using: url)
+                    player.load(mediaSource: source, using: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")

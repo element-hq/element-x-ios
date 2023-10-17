@@ -53,6 +53,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var rateObserver: NSKeyValueObservation?
     private var playToEndObserver: NSObjectProtocol?
     private var appBackgroundObserver: NSObjectProtocol?
+    private var autoplay = false
     
     private(set) var url: URL?
     
@@ -91,11 +92,12 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         unloadContent()
     }
     
-    func load(mediaSource: MediaSourceProxy, using url: URL) {
+    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
         unloadContent()
         setInternalState(.loading)
         self.mediaSource = mediaSource
         self.url = url
+        self.autoplay = autoplay
         playerItem = AVPlayerItem(url: url)
         internalAudioPlayer = AVQueuePlayer(playerItem: playerItem)
         addObservers()
@@ -122,9 +124,11 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         isStopped = true
         internalAudioPlayer?.pause()
         internalAudioPlayer?.seek(to: .zero)
+        try? AVAudioSession.sharedInstance().setActive(false)
     }
     
     func seek(to progress: Double) async {
+        MXLog.debug("seek(to: \(progress))")
         guard let internalAudioPlayer else { return }
         let time = progress * duration
         await internalAudioPlayer.seek(to: CMTime(seconds: time, preferredTimescale: 60))
@@ -205,7 +209,10 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             actionsSubject.send(.didStartLoading)
         case .readyToPlay:
             actionsSubject.send(.didFinishLoading)
-            play()
+            if autoplay {
+                autoplay = false
+                play()
+            }
         case .playing:
             actionsSubject.send(.didStartPlaying)
         case .paused:

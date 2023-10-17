@@ -151,6 +151,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             actionsSubject.send(.stopRecordingVoiceMessage)
         case .deleteRecordedVoiceMessage:
             actionsSubject.send(.deleteRecordedVoiceMessage)
+        case .startPlayingRecordedVoiceMessage:
+            actionsSubject.send(.startPlayingRecordedVoiceMessage)
+        case .stopPlayingRecordedVoiceMessage:
+            actionsSubject.send(.stopPlayingRecordedVoiceMessage)
+        case .seekRecordedVoiceMessage(let progress):
+            actionsSubject.send(.seekRecordedVoiceMessage(progress: progress))
         }
     }
 
