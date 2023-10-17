@@ -45,7 +45,7 @@ struct VoiceMessageRecordingView: View {
                 .foregroundColor(.compound.textSecondary)
                 .monospacedDigit()
                 .fixedSize()
-            WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
+            EstimatedWaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0, showCursor: false)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
@@ -53,10 +53,10 @@ struct VoiceMessageRecordingView: View {
 }
 
 struct VoiceMessageRecordingView_Previews: PreviewProvider, TestablePreview {
-    static let waveform = Waveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
-                                          334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
-                                          294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
-                                          0, 0, 0, 0, 0, 3])
+    static let waveform = EstimatedWaveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
+                                                   334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
+                                                   294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
+                                                   0, 0, 0, 0, 0, 3])
     
     static let recorderState = AudioRecorderState()
     

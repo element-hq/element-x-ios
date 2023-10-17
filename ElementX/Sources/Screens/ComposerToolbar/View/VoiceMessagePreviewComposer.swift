@@ -51,7 +51,7 @@ struct VoiceMessagePreviewComposer: View {
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     static let playerState = AudioPlayerState(duration: 10.0,
-                                              waveform: Waveform.mockWaveform,
+                                              waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)
     
     static var previews: some View {
