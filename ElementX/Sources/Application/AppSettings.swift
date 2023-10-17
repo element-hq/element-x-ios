@@ -117,6 +117,13 @@ final class AppSettings {
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
     
+    // MARK: - Security
+    
+    /// The amount of time the app can remain in the background for without requesting the PIN/TouchID/FaceID.
+    let appLockGracePeriod: TimeInterval = 180
+    /// Any codes that the user isn't allowed to use for their PIN.
+    let appLockPINCodeBlockList = ["0000", "1234"]
+    
     // MARK: - Authentication
     
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.

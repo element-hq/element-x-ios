@@ -564,6 +564,88 @@ class KeychainControllerMock: KeychainControllerProtocol {
         removeAllRestorationTokensCallsCount += 1
         removeAllRestorationTokensClosure?()
     }
+    //MARK: - resetSecrets
+
+    var resetSecretsCallsCount = 0
+    var resetSecretsCalled: Bool {
+        return resetSecretsCallsCount > 0
+    }
+    var resetSecretsClosure: (() -> Void)?
+
+    func resetSecrets() {
+        resetSecretsCallsCount += 1
+        resetSecretsClosure?()
+    }
+    //MARK: - containsPINCode
+
+    var containsPINCodeThrowableError: Error?
+    var containsPINCodeCallsCount = 0
+    var containsPINCodeCalled: Bool {
+        return containsPINCodeCallsCount > 0
+    }
+    var containsPINCodeReturnValue: Bool!
+    var containsPINCodeClosure: (() throws -> Bool)?
+
+    func containsPINCode() throws -> Bool {
+        if let error = containsPINCodeThrowableError {
+            throw error
+        }
+        containsPINCodeCallsCount += 1
+        if let containsPINCodeClosure = containsPINCodeClosure {
+            return try containsPINCodeClosure()
+        } else {
+            return containsPINCodeReturnValue
+        }
+    }
+    //MARK: - setPINCode
+
+    var setPINCodeThrowableError: Error?
+    var setPINCodeCallsCount = 0
+    var setPINCodeCalled: Bool {
+        return setPINCodeCallsCount > 0
+    }
+    var setPINCodeReceivedPinCode: String?
+    var setPINCodeReceivedInvocations: [String] = []
+    var setPINCodeClosure: ((String) throws -> Void)?
+
+    func setPINCode(_ pinCode: String) throws {
+        if let error = setPINCodeThrowableError {
+            throw error
+        }
+        setPINCodeCallsCount += 1
+        setPINCodeReceivedPinCode = pinCode
+        setPINCodeReceivedInvocations.append(pinCode)
+        try setPINCodeClosure?(pinCode)
+    }
+    //MARK: - pinCode
+
+    var pinCodeCallsCount = 0
+    var pinCodeCalled: Bool {
+        return pinCodeCallsCount > 0
+    }
+    var pinCodeReturnValue: String?
+    var pinCodeClosure: (() -> String?)?
+
+    func pinCode() -> String? {
+        pinCodeCallsCount += 1
+        if let pinCodeClosure = pinCodeClosure {
+            return pinCodeClosure()
+        } else {
+            return pinCodeReturnValue
+        }
+    }
+    //MARK: - removePINCode
+
+    var removePINCodeCallsCount = 0
+    var removePINCodeCalled: Bool {
+        return removePINCodeCallsCount > 0
+    }
+    var removePINCodeClosure: (() -> Void)?
+
+    func removePINCode() {
+        removePINCodeCallsCount += 1
+        removePINCodeClosure?()
+    }
 }
 class MediaPlayerMock: MediaPlayerProtocol {
     var mediaSource: MediaSourceProxy?

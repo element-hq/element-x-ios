@@ -22,24 +22,36 @@ enum KeychainControllerService: String {
     case sessions
     case tests
 
-    var identifier: String {
+    var restorationTokenID: String {
         InfoPlistReader.main.baseBundleIdentifier + "." + rawValue
+    }
+    
+    var mainID: String {
+        InfoPlistReader.main.baseBundleIdentifier + ".keychain.\(rawValue)"
     }
 }
 
 class KeychainController: KeychainControllerProtocol {
-    private let keychain: Keychain
-
-    init(service: KeychainControllerService,
-         accessGroup: String) {
-        keychain = Keychain(service: service.identifier,
-                            accessGroup: accessGroup)
+    /// The keychain responsible for storing account restoration tokens (keyed by userID).
+    private let restorationTokenKeychain: Keychain
+    /// The keychain responsible for storing all other secrets in the app (keyed by `Key`s).
+    private let mainKeychain: Keychain
+    
+    private enum Key: String {
+        case pinCode
     }
+
+    init(service: KeychainControllerService, accessGroup: String) {
+        restorationTokenKeychain = Keychain(service: service.restorationTokenID, accessGroup: accessGroup)
+        mainKeychain = Keychain(service: service.mainID, accessGroup: accessGroup)
+    }
+    
+    // MARK: - Restoration Tokens
 
     func setRestorationToken(_ restorationToken: RestorationToken, forUsername username: String) {
         do {
             let tokenData = try JSONEncoder().encode(restorationToken)
-            try keychain.set(tokenData, key: username)
+            try restorationTokenKeychain.set(tokenData, key: username)
         } catch {
             MXLog.error("Failed storing user restore token with error: \(error)")
         }
@@ -47,7 +59,7 @@ class KeychainController: KeychainControllerProtocol {
 
     func restorationTokenForUsername(_ username: String) -> RestorationToken? {
         do {
-            guard let tokenData = try keychain.getData(username) else {
+            guard let tokenData = try restorationTokenKeychain.getData(username) else {
                 return nil
             }
 
@@ -59,7 +71,7 @@ class KeychainController: KeychainControllerProtocol {
     }
 
     func restorationTokens() -> [KeychainCredentials] {
-        keychain.allKeys().compactMap { username in
+        restorationTokenKeychain.allKeys().compactMap { username in
             guard let restorationToken = restorationTokenForUsername(username) else {
                 return nil
             }
@@ -72,7 +84,7 @@ class KeychainController: KeychainControllerProtocol {
         MXLog.warning("Removing restoration token for user: \(username).")
         
         do {
-            try keychain.remove(username)
+            try restorationTokenKeychain.remove(username)
         } catch {
             MXLog.error("Failed removing restore token with error: \(error)")
         }
@@ -82,7 +94,7 @@ class KeychainController: KeychainControllerProtocol {
         MXLog.warning("Removing all user restoration tokens.")
         
         do {
-            try keychain.removeAll()
+            try restorationTokenKeychain.removeAll()
         } catch {
             MXLog.error("Failed removing all tokens")
         }
@@ -102,5 +114,42 @@ class KeychainController: KeychainControllerProtocol {
         MXLog.info("Saving session changes in the keychain.")
         let restorationToken = RestorationToken(session: session)
         setRestorationToken(restorationToken, forUsername: session.userId)
+    }
+    
+    // MARK: - App Secrets
+    
+    func resetSecrets() {
+        MXLog.warning("Resetting main keychain.")
+        
+        do {
+            try mainKeychain.removeAll()
+        } catch {
+            MXLog.error("Failed resetting the main keychain.")
+        }
+    }
+    
+    func containsPINCode() throws -> Bool {
+        try mainKeychain.contains(Key.pinCode.rawValue)
+    }
+    
+    func setPINCode(_ pinCode: String) throws {
+        try mainKeychain.set(pinCode, key: Key.pinCode.rawValue)
+    }
+    
+    func pinCode() -> String? {
+        do {
+            return try mainKeychain.getString(Key.pinCode.rawValue)
+        } catch {
+            MXLog.error("Failed retrieving the PIN code.")
+            return nil
+        }
+    }
+    
+    func removePINCode() {
+        do {
+            try mainKeychain.remove(Key.pinCode.rawValue)
+        } catch {
+            MXLog.error("Failed removing the PIN code.")
+        }
     }
 }
