@@ -62,26 +62,19 @@ struct EstimatedWaveformView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle().fill(Color.compound.iconQuaternary)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                Rectangle().fill(Color.compound.iconSecondary)
-                    .frame(width: max(0.0, geometry.size.width * progress), height: geometry.size.height)
-            }
-            .preference(key: ViewSizeKey.self, value: geometry.size)
-            .mask(alignment: .leading) {
-                WaveformShape(lineWidth: lineWidth,
-                              linePadding: linePadding,
-                              waveformData: normalizedWaveformData)
-                    .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-            }
-            // Display a cursor
-            .overlay(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
-                    .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
-                    .frame(width: lineWidth, height: geometry.size.height)
-                    .opacity(showCursor ? 1 : 0)
-            }
+            WaveformShape(lineWidth: lineWidth,
+                          linePadding: linePadding,
+                          waveformData: normalizedWaveformData)
+                .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .progressMask(progress: progress)
+                .overlay(alignment: .leading) {
+                    // Display a cursor
+                    RoundedRectangle(cornerRadius: 1).fill(Color.compound.iconAccentTertiary)
+                        .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
+                        .frame(width: lineWidth, height: geometry.size.height)
+                        .opacity(showCursor ? 1 : 0)
+                }
+                .preference(key: ViewSizeKey.self, value: geometry.size)
         }
         .onPreferenceChange(ViewSizeKey.self) { size in
             buildNormalizedWaveformData(size: size)
