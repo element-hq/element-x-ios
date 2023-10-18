@@ -34,6 +34,7 @@ struct PillView: View {
         .padding(.vertical, 4)
         // for now design has defined no color so we will just use gray
         .background(Capsule().foregroundColor(context.viewState.isOwnMention ? .compound.bgCriticalPrimary : .gray))
+        .frame(maxWidth: PillConstants.maxWidth)
         .onChange(of: context.viewState.displayText) { _ in
             didChangeText()
         }
@@ -53,13 +54,11 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
             // To simulate the trimming that happens at UIKit level
-            .frame(maxWidth: PillConstants.maxWidth)
             .previewDisplayName("Loaded Long")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
             // To simulate the trimming that happens at UIKit level
             .frame(maxWidth: PillConstants.maxWidth)
-            .previewDisplayName("Loaded Long Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .allUsers)) { }
             .previewDisplayName("All Users")
