@@ -17,5 +17,8 @@
 import Foundation
 
 protocol MediaPlayerProviderProtocol {
-    func player(for mediaSource: MediaSourceProxy) async -> MediaPlayerProtocol?
+    func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol
 }
+
+// sourcery: AutoMockable
+extension MediaPlayerProviderProtocol { }

@@ -260,6 +260,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: nil)),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -271,6 +272,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Some room name", avatarURL: URL.picturesDirectory)),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -284,6 +286,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "New room", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -297,6 +300,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "New room", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -311,6 +315,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "New room", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -327,6 +332,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Small timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -343,6 +349,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Small timeline, paginating", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -359,6 +366,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -376,6 +384,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -392,6 +401,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Large timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -408,6 +418,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -424,6 +435,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)
@@ -440,6 +452,7 @@ class MockScreen: Identifiable {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: RoomProxyMock(with: .init(displayName: "Polls timeline", avatarURL: URL.picturesDirectory)),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
+                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              appSettings: ServiceLocator.shared.settings)

@@ -273,7 +273,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        guard let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
+        guard let player = try? mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
             MXLog.error("Cannot play a voice message without an audio player")
             return
         }
@@ -287,6 +287,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 }
             }
             playerState.attachAudioPlayer(player)
+            
+            callbacks.send(.startPlayingAudio)
             
             // Load content
             do {
@@ -307,6 +309,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if player.state == .playing {
             player.pause()
         } else {
+            callbacks.send(.startPlayingAudio)
             player.play()
         }
     }

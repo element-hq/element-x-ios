@@ -16,32 +16,11 @@
 
 import Foundation
 
-enum VoiceMessageRecorderError: Error {
-    case genericError
-    case previewNotAvailable
-}
-
-protocol VoiceMessageRecorderProtocol {
-    var previewPlayerState: AudioPlayerState? { get }
-    var recordingURL: URL? { get }
-    var recordingDuration: TimeInterval { get }
-    var recordingWaveform: [UInt16] { get }
-    
-    @MainActor func startRecording() -> AudioRecorderProtocol
-    func stopRecording() async throws
-    func cancelRecording() async throws
-    func startRecordedVoiceMessagePlayback() async
-    func pauseRecordedVoiceMessagePlayback()
-    func stopRecordedVoiceMessagePlayback()
-    func seekRecordedVoiceMessagePlayback(to progress: Double) async
-    func deleteRecordedVoiceMessage()
-}
-
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private let audioRecorder: AudioRecorderProtocol
     private let audioConverter: AudioConverterProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
-    var audioPlayer: AudioPlayerProtocol?
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     
     var recordingURL: URL? {
         audioRecorder.url
@@ -53,13 +32,22 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private(set) var previewPlayerState: AudioPlayerState?
     
     init(audioRecorder: AudioRecorderProtocol = AudioRecorder(),
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
          audioConverter: AudioConverterProtocol = AudioConverter(),
          voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache()) {
         self.audioRecorder = audioRecorder
+        self.mediaPlayerProvider = mediaPlayerProvider
         self.audioConverter = audioConverter
         self.voiceMessageCache = voiceMessageCache
     }
 
+    func stop() async throws {
+        if audioRecorder.isRecording {
+            try await stopRecording()
+        }
+        await stopPlayback()
+    }
+    
     // MARK: - Recording
     
     @MainActor
@@ -86,41 +74,55 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     // MARK: - Preview
-    
-    func startRecordedVoiceMessagePlayback() async {
+        
+    func startPlayback() async throws {
         guard let previewPlayerState, let url = audioRecorder.url else {
             MXLog.error("no available preview")
             return
         }
         
-        if let audioPlayer, audioPlayer.url == url {
+        let audioPlayer = try audioPlayer()
+        if audioPlayer.url == url {
             audioPlayer.play()
             return
         }
-        
-        let audioPlayer = AudioPlayer()
-        self.audioPlayer = audioPlayer
         
         await previewPlayerState.attachAudioPlayer(audioPlayer)
         let pendingMediaSource = MediaSourceProxy(url: url, mimeType: "audio/m4a")
         audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
     }
     
-    func pauseRecordedVoiceMessagePlayback() {
+    func pausePlayback() {
+        let audioPlayer = try? audioPlayer()
         audioPlayer?.pause()
     }
     
-    func stopRecordedVoiceMessagePlayback() {
+    func stopPlayback() async {
+        await previewPlayerState?.detachAudioPlayer()
+        let audioPlayer = try? audioPlayer()
         audioPlayer?.stop()
     }
     
-    func seekRecordedVoiceMessagePlayback(to progress: Double) async {
+    func seekPlayback(to progress: Double) async {
         await previewPlayerState?.updateState(progress: progress)
     }
     
     // MARK: - Pending Voice Message
     
-    func deleteRecordedVoiceMessage() {
+    func deleteRecording() {
         audioRecorder.deleteRecording()
+    }
+    
+    // MARK: - Private
+    
+    private func audioPlayer() throws -> AudioPlayerProtocol {
+        guard let url = audioRecorder.url else {
+            throw VoiceMessageRecorderError.previewNotAvailable
+        }
+        let mediaSource = MediaSourceProxy(url: url, mimeType: "audio/m4a")
+        guard let audioPlayer = try mediaPlayerProvider.player(for: mediaSource) as? AudioPlayerProtocol else {
+            throw VoiceMessageRecorderError.previewNotAvailable
+        }
+        return audioPlayer
     }
 }

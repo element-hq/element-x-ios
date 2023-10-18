@@ -16,22 +16,21 @@
 
 import Foundation
 
+enum MediaPlayerProviderError: Error {
+    case unsupportedMediaType
+}
+
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
-    private let mediaProvider: MediaProviderProtocol
-    private var audioPlayer: AudioPlayerProtocol?
+    private var audioPlayer: AudioPlayerProtocol!
             
-    init(mediaProvider: MediaProviderProtocol) {
-        self.mediaProvider = mediaProvider
-    }
-    
     deinit {
         audioPlayer = nil
     }
     
-    func player(for mediaSource: MediaSourceProxy) -> MediaPlayerProtocol? {
+    func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol {
         guard let mimeType = mediaSource.mimeType else {
             MXLog.error("Unknown mime type")
-            return nil
+            throw MediaPlayerProviderError.unsupportedMediaType
         }
         
         if mimeType.starts(with: "audio/") {
@@ -41,7 +40,7 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
             return audioPlayer
         } else {
             MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
-            return nil
+            throw MediaPlayerProviderError.unsupportedMediaType
         }
     }
 }

@@ -22,6 +22,7 @@ enum RoomTimelineControllerCallback {
     case updatedTimelineItems
     case canBackPaginate(Bool)
     case isBackPaginating(Bool)
+    case startPlayingAudio
 }
 
 enum RoomTimelineControllerAction {

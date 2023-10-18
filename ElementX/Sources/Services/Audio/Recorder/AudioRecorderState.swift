@@ -36,9 +36,9 @@ class AudioRecorderState: ObservableObject, Identifiable {
     private var cancellables: Set<AnyCancellable> = []
     private var displayLink: CADisplayLink?
     
-    func attachAudioRecorder(_ audioRecorder: AudioRecorderProtocol) {
+    func attachAudioRecorder(_ audioRecorder: AudioRecorderProtocol) async throws {
         if self.audioRecorder != nil {
-            detachAudioRecorder()
+            try await detachAudioRecorder()
         }
         recordingState = .stopped
         self.audioRecorder = audioRecorder
@@ -48,12 +48,14 @@ class AudioRecorderState: ObservableObject, Identifiable {
         }
     }
     
-    func detachAudioRecorder() {
-        guard audioRecorder != nil else { return }
-        audioRecorder?.stopRecording()
+    func detachAudioRecorder() async throws {
+        guard let audioRecorder else { return }
+        if audioRecorder.isRecording == true {
+            try await audioRecorder.stopRecording()
+        }
         stopPublishUpdates()
         cancellables = []
-        audioRecorder = nil
+        self.audioRecorder = nil
         recordingState = .stopped
     }
     

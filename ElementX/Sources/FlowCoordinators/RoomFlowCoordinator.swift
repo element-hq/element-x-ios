@@ -334,7 +334,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let userID = userSession.clientProxy.userID
         
-        let mediaPlayerProvider = MediaPlayerProvider(mediaProvider: userSession.mediaProvider)
+        let mediaPlayerProvider = MediaPlayerProvider()
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           mediaProvider: userSession.mediaProvider,
@@ -357,6 +357,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
+                                                         mediaPlayerProvider: mediaPlayerProvider,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
                                                          appSettings: appSettings)

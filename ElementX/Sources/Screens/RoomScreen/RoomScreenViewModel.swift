@@ -38,6 +38,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let notificationCenterProtocol: NotificationCenterProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
 
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
 
@@ -47,6 +48,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
          roomProxy: RoomProxyProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
@@ -58,7 +60,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
-        voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder())
+        self.mediaPlayerProvider = mediaPlayerProvider
+        voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -206,10 +209,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .cancelVoiceMessageRecording:
             Task { try? await cancelRecordingVoiceMessage() }
         case .deleteVoiceMessageRecording:
-            deleteCurrentVoiceMessage()
+            Task { await deleteCurrentVoiceMessage() }
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
+            timelineController.pauseAudio()
             Task { await startPlayingRecordedVoiceMessage() }
         case .pauseVoiceMessagePlayback:
             pausePlayingRecordedVoiceMessage()
@@ -241,6 +245,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     if self.state.timelineViewState.isBackPaginating != isBackPaginating {
                         self.state.timelineViewState.isBackPaginating = isBackPaginating
                     }
+                case .startPlayingAudio:
+                    Task { await self.stopVoiceMessageRecorder() }
                 }
             }
             .store(in: &cancellables)
@@ -934,11 +940,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Voice message
     
+    private func stopVoiceMessageRecorder() async {
+        try? await voiceMessageRecorder.stop()
+    }
+    
     private func startRecordingVoiceMessage() async {
         let audioRecorder = voiceMessageRecorder.startRecording()
         let audioRecordState = AudioRecorderState()
-        audioRecordState.attachAudioRecorder(audioRecorder)
-        actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        do {
+            try await audioRecordState.attachAudioRecorder(audioRecorder)
+            actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        } catch {
+            MXLog.error("failed to start voice message recording: \(error)")
+        }
     }
     
     private func stopRecordingVoiceMessage() async {
@@ -962,9 +976,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
-    private func deleteCurrentVoiceMessage() {
-        voiceMessageRecorder.stopRecordedVoiceMessagePlayback()
-        voiceMessageRecorder.deleteRecordedVoiceMessage()
+    private func deleteCurrentVoiceMessage() async {
+        await voiceMessageRecorder.stopPlayback()
+        voiceMessageRecorder.deleteRecording()
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
@@ -973,7 +987,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("failed to send the voice message: no recorded file")
             return
         }
-        voiceMessageRecorder.stopRecordedVoiceMessagePlayback()
+        await voiceMessageRecorder.stopPlayback()
         
         do {
             // convert the file
@@ -1005,15 +1019,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func startPlayingRecordedVoiceMessage() async {
-        await voiceMessageRecorder.startRecordedVoiceMessagePlayback()
+        do {
+            try await voiceMessageRecorder.startPlayback()
+        } catch {
+            MXLog.error("failed to play recorded voice message: \(error)")
+        }
     }
     
     private func pausePlayingRecordedVoiceMessage() {
-        voiceMessageRecorder.pauseRecordedVoiceMessagePlayback()
+        voiceMessageRecorder.pausePlayback()
     }
     
     private func seekRecordedVoiceMessage(to progress: Double) async {
-        await voiceMessageRecorder.seekRecordedVoiceMessagePlayback(to: progress)
+        await voiceMessageRecorder.seekPlayback(to: progress)
     }
 }
 
@@ -1042,6 +1060,7 @@ extension RoomScreenViewModel.Context {
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
