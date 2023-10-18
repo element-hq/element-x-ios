@@ -38,9 +38,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     private var cancellables: Set<AnyCancellable> = []
     private var displayLink: CADisplayLink?
 
-    var playingURL: URL? {
-        audioPlayer?.url
-    }
+    private(set) var fileURL: URL?
 
     var isAttached: Bool {
         audioPlayer != nil
@@ -114,6 +112,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
             playbackState = .loading
         case .didFinishLoading:
             playbackState = .readyToPlay
+            fileURL = audioPlayer?.url
         case .didStartPlaying:
             if let audioPlayer {
                 await restoreAudioPlayerState(audioPlayer: audioPlayer)

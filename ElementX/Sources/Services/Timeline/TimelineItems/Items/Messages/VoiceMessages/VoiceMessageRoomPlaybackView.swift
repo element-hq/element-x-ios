@@ -111,7 +111,7 @@ struct VoiceMessageRoomPlaybackView: View {
                         })
             }
         }
-        .animation(.elementDefault, value: playerState.playingURL)
+        .animation(.elementDefault, value: playerState.fileURL)
         .onChange(of: dragState) { newDragState in
             switch newDragState {
             case .inactive:
@@ -161,7 +161,7 @@ struct VoiceMessageRoomPlaybackView: View {
 
     @ViewBuilder
     private var waveformView: some View {
-        if let url = playerState.playingURL {
+        if let url = playerState.fileURL {
             WaveformView(audioURL: url,
                          configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding)),
                                               verticalScalingFactor: 1.0))
