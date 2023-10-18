@@ -34,63 +34,63 @@ class AppLockTimerTests: XCTestCase {
     
     func testTimerLockedOnStartup() {
         setupTimer(unlocked: false)
-        XCTAssertTrue(timer.needsUnlock(date: now),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now),
                       "The app should be locked on a fresh launch.")
         
         setupTimer(unlocked: false)
-        XCTAssertTrue(timer.needsUnlock(date: now + 1),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + 1),
                       "The app should be locked after a fresh launch.")
         
         setupTimer(unlocked: false)
-        XCTAssertTrue(timer.needsUnlock(date: now + halfGracePeriod),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + halfGracePeriod),
                       "The app should be locked after a fresh launch.")
         
         setupTimer(unlocked: false)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriod),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriod),
                       "The app should be locked after a fresh launch.")
         
         setupTimer(unlocked: false)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriodX10),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriodX10),
                       "The app should be locked after a fresh launch.")
     }
     
     func testTimerBeforeFirstUnlock() {
         setupTimer(unlocked: false, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now),
                       "The app should always remain locked after backgrounding when locked.")
         
         setupTimer(unlocked: false, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + 1),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + 1),
                       "The app should always remain locked after backgrounding when locked.")
         
         setupTimer(unlocked: false, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + halfGracePeriod),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + halfGracePeriod),
                       "The app should always remain locked after backgrounding when locked.")
         
         setupTimer(unlocked: false, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriod),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriod),
                       "The app should always remain locked after backgrounding when locked.")
         
         setupTimer(unlocked: false, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriodX10),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriodX10),
                       "The app should always remain locked after backgrounding when locked.")
     }
     
     func testTimerWhenUnlocked() {
         setupTimer(unlocked: true, backgroundedAt: now)
-        XCTAssertFalse(timer.needsUnlock(date: now + 1),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: now + 1),
                        "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         
         setupTimer(unlocked: true, backgroundedAt: now)
-        XCTAssertFalse(timer.needsUnlock(date: now + halfGracePeriod),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: now + halfGracePeriod),
                        "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         
         setupTimer(unlocked: true, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriod),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriod),
                       "The app should become locked when it was unlocked and backgrounded for more than the grace period.")
         
         setupTimer(unlocked: true, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now + gracePeriodX10),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now + gracePeriodX10),
                       "The app should become locked when it was unlocked and backgrounded for more than the grace period.")
     }
     
@@ -98,27 +98,27 @@ class AppLockTimerTests: XCTestCase {
         setupTimer(unlocked: true, backgroundedAt: now)
         
         var nextCheck = now + halfGracePeriod
-        XCTAssertFalse(timer.needsUnlock(date: nextCheck),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: nextCheck),
                        "The app should remain unlocked when it was unlocked and backgrounded for less then the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
         nextCheck = now + gracePeriod
-        XCTAssertFalse(timer.needsUnlock(date: nextCheck),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: nextCheck),
                        "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
         nextCheck = now + gracePeriod + halfGracePeriod
-        XCTAssertFalse(timer.needsUnlock(date: nextCheck),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: nextCheck),
                        "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
         nextCheck = now + gracePeriodX2
-        XCTAssertFalse(timer.needsUnlock(date: nextCheck),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: nextCheck),
                        "The app should remain unlocked when repeating the backgrounded and foreground within the grace period.")
         timer.applicationDidEnterBackground(date: nextCheck)
         
         nextCheck = now + gracePeriodX10
-        XCTAssertTrue(timer.needsUnlock(date: nextCheck),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: nextCheck),
                       "The app should become locked however when finally staying backgrounded for longer than the grace period.")
     }
     
@@ -128,13 +128,13 @@ class AppLockTimerTests: XCTestCase {
         let backgroundDate = now + gracePeriodX10
         timer.applicationDidEnterBackground(date: backgroundDate)
         
-        XCTAssertFalse(timer.needsUnlock(date: backgroundDate + 1),
+        XCTAssertFalse(timer.computeLockState(willEnterForegroundAt: backgroundDate + 1),
                        "The grace period should be measured from the time the app was backgrounded, and not when it was unlocked.")
     }
     
     func testChangingTimeLocksApp() {
         setupTimer(unlocked: true, backgroundedAt: now)
-        XCTAssertTrue(timer.needsUnlock(date: now - 1),
+        XCTAssertTrue(timer.computeLockState(willEnterForegroundAt: now - 1),
                       "The the device's clock is changed to before the app was backgrounded, the device should remain locked.")
     }
     

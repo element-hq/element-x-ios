@@ -42,13 +42,13 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
-                self?.showPlaceholderIfNeeded()
+                self?.applicationDidEnterBackground()
             }
             .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { [weak self] _ in
-                self?.showUnlockScreenIfNeeded()
+                self?.applicationWillEnterForeground()
             }
             .store(in: &cancellables)
     }
@@ -59,18 +59,26 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     // MARK: - App unlock
     
-    /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.
-    private func showPlaceholderIfNeeded() {
+    private func applicationDidEnterBackground() {
         guard appLockService.isEnabled else { return }
         
+        appLockService.applicationDidEnterBackground()
+        showPlaceholder()
+    }
+    
+    private func applicationWillEnterForeground() {
+        guard appLockService.isEnabled, appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) else { return }
+        showUnlockScreen()
+    }
+    
+    /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.
+    private func showPlaceholder() {
         navigationCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(), animated: false)
         actionsSubject.send(.lockApp)
     }
     
     /// Displays the unlock flow with the main unlock screen.
-    private func showUnlockScreenIfNeeded() {
-        guard appLockService.isEnabled, appLockService.needsUnlock else { return }
-        
+    private func showUnlockScreen() {
         let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

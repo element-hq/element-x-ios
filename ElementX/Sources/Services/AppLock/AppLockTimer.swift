@@ -41,8 +41,8 @@ class AppLockTimer {
         lastUnlockedBackground = date
     }
     
-    /// Asks the timer whether the app should be unlocked to be accessed.
-    func needsUnlock(date: Date = .now) -> Bool {
+    /// Asks the timer to recompute the lock state on foregrounding.
+    func computeLockState(willEnterForegroundAt date: Date) -> Bool {
         guard !isLocked, let lastUnlockedBackground else { return true }
         
         isLocked = date.timeIntervalSince(lastUnlockedBackground) >= gracePeriod

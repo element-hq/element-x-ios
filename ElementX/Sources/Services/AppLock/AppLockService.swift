@@ -33,8 +33,6 @@ protocol AppLockServiceProtocol {
     var biometryType: LABiometryType { get }
     /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.
     var biometricUnlockEnabled: Bool { get set }
-    /// The app should be unlocked with a PIN code/biometrics before being presented.
-    var needsUnlock: Bool { get }
     
     /// Sets the user's PIN code used to unlock the app.
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
@@ -43,6 +41,8 @@ protocol AppLockServiceProtocol {
     
     /// Informs the service that the app has entered the background.
     func applicationDidEnterBackground()
+    /// Decides whether the app should be unlocked with a PIN code/biometrics on foregrounding.
+    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool
     
     /// Attempt to unlock the app with the supplied PIN code.
     func unlock(with pinCode: String) -> Bool
@@ -72,10 +72,6 @@ class AppLockService: AppLockServiceProtocol {
     var biometryType: LABiometryType { context.biometryType }
     var biometricUnlockEnabled = false // Needs to be stored, not sure if in the keychain or defaults yet.
     
-    var needsUnlock: Bool {
-        timer.needsUnlock()
-    }
-    
     init(keychainController: KeychainControllerProtocol, appSettings: AppSettings) {
         self.keychainController = keychainController
         self.appSettings = appSettings
@@ -102,6 +98,10 @@ class AppLockService: AppLockServiceProtocol {
     
     func applicationDidEnterBackground() {
         timer.applicationDidEnterBackground()
+    }
+    
+    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool {
+        timer.computeLockState(willEnterForegroundAt: date)
     }
     
     func unlock(with pinCode: String) -> Bool {
