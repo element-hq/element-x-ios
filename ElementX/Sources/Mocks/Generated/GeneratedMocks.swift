@@ -2837,6 +2837,11 @@ class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
     }
 }
 class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
+    var audioRecorder: AudioRecorderProtocol {
+        get { return underlyingAudioRecorder }
+        set(value) { underlyingAudioRecorder = value }
+    }
+    var underlyingAudioRecorder: AudioRecorderProtocol!
     var previewPlayerState: AudioPlayerState?
     var recordingURL: URL?
     var recordingDuration: TimeInterval {
@@ -2852,17 +2857,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     var startRecordingCalled: Bool {
         return startRecordingCallsCount > 0
     }
-    var startRecordingReturnValue: AudioRecorderProtocol!
-    var startRecordingClosure: (() -> AudioRecorderProtocol)?
+    var startRecordingClosure: (() -> Void)?
 
-    @MainActor
-    func startRecording() -> AudioRecorderProtocol {
+    func startRecording() {
         startRecordingCallsCount += 1
-        if let startRecordingClosure = startRecordingClosure {
-            return startRecordingClosure()
-        } else {
-            return startRecordingReturnValue
-        }
+        startRecordingClosure?()
     }
     //MARK: - stopRecording
 
@@ -2963,22 +2962,6 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     func deleteRecording() {
         deleteRecordingCallsCount += 1
         deleteRecordingClosure?()
-    }
-    //MARK: - stop
-
-    var stopThrowableError: Error?
-    var stopCallsCount = 0
-    var stopCalled: Bool {
-        return stopCallsCount > 0
-    }
-    var stopClosure: (() async throws -> Void)?
-
-    func stop() async throws {
-        if let error = stopThrowableError {
-            throw error
-        }
-        stopCallsCount += 1
-        try await stopClosure?()
     }
 }
 // swiftlint:enable all

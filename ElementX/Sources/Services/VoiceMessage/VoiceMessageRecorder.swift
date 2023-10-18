@@ -18,10 +18,12 @@ import DSWaveformImage
 import Foundation
 
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
-    private let audioRecorder: AudioRecorderProtocol
+    let audioRecorder: AudioRecorderProtocol
     private let audioConverter: AudioConverterProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    
+    private let mp4accMimeType = "audio/m4a"
     
     var recordingURL: URL? {
         audioRecorder.url
@@ -41,23 +43,17 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         self.audioConverter = audioConverter
         self.voiceMessageCache = voiceMessageCache
     }
-
-    func stop() async throws {
-        if audioRecorder.isRecording {
-            try await stopRecording()
-        }
-        await stopPlayback()
-    }
     
     // MARK: - Recording
     
-    @MainActor
-    func startRecording() -> AudioRecorderProtocol {
+    func startRecording() {
         audioRecorder.record()
-        return audioRecorder
     }
     
     func stopRecording() async throws {
+        guard audioRecorder.isRecording else {
+            return
+        }
         recordingDuration = audioRecorder.currentTime
         try await audioRecorder.stopRecording()
         
@@ -100,7 +96,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         }
         
         await previewPlayerState.attachAudioPlayer(audioPlayer)
-        let pendingMediaSource = MediaSourceProxy(url: url, mimeType: "audio/m4a")
+        let pendingMediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
         audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
     }
     
@@ -131,7 +127,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         guard let url = audioRecorder.url else {
             throw VoiceMessageRecorderError.previewNotAvailable
         }
-        let mediaSource = MediaSourceProxy(url: url, mimeType: "audio/m4a")
+        let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
         guard let audioPlayer = try mediaPlayerProvider.player(for: mediaSource) as? AudioPlayerProtocol else {
             throw VoiceMessageRecorderError.previewNotAvailable
         }

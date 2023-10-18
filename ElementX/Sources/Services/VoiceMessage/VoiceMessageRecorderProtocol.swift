@@ -22,12 +22,13 @@ enum VoiceMessageRecorderError: Error {
 }
 
 protocol VoiceMessageRecorderProtocol {
+    var audioRecorder: AudioRecorderProtocol { get }
     var previewPlayerState: AudioPlayerState? { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
     var recordingWaveform: Waveform? { get }
     
-    @MainActor func startRecording() -> AudioRecorderProtocol
+    func startRecording()
     func stopRecording() async throws
     func cancelRecording() async throws
     func startPlayback() async throws
@@ -35,8 +36,6 @@ protocol VoiceMessageRecorderProtocol {
     func stopPlayback() async
     func seekPlayback(to progress: Double) async
     func deleteRecording()
-    
-    func stop() async throws
 }
 
 // sourcery: AutoMockable

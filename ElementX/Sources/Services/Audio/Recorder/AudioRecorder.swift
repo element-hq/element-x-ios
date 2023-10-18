@@ -47,8 +47,6 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func record() {
-        MXLog.debug("recording")
-        
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: 48000,
                         AVEncoderBitRateKey: 128_000,
@@ -71,32 +69,13 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func stopRecording() async throws {
-        MXLog.debug("stop recording")
-        guard let audioRecorder else {
+        guard let audioRecorder, audioRecorder.isRecording else {
             return
         }
-
         audioRecorder.stop()
-        try await withCheckedThrowingContinuation { continuation in
-            actions
-                .first()
-                .sink { action in
-                    switch action {
-                    case .didStopRecording:
-                        continuation.resume()
-                    case .didFailWithError(let error):
-                        continuation.resume(throwing: error)
-                    default:
-                        break
-                    }
-                }
-                .store(in: &cancellables)
-        }
-        MXLog.debug("stopped!")
     }
     
     func deleteRecording() {
-        MXLog.debug("delete recording")
         audioRecorder?.deleteRecording()
     }
         
@@ -139,7 +118,6 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     // MARK: - AVAudioRecorderDelegate
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
-        MXLog.debug("audioRecorderDidFinishRecording successfully: \(success)")
         try? AVAudioSession.sharedInstance().setActive(false)
         if success {
             actionsSubject.send(.didStopRecording)
@@ -149,7 +127,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        MXLog.debug("audioRecorderEncodeErrorDidOccur: \(error)")
+        try? AVAudioSession.sharedInstance().setActive(false)
         actionsSubject.send(.didFailWithError(error: error ?? AudioRecorderError.genericError))
     }
     

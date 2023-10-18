@@ -941,18 +941,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Voice message
     
     private func stopVoiceMessageRecorder() async {
-        try? await voiceMessageRecorder.stop()
+        try? await voiceMessageRecorder.stopRecording()
+        await voiceMessageRecorder.stopPlayback()
     }
     
     private func startRecordingVoiceMessage() async {
-        let audioRecorder = voiceMessageRecorder.startRecording()
         let audioRecordState = AudioRecorderState()
         do {
-            try await audioRecordState.attachAudioRecorder(audioRecorder)
+            try await audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
         } catch {
             MXLog.error("failed to start voice message recording: \(error)")
         }
+        voiceMessageRecorder.startRecording()
     }
     
     private func stopRecordingVoiceMessage() async {
@@ -1004,7 +1005,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                           audioInfo: audioInfo,
                                                           waveform: waveform?.data ?? [],
                                                           progressSubject: nil) { _ in }
-            
             // delete the temporary file
             try? FileManager.default.removeItem(at: oggFile)
             
