@@ -162,7 +162,9 @@ struct VoiceMessageRoomPlaybackView: View {
     @ViewBuilder
     private var waveformView: some View {
         if let url = playerState.playingURL {
-            WaveformView(audioURL: url, configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding))))
+            WaveformView(audioURL: url,
+                         configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding)),
+                                              verticalScalingFactor: 1.0))
                 .progressMask(progress: playerState.progress)
         } else {
             EstimatedWaveformView(lineWidth: waveformLineWidth,
