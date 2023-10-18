@@ -47,6 +47,8 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func record() {
+        MXLog.debug("recording")
+        
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: 48000,
                         AVEncoderBitRateKey: 128_000,
@@ -67,21 +69,37 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             actionsSubject.send(.didFailWithError(error: error))
         }
     }
-
-    func stopRecording() {
-        audioRecorder?.stop()
-
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            actionsSubject.send(.didFailWithError(error: error))
+    
+    func stopRecording() async throws {
+        MXLog.debug("stop recording")
+        guard let audioRecorder else {
+            return
         }
+
+        audioRecorder.stop()
+        try await withCheckedThrowingContinuation { continuation in
+            actions
+                .first()
+                .sink { action in
+                    switch action {
+                    case .didStopRecording:
+                        continuation.resume()
+                    case .didFailWithError(let error):
+                        continuation.resume(throwing: error)
+                    default:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+        }
+        MXLog.debug("stopped!")
     }
     
     func deleteRecording() {
+        MXLog.debug("delete recording")
         audioRecorder?.deleteRecording()
     }
-    
+        
     func peakPowerForChannelNumber(_ channelNumber: Int) -> Float {
         guard isRecording, let audioRecorder else {
             return 0.0
@@ -109,7 +127,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.stopRecording()
+                Task { try? await self.stopRecording() }
             }
             .store(in: &cancellables)
     }
@@ -121,6 +139,8 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     // MARK: - AVAudioRecorderDelegate
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {
+        MXLog.debug("audioRecorderDidFinishRecording successfully: \(success)")
+        try? AVAudioSession.sharedInstance().setActive(false)
         if success {
             actionsSubject.send(.didStopRecording)
         } else {
@@ -129,6 +149,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
+        MXLog.debug("audioRecorderEncodeErrorDidOccur: \(error)")
         actionsSubject.send(.didFailWithError(error: error ?? AudioRecorderError.genericError))
     }
     

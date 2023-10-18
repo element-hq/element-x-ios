@@ -29,9 +29,11 @@ protocol VoiceMessageRecorderProtocol {
     
     @MainActor func startRecording() -> AudioRecorderProtocol
     func stopRecording() async throws
-    func startPlayingRecordedVoiceMessage() async
-    func stopPlayingRecordedVoiceMessage()
-    func seekRecordedVoiceMessage(to progress: Double) async
+    func cancelRecording() async throws
+    func startRecordedVoiceMessagePlayback() async
+    func pauseRecordedVoiceMessagePlayback()
+    func stopRecordedVoiceMessagePlayback()
+    func seekRecordedVoiceMessagePlayback(to progress: Double) async
     func deleteRecordedVoiceMessage()
 }
 
@@ -68,7 +70,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func stopRecording() async throws {
         recordingDuration = audioRecorder.currentTime
-        audioRecorder.stopRecording()
+        try await audioRecorder.stopRecording()
                         
         // TODO: waveform analysis
         let waveform: [UInt16] = []
@@ -78,9 +80,14 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         previewPlayerState = audioPlayerState
     }
     
+    func cancelRecording() async throws {
+        try await audioRecorder.stopRecording()
+        audioRecorder.deleteRecording()
+    }
+    
     // MARK: - Preview
     
-    func startPlayingRecordedVoiceMessage() async {
+    func startRecordedVoiceMessagePlayback() async {
         guard let previewPlayerState, let url = audioRecorder.url else {
             MXLog.error("no available preview")
             return
@@ -99,11 +106,15 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
     }
     
-    func stopPlayingRecordedVoiceMessage() {
+    func pauseRecordedVoiceMessagePlayback() {
         audioPlayer?.pause()
     }
     
-    func seekRecordedVoiceMessage(to progress: Double) async {
+    func stopRecordedVoiceMessagePlayback() {
+        audioPlayer?.stop()
+    }
+    
+    func seekRecordedVoiceMessagePlayback(to progress: Double) async {
         await previewPlayerState?.updateState(progress: progress)
     }
     

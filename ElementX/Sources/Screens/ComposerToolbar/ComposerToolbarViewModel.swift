@@ -144,19 +144,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         case .selectedSuggestion(let suggestion):
             handleSuggestion(suggestion)
-        case .startRecordingVoiceMessage:
+        case .startVoiceMessageRecording:
             state.bindings.composerActionsEnabled = false
-            actionsSubject.send(.startRecordingVoiceMessage)
-        case .stopRecordingVoiceMessage:
-            actionsSubject.send(.stopRecordingVoiceMessage)
-        case .deleteRecordedVoiceMessage:
-            actionsSubject.send(.deleteRecordedVoiceMessage)
-        case .startPlayingRecordedVoiceMessage:
-            actionsSubject.send(.startPlayingRecordedVoiceMessage)
-        case .stopPlayingRecordedVoiceMessage:
-            actionsSubject.send(.stopPlayingRecordedVoiceMessage)
-        case .seekRecordedVoiceMessage(let progress):
-            actionsSubject.send(.seekRecordedVoiceMessage(progress: progress))
+            actionsSubject.send(.startVoiceMessageRecording)
+        case .stopVoiceMessageRecording:
+            actionsSubject.send(.stopVoiceMessageRecording)
+        case .cancelVoiceMessageRecording:
+            actionsSubject.send(.cancelVoiceMessageRecording)
+        case .deleteVoiceMessageRecording:
+            actionsSubject.send(.deleteVoiceMessageRecording)
+        case .startVoiceMessagePlayback:
+            actionsSubject.send(.startVoiceMessagePlayback)
+        case .pauseVoiceMessagePlayback:
+            actionsSubject.send(.pauseVoiceMessagePlayback)
+        case .seekVoiceMessagePlayback(let progress):
+            actionsSubject.send(.seekVoiceMessagePlayback(progress: progress))
         }
     }
 

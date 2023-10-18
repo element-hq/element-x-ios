@@ -198,20 +198,22 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
-        case .startRecordingVoiceMessage:
+        case .startVoiceMessageRecording:
             timelineController.pauseAudio()
             Task { await startRecordingVoiceMessage() }
-        case .stopRecordingVoiceMessage:
+        case .stopVoiceMessageRecording:
             Task { await stopRecordingVoiceMessage() }
-        case .deleteRecordedVoiceMessage:
+        case .cancelVoiceMessageRecording:
+            Task { try? await cancelRecordingVoiceMessage() }
+        case .deleteVoiceMessageRecording:
             deleteCurrentVoiceMessage()
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
-        case .startPlayingRecordedVoiceMessage:
+        case .startVoiceMessagePlayback:
             Task { await startPlayingRecordedVoiceMessage() }
-        case .stopPlayingRecordedVoiceMessage:
-            stopPlayingRecordedVoiceMessage()
-        case .seekRecordedVoiceMessage(let progress):
+        case .pauseVoiceMessagePlayback:
+            pausePlayingRecordedVoiceMessage()
+        case .seekVoiceMessagePlayback(let progress):
             Task { await seekRecordedVoiceMessage(to: progress) }
         }
     }
@@ -933,16 +935,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Voice message
     
     private func startRecordingVoiceMessage() async {
-        MXLog.debug("start recording voice message")
         let audioRecorder = voiceMessageRecorder.startRecording()
         let audioRecordState = AudioRecorderState()
         audioRecordState.attachAudioRecorder(audioRecorder)
         actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
-        MXLog.debug("start recording voice message: DONE")
     }
     
     private func stopRecordingVoiceMessage() async {
-        MXLog.debug("stop recording voice message")
         do {
             try await voiceMessageRecorder.stopRecording()
         } catch {
@@ -956,12 +955,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
-        MXLog.debug("stop recording voice message: DONE")
+    }
+    
+    private func cancelRecordingVoiceMessage() async throws {
+        try await voiceMessageRecorder.cancelRecording()
+        actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
     private func deleteCurrentVoiceMessage() {
+        voiceMessageRecorder.stopRecordedVoiceMessagePlayback()
         voiceMessageRecorder.deleteRecordedVoiceMessage()
-
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
@@ -970,6 +973,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("failed to send the voice message: no recorded file")
             return
         }
+        voiceMessageRecorder.stopRecordedVoiceMessagePlayback()
         
         do {
             // convert the file
@@ -1001,15 +1005,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func startPlayingRecordedVoiceMessage() async {
-        await voiceMessageRecorder.startPlayingRecordedVoiceMessage()
+        await voiceMessageRecorder.startRecordedVoiceMessagePlayback()
     }
     
-    private func stopPlayingRecordedVoiceMessage() {
-        voiceMessageRecorder.stopPlayingRecordedVoiceMessage()
+    private func pausePlayingRecordedVoiceMessage() {
+        voiceMessageRecorder.pauseRecordedVoiceMessagePlayback()
     }
     
     private func seekRecordedVoiceMessage(to progress: Double) async {
-        await voiceMessageRecorder.seekRecordedVoiceMessage(to: progress)
+        await voiceMessageRecorder.seekRecordedVoiceMessagePlayback(to: progress)
     }
 }
 

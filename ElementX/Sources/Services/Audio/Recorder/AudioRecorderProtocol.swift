@@ -30,7 +30,7 @@ protocol AudioRecorderProtocol: AnyObject {
     var url: URL? { get }
     
     func record()
-    func stopRecording()
+    func stopRecording() async throws
     func deleteRecording()
     func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
 }
