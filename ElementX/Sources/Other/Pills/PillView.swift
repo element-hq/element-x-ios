@@ -58,7 +58,7 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
             // To simulate the trimming that happens at UIKit level
-            .frame(maxWidth: PillConstants.maxWidth)
+            .previewDisplayName("Loaded Long Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .allUsers)) { }
             .previewDisplayName("All Users")
