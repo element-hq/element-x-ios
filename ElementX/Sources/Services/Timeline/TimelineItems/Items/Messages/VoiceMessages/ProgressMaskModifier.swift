@@ -17,28 +17,35 @@
 import SwiftUI
 
 extension View {
-    func progressMask(progress: CGFloat) -> some View {
-        modifier(ProgressMaskModifier(progress: progress))
+    func progressMask(progress: CGFloat,
+                      trackColor: Color = .compound.iconSecondary,
+                      backgroundTrackColor: Color = .compound.iconQuaternary) -> some View {
+        modifier(ProgressMaskModifier(progress: progress,
+                                      trackColor: trackColor,
+                                      backgroundTrackColor: backgroundTrackColor))
     }
 }
 
-#warning("ag: add parameters for colors")
 private struct ProgressMaskModifier: ViewModifier {
     private let progress: CGFloat
+    private let trackColor: Color
+    private let backgroundTrackColor: Color
 
-    init(progress: CGFloat) {
+    init(progress: CGFloat, trackColor: Color, backgroundTrackColor: Color) {
         self.progress = progress
+        self.trackColor = trackColor
+        self.backgroundTrackColor = backgroundTrackColor
     }
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .fill(Color.compound.iconQuaternary)
+                    .fill(backgroundTrackColor)
                     .frame(width: geometry.size.width, height: geometry.size.height)
                 
                 Rectangle()
-                    .fill(Color.compound.iconSecondary)
+                    .fill(trackColor)
                     .frame(width: max(0.0, geometry.size.width * progress), height: geometry.size.height)
             }
             .mask {
