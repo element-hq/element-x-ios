@@ -31,6 +31,7 @@ class AudioRecorderStateTests: XCTestCase {
         
     private func buildAudioRecorderMock() -> AudioRecorderMock {
         let audioRecorderMock = AudioRecorderMock()
+        audioRecorderMock.isRecording = false
         audioRecorderMock.underlyingActions = audioRecorderActions
         audioRecorderMock.currentTime = 0.0
         return audioRecorderMock
@@ -43,15 +44,15 @@ class AudioRecorderStateTests: XCTestCase {
     }
     
     func testAttach() async throws {
-        audioRecorderState.attachAudioRecorder(audioRecorderMock)
+        try await audioRecorderState.attachAudioRecorder(audioRecorderMock)
         
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
     }
     
     func testDetach() async throws {
-        audioRecorderState.attachAudioRecorder(audioRecorderMock)
-        
-        audioRecorderState.detachAudioRecorder()
+        try await audioRecorderState.attachAudioRecorder(audioRecorderMock)
+        audioRecorderMock.isRecording = true
+        try await audioRecorderState.detachAudioRecorder()
         XCTAssert(audioRecorderMock.stopRecordingCalled)
         XCTAssertEqual(audioRecorderState.recordingState, .stopped)
     }
@@ -63,7 +64,7 @@ class AudioRecorderStateTests: XCTestCase {
     }
     
     func testHandlingAudioRecorderActionDidStartRecording() async throws {
-        audioRecorderState.attachAudioRecorder(audioRecorderMock)
+        try await audioRecorderState.attachAudioRecorder(audioRecorderMock)
 
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
             switch action {
@@ -80,7 +81,7 @@ class AudioRecorderStateTests: XCTestCase {
     }
 
     func testHandlingAudioPlayerActionDidStopRecording() async throws {
-        audioRecorderState.attachAudioRecorder(audioRecorderMock)
+        try await audioRecorderState.attachAudioRecorder(audioRecorderMock)
 
         let deferred = deferFulfillment(audioRecorderState.$recordingState) { action in
             switch action {

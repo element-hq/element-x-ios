@@ -37,9 +37,6 @@ class AudioRecorderState: ObservableObject, Identifiable {
     private var displayLink: CADisplayLink?
     
     func attachAudioRecorder(_ audioRecorder: AudioRecorderProtocol) async throws {
-        if self.audioRecorder != nil {
-            try await detachAudioRecorder()
-        }
         recordingState = .stopped
         self.audioRecorder = audioRecorder
         subscribeToAudioRecorder(audioRecorder)
@@ -49,8 +46,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
     }
     
     func detachAudioRecorder() async throws {
-        guard let audioRecorder else { return }
-        if audioRecorder.isRecording == true {
+        if let audioRecorder, audioRecorder.isRecording {
             try await audioRecorder.stopRecording()
         }
         stopPublishUpdates()

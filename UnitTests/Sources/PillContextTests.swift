@@ -28,6 +28,7 @@ class PillContextTests: XCTestCase {
         proxyMock.members = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),
+                                       mediaPlayerProvider: MediaPlayerProviderMock(),
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,
@@ -59,6 +60,7 @@ class PillContextTests: XCTestCase {
         proxyMock.members = subject.asCurrentValuePublisher()
         let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                        mediaProvider: MockMediaProvider(),
+                                       mediaPlayerProvider: MediaPlayerProviderMock(),
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,
@@ -77,6 +79,7 @@ class PillContextTests: XCTestCase {
         mockController.roomProxy = proxyMock
         let mock = RoomScreenViewModel(timelineController: mockController,
                                        mediaProvider: MockMediaProvider(),
+                                       mediaPlayerProvider: MediaPlayerProviderMock(),
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,

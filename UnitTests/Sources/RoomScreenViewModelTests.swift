@@ -51,6 +51,7 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: RoomProxyMock(with: .init(displayName: "")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -84,6 +85,7 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: RoomProxyMock(with: .init(displayName: "")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -115,6 +117,7 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: RoomProxyMock(with: .init(displayName: "")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -143,6 +146,7 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: RoomProxyMock(with: .init(displayName: "")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -171,6 +175,7 @@ class RoomScreenViewModelTests: XCTestCase {
         timelineController.timelineItems = items
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: RoomProxyMock(with: .init(displayName: "")),
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -195,6 +200,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -233,6 +239,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -272,6 +279,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -303,6 +311,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -322,6 +331,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -340,6 +350,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -359,6 +370,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxyMock,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
@@ -495,6 +507,7 @@ class RoomScreenViewModelTests: XCTestCase {
 
         let viewModel = RoomScreenViewModel(timelineController: timelineController,
                                             mediaProvider: MockMediaProvider(),
+                                            mediaPlayerProvider: MediaPlayerProviderMock(),
                                             roomProxy: roomProxy,
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
