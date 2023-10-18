@@ -38,6 +38,8 @@ class AudioPlayerState: ObservableObject, Identifiable {
     private var cancellables: Set<AnyCancellable> = []
     private var displayLink: CADisplayLink?
 
+    /// The file url that the last player attached to this object has loaded.
+    /// The file url persists even if the AudioPlayer will be detached later.
     private(set) var fileURL: URL?
 
     var isAttached: Bool {
