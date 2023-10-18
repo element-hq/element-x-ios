@@ -57,7 +57,7 @@ class AppLockServiceTests: XCTestCase {
         XCTAssertFalse(service.unlock(with: "9999"), "No other PIN code should work.")
     }
     
-    func testInvalidPINCode() {
+    func testWeakPINCode() {
         // Given a service that hasn't been enabled.
         XCTAssertFalse(service.isEnabled, "The service shouldn't be enabled to begin with.")
         
@@ -71,6 +71,40 @@ class AppLockServiceTests: XCTestCase {
             return
         }
         XCTAssertEqual(error, .weakPIN, "The PIN should be rejected as weak.")
+        XCTAssertFalse(service.isEnabled, "The service should remain disabled.")
+    }
+    
+    func testShortPINCode() {
+        // Given a service that hasn't been enabled.
+        XCTAssertFalse(service.isEnabled, "The service shouldn't be enabled to begin with.")
+        
+        // When setting a PIN code that is too short
+        let pinCode = "123"
+        let result = service.setupPINCode(pinCode)
+        
+        // Then the setup should fail and the service be left as disabled.
+        guard case let .failure(error) = result else {
+            XCTFail("The call should have failed.")
+            return
+        }
+        XCTAssertEqual(error, .invalidPIN, "The PIN should be rejected as invalid.")
+        XCTAssertFalse(service.isEnabled, "The service should remain disabled.")
+    }
+    
+    func testNonNumericPINCode() {
+        // Given a service that hasn't been enabled.
+        XCTAssertFalse(service.isEnabled, "The service shouldn't be enabled to begin with.")
+        
+        // When setting a PIN code that is too short
+        let pinCode = "abcd"
+        let result = service.setupPINCode(pinCode)
+        
+        // Then the setup should fail and the service be left as disabled.
+        guard case let .failure(error) = result else {
+            XCTFail("The call should have failed.")
+            return
+        }
+        XCTAssertEqual(error, .invalidPIN, "The PIN should be rejected as invalid.")
         XCTAssertFalse(service.isEnabled, "The service should remain disabled.")
     }
     

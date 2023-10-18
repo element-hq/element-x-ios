@@ -17,7 +17,7 @@
 import Foundation
 
 /// A timer that adds a grace-period to the app before locking it.
-struct AppLockTimer {
+class AppLockTimer {
     /// The amount of time the app should remain unlocked for whilst backgrounded.
     let gracePeriod: TimeInterval
     
@@ -35,14 +35,14 @@ struct AppLockTimer {
     }
     
     /// Signals to the timer to track how long the app will be backgrounded for.
-    mutating func applicationDidEnterBackground(date: Date = .now) {
+    func applicationDidEnterBackground(date: Date = .now) {
         // Only update the last background date if the app is currently unlocked.
         guard !isLocked else { return }
         lastUnlockedBackground = date
     }
     
     /// Asks the timer whether the app should be unlocked to be accessed.
-    mutating func needsUnlock(date: Date = .now) -> Bool {
+    func needsUnlock(date: Date = .now) -> Bool {
         guard !isLocked, let lastUnlockedBackground else { return true }
         
         isLocked = date.timeIntervalSince(lastUnlockedBackground) >= gracePeriod
@@ -56,7 +56,7 @@ struct AppLockTimer {
     }
     
     /// Registers a successful unlock with the timer.
-    mutating func registerUnlock() {
+    func registerUnlock() {
         isLocked = false
     }
 }

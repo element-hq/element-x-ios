@@ -19,6 +19,8 @@ import LocalAuthentication
 enum AppLockServiceError: Error {
     /// The operation failed to access the keychain.
     case keychainError
+    /// The PIN code was rejected because it isn't long enough, or contains invalid characters.
+    case invalidPIN
     /// The PIN code was rejected as an insecure choice.
     case weakPIN
 }
@@ -54,7 +56,7 @@ class AppLockService: AppLockServiceProtocol {
     private let appSettings: AppSettings
     private let context = LAContext()
     
-    private var timer: AppLockTimer
+    private let timer: AppLockTimer
     
     var isEnabled: Bool {
         do {
@@ -81,8 +83,10 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError> {
+        guard validate(pinCode) else { return .failure(.invalidPIN) }
+        guard !appSettings.appLockPINCodeBlockList.contains(pinCode) else { return .failure(.weakPIN) }
+        
         do {
-            guard !appSettings.appLockPINCodeBlockList.contains(pinCode) else { return .failure(.weakPIN) }
             try keychainController.setPINCode(pinCode)
             return .success(())
         } catch {
@@ -111,6 +115,11 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     // MARK: - Private
+    
+    /// Ensures that a provided PIN code is long enough and only contains digits.
+    private func validate(_ pinCode: String) -> Bool {
+        pinCode.count == 4 && pinCode.allSatisfy(\.isNumber)
+    }
     
     /// Shared logic for completing an unlock via a PIN or biometry.
     private func completeUnlock() -> Bool {
