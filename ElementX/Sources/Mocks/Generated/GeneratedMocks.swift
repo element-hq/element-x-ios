@@ -2844,7 +2844,7 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         set(value) { underlyingRecordingDuration = value }
     }
     var underlyingRecordingDuration: TimeInterval!
-    var recordingWaveform: [UInt16] = []
+    var recordingWaveform: Waveform?
 
     //MARK: - startRecording
 

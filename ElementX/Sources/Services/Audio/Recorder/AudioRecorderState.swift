@@ -51,7 +51,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
         }
         stopPublishUpdates()
         cancellables = []
-        self.audioRecorder = nil
+        audioRecorder = nil
         recordingState = .stopped
     }
     

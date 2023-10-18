@@ -1002,7 +1002,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             let result = await roomProxy.sendVoiceMessage(url: oggFile,
                                                           audioInfo: audioInfo,
-                                                          waveform: waveform,
+                                                          waveform: waveform?.data ?? [],
                                                           progressSubject: nil) { _ in }
             
             // delete the temporary file

@@ -25,7 +25,7 @@ protocol VoiceMessageRecorderProtocol {
     var previewPlayerState: AudioPlayerState? { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
-    var recordingWaveform: [UInt16] { get }
+    var recordingWaveform: Waveform? { get }
     
     @MainActor func startRecording() -> AudioRecorderProtocol
     func stopRecording() async throws

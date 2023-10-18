@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import DSWaveformImage
 import Foundation
 
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
@@ -27,7 +28,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     private(set) var recordingDuration: TimeInterval = 0.0
-    private(set) var recordingWaveform: [UInt16] = []
+    private(set) var recordingWaveform: Waveform?
     
     private(set) var previewPlayerState: AudioPlayerState?
     
@@ -59,12 +60,23 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     func stopRecording() async throws {
         recordingDuration = audioRecorder.currentTime
         try await audioRecorder.stopRecording()
-                        
-        // TODO: waveform analysis
-        let waveform: [UInt16] = []
+        
+        var waveformData: [UInt16] = []
+        let analyzer = WaveformAnalyzer()
+        if let recordingURL {
+            do {
+                let samples = try await analyzer.samples(fromAudioAt: recordingURL, count: 100)
+                // linearly normalized to [0, 1] (1 -> -50 dB)
+                waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
+            } catch {
+                MXLog.error("Waveform analysis failed: \(error)")
+            }
+        }
+        let waveform = Waveform(data: waveformData)
+        recordingWaveform = waveform
         
         // Build the preview audio player state
-        let audioPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: Waveform(data: waveform))
+        let audioPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: waveform)
         previewPlayerState = audioPlayerState
     }
     
