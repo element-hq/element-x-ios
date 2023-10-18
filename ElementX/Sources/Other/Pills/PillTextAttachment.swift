@@ -26,29 +26,13 @@ final class PillTextAttachment: NSTextAttachment {
     }
     
     private(set) var pillData: PillTextAttachmentData!
-    weak var view: UIView?
-    private var lastBounds: CGRect?
-    
-    func invalidateLastBounds() {
-        lastBounds = nil
-    }
     
     override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
-        var rect: CGRect
-        if let lastBounds {
-            return lastBounds
-        } else if let view {
-            rect = CGRect(origin: .zero, size: view.sizeThatFits(UIView.layoutFittingExpandedSize))
-        } else {
-            rect = super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
-        }
+        var rect = super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
         
         let fontData = pillData.fontData
         // Align the pill text vertically with the surrounding text.
         rect.origin.y = fontData.descender + (fontData.lineHeight - rect.height) / 2.0
-        // Set the max width of the pill
-        rect.size.width = min(rect.size.width, PillConstants.maxWidth)
-        lastBounds = rect
         return rect
     }
 }
