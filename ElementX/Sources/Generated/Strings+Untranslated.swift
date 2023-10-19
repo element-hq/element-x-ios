@@ -10,8 +10,26 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
+  /// Screen lock
+  public static var commonScreenLock: String { return UntranslatedL10n.tr("Untranslated", "common_screen_lock") }
   /// Unlock
   public static var commonUnlock: String { return UntranslatedL10n.tr("Untranslated", "common_unlock") }
+  /// Change PIN code
+  public static var screenAppLockSettingsChangePin: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_change_pin") }
+  /// Allow biometric unlock
+  public static var screenAppLockSettingsEnableBiometricUnlock: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_enable_biometric_unlock") }
+  /// Allow Face ID
+  public static var screenAppLockSettingsEnableFaceIdIos: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_enable_face_id_ios") }
+  /// Allow Optic ID
+  public static var screenAppLockSettingsEnableOpticIdIos: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_enable_optic_id_ios") }
+  /// Allow Touch ID
+  public static var screenAppLockSettingsEnableTouchIdIos: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_enable_touch_id_ios") }
+  /// Remove PIN
+  public static var screenAppLockSettingsRemovePin: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_remove_pin") }
+  /// Are you sure you want to remove PIN?
+  public static var screenAppLockSettingsRemovePinAlertMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_remove_pin_alert_message") }
+  /// Remove PIN?
+  public static var screenAppLockSettingsRemovePinAlertTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_app_lock_settings_remove_pin_alert_title") }
   /// %@ is locked
   public static func screenAppLockTitle(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_app_lock_title", String(describing: p1))

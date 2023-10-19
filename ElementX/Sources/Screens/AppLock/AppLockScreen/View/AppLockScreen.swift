@@ -47,8 +47,7 @@ struct AppLockScreen: View {
 
 // Add TestablePreview conformance once we have designs.
 struct AppLockScreen_Previews: PreviewProvider {
-    static let viewModel = AppLockScreenViewModel(appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                 appSettings: ServiceLocator.shared.settings))
+    static let viewModel = AppLockScreenViewModel(appLockService: AppLockServiceMock.mock())
     
     static var previews: some View {
         NavigationStack {

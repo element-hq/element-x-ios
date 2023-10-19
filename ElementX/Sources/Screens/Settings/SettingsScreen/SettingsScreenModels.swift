@@ -22,6 +22,7 @@ enum SettingsScreenViewModelAction {
     case userDetails
     case accountProfile
     case analytics
+    case appLock
     case reportBug
     case about
     case sessionVerification
@@ -40,6 +41,7 @@ struct SettingsScreenViewState: BindableState {
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showSessionVerificationSection: Bool
+    var showAppLockSettings: Bool
     var showDeveloperOptions: Bool
     
     /// The presentation anchor used to display the OIDC account URL.
@@ -51,6 +53,7 @@ enum SettingsScreenViewAction {
     case userDetails
     case accountProfile
     case analytics
+    case appLock
     case reportBug
     case about
     case sessionVerification

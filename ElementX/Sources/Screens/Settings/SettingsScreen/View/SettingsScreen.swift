@@ -118,6 +118,15 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
+            if context.viewState.showAppLockSettings {
+                ListRow(label: .default(title: UntranslatedL10n.commonScreenLock,
+                                        systemIcon: .lock),
+                        kind: .navigationLink {
+                            context.send(viewAction: .appLock)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
+            }
+            
             ListRow(label: .default(title: L10n.commonReportABug,
                                     systemIcon: .ladybug),
                     kind: .navigationLink {

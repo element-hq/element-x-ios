@@ -21,6 +21,7 @@ struct SettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let userSession: UserSessionProtocol
+    let appLockService: AppLockServiceProtocol
     let bugReportService: BugReportServiceProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let appSettings: AppSettings
@@ -48,7 +49,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession, appSettings: ServiceLocator.shared.settings)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession, appSettings: parameters.appSettings)
         
         viewModel.actions
             .sink { [weak self] action in
@@ -63,6 +64,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     presentAccountProfileURL()
                 case .analytics:
                     presentAnalyticsScreen()
+                case .appLock:
+                    presentAppLockSettingsScreen()
                 case .reportBug:
                     presentBugReportScreen()
                 case .about:
@@ -133,8 +136,13 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func presentAnalyticsScreen() {
-        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: ServiceLocator.shared.settings,
+        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
                                                                                analytics: ServiceLocator.shared.analytics))
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
+    
+    private func presentAppLockSettingsScreen() {
+        let coordinator = AppLockSettingsScreenCoordinator(parameters: .init(appLockService: parameters.appLockService))
         parameters.navigationStackCoordinator?.push(coordinator)
     }
     

@@ -161,6 +161,12 @@ class MockScreen: Identifiable {
             let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
             let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
             return coordinator
+        case .appLockSettingsScreen:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let appLockService = AppLockServiceMock.mock(biometryType: .faceID)
+            let coordinator = AppLockSettingsScreenCoordinator(parameters: .init(appLockService: appLockService))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
@@ -178,7 +184,11 @@ class MockScreen: Identifiable {
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: nil,
-                                                                          userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
+                                                                          userSession: MockUserSession(clientProxy: clientProxy,
+                                                                                                       mediaProvider: MockMediaProvider(),
+                                                                                                       voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
+                                                                          appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                                         appSettings: ServiceLocator.shared.settings),
                                                                           bugReportService: BugReportServiceMock(),
                                                                           notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                                           appSettings: ServiceLocator.shared.settings))
@@ -444,6 +454,8 @@ class MockScreen: Identifiable {
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider(), voiceMessageMediaManager: VoiceMessageMediaManagerMock()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
+                                                         appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                        appSettings: ServiceLocator.shared.settings),
                                                          bugReportService: BugReportServiceMock(),
                                                          roomTimelineControllerFactory: MockRoomTimelineControllerFactory(),
                                                          appSettings: appSettings,
