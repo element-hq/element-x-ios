@@ -39,6 +39,13 @@ class MockClientProxy: ClientProxyProtocol {
     var userDisplayName: CurrentValuePublisher<String?, Never> { CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher() }
     
     var notificationSettings: NotificationSettingsProxyProtocol = NotificationSettingsProxyMock(with: .init())
+    
+    lazy var secureBackupController: SecureBackupControllerProtocol = {
+        let secureBackupController = SecureBackupControllerMock()
+        secureBackupController.underlyingRecoveryKeyState = .init(CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled))
+        secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
+        return secureBackupController
+    }()
 
     init(userID: String, deviceID: String? = nil, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID

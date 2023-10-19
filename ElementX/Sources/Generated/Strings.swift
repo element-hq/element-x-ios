@@ -152,6 +152,10 @@ public enum L10n {
   public static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
   /// Sign in again
   public static var actionSignInAgain: String { return L10n.tr("Localizable", "action_sign_in_again") }
+  /// Sign out
+  public static var actionSignout: String { return L10n.tr("Localizable", "action_signout") }
+  /// Sign out anyway
+  public static var actionSignoutAnyway: String { return L10n.tr("Localizable", "action_signout_anyway") }
   /// Skip
   public static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
   /// Start
@@ -180,6 +184,8 @@ public enum L10n {
   public static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
   /// Bubbles
   public static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
+  /// Chat backup
+  public static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
   /// Copyright
   public static var commonCopyright: String { return L10n.tr("Localizable", "common_copyright") }
   /// Creating room…
@@ -272,6 +278,8 @@ public enum L10n {
   public static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
   public static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
+  /// Recovery key
+  public static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
   /// Refreshing…
   public static var commonRefreshing: String { return L10n.tr("Localizable", "common_refreshing") }
   /// Replying to %1$@
@@ -292,8 +300,6 @@ public enum L10n {
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
   public static var commonSearchResults: String { return L10n.tr("Localizable", "common_search_results") }
-  /// Secure backup
-  public static var commonSecureBackup: String { return L10n.tr("Localizable", "common_secure_backup") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Sending…
@@ -592,6 +598,12 @@ public enum L10n {
   public static var screenAdvancedSettingsDeveloperMode: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode") }
   /// Enable to have access to features and functionality for developers.
   public static var screenAdvancedSettingsDeveloperModeDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode_description") }
+  /// Custom Element Call base URL
+  public static var screenAdvancedSettingsElementCallBaseUrl: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url") }
+  /// Set a custom base URL for Element Call.
+  public static var screenAdvancedSettingsElementCallBaseUrlDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_description") }
+  /// Invalid URL, please make sure you include the protocol (http/https) and the correct address.
+  public static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
   /// Disable the rich text editor to type Markdown manually.
   public static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// We won't record or profile any personal data
@@ -670,6 +682,28 @@ public enum L10n {
   public static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
   public static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
+  /// Turn off backup
+  public static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
+  /// Turn on backup
+  public static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
+  /// Backup ensures that you don't lose your message history. %1$@.
+  public static func screenChatBackupKeyBackupDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_chat_backup_key_backup_description", String(describing: p1))
+  }
+  /// Backup
+  public static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
+  /// Change recovery key
+  public static var screenChatBackupRecoveryActionChange: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change") }
+  /// Confirm recovery key
+  public static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
+  /// Your chat backup is currently out of sync.
+  public static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
+  /// Set up recovery
+  public static var screenChatBackupRecoveryActionSetup: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup") }
+  /// Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.
+  public static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description", String(describing: p1))
+  }
   /// Add option
   public static var screenCreatePollAddOptionBtn: String { return L10n.tr("Localizable", "screen_create_poll_add_option_btn") }
   /// Show results only after poll ends
@@ -754,6 +788,22 @@ public enum L10n {
   public static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
+  /// Turn off
+  public static var screenKeyBackupDisableConfirmationActionTurnOff: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_action_turn_off") }
+  /// You will lose your encrypted messages if you are signed out of all devices.
+  public static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
+  /// Are you sure you want to turn off backup?
+  public static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
+  /// Turning off backup will remove your current encryption key backup and turn off other security features. In this case, you will:
+  public static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
+  /// Not have encrypted message history on new devices
+  public static var screenKeyBackupDisableDescriptionPoint1: String { return L10n.tr("Localizable", "screen_key_backup_disable_description_point_1") }
+  /// Lose access to your encrypted messages if you are signed out of %1$@ everywhere
+  public static func screenKeyBackupDisableDescriptionPoint2(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_key_backup_disable_description_point_2", String(describing: p1))
+  }
+  /// Are you sure you want to turn off backup?
+  public static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
   /// This account has been deactivated.
   public static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -850,6 +900,48 @@ public enum L10n {
   }
   /// Be in your element
   public static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
+  /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
+  public static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
+  /// Generate a new recovery key
+  public static var screenRecoveryKeyChangeGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key") }
+  /// Make sure you can store your recovery key somewhere safe
+  public static var screenRecoveryKeyChangeGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key_description") }
+  /// Recovery key changed
+  public static var screenRecoveryKeyChangeSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_change_success") }
+  /// Change recovery key?
+  public static var screenRecoveryKeyChangeTitle: String { return L10n.tr("Localizable", "screen_recovery_key_change_title") }
+  /// Enter your recovery key to confirm access to your chat backup.
+  public static var screenRecoveryKeyConfirmDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_description") }
+  /// Enter the 48 character code.
+  public static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
+  /// Enter...
+  public static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
+  /// Recovery key confirmed
+  public static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
+  /// Confirm your recovery key
+  public static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
+  /// Save recovery key
+  public static var screenRecoveryKeySaveAction: String { return L10n.tr("Localizable", "screen_recovery_key_save_action") }
+  /// Write down your recovery key somewhere safe or save it in a password manager.
+  public static var screenRecoveryKeySaveDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_description") }
+  /// Tap to copy recovery key
+  public static var screenRecoveryKeySaveKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_key_description") }
+  /// Save your recovery key
+  public static var screenRecoveryKeySaveTitle: String { return L10n.tr("Localizable", "screen_recovery_key_save_title") }
+  /// You will not be able to access your new recovery key after this step.
+  public static var screenRecoveryKeySetupConfirmationDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_description") }
+  /// Have you saved your recovery key?
+  public static var screenRecoveryKeySetupConfirmationTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_title") }
+  /// Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.
+  public static var screenRecoveryKeySetupDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_description") }
+  /// Generate your recovery key
+  public static var screenRecoveryKeySetupGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key") }
+  /// Make sure you can store your recovery key somewhere safe
+  public static var screenRecoveryKeySetupGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key_description") }
+  /// Recovery setup successful
+  public static var screenRecoveryKeySetupSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_setup_success") }
+  /// Set up recovery
+  public static var screenRecoveryKeySetupTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_title") }
   /// Block user
   public static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
   /// Check if you want to hide all current and future messages from this user
@@ -1064,6 +1156,10 @@ public enum L10n {
   }
   /// You’re signed out
   public static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
+  /// Please wait for this to complete before signing out.
+  public static var screenSignoutBackingUpSubtitle: String { return L10n.tr("Localizable", "screen_signout_backing_up_subtitle") }
+  /// Your keys are still being backed up
+  public static var screenSignoutBackingUpTitle: String { return L10n.tr("Localizable", "screen_signout_backing_up_title") }
   /// Are you sure you want to sign out?
   public static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
   /// Sign out
@@ -1072,6 +1168,10 @@ public enum L10n {
   public static var screenSignoutConfirmationDialogTitle: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_title") }
   /// Signing out…
   public static var screenSignoutInProgressDialogContent: String { return L10n.tr("Localizable", "screen_signout_in_progress_dialog_content") }
+  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
+  public static var screenSignoutLastSessionSubtitle: String { return L10n.tr("Localizable", "screen_signout_last_session_subtitle") }
+  /// Have you saved your recovery key?
+  public static var screenSignoutLastSessionTitle: String { return L10n.tr("Localizable", "screen_signout_last_session_title") }
   /// Sign out
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// An error occurred when trying to start a chat

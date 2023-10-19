@@ -45,6 +45,8 @@ class ClientProxy: ClientProxyProtocol {
     
     let notificationSettings: NotificationSettingsProxyProtocol
 
+    let secureBackupController: SecureBackupControllerProtocol
+
     private let roomListRecencyOrderingAllowedEventTypes = ["m.room.message", "m.room.encrypted", "m.sticker"]
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
@@ -93,6 +95,8 @@ class ClientProxy: ClientProxyProtocol {
         
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
                                                          backgroundTaskService: backgroundTaskService)
+        
+        secureBackupController = SecureBackupController()
 
         client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true

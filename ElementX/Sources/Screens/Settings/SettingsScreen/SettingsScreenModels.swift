@@ -26,6 +26,7 @@ enum SettingsScreenViewModelAction {
     case reportBug
     case about
     case sessionVerification
+    case secureBackup
     case accountSessionsList
     case notifications
     case advancedSettings
@@ -40,7 +41,9 @@ struct SettingsScreenViewState: BindableState {
     var accountSessionsListURL: URL?
     var userAvatarURL: URL?
     var userDisplayName: String?
-    var showSessionVerificationSection: Bool
+    var isSessionVerified: Bool
+    var chatBackupEnabled = false
+    var showSecureBackupBadge = false
     var showAppLockSettings: Bool
     var showDeveloperOptions: Bool
     
@@ -57,6 +60,7 @@ enum SettingsScreenViewAction {
     case reportBug
     case about
     case sessionVerification
+    case secureBackup
     case accountSessionsList
     case notifications
     case developerOptions

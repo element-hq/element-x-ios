@@ -24,6 +24,7 @@ struct SettingsScreenCoordinatorParameters {
     let appLockService: AppLockServiceProtocol
     let bugReportService: BugReportServiceProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
+    let secureBackupController: SecureBackupControllerProtocol
     let appSettings: AppSettings
 }
 
@@ -49,7 +50,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession, appSettings: parameters.appSettings)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
+                                            appSettings: parameters.appSettings)
         
         viewModel.actions
             .sink { [weak self] action in
@@ -71,7 +73,9 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 case .about:
                     presentLegalInformationScreen()
                 case .sessionVerification:
-                    verifySession()
+                    presentSessionVerificationScreen()
+                case .secureBackup:
+                    presentSecureBackupScreen()
                 case .accountSessionsList:
                     presentAccountSessionsListURL()
                 case .notifications:
@@ -172,7 +176,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.push(LegalInformationScreenCoordinator(appSettings: parameters.appSettings))
     }
     
-    private func verifySession() {
+    private func presentSessionVerificationScreen() {
         guard let sessionVerificationController = parameters.userSession.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
@@ -194,6 +198,15 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.setSheetCoordinator(coordinator) { [weak self] in
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
+    }
+    
+    private func presentSecureBackupScreen() {
+        let coordinator = SecureBackupScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
+                                                                          secureBackupController: parameters.userSession.clientProxy.secureBackupController,
+                                                                          navigationStackCoordinator: parameters.navigationStackCoordinator,
+                                                                          userIndicatorController: parameters.userIndicatorController))
+        
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
     
     private func presentNotificationSettings() {

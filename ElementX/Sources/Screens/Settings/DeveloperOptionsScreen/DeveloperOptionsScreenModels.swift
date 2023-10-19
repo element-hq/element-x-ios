@@ -53,6 +53,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var mentionsEnabled: Bool { get set }
     var appLockFlowEnabled: Bool { get set }
     var elementCallEnabled: Bool { get set }
+    var chatBackupEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

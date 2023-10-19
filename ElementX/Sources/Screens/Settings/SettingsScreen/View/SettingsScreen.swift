@@ -27,9 +27,7 @@ struct SettingsScreen: View {
         Form {
             userSection
             
-            if context.viewState.showSessionVerificationSection {
-                sessionVerificationSection
-            }
+            accountSecuritySection
             
             mainSection
             
@@ -86,11 +84,22 @@ struct SettingsScreen: View {
         }
     }
     
-    private var sessionVerificationSection: some View {
-        Section {
-            ListRow(label: .default(title: L10n.actionCompleteVerification,
-                                    systemIcon: .checkmarkShield),
-                    kind: .button { context.send(viewAction: .sessionVerification) })
+    @ViewBuilder
+    private var accountSecuritySection: some View {
+        if !context.viewState.isSessionVerified || context.viewState.chatBackupEnabled {
+            Section {
+                if !context.viewState.isSessionVerified {
+                    ListRow(label: .default(title: L10n.actionCompleteVerification,
+                                            systemIcon: .checkmarkShield),
+                            kind: .button { context.send(viewAction: .sessionVerification) })
+                } else if context.viewState.chatBackupEnabled {
+                    ListRow(label: .default(title: L10n.commonChatBackup,
+                                            icon: Image(asset: Asset.Images.secureBackupIcon)),
+                            details: context.viewState.showSecureBackupBadge ? .icon(secureBackupBadge) : nil,
+                            kind: .navigationLink { context.send(viewAction: .secureBackup) })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
+                }
+            }
         }
     }
     
@@ -220,6 +229,13 @@ struct SettingsScreen: View {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionDone) { context.send(viewAction: .close) }
                 .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
+        }
+    }
+    
+    @ViewBuilder
+    private var secureBackupBadge: some View {
+        if context.viewState.showSecureBackupBadge {
+            BadgeView(size: 10)
         }
     }
 }

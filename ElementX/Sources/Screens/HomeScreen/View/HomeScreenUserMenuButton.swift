@@ -18,6 +18,7 @@ import SwiftUI
 
 struct HomeScreenUserMenuButton: View {
     @State private var showingLogoutConfirmation = false
+    @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var context: HomeScreenViewModel.Context
     
@@ -27,7 +28,11 @@ struct HomeScreenUserMenuButton: View {
                 Button {
                     context.send(viewAction: .userMenu(action: .settings))
                 } label: {
-                    Label(L10n.commonSettings, systemImage: "gearshape")
+                    Label {
+                        Text(L10n.commonSettings)
+                    } icon: {
+                        settingsIconImage
+                    }
                 }
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.settings)
             }
@@ -55,6 +60,8 @@ struct HomeScreenUserMenuButton: View {
                                 avatarSize: .user(on: .home),
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                .overlayBadge(10, isBadged: context.viewState.showUserMenuBadge)
+                .compositingGroup()
         }
         .alert(L10n.screenSignoutConfirmationDialogTitle,
                isPresented: $showingLogoutConfirmation) {
@@ -66,5 +73,25 @@ struct HomeScreenUserMenuButton: View {
             Text(L10n.screenSignoutConfirmationDialogContent)
         }
         .accessibilityLabel(L10n.a11yUserMenu)
+    }
+    
+    // MARK: - Private
+        
+    /// Menu doesn't render composed views. Trick it into showing a badge.
+    private var settingsIconImage: Image? {
+        let settingsIcon = Image(systemSymbol: .gearshape)
+            .resizable()
+            .frame(width: 100, height: 100)
+            .overlayBadge(40, isBadged: context.viewState.showSettingsMenuOptionBadge)
+            .colorScheme(colorScheme)
+            .padding()
+        
+        let renderer = ImageRenderer(content: settingsIcon)
+        
+        guard let image = renderer.uiImage else {
+            return nil
+        }
+        
+        return Image(uiImage: image)
     }
 }

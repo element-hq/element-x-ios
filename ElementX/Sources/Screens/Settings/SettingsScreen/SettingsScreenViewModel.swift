@@ -33,16 +33,16 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         self.userSession = userSession
         self.appSettings = appSettings
         
-        var showSessionVerificationSection = false
+        var isSessionVerified = true
         if let sessionVerificationController = userSession.sessionVerificationController {
-            showSessionVerificationSection = !sessionVerificationController.isVerified
+            isSessionVerified = sessionVerificationController.isVerified
         }
         
         super.init(initialViewState: .init(deviceID: userSession.deviceID,
                                            userID: userSession.userID,
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
-                                           showSessionVerificationSection: showSessionVerificationSection,
+                                           isSessionVerified: isSessionVerified,
                                            showAppLockSettings: appSettings.appLockFlowEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
@@ -56,11 +56,24 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
-        
+
         appSettings.$appLockFlowEnabled
             .weakAssign(to: \.state.showAppLockSettings, on: self)
             .store(in: &cancellables)
+        
+        appSettings.$chatBackupEnabled
+            .weakAssign(to: \.state.chatBackupEnabled, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.secureBackupController.recoveryKeyState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { return }
                 
+                self.state.showSecureBackupBadge = (state == .unknown || state == .disabled) && appSettings.chatBackupEnabled
+            }
+            .store(in: &cancellables)
+        
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
@@ -71,9 +84,9 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .sink { [weak self] callback in
                 switch callback {
                 case .sessionVerificationNeeded:
-                    self?.state.showSessionVerificationSection = true
+                    self?.state.isSessionVerified = false
                 case .didVerifySession:
-                    self?.state.showSessionVerificationSection = false
+                    self?.state.isSessionVerified = true
                 default:
                     break
                 }
@@ -101,6 +114,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.logout)
         case .sessionVerification:
             actionsSubject.send(.sessionVerification)
+        case .secureBackup:
+            actionsSubject.send(.secureBackup)
         case .notifications:
             actionsSubject.send(.notifications)
         case .accountSessionsList:

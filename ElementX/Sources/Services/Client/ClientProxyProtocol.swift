@@ -95,6 +95,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var notificationSettings: NotificationSettingsProxyProtocol { get }
     
+    var secureBackupController: SecureBackupControllerProtocol { get }
+    
     func startSync()
 
     func stopSync()

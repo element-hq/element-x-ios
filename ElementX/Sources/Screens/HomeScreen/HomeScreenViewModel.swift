@@ -53,7 +53,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         inviteSummaryProvider = userSession.clientProxy.inviteSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
+        super.init(initialViewState: .init(userID: userSession.userID),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -78,6 +78,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userSession.clientProxy.userDisplayName
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.secureBackupController.recoveryKeyState
+            .receive(on: DispatchQueue.main)
+            .map { state in
+                state == .unknown || state == .disabled
+            }
+            .sink { [weak self] requiresSecureBackupSetup in
+                guard let self else { return }
+                
+                state.showUserMenuBadge = requiresSecureBackupSetup && appSettings.chatBackupEnabled
+                state.showSettingsMenuOptionBadge = requiresSecureBackupSetup && appSettings.chatBackupEnabled
+            }
             .store(in: &cancellables)
         
         selectedRoomPublisher

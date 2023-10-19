@@ -44,6 +44,7 @@ final class AppSettings {
         case mentionsEnabled
         case appLockFlowEnabled
         case elementCallEnabled
+        case chatBackupEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -116,6 +117,8 @@ final class AppSettings {
     let privacyURL: URL = "https://element.io/privacy"
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
+    // A URL where users can go read more about the chat backup.
+    let chatBackupDetailsURL: URL = "https://element.io/help#encryption"
     
     // MARK: - Security
     
@@ -276,4 +279,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.elementCallEnabled, defaultValue: false, storageType: .userDefaults(store))
     var elementCallEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.chatBackupEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var chatBackupEnabled
 }

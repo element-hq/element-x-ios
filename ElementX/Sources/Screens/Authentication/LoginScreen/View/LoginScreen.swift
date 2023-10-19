@@ -52,7 +52,7 @@ struct LoginScreen: View {
     /// The header containing the title and icon.
     var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(systemName: "lock.fill"))
+            HeroImage(image: Image(systemName: "lock.fill"))
                 .padding(.bottom, 8)
             
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
