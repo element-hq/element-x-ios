@@ -955,13 +955,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
         } catch AudioRecorderError.recordPermissionNotGranted {
             state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: "Permission needed",
-                                                         message: "Microphone permission not granted",
-                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOk, action: {  }))
+                                                         title: L10n.dialogPermissionMicrophone,
+                                                         primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }))
         } catch {
             MXLog.error("failed to start voice message recording: \(error)")
         }
+    }
+    
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
     
     private func stopRecordingVoiceMessage() async {
