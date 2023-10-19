@@ -30,8 +30,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dmrschmidt/DSWaveformImage",
       "state" : {
-        "revision" : "730021fa5bab91aae2f77d90e1c1c8c4985c0756",
-        "version" : "14.0.0"
+        "revision" : "6a4c99a8ab2d2a03f42de21fb8777172ebbcccb1",
+        "version" : "14.1.0"
       }
     },
     {

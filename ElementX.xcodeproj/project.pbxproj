@@ -6100,7 +6100,7 @@
 			repositoryURL = "https://github.com/dmrschmidt/DSWaveformImage";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 14.0.0;
+				minimumVersion = 14.1.0;
 			};
 		};
 		61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {

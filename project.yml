@@ -119,7 +119,7 @@ packages:
     branch: 0.0.1
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
-    minorVersion: 14.0.0
+    minorVersion: 14.1.0
 
 
 

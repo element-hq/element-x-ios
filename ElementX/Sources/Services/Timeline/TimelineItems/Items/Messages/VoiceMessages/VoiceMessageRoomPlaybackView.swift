@@ -111,7 +111,6 @@ struct VoiceMessageRoomPlaybackView: View {
                         })
             }
         }
-        .animation(.elementDefault, value: playerState.fileURL)
         .onChange(of: dragState) { newDragState in
             switch newDragState {
             case .inactive:
@@ -164,14 +163,19 @@ struct VoiceMessageRoomPlaybackView: View {
         if let url = playerState.fileURL {
             WaveformView(audioURL: url,
                          configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding)),
-                                              verticalScalingFactor: 1.0))
+                                              verticalScalingFactor: 1.0),
+                         placeholder: { estimatedWaveformView })
                 .progressMask(progress: playerState.progress)
         } else {
-            EstimatedWaveformView(lineWidth: waveformLineWidth,
-                                  linePadding: waveformLinePadding,
-                                  waveform: playerState.waveform,
-                                  progress: playerState.progress)
+            estimatedWaveformView
         }
+    }
+
+    private var estimatedWaveformView: some View {
+        EstimatedWaveformView(lineWidth: waveformLineWidth,
+                              linePadding: waveformLinePadding,
+                              waveform: playerState.waveform,
+                              progress: playerState.progress)
     }
 }
 
