@@ -4,6 +4,7 @@
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
 "a11y_pause" = "Pause";
+"a11y_pin_field" = "PIN field";
 "a11y_play" = "Play";
 "a11y_poll" = "Poll";
 "a11y_poll_end" = "Ended poll";
@@ -95,6 +96,7 @@
 "common_editing" = "Editing";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption_enabled" = "Encryption enabled";
+"common_enter_your_pin" = "Enter your PIN";
 "common_error" = "Error";
 "common_everyone" = "Everyone";
 "common_file" = "File";
@@ -130,6 +132,7 @@
 "common_rich_text_editor" = "Rich text editor";
 "common_room_name" = "Room name";
 "common_room_name_placeholder" = "e.g. your project name";
+"common_screen_lock" = "Screen lock";
 "common_search_for_someone" = "Search for someone";
 "common_search_results" = "Search results";
 "common_security" = "Security";
@@ -151,6 +154,7 @@
 "common_unable_to_decrypt" = "Unable to decrypt";
 "common_unable_to_invite_message" = "Invites couldn't be sent to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
+"common_unlock" = "Unlock";
 "common_unmute" = "Unmute";
 "common_unsupported_event" = "Unsupported event";
 "common_username" = "Username";
@@ -260,6 +264,18 @@
 "screen_analytics_prompt_third_party_sharing" = "We won't share your data with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
 "screen_analytics_settings_share_data" = "Share analytics data";
+"screen_app_lock_forgot_pin" = "Forgot PIN?";
+"screen_app_lock_settings_change_pin" = "Change PIN code";
+"screen_app_lock_settings_enable_biometric_unlock" = "Allow biometric unlock";
+"screen_app_lock_settings_enable_face_id_ios" = "Allow Face ID";
+"screen_app_lock_settings_enable_optic_id_ios" = "Allow Optic ID";
+"screen_app_lock_settings_enable_touch_id_ios" = "Allow Touch ID";
+"screen_app_lock_settings_remove_pin" = "Remove PIN";
+"screen_app_lock_settings_remove_pin_alert_message" = "Are you sure you want to remove PIN?";
+"screen_app_lock_settings_remove_pin_alert_title" = "Remove PIN?";
+"screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
+"screen_app_lock_signout_alert_title" = "You are being signed out";
+"screen_app_lock_subtitle" = "You have 3 attempts to unlock";
 "screen_bug_report_attach_screenshot" = "Attach screenshot";
 "screen_bug_report_contact_me" = "You may contact me if you have any follow up questions.";
 "screen_bug_report_contact_me_title" = "Contact me";

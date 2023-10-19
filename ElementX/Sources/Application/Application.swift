@@ -51,10 +51,6 @@ struct Application: App {
                         openURLInSystemBrowser($0)
                     }
                 }
-                .introspect(.window, on: .supportedVersions) { window in
-                    // Workaround for SwiftUI not consistently applying the tint colour to Alerts/Confirmation Dialogs.
-                    window.tintColor = .compound.textActionPrimary
-                }
                 .task {
                     appCoordinator.start()
                 }

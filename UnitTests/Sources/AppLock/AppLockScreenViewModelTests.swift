@@ -44,7 +44,8 @@ class AppLockScreenViewModelTests: XCTestCase {
         
         // When entering it on the lock screen.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .appUnlocked }
-        context.send(viewAction: .submitPINCode(pinCode))
+        viewModel.context.pinCode = pinCode
+        context.send(viewAction: .submitPINCode)
         let result = try await deferred.fulfill()
         
         // The app should become unlocked.

@@ -33,14 +33,14 @@ struct AppLockSettingsScreenViewState: BindableState {
         case .none:
             return L10n.commonError
         case .touchID:
-            return UntranslatedL10n.screenAppLockSettingsEnableTouchIdIos
+            return L10n.screenAppLockSettingsEnableTouchIdIos
         case .faceID:
-            return UntranslatedL10n.screenAppLockSettingsEnableFaceIdIos
+            return L10n.screenAppLockSettingsEnableFaceIdIos
         // Requires Xcode 15:
         // case .opticID:
-        //    UntranslatedL10n.screenAppLockSettingsEnableOpticIdIos
+        //    L10n.screenAppLockSettingsEnableOpticIdIos
         @unknown default:
-            return UntranslatedL10n.screenAppLockSettingsEnableBiometricUnlock
+            return L10n.screenAppLockSettingsEnableBiometricUnlock
         }
     }
 }

@@ -12,6 +12,10 @@ import Foundation
 public enum L10n {
   /// Delete
   public static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
+  /// Plural format key: "%#@COUNT@"
+  public static func a11yDigitsEntered(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_digits_entered", p1)
+  }
   /// Hide password
   public static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Mentions only
@@ -20,6 +24,8 @@ public enum L10n {
   public static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
   /// Pause
   public static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
+  /// PIN field
+  public static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Play
   public static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
   /// Poll
@@ -206,6 +212,8 @@ public enum L10n {
   }
   /// Encryption enabled
   public static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
+  /// Enter your PIN
+  public static var commonEnterYourPin: String { return L10n.tr("Localizable", "common_enter_your_pin") }
   /// Error
   public static var commonError: String { return L10n.tr("Localizable", "common_error") }
   /// Everyone
@@ -296,6 +304,8 @@ public enum L10n {
   public static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name
   public static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
+  /// Screen lock
+  public static var commonScreenLock: String { return L10n.tr("Localizable", "common_screen_lock") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Search results
@@ -338,6 +348,8 @@ public enum L10n {
   public static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
   /// Unable to send invite(s)
   public static var commonUnableToInviteTitle: String { return L10n.tr("Localizable", "common_unable_to_invite_title") }
+  /// Unlock
+  public static var commonUnlock: String { return L10n.tr("Localizable", "common_unlock") }
   /// Unmute
   public static var commonUnmute: String { return L10n.tr("Localizable", "common_unmute") }
   /// Unsupported event
@@ -634,6 +646,34 @@ public enum L10n {
   public static var screenAnalyticsSettingsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_settings_read_terms_content_link") }
   /// Share analytics data
   public static var screenAnalyticsSettingsShareData: String { return L10n.tr("Localizable", "screen_analytics_settings_share_data") }
+  /// Forgot PIN?
+  public static var screenAppLockForgotPin: String { return L10n.tr("Localizable", "screen_app_lock_forgot_pin") }
+  /// Change PIN code
+  public static var screenAppLockSettingsChangePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_change_pin") }
+  /// Allow biometric unlock
+  public static var screenAppLockSettingsEnableBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_biometric_unlock") }
+  /// Allow Face ID
+  public static var screenAppLockSettingsEnableFaceIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_face_id_ios") }
+  /// Allow Optic ID
+  public static var screenAppLockSettingsEnableOpticIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_optic_id_ios") }
+  /// Allow Touch ID
+  public static var screenAppLockSettingsEnableTouchIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_touch_id_ios") }
+  /// Remove PIN
+  public static var screenAppLockSettingsRemovePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin") }
+  /// Are you sure you want to remove PIN?
+  public static var screenAppLockSettingsRemovePinAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_message") }
+  /// Remove PIN?
+  public static var screenAppLockSettingsRemovePinAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_title") }
+  /// You’ll need to re-login and create a new PIN to proceed
+  public static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
+  /// You are being signed out
+  public static var screenAppLockSignoutAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_title") }
+  /// You have 3 attempts to unlock
+  public static var screenAppLockSubtitle: String { return L10n.tr("Localizable", "screen_app_lock_subtitle") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenAppLockSubtitleWrongPin(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_app_lock_subtitle_wrong_pin", p1)
+  }
   /// Attach screenshot
   public static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions.

@@ -351,6 +351,7 @@
 		64AB99285DC4437C0DDE9585 /* MenuSheetLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ABAB186CF00B15C5521D04 /* MenuSheetLabelStyle.swift */; };
 		64C373ACCFA26D42BA45CFAD /* HomeScreenInvitesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24227FF9A2797F6EA7F69CDD /* HomeScreenInvitesButton.swift */; };
 		64D05250CEDE8B604119F6E6 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981663D961C94270FA035FD0 /* Alert.swift */; };
+		64E541F88F35BD126C4AFCA1 /* AppLockScreenPINKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38345442415E07A931197C55 /* AppLockScreenPINKeypad.swift */; };
 		64F43D7390DA2A0AFD6BA911 /* VideoRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1941C8817E6B6971BA4415F5 /* VideoRoomTimelineView.swift */; };
 		64FF5CB4E35971255872E1BB /* AuthenticationServiceProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CB536D1C3CC15AA740CC6 /* AuthenticationServiceProxyProtocol.swift */; };
 		651341E67C3514F9811A1EC1 /* LoginScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F598B1B346DAF223651C91 /* LoginScreenCoordinator.swift */; };
@@ -1174,6 +1175,7 @@
 		37CA26F55123E36B50DB0B3A /* AttributedStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringTests.swift; sourceTree = "<group>"; };
 		37E727F7E0BCE8A0BBFD33FF /* OnboardingScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreenCoordinator.swift; sourceTree = "<group>"; };
 		382B50F7E379B3DBBD174364 /* NotificationSettingsProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsProxyMock.swift; sourceTree = "<group>"; };
+		38345442415E07A931197C55 /* AppLockScreenPINKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenPINKeypad.swift; sourceTree = "<group>"; };
 		38E521D6C2BF8DF0DFB35146 /* DeveloperOptionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreen.swift; sourceTree = "<group>"; };
 		3948D16F021DFDB2CD26EAA8 /* MockBackgroundTaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBackgroundTaskService.swift; sourceTree = "<group>"; };
 		398817652FA8ABAE0A31AC6D /* ReadableFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadableFrameModifier.swift; sourceTree = "<group>"; };
@@ -4400,6 +4402,7 @@
 			isa = PBXGroup;
 			children = (
 				56D6F88FE35A0979D2821E06 /* AppLockScreen.swift */,
+				38345442415E07A931197C55 /* AppLockScreenPINKeypad.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5091,6 +5094,7 @@
 				06F8EDF52E33A2D36BCC1161 /* AppLockScreen.swift in Sources */,
 				9912F9EB2D6589141A2957B4 /* AppLockScreenCoordinator.swift in Sources */,
 				2DD9D0FE7CB5CFC80D071451 /* AppLockScreenModels.swift in Sources */,
+				64E541F88F35BD126C4AFCA1 /* AppLockScreenPINKeypad.swift in Sources */,
 				97969EF0B9C412CD38E5CA93 /* AppLockScreenViewModel.swift in Sources */,
 				E79D79CDAFE8BEBCC3AECA54 /* AppLockScreenViewModelProtocol.swift in Sources */,
 				1D623953F970D11F6F38499C /* AppLockService.swift in Sources */,

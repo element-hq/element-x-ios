@@ -173,6 +173,7 @@ struct A11yIdentifiers {
         let secureBackup = "settings-secure_backup"
         let notifications = "settings-notifications"
         let analytics = "settings-analytics"
+        let screenLock = "settings-screen_lock"
         let reportBug = "settings-report_bug"
         let about = "settings_about"
         let advancedSettings = "settings_advanced-settings"
