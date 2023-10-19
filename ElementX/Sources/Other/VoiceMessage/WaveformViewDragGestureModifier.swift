@@ -32,7 +32,7 @@ struct WaveformViewDragGestureModifier: ViewModifier {
                     .updating($dragGestureState) { value, state, _ in
                         switch value {
                         // (SpatialTap, LongPress) begins.
-                        case .first(let spatialLongPress) where spatialLongPress.second ?? false:
+                        case .first(let spatialLongPress):
                             // Compute the progress with the spatialTap location
                             let progress = (spatialLongPress.first?.location ?? .zero).x / geometry.size.width
                             state = .pressing(progress: progress)

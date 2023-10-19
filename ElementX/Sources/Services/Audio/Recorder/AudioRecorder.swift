@@ -21,6 +21,7 @@ import UIKit
 
 enum AudioRecorderError: Error {
     case genericError
+    case recordPermissionNotGranted
 }
 
 class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
@@ -46,7 +47,11 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
-    func record() {
+    func record(withId recordId: String) async throws {
+        guard await requestRecordPermission() else {
+            throw AudioRecorderError.recordPermissionNotGranted
+        }
+        
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                         AVSampleRateKey: 48000,
                         AVEncoderBitRateKey: 128_000,
@@ -56,7 +61,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
-            let url = URL.temporaryDirectory.appendingPathComponent("voice-message.m4a")
+            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordId).m4a")
             audioRecorder = try AVAudioRecorder(url: url, settings: settings)
             audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true
@@ -85,7 +90,6 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
         
         audioRecorder.updateMeters()
-
         return normalizedPowerLevelFromDecibels(audioRecorder.peakPower(forChannel: channelNumber))
     }
     
@@ -95,7 +99,6 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         }
         
         audioRecorder.updateMeters()
-        
         return normalizedPowerLevelFromDecibels(audioRecorder.averagePower(forChannel: channelNumber))
     }
     
@@ -113,6 +116,18 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     
     private func removeObservers() {
         cancellables.removeAll()
+    }
+    
+    private func requestRecordPermission() async -> Bool {
+        if #available(iOS 17, *) {
+            return await AVAudioApplication.requestRecordPermission()
+        } else {
+            return await withCheckedContinuation { continuation in
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            }
+        }
     }
         
     // MARK: - AVAudioRecorderDelegate

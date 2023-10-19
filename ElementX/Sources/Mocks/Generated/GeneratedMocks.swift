@@ -410,15 +410,23 @@ class AudioRecorderMock: AudioRecorderProtocol {
 
     //MARK: - record
 
-    var recordCallsCount = 0
-    var recordCalled: Bool {
-        return recordCallsCount > 0
+    var recordWithIdThrowableError: Error?
+    var recordWithIdCallsCount = 0
+    var recordWithIdCalled: Bool {
+        return recordWithIdCallsCount > 0
     }
-    var recordClosure: (() -> Void)?
+    var recordWithIdReceivedRecordId: String?
+    var recordWithIdReceivedInvocations: [String] = []
+    var recordWithIdClosure: ((String) async throws -> Void)?
 
-    func record() {
-        recordCallsCount += 1
-        recordClosure?()
+    func record(withId recordId: String) async throws {
+        if let error = recordWithIdThrowableError {
+            throw error
+        }
+        recordWithIdCallsCount += 1
+        recordWithIdReceivedRecordId = recordId
+        recordWithIdReceivedInvocations.append(recordId)
+        try await recordWithIdClosure?(recordId)
     }
     //MARK: - stopRecording
 
@@ -912,6 +920,75 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
         } else {
             return playerForReturnValue
         }
+    }
+    //MARK: - playerState
+
+    var playerStateWithIdCallsCount = 0
+    var playerStateWithIdCalled: Bool {
+        return playerStateWithIdCallsCount > 0
+    }
+    var playerStateWithIdReceivedWithId: String?
+    var playerStateWithIdReceivedInvocations: [String] = []
+    var playerStateWithIdReturnValue: AudioPlayerState?
+    var playerStateWithIdClosure: ((String) -> AudioPlayerState?)?
+
+    func playerState(withId: String) -> AudioPlayerState? {
+        playerStateWithIdCallsCount += 1
+        playerStateWithIdReceivedWithId = withId
+        playerStateWithIdReceivedInvocations.append(withId)
+        if let playerStateWithIdClosure = playerStateWithIdClosure {
+            return playerStateWithIdClosure(withId)
+        } else {
+            return playerStateWithIdReturnValue
+        }
+    }
+    //MARK: - register
+
+    var registerAudioPlayerStateWithIdCallsCount = 0
+    var registerAudioPlayerStateWithIdCalled: Bool {
+        return registerAudioPlayerStateWithIdCallsCount > 0
+    }
+    var registerAudioPlayerStateWithIdReceivedArguments: (audioPlayerState: AudioPlayerState, withId: String)?
+    var registerAudioPlayerStateWithIdReceivedInvocations: [(audioPlayerState: AudioPlayerState, withId: String)] = []
+    var registerAudioPlayerStateWithIdClosure: ((AudioPlayerState, String) -> Void)?
+
+    func register(audioPlayerState: AudioPlayerState, withId: String) {
+        registerAudioPlayerStateWithIdCallsCount += 1
+        registerAudioPlayerStateWithIdReceivedArguments = (audioPlayerState: audioPlayerState, withId: withId)
+        registerAudioPlayerStateWithIdReceivedInvocations.append((audioPlayerState: audioPlayerState, withId: withId))
+        registerAudioPlayerStateWithIdClosure?(audioPlayerState, withId)
+    }
+    //MARK: - unregister
+
+    var unregisterWithAudioPlayerStateIdCallsCount = 0
+    var unregisterWithAudioPlayerStateIdCalled: Bool {
+        return unregisterWithAudioPlayerStateIdCallsCount > 0
+    }
+    var unregisterWithAudioPlayerStateIdReceivedWithAudioPlayerStateId: String?
+    var unregisterWithAudioPlayerStateIdReceivedInvocations: [String] = []
+    var unregisterWithAudioPlayerStateIdClosure: ((String) -> Void)?
+
+    func unregister(withAudioPlayerStateId: String) {
+        unregisterWithAudioPlayerStateIdCallsCount += 1
+        unregisterWithAudioPlayerStateIdReceivedWithAudioPlayerStateId = withAudioPlayerStateId
+        unregisterWithAudioPlayerStateIdReceivedInvocations.append(withAudioPlayerStateId)
+        unregisterWithAudioPlayerStateIdClosure?(withAudioPlayerStateId)
+    }
+    //MARK: - detachAllStates
+
+    var detachAllStatesExceptCallsCount = 0
+    var detachAllStatesExceptCalled: Bool {
+        return detachAllStatesExceptCallsCount > 0
+    }
+    var detachAllStatesExceptReceivedException: AudioPlayerState?
+    var detachAllStatesExceptReceivedInvocations: [AudioPlayerState?] = []
+    var detachAllStatesExceptClosure: ((AudioPlayerState?) async -> Void)?
+
+    func detachAllStates(except exception: AudioPlayerState?) async {
+        detachAllStatesExceptCallsCount += 1
+        detachAllStatesExceptReceivedException = exception
+        detachAllStatesExceptReceivedInvocations.append(exception)
+        await detachAllStatesExceptClosure?(exception)
     }
 }
 class NotificationCenterMock: NotificationCenterProtocol {
@@ -2853,15 +2930,19 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
 
     //MARK: - startRecording
 
+    var startRecordingThrowableError: Error?
     var startRecordingCallsCount = 0
     var startRecordingCalled: Bool {
         return startRecordingCallsCount > 0
     }
-    var startRecordingClosure: (() -> Void)?
+    var startRecordingClosure: (() async throws -> Void)?
 
-    func startRecording() {
+    func startRecording() async throws {
+        if let error = startRecordingThrowableError {
+            throw error
+        }
         startRecordingCallsCount += 1
-        startRecordingClosure?()
+        try await startRecordingClosure?()
     }
     //MARK: - stopRecording
 
@@ -2957,11 +3038,11 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     var deleteRecordingCalled: Bool {
         return deleteRecordingCallsCount > 0
     }
-    var deleteRecordingClosure: (() -> Void)?
+    var deleteRecordingClosure: (() async -> Void)?
 
-    func deleteRecording() {
+    func deleteRecording() async {
         deleteRecordingCallsCount += 1
-        deleteRecordingClosure?()
+        await deleteRecordingClosure?()
     }
 }
 // swiftlint:enable all

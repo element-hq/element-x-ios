@@ -28,14 +28,14 @@ protocol VoiceMessageRecorderProtocol {
     var recordingDuration: TimeInterval { get }
     var recordingWaveform: Waveform? { get }
     
-    func startRecording()
+    func startRecording() async throws
     func stopRecording() async throws
     func cancelRecording() async throws
     func startPlayback() async throws
     func pausePlayback()
     func stopPlayback() async
     func seekPlayback(to progress: Double) async
-    func deleteRecording()
+    func deleteRecording() async
 }
 
 // sourcery: AutoMockable

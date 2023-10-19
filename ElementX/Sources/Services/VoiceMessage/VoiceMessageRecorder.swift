@@ -24,11 +24,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     
     private let mp4accMimeType = "audio/m4a"
+    private let waveformSamplesCount = 100
     
-    var recordingURL: URL? {
-        audioRecorder.url
-    }
-    
+    private(set) var recordingURL: URL?
     private(set) var recordingDuration: TimeInterval = 0.0
     private(set) var recordingWaveform: Waveform?
     
@@ -46,14 +44,14 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     // MARK: - Recording
     
-    func startRecording() {
-        audioRecorder.record()
+    func startRecording() async throws {
+        await stopPlayback()
+        recordingURL = nil
+        try await audioRecorder.record(withId: UUID().uuidString)
+        recordingURL = audioRecorder.url
     }
     
     func stopRecording() async throws {
-        guard audioRecorder.isRecording else {
-            return
-        }
         recordingDuration = audioRecorder.currentTime
         try await audioRecorder.stopRecording()
         
@@ -61,7 +59,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         let analyzer = WaveformAnalyzer()
         if let recordingURL {
             do {
-                let samples = try await analyzer.samples(fromAudioAt: recordingURL, count: 100)
+                let samples = try await analyzer.samples(fromAudioAt: recordingURL, count: waveformSamplesCount)
                 // linearly normalized to [0, 1] (1 -> -50 dB)
                 waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
             } catch {
@@ -72,19 +70,27 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         recordingWaveform = waveform
         
         // Build the preview audio player state
-        let audioPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: waveform)
-        previewPlayerState = audioPlayerState
+        previewPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: waveform)
     }
     
     func cancelRecording() async throws {
         try await audioRecorder.stopRecording()
         audioRecorder.deleteRecording()
+        recordingURL = nil
+        previewPlayerState = nil
     }
     
+    func deleteRecording() async {
+        await stopPlayback()
+        audioRecorder.deleteRecording()
+        previewPlayerState = nil
+        recordingURL = nil
+    }
+
     // MARK: - Preview
         
     func startPlayback() async throws {
-        guard let previewPlayerState, let url = audioRecorder.url else {
+        guard let previewPlayerState, let url = recordingURL else {
             MXLog.error("no available preview")
             return
         }
@@ -106,7 +112,10 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func stopPlayback() async {
-        await previewPlayerState?.detachAudioPlayer()
+        guard let previewPlayerState else {
+            return
+        }
+        await previewPlayerState.detachAudioPlayer()
         let audioPlayer = try? audioPlayer()
         audioPlayer?.stop()
     }
@@ -114,17 +123,11 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     func seekPlayback(to progress: Double) async {
         await previewPlayerState?.updateState(progress: progress)
     }
-    
-    // MARK: - Pending Voice Message
-    
-    func deleteRecording() {
-        audioRecorder.deleteRecording()
-    }
-    
+        
     // MARK: - Private
     
     private func audioPlayer() throws -> AudioPlayerProtocol {
-        guard let url = audioRecorder.url else {
+        guard let url = recordingURL else {
             throw VoiceMessageRecorderError.previewNotAvailable
         }
         let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)

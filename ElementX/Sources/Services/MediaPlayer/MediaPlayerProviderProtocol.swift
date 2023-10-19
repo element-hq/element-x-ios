@@ -18,6 +18,11 @@ import Foundation
 
 protocol MediaPlayerProviderProtocol {
     func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol
+    
+    func playerState(withId: String) -> AudioPlayerState?
+    func register(audioPlayerState: AudioPlayerState, withId: String)
+    func unregister(withAudioPlayerStateId: String)
+    func detachAllStates(except exception: AudioPlayerState?) async
 }
 
 // sourcery: AutoMockable

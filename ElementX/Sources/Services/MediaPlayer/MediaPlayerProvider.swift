@@ -22,9 +22,11 @@ enum MediaPlayerProviderError: Error {
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private var audioPlayer: AudioPlayerProtocol!
-            
+    private var audioPlayerStates: [String: AudioPlayerState] = [:]
+    
     deinit {
         audioPlayer = nil
+        audioPlayerStates = [:]
     }
     
     func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol {
@@ -41,6 +43,29 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         } else {
             MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
             throw MediaPlayerProviderError.unsupportedMediaType
+        }
+    }
+    
+    // MARK: - AudioPlayer
+    
+    func playerState(withId id: String) -> AudioPlayerState? {
+        audioPlayerStates[id]
+    }
+    
+    func register(audioPlayerState: AudioPlayerState, withId id: String) {
+        audioPlayerStates[id] = audioPlayerState
+    }
+    
+    func unregister(withAudioPlayerStateId id: String) {
+        audioPlayerStates[id] = nil
+    }
+    
+    func detachAllStates(except exception: AudioPlayerState?) async {
+        for key in audioPlayerStates.keys {
+            if key == exception?.id.uuidString {
+                continue
+            }
+            await audioPlayerStates[key]?.detachAudioPlayer()
         }
     }
 }

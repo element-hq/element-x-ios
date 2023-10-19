@@ -102,6 +102,7 @@ struct ComposerToolbar: View {
                 }
             }
         }
+        .animation(.elementDefault, value: context.viewState.composerMode)
     }
     
     private var bottomBar: some View {

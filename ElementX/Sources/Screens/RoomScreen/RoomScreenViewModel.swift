@@ -202,8 +202,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .composerFocusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
         case .startVoiceMessageRecording:
-            timelineController.pauseAudio()
-            Task { await startRecordingVoiceMessage() }
+            Task {
+                await mediaPlayerProvider.detachAllStates(except: nil)
+                await startRecordingVoiceMessage()
+            }
         case .stopVoiceMessageRecording:
             Task { await stopRecordingVoiceMessage() }
         case .cancelVoiceMessageRecording:
@@ -213,8 +215,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
-            timelineController.pauseAudio()
-            Task { await startPlayingRecordedVoiceMessage() }
+            Task {
+                await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewPlayerState)
+                await startPlayingRecordedVoiceMessage()
+            }
         case .pauseVoiceMessagePlayback:
             pausePlayingRecordedVoiceMessage()
         case .seekVoiceMessagePlayback(let progress):
@@ -245,8 +249,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     if self.state.timelineViewState.isBackPaginating != isBackPaginating {
                         self.state.timelineViewState.isBackPaginating = isBackPaginating
                     }
-                case .startPlayingAudio:
-                    Task { await self.stopVoiceMessageRecorder() }
                 }
             }
             .store(in: &cancellables)
@@ -949,11 +951,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let audioRecordState = AudioRecorderState()
         do {
             try await audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
+            try await voiceMessageRecorder.startRecording()
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        } catch AudioRecorderError.recordPermissionNotGranted {
+            state.bindings.confirmationAlertInfo = .init(id: .init(),
+                                                         title: "Permission needed",
+                                                         message: "Microphone permission not granted",
+                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: L10n.actionOk, action: {  }))
         } catch {
             MXLog.error("failed to start voice message recording: \(error)")
         }
-        voiceMessageRecorder.startRecording()
     }
     
     private func stopRecordingVoiceMessage() async {
@@ -968,7 +976,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("no preview available")
             return
         }
-        
+        mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerState.id.uuidString)
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
     }
     
@@ -978,8 +986,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func deleteCurrentVoiceMessage() async {
-        await voiceMessageRecorder.stopPlayback()
-        voiceMessageRecorder.deleteRecording()
+        await voiceMessageRecorder.deleteRecording()
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
@@ -1011,7 +1018,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             if case .failure(let failure) = result {
                 throw failure
             } else {
-                actionsSubject.send(.composer(action: .setMode(mode: .default)))
+                await deleteCurrentVoiceMessage()
             }
         } catch {
             MXLog.error("failed to send the voice message: \(error)")

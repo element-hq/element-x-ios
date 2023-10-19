@@ -162,3 +162,9 @@ extension AudioPlayerState: Equatable {
         lhs.id == rhs.id
     }
 }
+
+extension AudioPlayerState: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
