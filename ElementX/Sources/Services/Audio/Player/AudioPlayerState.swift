@@ -30,13 +30,17 @@ enum AudioPlayerPlaybackState {
 class AudioPlayerState: ObservableObject, Identifiable {
     let id = UUID()
     let duration: Double
-    let waveform: Waveform
+    let waveform: EstimatedWaveform
     @Published private(set) var playbackState: AudioPlayerPlaybackState
     @Published private(set) var progress: Double
 
     private weak var audioPlayer: AudioPlayerProtocol?
     private var cancellables: Set<AnyCancellable> = []
     private var displayLink: CADisplayLink?
+
+    /// The file url that the last player attached to this object has loaded.
+    /// The file url persists even if the AudioPlayer will be detached later.
+    private(set) var fileURL: URL?
 
     var isAttached: Bool {
         audioPlayer != nil
@@ -46,9 +50,9 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink != nil
     }
 
-    init(duration: Double, waveform: Waveform? = nil, progress: Double = 0.0) {
+    init(duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
         self.duration = duration
-        self.waveform = waveform ?? Waveform(data: [])
+        self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
         playbackState = .stopped
     }
@@ -110,6 +114,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
             playbackState = .loading
         case .didFinishLoading:
             playbackState = .readyToPlay
+            fileURL = audioPlayer?.url
         case .didStartPlaying:
             if let audioPlayer {
                 await restoreAudioPlayerState(audioPlayer: audioPlayer)

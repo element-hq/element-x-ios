@@ -117,3 +117,9 @@ packages:
   SwiftOGG:
     url: https://github.com/vector-im/swift-ogg
     branch: 0.0.1
+  DSWaveformImage:
+    url: https://github.com/dmrschmidt/DSWaveformImage
+    minorVersion: 14.1.0
+
+
+

@@ -469,9 +469,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
-        var waveform: Waveform?
+        var waveform: EstimatedWaveform?
         if let audioWaveform = messageContent.audio?.waveform {
-            waveform = Waveform(data: audioWaveform)
+            waveform = EstimatedWaveform(data: audioWaveform)
         }
 
         return AudioRoomTimelineItemContent(body: messageContent.body,

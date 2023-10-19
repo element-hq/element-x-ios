@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+import DSWaveformImage
+import DSWaveformImageViews
 import SwiftUI
 
 struct VoiceMessageRoomPlaybackView: View {
@@ -74,7 +76,15 @@ struct VoiceMessageRoomPlaybackView: View {
                     .fixedSize(horizontal: true, vertical: true)
             }
             GeometryReader { geometry in
-                WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
+                waveformView
+                    .overlay(alignment: .leading) {
+                        // Display a cursor
+                        RoundedRectangle(cornerRadius: 1)
+                            .fill(Color.compound.iconAccentTertiary)
+                            .offset(CGSize(width: playerState.progress * geometry.size.width, height: 0.0))
+                            .frame(width: waveformLineWidth, height: geometry.size.height)
+                            .opacity(showWaveformCursor ? 1 : 0)
+                    }
                     // Add a gesture to drag the waveform
                     .gesture(SpatialTapGesture()
                         .simultaneously(with: LongPressGesture())
@@ -147,6 +157,26 @@ struct VoiceMessageRoomPlaybackView: View {
         .frame(width: playPauseButtonSize,
                height: playPauseButtonSize)
     }
+
+    @ViewBuilder
+    private var waveformView: some View {
+        if let url = playerState.fileURL {
+            WaveformView(audioURL: url,
+                         configuration: .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding)),
+                                              verticalScalingFactor: 1.0),
+                         placeholder: { estimatedWaveformView })
+                .progressMask(progress: playerState.progress)
+        } else {
+            estimatedWaveformView
+        }
+    }
+
+    private var estimatedWaveformView: some View {
+        EstimatedWaveformView(lineWidth: waveformLineWidth,
+                              linePadding: waveformLinePadding,
+                              waveform: playerState.waveform,
+                              progress: playerState.progress)
+    }
 }
 
 private enum DragState: Equatable {
@@ -183,10 +213,10 @@ private enum DragState: Equatable {
 }
 
 struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
-    static let waveform = Waveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
-                                          334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
-                                          294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
-                                          0, 0, 0, 0, 0, 3])
+    static let waveform = EstimatedWaveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
+                                                   334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
+                                                   294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
+                                                   0, 0, 0, 0, 0, 3])
     
     static var playerState = AudioPlayerState(duration: 10.0,
                                               waveform: waveform,

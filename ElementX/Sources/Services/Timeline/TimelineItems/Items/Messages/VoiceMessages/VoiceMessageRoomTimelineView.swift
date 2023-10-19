@@ -75,12 +75,12 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(body: "audio.ogg",
                                                                                    duration: 300,
-                                                                                   waveform: Waveform.mockWaveform,
+                                                                                   waveform: EstimatedWaveform.mockWaveform,
                                                                                    source: nil,
                                                                                    contentType: nil))
     
     static let playerState = AudioPlayerState(duration: 10.0,
-                                              waveform: Waveform.mockWaveform,
+                                              waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)
     
     static var previews: some View {

@@ -227,12 +227,12 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                              sender: .init(id: ""),
                                                              content: .init(body: "audio.ogg",
                                                                             duration: 100,
-                                                                            waveform: Waveform.mockWaveform,
+                                                                            waveform: EstimatedWaveform.mockWaveform,
                                                                             source: nil,
                                                                             contentType: nil),
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                    contentType: .text(.init(body: "Short")))),
-                                         playerState: AudioPlayerState(duration: 10, waveform: Waveform.mockWaveform))
+                                         playerState: AudioPlayerState(duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

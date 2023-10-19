@@ -194,6 +194,8 @@ targets:
     - package: WysiwygComposer
     - package: Prefire
     - package: SwiftOGG
+    - package: DSWaveformImage
+      product: DSWaveformImageViews
 
     sources:
     - path: ../Sources
