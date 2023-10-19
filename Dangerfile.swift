@@ -6,7 +6,7 @@ SwiftLint.lint(inline: true)
 let danger = Danger()
 
 // Warn when there is a big PR
-if (danger.github.pullRequest.additions ?? 0) > 500 {
+if (danger.github.pullRequest.additions ?? 0) > 1000 {
     warn("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
 }
 

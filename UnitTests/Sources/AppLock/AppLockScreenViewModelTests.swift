@@ -21,19 +21,22 @@ import XCTest
 @MainActor
 class AppLockScreenViewModelTests: XCTestCase {
     var appLockService: AppLockService!
+    var keychainController: KeychainControllerMock!
     var viewModel: AppLockScreenViewModelProtocol!
     
     var context: AppLockScreenViewModelType.Context { viewModel.context }
     
     override func setUp() {
         AppSettings.reset()
-        appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: AppSettings())
+        keychainController = KeychainControllerMock()
+        appLockService = AppLockService(keychainController: keychainController, appSettings: AppSettings())
         viewModel = AppLockScreenViewModel(appLockService: appLockService)
     }
     
     func testUnlock() async throws {
         // Given a valid PIN code.
-        let pinCode = "0000"
+        let pinCode = "2023"
+        keychainController.pinCodeReturnValue = pinCode
         
         // When entering it on the lock screen.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .appUnlocked }

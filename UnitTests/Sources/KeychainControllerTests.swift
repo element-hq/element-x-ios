@@ -24,6 +24,7 @@ class KeychainControllerTests: XCTestCase {
         keychain = KeychainController(service: .tests,
                                       accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         keychain.removeAllRestorationTokens()
+        keychain.resetSecrets()
     }
     
     func testAddRestorationToken() {
@@ -112,5 +113,46 @@ class KeychainControllerTests: XCTestCase {
         XCTAssertNil(keychain.restorationTokenForUsername("@test2:example.com"), "The restoration token should have been deleted.")
         XCTAssertNotNil(keychain.restorationTokenForUsername("@test3:example.com"), "The restoration token should not have been deleted.")
         XCTAssertNotNil(keychain.restorationTokenForUsername("@test4:example.com"), "The restoration token should not have been deleted.")
+    }
+    
+    func testAddPINCode() throws {
+        // Given a keychain without a PIN code set.
+        try XCTAssertFalse(keychain.containsPINCode(), "A new keychain shouldn't contain a PIN code.")
+        XCTAssertNil(keychain.pinCode(), "A new keychain shouldn't return a PIN code.")
+        
+        // When setting a PIN code.
+        try keychain.setPINCode("0000")
+        
+        // The the PIN code should be stored.
+        try XCTAssertTrue(keychain.containsPINCode(), "The keychain should contain the PIN code.")
+        XCTAssertEqual(keychain.pinCode(), "0000", "The stored PIN code should match what was set.")
+    }
+    
+    func testUpdatePINCode() throws {
+        // Given a keychain with a PIN code already set.
+        try keychain.setPINCode("0000")
+        try XCTAssertTrue(keychain.containsPINCode(), "The keychain should contain the PIN code.")
+        XCTAssertEqual(keychain.pinCode(), "0000", "The stored PIN code should match what was set.")
+        
+        // When setting a different PIN code.
+        try keychain.setPINCode("1234")
+        
+        // The the PIN code should be updated.
+        try XCTAssertTrue(keychain.containsPINCode(), "The keychain should still contain the PIN code.")
+        XCTAssertEqual(keychain.pinCode(), "1234", "The stored PIN code should match the new value.")
+    }
+    
+    func testRemovePINCode() throws {
+        // Given a keychain with a PIN code already set.
+        try keychain.setPINCode("0000")
+        try XCTAssertTrue(keychain.containsPINCode(), "The keychain should contain the PIN code.")
+        XCTAssertEqual(keychain.pinCode(), "0000", "The stored PIN code should match what was set.")
+        
+        // When removing the PIN code.
+        keychain.removePINCode()
+        
+        // The the PIN code should no longer be stored.
+        try XCTAssertFalse(keychain.containsPINCode(), "The keychain should no longer contain the PIN code.")
+        XCTAssertNil(keychain.pinCode(), "There shouldn't be a stored PIN code after removing it.")
     }
 }
