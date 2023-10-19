@@ -16,40 +16,6 @@
 
 import LocalAuthentication
 
-enum AppLockServiceError: Error {
-    /// The operation failed to access the keychain.
-    case keychainError
-    /// The PIN code was rejected because it isn't long enough, or contains invalid characters.
-    case invalidPIN
-    /// The PIN code was rejected as an insecure choice.
-    case weakPIN
-}
-
-@MainActor
-protocol AppLockServiceProtocol {
-    /// The app has been configured to automatically lock with a PIN code.
-    var isEnabled: Bool { get }
-    /// The type of biometric authentication supported by the device.
-    var biometryType: LABiometryType { get }
-    /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.
-    var biometricUnlockEnabled: Bool { get set }
-    
-    /// Sets the user's PIN code used to unlock the app.
-    func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
-    /// Disables the App Lock feature, removing the user's stored PIN code.
-    func disable()
-    
-    /// Informs the service that the app has entered the background.
-    func applicationDidEnterBackground()
-    /// Decides whether the app should be unlocked with a PIN code/biometrics on foregrounding.
-    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool
-    
-    /// Attempt to unlock the app with the supplied PIN code.
-    func unlock(with pinCode: String) -> Bool
-    /// Attempt to unlock the app using FaceID or TouchID.
-    func unlockWithBiometrics() -> Bool
-}
-
 /// The service responsible for locking and unlocking the app.
 class AppLockService: AppLockServiceProtocol {
     private let keychainController: KeychainControllerProtocol
@@ -76,6 +42,8 @@ class AppLockService: AppLockServiceProtocol {
         self.keychainController = keychainController
         self.appSettings = appSettings
         timer = AppLockTimer(gracePeriod: appSettings.appLockGracePeriod)
+        
+        configureBiometrics()
     }
     
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError> {
@@ -115,6 +83,16 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     // MARK: - Private
+    
+    /// Queries the context for supported biometrics.
+    private func configureBiometrics() {
+        var error: NSError?
+        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        
+        if let error {
+            MXLog.error("Biometrics error: \(error)")
+        }
+    }
     
     /// Ensures that a provided PIN code is long enough and only contains digits.
     private func validate(_ pinCode: String) -> Bool {

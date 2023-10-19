@@ -43,6 +43,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            accountProfileURL: userSession.clientProxy.accountURL(action: .profile),
                                            accountSessionsListURL: userSession.clientProxy.accountURL(action: .sessionsList),
                                            showSessionVerificationSection: showSessionVerificationSection,
+                                           showAppLockSettings: appSettings.appLockFlowEnabled,
                                            showDeveloperOptions: appSettings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
@@ -54,6 +55,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         userSession.clientProxy.userDisplayName
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userDisplayName, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$appLockFlowEnabled
+            .weakAssign(to: \.state.showAppLockSettings, on: self)
             .store(in: &cancellables)
                 
         Task {
@@ -86,6 +91,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.accountProfile)
         case .analytics:
             actionsSubject.send(.analytics)
+        case .appLock:
+            actionsSubject.send(.appLock)
         case .reportBug:
             actionsSubject.send(.reportBug)
         case .about:

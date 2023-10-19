@@ -33,6 +33,10 @@ class AppLockScreenViewModelTests: XCTestCase {
         viewModel = AppLockScreenViewModel(appLockService: appLockService)
     }
     
+    override func tearDown() {
+        AppSettings.reset()
+    }
+    
     func testUnlock() async throws {
         // Given a valid PIN code.
         let pinCode = "2023"

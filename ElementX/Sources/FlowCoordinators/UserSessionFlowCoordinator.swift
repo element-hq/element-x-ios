@@ -25,6 +25,7 @@ enum UserSessionFlowCoordinatorAction {
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
+    private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let appSettings: AppSettings
@@ -48,6 +49,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
+         appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          appSettings: AppSettings,
@@ -55,6 +57,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
+        self.appLockService = appLockService
         self.bugReportService = bugReportService
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.appSettings = appSettings
@@ -328,6 +331,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
                                                              userIndicatorController: userIndicatorController,
                                                              userSession: userSession,
+                                                             appLockService: appLockService,
                                                              bugReportService: bugReportService,
                                                              notificationSettings: userSession.clientProxy.notificationSettings,
                                                              appSettings: appSettings)

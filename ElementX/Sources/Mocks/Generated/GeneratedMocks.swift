@@ -2,11 +2,12 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
+import AnalyticsEvents
 import Combine
 import Foundation
-import SwiftUI
-import AnalyticsEvents
+import LocalAuthentication
 import MatrixRustSDK
+import SwiftUI
 class AnalyticsClientMock: AnalyticsClientProtocol {
     var isRunning: Bool {
         get { return underlyingIsRunning }
@@ -113,6 +114,128 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         updateUserPropertiesReceivedUserProperties = userProperties
         updateUserPropertiesReceivedInvocations.append(userProperties)
         updateUserPropertiesClosure?(userProperties)
+    }
+}
+class AppLockServiceMock: AppLockServiceProtocol {
+    var isEnabled: Bool {
+        get { return underlyingIsEnabled }
+        set(value) { underlyingIsEnabled = value }
+    }
+    var underlyingIsEnabled: Bool!
+    var biometryType: LABiometryType {
+        get { return underlyingBiometryType }
+        set(value) { underlyingBiometryType = value }
+    }
+    var underlyingBiometryType: LABiometryType!
+    var biometricUnlockEnabled: Bool {
+        get { return underlyingBiometricUnlockEnabled }
+        set(value) { underlyingBiometricUnlockEnabled = value }
+    }
+    var underlyingBiometricUnlockEnabled: Bool!
+
+    //MARK: - setupPINCode
+
+    var setupPINCodeCallsCount = 0
+    var setupPINCodeCalled: Bool {
+        return setupPINCodeCallsCount > 0
+    }
+    var setupPINCodeReceivedPinCode: String?
+    var setupPINCodeReceivedInvocations: [String] = []
+    var setupPINCodeReturnValue: Result<Void, AppLockServiceError>!
+    var setupPINCodeClosure: ((String) -> Result<Void, AppLockServiceError>)?
+
+    func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError> {
+        setupPINCodeCallsCount += 1
+        setupPINCodeReceivedPinCode = pinCode
+        setupPINCodeReceivedInvocations.append(pinCode)
+        if let setupPINCodeClosure = setupPINCodeClosure {
+            return setupPINCodeClosure(pinCode)
+        } else {
+            return setupPINCodeReturnValue
+        }
+    }
+    //MARK: - disable
+
+    var disableCallsCount = 0
+    var disableCalled: Bool {
+        return disableCallsCount > 0
+    }
+    var disableClosure: (() -> Void)?
+
+    func disable() {
+        disableCallsCount += 1
+        disableClosure?()
+    }
+    //MARK: - applicationDidEnterBackground
+
+    var applicationDidEnterBackgroundCallsCount = 0
+    var applicationDidEnterBackgroundCalled: Bool {
+        return applicationDidEnterBackgroundCallsCount > 0
+    }
+    var applicationDidEnterBackgroundClosure: (() -> Void)?
+
+    func applicationDidEnterBackground() {
+        applicationDidEnterBackgroundCallsCount += 1
+        applicationDidEnterBackgroundClosure?()
+    }
+    //MARK: - computeNeedsUnlock
+
+    var computeNeedsUnlockWillEnterForegroundAtCallsCount = 0
+    var computeNeedsUnlockWillEnterForegroundAtCalled: Bool {
+        return computeNeedsUnlockWillEnterForegroundAtCallsCount > 0
+    }
+    var computeNeedsUnlockWillEnterForegroundAtReceivedDate: Date?
+    var computeNeedsUnlockWillEnterForegroundAtReceivedInvocations: [Date] = []
+    var computeNeedsUnlockWillEnterForegroundAtReturnValue: Bool!
+    var computeNeedsUnlockWillEnterForegroundAtClosure: ((Date) -> Bool)?
+
+    func computeNeedsUnlock(willEnterForegroundAt date: Date) -> Bool {
+        computeNeedsUnlockWillEnterForegroundAtCallsCount += 1
+        computeNeedsUnlockWillEnterForegroundAtReceivedDate = date
+        computeNeedsUnlockWillEnterForegroundAtReceivedInvocations.append(date)
+        if let computeNeedsUnlockWillEnterForegroundAtClosure = computeNeedsUnlockWillEnterForegroundAtClosure {
+            return computeNeedsUnlockWillEnterForegroundAtClosure(date)
+        } else {
+            return computeNeedsUnlockWillEnterForegroundAtReturnValue
+        }
+    }
+    //MARK: - unlock
+
+    var unlockWithCallsCount = 0
+    var unlockWithCalled: Bool {
+        return unlockWithCallsCount > 0
+    }
+    var unlockWithReceivedPinCode: String?
+    var unlockWithReceivedInvocations: [String] = []
+    var unlockWithReturnValue: Bool!
+    var unlockWithClosure: ((String) -> Bool)?
+
+    func unlock(with pinCode: String) -> Bool {
+        unlockWithCallsCount += 1
+        unlockWithReceivedPinCode = pinCode
+        unlockWithReceivedInvocations.append(pinCode)
+        if let unlockWithClosure = unlockWithClosure {
+            return unlockWithClosure(pinCode)
+        } else {
+            return unlockWithReturnValue
+        }
+    }
+    //MARK: - unlockWithBiometrics
+
+    var unlockWithBiometricsCallsCount = 0
+    var unlockWithBiometricsCalled: Bool {
+        return unlockWithBiometricsCallsCount > 0
+    }
+    var unlockWithBiometricsReturnValue: Bool!
+    var unlockWithBiometricsClosure: (() -> Bool)?
+
+    func unlockWithBiometrics() -> Bool {
+        unlockWithBiometricsCallsCount += 1
+        if let unlockWithBiometricsClosure = unlockWithBiometricsClosure {
+            return unlockWithBiometricsClosure()
+        } else {
+            return unlockWithBiometricsReturnValue
+        }
     }
 }
 class AudioConverterMock: AudioConverterProtocol {
