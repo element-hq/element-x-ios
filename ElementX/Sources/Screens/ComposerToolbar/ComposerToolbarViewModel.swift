@@ -232,7 +232,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .recordVoiceMessage(let audioRecorderState):
             state.bindings.composerFocused = false
             state.audioRecorderState = audioRecorderState
-        case .previewVoiceMessage(let audioPlayerState):
+        case .previewVoiceMessage(let audioPlayerState, _):
             state.audioPlayerState = audioPlayerState
         case .edit, .reply:
             // Focus composer when switching to reply/edit

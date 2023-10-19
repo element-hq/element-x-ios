@@ -75,9 +75,9 @@ struct ComposerToolbar: View {
             case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 VoiceMessageRecordingComposer(recorderState: state)
                     .padding(.leading, 12)
-            case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+            case .previewVoiceMessage(let state, let waveform) where context.viewState.enableVoiceMessageComposer:
                 voiceMessageTrashButton
-                voiceMessagePreviewComposer(audioPlayerState: state)
+                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
             default:
                 if !context.composerActionsEnabled {
                     RoomAttachmentPicker(context: context)
@@ -266,8 +266,8 @@ struct ComposerToolbar: View {
             })
     }
     
-    private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState) -> some View {
-        VoiceMessagePreviewComposer(playerState: audioPlayerState, onPlay: {
+    private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
+        VoiceMessagePreviewComposer(playerState: audioPlayerState, waveform: waveform, onPlay: {
             context.send(viewAction: .startVoiceMessagePlayback)
         },
         onPause: {
@@ -365,13 +365,14 @@ extension ComposerToolbar {
     
     static func voiceMessagePreviewMock(recording: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
+        let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0))
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0), waveform: .data(waveformData))
             model.state.enableVoiceMessageComposer = true
             return model
         }

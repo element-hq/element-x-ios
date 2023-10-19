@@ -955,7 +955,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
         } catch AudioRecorderError.recordPermissionNotGranted {
             state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: L10n.dialogPermissionMicrophone,
+                                                         title: "",
+                                                         message: L10n.dialogPermissionMicrophone,
                                                          primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
                                                          secondaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }))
         } catch {
@@ -980,8 +981,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.error("no preview available")
             return
         }
+        
+        guard let recordingUrl = voiceMessageRecorder.recordingURL else {
+            MXLog.error("no preview available")
+            return
+        }
+        
         mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerState.id.uuidString)
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingUrl)))))
     }
     
     private func cancelRecordingVoiceMessage() async throws {
@@ -1010,11 +1017,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
             let duration = voiceMessageRecorder.recordingDuration
             let audioInfo = AudioInfo(duration: duration, size: size, mimetype: "audio/ogg")
-            let waveform = voiceMessageRecorder.recordingWaveform
+            let waveform = try await voiceMessageRecorder.buildRecordingWaveform()
             
             let result = await roomProxy.sendVoiceMessage(url: oggFile,
                                                           audioInfo: audioInfo,
-                                                          waveform: waveform?.data ?? [],
+                                                          waveform: waveform,
                                                           progressSubject: nil) { _ in }
             // delete the temporary file
             try? FileManager.default.removeItem(at: oggFile)

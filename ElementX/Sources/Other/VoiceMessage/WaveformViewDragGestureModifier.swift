@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import DSWaveformImageViews
 import Foundation
 import SwiftUI
 
@@ -56,8 +57,8 @@ struct WaveformViewDragGestureModifier: ViewModifier {
     }
 }
 
-extension WaveformView {
-    func dragGesture(_ dragState: Binding<WaveformViewDragState>, minimumDragDistance: Double = 0) -> some View {
+extension View {
+    func waveformDragGesture(_ dragState: Binding<WaveformViewDragState>, minimumDragDistance: Double = 0) -> some View {
         modifier(WaveformViewDragGestureModifier(dragState: dragState,
                                                  minimumDragDistance: minimumDragDistance))
     }

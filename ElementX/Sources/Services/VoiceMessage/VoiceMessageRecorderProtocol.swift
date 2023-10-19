@@ -26,7 +26,6 @@ protocol VoiceMessageRecorderProtocol {
     var previewPlayerState: AudioPlayerState? { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
-    var recordingWaveform: Waveform? { get }
     
     func startRecording() async throws
     func stopRecording() async throws
@@ -36,6 +35,8 @@ protocol VoiceMessageRecorderProtocol {
     func stopPlayback() async
     func seekPlayback(to progress: Double) async
     func deleteRecording() async
+    
+    func buildRecordingWaveform() async throws -> [UInt16]
 }
 
 // sourcery: AutoMockable

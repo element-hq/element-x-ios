@@ -28,7 +28,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private(set) var recordingURL: URL?
     private(set) var recordingDuration: TimeInterval = 0.0
-    private(set) var recordingWaveform: Waveform?
     
     private(set) var previewPlayerState: AudioPlayerState?
     
@@ -54,23 +53,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     func stopRecording() async throws {
         recordingDuration = audioRecorder.currentTime
         try await audioRecorder.stopRecording()
-        
-        var waveformData: [UInt16] = []
-        let analyzer = WaveformAnalyzer()
-        if let recordingURL {
-            do {
-                let samples = try await analyzer.samples(fromAudioAt: recordingURL, count: waveformSamplesCount)
-                // linearly normalized to [0, 1] (1 -> -50 dB)
-                waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
-            } catch {
-                MXLog.error("Waveform analysis failed: \(error)")
-            }
-        }
-        let waveform = Waveform(data: waveformData)
-        recordingWaveform = waveform
-        
+                
         // Build the preview audio player state
-        previewPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: waveform)
+        previewPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: EstimatedWaveform(data: []))
     }
     
     func cancelRecording() async throws {
@@ -122,6 +107,24 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func seekPlayback(to progress: Double) async {
         await previewPlayerState?.updateState(progress: progress)
+    }
+    
+    func buildRecordingWaveform() async throws -> [UInt16] {
+        guard let url = recordingURL else {
+            MXLog.error("no recording file")
+            return []
+        }
+        // build the waveform
+        var waveformData: [UInt16] = []
+        let analyzer = WaveformAnalyzer()
+        do {
+            let samples = try await analyzer.samples(fromAudioAt: url, count: 100)
+            // linearly normalized to [0, 1] (1 -> -50 dB)
+            waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
+        } catch {
+            MXLog.error("Waveform analysis failed: \(error)")
+        }
+        return waveformData
     }
         
     // MARK: - Private

@@ -14,11 +14,14 @@
 // limitations under the License.
 //
 
+import DSWaveformImage
+import DSWaveformImageViews
 import Foundation
 import SwiftUI
 
 struct VoiceMessagePreviewComposer: View {
     @ObservedObject var playerState: AudioPlayerState
+    let waveform: WaveformSource
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     @State private var resumePlaybackAfterScrubbing = false
@@ -48,7 +51,7 @@ struct VoiceMessagePreviewComposer: View {
     var showWaveformCursor: Bool {
         playerState.playbackState == .playing || dragState.isDragging
     }
-        
+            
     var body: some View {
         HStack {
             HStack {
@@ -60,8 +63,8 @@ struct VoiceMessagePreviewComposer: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
-            WaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: playerState.waveform, progress: playerState.progress, showCursor: showWaveformCursor)
-                .dragGesture($dragState)
+            waveformView
+                .waveformDragGesture($dragState)
                 .onChange(of: dragState) { dragState in
                     switch dragState {
                     case .inactive:
@@ -90,6 +93,22 @@ struct VoiceMessagePreviewComposer: View {
         .fixedSize(horizontal: false, vertical: true)
     }
     
+    @ViewBuilder
+    private var waveformView: some View {
+        let configuration: Waveform.Configuration = .init(style: .striped(.init(color: .black, width: waveformLineWidth, spacing: waveformLinePadding)),
+                                                          verticalScalingFactor: 1.0)
+        switch waveform {
+        case .url(let url):
+            WaveformView(audioURL: url,
+                         configuration: configuration)
+                .progressMask(progress: playerState.progress)
+        case .data(let array):
+            WaveformLiveCanvas(samples: array,
+                               configuration: configuration)
+                .progressMask(progress: playerState.progress)
+        }
+    }
+
     @ViewBuilder
     private var playPauseButton: some View {
         Button {
@@ -144,9 +163,11 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
                                               waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)
     
+    static let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
+    
     static var previews: some View {
         VStack {
-            VoiceMessagePreviewComposer(playerState: playerState, onPlay: { }, onPause: { }, onSeek: { _ in })
+            VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in })
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

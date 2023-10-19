@@ -39,6 +39,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     override func setUp() async throws {
         audioRecorder = AudioRecorderMock()
         audioRecorder.underlyingCurrentTime = 0
+        audioRecorder.averagePowerForChannelNumberReturnValue = 0
         audioPlayer = AudioPlayerMock()
         audioPlayer.actions = audioPlayerActions
         
@@ -54,20 +55,12 @@ class VoiceMessageRecorderTests: XCTestCase {
                                                     audioConverter: audioConverter,
                                                     voiceMessageCache: voiceMessageCache)
     }
-    
-    func testStop() async throws {
-        audioRecorder.isRecording = true
-        audioRecorder.url = recordingURL
-        try await voiceMessageRecorder.stop()
-        XCTAssert(audioRecorder.stopRecordingCalled)
-        XCTAssert(audioPlayer.stopCalled)
-    }
-    
+        
     func testStartRecording() async throws {
         audioRecorder.url = recordingURL
-        let returnedAudioRecorder = voiceMessageRecorder.startRecording()
-        XCTAssert(audioRecorder.recordCalled)
-        XCTAssertEqual(returnedAudioRecorder.url, audioRecorder.url)
+        try await voiceMessageRecorder.startRecording()
+        XCTAssert(audioRecorder.recordWithIdCalled)
+        XCTAssertEqual(voiceMessageRecorder.recordingURL, audioRecorder.url)
     }
     
     func testStopRecording() async throws {
@@ -95,15 +88,17 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssert(audioRecorder.deleteRecordingCalled)
     }
     
+    func testDeleteRecording() async throws {
+        await voiceMessageRecorder.deleteRecording()
+        XCTAssert(audioRecorder.deleteRecordingCalled)
+    }
+    
     func testStartPlayback() async throws {
-        audioRecorder.isRecording = false
         audioRecorder.url = recordingURL
-
-        // Calling stop will generate the preview player state
+        try await voiceMessageRecorder.startRecording()
         try await voiceMessageRecorder.stopRecording()
 
         // if the player url doesn't match the recording url
-        audioPlayer.url = nil
         try await voiceMessageRecorder.startPlayback()
         
         XCTAssert(audioPlayer.loadMediaSourceUsingAutoplayCalled)
@@ -115,12 +110,10 @@ class VoiceMessageRecorderTests: XCTestCase {
     }
     
     func testResumePlayback() async throws {
-        audioRecorder.isRecording = false
         audioRecorder.url = recordingURL
-
-        // Calling stop will generate the preview player state
+        try await voiceMessageRecorder.startRecording()
         try await voiceMessageRecorder.stopRecording()
-
+        
         // if the player url matches the recording url
         audioPlayer.url = recordingURL
         try await voiceMessageRecorder.startPlayback()
@@ -131,8 +124,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testPausePlayback() async throws {
         audioRecorder.url = recordingURL
-
-        // Calling stop will generate the preview player state needed to have an audio player
+        try await voiceMessageRecorder.startRecording()
         try await voiceMessageRecorder.stopRecording()
 
         voiceMessageRecorder.pausePlayback()
@@ -141,10 +133,9 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testStopPlayback() async throws {
         audioRecorder.url = recordingURL
-
-        // Calling stop will generate the preview player state needed to have an audio player
+        try await voiceMessageRecorder.startRecording()
         try await voiceMessageRecorder.stopRecording()
-        
+
         await voiceMessageRecorder.stopPlayback()
         XCTAssertEqual(voiceMessageRecorder.previewPlayerState?.isAttached, false)
         XCTAssert(audioPlayer.stopCalled)
@@ -152,7 +143,6 @@ class VoiceMessageRecorderTests: XCTestCase {
     
     func testSeekPlayback() async throws {
         audioRecorder.url = recordingURL
-        
         // Calling stop will generate the preview player state needed to have an audio player
         try await voiceMessageRecorder.stopRecording()
         voiceMessageRecorder.previewPlayerState?.attachAudioPlayer(audioPlayer)
@@ -162,8 +152,16 @@ class VoiceMessageRecorderTests: XCTestCase {
         XCTAssertEqual(audioPlayer.seekToReceivedProgress, 0.4)
     }
     
-    func testDeleteRecording() async throws {
-        voiceMessageRecorder.deleteRecording()
-        XCTAssert(audioRecorder.deleteRecordingCalled)
+    func testBuildRecordedWaveform() async throws {
+        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_audio", withExtension: "mp3") else {
+            XCTFail("Test audio file is missing")
+            return
+        }
+        audioRecorder.url = audioFileUrl
+        try await voiceMessageRecorder.startRecording()
+        try await voiceMessageRecorder.stopRecording()
+
+        let data = try await voiceMessageRecorder.buildRecordingWaveform()
+        XCTAssert(!data.isEmpty)
     }
 }

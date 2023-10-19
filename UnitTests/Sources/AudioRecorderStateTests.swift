@@ -34,6 +34,7 @@ class AudioRecorderStateTests: XCTestCase {
         audioRecorderMock.isRecording = false
         audioRecorderMock.underlyingActions = audioRecorderActions
         audioRecorderMock.currentTime = 0.0
+        audioRecorderMock.averagePowerForChannelNumberReturnValue = 0
         return audioRecorderMock
     }
     

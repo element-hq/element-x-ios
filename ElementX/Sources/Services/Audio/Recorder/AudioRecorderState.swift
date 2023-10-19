@@ -30,7 +30,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
     
     @Published private(set) var recordingState: AudioRecorderRecordingState = .stopped
     @Published private(set) var duration = 0.0
-    @Published private(set) var waveform = EstimatedWaveform(data: Array(repeating: 0, count: 100))
+    @Published private(set) var waveformSamples: [Float] = []
     
     private weak var audioRecorder: AudioRecorderProtocol?
     private var cancellables: Set<AnyCancellable> = []
@@ -50,6 +50,7 @@ class AudioRecorderState: ObservableObject, Identifiable {
             try await audioRecorder.stopRecording()
         }
         stopPublishUpdates()
+        waveformSamples = []
         cancellables = []
         audioRecorder = nil
         recordingState = .stopped
@@ -92,13 +93,16 @@ class AudioRecorderState: ObservableObject, Identifiable {
             stopPublishUpdates()
         }
         displayLink = CADisplayLink(target: self, selector: #selector(publishUpdate))
-        displayLink?.preferredFrameRateRange = .init(minimum: 10, maximum: 20)
+        displayLink?.preferredFrameRateRange = .init(minimum: 30, maximum: 60)
         displayLink?.add(to: .current, forMode: .common)
     }
     
     @objc private func publishUpdate(displayLink: CADisplayLink) {
         if let currentTime = audioRecorder?.currentTime {
             duration = currentTime
+        }
+        if let sample = audioRecorder?.averagePowerForChannelNumber(0) {
+            waveformSamples.append(sample)
         }
     }
     

@@ -2926,7 +2926,6 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         set(value) { underlyingRecordingDuration = value }
     }
     var underlyingRecordingDuration: TimeInterval!
-    var recordingWaveform: Waveform?
 
     //MARK: - startRecording
 
@@ -3043,6 +3042,27 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     func deleteRecording() async {
         deleteRecordingCallsCount += 1
         await deleteRecordingClosure?()
+    }
+    //MARK: - buildRecordingWaveform
+
+    var buildRecordingWaveformThrowableError: Error?
+    var buildRecordingWaveformCallsCount = 0
+    var buildRecordingWaveformCalled: Bool {
+        return buildRecordingWaveformCallsCount > 0
+    }
+    var buildRecordingWaveformReturnValue: [UInt16]!
+    var buildRecordingWaveformClosure: (() async throws -> [UInt16])?
+
+    func buildRecordingWaveform() async throws -> [UInt16] {
+        if let error = buildRecordingWaveformThrowableError {
+            throw error
+        }
+        buildRecordingWaveformCallsCount += 1
+        if let buildRecordingWaveformClosure = buildRecordingWaveformClosure {
+            return try await buildRecordingWaveformClosure()
+        } else {
+            return buildRecordingWaveformReturnValue
+        }
     }
 }
 // swiftlint:enable all
