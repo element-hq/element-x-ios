@@ -40,7 +40,7 @@ struct AppLockSettingsScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonSettings)
+        .navigationTitle(UntranslatedL10n.commonScreenLock)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
