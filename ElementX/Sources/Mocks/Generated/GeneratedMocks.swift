@@ -1625,23 +1625,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendMessage
 
-    var sendMessageHtmlInReplyToCallsCount = 0
-    var sendMessageHtmlInReplyToCalled: Bool {
-        return sendMessageHtmlInReplyToCallsCount > 0
+    var sendMessageHtmlInReplyToIntentionalMentionsCallsCount = 0
+    var sendMessageHtmlInReplyToIntentionalMentionsCalled: Bool {
+        return sendMessageHtmlInReplyToIntentionalMentionsCallsCount > 0
     }
-    var sendMessageHtmlInReplyToReceivedArguments: (message: String, html: String?, eventID: String?)?
-    var sendMessageHtmlInReplyToReceivedInvocations: [(message: String, html: String?, eventID: String?)] = []
-    var sendMessageHtmlInReplyToReturnValue: Result<Void, RoomProxyError>!
-    var sendMessageHtmlInReplyToClosure: ((String, String?, String?) async -> Result<Void, RoomProxyError>)?
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments: (message: String, html: String?, eventID: String?, intentionalMentions: Mentions)?
+    var sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations: [(message: String, html: String?, eventID: String?, intentionalMentions: Mentions)] = []
+    var sendMessageHtmlInReplyToIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
+    var sendMessageHtmlInReplyToIntentionalMentionsClosure: ((String, String?, String?, Mentions) async -> Result<Void, RoomProxyError>)?
 
-    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError> {
-        sendMessageHtmlInReplyToCallsCount += 1
-        sendMessageHtmlInReplyToReceivedArguments = (message: message, html: html, eventID: eventID)
-        sendMessageHtmlInReplyToReceivedInvocations.append((message: message, html: html, eventID: eventID))
-        if let sendMessageHtmlInReplyToClosure = sendMessageHtmlInReplyToClosure {
-            return await sendMessageHtmlInReplyToClosure(message, html, eventID)
+    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String?, intentionalMentions: Mentions) async -> Result<Void, RoomProxyError> {
+        sendMessageHtmlInReplyToIntentionalMentionsCallsCount += 1
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedArguments = (message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        sendMessageHtmlInReplyToIntentionalMentionsReceivedInvocations.append((message: message, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let sendMessageHtmlInReplyToIntentionalMentionsClosure = sendMessageHtmlInReplyToIntentionalMentionsClosure {
+            return await sendMessageHtmlInReplyToIntentionalMentionsClosure(message, html, eventID, intentionalMentions)
         } else {
-            return sendMessageHtmlInReplyToReturnValue
+            return sendMessageHtmlInReplyToIntentionalMentionsReturnValue
         }
     }
     //MARK: - toggleReaction
@@ -1788,23 +1788,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - editMessage
 
-    var editMessageHtmlOriginalCallsCount = 0
-    var editMessageHtmlOriginalCalled: Bool {
-        return editMessageHtmlOriginalCallsCount > 0
+    var editMessageHtmlOriginalIntentionalMentionsCallsCount = 0
+    var editMessageHtmlOriginalIntentionalMentionsCalled: Bool {
+        return editMessageHtmlOriginalIntentionalMentionsCallsCount > 0
     }
-    var editMessageHtmlOriginalReceivedArguments: (newMessage: String, html: String?, eventID: String)?
-    var editMessageHtmlOriginalReceivedInvocations: [(newMessage: String, html: String?, eventID: String)] = []
-    var editMessageHtmlOriginalReturnValue: Result<Void, RoomProxyError>!
-    var editMessageHtmlOriginalClosure: ((String, String?, String) async -> Result<Void, RoomProxyError>)?
+    var editMessageHtmlOriginalIntentionalMentionsReceivedArguments: (newMessage: String, html: String?, eventID: String, intentionalMentions: Mentions)?
+    var editMessageHtmlOriginalIntentionalMentionsReceivedInvocations: [(newMessage: String, html: String?, eventID: String, intentionalMentions: Mentions)] = []
+    var editMessageHtmlOriginalIntentionalMentionsReturnValue: Result<Void, RoomProxyError>!
+    var editMessageHtmlOriginalIntentionalMentionsClosure: ((String, String?, String, Mentions) async -> Result<Void, RoomProxyError>)?
 
-    func editMessage(_ newMessage: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
-        editMessageHtmlOriginalCallsCount += 1
-        editMessageHtmlOriginalReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID)
-        editMessageHtmlOriginalReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID))
-        if let editMessageHtmlOriginalClosure = editMessageHtmlOriginalClosure {
-            return await editMessageHtmlOriginalClosure(newMessage, html, eventID)
+    func editMessage(_ newMessage: String, html: String?, original eventID: String, intentionalMentions: Mentions) async -> Result<Void, RoomProxyError> {
+        editMessageHtmlOriginalIntentionalMentionsCallsCount += 1
+        editMessageHtmlOriginalIntentionalMentionsReceivedArguments = (newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions)
+        editMessageHtmlOriginalIntentionalMentionsReceivedInvocations.append((newMessage: newMessage, html: html, eventID: eventID, intentionalMentions: intentionalMentions))
+        if let editMessageHtmlOriginalIntentionalMentionsClosure = editMessageHtmlOriginalIntentionalMentionsClosure {
+            return await editMessageHtmlOriginalIntentionalMentionsClosure(newMessage, html, eventID, intentionalMentions)
         } else {
-            return editMessageHtmlOriginalReturnValue
+            return editMessageHtmlOriginalIntentionalMentionsReturnValue
         }
     }
     //MARK: - redact

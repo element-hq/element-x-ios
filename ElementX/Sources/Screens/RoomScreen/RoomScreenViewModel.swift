@@ -171,8 +171,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
-        case .sendMessage(let message, let html, let mode):
-            Task { await sendCurrentMessage(message, html: html, mode: mode) }
+        case .sendMessage(let message, let html, let mode, let intentionalMentions):
+            Task {
+                await sendCurrentMessage(message,
+                                         html: html,
+                                         mode: mode,
+                                         intentionalMentions: intentionalMentions)
+            }
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
@@ -468,7 +473,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
     }
 
-    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode) async {
+    private func sendCurrentMessage(_ message: String, html: String?, mode: RoomScreenComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }
@@ -477,11 +482,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch mode {
         case .reply(let itemId, _, _):
-            await timelineController.sendMessage(message, html: html, inReplyTo: itemId)
+            await timelineController.sendMessage(message,
+                                                 html: html,
+                                                 inReplyTo: itemId,
+                                                 intentionalMentions: intentionalMentions)
         case .edit(let originalItemId):
-            await timelineController.editMessage(message, html: html, original: originalItemId)
+            await timelineController.editMessage(message,
+                                                 html: html,
+                                                 original: originalItemId,
+                                                 intentionalMentions: intentionalMentions)
         case .default:
-            await timelineController.sendMessage(message, html: html)
+            await timelineController.sendMessage(message,
+                                                 html: html,
+                                                 intentionalMentions: intentionalMentions)
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
