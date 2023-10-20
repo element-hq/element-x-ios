@@ -6368,7 +6368,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.23;
+				version = 1.1.24;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -6384,7 +6384,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-wysiwyg-composer-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.14.3;
+				version = 2.14.4;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {

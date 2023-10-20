@@ -45,7 +45,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.1.23
+    exactVersion: 1.1.24
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/vector-im/compound-ios
@@ -112,7 +112,7 @@ packages:
     minorVersion: 2.0.0
   WysiwygComposer:
     url: https://github.com/matrix-org/matrix-wysiwyg-composer-swift
-    exactVersion: 2.14.3
+    exactVersion: 2.14.4
 #    path: ../matrix-wysiwyg/platforms/ios/lib/WysiwygComposer
   SwiftOGG:
     url: https://github.com/vector-im/swift-ogg
