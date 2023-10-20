@@ -260,7 +260,7 @@ class RoomProxy: RoomProxyProtocol {
     func sendMessage(_ message: String,
                      html: String?,
                      inReplyTo eventID: String? = nil,
-                     intentionalMentions: Mentions) async -> Result<Void, RoomProxyError> {
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -268,7 +268,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let messageContent = buildMessageContentFor(message,
                                                     html: html,
-                                                    intentionalMentions: intentionalMentions)
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -443,7 +443,7 @@ class RoomProxy: RoomProxyProtocol {
     func editMessage(_ message: String,
                      html: String?,
                      original eventID: String,
-                     intentionalMentions: Mentions) async -> Result<Void, RoomProxyError> {
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -451,7 +451,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let messageContent = buildMessageContentFor(message,
                                                     html: html,
-                                                    intentionalMentions: intentionalMentions)
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {

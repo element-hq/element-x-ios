@@ -22,6 +22,10 @@ import WysiwygComposer
 struct IntentionalMentions: Equatable {
     let userIDs: Set<String>
     let atRoom: Bool
+    
+    static var empty: Self {
+        IntentionalMentions(userIDs: [], atRoom: false)
+    }
 }
 
 extension IntentionalMentions {
@@ -33,11 +37,5 @@ extension IntentionalMentions {
 extension MentionsState {
     func toIntentionalMentions() -> IntentionalMentions {
         IntentionalMentions(userIDs: Set(userIds), atRoom: hasAtRoomMention)
-    }
-}
-
-extension Mentions {
-    static var empty: Self {
-        Mentions(userIds: [], room: false)
     }
 }

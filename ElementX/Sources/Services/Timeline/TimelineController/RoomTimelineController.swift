@@ -148,7 +148,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch await roomProxy.sendMessage(message,
                                            html: html,
                                            inReplyTo: inReplyTo,
-                                           intentionalMentions: intentionalMentions.toRustMentions()) {
+                                           intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -186,7 +186,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch await roomProxy.editMessage(newMessage,
                                                html: html,
                                                original: eventID,
-                                               intentionalMentions: intentionalMentions.toRustMentions()) {
+                                               intentionalMentions: intentionalMentions) {
             case .success:
                 MXLog.info("Finished editing message")
             case .failure(let error):
