@@ -164,4 +164,54 @@ class VoiceMessageRecorderTests: XCTestCase {
         let data = try await voiceMessageRecorder.buildRecordingWaveform()
         XCTAssert(!data.isEmpty)
     }
+    
+    func testSendVoiceMessage() async throws {
+        guard let audioFileUrl = Bundle(for: Self.self).url(forResource: "test_voice_message", withExtension: "m4a") else {
+            XCTFail("Test audio file is missing")
+            return
+        }
+        audioRecorder.currentTime = 42
+        audioRecorder.url = audioFileUrl
+        try await voiceMessageRecorder.startRecording()
+        try await voiceMessageRecorder.stopRecording()
+        
+        let roomProxy = RoomProxyMock()
+        let audioConverter = AudioConverterMock()
+        var convertedFileUrl: URL?
+        var convertedFileSize: UInt64?
+        
+        audioConverter.convertToOpusOggSourceURLDestinationURLClosure = { source, destination in
+            convertedFileUrl = destination
+            try? FileManager.default.removeItem(at: destination)
+            let internalConverter = AudioConverter()
+            try internalConverter.convertToOpusOgg(sourceURL: source, destinationURL: destination)
+            convertedFileSize = try? UInt64(FileManager.default.sizeForItem(at: destination))
+            // the source URL must be the recorded file
+            XCTAssertEqual(source, audioFileUrl)
+            // check the converted file extension
+            XCTAssertEqual(destination.pathExtension, "ogg")
+        }
+        
+        roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = { url, audioInfo, waveform, _, _ in
+            XCTAssertEqual(url, convertedFileUrl)
+            XCTAssertEqual(audioInfo.duration, self.audioRecorder.currentTime)
+            XCTAssertEqual(audioInfo.size, convertedFileSize)
+            XCTAssertEqual(audioInfo.mimetype, "audio/ogg")
+            XCTAssertFalse(waveform.isEmpty)
+            
+            return .success(())
+        }
+        
+        try await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter)
+        
+        XCTAssert(audioConverter.convertToOpusOggSourceURLDestinationURLCalled)
+        XCTAssert(roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)
+        
+        // the converted file must have been deleted
+        if let convertedFileUrl {
+            XCTAssertFalse(FileManager.default.fileExists(atPath: convertedFileUrl.path()))
+        } else {
+            XCTFail("converted file URL is missing")
+        }
+    }
 }

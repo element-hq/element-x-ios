@@ -14,15 +14,15 @@
 // limitations under the License.
 //
 
+// swiftlint:disable file_length
+
 import Algorithms
 import Combine
-import MatrixRustSDK
 import OrderedCollections
 import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
-// swiftlint:disable file_length
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationEventLimit: UInt = 20
@@ -39,11 +39,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
-
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
-
     private var canCurrentUserRedact = false
-    
     private var paginateBackwardsTask: Task<Void, Never>?
 
     init(timelineController: RoomTimelineControllerProtocol,
@@ -964,11 +961,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func openSystemSettings() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
-    }
-    
     private func stopRecordingVoiceMessage() async {
         do {
             try await voiceMessageRecorder.stopRecording()
@@ -978,12 +970,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
 
         guard let audioPlayerState = voiceMessageRecorder.previewPlayerState else {
-            MXLog.error("no preview available")
+            MXLog.error("the recorder preview is missing after the recording has been stopped")
             return
         }
         
         guard let recordingUrl = voiceMessageRecorder.recordingURL else {
-            MXLog.error("no preview available")
+            MXLog.error("the recording URL is missing after the recording has been stopped")
             return
         }
         
@@ -1002,35 +994,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func sendCurrentVoiceMessage() async {
-        guard let url = voiceMessageRecorder.recordingURL else {
-            MXLog.error("failed to send the voice message: no recorded file")
-            return
-        }
         await voiceMessageRecorder.stopPlayback()
-        
         do {
-            // convert the file
-            let oggFile = URL.temporaryDirectory.appendingPathComponent("voice-message.ogg")
-            try AudioConverter().convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
-
-            // send it
-            let size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
-            let duration = voiceMessageRecorder.recordingDuration
-            let audioInfo = AudioInfo(duration: duration, size: size, mimetype: "audio/ogg")
-            let waveform = try await voiceMessageRecorder.buildRecordingWaveform()
-            
-            let result = await roomProxy.sendVoiceMessage(url: oggFile,
-                                                          audioInfo: audioInfo,
-                                                          waveform: waveform,
-                                                          progressSubject: nil) { _ in }
-            // delete the temporary file
-            try? FileManager.default.removeItem(at: oggFile)
-            
-            if case .failure(let failure) = result {
-                throw failure
-            } else {
-                await deleteCurrentVoiceMessage()
-            }
+            try await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter())
+            await deleteCurrentVoiceMessage()
         } catch {
             MXLog.error("failed to send the voice message: \(error)")
         }
@@ -1050,6 +1017,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func seekRecordedVoiceMessage(to progress: Double) async {
         await voiceMessageRecorder.seekPlayback(to: progress)
+    }
+    
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 }
 

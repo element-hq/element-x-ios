@@ -18,6 +18,7 @@ import Foundation
 
 enum VoiceMessageRecorderError: Error {
     case genericError
+    case missingRecordingFile
     case previewNotAvailable
 }
 
@@ -37,6 +38,7 @@ protocol VoiceMessageRecorderProtocol {
     func deleteRecording() async
     
     func buildRecordingWaveform() async throws -> [UInt16]
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws
 }
 
 // sourcery: AutoMockable

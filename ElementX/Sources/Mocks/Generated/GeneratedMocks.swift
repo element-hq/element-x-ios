@@ -3064,5 +3064,25 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
             return buildRecordingWaveformReturnValue
         }
     }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageInRoomAudioConverterThrowableError: Error?
+    var sendVoiceMessageInRoomAudioConverterCallsCount = 0
+    var sendVoiceMessageInRoomAudioConverterCalled: Bool {
+        return sendVoiceMessageInRoomAudioConverterCallsCount > 0
+    }
+    var sendVoiceMessageInRoomAudioConverterReceivedArguments: (roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)?
+    var sendVoiceMessageInRoomAudioConverterReceivedInvocations: [(roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)] = []
+    var sendVoiceMessageInRoomAudioConverterClosure: ((RoomProxyProtocol, AudioConverterProtocol) async throws -> Void)?
+
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws {
+        if let error = sendVoiceMessageInRoomAudioConverterThrowableError {
+            throw error
+        }
+        sendVoiceMessageInRoomAudioConverterCallsCount += 1
+        sendVoiceMessageInRoomAudioConverterReceivedArguments = (roomProxy: roomProxy, audioConverter: audioConverter)
+        sendVoiceMessageInRoomAudioConverterReceivedInvocations.append((roomProxy: roomProxy, audioConverter: audioConverter))
+        try await sendVoiceMessageInRoomAudioConverterClosure?(roomProxy, audioConverter)
+    }
 }
 // swiftlint:enable all

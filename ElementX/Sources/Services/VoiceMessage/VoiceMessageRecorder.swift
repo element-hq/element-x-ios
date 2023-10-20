@@ -16,6 +16,7 @@
 
 import DSWaveformImage
 import Foundation
+import MatrixRustSDK
 
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     let audioRecorder: AudioRecorderProtocol
@@ -76,8 +77,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
     func startPlayback() async throws {
         guard let previewPlayerState, let url = recordingURL else {
-            MXLog.error("no available preview")
-            return
+            throw VoiceMessageRecorderError.missingRecordingFile
         }
         
         let audioPlayer = try audioPlayer()
@@ -111,8 +111,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func buildRecordingWaveform() async throws -> [UInt16] {
         guard let url = recordingURL else {
-            MXLog.error("no recording file")
-            return []
+            throw VoiceMessageRecorderError.missingRecordingFile
         }
         // build the waveform
         var waveformData: [UInt16] = []
@@ -125,6 +124,33 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             MXLog.error("Waveform analysis failed: \(error)")
         }
         return waveformData
+    }
+    
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws {
+        guard let url = recordingURL else {
+            throw VoiceMessageRecorderError.missingRecordingFile
+        }
+        
+        // convert the file
+        let sourceFilename = url.deletingPathExtension().lastPathComponent
+        let oggFile = URL.temporaryDirectory.appendingPathComponent(sourceFilename).appendingPathExtension("ogg")
+        try audioConverter.convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
+
+        // send it
+        let size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
+        let audioInfo = AudioInfo(duration: recordingDuration, size: size, mimetype: "audio/ogg")
+        let waveform = try await buildRecordingWaveform()
+        
+        let result = await roomProxy.sendVoiceMessage(url: oggFile,
+                                                      audioInfo: audioInfo,
+                                                      waveform: waveform,
+                                                      progressSubject: nil) { _ in }
+        // delete the temporary file
+        try? FileManager.default.removeItem(at: oggFile)
+        
+        if case .failure(let failure) = result {
+            throw failure
+        }
     }
         
     // MARK: - Private
