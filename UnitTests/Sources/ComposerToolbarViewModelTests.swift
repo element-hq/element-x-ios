@@ -160,4 +160,25 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
         XCTAssertEqual(attachment?.pillData?.type, .allUsers)
     }
+    
+    func testIntentionalMentions() async throws {
+        wysiwygViewModel.setHtmlContent(
+            """
+            <p>Hello @room \
+            and especially hello to <a href=\"https://matrix.to/#/@test:matrix.org\">Test</a></p>
+            """
+        )
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .sendMessage(_, _, _, intentionalMentions):
+                return intentionalMentions == IntentionalMentions(userIDs: ["@test:matrix.org"], atRoom: true)
+            default:
+                return false
+            }
+        }
+        viewModel.context.send(viewAction: .sendMessage)
+        
+        try await deferred.fulfill()
+    }
 }
