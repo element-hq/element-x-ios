@@ -39,13 +39,43 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .submitPINCode(let pinCode):
-            guard appLockService.unlock(with: pinCode) else {
-                MXLog.warning("Invalid PIN code entered.")
-                // Indicate failure here.
+        case .submitPINCode:
+            guard appLockService.unlock(with: state.bindings.pinCode) else {
+                handleInvalidPIN()
                 return
             }
             actionsSubject.send(.appUnlocked)
+        case .clearPINCode:
+            state.bindings.pinCode = ""
+        case .forgotPIN:
+            handleForgotPIN()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func handleForgotPIN() {
+        state.bindings.alertInfo = .init(id: .confirmResetPIN,
+                                         title: L10n.screenAppLockSignoutAlertTitle,
+                                         message: L10n.screenAppLockSignoutAlertMessage,
+                                         primaryButton: .init(title: L10n.actionOk, action: forceSignOut),
+                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+    
+    private func handleInvalidPIN() {
+        MXLog.warning("Invalid PIN code entered.")
+        state.numberOfPINAttempts += 1
+        
+        if state.numberOfPINAttempts == 3 {
+            state.bindings.alertInfo = .init(id: .forceSignOut,
+                                             title: L10n.screenAppLockSignoutAlertTitle,
+                                             message: L10n.screenAppLockSignoutAlertMessage,
+                                             primaryButton: .init(title: L10n.actionOk, action: nil))
+            forceSignOut()
+        }
+    }
+    
+    private func forceSignOut() {
+        // To be implemented.
     }
 }

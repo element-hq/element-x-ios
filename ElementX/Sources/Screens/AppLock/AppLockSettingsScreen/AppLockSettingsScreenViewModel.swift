@@ -55,8 +55,8 @@ class AppLockSettingsScreenViewModel: AppLockSettingsScreenViewModelType, AppLoc
     /// Shows a confirmation alert to the user before removing their PIN code.
     private func showRemovePINAlert() {
         state.bindings.alertInfo = .init(id: .confirmRemovePINCode,
-                                         title: UntranslatedL10n.screenAppLockSettingsRemovePinAlertTitle,
-                                         message: UntranslatedL10n.screenAppLockSettingsRemovePinAlertMessage,
+                                         title: L10n.screenAppLockSettingsRemovePinAlertTitle,
+                                         message: L10n.screenAppLockSettingsRemovePinAlertMessage,
                                          primaryButton: .init(title: L10n.actionYes) { self.completeRemovePIN() },
                                          secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }

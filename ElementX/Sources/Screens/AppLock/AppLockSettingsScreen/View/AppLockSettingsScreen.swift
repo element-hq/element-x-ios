@@ -23,9 +23,9 @@ struct AppLockSettingsScreen: View {
     var body: some View {
         Form {
             Section {
-                ListRow(label: .plain(title: UntranslatedL10n.screenAppLockSettingsChangePin),
+                ListRow(label: .plain(title: L10n.screenAppLockSettingsChangePin),
                         kind: .button { context.send(viewAction: .changePINCode) })
-                ListRow(label: .plain(title: UntranslatedL10n.screenAppLockSettingsRemovePin, role: .destructive),
+                ListRow(label: .plain(title: L10n.screenAppLockSettingsRemovePin, role: .destructive),
                         kind: .button { context.send(viewAction: .disable) })
             }
             
@@ -40,7 +40,7 @@ struct AppLockSettingsScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(UntranslatedL10n.commonScreenLock)
+        .navigationTitle(L10n.commonScreenLock)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }

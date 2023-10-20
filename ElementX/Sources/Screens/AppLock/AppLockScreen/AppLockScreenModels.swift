@@ -22,19 +22,45 @@ enum AppLockScreenViewModelAction {
 }
 
 struct AppLockScreenViewState: BindableState {
-    var bindings: AppLockScreenViewStateBindings
-}
-
-struct AppLockScreenViewStateBindings { }
-
-enum AppLockScreenViewAction: CustomStringConvertible {
-    /// Attempt to unlock the app with the supplied PIN code.
-    case submitPINCode(String)
+    private let maximumAttempts = 3
     
-    var description: String {
-        switch self {
-        case .submitPINCode:
-            return "submitPINCode"
+    /// The number of times the user attempted to enter their PIN.
+    var numberOfPINAttempts = 0
+    
+    var bindings: AppLockScreenViewStateBindings
+    
+    /// The number of digits the user has entered so far.
+    var numberOfDigitsEntered: Int { bindings.pinCode.count }
+    /// Whether the subtitle is in a warning state or not.
+    var isSubtitleWarning: Bool { numberOfPINAttempts > 0 }
+    /// The string shown in the screen's subtitle.
+    var subtitle: String {
+        if !isSubtitleWarning {
+            return L10n.screenAppLockSubtitle
+        } else {
+            return L10n.screenAppLockSubtitleWrongPin(maximumAttempts - numberOfPINAttempts)
         }
     }
+}
+
+struct AppLockScreenViewStateBindings {
+    /// The PIN code entered by the user.
+    var pinCode = ""
+    var alertInfo: AlertInfo<AppLockScreenAlertType>?
+}
+
+enum AppLockScreenAlertType {
+    /// The user has failed too many times, they're being signed out.
+    case forceSignOut
+    /// The user has forgotten their PIN, confirm they're happy to sign out.
+    case confirmResetPIN
+}
+
+enum AppLockScreenViewAction {
+    /// Attempt to unlock the app with the supplied PIN code.
+    case submitPINCode
+    /// Clears the PIN code after a failure animation.
+    case clearPINCode
+    /// The user didn't heed the warnings and can't remember their PIN.
+    case forgotPIN
 }

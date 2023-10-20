@@ -67,8 +67,14 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     }
     
     private func applicationWillEnterForeground() {
-        guard appLockService.isEnabled, appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) else { return }
-        showUnlockScreen()
+        guard appLockService.isEnabled else { return }
+        
+        if appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) {
+            showUnlockScreen()
+        } else {
+            // Reveal the app again if within the grace period.
+            actionsSubject.send(.unlockApp)
+        }
     }
     
     /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.

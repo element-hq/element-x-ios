@@ -4,18 +4,6 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
-"screen_app_lock_title" = "%@ is locked";
-"screen_app_lock_settings_change_pin" = "Change PIN code";
-"screen_app_lock_settings_remove_pin" = "Remove PIN";
-"screen_app_lock_settings_enable_touch_id_ios" = "Allow Touch ID";
-"screen_app_lock_settings_enable_face_id_ios" = "Allow Face ID";
-"screen_app_lock_settings_enable_optic_id_ios" = "Allow Optic ID";
-"screen_app_lock_settings_enable_biometric_unlock" = "Allow biometric unlock";
-"screen_app_lock_settings_remove_pin_alert_title" = "Remove PIN?";
-"screen_app_lock_settings_remove_pin_alert_message" = "Are you sure you want to remove PIN?";
-"common_unlock" = "Unlock";
-"common_screen_lock" = "Screen lock";
-
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";

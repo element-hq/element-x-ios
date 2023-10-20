@@ -38,8 +38,10 @@ class WindowManager {
     /// Configures the window manager to operate on the supplied scene.
     func configure(with windowScene: UIWindowScene) {
         mainWindow = windowScene.keyWindow
+        mainWindow.tintColor = .compound.textActionPrimary
         
         overlayWindow = UIWindow(windowScene: windowScene)
+        overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
         // We don't support user interaction on our indicators so disable interaction, to pass
         // touches through to the main window. If this changes, there's another solution here:
@@ -47,6 +49,7 @@ class WindowManager {
         overlayWindow.isUserInteractionEnabled = false
         
         alternateWindow = UIWindow(windowScene: windowScene)
+        alternateWindow.tintColor = .compound.textActionPrimary
         
         delegate?.windowManagerDidConfigureWindows(self)
     }

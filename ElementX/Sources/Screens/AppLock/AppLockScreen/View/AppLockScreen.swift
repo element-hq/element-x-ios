@@ -17,36 +17,107 @@
 import Compound
 import SwiftUI
 
-// This implementation is only for development purposes.
-
 struct AppLockScreen: View {
     @ObservedObject var context: AppLockScreenViewModel.Context
     
+    /// The size of each dot within the PIN input field.
+    @ScaledMetric private var pinDotSize = 14
+    /// Used to animate the PIN input field on failure.
+    @State private var pinInputFieldOffset = 0.0
+    
+    /// A focus state to highlight a failed PIN entry in VoiceOver.
+    @AccessibilityFocusState private var accessibilitySubtitleFocus: Bool
+    
+    var subtitleColor: Color {
+        context.viewState.isSubtitleWarning ? .compound.textCriticalPrimary : .compound.textPrimary
+    }
+    
     var body: some View {
         FullscreenDialog {
-            VStack(spacing: 8) {
-                HeroImage(image: Image(systemSymbol: .lock))
-                    .symbolVariant(.fill)
-                    .padding(.bottom, 8)
+            VStack(spacing: 32) {
+                header
                 
-                Text(UntranslatedL10n.screenAppLockTitle(InfoPlistReader.main.bundleDisplayName))
-                    .font(.compound.headingMDBold)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.compound.textPrimary)
+                pinInputField
+                    .padding(.bottom, 16)
+                    .offset(x: pinInputFieldOffset)
+                    .onChange(of: context.viewState.numberOfPINAttempts) { newValue in
+                        guard newValue > 0 else { return } // Reset without animation in Previews.
+                        accessibilitySubtitleFocus = true
+                        Task { await animatePINFailure() }
+                    }
+                    .accessibilityLabel(L10n.a11yPinField)
+                    .accessibilityValue(L10n.a11yDigitsEntered(context.viewState.numberOfDigitsEntered))
+                
+                AppLockScreenPINKeypad(pinCode: $context.pinCode)
+                    .onChange(of: context.pinCode) { newValue in
+                        guard newValue.count == 4 else { return }
+                        context.send(viewAction: .submitPINCode)
+                    }
             }
         } bottomContent: {
-            Button(UntranslatedL10n.commonUnlock) {
-                context.send(viewAction: .submitPINCode("0000"))
+            Button(L10n.screenAppLockForgotPin) {
+                context.send(viewAction: .forgotPIN)
             }
-            .buttonStyle(.compound(.primary))
+            .font(.compound.bodyMDSemibold)
         }
+        .alert(item: $context.alertInfo)
+    }
+    
+    var header: some View {
+        VStack(spacing: 8) {
+            CompoundIcon(\.lock, size: .medium, relativeTo: .compound.headingMDBold)
+                .padding(.bottom, 8)
+                .accessibilityHidden(true)
+            
+            Text(L10n.commonEnterYourPin)
+                .font(.compound.headingMDBold)
+                .foregroundColor(.compound.textPrimary)
+                .multilineTextAlignment(.center)
+            
+            Text(context.viewState.subtitle)
+                .font(.compound.bodyMD)
+                .foregroundColor(subtitleColor)
+                .multilineTextAlignment(.center)
+                .accessibilityFocused($accessibilitySubtitleFocus)
+        }
+    }
+    
+    /// The row of dots showing how many digits have been entered.
+    var pinInputField: some View {
+        HStack(spacing: 24) {
+            Circle()
+                .fill(context.viewState.numberOfDigitsEntered > 0 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
+                .frame(width: pinDotSize, height: pinDotSize)
+            Circle()
+                .fill(context.viewState.numberOfDigitsEntered > 1 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
+                .frame(width: pinDotSize, height: pinDotSize)
+            Circle()
+                .fill(context.viewState.numberOfDigitsEntered > 2 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
+                .frame(width: pinDotSize, height: pinDotSize)
+            Circle()
+                .fill(context.viewState.numberOfDigitsEntered > 3 ? .compound.iconPrimary : .compound.bgSubtlePrimary)
+                .frame(width: pinDotSize, height: pinDotSize)
+        }
+    }
+    
+    func animatePINFailure() async {
+        withAnimation(.spring(response: 0, dampingFraction: 0.7, blendDuration: 0.0)) {
+            pinInputFieldOffset = 15
+        }
+        
+        try? await Task.sleep(for: .milliseconds(50))
+        withAnimation(.spring(response: 0.1, dampingFraction: 0.3, blendDuration: 0.1)) {
+            pinInputFieldOffset = 0
+        }
+        
+        try? await Task.sleep(for: .milliseconds(100))
+        context.send(viewAction: .clearPINCode)
     }
 }
 
 // MARK: - Previews
 
-// Add TestablePreview conformance once we have designs.
-struct AppLockScreen_Previews: PreviewProvider {
+struct AppLockScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = AppLockScreenViewModel(appLockService: AppLockServiceMock.mock())
     
     static var previews: some View {
