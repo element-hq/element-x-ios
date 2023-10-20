@@ -61,6 +61,7 @@ internal enum Asset {
     internal static let decryptionError = ImageAsset(name: "images/decryption-error")
     internal static let endedPoll = ImageAsset(name: "images/ended-poll")
     internal static let compose = ImageAsset(name: "images/compose")
+    internal static let settingsIconWithBadge = ImageAsset(name: "images/settings-icon-with-badge")
     internal static let launchBackground = ImageAsset(name: "images/launch-background")
     internal static let locationMarker = ImageAsset(name: "images/location-marker")
     internal static let locationPin = ImageAsset(name: "images/location-pin")
