@@ -77,6 +77,7 @@
 "action_start_verification" = "Start verification";
 "action_static_map_load" = "Tap to load map";
 "action_take_photo" = "Take photo";
+"action_try_again" = "Try again";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.edit_poll" = "Edit poll";
@@ -273,6 +274,13 @@
 "screen_app_lock_settings_remove_pin" = "Remove PIN";
 "screen_app_lock_settings_remove_pin_alert_message" = "Are you sure you want to remove PIN?";
 "screen_app_lock_settings_remove_pin_alert_title" = "Remove PIN?";
+"screen_app_lock_setup_choose_pin" = "Choose PIN";
+"screen_app_lock_setup_confirm_pin" = "Confirm PIN";
+"screen_app_lock_setup_pin_blacklisted_dialog_content" = "You cannot choose this as your PIN code for security reasons";
+"screen_app_lock_setup_pin_blacklisted_dialog_title" = "Choose a different PIN";
+"screen_app_lock_setup_pin_context" = "Lock %1$@ to add extra security to your chats.\n\nChoose something memorable. If you forget this PIN, you will be logged out of the app.";
+"screen_app_lock_setup_pin_mismatch_dialog_content" = "Please enter the same PIN twice";
+"screen_app_lock_setup_pin_mismatch_dialog_title" = "PINs don't match";
 "screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
 "screen_app_lock_signout_alert_title" = "You are being signed out";
 "screen_app_lock_subtitle" = "You have 3 attempts to unlock";

@@ -154,6 +154,27 @@ class AppLockServiceMock: AppLockServiceProtocol {
             return setupPINCodeReturnValue
         }
     }
+    //MARK: - validate
+
+    var validateCallsCount = 0
+    var validateCalled: Bool {
+        return validateCallsCount > 0
+    }
+    var validateReceivedPinCode: String?
+    var validateReceivedInvocations: [String] = []
+    var validateReturnValue: Result<Void, AppLockServiceError>!
+    var validateClosure: ((String) -> Result<Void, AppLockServiceError>)?
+
+    func validate(_ pinCode: String) -> Result<Void, AppLockServiceError> {
+        validateCallsCount += 1
+        validateReceivedPinCode = pinCode
+        validateReceivedInvocations.append(pinCode)
+        if let validateClosure = validateClosure {
+            return validateClosure(pinCode)
+        } else {
+            return validateReturnValue
+        }
+    }
     //MARK: - disable
 
     var disableCallsCount = 0
