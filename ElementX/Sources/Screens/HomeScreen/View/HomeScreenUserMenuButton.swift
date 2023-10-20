@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct HomeScreenUserMenuButton: View {
@@ -31,7 +32,11 @@ struct HomeScreenUserMenuButton: View {
                     Label {
                         Text(L10n.commonSettings)
                     } icon: {
-                        settingsIconImage
+                        if context.viewState.showSettingsMenuOptionBadge {
+                            CompoundIcon(customImage: Asset.Images.settingsIconWithBadge.swiftUIImage)
+                        } else {
+                            CompoundIcon(\.settings)
+                        }
                     }
                 }
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.settings)
@@ -73,25 +78,5 @@ struct HomeScreenUserMenuButton: View {
             Text(L10n.screenSignoutConfirmationDialogContent)
         }
         .accessibilityLabel(L10n.a11yUserMenu)
-    }
-    
-    // MARK: - Private
-        
-    /// Menu doesn't render composed views. Trick it into showing a badge.
-    private var settingsIconImage: Image? {
-        let settingsIcon = Image(systemSymbol: .gearshape)
-            .resizable()
-            .frame(width: 100, height: 100)
-            .overlayBadge(40, isBadged: context.viewState.showSettingsMenuOptionBadge)
-            .colorScheme(colorScheme)
-            .padding()
-        
-        let renderer = ImageRenderer(content: settingsIcon)
-        
-        guard let image = renderer.uiImage else {
-            return nil
-        }
-        
-        return Image(uiImage: image)
     }
 }
