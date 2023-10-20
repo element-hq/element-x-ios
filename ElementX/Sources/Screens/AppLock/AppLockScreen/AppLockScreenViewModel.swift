@@ -48,13 +48,13 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         case .clearPINCode:
             state.bindings.pinCode = ""
         case .forgotPIN:
-            forgotPIN()
+            handleForgotPIN()
         }
     }
     
     // MARK: - Private
     
-    private func forgotPIN() {
+    private func handleForgotPIN() {
         state.bindings.alertInfo = .init(id: .confirmResetPIN,
                                          title: L10n.screenAppLockSignoutAlertTitle,
                                          message: L10n.screenAppLockSignoutAlertMessage,

@@ -38,7 +38,7 @@ struct AppLockScreenViewState: BindableState {
         if !isSubtitleWarning {
             return L10n.screenAppLockSubtitle
         } else {
-            return L10n.screenAppLockSubtitleWrongPin(3 - numberOfPINAttempts)
+            return L10n.screenAppLockSubtitleWrongPin(maximumAttempts - numberOfPINAttempts)
         }
     }
 }
