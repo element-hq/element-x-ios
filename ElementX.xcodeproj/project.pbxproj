@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000765812BABB81F5174C601 /* AppLockSetupPINScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDC38E389B89BCF5C1AFD4A /* AppLockSetupPINScreenUITests.swift */; };
 		0033481EE363E4914295F188 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070FD43DC6BF4E50217965A /* LocalizationTests.swift */; };
 		0180C44B997EDA8D21F883AC /* RoomNotificationSettingsCustomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B746EFA112532A7B701FB914 /* RoomNotificationSettingsCustomSectionView.swift */; };
 		0206016CCEF6EF9365916768 /* AppLockSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33284693F54382F46CFD2EDD /* AppLockSettingsScreenViewModelProtocol.swift */; };
@@ -1577,6 +1578,7 @@
 		AE40D4A5DD857AC16EED945A /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		AE52983FAFB4E0998C00EE8A /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellableTask.swift; sourceTree = "<group>"; };
 		AE5DDBEBBA17973ED4638823 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		AEDC38E389B89BCF5C1AFD4A /* AppLockSetupPINScreenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupPINScreenUITests.swift; sourceTree = "<group>"; };
 		AEEAFB646E583655652C3D04 /* RoomStateEventStringBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateEventStringBuilderTests.swift; sourceTree = "<group>"; };
 		AF042B0FB2EE88977C91E330 /* portrait_test_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = portrait_test_image.jpg; sourceTree = "<group>"; };
 		AF11DD57D9FACF2A757AB024 /* AnalyticsPromptUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptUITests.swift; sourceTree = "<group>"; };
@@ -3565,6 +3567,7 @@
 				7D0CBC76C80E04345E11F2DB /* Application.swift */,
 				349C633291427A0F29C28C54 /* AppLockScreenUITests.swift */,
 				5F088B61525099A48909743B /* AppLockSettingsScreenUITests.swift */,
+				AEDC38E389B89BCF5C1AFD4A /* AppLockSetupPINScreenUITests.swift */,
 				5D2D0A6F1ABC99D29462FB84 /* AuthenticationCoordinatorUITests.swift */,
 				C6FEA87EA3752203065ECE27 /* BugReportUITests.swift */,
 				1D8866FE1CCCF10305FCACBC /* CallScreenUITests.swift */,
@@ -5755,6 +5758,7 @@
 				BF675964C9159F718589C36A /* AnalyticsSettingsScreenUITests.swift in Sources */,
 				F05516474DB42369FD976CEF /* AppLockScreenUITests.swift in Sources */,
 				61C345258DD392477E79A3B5 /* AppLockSettingsScreenUITests.swift in Sources */,
+				000765812BABB81F5174C601 /* AppLockSetupPINScreenUITests.swift in Sources */,
 				7405B4824D45BA7C3D943E76 /* Application.swift in Sources */,
 				ACF094CF3BF02DBFA6DFDE60 /* AuthenticationCoordinatorUITests.swift in Sources */,
 				7756C4E90CABE6F14F7920A0 /* BugReportUITests.swift in Sources */,

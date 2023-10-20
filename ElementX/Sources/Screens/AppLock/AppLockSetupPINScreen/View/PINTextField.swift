@@ -27,9 +27,11 @@ struct PINTextField: View {
             .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure))
             .keyboardType(.numberPad)
             .onChange(of: pinCode) { newValue in
-                // add some tests.
                 let sanitized = sanitize(newValue)
-                if sanitized != newValue { pinCode = sanitized }
+                if sanitized != newValue {
+                    MXLog.warning("PIN code input sanitized.")
+                    pinCode = sanitized
+                }
             }
     }
     
@@ -59,7 +61,7 @@ private struct PINTextFieldStyle: TextFieldStyle {
     public func _body(configuration: TextField<_Label>) -> some View {
         HStack(spacing: 8) {
             ForEach(0..<4) { index in
-                PINTextFieldDigit(pinCode: pinCode, index: index, isSecure: isSecure)
+                PINDigitField(digit: digit(index))
             }
         }
         .overlay {
@@ -69,31 +71,30 @@ private struct PINTextFieldStyle: TextFieldStyle {
         }
         .onTapGesture { isFocussed = true }
     }
+    
+    func digit(_ index: Int) -> Character? {
+        guard pinCode.count > index else { return nil }
+        let stringIndex = pinCode.index(pinCode.startIndex, offsetBy: index)
+        return isSecure ? "●" : pinCode[stringIndex]
+    }
 }
 
 /// A single digit shown within the text field style.
-private struct PINTextFieldDigit: View {
-    let pinCode: String
-    let index: Int
-    let isSecure: Bool
-    
-    var isEntered: Bool { pinCode.count > index }
-    
-    var stringIndex: String.Index { pinCode.index(pinCode.startIndex, offsetBy: index) }
-    var character: Character { isSecure ? "●" : pinCode[stringIndex] }
-    var digit: String { isEntered ? String(character) : "" }
+private struct PINDigitField: View {
+    let digit: Character?
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.compound.bgSubtlePrimary)
-                .opacity(isEntered ? 1 : 0)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .inset(by: 0.5)
-                .stroke(Color.compound.iconPrimary, lineWidth: 1)
-                .opacity(isEntered ? 0 : 1)
-            Text(digit)
-                .font(.compound.headingMDBold)
+            if let digit {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.compound.bgSubtlePrimary)
+                Text(String(digit))
+                    .font(.compound.headingMDBold)
+            } else {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .inset(by: 0.5)
+                    .stroke(Color.compound.iconPrimary, lineWidth: 1)
+            }
         }
         .frame(width: 48, height: 48)
     }
