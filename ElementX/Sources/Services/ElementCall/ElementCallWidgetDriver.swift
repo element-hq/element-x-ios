@@ -135,7 +135,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
     
     // MARK: - WidgetCapabilitiesProvider
     
-    func acquireCapabilities(capabilities: WidgetPermissions) -> WidgetPermissions {
+    func acquireCapabilities(capabilities: WidgetCapabilities) -> WidgetCapabilities {
         capabilities
     }
     
