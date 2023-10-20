@@ -6335,8 +6335,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dmrschmidt/DSWaveformImage";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 14.1.0;
+				kind = revision;
+				revision = 6a4c99a8ab2d2a03f42de21fb8777172ebbcccb1;
 			};
 		};
 		61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
