@@ -1,0 +1,107 @@
+//
+// Copyright 2023 New Vector Ltd
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+import Combine
+@testable import ElementX
+import Foundation
+import XCTest
+
+class MediaPlayerProviderTests: XCTestCase {
+    private var mediaPlayerProvider: MediaPlayerProvider!
+    
+    private let oggMimeType = "audio/ogg"
+    private let someUrl = URL("/some/url")
+    private let someOtherUrl = URL("/some/other/url")
+    
+    override func setUp() async throws {
+        mediaPlayerProvider = MediaPlayerProvider()
+    }
+    
+    func testPlayerForWrongMediaType() async throws {
+        let mediaSourceWithoutMimeType = MediaSourceProxy(url: someUrl, mimeType: nil)
+        XCTAssertThrowsError(try mediaPlayerProvider.player(for: mediaSourceWithoutMimeType))
+
+        let mediaSourceVideo = MediaSourceProxy(url: someUrl, mimeType: "video/mp4")
+        XCTAssertThrowsError(try mediaPlayerProvider.player(for: mediaSourceVideo))
+    }
+    
+    func testPlayerFor() async throws {
+        let mediaSource = MediaSourceProxy(url: someUrl, mimeType: oggMimeType)
+        let playerA = try mediaPlayerProvider.player(for: mediaSource)
+        XCTAssertNotNil(playerA)
+        
+        // calling it again with another mediasource must returns the same player
+        let otherMediaSource = MediaSourceProxy(url: someOtherUrl, mimeType: oggMimeType)
+        let playerB = try mediaPlayerProvider.player(for: otherMediaSource)
+        XCTAssert(playerA === playerB)
+    }
+    
+    func testPlayerStates() async throws {
+        let audioPlayerStateId = UUID().uuidString
+        // By default, there should be no player state
+        XCTAssertNil(mediaPlayerProvider.playerState(withId: audioPlayerStateId))
+        
+        let audioPlayerState = await AudioPlayerState(duration: 10.0)
+        mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerStateId)
+        XCTAssertEqual(audioPlayerState, mediaPlayerProvider.playerState(withId: audioPlayerStateId))
+        
+        mediaPlayerProvider.unregister(withAudioPlayerStateId: audioPlayerStateId)
+        XCTAssertNil(mediaPlayerProvider.playerState(withId: audioPlayerStateId))
+    }
+    
+    func testDetachAllStates() async throws {
+        let audioPlayer = AudioPlayerMock()
+        audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
+        
+        let audioPlayerStates = await Array(repeating: AudioPlayerState(duration: 0), count: 10)
+        for audioPlayerState in audioPlayerStates {
+            await mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerState.id.uuidString)
+            await audioPlayerState.attachAudioPlayer(audioPlayer)
+            let isAttached = await audioPlayerState.isAttached
+            XCTAssertTrue(isAttached)
+        }
+        
+        await mediaPlayerProvider.detachAllStates(except: nil)
+        for audioPlayerState in audioPlayerStates {
+            let isAttached = await audioPlayerState.isAttached
+            XCTAssertFalse(isAttached)
+        }
+    }
+    
+    func testDetachAllStatesWithException() async throws {
+        let audioPlayer = AudioPlayerMock()
+        audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
+        
+        let audioPlayerStates = await Array(repeating: AudioPlayerState(duration: 0), count: 10)
+        for audioPlayerState in audioPlayerStates {
+            await mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerState.id.uuidString)
+            await audioPlayerState.attachAudioPlayer(audioPlayer)
+            let isAttached = await audioPlayerState.isAttached
+            XCTAssertTrue(isAttached)
+        }
+        
+        let exception = audioPlayerStates[1]
+        await mediaPlayerProvider.detachAllStates(except: exception)
+        for audioPlayerState in audioPlayerStates {
+            let isAttached = await audioPlayerState.isAttached
+            if audioPlayerState == exception {
+                XCTAssertTrue(isAttached)
+            } else {
+                XCTAssertFalse(isAttached)
+            }
+        }
+    }
+}
