@@ -111,7 +111,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 let sendHTML = ServiceLocator.shared.settings.richTextEditorEnabled
                 actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
                                                  html: sendHTML ? wysiwygViewModel.content.html : nil,
-                                                 mode: state.composerMode))
+                                                 mode: state.composerMode,
+                                                 intentionalMentions: wysiwygViewModel
+                                                     .getMentionsState()
+                                                     .toIntentionalMentions()))
             }
         case .cancelReply:
             set(mode: .default)

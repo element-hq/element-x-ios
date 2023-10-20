@@ -257,13 +257,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String, html: String?, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyTo eventID: String? = nil,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
-        let messageContent = buildMessageContentFor(message, html: html)
+        let messageContent = buildMessageContentFor(message,
+                                                    html: html,
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -435,13 +440,18 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func editMessage(_ message: String, html: String?, original eventID: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ message: String,
+                     html: String?,
+                     original eventID: String,
+                     intentionalMentions: IntentionalMentions) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
         
-        let messageContent = buildMessageContentFor(message, html: html)
+        let messageContent = buildMessageContentFor(message,
+                                                    html: html,
+                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
         return await Task.dispatch(on: messageSendingDispatchQueue) {
             do {
@@ -718,26 +728,29 @@ class RoomProxy: RoomProxyProtocol {
 
     // MARK: - Private
 
-    private func buildMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {
+    private func buildMessageContentFor(_ message: String,
+                                        html: String?,
+                                        intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {
         let emoteSlashCommand = "/me "
         let isEmote: Bool = message.starts(with: emoteSlashCommand)
         
-        guard isEmote else {
+        let content: RoomMessageEventContentWithoutRelation
+        if isEmote {
+            let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
+            
+            var emoteHtml: String?
             if let html {
-                return messageEventContentFromHtml(body: message, htmlBody: html)
+                emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
+            }
+            content = buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
+        } else {
+            if let html {
+                content = messageEventContentFromHtml(body: message, htmlBody: html)
             } else {
-                return messageEventContentFromMarkdown(md: message)
+                content = messageEventContentFromMarkdown(md: message)
             }
         }
-        
-        let emoteMessage = String(message.dropFirst(emoteSlashCommand.count))
-        
-        var emoteHtml: String?
-        if let html {
-            emoteHtml = String(html.dropFirst(emoteSlashCommand.count))
-        }
-        
-        return buildEmoteMessageContentFor(emoteMessage, html: emoteHtml)
+        return content.withMentions(mentions: intentionalMentions)
     }
     
     private func buildEmoteMessageContentFor(_ message: String, html: String?) -> RoomMessageEventContentWithoutRelation {

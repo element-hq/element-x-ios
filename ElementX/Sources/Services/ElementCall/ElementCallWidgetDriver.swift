@@ -37,7 +37,7 @@ private struct ElementCallWidgetMessage: Codable {
     }
 }
 
-class ElementCallWidgetDriver: WidgetPermissionsProvider, ElementCallWidgetDriverProtocol {
+class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriverProtocol {
     private let room: RoomProtocol
     private var widgetDriver: WidgetDriverAndHandle?
     
@@ -66,7 +66,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider, ElementCallWidgetDrive
                                                                                  appPrompt: false,
                                                                                  skipLobby: true,
                                                                                  confineToRoom: true,
-                                                                                 fonts: nil,
+                                                                                 font: nil,
                                                                                  analyticsId: nil)) else {
             return .failure(.failedBuildingWidgetSettings)
         }
@@ -114,7 +114,7 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider, ElementCallWidgetDrive
                 MXLog.debug("Stopped widget driver")
             }
             
-            await widgetDriver.driver.run(room: room, permissionsProvider: self)
+            await widgetDriver.driver.run(room: room, capabilitiesProvider: self)
         }
         
         return .success(url)
@@ -133,10 +133,10 @@ class ElementCallWidgetDriver: WidgetPermissionsProvider, ElementCallWidgetDrive
         return .success(result)
     }
     
-    // MARK: - WidgetPermissionsProvider
+    // MARK: - WidgetCapabilitiesProvider
     
-    func acquirePermissions(permissions: MatrixRustSDK.WidgetPermissions) -> MatrixRustSDK.WidgetPermissions {
-        permissions
+    func acquireCapabilities(capabilities: WidgetPermissions) -> WidgetPermissions {
+        capabilities
     }
     
     // MARK: - Private
