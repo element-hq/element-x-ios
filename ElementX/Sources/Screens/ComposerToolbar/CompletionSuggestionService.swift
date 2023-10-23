@@ -55,7 +55,12 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                     return membersSuggestion
                 }
             }
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .map { [weak self] value in
+                let delay = self?.suggestionTriggerSubject.value == nil ? 0.0 : 0.5
+                return Just(value).delay(for: .seconds(delay), scheduler: DispatchQueue.main)
+            }
+            .switchToLatest()
+            .removeDuplicates()
             .eraseToAnyPublisher()
         
         Task {
@@ -73,6 +78,10 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     private static func isIncluded(searchText: String, userID: String, displayName: String?) -> Bool {
+        // If the search text is empty give back all the results
+        guard !searchText.isEmpty else {
+            return true
+        }
         let containedInUserID = userID.localizedStandardContains(searchText.lowercased())
         
         let containedInDisplayName: Bool
