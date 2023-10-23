@@ -169,7 +169,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         body: L10n.commonUnableToDecrypt,
+                                         body: L10n.commonWaitingForDecryptionKey,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          isOutgoing: isOutgoing,
