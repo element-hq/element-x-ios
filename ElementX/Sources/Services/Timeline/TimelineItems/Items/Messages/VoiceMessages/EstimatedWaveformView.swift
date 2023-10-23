@@ -17,31 +17,32 @@
 import SwiftUI
 
 struct EstimatedWaveform: Equatable, Hashable {
-    static let range: ClosedRange<UInt16> = 0...1024
+    static let dataRange: ClosedRange<UInt16> = 0...1024
     let data: [UInt16]
 }
 
 extension EstimatedWaveform {
-    func normalisedData(idealSamplesCount: Int) -> [Float] {
-        guard idealSamplesCount > 0 else {
+    /// Maps the `data` array to Float values in the range 0...1 respecting the `Self.dataRange` limits.
+    /// Up to `maxSamplesCount` will be returned in the output array
+    func normalisedData(maxSamplesCount: Int) -> [Float] {
+        guard maxSamplesCount > 0 else {
             return []
         }
+
         // Filter the data to keep only the expected number of samples
-        let originalCount = Double(data.count)
-        let expectedCount = Double(idealSamplesCount)
-        var filteredData: [UInt16] = []
-        if expectedCount < originalCount {
-            for index in 0..<idealSamplesCount {
-                let targetIndex = (Double(index) * (originalCount / expectedCount)).rounded()
-                filteredData.append(UInt16(data[Int(targetIndex)]))
-            }
+        let result: [UInt16]
+        if data.count > maxSamplesCount {
+            result = (0..<maxSamplesCount)
+                .map { index in
+                    let targetIndex = Int((Double(index) * (Double(data.count) / Double(maxSamplesCount))).rounded())
+                    return UInt16(data[targetIndex])
+                }
         } else {
-            filteredData = data
+            result = data
         }
 
         // Normalize the sample in the allowed range
-        let rangeMax = Float(Self.range.upperBound)
-        return filteredData.map { Float($0) / rangeMax }
+        return result.map { Float($0) / Float(Self.dataRange.upperBound) }
     }
 }
 
@@ -69,7 +70,6 @@ struct EstimatedWaveformView: View {
                 .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .progressMask(progress: progress)
                 .preference(key: ViewSizeKey.self, value: geometry.size)
-                .background(Color.yellow)
         }
         .onPreferenceChange(ViewSizeKey.self) { size in
             buildNormalizedWaveformData(size: size)
@@ -82,7 +82,7 @@ struct EstimatedWaveformView: View {
         if normalizedWaveformData.count == count {
             return
         }
-        normalizedWaveformData = waveform.normalisedData(idealSamplesCount: count)
+        normalizedWaveformData = waveform.normalisedData(maxSamplesCount: count)
     }
 }
 
@@ -121,7 +121,7 @@ private struct WaveformShape: Shape {
     }
 }
 
-struct WaveformView_Previews: PreviewProvider, TestablePreview {
+struct EstimatedWaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         // Wrap the WaveformView in a VStack otherwise the preview test will fail (because of Prefire / GeometryReader)
         VStack {
