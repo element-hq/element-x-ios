@@ -69,13 +69,14 @@ class VoiceMessageRecorderTests: XCTestCase {
         audioRecorder.currentTime = 14.0
         audioRecorder.url = recordingURL
         
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.startRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         
         // Internal audio recorder must have been stopped
         XCTAssert(audioRecorder.stopRecordingCalled)
         
         // A preview player state must be available
-        let previewPlayerState = voiceMessageRecorder.previewPlayerState
+        let previewPlayerState = voiceMessageRecorder.previewAudioPlayerState
         XCTAssertNotNil(previewPlayerState)
         XCTAssertEqual(previewPlayerState?.duration, audioRecorder.currentTime)
     }
@@ -97,7 +98,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     func testStartPlayback() async throws {
         audioRecorder.url = recordingURL
         _ = await voiceMessageRecorder.startRecording()
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
 
         // if the player url doesn't match the recording url
         guard case .success = await voiceMessageRecorder.startPlayback() else {
@@ -116,7 +117,7 @@ class VoiceMessageRecorderTests: XCTestCase {
     func testResumePlayback() async throws {
         audioRecorder.url = recordingURL
         _ = await voiceMessageRecorder.startRecording()
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         
         // if the player url matches the recording url
         audioPlayer.url = recordingURL
@@ -137,7 +138,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         case .success:
             break
         }
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
 
         voiceMessageRecorder.pausePlayback()
         XCTAssert(audioPlayer.pauseCalled)
@@ -146,18 +147,19 @@ class VoiceMessageRecorderTests: XCTestCase {
     func testStopPlayback() async throws {
         audioRecorder.url = recordingURL
         _ = await voiceMessageRecorder.startRecording()
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         
         await voiceMessageRecorder.stopPlayback()
-        XCTAssertEqual(voiceMessageRecorder.previewPlayerState?.isAttached, false)
+        XCTAssertEqual(voiceMessageRecorder.previewAudioPlayerState?.isAttached, false)
         XCTAssert(audioPlayer.stopCalled)
     }
     
     func testSeekPlayback() async throws {
         audioRecorder.url = recordingURL
         // Calling stop will generate the preview player state needed to have an audio player
-        await voiceMessageRecorder.stopRecording()
-        voiceMessageRecorder.previewPlayerState?.attachAudioPlayer(audioPlayer)
+        _ = await voiceMessageRecorder.startRecording()
+        _ = await voiceMessageRecorder.stopRecording()
+        voiceMessageRecorder.previewAudioPlayerState?.attachAudioPlayer(audioPlayer)
         
         await voiceMessageRecorder.seekPlayback(to: 0.4)
         XCTAssert(audioPlayer.seekToCalled)
@@ -171,7 +173,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         audioRecorder.url = audioFileUrl
         _ = await voiceMessageRecorder.startRecording()
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         
         guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
             XCTFail("A waveform is expected")
@@ -188,7 +190,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         audioRecorder.currentTime = 42
         audioRecorder.url = audioFileUrl
         _ = await voiceMessageRecorder.startRecording()
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         
         let roomProxy = RoomProxyMock()
         let audioConverter = AudioConverterMock()

@@ -2912,7 +2912,7 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         set(value) { underlyingAudioRecorder = value }
     }
     var underlyingAudioRecorder: AudioRecorderProtocol!
-    var previewPlayerState: AudioPlayerState?
+    var previewAudioPlayerState: AudioPlayerState?
     var recordingURL: URL?
     var recordingDuration: TimeInterval {
         get { return underlyingRecordingDuration }
@@ -2943,11 +2943,16 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     var stopRecordingCalled: Bool {
         return stopRecordingCallsCount > 0
     }
-    var stopRecordingClosure: (() async -> Void)?
+    var stopRecordingReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var stopRecordingClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
 
-    func stopRecording() async {
+    func stopRecording() async -> Result<Void, VoiceMessageRecorderError> {
         stopRecordingCallsCount += 1
-        await stopRecordingClosure?()
+        if let stopRecordingClosure = stopRecordingClosure {
+            return await stopRecordingClosure()
+        } else {
+            return stopRecordingReturnValue
+        }
     }
     //MARK: - cancelRecording
 

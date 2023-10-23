@@ -213,7 +213,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await sendCurrentVoiceMessage() }
         case .startVoiceMessagePlayback:
             Task {
-                await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewPlayerState)
+                await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
                 await startPlayingRecordedVoiceMessage()
             }
         case .pauseVoiceMessagePlayback:
@@ -940,7 +940,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Voice message
     
     private func stopVoiceMessageRecorder() async {
-        await voiceMessageRecorder.stopRecording()
+        _ = await voiceMessageRecorder.stopRecording()
         await voiceMessageRecorder.stopPlayback()
     }
     
@@ -966,9 +966,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func stopRecordingVoiceMessage() async {
-        await voiceMessageRecorder.stopRecording()
+        if case .failure(let error) = await voiceMessageRecorder.stopRecording() {
+            MXLog.error("failed to stop the recording", context: error)
+            return
+        }
 
-        guard let audioPlayerState = voiceMessageRecorder.previewPlayerState else {
+        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
             MXLog.error("the recorder preview is missing after the recording has been stopped")
             return
         }

@@ -26,12 +26,12 @@ enum VoiceMessageRecorderError: Error {
 
 protocol VoiceMessageRecorderProtocol {
     var audioRecorder: AudioRecorderProtocol { get }
-    var previewPlayerState: AudioPlayerState? { get }
+    var previewAudioPlayerState: AudioPlayerState? { get }
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
     
     func startRecording() async -> Result<Void, VoiceMessageRecorderError>
-    func stopRecording() async
+    func stopRecording() async -> Result<Void, VoiceMessageRecorderError>
     func cancelRecording() async
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError>
     func pausePlayback()
