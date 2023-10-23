@@ -28,21 +28,7 @@ struct AppLockSettingsScreenViewState: BindableState {
     var bindings: AppLockSettingsScreenViewStateBindings
     
     var supportsBiometry: Bool { biometryType != .none }
-    var enableBiometryTitle: String {
-        switch biometryType {
-        case .none:
-            return L10n.commonError
-        case .touchID:
-            return L10n.screenAppLockSettingsEnableTouchIdIos
-        case .faceID:
-            return L10n.screenAppLockSettingsEnableFaceIdIos
-        // Requires Xcode 15:
-        // case .opticID:
-        //    L10n.screenAppLockSettingsEnableOpticIdIos
-        @unknown default:
-            return L10n.screenAppLockSettingsEnableBiometricUnlock
-        }
-    }
+    var enableBiometryTitle: String { L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString) }
 }
 
 struct AppLockSettingsScreenViewStateBindings {
