@@ -27,13 +27,13 @@ enum HomeScreenViewModelAction {
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentInvitesScreen
-    case signOut
+    case logout
 }
 
 enum HomeScreenViewUserMenuAction {
     case settings
     case feedback
-    case signOut
+    case logout
 }
 
 enum HomeScreenViewAction {

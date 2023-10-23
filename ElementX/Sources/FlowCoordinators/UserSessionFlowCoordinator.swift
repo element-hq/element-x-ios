@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
-    case signOut
+    case logout
     case clearCache
 }
 
@@ -295,8 +295,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showSessionVerificationScreen)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .signOut:
-                    actionsSubject.send(.signOut)
+                case .logout:
+                    logout()
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
                 }
@@ -319,6 +319,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(welcomeScreenCoordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedWelcomeScreen)
         }
+    }
+    
+    private func logout() {
+        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
+                                                                        message: L10n.screenSignoutConfirmationDialogContent,
+                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                            self?.actionsSubject.send(.logout)
+                                                                        })
     }
     
     // MARK: Settings
@@ -347,7 +356,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationSplitCoordinator.setSheetCoordinator(nil)
                 case .logout:
                     navigationSplitCoordinator.setSheetCoordinator(nil)
-                    actionsSubject.send(.signOut)
+                    
+                    // The settings sheet needs to be dismissed before the alert can be shown
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.logout()
+                    }
                 case .clearCache:
                     actionsSubject.send(.clearCache)
                 }

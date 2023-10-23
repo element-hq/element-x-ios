@@ -19,8 +19,6 @@ import SFSafeSymbols
 import SwiftUI
 
 struct SettingsScreen: View {
-    @State private var showingLogoutConfirmation = false
-    
     @ObservedObject var context: SettingsScreenViewModel.Context
     
     var body: some View {
@@ -196,16 +194,9 @@ struct SettingsScreen: View {
             ListRow(label: .default(title: L10n.screenSignoutPreferenceItem,
                                     systemIcon: .rectanglePortraitAndArrowRight),
                     kind: .button {
-                        showingLogoutConfirmation = true
+                        context.send(viewAction: .logout)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
-                    .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
-                        Button(L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) {
-                            context.send(viewAction: .logout)
-                        }
-                    } message: {
-                        Text(L10n.screenSignoutConfirmationDialogContent)
-                    }
         } footer: {
             VStack {
                 versionText

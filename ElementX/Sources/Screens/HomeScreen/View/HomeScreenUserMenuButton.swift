@@ -18,7 +18,6 @@ import Compound
 import SwiftUI
 
 struct HomeScreenUserMenuButton: View {
-    @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var context: HomeScreenViewModel.Context
@@ -53,7 +52,7 @@ struct HomeScreenUserMenuButton: View {
             }
             Section {
                 Button(role: .destructive) {
-                    showingLogoutConfirmation = true
+                    context.send(viewAction: .userMenu(action: .logout))
                 } label: {
                     Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
                 }
@@ -67,15 +66,6 @@ struct HomeScreenUserMenuButton: View {
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                 .overlayBadge(10, isBadged: context.viewState.showUserMenuBadge)
                 .compositingGroup()
-        }
-        .alert(L10n.screenSignoutConfirmationDialogTitle,
-               isPresented: $showingLogoutConfirmation) {
-            Button(L10n.screenSignoutConfirmationDialogSubmit,
-                   role: .destructive) {
-                context.send(viewAction: .userMenu(action: .signOut))
-            }
-        } message: {
-            Text(L10n.screenSignoutConfirmationDialogContent)
         }
         .accessibilityLabel(L10n.a11yUserMenu)
     }
