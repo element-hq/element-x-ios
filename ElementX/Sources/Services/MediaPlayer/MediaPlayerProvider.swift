@@ -17,11 +17,10 @@
 import Foundation
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
-    private var audioPlayer: AudioPlayerProtocol!
+    private lazy var audioPlayer = AudioPlayer()
     private var audioPlayerStates: [String: AudioPlayerState] = [:]
     
     deinit {
-        audioPlayer = nil
         audioPlayerStates = [:]
     }
     
@@ -32,9 +31,6 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         }
         
         if mimeType.starts(with: "audio/") {
-            if audioPlayer == nil {
-                audioPlayer = AudioPlayer()
-            }
             return .success(audioPlayer)
         } else {
             MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")

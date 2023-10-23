@@ -14,8 +14,6 @@
 // limitations under the License.
 //
 
-// swiftlint:disable file_length
-
 import Algorithms
 import Combine
 import OrderedCollections
@@ -957,8 +955,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                              title: "",
                                                              message: L10n.dialogPermissionMicrophone,
-                                                             primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
-                                                             secondaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }))
+                                                             primaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }),
+                                                             secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
             default:
                 MXLog.error("failed to start voice message recording: \(error)")
             }
@@ -976,13 +974,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
         
-        guard let recordingUrl = voiceMessageRecorder.recordingURL else {
+        guard let recordingURL = voiceMessageRecorder.recordingURL else {
             MXLog.error("the recording URL is missing after the recording has been stopped")
             return
         }
         
         mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingUrl)))))
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL)))))
     }
     
     private func cancelRecordingVoiceMessage() async {

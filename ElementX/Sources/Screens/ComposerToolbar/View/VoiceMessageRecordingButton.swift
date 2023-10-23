@@ -20,7 +20,6 @@ import SwiftUI
 struct VoiceMessageRecordingButton: View {
     @ScaledMetric private var buttonIconSize = 24
     @State private var buttonPressed = false
-    @State private var buttonPressedTimestamp: Date = .now
 
     var startRecording: (() -> Void)?
     var stopRecording: (() -> Void)?
@@ -29,16 +28,16 @@ struct VoiceMessageRecordingButton: View {
         Button { } label: {
             voiceMessageButtonImage
         }
-        .onLongPressGesture(perform: { }, onPressingChanged: { pressing in
-            buttonPressed = pressing
-            if pressing {
+        .onLongPressGesture { } onPressingChanged: { isPressing in
+            buttonPressed = isPressing
+            if isPressing {
                 // Start recording
                 startRecording?()
             } else {
                 // Stop recording
                 stopRecording?()
             }
-        })
+        }
         .fixedSize()
     }
     

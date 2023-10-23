@@ -32,8 +32,13 @@ struct VoiceMessageRecordingView: View {
         return dateFormatter
     }()
             
-    var timeLabelContent: String {
+    private var timeLabelContent: String {
         Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: recorderState.duration))
+    }
+    
+    private var configuration: Waveform.Configuration {
+        .init(style: .striped(.init(color: .compound.iconSecondary, width: waveformLineWidth, spacing: waveformLinePadding)),
+              verticalScalingFactor: 1.0)
     }
     
     var body: some View {
@@ -48,18 +53,11 @@ struct VoiceMessageRecordingView: View {
                 .monospacedDigit()
                 .fixedSize()
             
-            waveformView
+            WaveformLiveCanvas(samples: recorderState.waveformSamples,
+                               configuration: configuration)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
-    }
-    
-    @ViewBuilder
-    private var waveformView: some View {
-        let configuration: Waveform.Configuration = .init(style: .striped(.init(color: .compound.iconSecondary, width: waveformLineWidth, spacing: waveformLinePadding)),
-                                                          verticalScalingFactor: 1.0)
-        WaveformLiveCanvas(samples: recorderState.waveformSamples,
-                           configuration: configuration)
     }
 }
 

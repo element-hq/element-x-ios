@@ -223,11 +223,11 @@ struct ComposerToolbar: View {
     // MARK: - Voice message
 
     private var voiceMessageRecordingButton: some View {
-        VoiceMessageRecordingButton(startRecording: {
+        VoiceMessageRecordingButton {
             showVoiceMessageRecordingTooltip = false
             voiceMessageRecordingStartTime = Date.now
             context.send(viewAction: .startVoiceMessageRecording)
-        }, stopRecording: {
+        } stopRecording: {
             if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
                 context.send(viewAction: .cancelVoiceMessageRecording)
                 withAnimation {
@@ -236,7 +236,7 @@ struct ComposerToolbar: View {
             } else {
                 context.send(viewAction: .stopVoiceMessageRecording)
             }
-        })
+        }
         .padding(4)
     }
         
@@ -257,24 +257,23 @@ struct ComposerToolbar: View {
     private var voiceMessageRecordingButtonTooltipView: some View {
         VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
             .allowsHitTesting(false)
-            .onAppear(perform: {
+            .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
                     withAnimation {
                         showVoiceMessageRecordingTooltip = false
                     }
                 }
-            })
+            }
     }
     
     private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
-        VoiceMessagePreviewComposer(playerState: audioPlayerState, waveform: waveform, onPlay: {
+        VoiceMessagePreviewComposer(playerState: audioPlayerState, waveform: waveform) {
             context.send(viewAction: .startVoiceMessagePlayback)
-        },
-        onPause: {
+        } onPause: {
             context.send(viewAction: .pauseVoiceMessagePlayback)
-        }, onSeek: { progress in
+        } onSeek: { progress in
             context.send(viewAction: .seekVoiceMessagePlayback(progress: progress))
-        })
+        }
     }
 }
 

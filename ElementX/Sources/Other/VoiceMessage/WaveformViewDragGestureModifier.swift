@@ -41,8 +41,8 @@ struct WaveformViewDragGestureModifier: ViewModifier {
                         case .second(let spatialLongPress, let drag) where spatialLongPress.second ?? false:
                             var progress: Double = dragState.progress
                             // Compute the progress with drag location
-                            if let loc = drag?.location {
-                                progress = loc.x / geometry.size.width
+                            if let location = drag?.location {
+                                progress = location.x / geometry.size.width
                             }
                             state = .dragging(progress: progress)
                         // Dragging ended or the long press cancelled.
