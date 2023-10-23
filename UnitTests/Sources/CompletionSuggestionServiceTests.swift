@@ -87,4 +87,26 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         service.setSuggestionTrigger(.init(type: .user, text: "every"))
         try await deferred.fulfill()
     }
+    
+    func testUserSuggestionsWithEmptyText() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        let bob: RoomMemberProxyMock = .mockBob
+        let members: [RoomMemberProxyMock] = [alice, bob, .mockMe]
+        let roomProxyMock = RoomProxyMock(with: .init(displayName: "test", members: members, canUserTriggerRoomNotification: true))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock, areSuggestionsEnabled: true)
+                
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)),
+                            .user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL)),
+                            .allUsers(item: .allUsersMention(roomAvatar: nil))]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: ""))
+        try await deferred.fulfill()
+    }
 }

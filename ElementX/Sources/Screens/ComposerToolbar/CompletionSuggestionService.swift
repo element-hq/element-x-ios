@@ -55,8 +55,10 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                     return membersSuggestion
                 }
             }
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
-            .eraseToAnyPublisher()
+            // We only debounce if the suggestion is nil
+            .debounceAndRemoveDuplicates(on: DispatchQueue.main) { [weak self] _ in
+                self?.suggestionTriggerSubject.value != nil ? .milliseconds(500) : .milliseconds(0)
+            }
         
         Task {
             switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {
@@ -73,6 +75,10 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     private static func isIncluded(searchText: String, userID: String, displayName: String?) -> Bool {
+        // If the search text is empty give back all the results
+        guard !searchText.isEmpty else {
+            return true
+        }
         let containedInUserID = userID.localizedStandardContains(searchText.lowercased())
         
         let containedInDisplayName: Bool

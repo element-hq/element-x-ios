@@ -25,16 +25,23 @@ extension Publisher where Self.Failure == Never {
     }
 }
 
-extension Publisher where Output == String, Failure == Never {
-    /// Debounce text queries and remove duplicates.
-    /// Clearing the text publishes the update immediately.
-    func debounceAndRemoveDuplicates() -> AnyPublisher<String, Never> {
+extension Publisher where Output: Equatable, Failure == Never {
+    func debounceAndRemoveDuplicates<S: Scheduler>(on scheduler: S, delay: @escaping (Output) -> S.SchedulerTimeType.Stride) -> AnyPublisher<Output, Never> {
         map { query in
-            let milliseconds = query.isEmpty ? 0 : 250
-            return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
+            Just(query).delay(for: delay(query), scheduler: scheduler)
         }
         .switchToLatest()
         .removeDuplicates()
         .eraseToAnyPublisher()
+    }
+}
+
+extension Publisher where Output == String, Failure == Never {
+    /// Debounce text queries and remove duplicates.
+    /// Clearing the text publishes the update immediately.
+    func debounceTextQueriesAndRemoveDuplicates() -> AnyPublisher<String, Never> {
+        debounceAndRemoveDuplicates(on: DispatchQueue.main) { query in
+            query.isEmpty ? .milliseconds(0) : .milliseconds(250)
+        }
     }
 }
