@@ -56,13 +56,9 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 }
             }
             // We only debounce if the suggestion is nil
-            .map { [weak self] value in
-                let delay = self?.suggestionTriggerSubject.value == nil ? 0.0 : 0.5
-                return Just(value).delay(for: .seconds(delay), scheduler: DispatchQueue.main)
+            .debounceAndRemoveDuplicates(on: DispatchQueue.main) { [weak self] _ in
+                self?.suggestionTriggerSubject.value != nil ? .milliseconds(500) : .milliseconds(0)
             }
-            .switchToLatest()
-            .removeDuplicates()
-            .eraseToAnyPublisher()
         
         Task {
             switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {

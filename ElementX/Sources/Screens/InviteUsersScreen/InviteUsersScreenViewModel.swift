@@ -95,7 +95,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>) {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .debounceAndRemoveDuplicates()
+            .debounceTextQueriesAndRemoveDuplicates()
             .sink { [weak self] _ in
                 self?.fetchUsers()
             }
