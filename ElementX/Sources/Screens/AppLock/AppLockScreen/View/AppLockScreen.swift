@@ -60,6 +60,7 @@ struct AppLockScreen: View {
             }
             .font(.compound.bodyMDSemibold)
         }
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
     }
     

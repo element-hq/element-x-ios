@@ -36,6 +36,8 @@ protocol AppLockServiceProtocol: AnyObject {
     
     /// Sets the user's PIN code used to unlock the app.
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
+    /// Validates the supplied PIN code is long enough, only contains digits and isn't a weak choice.
+    func validate(_ pinCode: String) -> Result<Void, AppLockServiceError>
     /// Disables the App Lock feature, removing the user's stored PIN code.
     func disable()
     

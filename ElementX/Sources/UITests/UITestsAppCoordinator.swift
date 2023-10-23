@@ -161,6 +161,13 @@ class MockScreen: Identifiable {
             let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
             let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
             return coordinator
+        case .appLockSetupFlow:
+            // Use the flow coordinator once more screens are added and remove the settings screen below.
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
+            let coordinator = AppLockSetupPINScreenCoordinator(parameters: .init(initialMode: .create, appLockService: appLockService))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .appLockSettingsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let appLockService = AppLockServiceMock.mock(biometryType: .faceID)

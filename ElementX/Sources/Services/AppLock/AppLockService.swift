@@ -47,8 +47,8 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError> {
-        guard validate(pinCode) else { return .failure(.invalidPIN) }
-        guard !appSettings.appLockPINCodeBlockList.contains(pinCode) else { return .failure(.weakPIN) }
+        let result = validate(pinCode)
+        guard case .success = result else { return result }
         
         do {
             try keychainController.setPINCode(pinCode)
@@ -57,6 +57,12 @@ class AppLockService: AppLockServiceProtocol {
             MXLog.error("Keychain access error: \(error)")
             return .failure(.keychainError)
         }
+    }
+    
+    func validate(_ pinCode: String) -> Result<Void, AppLockServiceError> {
+        guard pinCode.count == 4, pinCode.allSatisfy(\.isNumber) else { return .failure(.invalidPIN) }
+        guard !appSettings.appLockPINCodeBlockList.contains(pinCode) else { return .failure(.weakPIN) }
+        return .success(())
     }
     
     func disable() {
@@ -92,11 +98,6 @@ class AppLockService: AppLockServiceProtocol {
         if let error {
             MXLog.error("Biometrics error: \(error)")
         }
-    }
-    
-    /// Ensures that a provided PIN code is long enough and only contains digits.
-    private func validate(_ pinCode: String) -> Bool {
-        pinCode.count == 4 && pinCode.allSatisfy(\.isNumber)
     }
     
     /// Shared logic for completing an unlock via a PIN or biometry.

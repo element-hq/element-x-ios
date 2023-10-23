@@ -174,6 +174,8 @@ public enum L10n {
   public static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
   /// Take photo
   public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
+  /// Try again
+  public static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// View source
   public static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
@@ -664,6 +666,24 @@ public enum L10n {
   public static var screenAppLockSettingsRemovePinAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_message") }
   /// Remove PIN?
   public static var screenAppLockSettingsRemovePinAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_title") }
+  /// Choose PIN
+  public static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
+  /// Confirm PIN
+  public static var screenAppLockSetupConfirmPin: String { return L10n.tr("Localizable", "screen_app_lock_setup_confirm_pin") }
+  /// You cannot choose this as your PIN code for security reasons
+  public static var screenAppLockSetupPinBlacklistedDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_content") }
+  /// Choose a different PIN
+  public static var screenAppLockSetupPinBlacklistedDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_blacklisted_dialog_title") }
+  /// Lock %1$@ to add extra security to your chats.
+  /// 
+  /// Choose something memorable. If you forget this PIN, you will be logged out of the app.
+  public static func screenAppLockSetupPinContext(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_app_lock_setup_pin_context", String(describing: p1))
+  }
+  /// Please enter the same PIN twice
+  public static var screenAppLockSetupPinMismatchDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_content") }
+  /// PINs don't match
+  public static var screenAppLockSetupPinMismatchDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_title") }
   /// You’ll need to re-login and create a new PIN to proceed
   public static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
   /// You are being signed out
