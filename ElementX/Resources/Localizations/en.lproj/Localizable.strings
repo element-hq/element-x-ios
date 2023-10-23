@@ -167,6 +167,7 @@
 "common_video" = "Video";
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
+"common_waiting_for_decryption_key" = "Waiting for decryption key";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
@@ -188,6 +189,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Failed loading messages";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
+"error_failed_uploading_voice_message" = "Failed to upload your voice message.";
 "error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
@@ -413,6 +415,8 @@
 "screen_recovery_key_confirm_key_placeholder" = "Enter...";
 "screen_recovery_key_confirm_success" = "Recovery key confirmed";
 "screen_recovery_key_confirm_title" = "Confirm your recovery key";
+"screen_recovery_key_copied_to_clipboard" = "Copied recovery key";
+"screen_recovery_key_generating_key" = "Generating…";
 "screen_recovery_key_save_action" = "Save recovery key";
 "screen_recovery_key_save_description" = "Write down your recovery key somewhere safe or save it in a password manager.";
 "screen_recovery_key_save_key_description" = "Tap to copy recovery key";
@@ -451,7 +455,8 @@
 "screen_room_details_room_name_label" = "Room name";
 "screen_room_details_share_room_title" = "Share room";
 "screen_room_details_updating_room" = "Updating room…";
-"screen_room_encrypted_history_banner" = "Message history is currently unavailable in this room";
+"screen_room_encrypted_history_banner" = "Message history is currently unavailable.";
+"screen_room_encrypted_history_banner_unverified" = "Message history is unavailable in this room. Verify this device to see your message history.";
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_invite_again_alert_message" = "Would you like to invite them back?";
 "screen_room_invite_again_alert_title" = "You are alone in this chat";
@@ -520,13 +525,19 @@
 "screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
 "screen_signed_out_title" = "You’re signed out";
-"screen_signout_backing_up_subtitle" = "Please wait for this to complete before signing out.";
-"screen_signout_backing_up_title" = "Your keys are still being backed up";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to sign out?";
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
-"screen_signout_last_session_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
-"screen_signout_last_session_title" = "Have you saved your recovery key?";
+"screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
+"screen_signout_key_backup_disabled_title" = "You have turned off backup";
+"screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.";
+"screen_signout_key_backup_offline_title" = "Your keys are still being backed up";
+"screen_signout_key_backup_ongoing_subtitle" = "Please wait for this to complete before signing out.";
+"screen_signout_key_backup_ongoing_title" = "Your keys are still being backed up";
+"screen_signout_recovery_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.";
+"screen_signout_recovery_disabled_title" = "Recovery not set up";
+"screen_signout_save_recovery_key_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
+"screen_signout_save_recovery_key_title" = "Have you saved your recovery key?";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
 "screen_view_location_title" = "Location";
 "screen_waitlist_message" = "There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.\n\nThanks for your patience!";
@@ -539,7 +550,7 @@
 "screen_welcome_button" = "Let's go!";
 "screen_welcome_subtitle" = "Here’s what you need to know:";
 "screen_welcome_title" = "Welcome to %1$@!";
-"session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.";
+"session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages.";
 "session_verification_banner_title" = "Verify it’s you";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Detection threshold";

@@ -10,26 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
-  /// You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.
-  public static var screenSignoutKeyBackupDisabledSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_disabled_subtitle") }
-  /// You have turned off backup
-  public static var screenSignoutKeyBackupDisabledTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_disabled_title") }
-  /// Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.
-  public static var screenSignoutKeyBackupOfflineSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_offline_subtitle") }
-  /// Your keys are still being backed up
-  public static var screenSignoutKeyBackupOfflineTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_offline_title") }
-  /// Please wait for this to complete before signing out.
-  public static var screenSignoutKeyBackupOngoingSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_ongoing_subtitle") }
-  /// Your keys are still being backed up
-  public static var screenSignoutKeyBackupOngoingTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_key_backup_ongoing_title") }
-  /// You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.
-  public static var screenSignoutRecoveryDisabledSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_recovery_disabled_subtitle") }
-  /// Recovery not set up
-  public static var screenSignoutRecoveryDisabledTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_recovery_disabled_title") }
-  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
-  public static var screenSignoutSaveRecoveryKeySubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_subtitle") }
-  /// Have you saved your recovery key?
-  public static var screenSignoutSaveRecoveryKeyTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

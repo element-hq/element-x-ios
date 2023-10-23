@@ -91,22 +91,22 @@ struct SecureBackupLogoutConfirmationScreen: View {
     var title: String {
         switch context.viewState.mode {
         case .saveRecoveryKey:
-            return UntranslatedL10n.screenSignoutSaveRecoveryKeyTitle
+            return L10n.screenSignoutSaveRecoveryKeyTitle
         case .backupOngoing:
-            return UntranslatedL10n.screenSignoutKeyBackupOngoingTitle
+            return L10n.screenSignoutKeyBackupOngoingTitle
         case .offline:
-            return UntranslatedL10n.screenSignoutKeyBackupOfflineTitle
+            return L10n.screenSignoutKeyBackupOfflineTitle
         }
     }
     
     var subtitle: String {
         switch context.viewState.mode {
         case .saveRecoveryKey:
-            return UntranslatedL10n.screenSignoutSaveRecoveryKeySubtitle
+            return L10n.screenSignoutSaveRecoveryKeySubtitle
         case .backupOngoing:
-            return UntranslatedL10n.screenSignoutKeyBackupOngoingSubtitle
+            return L10n.screenSignoutKeyBackupOngoingSubtitle
         case .offline:
-            return UntranslatedL10n.screenSignoutKeyBackupOfflineSubtitle
+            return L10n.screenSignoutKeyBackupOfflineSubtitle
         }
     }
 }

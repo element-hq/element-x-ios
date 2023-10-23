@@ -331,8 +331,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         guard secureBackupController.isLastSession else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: UntranslatedL10n.screenSignoutRecoveryDisabledTitle,
-                                                                            message: UntranslatedL10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             })
@@ -341,8 +341,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         guard secureBackupController.recoveryKeyState.value == .enabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: UntranslatedL10n.screenSignoutRecoveryDisabledTitle,
-                                                                            message: UntranslatedL10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
@@ -353,8 +353,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         guard secureBackupController.keyBackupState.value == .enabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: UntranslatedL10n.screenSignoutKeyBackupDisabledTitle,
-                                                                            message: UntranslatedL10n.screenSignoutKeyBackupDisabledSubtitle,
+                                                                            title: L10n.screenSignoutKeyBackupDisabledTitle,
+                                                                            message: L10n.screenSignoutKeyBackupDisabledSubtitle,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
