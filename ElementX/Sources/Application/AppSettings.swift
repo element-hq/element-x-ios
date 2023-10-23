@@ -118,7 +118,7 @@ final class AppSettings {
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
     // A URL where users can go read more about the chat backup.
-    let chatBackupDetailsURL: URL = "https://element.io/help#encryption"
+    let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     
     // MARK: - Security
     
