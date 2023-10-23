@@ -42,7 +42,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
-    func record(with recordId: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         guard await requestRecordPermission() else {
             return .failure(.recordPermissionNotGranted)
         }
@@ -56,7 +56,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
-            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordId.identifier).m4a")
+            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
             audioRecorder = try AVAudioRecorder(url: url, settings: settings)
             audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true

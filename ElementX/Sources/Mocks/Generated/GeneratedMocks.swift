@@ -414,17 +414,17 @@ class AudioRecorderMock: AudioRecorderProtocol {
     var recordWithCalled: Bool {
         return recordWithCallsCount > 0
     }
-    var recordWithReceivedRecordId: AudioRecordingIdentifier?
+    var recordWithReceivedRecordID: AudioRecordingIdentifier?
     var recordWithReceivedInvocations: [AudioRecordingIdentifier] = []
     var recordWithReturnValue: Result<Void, AudioRecorderError>!
     var recordWithClosure: ((AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>)?
 
-    func record(with recordId: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         recordWithCallsCount += 1
-        recordWithReceivedRecordId = recordId
-        recordWithReceivedInvocations.append(recordId)
+        recordWithReceivedRecordID = recordID
+        recordWithReceivedInvocations.append(recordID)
         if let recordWithClosure = recordWithClosure {
-            return await recordWithClosure(recordId)
+            return await recordWithClosure(recordID)
         } else {
             return recordWithReturnValue
         }

@@ -47,7 +47,7 @@ protocol AudioRecorderProtocol: AnyObject {
     var isRecording: Bool { get }
     var url: URL? { get }
     
-    func record(with recordId: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>
+    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>
     func stopRecording() async
     func deleteRecording()
     func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
