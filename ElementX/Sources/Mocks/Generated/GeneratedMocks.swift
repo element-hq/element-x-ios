@@ -2842,25 +2842,21 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
     }
     //MARK: - cache
 
-    var cacheMediaSourceUsingMoveThrowableError: Error?
     var cacheMediaSourceUsingMoveCallsCount = 0
     var cacheMediaSourceUsingMoveCalled: Bool {
         return cacheMediaSourceUsingMoveCallsCount > 0
     }
     var cacheMediaSourceUsingMoveReceivedArguments: (mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)?
     var cacheMediaSourceUsingMoveReceivedInvocations: [(mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)] = []
-    var cacheMediaSourceUsingMoveReturnValue: URL!
-    var cacheMediaSourceUsingMoveClosure: ((MediaSourceProxy, URL, Bool) throws -> URL)?
+    var cacheMediaSourceUsingMoveReturnValue: Result<URL, VoiceMessageCacheError>!
+    var cacheMediaSourceUsingMoveClosure: ((MediaSourceProxy, URL, Bool) -> Result<URL, VoiceMessageCacheError>)?
 
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL {
-        if let error = cacheMediaSourceUsingMoveThrowableError {
-            throw error
-        }
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) -> Result<URL, VoiceMessageCacheError> {
         cacheMediaSourceUsingMoveCallsCount += 1
         cacheMediaSourceUsingMoveReceivedArguments = (mediaSource: mediaSource, fileURL: fileURL, move: move)
         cacheMediaSourceUsingMoveReceivedInvocations.append((mediaSource: mediaSource, fileURL: fileURL, move: move))
         if let cacheMediaSourceUsingMoveClosure = cacheMediaSourceUsingMoveClosure {
-            return try cacheMediaSourceUsingMoveClosure(mediaSource, fileURL, move)
+            return cacheMediaSourceUsingMoveClosure(mediaSource, fileURL, move)
         } else {
             return cacheMediaSourceUsingMoveReturnValue
         }

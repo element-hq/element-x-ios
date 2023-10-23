@@ -16,10 +16,6 @@
 
 import Foundation
 
-enum VoiceMessageCacheError: Error {
-    case invalidFileExtension
-}
-
 class VoiceMessageCache: VoiceMessageCacheProtocol {
     private let preferredFileExtension = "m4a"
     private var temporaryFilesFolderURL: URL {
@@ -31,13 +27,18 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         return FileManager.default.fileExists(atPath: url.path()) ? url : nil
     }
     
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool = false) throws -> URL {
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool = false) -> Result<URL, VoiceMessageCacheError> {
         guard fileURL.pathExtension == preferredFileExtension else {
-            throw VoiceMessageCacheError.invalidFileExtension
+            return .failure(.invalidFileExtension)
         }
         let url = cacheURL(for: mediaSource)
-        try cacheFile(source: fileURL, destination: url, move: move)
-        return url
+        do {
+            try cacheFile(source: fileURL, destination: url, move: move)
+        } catch {
+            MXLog.error("Failed storing file in cache", context: error)
+            return .failure(.failedStoringFileInCache)
+        }
+        return .success(url)
     }
         
     func clearCache() {

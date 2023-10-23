@@ -93,7 +93,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
         mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
         let audioConverter = AudioConverterMock()
-        voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = cachedConvertedFileURL
+        voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,
                                                             audioConverter: audioConverter,
@@ -124,7 +124,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         }
         voiceMessageCache.cacheMediaSourceUsingMoveClosure = { _, _, _ in
             cachedURL = cachedConvertedFileURL
-            return cachedConvertedFileURL
+            return .success(cachedConvertedFileURL)
         }
         
         let audioConverter = AudioConverterMock()

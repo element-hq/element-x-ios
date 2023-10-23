@@ -16,6 +16,11 @@
 
 import Foundation
 
+enum VoiceMessageCacheError: Error {
+    case invalidFileExtension
+    case failedStoringFileInCache
+}
+
 protocol VoiceMessageCacheProtocol {
     /// Returns the URL of the cached audio file for a given media source
     /// - Parameter mediaSource: the media source
@@ -28,7 +33,7 @@ protocol VoiceMessageCacheProtocol {
     ///   - fileURL: the source file
     ///   - move: wheter to move or copy the source file
     /// - Returns: the cached URL
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) -> Result<URL, VoiceMessageCacheError>
         
     /// Clears the cache
     func clearCache()

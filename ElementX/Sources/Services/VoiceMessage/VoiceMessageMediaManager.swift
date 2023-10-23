@@ -80,7 +80,13 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
             try audioConverter.convertToMPEG4AAC(sourceURL: fileHandle.url, destinationURL: convertedFileURL)
 
             // Cache the file and return the url
-            return try voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)
+            let result = voiceMessageCache.cache(mediaSource: source, using: convertedFileURL, move: true)
+            switch result {
+            case .success(let url):
+                return url
+            case .failure(let error):
+                throw error
+            }
         }
     }
     
