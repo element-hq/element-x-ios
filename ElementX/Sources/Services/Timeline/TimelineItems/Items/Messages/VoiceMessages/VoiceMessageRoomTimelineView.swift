@@ -65,8 +65,8 @@ struct VoiceMessageRoomTimelineView: View {
 
 struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
-
-    static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: .random,
+    static let timelineItemIdentifier = TimelineItemIdentifier.random
+    static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: timelineItemIdentifier,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
@@ -79,7 +79,8 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                    source: nil,
                                                                                    contentType: nil))
     
-    static let playerState = AudioPlayerState(duration: 10.0,
+    static let playerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItemIdentifier),
+                                              duration: 10.0,
                                               waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)
     

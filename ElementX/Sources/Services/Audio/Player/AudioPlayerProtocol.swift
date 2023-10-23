@@ -17,6 +17,11 @@
 import Combine
 import Foundation
 
+enum AudioPlayerError: Error {
+    case genericError
+    case loadFileError
+}
+
 enum AudioPlayerAction {
     case didStartLoading
     case didFinishLoading

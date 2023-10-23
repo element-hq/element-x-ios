@@ -30,11 +30,6 @@ private enum InternalAudioPlayerState {
     case error(Error)
 }
 
-enum AudioPlayerError: Error {
-    case genericError
-    case loadFileError
-}
-
 class AudioPlayer: NSObject, AudioPlayerProtocol {
     var mediaSource: MediaSourceProxy?
     

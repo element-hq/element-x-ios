@@ -47,7 +47,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled,
                                                               enableVoiceMessageComposer: appSettings.voiceMessageEnabled,
-                                                              audioPlayerState: .init(duration: 0),
+                                                              audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
                    imageProvider: mediaProvider)

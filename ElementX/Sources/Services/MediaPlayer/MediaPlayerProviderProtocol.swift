@@ -19,9 +19,9 @@ import Foundation
 protocol MediaPlayerProviderProtocol {
     func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol
     
-    func playerState(withId: String) -> AudioPlayerState?
-    func register(audioPlayerState: AudioPlayerState, withId: String)
-    func unregister(withAudioPlayerStateId: String)
+    func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState?
+    func register(audioPlayerState: AudioPlayerState)
+    func unregister(audioPlayerState: AudioPlayerState)
     func detachAllStates(except exception: AudioPlayerState?) async
 }
 

@@ -48,24 +48,49 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
     
     // MARK: - AudioPlayer
     
-    func playerState(withId id: String) -> AudioPlayerState? {
-        audioPlayerStates[id]
+    func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState? {
+        guard let audioPlayerStateID = audioPlayerStateID(for: id) else {
+            MXLog.error("Failed to build an ID using: \(id)")
+            return nil
+        }
+        return audioPlayerStates[audioPlayerStateID]
     }
     
-    func register(audioPlayerState: AudioPlayerState, withId id: String) {
-        audioPlayerStates[id] = audioPlayerState
+    @MainActor
+    func register(audioPlayerState: AudioPlayerState) {
+        guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
+            MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
+            return
+        }
+        audioPlayerStates[audioPlayerStateID] = audioPlayerState
     }
     
-    func unregister(withAudioPlayerStateId id: String) {
-        audioPlayerStates[id] = nil
+    @MainActor
+    func unregister(audioPlayerState: AudioPlayerState) {
+        guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
+            MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
+            return
+        }
+        audioPlayerStates[audioPlayerStateID] = nil
     }
     
     func detachAllStates(except exception: AudioPlayerState?) async {
         for key in audioPlayerStates.keys {
-            if key == exception?.id.uuidString {
+            if let exception, key == audioPlayerStateID(for: exception.id) {
                 continue
             }
             await audioPlayerStates[key]?.detachAudioPlayer()
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func audioPlayerStateID(for identifier: AudioPlayerStateIdentifier) -> String? {
+        switch identifier {
+        case .timelineItemIdentifier(let timelineItemIdentifier):
+            return timelineItemIdentifier.eventID
+        case .recorderPreview:
+            return "recorderPreviewAudioPlayerState"
         }
     }
 }

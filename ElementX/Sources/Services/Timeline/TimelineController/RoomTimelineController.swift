@@ -248,13 +248,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
         }
         
-        if let playerState = mediaPlayerProvider.playerState(withId: itemID.timelineID) {
+        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
             return playerState
         }
         
-        let playerState = AudioPlayerState(duration: voiceMessageRoomTimelineItem.content.duration,
+        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform)
-        mediaPlayerProvider.register(audioPlayerState: playerState, withId: itemID.timelineID)
+        mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }
     
@@ -310,7 +311,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
         
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        guard let playerState = mediaPlayerProvider.playerState(withId: itemID.timelineID) else {
+        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
             return
         }
         await playerState.updateState(progress: progress)
@@ -397,11 +398,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
                 // Stops the audio player when a voice message is redacted.
                 if timelineItem is RedactedRoomTimelineItem {
-                    guard let audioState = mediaPlayerProvider.playerState(withId: timelineItem.id.timelineID) else {
+                    guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
                         continue
                     }
-                    audioState.detachAudioPlayer()
-                    mediaPlayerProvider.unregister(withAudioPlayerStateId: timelineItem.id.timelineID)
+                    playerState.detachAudioPlayer()
+                    mediaPlayerProvider.unregister(audioPlayerState: playerState)
                 }
 
                 newTimelineItems.append(timelineItem)

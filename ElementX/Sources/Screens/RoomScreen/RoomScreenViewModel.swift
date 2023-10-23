@@ -206,7 +206,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .stopVoiceMessageRecording:
             Task { await stopRecordingVoiceMessage() }
         case .cancelVoiceMessageRecording:
-            Task { try? await cancelRecordingVoiceMessage() }
+            Task { await cancelRecordingVoiceMessage() }
         case .deleteVoiceMessageRecording:
             Task { await deleteCurrentVoiceMessage() }
         case .sendVoiceMessage:
@@ -940,34 +940,33 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Voice message
     
     private func stopVoiceMessageRecorder() async {
-        try? await voiceMessageRecorder.stopRecording()
+        await voiceMessageRecorder.stopRecording()
         await voiceMessageRecorder.stopPlayback()
     }
     
     private func startRecordingVoiceMessage() async {
         let audioRecordState = AudioRecorderState()
-        do {
-            try await audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
-            try await voiceMessageRecorder.startRecording()
+        audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
+        
+        switch await voiceMessageRecorder.startRecording() {
+        case .success:
             actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
-        } catch AudioRecorderError.recordPermissionNotGranted {
-            state.bindings.confirmationAlertInfo = .init(id: .init(),
-                                                         title: "",
-                                                         message: L10n.dialogPermissionMicrophone,
-                                                         primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }))
-        } catch {
-            MXLog.error("failed to start voice message recording: \(error)")
+        case .failure(let error):
+            switch error {
+            case .audioRecorderError(.recordPermissionNotGranted):
+                state.bindings.confirmationAlertInfo = .init(id: .init(),
+                                                             title: "",
+                                                             message: L10n.dialogPermissionMicrophone,
+                                                             primaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil),
+                                                             secondaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }))
+            default:
+                MXLog.error("failed to start voice message recording: \(error)")
+            }
         }
     }
     
     private func stopRecordingVoiceMessage() async {
-        do {
-            try await voiceMessageRecorder.stopRecording()
-        } catch {
-            MXLog.error("failed to stop voice message recording: \(error)")
-            return
-        }
+        await voiceMessageRecorder.stopRecording()
 
         guard let audioPlayerState = voiceMessageRecorder.previewPlayerState else {
             MXLog.error("the recorder preview is missing after the recording has been stopped")
@@ -979,12 +978,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return
         }
         
-        mediaPlayerProvider.register(audioPlayerState: audioPlayerState, withId: audioPlayerState.id.uuidString)
+        mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingUrl)))))
     }
     
-    private func cancelRecordingVoiceMessage() async throws {
-        try await voiceMessageRecorder.cancelRecording()
+    private func cancelRecordingVoiceMessage() async {
+        await voiceMessageRecorder.cancelRecording()
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     

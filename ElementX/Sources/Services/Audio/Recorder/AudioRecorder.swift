@@ -19,11 +19,6 @@ import Combine
 import Foundation
 import UIKit
 
-enum AudioRecorderError: Error {
-    case genericError
-    case recordPermissionNotGranted
-}
-
 class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     private let silenceThreshold: Float = -50.0
     
@@ -47,9 +42,9 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
-    func record(withId recordId: String) async throws {
+    func record(with recordId: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         guard await requestRecordPermission() else {
-            throw AudioRecorderError.recordPermissionNotGranted
+            return .failure(.recordPermissionNotGranted)
         }
         
         let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -61,7 +56,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
-            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordId).m4a")
+            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordId.identifier).m4a")
             audioRecorder = try AVAudioRecorder(url: url, settings: settings)
             audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true
@@ -71,9 +66,10 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             MXLog.error("audio recording failed: \(error)")
             actionsSubject.send(.didFailWithError(error: error))
         }
+        return .success(())
     }
     
-    func stopRecording() async throws {
+    func stopRecording() async {
         guard let audioRecorder, audioRecorder.isRecording else {
             return
         }
@@ -105,11 +101,11 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     // MARK: - Private
     
     private func addObservers() {
-        // Stop recording uppon UIApplication.didBecomeActiveNotification notification
+        // Stop recording uppon UIApplication.didEnterBackgroundNotification notification
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
                 guard let self else { return }
-                Task { try? await self.stopRecording() }
+                Task { await self.stopRecording() }
             }
             .store(in: &cancellables)
     }

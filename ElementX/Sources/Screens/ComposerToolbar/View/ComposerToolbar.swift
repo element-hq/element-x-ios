@@ -372,7 +372,7 @@ extension ComposerToolbar {
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0), waveform: .data(waveformData))
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData))
             model.state.enableVoiceMessageComposer = true
             return model
         }

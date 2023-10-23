@@ -26,9 +26,14 @@ enum AudioPlayerPlaybackState {
     case error
 }
 
+enum AudioPlayerStateIdentifier {
+    case timelineItemIdentifier(TimelineItemIdentifier)
+    case recorderPreview
+}
+
 @MainActor
 class AudioPlayerState: ObservableObject, Identifiable {
-    let id = UUID()
+    let id: AudioPlayerStateIdentifier
     let duration: Double
     let waveform: EstimatedWaveform
     @Published private(set) var playbackState: AudioPlayerPlaybackState
@@ -50,7 +55,8 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink != nil
     }
 
-    init(duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
+    init(id: AudioPlayerStateIdentifier, duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
+        self.id = id
         self.duration = duration
         self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
@@ -160,11 +166,5 @@ class AudioPlayerState: ObservableObject, Identifiable {
 extension AudioPlayerState: Equatable {
     nonisolated static func == (lhs: AudioPlayerState, rhs: AudioPlayerState) -> Bool {
         lhs.id == rhs.id
-    }
-}
-
-extension AudioPlayerState: Hashable {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }

@@ -44,23 +44,28 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     // MARK: - Recording
     
-    func startRecording() async throws {
+    func startRecording() async -> Result<Void, VoiceMessageRecorderError> {
         await stopPlayback()
         recordingURL = nil
-        try await audioRecorder.record(withId: UUID().uuidString)
-        recordingURL = audioRecorder.url
+        switch await audioRecorder.record(with: .uuid(UUID())) {
+        case .failure(let error):
+            return .failure(.audioRecorderError(error))
+        case .success:
+            recordingURL = audioRecorder.url
+            return .success(())
+        }
     }
     
-    func stopRecording() async throws {
+    func stopRecording() async {
         recordingDuration = audioRecorder.currentTime
-        try await audioRecorder.stopRecording()
+        await audioRecorder.stopRecording()
                 
         // Build the preview audio player state
-        previewPlayerState = await AudioPlayerState(duration: recordingDuration, waveform: EstimatedWaveform(data: []))
+        previewPlayerState = await AudioPlayerState(id: .recorderPreview, duration: recordingDuration, waveform: EstimatedWaveform(data: []))
     }
     
-    func cancelRecording() async throws {
-        try await audioRecorder.stopRecording()
+    func cancelRecording() async {
+        await audioRecorder.stopRecording()
         audioRecorder.deleteRecording()
         recordingURL = nil
         previewPlayerState = nil

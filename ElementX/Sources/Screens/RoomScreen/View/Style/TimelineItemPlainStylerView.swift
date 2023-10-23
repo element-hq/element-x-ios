@@ -232,7 +232,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider, TestablePreview {
                                                                             contentType: nil),
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                    contentType: .text(.init(body: "Short")))),
-                                         playerState: AudioPlayerState(duration: 10, waveform: EstimatedWaveform.mockWaveform))
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.init(timelineID: "")), duration: 10, waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

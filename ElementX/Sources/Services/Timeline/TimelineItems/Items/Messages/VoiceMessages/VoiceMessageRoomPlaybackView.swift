@@ -193,7 +193,8 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                                    294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                                    0, 0, 0, 0, 0, 3])
     
-    static var playerState = AudioPlayerState(duration: 10.0,
+    static var playerState = AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                              duration: 10.0,
                                               waveform: waveform,
                                               progress: 0.3)
     
