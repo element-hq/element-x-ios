@@ -55,6 +55,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                     return membersSuggestion
                 }
             }
+            // We only debounce if the suggestion is nil
             .map { [weak self] value in
                 let delay = self?.suggestionTriggerSubject.value == nil ? 0.0 : 0.5
                 return Just(value).delay(for: .seconds(delay), scheduler: DispatchQueue.main)
