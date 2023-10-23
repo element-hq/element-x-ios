@@ -17,29 +17,31 @@
 import SwiftUI
 
 struct EstimatedWaveform: Equatable, Hashable {
+    static let range: ClosedRange<UInt16> = 0...1024
     let data: [UInt16]
 }
 
 extension EstimatedWaveform {
-    func normalisedData(keepSamplesCount: Int) -> [Float] {
-        guard keepSamplesCount > 0 else {
+    func normalisedData(idealSamplesCount: Int) -> [Float] {
+        guard idealSamplesCount > 0 else {
             return []
         }
         // Filter the data to keep only the expected number of samples
         let originalCount = Double(data.count)
-        let expectedCount = Double(keepSamplesCount)
+        let expectedCount = Double(idealSamplesCount)
         var filteredData: [UInt16] = []
         if expectedCount < originalCount {
-            for index in 0..<keepSamplesCount {
+            for index in 0..<idealSamplesCount {
                 let targetIndex = (Double(index) * (originalCount / expectedCount)).rounded()
                 filteredData.append(UInt16(data[Int(targetIndex)]))
             }
         } else {
             filteredData = data
         }
-        // Normalize the sample
-        let max = max(1.0, filteredData.max().flatMap { Float($0) } ?? 1.0)
-        return filteredData.map { Float($0) / max }
+
+        // Normalize the sample in the allowed range
+        let rangeMax = Float(Self.range.upperBound)
+        return filteredData.map { Float($0) / rangeMax }
     }
 }
 
@@ -67,6 +69,7 @@ struct EstimatedWaveformView: View {
                 .stroke(Color.compound.iconSecondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .progressMask(progress: progress)
                 .preference(key: ViewSizeKey.self, value: geometry.size)
+                .background(Color.yellow)
         }
         .onPreferenceChange(ViewSizeKey.self) { size in
             buildNormalizedWaveformData(size: size)
@@ -79,7 +82,7 @@ struct EstimatedWaveformView: View {
         if normalizedWaveformData.count == count {
             return
         }
-        normalizedWaveformData = waveform.normalisedData(keepSamplesCount: count)
+        normalizedWaveformData = waveform.normalisedData(idealSamplesCount: count)
     }
 }
 
