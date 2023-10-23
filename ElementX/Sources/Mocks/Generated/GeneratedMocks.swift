@@ -895,25 +895,21 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
 
     //MARK: - player
 
-    var playerForThrowableError: Error?
     var playerForCallsCount = 0
     var playerForCalled: Bool {
         return playerForCallsCount > 0
     }
     var playerForReceivedMediaSource: MediaSourceProxy?
     var playerForReceivedInvocations: [MediaSourceProxy] = []
-    var playerForReturnValue: MediaPlayerProtocol!
-    var playerForClosure: ((MediaSourceProxy) throws -> MediaPlayerProtocol)?
+    var playerForReturnValue: Result<MediaPlayerProtocol, MediaPlayerProviderError>!
+    var playerForClosure: ((MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>)?
 
-    func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol {
-        if let error = playerForThrowableError {
-            throw error
-        }
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
         playerForCallsCount += 1
         playerForReceivedMediaSource = mediaSource
         playerForReceivedInvocations.append(mediaSource)
         if let playerForClosure = playerForClosure {
-            return try playerForClosure(mediaSource)
+            return playerForClosure(mediaSource)
         } else {
             return playerForReturnValue
         }
@@ -2967,19 +2963,20 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
     //MARK: - startPlayback
 
-    var startPlaybackThrowableError: Error?
     var startPlaybackCallsCount = 0
     var startPlaybackCalled: Bool {
         return startPlaybackCallsCount > 0
     }
-    var startPlaybackClosure: (() async throws -> Void)?
+    var startPlaybackReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var startPlaybackClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
 
-    func startPlayback() async throws {
-        if let error = startPlaybackThrowableError {
-            throw error
-        }
+    func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
         startPlaybackCallsCount += 1
-        try await startPlaybackClosure?()
+        if let startPlaybackClosure = startPlaybackClosure {
+            return await startPlaybackClosure()
+        } else {
+            return startPlaybackReturnValue
+        }
     }
     //MARK: - pausePlayback
 
@@ -3035,44 +3032,41 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
     }
     //MARK: - buildRecordingWaveform
 
-    var buildRecordingWaveformThrowableError: Error?
     var buildRecordingWaveformCallsCount = 0
     var buildRecordingWaveformCalled: Bool {
         return buildRecordingWaveformCallsCount > 0
     }
-    var buildRecordingWaveformReturnValue: [UInt16]!
-    var buildRecordingWaveformClosure: (() async throws -> [UInt16])?
+    var buildRecordingWaveformReturnValue: Result<[UInt16], VoiceMessageRecorderError>!
+    var buildRecordingWaveformClosure: (() async -> Result<[UInt16], VoiceMessageRecorderError>)?
 
-    func buildRecordingWaveform() async throws -> [UInt16] {
-        if let error = buildRecordingWaveformThrowableError {
-            throw error
-        }
+    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
         buildRecordingWaveformCallsCount += 1
         if let buildRecordingWaveformClosure = buildRecordingWaveformClosure {
-            return try await buildRecordingWaveformClosure()
+            return await buildRecordingWaveformClosure()
         } else {
             return buildRecordingWaveformReturnValue
         }
     }
     //MARK: - sendVoiceMessage
 
-    var sendVoiceMessageInRoomAudioConverterThrowableError: Error?
     var sendVoiceMessageInRoomAudioConverterCallsCount = 0
     var sendVoiceMessageInRoomAudioConverterCalled: Bool {
         return sendVoiceMessageInRoomAudioConverterCallsCount > 0
     }
     var sendVoiceMessageInRoomAudioConverterReceivedArguments: (roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)?
     var sendVoiceMessageInRoomAudioConverterReceivedInvocations: [(roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)] = []
-    var sendVoiceMessageInRoomAudioConverterClosure: ((RoomProxyProtocol, AudioConverterProtocol) async throws -> Void)?
+    var sendVoiceMessageInRoomAudioConverterReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var sendVoiceMessageInRoomAudioConverterClosure: ((RoomProxyProtocol, AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>)?
 
-    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws {
-        if let error = sendVoiceMessageInRoomAudioConverterThrowableError {
-            throw error
-        }
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
         sendVoiceMessageInRoomAudioConverterCallsCount += 1
         sendVoiceMessageInRoomAudioConverterReceivedArguments = (roomProxy: roomProxy, audioConverter: audioConverter)
         sendVoiceMessageInRoomAudioConverterReceivedInvocations.append((roomProxy: roomProxy, audioConverter: audioConverter))
-        try await sendVoiceMessageInRoomAudioConverterClosure?(roomProxy, audioConverter)
+        if let sendVoiceMessageInRoomAudioConverterClosure = sendVoiceMessageInRoomAudioConverterClosure {
+            return await sendVoiceMessageInRoomAudioConverterClosure(roomProxy, audioConverter)
+        } else {
+            return sendVoiceMessageInRoomAudioConverterReturnValue
+        }
     }
 }
 // swiftlint:enable all

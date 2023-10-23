@@ -273,40 +273,40 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        guard let player = try? mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
             MXLog.error("Cannot play a voice message without an audio player")
             return
         }
         
-        let playerState = audioPlayerState(for: itemID)
+        let audioPlayerState = audioPlayerState(for: itemID)
         
-        guard player.mediaSource == source, player.state != .error else {
-            player.stop()
+        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+            audioPlayer.stop()
             
-            await mediaPlayerProvider.detachAllStates(except: playerState)
+            await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
             
-            playerState.attachAudioPlayer(player)
+            audioPlayerState.attachAudioPlayer(audioPlayer)
 
             // Load content
             do {
                 let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
-                if playerState.isAttached {
-                    player.load(mediaSource: source, using: url, autoplay: true)
+                if audioPlayerState.isAttached {
+                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")
-                playerState.reportError(error)
+                audioPlayerState.reportError(error)
             }
             
             return
         }
         
-        if player.state == .playing {
-            player.pause()
+        if audioPlayer.state == .playing {
+            audioPlayer.pause()
         } else {
-            player.play()
+            audioPlayer.play()
         }
     }
         

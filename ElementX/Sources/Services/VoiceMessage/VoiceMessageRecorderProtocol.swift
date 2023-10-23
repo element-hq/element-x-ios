@@ -21,6 +21,7 @@ enum VoiceMessageRecorderError: Error {
     case missingRecordingFile
     case previewNotAvailable
     case audioRecorderError(AudioRecorderError)
+    case failedSendingVoiceMessage
 }
 
 protocol VoiceMessageRecorderProtocol {
@@ -29,17 +30,17 @@ protocol VoiceMessageRecorderProtocol {
     var recordingURL: URL? { get }
     var recordingDuration: TimeInterval { get }
     
-    func startRecording() async -> Result<Void, VoiceMessageRecorderError> 
+    func startRecording() async -> Result<Void, VoiceMessageRecorderError>
     func stopRecording() async
     func cancelRecording() async
-    func startPlayback() async throws
+    func startPlayback() async -> Result<Void, VoiceMessageRecorderError>
     func pausePlayback()
     func stopPlayback() async
     func seekPlayback(to progress: Double) async
     func deleteRecording() async
     
-    func buildRecordingWaveform() async throws -> [UInt16]
-    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws
+    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError>
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>
 }
 
 // sourcery: AutoMockable

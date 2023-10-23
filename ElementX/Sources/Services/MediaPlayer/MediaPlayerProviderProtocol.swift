@@ -16,8 +16,12 @@
 
 import Foundation
 
+enum MediaPlayerProviderError: Error {
+    case unsupportedMediaType
+}
+
 protocol MediaPlayerProviderProtocol {
-    func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>
     
     func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState?
     func register(audioPlayerState: AudioPlayerState)

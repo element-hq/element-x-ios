@@ -46,7 +46,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         
         mediaPlayerProvider = MediaPlayerProviderMock()
         mediaPlayerProvider.playerForClosure = { _ in
-            self.audioPlayer
+            .success(self.audioPlayer)
         }
         audioConverter = AudioConverterMock()
         voiceMessageCache = VoiceMessageCacheMock()
@@ -100,7 +100,10 @@ class VoiceMessageRecorderTests: XCTestCase {
         await voiceMessageRecorder.stopRecording()
 
         // if the player url doesn't match the recording url
-        try await voiceMessageRecorder.startPlayback()
+        guard case .success = await voiceMessageRecorder.startPlayback() else {
+            XCTFail("Playback should start")
+            return
+        }
         
         XCTAssert(audioPlayer.loadMediaSourceUsingAutoplayCalled)
         XCTAssertEqual(audioPlayer.loadMediaSourceUsingAutoplayReceivedArguments?.url, recordingURL)
@@ -117,7 +120,10 @@ class VoiceMessageRecorderTests: XCTestCase {
         
         // if the player url matches the recording url
         audioPlayer.url = recordingURL
-        try await voiceMessageRecorder.startPlayback()
+        guard case .success = await voiceMessageRecorder.startPlayback() else {
+            XCTFail("Playback should start")
+            return
+        }
         
         XCTAssertFalse(audioPlayer.loadMediaSourceUsingAutoplayCalled)
         XCTAssert(audioPlayer.playCalled)
@@ -167,7 +173,10 @@ class VoiceMessageRecorderTests: XCTestCase {
         _ = await voiceMessageRecorder.startRecording()
         await voiceMessageRecorder.stopRecording()
         
-        let data = try await voiceMessageRecorder.buildRecordingWaveform()
+        guard case .success(let data) = await voiceMessageRecorder.buildRecordingWaveform() else {
+            XCTFail("A waveform is expected")
+            return
+        }
         XCTAssert(!data.isEmpty)
     }
     
@@ -208,7 +217,10 @@ class VoiceMessageRecorderTests: XCTestCase {
             return .success(())
         }
         
-        try await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter)
+        guard case .success = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
+            XCTFail("A success is expected")
+            return
+        }
         
         XCTAssert(audioConverter.convertToOpusOggSourceURLDestinationURLCalled)
         XCTAssert(roomProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)

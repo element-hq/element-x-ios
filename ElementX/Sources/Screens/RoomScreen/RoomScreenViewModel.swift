@@ -994,19 +994,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func sendCurrentVoiceMessage() async {
         await voiceMessageRecorder.stopPlayback()
-        do {
-            try await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter())
+        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
+        case .success:
             await deleteCurrentVoiceMessage()
-        } catch {
-            MXLog.error("failed to send the voice message: \(error)")
+        case .failure(let error):
+            MXLog.error("failed to send the voice message", context: error)
         }
     }
     
     private func startPlayingRecordedVoiceMessage() async {
-        do {
-            try await voiceMessageRecorder.startPlayback()
-        } catch {
-            MXLog.error("failed to play recorded voice message: \(error)")
+        if case .failure(let error) = await voiceMessageRecorder.startPlayback() {
+            MXLog.error("failed to play recorded voice message", context: error)
         }
     }
     

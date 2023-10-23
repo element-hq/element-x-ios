@@ -16,10 +16,6 @@
 
 import Foundation
 
-enum MediaPlayerProviderError: Error {
-    case unsupportedMediaType
-}
-
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private var audioPlayer: AudioPlayerProtocol!
     private var audioPlayerStates: [String: AudioPlayerState] = [:]
@@ -29,20 +25,20 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         audioPlayerStates = [:]
     }
     
-    func player(for mediaSource: MediaSourceProxy) throws -> MediaPlayerProtocol {
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
         guard let mimeType = mediaSource.mimeType else {
             MXLog.error("Unknown mime type")
-            throw MediaPlayerProviderError.unsupportedMediaType
+            return .failure(.unsupportedMediaType)
         }
         
         if mimeType.starts(with: "audio/") {
             if audioPlayer == nil {
                 audioPlayer = AudioPlayer()
             }
-            return audioPlayer
+            return .success(audioPlayer)
         } else {
             MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
-            throw MediaPlayerProviderError.unsupportedMediaType
+            return .failure(.unsupportedMediaType)
         }
     }
     

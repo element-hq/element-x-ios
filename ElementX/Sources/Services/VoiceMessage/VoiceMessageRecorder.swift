@@ -80,20 +80,24 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
 
     // MARK: - Preview
         
-    func startPlayback() async throws {
+    func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
         guard let previewPlayerState, let url = recordingURL else {
-            throw VoiceMessageRecorderError.missingRecordingFile
+            return .failure(.previewNotAvailable)
         }
         
-        let audioPlayer = try audioPlayer()
+        guard let audioPlayer = try? audioPlayer() else {
+            return .failure(.previewNotAvailable)
+        }
+        
         if audioPlayer.url == url {
             audioPlayer.play()
-            return
+            return .success(())
         }
         
         await previewPlayerState.attachAudioPlayer(audioPlayer)
         let pendingMediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
         audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
+        return .success(())
     }
     
     func pausePlayback() {
@@ -114,9 +118,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await previewPlayerState?.updateState(progress: progress)
     }
     
-    func buildRecordingWaveform() async throws -> [UInt16] {
+    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
         guard let url = recordingURL else {
-            throw VoiceMessageRecorderError.missingRecordingFile
+            return .failure(.missingRecordingFile)
         }
         // build the waveform
         var waveformData: [UInt16] = []
@@ -128,23 +132,35 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         } catch {
             MXLog.error("Waveform analysis failed: \(error)")
         }
-        return waveformData
+        return .success(waveformData)
     }
     
-    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async throws {
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
         guard let url = recordingURL else {
-            throw VoiceMessageRecorderError.missingRecordingFile
+            return .failure(VoiceMessageRecorderError.missingRecordingFile)
         }
         
         // convert the file
         let sourceFilename = url.deletingPathExtension().lastPathComponent
         let oggFile = URL.temporaryDirectory.appendingPathComponent(sourceFilename).appendingPathExtension("ogg")
-        try audioConverter.convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
+        do {
+            try audioConverter.convertToOpusOgg(sourceURL: url, destinationURL: oggFile)
+        } catch {
+            return .failure(.failedSendingVoiceMessage)
+        }
 
         // send it
-        let size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
+        let size: UInt64
+        do {
+            size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
+        } catch {
+            MXLog.error("Failed to get the recording file size", context: error)
+            return .failure(.failedSendingVoiceMessage)
+        }
         let audioInfo = AudioInfo(duration: recordingDuration, size: size, mimetype: "audio/ogg")
-        let waveform = try await buildRecordingWaveform()
+        guard case .success(let waveform) = await buildRecordingWaveform() else {
+            return .failure(.failedSendingVoiceMessage)
+        }
         
         let result = await roomProxy.sendVoiceMessage(url: oggFile,
                                                       audioInfo: audioInfo,
@@ -153,9 +169,12 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         // delete the temporary file
         try? FileManager.default.removeItem(at: oggFile)
         
-        if case .failure(let failure) = result {
-            throw failure
+        if case .failure(let error) = result {
+            MXLog.error("Failed to send the voice message.", context: error)
+            return .failure(.failedSendingVoiceMessage)
         }
+        
+        return .success(())
     }
         
     // MARK: - Private
@@ -165,7 +184,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             throw VoiceMessageRecorderError.previewNotAvailable
         }
         let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
-        guard let audioPlayer = try mediaPlayerProvider.player(for: mediaSource) as? AudioPlayerProtocol else {
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: mediaSource), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
             throw VoiceMessageRecorderError.previewNotAvailable
         }
         return audioPlayer
