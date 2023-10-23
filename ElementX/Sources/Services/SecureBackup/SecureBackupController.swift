@@ -19,7 +19,7 @@ import Foundation
 
 class SecureBackupController: SecureBackupControllerProtocol {
     private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled)
-    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled)
+    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.disabled)
     
     var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
         recoveryKeyStateSubject.asCurrentValuePublisher()
@@ -27,6 +27,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> {
         keyBackupStateSubject.asCurrentValuePublisher()
+    }
+    
+    var isLastSession: Bool {
+        #warning("FIXME")
+        return true
     }
     
     func enableBackup() async -> Result<Void, SecureBackupControllerError> {
@@ -75,5 +80,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
         recoveryKeyStateSubject.send(.enabled)
         
         return .success(())
+    }
+    
+    func waitForKeyBackup() async {
+        try? await Task.sleep(for: .seconds(5))
     }
 }

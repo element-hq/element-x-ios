@@ -984,6 +984,24 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
         await detachAllStatesExceptClosure?(exception)
     }
 }
+class NetworkMonitorMock: NetworkMonitorProtocol {
+    var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        get { return underlyingReachabilityPublisher }
+        set(value) { underlyingReachabilityPublisher = value }
+    }
+    var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
+    var isCurrentConnectionExpensive: Bool {
+        get { return underlyingIsCurrentConnectionExpensive }
+        set(value) { underlyingIsCurrentConnectionExpensive = value }
+    }
+    var underlyingIsCurrentConnectionExpensive: Bool!
+    var isCurrentConnectionConstrained: Bool {
+        get { return underlyingIsCurrentConnectionConstrained }
+        set(value) { underlyingIsCurrentConnectionConstrained = value }
+    }
+    var underlyingIsCurrentConnectionConstrained: Bool!
+
+}
 class NotificationCenterMock: NotificationCenterProtocol {
 
     //MARK: - post
@@ -2400,6 +2418,11 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
         set(value) { underlyingKeyBackupState = value }
     }
     var underlyingKeyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never>!
+    var isLastSession: Bool {
+        get { return underlyingIsLastSession }
+        set(value) { underlyingIsLastSession = value }
+    }
+    var underlyingIsLastSession: Bool!
 
     //MARK: - enableBackup
 
@@ -2472,6 +2495,18 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
         } else {
             return confirmRecoveryKeyReturnValue
         }
+    }
+    //MARK: - waitForKeyBackup
+
+    var waitForKeyBackupCallsCount = 0
+    var waitForKeyBackupCalled: Bool {
+        return waitForKeyBackupCallsCount > 0
+    }
+    var waitForKeyBackupClosure: (() async -> Void)?
+
+    func waitForKeyBackup() async {
+        waitForKeyBackupCallsCount += 1
+        await waitForKeyBackupClosure?()
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

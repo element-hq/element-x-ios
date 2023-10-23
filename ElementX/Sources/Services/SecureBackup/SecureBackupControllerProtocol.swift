@@ -49,11 +49,15 @@ protocol SecureBackupControllerProtocol {
     
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> { get }
     
+    var isLastSession: Bool { get }
+    
     func enableBackup() async -> Result<Void, SecureBackupControllerError>
     func disableBackup() async -> Result<Void, SecureBackupControllerError>
     
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
+    
+    func waitForKeyBackup() async
 }
 
 extension SecureBackupControllerMock {

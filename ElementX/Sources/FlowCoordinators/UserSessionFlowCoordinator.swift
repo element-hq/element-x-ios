@@ -211,7 +211,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentInvitesList(animated: animated)
             case (.invitesScreen, .showInvitesScreen, .invitesScreen):
                 break
-            case (.invitesScreen, .closedInvitesScreen, .roomList):
+            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
+                break
+                
+            case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
+                presentSecureBackupConfirmationScreen()
+            case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
                 
             default:
@@ -296,7 +301,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:
-                    logout()
+                    runLogoutFlow()
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
                 }
@@ -321,13 +326,44 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func logout() {
-        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
-                                                                        message: L10n.screenSignoutConfirmationDialogContent,
-                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                            self?.actionsSubject.send(.logout)
-                                                                        })
+    private func runLogoutFlow() {
+        let secureBackupController = userSession.clientProxy.secureBackupController
+        
+        guard secureBackupController.isLastSession else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: UntranslatedL10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: UntranslatedL10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            })
+            return
+        }
+        
+        guard secureBackupController.recoveryKeyState.value == .enabled else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: UntranslatedL10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: UntranslatedL10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                                self?.presentSecureBackupSettingsScreen()
+                                                                            })
+            return
+        }
+        
+        guard secureBackupController.keyBackupState.value == .enabled else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: UntranslatedL10n.screenSignoutKeyBackupDisabledTitle,
+                                                                            message: UntranslatedL10n.screenSignoutKeyBackupDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                                self?.presentSecureBackupSettingsScreen()
+                                                                            })
+            return
+        }
+        
+        presentSecureBackupConfirmationScreen()
     }
     
     // MARK: Settings
@@ -359,7 +395,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     
                     // The settings sheet needs to be dismissed before the alert can be shown
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.logout()
+                        self.runLogoutFlow()
                     }
                 case .clearCache:
                     actionsSubject.send(.clearCache)
@@ -373,6 +409,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
         }
     }
+    
+    private func presentSecureBackupSettingsScreen() { }
     
     // MARK: Session verification
     
@@ -470,7 +508,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.closedInvitesScreen)
+            self?.stateMachine.processEvent(.dismissedInvitesScreen)
         }
     }
     
@@ -491,5 +529,29 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+    }
+    
+    // MARK: Secure backup confirmation
+    
+    private func presentSecureBackupConfirmationScreen() {
+        let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                                            networkMonitor: ServiceLocator.shared.networkMonitor))
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .cancel:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .settings:
+                    presentSecureBackupSettingsScreen()
+                case .logout:
+                    actionsSubject.send(.logout)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: true)
     }
 }
