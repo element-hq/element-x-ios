@@ -17,29 +17,32 @@
 import SwiftUI
 
 struct EstimatedWaveform: Equatable, Hashable {
+    static let dataRange: ClosedRange<UInt16> = 0...1024
     let data: [UInt16]
 }
 
 extension EstimatedWaveform {
-    func normalisedData(keepSamplesCount: Int) -> [Float] {
-        guard keepSamplesCount > 0 else {
+    /// Maps the `data` array to Float values in the range 0...1 respecting the `Self.dataRange` limits.
+    /// Up to `maxSamplesCount` will be returned in the output array
+    func normalisedData(maxSamplesCount: Int) -> [Float] {
+        guard maxSamplesCount > 0 else {
             return []
         }
+
         // Filter the data to keep only the expected number of samples
-        let originalCount = Double(data.count)
-        let expectedCount = Double(keepSamplesCount)
-        var filteredData: [UInt16] = []
-        if expectedCount < originalCount {
-            for index in 0..<keepSamplesCount {
-                let targetIndex = (Double(index) * (originalCount / expectedCount)).rounded()
-                filteredData.append(UInt16(data[Int(targetIndex)]))
-            }
+        let result: [UInt16]
+        if data.count > maxSamplesCount {
+            result = (0..<maxSamplesCount)
+                .map { index in
+                    let targetIndex = Int((Double(index) * (Double(data.count) / Double(maxSamplesCount))).rounded())
+                    return UInt16(data[targetIndex])
+                }
         } else {
-            filteredData = data
+            result = data
         }
-        // Normalize the sample
-        let max = max(1.0, filteredData.max().flatMap { Float($0) } ?? 1.0)
-        return filteredData.map { Float($0) / max }
+
+        // Normalize the sample in the allowed range
+        return result.map { Float($0) / Float(Self.dataRange.upperBound) }
     }
 }
 
@@ -79,7 +82,7 @@ struct EstimatedWaveformView: View {
         if normalizedWaveformData.count == count {
             return
         }
-        normalizedWaveformData = waveform.normalisedData(keepSamplesCount: count)
+        normalizedWaveformData = waveform.normalisedData(maxSamplesCount: count)
     }
 }
 
@@ -118,7 +121,7 @@ private struct WaveformShape: Shape {
     }
 }
 
-struct WaveformView_Previews: PreviewProvider, TestablePreview {
+struct EstimatedWaveformView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         // Wrap the WaveformView in a VStack otherwise the preview test will fail (because of Prefire / GeometryReader)
         VStack {
