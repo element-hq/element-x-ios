@@ -100,6 +100,7 @@
 "common_enter_your_pin" = "Enter your PIN";
 "common_error" = "Error";
 "common_everyone" = "Everyone";
+"common_face_id_ios" = "Face ID";
 "common_file" = "File";
 "common_forward_message" = "Forward message";
 "common_gif" = "GIF";
@@ -116,6 +117,7 @@
 "common_mute" = "Mute";
 "common_no_results" = "No results";
 "common_offline" = "Offline";
+"common_optic_id_ios" = "Optic ID";
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
@@ -152,6 +154,7 @@
 "common_thread" = "Thread";
 "common_topic" = "Topic";
 "common_topic_placeholder" = "What is this room about?";
+"common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Unable to decrypt";
 "common_unable_to_invite_message" = "Invites couldn't be sent to one or more users.";
 "common_unable_to_invite_title" = "Unable to send invite(s)";
@@ -265,6 +268,8 @@
 "screen_analytics_prompt_third_party_sharing" = "We won't share your data with third parties";
 "screen_analytics_prompt_title" = "Help improve %1$@";
 "screen_analytics_settings_share_data" = "Share analytics data";
+"screen_app_lock_biometric_authentication" = "biometric authentication";
+"screen_app_lock_biometric_unlock" = "biometric unlock";
 "screen_app_lock_forgot_pin" = "Forgot PIN?";
 "screen_app_lock_settings_change_pin" = "Change PIN code";
 "screen_app_lock_settings_enable_biometric_unlock" = "Allow biometric unlock";
@@ -274,6 +279,9 @@
 "screen_app_lock_settings_remove_pin" = "Remove PIN";
 "screen_app_lock_settings_remove_pin_alert_message" = "Are you sure you want to remove PIN?";
 "screen_app_lock_settings_remove_pin_alert_title" = "Remove PIN?";
+"screen_app_lock_setup_biometric_unlock_allow_title" = "Allow %1$@";
+"screen_app_lock_setup_biometric_unlock_skip" = "I’d rather use PIN";
+"screen_app_lock_setup_biometric_unlock_subtitle" = "Save yourself some time and use %1$@ to unlock the app each time";
 "screen_app_lock_setup_choose_pin" = "Choose PIN";
 "screen_app_lock_setup_confirm_pin" = "Confirm PIN";
 "screen_app_lock_setup_pin_blacklisted_dialog_content" = "You cannot choose this as your PIN code for security reasons";

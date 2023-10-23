@@ -220,6 +220,8 @@ public enum L10n {
   public static var commonError: String { return L10n.tr("Localizable", "common_error") }
   /// Everyone
   public static var commonEveryone: String { return L10n.tr("Localizable", "common_everyone") }
+  /// Face ID
+  public static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
   /// File
   public static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
@@ -258,6 +260,8 @@ public enum L10n {
   public static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// Offline
   public static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
+  /// Optic ID
+  public static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
   /// Password
   public static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -344,6 +348,8 @@ public enum L10n {
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// What is this room about?
   public static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
+  /// Touch ID
+  public static var commonTouchIdIos: String { return L10n.tr("Localizable", "common_touch_id_ios") }
   /// Unable to decrypt
   public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
   /// Invites couldn't be sent to one or more users.
@@ -648,6 +654,10 @@ public enum L10n {
   public static var screenAnalyticsSettingsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_settings_read_terms_content_link") }
   /// Share analytics data
   public static var screenAnalyticsSettingsShareData: String { return L10n.tr("Localizable", "screen_analytics_settings_share_data") }
+  /// biometric authentication
+  public static var screenAppLockBiometricAuthentication: String { return L10n.tr("Localizable", "screen_app_lock_biometric_authentication") }
+  /// biometric unlock
+  public static var screenAppLockBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock") }
   /// Forgot PIN?
   public static var screenAppLockForgotPin: String { return L10n.tr("Localizable", "screen_app_lock_forgot_pin") }
   /// Change PIN code
@@ -666,6 +676,16 @@ public enum L10n {
   public static var screenAppLockSettingsRemovePinAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_message") }
   /// Remove PIN?
   public static var screenAppLockSettingsRemovePinAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_title") }
+  /// Allow %1$@
+  public static func screenAppLockSetupBiometricUnlockAllowTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_allow_title", String(describing: p1))
+  }
+  /// I’d rather use PIN
+  public static var screenAppLockSetupBiometricUnlockSkip: String { return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_skip") }
+  /// Save yourself some time and use %1$@ to unlock the app each time
+  public static func screenAppLockSetupBiometricUnlockSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_subtitle", String(describing: p1))
+  }
   /// Choose PIN
   public static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
   /// Confirm PIN
