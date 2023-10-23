@@ -21,19 +21,27 @@ struct PillView: View {
     @ObservedObject var context: PillContext
     /// callback triggerd by changes in the display text
     let didChangeText: () -> Void
+    
+    var textColor: Color {
+        context.viewState.isOwnMention ? .compound.textOnSolidPrimary : .compound.textSuccessPrimary
+    }
+    
+    var backgroundColor: Color {
+        context.viewState.isOwnMention ? .compound._bgOwnPill : .compound._bgPill
+    }
         
     var body: some View {
-        HStack(spacing: 4) {
-            LoadableAvatarImage(url: context.viewState.avatarURL, name: context.viewState.name, contentID: context.viewState.contentID, avatarSize: .custom(24), imageProvider: imageProvider)
+        HStack(spacing: 2) {
+            LoadableAvatarImage(url: context.viewState.avatarURL, name: context.viewState.name, contentID: context.viewState.contentID, avatarSize: .custom(16), imageProvider: imageProvider)
             Text(context.viewState.displayText)
                 .font(.compound.bodyLGSemibold)
-                .foregroundColor(.compound.textOnSolidPrimary)
+                .foregroundColor(textColor)
                 .lineLimit(1)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        // for now design has defined no color so we will just use gray
-        .background(Capsule().foregroundColor(context.viewState.isOwnMention ? .compound.bgCriticalPrimary : .gray))
+        .padding(.leading, 4)
+        .padding(.trailing, 6)
+        .padding(.vertical, 1)
+        .background { Capsule().foregroundColor(backgroundColor) }
         .frame(maxWidth: PillConstants.maxWidth)
         .onChange(of: context.viewState.displayText) { _ in
             didChangeText()
@@ -53,11 +61,9 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Loading Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
-            // To simulate the trimming that happens at UIKit level
             .previewDisplayName("Loaded Long")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
-            // To simulate the trimming that happens at UIKit level
             .previewDisplayName("Loaded Long Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .allUsers)) { }
