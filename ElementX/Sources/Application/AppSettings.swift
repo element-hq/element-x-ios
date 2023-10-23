@@ -211,7 +211,7 @@ final class AppSettings {
     
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io"
+    let elementCallBaseURL: URL = "https://call.element.dev"
     
     // MARK: - Notifications
 
