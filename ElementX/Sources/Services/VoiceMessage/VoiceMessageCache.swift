@@ -16,36 +16,31 @@
 
 import Foundation
 
-enum VoiceMessageCacheError: Error {
-    case invalidFileExtension
-}
-
 class VoiceMessageCache: VoiceMessageCacheProtocol {
     private let preferredFileExtension = "m4a"
     private var temporaryFilesFolderURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("media/voice-message")
     }
-        
+    
     func fileURL(for mediaSource: MediaSourceProxy) -> URL? {
         let url = cacheURL(for: mediaSource)
         return FileManager.default.fileExists(atPath: url.path()) ? url : nil
     }
-
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool = false) throws -> URL {
-        guard fileURL.pathExtension == preferredFileExtension else {
-            throw VoiceMessageCacheError.invalidFileExtension
-        }
-        setupTemporaryFilesFolder()
-        let url = cacheURL(for: mediaSource)
-        try? FileManager.default.removeItem(at: url)
-        if move {
-            try FileManager.default.moveItem(at: fileURL, to: url)
-        } else {
-            try FileManager.default.copyItem(at: fileURL, to: url)
-        }
-        return url
-    }
     
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool = false) -> Result<URL, VoiceMessageCacheError> {
+        guard fileURL.pathExtension == preferredFileExtension else {
+            return .failure(.invalidFileExtension)
+        }
+        let url = cacheURL(for: mediaSource)
+        do {
+            try cacheFile(source: fileURL, destination: url, move: move)
+        } catch {
+            MXLog.error("Failed storing file in cache", context: error)
+            return .failure(.failedStoringFileInCache)
+        }
+        return .success(url)
+    }
+        
     func clearCache() {
         if FileManager.default.fileExists(atPath: temporaryFilesFolderURL.path) {
             do {
@@ -63,6 +58,16 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
             try FileManager.default.createDirectoryIfNeeded(at: temporaryFilesFolderURL, withIntermediateDirectories: true)
         } catch {
             MXLog.error("Failed to setup audio cache manager.")
+        }
+    }
+    
+    private func cacheFile(source: URL, destination: URL, move: Bool) throws {
+        setupTemporaryFilesFolder()
+        try? FileManager.default.removeItem(at: destination)
+        if move {
+            try FileManager.default.moveItem(at: source, to: destination)
+        } else {
+            try FileManager.default.copyItem(at: source, to: destination)
         }
     }
     

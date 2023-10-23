@@ -56,7 +56,10 @@ class VoiceMessageCacheTests: XCTestCase {
         
         // If the file is present in the cache, its URL must be returned
         let temporaryFileURL = try createTemporaryFile(named: testFilename, withExtension: mpeg4aacFileExtension)
-        let cachedURL = try voiceMessageCache.cache(mediaSource: mediaSource, using: temporaryFileURL, move: true)
+        guard case .success(let cachedURL) = voiceMessageCache.cache(mediaSource: mediaSource, using: temporaryFileURL, move: true) else {
+            XCTFail("A success is expected")
+            return
+        }
         
         XCTAssertEqual(cachedURL, voiceMessageCache.fileURL(for: mediaSource))
     }
@@ -64,22 +67,20 @@ class VoiceMessageCacheTests: XCTestCase {
     func testCacheInvalidFileExtension() async throws {
         // An error should be raised if the file extension is not "m4a"
         let mpegFileURL = try createTemporaryFile(named: testFilename, withExtension: "mpg")
-        do {
-            _ = try voiceMessageCache.cache(mediaSource: mediaSource, using: mpegFileURL, move: true)
+        guard case .failure(let error) = voiceMessageCache.cache(mediaSource: mediaSource, using: mpegFileURL, move: true) else {
             XCTFail("An error is expected")
-        } catch {
-            switch error as? VoiceMessageCacheError {
-            case .invalidFileExtension:
-                break
-            default:
-                XCTFail("A VoiceMessageCacheError.invalidFileExtension is expected")
-            }
+            return
         }
+        
+        XCTAssertEqual(error, .invalidFileExtension)
     }
     
     func testCacheCopy() async throws {
         let fileURL = try createTemporaryFile(named: testFilename, withExtension: mpeg4aacFileExtension)
-        let cacheURL = try voiceMessageCache.cache(mediaSource: mediaSource, using: fileURL, move: false)
+        guard case .success(let cacheURL) = voiceMessageCache.cache(mediaSource: mediaSource, using: fileURL, move: false) else {
+            XCTFail("A success is expected")
+            return
+        }
         
         // The source file must remain in its original location
         XCTAssertTrue(fileManager.fileExists(atPath: fileURL.path()))
@@ -89,7 +90,10 @@ class VoiceMessageCacheTests: XCTestCase {
     
     func testCacheMove() async throws {
         let fileURL = try createTemporaryFile(named: testFilename, withExtension: mpeg4aacFileExtension)
-        let cacheURL = try voiceMessageCache.cache(mediaSource: mediaSource, using: fileURL, move: true)
+        guard case .success(let cacheURL) = voiceMessageCache.cache(mediaSource: mediaSource, using: fileURL, move: true) else {
+            XCTFail("A success is expected")
+            return
+        }
         
         // The file must have been moved
         XCTAssertFalse(fileManager.fileExists(atPath: fileURL.path()))

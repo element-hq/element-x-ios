@@ -16,27 +16,9 @@
 
 import Foundation
 
-enum MediaPlayerState {
-    case loading
-    case playing
-    case paused
-    case stopped
-    case error
+enum WaveformSource: Equatable {
+    /// File URL of the source audio file
+    case url(URL)
+    /// Array of small number of pre-computed samples
+    case data([Float])
 }
-
-protocol MediaPlayerProtocol: AnyObject {
-    var mediaSource: MediaSourceProxy? { get }
-    
-    var currentTime: TimeInterval { get }
-    var url: URL? { get }
-    var state: MediaPlayerState { get }
-    
-    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool)
-    func play()
-    func pause()
-    func stop()
-    func seek(to progress: Double) async
-}
-
-// sourcery: AutoMockable
-extension MediaPlayerProtocol { }

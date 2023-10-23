@@ -38,7 +38,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
-    private var timelineAudioPlayerStates = [TimelineItemIdentifier: AudioPlayerState]()
 
     var roomID: String {
         roomProxy.id
@@ -249,13 +248,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             fatalError("Invalid TimelineItem type (expecting `VoiceMessageRoomTimelineItem` but found \(type(of: timelineItem)) instead")
         }
         
-        if let playerState = timelineAudioPlayerStates[itemID] {
+        if let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) {
             return playerState
         }
         
-        let playerState = AudioPlayerState(duration: voiceMessageRoomTimelineItem.content.duration,
+        let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform)
-        timelineAudioPlayerStates[itemID] = playerState
+        mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }
     
@@ -273,52 +273,48 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        guard let player = await mediaPlayerProvider.player(for: source) as? AudioPlayerProtocol else {
+        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
             MXLog.error("Cannot play a voice message without an audio player")
             return
         }
         
-        let playerState = audioPlayerState(for: itemID)
+        let audioPlayerState = audioPlayerState(for: itemID)
         
-        guard player.mediaSource == source, player.state != .error else {
-            timelineAudioPlayerStates.forEach { itemID, playerState in
-                if itemID != timelineItem.id {
-                    playerState.detachAudioPlayer()
-                }
-            }
-            playerState.attachAudioPlayer(player)
+        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+            audioPlayer.stop()
             
+            await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+            
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+
             // Load content
             do {
                 let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
-                if playerState.isAttached {
-                    player.load(mediaSource: source, using: url)
+                if audioPlayerState.isAttached {
+                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")
-                playerState.reportError(error)
+                audioPlayerState.reportError(error)
             }
             
             return
         }
         
-        if player.state == .playing {
-            player.pause()
+        if audioPlayer.state == .playing {
+            audioPlayer.pause()
         } else {
-            player.play()
+            audioPlayer.play()
         }
     }
-    
-    func pauseAudio() {
-        timelineAudioPlayerStates.forEach { _, playerState in
-            playerState.detachAudioPlayer()
-        }
-    }
-    
+        
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
-        await timelineAudioPlayerStates[itemID]?.updateState(progress: progress)
+        guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(itemID)) else {
+            return
+        }
+        await playerState.updateState(progress: progress)
     }
     
     // MARK: - Private
@@ -402,11 +398,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
                 // Stops the audio player when a voice message is redacted.
                 if timelineItem is RedactedRoomTimelineItem {
-                    guard let audioState = timelineAudioPlayerStates[timelineItem.id] else {
+                    guard let playerState = mediaPlayerProvider.playerState(for: .timelineItemIdentifier(timelineItem.id)) else {
                         continue
                     }
-                    audioState.detachAudioPlayer()
-                    timelineAudioPlayerStates.removeValue(forKey: timelineItem.id)
+                    playerState.detachAudioPlayer()
+                    mediaPlayerProvider.unregister(audioPlayerState: playerState)
                 }
 
                 newTimelineItems.append(timelineItem)

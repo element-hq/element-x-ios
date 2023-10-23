@@ -323,19 +323,19 @@ class AudioPlayerMock: AudioPlayerProtocol {
 
     //MARK: - load
 
-    var loadMediaSourceUsingCallsCount = 0
-    var loadMediaSourceUsingCalled: Bool {
-        return loadMediaSourceUsingCallsCount > 0
+    var loadMediaSourceUsingAutoplayCallsCount = 0
+    var loadMediaSourceUsingAutoplayCalled: Bool {
+        return loadMediaSourceUsingAutoplayCallsCount > 0
     }
-    var loadMediaSourceUsingReceivedArguments: (mediaSource: MediaSourceProxy, url: URL)?
-    var loadMediaSourceUsingReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL)] = []
-    var loadMediaSourceUsingClosure: ((MediaSourceProxy, URL) -> Void)?
+    var loadMediaSourceUsingAutoplayReceivedArguments: (mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)?
+    var loadMediaSourceUsingAutoplayReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)] = []
+    var loadMediaSourceUsingAutoplayClosure: ((MediaSourceProxy, URL, Bool) -> Void)?
 
-    func load(mediaSource: MediaSourceProxy, using url: URL) {
-        loadMediaSourceUsingCallsCount += 1
-        loadMediaSourceUsingReceivedArguments = (mediaSource: mediaSource, url: url)
-        loadMediaSourceUsingReceivedInvocations.append((mediaSource: mediaSource, url: url))
-        loadMediaSourceUsingClosure?(mediaSource, url)
+    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
+        loadMediaSourceUsingAutoplayCallsCount += 1
+        loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
+        loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
+        loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
     }
     //MARK: - play
 
@@ -408,21 +408,26 @@ class AudioRecorderMock: AudioRecorderProtocol {
     var underlyingIsRecording: Bool!
     var url: URL?
 
-    //MARK: - recordWithOutputURL
+    //MARK: - record
 
-    var recordWithOutputURLCallsCount = 0
-    var recordWithOutputURLCalled: Bool {
-        return recordWithOutputURLCallsCount > 0
+    var recordWithCallsCount = 0
+    var recordWithCalled: Bool {
+        return recordWithCallsCount > 0
     }
-    var recordWithOutputURLReceivedUrl: URL?
-    var recordWithOutputURLReceivedInvocations: [URL] = []
-    var recordWithOutputURLClosure: ((URL) -> Void)?
+    var recordWithReceivedRecordID: AudioRecordingIdentifier?
+    var recordWithReceivedInvocations: [AudioRecordingIdentifier] = []
+    var recordWithReturnValue: Result<Void, AudioRecorderError>!
+    var recordWithClosure: ((AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>)?
 
-    func recordWithOutputURL(_ url: URL) {
-        recordWithOutputURLCallsCount += 1
-        recordWithOutputURLReceivedUrl = url
-        recordWithOutputURLReceivedInvocations.append(url)
-        recordWithOutputURLClosure?(url)
+    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+        recordWithCallsCount += 1
+        recordWithReceivedRecordID = recordID
+        recordWithReceivedInvocations.append(recordID)
+        if let recordWithClosure = recordWithClosure {
+            return await recordWithClosure(recordID)
+        } else {
+            return recordWithReturnValue
+        }
     }
     //MARK: - stopRecording
 
@@ -430,11 +435,23 @@ class AudioRecorderMock: AudioRecorderProtocol {
     var stopRecordingCalled: Bool {
         return stopRecordingCallsCount > 0
     }
-    var stopRecordingClosure: (() -> Void)?
+    var stopRecordingClosure: (() async -> Void)?
 
-    func stopRecording() {
+    func stopRecording() async {
         stopRecordingCallsCount += 1
-        stopRecordingClosure?()
+        await stopRecordingClosure?()
+    }
+    //MARK: - deleteRecording
+
+    var deleteRecordingCallsCount = 0
+    var deleteRecordingCalled: Bool {
+        return deleteRecordingCallsCount > 0
+    }
+    var deleteRecordingClosure: (() -> Void)?
+
+    func deleteRecording() {
+        deleteRecordingCallsCount += 1
+        deleteRecordingClosure?()
     }
     //MARK: - averagePowerForChannelNumber
 
@@ -807,19 +824,19 @@ class MediaPlayerMock: MediaPlayerProtocol {
 
     //MARK: - load
 
-    var loadMediaSourceUsingCallsCount = 0
-    var loadMediaSourceUsingCalled: Bool {
-        return loadMediaSourceUsingCallsCount > 0
+    var loadMediaSourceUsingAutoplayCallsCount = 0
+    var loadMediaSourceUsingAutoplayCalled: Bool {
+        return loadMediaSourceUsingAutoplayCallsCount > 0
     }
-    var loadMediaSourceUsingReceivedArguments: (mediaSource: MediaSourceProxy, url: URL)?
-    var loadMediaSourceUsingReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL)] = []
-    var loadMediaSourceUsingClosure: ((MediaSourceProxy, URL) -> Void)?
+    var loadMediaSourceUsingAutoplayReceivedArguments: (mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)?
+    var loadMediaSourceUsingAutoplayReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)] = []
+    var loadMediaSourceUsingAutoplayClosure: ((MediaSourceProxy, URL, Bool) -> Void)?
 
-    func load(mediaSource: MediaSourceProxy, using url: URL) {
-        loadMediaSourceUsingCallsCount += 1
-        loadMediaSourceUsingReceivedArguments = (mediaSource: mediaSource, url: url)
-        loadMediaSourceUsingReceivedInvocations.append((mediaSource: mediaSource, url: url))
-        loadMediaSourceUsingClosure?(mediaSource, url)
+    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
+        loadMediaSourceUsingAutoplayCallsCount += 1
+        loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
+        loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
+        loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
     }
     //MARK: - play
 
@@ -872,6 +889,99 @@ class MediaPlayerMock: MediaPlayerProtocol {
         seekToReceivedProgress = progress
         seekToReceivedInvocations.append(progress)
         await seekToClosure?(progress)
+    }
+}
+class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
+
+    //MARK: - player
+
+    var playerForCallsCount = 0
+    var playerForCalled: Bool {
+        return playerForCallsCount > 0
+    }
+    var playerForReceivedMediaSource: MediaSourceProxy?
+    var playerForReceivedInvocations: [MediaSourceProxy] = []
+    var playerForReturnValue: Result<MediaPlayerProtocol, MediaPlayerProviderError>!
+    var playerForClosure: ((MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>)?
+
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
+        playerForCallsCount += 1
+        playerForReceivedMediaSource = mediaSource
+        playerForReceivedInvocations.append(mediaSource)
+        if let playerForClosure = playerForClosure {
+            return playerForClosure(mediaSource)
+        } else {
+            return playerForReturnValue
+        }
+    }
+    //MARK: - playerState
+
+    var playerStateForCallsCount = 0
+    var playerStateForCalled: Bool {
+        return playerStateForCallsCount > 0
+    }
+    var playerStateForReceivedId: AudioPlayerStateIdentifier?
+    var playerStateForReceivedInvocations: [AudioPlayerStateIdentifier] = []
+    var playerStateForReturnValue: AudioPlayerState?
+    var playerStateForClosure: ((AudioPlayerStateIdentifier) -> AudioPlayerState?)?
+
+    func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState? {
+        playerStateForCallsCount += 1
+        playerStateForReceivedId = id
+        playerStateForReceivedInvocations.append(id)
+        if let playerStateForClosure = playerStateForClosure {
+            return playerStateForClosure(id)
+        } else {
+            return playerStateForReturnValue
+        }
+    }
+    //MARK: - register
+
+    var registerAudioPlayerStateCallsCount = 0
+    var registerAudioPlayerStateCalled: Bool {
+        return registerAudioPlayerStateCallsCount > 0
+    }
+    var registerAudioPlayerStateReceivedAudioPlayerState: AudioPlayerState?
+    var registerAudioPlayerStateReceivedInvocations: [AudioPlayerState] = []
+    var registerAudioPlayerStateClosure: ((AudioPlayerState) -> Void)?
+
+    func register(audioPlayerState: AudioPlayerState) {
+        registerAudioPlayerStateCallsCount += 1
+        registerAudioPlayerStateReceivedAudioPlayerState = audioPlayerState
+        registerAudioPlayerStateReceivedInvocations.append(audioPlayerState)
+        registerAudioPlayerStateClosure?(audioPlayerState)
+    }
+    //MARK: - unregister
+
+    var unregisterAudioPlayerStateCallsCount = 0
+    var unregisterAudioPlayerStateCalled: Bool {
+        return unregisterAudioPlayerStateCallsCount > 0
+    }
+    var unregisterAudioPlayerStateReceivedAudioPlayerState: AudioPlayerState?
+    var unregisterAudioPlayerStateReceivedInvocations: [AudioPlayerState] = []
+    var unregisterAudioPlayerStateClosure: ((AudioPlayerState) -> Void)?
+
+    func unregister(audioPlayerState: AudioPlayerState) {
+        unregisterAudioPlayerStateCallsCount += 1
+        unregisterAudioPlayerStateReceivedAudioPlayerState = audioPlayerState
+        unregisterAudioPlayerStateReceivedInvocations.append(audioPlayerState)
+        unregisterAudioPlayerStateClosure?(audioPlayerState)
+    }
+    //MARK: - detachAllStates
+
+    var detachAllStatesExceptCallsCount = 0
+    var detachAllStatesExceptCalled: Bool {
+        return detachAllStatesExceptCallsCount > 0
+    }
+    var detachAllStatesExceptReceivedException: AudioPlayerState?
+    var detachAllStatesExceptReceivedInvocations: [AudioPlayerState?] = []
+    var detachAllStatesExceptClosure: ((AudioPlayerState?) async -> Void)?
+
+    func detachAllStates(except exception: AudioPlayerState?) async {
+        detachAllStatesExceptCallsCount += 1
+        detachAllStatesExceptReceivedException = exception
+        detachAllStatesExceptReceivedInvocations.append(exception)
+        await detachAllStatesExceptClosure?(exception)
     }
 }
 class NotificationCenterMock: NotificationCenterProtocol {
@@ -1773,6 +1883,23 @@ class RoomProxyMock: RoomProxyProtocol {
             return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
         } else {
             return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
+        }
+    }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
+    }
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, RoomProxyError>!
+    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError>)?
+
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
+        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
+        } else {
+            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
         }
     }
     //MARK: - retrySend
@@ -2715,25 +2842,21 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
     }
     //MARK: - cache
 
-    var cacheMediaSourceUsingMoveThrowableError: Error?
     var cacheMediaSourceUsingMoveCallsCount = 0
     var cacheMediaSourceUsingMoveCalled: Bool {
         return cacheMediaSourceUsingMoveCallsCount > 0
     }
     var cacheMediaSourceUsingMoveReceivedArguments: (mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)?
     var cacheMediaSourceUsingMoveReceivedInvocations: [(mediaSource: MediaSourceProxy, fileURL: URL, move: Bool)] = []
-    var cacheMediaSourceUsingMoveReturnValue: URL!
-    var cacheMediaSourceUsingMoveClosure: ((MediaSourceProxy, URL, Bool) throws -> URL)?
+    var cacheMediaSourceUsingMoveReturnValue: Result<URL, VoiceMessageCacheError>!
+    var cacheMediaSourceUsingMoveClosure: ((MediaSourceProxy, URL, Bool) -> Result<URL, VoiceMessageCacheError>)?
 
-    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) throws -> URL {
-        if let error = cacheMediaSourceUsingMoveThrowableError {
-            throw error
-        }
+    func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) -> Result<URL, VoiceMessageCacheError> {
         cacheMediaSourceUsingMoveCallsCount += 1
         cacheMediaSourceUsingMoveReceivedArguments = (mediaSource: mediaSource, fileURL: fileURL, move: move)
         cacheMediaSourceUsingMoveReceivedInvocations.append((mediaSource: mediaSource, fileURL: fileURL, move: move))
         if let cacheMediaSourceUsingMoveClosure = cacheMediaSourceUsingMoveClosure {
-            return try cacheMediaSourceUsingMoveClosure(mediaSource, fileURL, move)
+            return cacheMediaSourceUsingMoveClosure(mediaSource, fileURL, move)
         } else {
             return cacheMediaSourceUsingMoveReturnValue
         }
@@ -2776,6 +2899,174 @@ class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
             return try await loadVoiceMessageFromSourceBodyClosure(source, body)
         } else {
             return loadVoiceMessageFromSourceBodyReturnValue
+        }
+    }
+}
+class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
+    var audioRecorder: AudioRecorderProtocol {
+        get { return underlyingAudioRecorder }
+        set(value) { underlyingAudioRecorder = value }
+    }
+    var underlyingAudioRecorder: AudioRecorderProtocol!
+    var previewAudioPlayerState: AudioPlayerState?
+    var recordingURL: URL?
+    var recordingDuration: TimeInterval {
+        get { return underlyingRecordingDuration }
+        set(value) { underlyingRecordingDuration = value }
+    }
+    var underlyingRecordingDuration: TimeInterval!
+
+    //MARK: - startRecording
+
+    var startRecordingCallsCount = 0
+    var startRecordingCalled: Bool {
+        return startRecordingCallsCount > 0
+    }
+    var startRecordingReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var startRecordingClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
+
+    func startRecording() async -> Result<Void, VoiceMessageRecorderError> {
+        startRecordingCallsCount += 1
+        if let startRecordingClosure = startRecordingClosure {
+            return await startRecordingClosure()
+        } else {
+            return startRecordingReturnValue
+        }
+    }
+    //MARK: - stopRecording
+
+    var stopRecordingCallsCount = 0
+    var stopRecordingCalled: Bool {
+        return stopRecordingCallsCount > 0
+    }
+    var stopRecordingReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var stopRecordingClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
+
+    func stopRecording() async -> Result<Void, VoiceMessageRecorderError> {
+        stopRecordingCallsCount += 1
+        if let stopRecordingClosure = stopRecordingClosure {
+            return await stopRecordingClosure()
+        } else {
+            return stopRecordingReturnValue
+        }
+    }
+    //MARK: - cancelRecording
+
+    var cancelRecordingCallsCount = 0
+    var cancelRecordingCalled: Bool {
+        return cancelRecordingCallsCount > 0
+    }
+    var cancelRecordingClosure: (() async -> Void)?
+
+    func cancelRecording() async {
+        cancelRecordingCallsCount += 1
+        await cancelRecordingClosure?()
+    }
+    //MARK: - startPlayback
+
+    var startPlaybackCallsCount = 0
+    var startPlaybackCalled: Bool {
+        return startPlaybackCallsCount > 0
+    }
+    var startPlaybackReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var startPlaybackClosure: (() async -> Result<Void, VoiceMessageRecorderError>)?
+
+    func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
+        startPlaybackCallsCount += 1
+        if let startPlaybackClosure = startPlaybackClosure {
+            return await startPlaybackClosure()
+        } else {
+            return startPlaybackReturnValue
+        }
+    }
+    //MARK: - pausePlayback
+
+    var pausePlaybackCallsCount = 0
+    var pausePlaybackCalled: Bool {
+        return pausePlaybackCallsCount > 0
+    }
+    var pausePlaybackClosure: (() -> Void)?
+
+    func pausePlayback() {
+        pausePlaybackCallsCount += 1
+        pausePlaybackClosure?()
+    }
+    //MARK: - stopPlayback
+
+    var stopPlaybackCallsCount = 0
+    var stopPlaybackCalled: Bool {
+        return stopPlaybackCallsCount > 0
+    }
+    var stopPlaybackClosure: (() async -> Void)?
+
+    func stopPlayback() async {
+        stopPlaybackCallsCount += 1
+        await stopPlaybackClosure?()
+    }
+    //MARK: - seekPlayback
+
+    var seekPlaybackToCallsCount = 0
+    var seekPlaybackToCalled: Bool {
+        return seekPlaybackToCallsCount > 0
+    }
+    var seekPlaybackToReceivedProgress: Double?
+    var seekPlaybackToReceivedInvocations: [Double] = []
+    var seekPlaybackToClosure: ((Double) async -> Void)?
+
+    func seekPlayback(to progress: Double) async {
+        seekPlaybackToCallsCount += 1
+        seekPlaybackToReceivedProgress = progress
+        seekPlaybackToReceivedInvocations.append(progress)
+        await seekPlaybackToClosure?(progress)
+    }
+    //MARK: - deleteRecording
+
+    var deleteRecordingCallsCount = 0
+    var deleteRecordingCalled: Bool {
+        return deleteRecordingCallsCount > 0
+    }
+    var deleteRecordingClosure: (() async -> Void)?
+
+    func deleteRecording() async {
+        deleteRecordingCallsCount += 1
+        await deleteRecordingClosure?()
+    }
+    //MARK: - buildRecordingWaveform
+
+    var buildRecordingWaveformCallsCount = 0
+    var buildRecordingWaveformCalled: Bool {
+        return buildRecordingWaveformCallsCount > 0
+    }
+    var buildRecordingWaveformReturnValue: Result<[UInt16], VoiceMessageRecorderError>!
+    var buildRecordingWaveformClosure: (() async -> Result<[UInt16], VoiceMessageRecorderError>)?
+
+    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
+        buildRecordingWaveformCallsCount += 1
+        if let buildRecordingWaveformClosure = buildRecordingWaveformClosure {
+            return await buildRecordingWaveformClosure()
+        } else {
+            return buildRecordingWaveformReturnValue
+        }
+    }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageInRoomAudioConverterCallsCount = 0
+    var sendVoiceMessageInRoomAudioConverterCalled: Bool {
+        return sendVoiceMessageInRoomAudioConverterCallsCount > 0
+    }
+    var sendVoiceMessageInRoomAudioConverterReceivedArguments: (roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)?
+    var sendVoiceMessageInRoomAudioConverterReceivedInvocations: [(roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol)] = []
+    var sendVoiceMessageInRoomAudioConverterReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var sendVoiceMessageInRoomAudioConverterClosure: ((RoomProxyProtocol, AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>)?
+
+    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+        sendVoiceMessageInRoomAudioConverterCallsCount += 1
+        sendVoiceMessageInRoomAudioConverterReceivedArguments = (roomProxy: roomProxy, audioConverter: audioConverter)
+        sendVoiceMessageInRoomAudioConverterReceivedInvocations.append((roomProxy: roomProxy, audioConverter: audioConverter))
+        if let sendVoiceMessageInRoomAudioConverterClosure = sendVoiceMessageInRoomAudioConverterClosure {
+            return await sendVoiceMessageInRoomAudioConverterClosure(roomProxy, audioConverter)
+        } else {
+            return sendVoiceMessageInRoomAudioConverterReturnValue
         }
     }
 }

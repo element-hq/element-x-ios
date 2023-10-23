@@ -31,9 +31,13 @@ enum ComposerToolbarViewModelAction {
     case composerModeChanged(mode: RoomScreenComposerMode)
     case composerFocusedChanged(isFocused: Bool)
     
-    case startRecordingVoiceMessage
-    case stopRecordingVoiceMessage
-    case deleteRecordedVoiceMessage
+    case startVoiceMessageRecording
+    case stopVoiceMessageRecording
+    case cancelVoiceMessageRecording
+    case deleteVoiceMessageRecording
+    case startVoiceMessagePlayback
+    case pauseVoiceMessagePlayback
+    case seekVoiceMessagePlayback(progress: Double)
     case sendVoiceMessage
 }
 
@@ -51,9 +55,13 @@ enum ComposerToolbarViewAction {
     case enableTextFormatting
     case composerAction(action: ComposerAction)
     case selectedSuggestion(_ suggestion: SuggestionItem)
-    case startRecordingVoiceMessage
-    case stopRecordingVoiceMessage
-    case deleteRecordedVoiceMessage
+    case startVoiceMessageRecording
+    case stopVoiceMessageRecording
+    case cancelVoiceMessageRecording
+    case deleteVoiceMessageRecording
+    case startVoiceMessagePlayback
+    case pauseVoiceMessagePlayback
+    case seekVoiceMessagePlayback(progress: Double)
 }
 
 struct ComposerToolbarViewState: BindableState {

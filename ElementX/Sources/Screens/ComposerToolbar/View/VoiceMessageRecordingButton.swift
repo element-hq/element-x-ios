@@ -19,14 +19,8 @@ import SwiftUI
 
 struct VoiceMessageRecordingButton: View {
     @ScaledMetric private var buttonIconSize = 24
-    @State private var longPressConfirmed = false
     @State private var buttonPressed = false
-    @State private var longPressTask = VoiceMessageButtonTask()
 
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    private let delayBeforeRecording = 500
-
-    @Binding var showRecordTooltip: Bool
     var startRecording: (() -> Void)?
     var stopRecording: (() -> Void)?
     
@@ -34,29 +28,16 @@ struct VoiceMessageRecordingButton: View {
         Button { } label: {
             voiceMessageButtonImage
         }
-        .onLongPressGesture(perform: { }, onPressingChanged: { pressing in
-            buttonPressed = pressing
-            if pressing {
-                showRecordTooltip = true
-                feedbackGenerator.prepare()
-                longPressTask.task = Task {
-                    try? await Task.sleep(for: .milliseconds(delayBeforeRecording))
-                    guard !Task.isCancelled else {
-                        return
-                    }
-                    feedbackGenerator.impactOccurred()
-                    showRecordTooltip = false
-                    longPressConfirmed = true
-                    startRecording?()
-                }
+        .onLongPressGesture { } onPressingChanged: { isPressing in
+            buttonPressed = isPressing
+            if isPressing {
+                // Start recording
+                startRecording?()
             } else {
-                longPressTask.task?.cancel()
-                showRecordTooltip = false
-                guard longPressConfirmed else { return }
-                longPressConfirmed = false
+                // Stop recording
                 stopRecording?()
             }
-        })
+        }
         .fixedSize()
     }
     
@@ -71,13 +52,9 @@ struct VoiceMessageRecordingButton: View {
     }
 }
 
-private class VoiceMessageButtonTask {
-    @CancellableTask var task: Task<Void, Never>?
-}
-
 struct VoiceMessageRecordingButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VoiceMessageRecordingButton(showRecordTooltip: .constant(false))
+        VoiceMessageRecordingButton()
             .fixedSize(horizontal: true, vertical: true)
     }
 }

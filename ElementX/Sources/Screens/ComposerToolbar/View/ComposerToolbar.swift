@@ -28,8 +28,12 @@ struct ComposerToolbar: View {
     @ScaledMetric private var trashButtonIconSize = 24
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
+    @State private var voiceMessageRecordingStartTime: Date?
     @State private var showVoiceMessageRecordingTooltip = false
     @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
+    
+    private let voiceMessageMinimumRecordingDuration = 1.0
+    private let voiceMessageTooltipDuration = 1.0
     
     @State private var frame: CGRect = .zero
             
@@ -51,8 +55,10 @@ struct ComposerToolbar: View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            voiceMessageRecordingButtonTooltipView
-                .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
+            if showVoiceMessageRecordingTooltip {
+                voiceMessageRecordingButtonTooltipView
+                    .offset(y: -frame.height - voiceMessageTooltipPointerHeight)
+            }
         }
         .alert(item: $context.alertInfo)
     }
@@ -69,9 +75,9 @@ struct ComposerToolbar: View {
             case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
                 VoiceMessageRecordingComposer(recorderState: state)
                     .padding(.leading, 12)
-            case .previewVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+            case .previewVoiceMessage(let state, let waveform) where context.viewState.enableVoiceMessageComposer:
                 voiceMessageTrashButton
-                VoiceMessagePreviewComposer(playerState: state)
+                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
             default:
                 if !context.composerActionsEnabled {
                     RoomAttachmentPicker(context: context)
@@ -96,6 +102,7 @@ struct ComposerToolbar: View {
                 }
             }
         }
+        .animation(.elementDefault, value: context.viewState.composerMode)
     }
     
     private var bottomBar: some View {
@@ -216,17 +223,26 @@ struct ComposerToolbar: View {
     // MARK: - Voice message
 
     private var voiceMessageRecordingButton: some View {
-        VoiceMessageRecordingButton(showRecordTooltip: $showVoiceMessageRecordingTooltip, startRecording: {
-            context.send(viewAction: .startRecordingVoiceMessage)
-        }, stopRecording: {
-            context.send(viewAction: .stopRecordingVoiceMessage)
-        })
+        VoiceMessageRecordingButton {
+            showVoiceMessageRecordingTooltip = false
+            voiceMessageRecordingStartTime = Date.now
+            context.send(viewAction: .startVoiceMessageRecording)
+        } stopRecording: {
+            if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
+                context.send(viewAction: .cancelVoiceMessageRecording)
+                withAnimation {
+                    showVoiceMessageRecordingTooltip = true
+                }
+            } else {
+                context.send(viewAction: .stopVoiceMessageRecording)
+            }
+        }
         .padding(4)
     }
         
     private var voiceMessageTrashButton: some View {
         Button {
-            context.send(viewAction: .deleteRecordedVoiceMessage)
+            context.send(viewAction: .deleteVoiceMessageRecording)
         } label: {
             CompoundIcon(\.delete)
                 .font(.compound.bodyLG)
@@ -241,8 +257,23 @@ struct ComposerToolbar: View {
     private var voiceMessageRecordingButtonTooltipView: some View {
         VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
             .allowsHitTesting(false)
-            .opacity(showVoiceMessageRecordingTooltip ? 1.0 : 0.0)
-            .animation(.elementDefault, value: showVoiceMessageRecordingTooltip)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
+                    withAnimation {
+                        showVoiceMessageRecordingTooltip = false
+                    }
+                }
+            }
+    }
+    
+    private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {
+        VoiceMessagePreviewComposer(playerState: audioPlayerState, waveform: waveform) {
+            context.send(viewAction: .startVoiceMessagePlayback)
+        } onPause: {
+            context.send(viewAction: .pauseVoiceMessagePlayback)
+        } onSeek: { progress in
+            context.send(viewAction: .seekVoiceMessagePlayback(progress: progress))
+        }
     }
 }
 
@@ -333,13 +364,14 @@ extension ComposerToolbar {
     
     static func voiceMessagePreviewMock(recording: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
+        let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(duration: 10.0))
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData))
             model.state.enableVoiceMessageComposer = true
             return model
         }

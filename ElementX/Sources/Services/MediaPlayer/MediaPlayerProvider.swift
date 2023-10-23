@@ -17,31 +17,72 @@
 import Foundation
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
-    private let mediaProvider: MediaProviderProtocol
-    private var audioPlayer: AudioPlayerProtocol?
-            
-    init(mediaProvider: MediaProviderProtocol) {
-        self.mediaProvider = mediaProvider
-    }
+    private lazy var audioPlayer = AudioPlayer()
+    private var audioPlayerStates: [String: AudioPlayerState] = [:]
     
     deinit {
-        audioPlayer = nil
+        audioPlayerStates = [:]
     }
     
-    func player(for mediaSource: MediaSourceProxy) -> MediaPlayerProtocol? {
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
         guard let mimeType = mediaSource.mimeType else {
             MXLog.error("Unknown mime type")
-            return nil
+            return .failure(.unsupportedMediaType)
         }
         
         if mimeType.starts(with: "audio/") {
-            if audioPlayer == nil {
-                audioPlayer = AudioPlayer()
-            }
-            return audioPlayer
+            return .success(audioPlayer)
         } else {
             MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
+            return .failure(.unsupportedMediaType)
+        }
+    }
+    
+    // MARK: - AudioPlayer
+    
+    func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState? {
+        guard let audioPlayerStateID = audioPlayerStateID(for: id) else {
+            MXLog.error("Failed to build an ID using: \(id)")
             return nil
+        }
+        return audioPlayerStates[audioPlayerStateID]
+    }
+    
+    @MainActor
+    func register(audioPlayerState: AudioPlayerState) {
+        guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
+            MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
+            return
+        }
+        audioPlayerStates[audioPlayerStateID] = audioPlayerState
+    }
+    
+    @MainActor
+    func unregister(audioPlayerState: AudioPlayerState) {
+        guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
+            MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
+            return
+        }
+        audioPlayerStates[audioPlayerStateID] = nil
+    }
+    
+    func detachAllStates(except exception: AudioPlayerState?) async {
+        for key in audioPlayerStates.keys {
+            if let exception, key == audioPlayerStateID(for: exception.id) {
+                continue
+            }
+            await audioPlayerStates[key]?.detachAudioPlayer()
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func audioPlayerStateID(for identifier: AudioPlayerStateIdentifier) -> String? {
+        switch identifier {
+        case .timelineItemIdentifier(let timelineItemIdentifier):
+            return timelineItemIdentifier.eventID
+        case .recorderPreview:
+            return "recorderPreviewAudioPlayerState"
         }
     }
 }

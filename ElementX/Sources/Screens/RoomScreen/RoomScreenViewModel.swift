@@ -34,16 +34,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let analytics: AnalyticsService
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
+    private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let composerFocusedSubject = PassthroughSubject<Bool, Never>()
-
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
-
     private var canCurrentUserRedact = false
-    
     private var paginateBackwardsTask: Task<Void, Never>?
 
     init(timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
          roomProxy: RoomProxyProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
@@ -55,6 +55,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
+        self.mediaPlayerProvider = mediaPlayerProvider
+        voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
                                                          roomTitle: roomProxy.roomTitle,
@@ -194,15 +196,28 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
             composerFocusedSubject.send(isFocused)
-        case .startRecordingVoiceMessage:
-            timelineController.pauseAudio()
-            startRecordingVoiceMessage()
-        case .stopRecordingVoiceMessage:
-            stopRecordingVoiceMessage()
-        case .deleteRecordedVoiceMessage:
-            deleteCurrentVoiceMessage()
+        case .startVoiceMessageRecording:
+            Task {
+                await mediaPlayerProvider.detachAllStates(except: nil)
+                await startRecordingVoiceMessage()
+            }
+        case .stopVoiceMessageRecording:
+            Task { await stopRecordingVoiceMessage() }
+        case .cancelVoiceMessageRecording:
+            Task { await cancelRecordingVoiceMessage() }
+        case .deleteVoiceMessageRecording:
+            Task { await deleteCurrentVoiceMessage() }
         case .sendVoiceMessage:
             Task { await sendCurrentVoiceMessage() }
+        case .startVoiceMessagePlayback:
+            Task {
+                await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
+                await startPlayingRecordedVoiceMessage()
+            }
+        case .pauseVoiceMessagePlayback:
+            pausePlayingRecordedVoiceMessage()
+        case .seekVoiceMessagePlayback(let progress):
+            Task { await seekRecordedVoiceMessage(to: progress) }
         }
     }
     
@@ -922,30 +937,89 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Voice message
     
-    private func startRecordingVoiceMessage() {
-        // Partially implemented
-
+    private func stopVoiceMessageRecorder() async {
+        _ = await voiceMessageRecorder.stopRecording()
+        await voiceMessageRecorder.stopPlayback()
+    }
+    
+    private func startRecordingVoiceMessage() async {
         let audioRecordState = AudioRecorderState()
-        actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        audioRecordState.attachAudioRecorder(voiceMessageRecorder.audioRecorder)
+        
+        switch await voiceMessageRecorder.startRecording() {
+        case .success:
+            actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+        case .failure(let error):
+            switch error {
+            case .audioRecorderError(.recordPermissionNotGranted):
+                state.bindings.confirmationAlertInfo = .init(id: .init(),
+                                                             title: "",
+                                                             message: L10n.dialogPermissionMicrophone,
+                                                             primaryButton: .init(title: L10n.actionOpenSettings, action: { [weak self] in self?.openSystemSettings() }),
+                                                             secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
+            default:
+                MXLog.error("failed to start voice message recording: \(error)")
+            }
+        }
     }
     
-    private func stopRecordingVoiceMessage() {
-        // Partially implemented
+    private func stopRecordingVoiceMessage() async {
+        if case .failure(let error) = await voiceMessageRecorder.stopRecording() {
+            MXLog.error("failed to stop the recording", context: error)
+            return
+        }
 
-        let audioPlayerState = AudioPlayerState(duration: 0)
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState))))
+        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState else {
+            MXLog.error("the recorder preview is missing after the recording has been stopped")
+            return
+        }
+        
+        guard let recordingURL = voiceMessageRecorder.recordingURL else {
+            MXLog.error("the recording URL is missing after the recording has been stopped")
+            return
+        }
+        
+        mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL)))))
     }
     
-    private func deleteCurrentVoiceMessage() {
-        // Partially implemented
-
+    private func cancelRecordingVoiceMessage() async {
+        await voiceMessageRecorder.cancelRecording()
+        actionsSubject.send(.composer(action: .setMode(mode: .default)))
+    }
+    
+    private func deleteCurrentVoiceMessage() async {
+        await voiceMessageRecorder.deleteRecording()
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
     private func sendCurrentVoiceMessage() async {
-        // Partially implemented
-        
-        actionsSubject.send(.composer(action: .setMode(mode: .default)))
+        await voiceMessageRecorder.stopPlayback()
+        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
+        case .success:
+            await deleteCurrentVoiceMessage()
+        case .failure(let error):
+            MXLog.error("failed to send the voice message", context: error)
+        }
+    }
+    
+    private func startPlayingRecordedVoiceMessage() async {
+        if case .failure(let error) = await voiceMessageRecorder.startPlayback() {
+            MXLog.error("failed to play recorded voice message", context: error)
+        }
+    }
+    
+    private func pausePlayingRecordedVoiceMessage() {
+        voiceMessageRecorder.pausePlayback()
+    }
+    
+    private func seekRecordedVoiceMessage(to progress: Double) async {
+        await voiceMessageRecorder.seekPlayback(to: progress)
+    }
+    
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 }
 
@@ -974,6 +1048,7 @@ extension RoomScreenViewModel.Context {
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,

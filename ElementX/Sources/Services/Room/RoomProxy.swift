@@ -375,6 +375,31 @@ class RoomProxy: RoomProxyProtocol {
         return .success(())
     }
     
+    func sendVoiceMessage(url: URL,
+                          audioInfo: AudioInfo,
+                          waveform: [UInt16],
+                          progressSubject: CurrentValueSubject<Double, Never>?,
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = await backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        let handle = room.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, progressWatcher: UploadProgressListener { progress in
+            progressSubject?.send(progress)
+        })
+        
+        await requestHandle(handle)
+        
+        do {
+            try await handle.join()
+        } catch {
+            return .failure(.failedSendingMedia)
+        }
+        
+        return .success(())
+    }
+    
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   progressSubject: CurrentValueSubject<Double, Never>?,

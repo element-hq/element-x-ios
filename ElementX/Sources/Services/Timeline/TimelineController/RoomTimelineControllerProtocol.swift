@@ -74,9 +74,7 @@ protocol RoomTimelineControllerProtocol {
     func audioPlayerState(for itemID: TimelineItemIdentifier) -> AudioPlayerState
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async
-    
-    func pauseAudio()
-    
+        
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async
 }
 

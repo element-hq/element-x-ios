@@ -30,11 +30,6 @@ private enum InternalAudioPlayerState {
     case error(Error)
 }
 
-enum AudioPlayerError: Error {
-    case genericError
-    case loadFileError
-}
-
 class AudioPlayer: NSObject, AudioPlayerProtocol {
     var mediaSource: MediaSourceProxy?
     
@@ -53,6 +48,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private var rateObserver: NSKeyValueObservation?
     private var playToEndObserver: NSObjectProtocol?
     private var appBackgroundObserver: NSObjectProtocol?
+    private var autoplay = false
     
     private(set) var url: URL?
     
@@ -91,11 +87,12 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         unloadContent()
     }
     
-    func load(mediaSource: MediaSourceProxy, using url: URL) {
+    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
         unloadContent()
         setInternalState(.loading)
         self.mediaSource = mediaSource
         self.url = url
+        self.autoplay = autoplay
         playerItem = AVPlayerItem(url: url)
         internalAudioPlayer = AVQueuePlayer(playerItem: playerItem)
         addObservers()
@@ -122,6 +119,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         isStopped = true
         internalAudioPlayer?.pause()
         internalAudioPlayer?.seek(to: .zero)
+        try? AVAudioSession.sharedInstance().setActive(false)
     }
     
     func seek(to progress: Double) async {
@@ -205,7 +203,10 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             actionsSubject.send(.didStartLoading)
         case .readyToPlay:
             actionsSubject.send(.didFinishLoading)
-            play()
+            if autoplay {
+                autoplay = false
+                play()
+            }
         case .playing:
             actionsSubject.send(.didStartPlaying)
         case .paused:

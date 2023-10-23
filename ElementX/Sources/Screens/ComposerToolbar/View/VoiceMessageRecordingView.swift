@@ -15,6 +15,8 @@
 //
 
 import Compound
+import DSWaveformImage
+import DSWaveformImageViews
 import Foundation
 import SwiftUI
 
@@ -30,8 +32,13 @@ struct VoiceMessageRecordingView: View {
         return dateFormatter
     }()
             
-    var timeLabelContent: String {
+    private var timeLabelContent: String {
         Self.elapsedTimeFormatter.string(from: Date(timeIntervalSinceReferenceDate: recorderState.duration))
+    }
+    
+    private var configuration: Waveform.Configuration {
+        .init(style: .striped(.init(color: .compound.iconSecondary, width: waveformLineWidth, spacing: waveformLinePadding)),
+              verticalScalingFactor: 1.0)
     }
     
     var body: some View {
@@ -45,7 +52,9 @@ struct VoiceMessageRecordingView: View {
                 .foregroundColor(.compound.textSecondary)
                 .monospacedDigit()
                 .fixedSize()
-            EstimatedWaveformView(lineWidth: waveformLineWidth, linePadding: waveformLinePadding, waveform: recorderState.waveform, progress: 0)
+            
+            WaveformLiveCanvas(samples: recorderState.waveformSamples,
+                               configuration: configuration)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
@@ -53,11 +62,6 @@ struct VoiceMessageRecordingView: View {
 }
 
 struct VoiceMessageRecordingView_Previews: PreviewProvider, TestablePreview {
-    static let waveform = EstimatedWaveform(data: [3, 127, 400, 266, 126, 122, 373, 251, 45, 112,
-                                                   334, 205, 99, 138, 397, 354, 125, 361, 199, 51,
-                                                   294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
-                                                   0, 0, 0, 0, 0, 3])
-    
     static let recorderState = AudioRecorderState()
     
     static var previews: some View {

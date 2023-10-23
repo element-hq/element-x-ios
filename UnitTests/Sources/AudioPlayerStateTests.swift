@@ -47,7 +47,7 @@ class AudioPlayerStateTests: XCTestCase {
     override func setUp() async throws {
         audioPlayerActionsSubject = .init()
         audioPlayerSeekCallsSubject = .init()
-        audioPlayerState = AudioPlayerState(duration: 10.0)
+        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10.0)
         audioPlayerMock = buildAudioPlayerMock()
     }
     

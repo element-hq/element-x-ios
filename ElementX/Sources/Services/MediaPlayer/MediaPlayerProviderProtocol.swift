@@ -16,6 +16,18 @@
 
 import Foundation
 
-protocol MediaPlayerProviderProtocol {
-    func player(for mediaSource: MediaSourceProxy) async -> MediaPlayerProtocol?
+enum MediaPlayerProviderError: Error {
+    case unsupportedMediaType
 }
+
+protocol MediaPlayerProviderProtocol {
+    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>
+    
+    func playerState(for id: AudioPlayerStateIdentifier) -> AudioPlayerState?
+    func register(audioPlayerState: AudioPlayerState)
+    func unregister(audioPlayerState: AudioPlayerState)
+    func detachAllStates(except exception: AudioPlayerState?) async
+}
+
+// sourcery: AutoMockable
+extension MediaPlayerProviderProtocol { }

@@ -47,7 +47,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         super.init(initialViewState: ComposerToolbarViewState(areSuggestionsEnabled: completionSuggestionService.areSuggestionsEnabled,
                                                               enableVoiceMessageComposer: appSettings.voiceMessageEnabled,
-                                                              audioPlayerState: .init(duration: 0),
+                                                              audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
                    imageProvider: mediaProvider)
@@ -144,13 +144,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         case .selectedSuggestion(let suggestion):
             handleSuggestion(suggestion)
-        case .startRecordingVoiceMessage:
+        case .startVoiceMessageRecording:
             state.bindings.composerActionsEnabled = false
-            actionsSubject.send(.startRecordingVoiceMessage)
-        case .stopRecordingVoiceMessage:
-            actionsSubject.send(.stopRecordingVoiceMessage)
-        case .deleteRecordedVoiceMessage:
-            actionsSubject.send(.deleteRecordedVoiceMessage)
+            actionsSubject.send(.startVoiceMessageRecording)
+        case .stopVoiceMessageRecording:
+            actionsSubject.send(.stopVoiceMessageRecording)
+        case .cancelVoiceMessageRecording:
+            actionsSubject.send(.cancelVoiceMessageRecording)
+        case .deleteVoiceMessageRecording:
+            actionsSubject.send(.deleteVoiceMessageRecording)
+        case .startVoiceMessagePlayback:
+            actionsSubject.send(.startVoiceMessagePlayback)
+        case .pauseVoiceMessagePlayback:
+            actionsSubject.send(.pauseVoiceMessagePlayback)
+        case .seekVoiceMessagePlayback(let progress):
+            actionsSubject.send(.seekVoiceMessagePlayback(progress: progress))
         }
     }
 
@@ -224,7 +232,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .recordVoiceMessage(let audioRecorderState):
             state.bindings.composerFocused = false
             state.audioRecorderState = audioRecorderState
-        case .previewVoiceMessage(let audioPlayerState):
+        case .previewVoiceMessage(let audioPlayerState, _):
             state.audioPlayerState = audioPlayerState
         case .edit, .reply:
             // Focus composer when switching to reply/edit
