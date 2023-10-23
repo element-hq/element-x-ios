@@ -18,8 +18,8 @@ import Combine
 import Foundation
 
 class SecureBackupController: SecureBackupControllerProtocol {
-    private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.disabled)
-    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.disabled)
+    private let recoveryKeyStateSubject = CurrentValueSubject<SecureBackupRecoveryKeyState, Never>(.unknown)
+    private let keyBackupStateSubject = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.unknown)
     
     var recoveryKeyState: CurrentValuePublisher<SecureBackupRecoveryKeyState, Never> {
         recoveryKeyStateSubject.asCurrentValuePublisher()

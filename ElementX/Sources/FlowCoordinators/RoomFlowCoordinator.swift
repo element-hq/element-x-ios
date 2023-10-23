@@ -347,7 +347,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider,
                                                                                            mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager)
+                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager,
+                                                                                           secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)

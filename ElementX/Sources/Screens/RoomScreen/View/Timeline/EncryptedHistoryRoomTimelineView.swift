@@ -24,7 +24,7 @@ struct EncryptedHistoryRoomTimelineView: View {
     
     var body: some View {
         Label {
-            Text(L10n.screenRoomEncryptedHistoryBanner)
+            Text(title)
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textInfoPrimary)
         } icon: {
@@ -43,6 +43,10 @@ struct EncryptedHistoryRoomTimelineView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 16)
     }
+    
+    private var title: String {
+        timelineItem.isBackupDisabled ? L10n.screenRoomEncryptedHistoryBanner : L10n.screenRoomEncryptedHistoryBannerUnverified
+    }
 }
 
 private struct EncryptedHistoryLabelStyle: LabelStyle {
@@ -56,7 +60,7 @@ private struct EncryptedHistoryLabelStyle: LabelStyle {
 
 struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let item = EncryptedHistoryRoomTimelineItem(id: .random)
+        let item = EncryptedHistoryRoomTimelineItem(id: .random, isBackupDisabled: true)
         EncryptedHistoryRoomTimelineView(timelineItem: item)
     }
 }

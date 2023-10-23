@@ -26,6 +26,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let appSettings: AppSettings
+    private let secureBackupController: SecureBackupControllerProtocol
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
@@ -48,7 +49,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         secureBackupController: SecureBackupControllerProtocol) {
         self.roomProxy = roomProxy
         timelineProvider = roomProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
@@ -56,6 +58,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.mediaPlayerProvider = mediaPlayerProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.appSettings = appSettings
+        self.secureBackupController = secureBackupController
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         timelineProvider
@@ -442,8 +445,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .event(let eventTimelineItem):
             let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem)
             
-            if timelineItem is EncryptedRoomTimelineItem, isItemInEncryptionHistory(eventTimelineItem) {
-                return EncryptedHistoryRoomTimelineItem(id: eventTimelineItem.id)
+            // When backup is enabled just show the timeline items, they will most likely
+            // resolve eventually. If we don't know the backup state then we assume the session is not verified yet,
+            // otherwise we just treat it as fully disabled.
+            if secureBackupController.keyBackupState.value != .enabled {
+                if timelineItem is EncryptedRoomTimelineItem, isItemInEncryptionHistory(eventTimelineItem) {
+                    return EncryptedHistoryRoomTimelineItem(id: eventTimelineItem.id,
+                                                            isBackupDisabled: secureBackupController.keyBackupState.value != .unknown)
+                }
             }
             
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {

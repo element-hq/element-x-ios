@@ -17,11 +17,13 @@
 import Foundation
 
 struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
+    // swiftlint:disable:next function_parameter_count
     func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      mediaProvider: MediaProviderProtocol,
                                      mediaPlayerProvider: MediaPlayerProviderProtocol,
-                                     voiceMessageMediaManager: VoiceMessageMediaManagerProtocol) -> RoomTimelineControllerProtocol {
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
+                                     secureBackupController: SecureBackupControllerProtocol) -> RoomTimelineControllerProtocol {
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
         return timelineController
