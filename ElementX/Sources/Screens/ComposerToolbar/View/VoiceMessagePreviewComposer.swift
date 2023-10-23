@@ -130,9 +130,9 @@ struct VoiceMessagePreviewComposer: View {
                 }
             }
         }
+        .buttonStyle(PlainButtonStyle())
         .disabled(playerState.playbackState == .loading)
-        .frame(width: playPauseButtonSize,
-               height: playPauseButtonSize)
+        .frame(width: playPauseButtonSize, height: playPauseButtonSize)
     }
     
     private func onPlayPause() {

@@ -26,6 +26,7 @@ struct ComposerToolbar: View {
     @FocusState private var composerFocused: Bool
     @ScaledMetric private var sendButtonIconSize = 16
     @ScaledMetric private var trashButtonIconSize = 24
+    @ScaledMetric(relativeTo: .title) private var spinnerSize = 44
     @ScaledMetric(relativeTo: .title) private var closeRTEButtonSize = 30
     
     @State private var voiceMessageRecordingStartTime: Date?
@@ -71,29 +72,14 @@ struct ComposerToolbar: View {
     
     private var topBar: some View {
         HStack(alignment: .bottom, spacing: 5) {
-            switch context.viewState.composerMode {
-            case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
-                VoiceMessageRecordingComposer(recorderState: state)
-                    .padding(.leading, 12)
-            case .previewVoiceMessage(let state, let waveform) where context.viewState.enableVoiceMessageComposer:
-                voiceMessageTrashButton
-                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
-            default:
-                if !context.composerActionsEnabled {
-                    RoomAttachmentPicker(context: context)
-                }
-                messageComposer
-                    .environmentObject(context)
-                    .onTapGesture {
-                        guard !composerFocused else { return }
-                        composerFocused = true
-                    }
-                    .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-                    .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
-            }
+            mainTopBarContent
 
             if !context.composerActionsEnabled {
-                if context.viewState.showSendButton {
+                if context.viewState.isUploading {
+                    ProgressView()
+                        .frame(width: spinnerSize, height: spinnerSize)
+                        .padding(.leading, 3)
+                } else if context.viewState.showSendButton {
                     sendButton
                         .padding(.leading, 3)
                 } else if context.viewState.enableVoiceMessageComposer {
@@ -117,7 +103,34 @@ struct ComposerToolbar: View {
                 .padding(.leading, 7)
         }
     }
-    
+
+    @ViewBuilder
+    private var mainTopBarContent: some View {
+        switch context.viewState.composerMode {
+        case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+            VoiceMessageRecordingComposer(recorderState: state)
+                .padding(.leading, 12)
+        case .previewVoiceMessage(let state, let waveform, let isUploading) where context.viewState.enableVoiceMessageComposer:
+            Group {
+                voiceMessageTrashButton
+                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
+            }
+            .disabled(isUploading)
+        default:
+            if !context.composerActionsEnabled {
+                RoomAttachmentPicker(context: context)
+            }
+            messageComposer
+                .environmentObject(context)
+                .onTapGesture {
+                    guard !composerFocused else { return }
+                    composerFocused = true
+                }
+                .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+                .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+        }
+    }
+
     private var closeRTEButton: some View {
         Button {
             context.composerActionsEnabled = false
@@ -252,6 +265,7 @@ struct ComposerToolbar: View {
                 .fixedSize()
                 .accessibilityLabel(L10n.a11yDelete)
         }
+        .buttonStyle(PlainButtonStyle())
     }
     
     private var voiceMessageRecordingButtonTooltipView: some View {
@@ -303,7 +317,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
             ComposerToolbar.textWithVoiceMessage(focused: false)
             ComposerToolbar.textWithVoiceMessage(focused: true)
             ComposerToolbar.voiceMessageRecordingMock(recording: true)
-            ComposerToolbar.voiceMessagePreviewMock(recording: false)
+            ComposerToolbar.voiceMessagePreviewMock(recording: false, uploading: false)
         }
         .previewDisplayName("Voice Message")
     }
@@ -362,7 +376,7 @@ extension ComposerToolbar {
                                keyCommandHandler: { _ in false })
     }
     
-    static func voiceMessagePreviewMock(recording: Bool) -> ComposerToolbar {
+    static func voiceMessagePreviewMock(recording: Bool, uploading: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         var composerViewModel: ComposerToolbarViewModel {
@@ -371,7 +385,7 @@ extension ComposerToolbar {
                                                  mediaProvider: MockMediaProvider(),
                                                  appSettings: ServiceLocator.shared.settings,
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock)
-            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData))
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)
             model.state.enableVoiceMessageComposer = true
             return model
         }
