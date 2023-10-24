@@ -68,14 +68,14 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func cancelRecording() async {
         await audioRecorder.stopRecording()
-        audioRecorder.deleteRecording()
+        await audioRecorder.deleteRecording()
         recordingURL = nil
         previewAudioPlayerState = nil
     }
     
     func deleteRecording() async {
         await stopPlayback()
-        audioRecorder.deleteRecording()
+        await audioRecorder.deleteRecording()
         previewAudioPlayerState = nil
         recordingURL = nil
     }
@@ -189,7 +189,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
 
         // Build the preview audio player
         let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: mediaSource), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
+        guard case .success(let mediaPlayer) = await mediaPlayerProvider.player(for: mediaSource), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
             return .failure(.previewNotAvailable)
         }
         previewAudioPlayer = audioPlayer

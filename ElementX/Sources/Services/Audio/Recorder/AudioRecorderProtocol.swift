@@ -33,6 +33,7 @@ extension AudioRecordingIdentifier {
 enum AudioRecorderError: Error {
     case genericError
     case recordPermissionNotGranted
+    case recordingCancelled
 }
 
 enum AudioRecorderAction {
@@ -49,7 +50,7 @@ protocol AudioRecorderProtocol: AnyObject {
     
     func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError>
     func stopRecording() async
-    func deleteRecording()
+    func deleteRecording() async
     func averagePowerForChannelNumber(_ channelNumber: Int) -> Float
 }
 
