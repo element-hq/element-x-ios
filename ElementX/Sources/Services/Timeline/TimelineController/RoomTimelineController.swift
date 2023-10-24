@@ -451,7 +451,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             if secureBackupController.keyBackupState.value != .enabled {
                 if timelineItem is EncryptedRoomTimelineItem, isItemInEncryptionHistory(eventTimelineItem) {
                     return EncryptedHistoryRoomTimelineItem(id: eventTimelineItem.id,
-                                                            isBackupDisabled: secureBackupController.keyBackupState.value != .unknown)
+                                                            isSessionVerified: secureBackupController.keyBackupState.value != .unknown)
                 }
             }
             

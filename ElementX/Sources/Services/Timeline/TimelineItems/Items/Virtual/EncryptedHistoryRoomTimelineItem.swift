@@ -18,5 +18,5 @@ import Foundation
 
 struct EncryptedHistoryRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
-    let isBackupDisabled: Bool
+    let isSessionVerified: Bool
 }

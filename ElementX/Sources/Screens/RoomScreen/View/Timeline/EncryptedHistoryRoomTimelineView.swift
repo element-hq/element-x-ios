@@ -45,7 +45,7 @@ struct EncryptedHistoryRoomTimelineView: View {
     }
     
     private var title: String {
-        timelineItem.isBackupDisabled ? L10n.screenRoomEncryptedHistoryBanner : L10n.screenRoomEncryptedHistoryBannerUnverified
+        timelineItem.isSessionVerified ? L10n.screenRoomEncryptedHistoryBanner : L10n.screenRoomEncryptedHistoryBannerUnverified
     }
 }
 
@@ -60,7 +60,9 @@ private struct EncryptedHistoryLabelStyle: LabelStyle {
 
 struct EncryptedHistoryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let item = EncryptedHistoryRoomTimelineItem(id: .random, isBackupDisabled: true)
-        EncryptedHistoryRoomTimelineView(timelineItem: item)
+        VStack {
+            EncryptedHistoryRoomTimelineView(timelineItem: .init(id: .random, isSessionVerified: true))
+            EncryptedHistoryRoomTimelineView(timelineItem: .init(id: .random, isSessionVerified: false))
+        }
     }
 }
