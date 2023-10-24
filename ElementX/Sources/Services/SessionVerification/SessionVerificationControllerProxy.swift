@@ -65,8 +65,13 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     
     let callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
     
-    var isVerified: Bool {
-        sessionVerificationController.isVerified()
+    func isVerified() async -> Result<Bool, SessionVerificationControllerProxyError> {
+        do {
+            let result = try await sessionVerificationController.isVerified()
+            return .success(result)
+        } catch {
+            return .failure(.failedCheckingVerificationState)
+        }
     }
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {

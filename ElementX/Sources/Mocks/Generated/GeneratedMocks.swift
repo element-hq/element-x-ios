@@ -2704,12 +2704,24 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         set(value) { underlyingCallbacks = value }
     }
     var underlyingCallbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>!
-    var isVerified: Bool {
-        get { return underlyingIsVerified }
-        set(value) { underlyingIsVerified = value }
-    }
-    var underlyingIsVerified: Bool!
 
+    //MARK: - isVerified
+
+    var isVerifiedCallsCount = 0
+    var isVerifiedCalled: Bool {
+        return isVerifiedCallsCount > 0
+    }
+    var isVerifiedReturnValue: Result<Bool, SessionVerificationControllerProxyError>!
+    var isVerifiedClosure: (() async -> Result<Bool, SessionVerificationControllerProxyError>)?
+
+    func isVerified() async -> Result<Bool, SessionVerificationControllerProxyError> {
+        isVerifiedCallsCount += 1
+        if let isVerifiedClosure = isVerifiedClosure {
+            return await isVerifiedClosure()
+        } else {
+            return isVerifiedReturnValue
+        }
+    }
     //MARK: - requestVerification
 
     var requestVerificationCallsCount = 0

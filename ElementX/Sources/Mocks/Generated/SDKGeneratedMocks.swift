@@ -165,6 +165,23 @@ class SDKClientMock: SDKClientProtocol {
             return displayNameReturnValue
         }
     }
+    //MARK: - encryption
+
+    public var encryptionCallsCount = 0
+    public var encryptionCalled: Bool {
+        return encryptionCallsCount > 0
+    }
+    public var encryptionReturnValue: Encryption!
+    public var encryptionClosure: (() -> Encryption)?
+
+    public func encryption() -> Encryption {
+        encryptionCallsCount += 1
+        if let encryptionClosure = encryptionClosure {
+            return encryptionClosure()
+        } else {
+            return encryptionReturnValue
+        }
+    }
     //MARK: - getDmRoom
 
     public var getDmRoomUserIdThrowableError: Error?
