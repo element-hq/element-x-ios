@@ -96,7 +96,7 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings(),
                                                          backgroundTaskService: backgroundTaskService)
         
-        secureBackupController = SecureBackupController()
+        secureBackupController = SecureBackupController(encryption: client.encryption())
 
         client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true

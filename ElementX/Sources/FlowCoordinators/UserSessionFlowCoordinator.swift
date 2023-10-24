@@ -359,9 +359,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func runLogoutFlow() {
+        Task {
+            await runAsyncLogoutFlow()
+        }
+    }
+    
+    private func runAsyncLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard secureBackupController.isLastSession, appSettings.chatBackupEnabled else {
+        guard case let .success(isLastSession) = await secureBackupController.isLastSession() else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
+            return
+        }
+        
+        guard isLastSession, appSettings.chatBackupEnabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutRecoveryDisabledTitle,
                                                                             message: L10n.screenSignoutRecoveryDisabledSubtitle,

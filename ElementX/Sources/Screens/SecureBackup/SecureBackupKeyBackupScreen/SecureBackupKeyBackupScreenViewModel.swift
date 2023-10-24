@@ -70,22 +70,10 @@ class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModel
     }
     
     // MARK: - Private
-    
-    private func enableBackup() {
-        Task {
-            switch await secureBackupController.enableBackup() {
-            case .success:
-                actionsSubject.send(.done)
-            case .failure(let error):
-                MXLog.error("Failed enabling key backup with error: \(error)")
-                state.bindings.alertInfo = .init(id: .init())
-            }
-        }
-    }
-    
+        
     private func disableBackup() {
         Task {
-            switch await secureBackupController.disableBackup() {
+            switch await secureBackupController.disable() {
             case .success:
                 actionsSubject.send(.done)
             case .failure(let error):

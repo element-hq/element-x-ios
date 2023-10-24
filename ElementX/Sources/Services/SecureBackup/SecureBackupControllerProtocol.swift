@@ -36,11 +36,13 @@ enum SecureBackupKeyBackupState {
 }
 
 enum SecureBackupControllerError: Error {
-    case failedEnablingKeyBackup
-    case failedDisablingKeyBackup
+    case failedEnablingBackup
+    case failedDisablingBackup
     
     case failedGeneratingRecoveryKey
     case failedConfirmingRecoveryKey
+    
+    case failedFetchingSessionState
 }
 
 // sourcery: AutoMockable
@@ -49,13 +51,13 @@ protocol SecureBackupControllerProtocol {
     
     var keyBackupState: CurrentValuePublisher<SecureBackupKeyBackupState, Never> { get }
     
-    var isLastSession: Bool { get }
-    
-    func enableBackup() async -> Result<Void, SecureBackupControllerError>
-    func disableBackup() async -> Result<Void, SecureBackupControllerError>
+    func enable() async -> Result<Void, SecureBackupControllerError>
+    func disable() async -> Result<Void, SecureBackupControllerError>
     
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
+    
+    func isLastSession() async -> Result<Bool, SecureBackupControllerError>
     
     func waitForKeyBackup() async
 }
