@@ -980,7 +980,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL)))))
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
     }
     
     private func cancelRecordingVoiceMessage() async {
@@ -994,12 +994,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func sendCurrentVoiceMessage() async {
+        guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState, let recordingURL = voiceMessageRecorder.recordingURL else {
+            displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
+            return
+        }
+
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
         await voiceMessageRecorder.stopPlayback()
         switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):
             MXLog.error("failed to send the voice message", context: error)
+            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
+            displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
         }
     }
     

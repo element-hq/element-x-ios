@@ -422,6 +422,8 @@ public enum L10n {
   public static func errorFailedLocatingUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "error_failed_locating_user", String(describing: p1))
   }
+  /// Failed to upload your voice message.
+  public static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
   /// %1$@ does not have permission to access your location. You can enable access in Settings > Location
   public static func errorMissingLocationAuthIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "error_missing_location_auth_ios", String(describing: p1))
@@ -1286,7 +1288,7 @@ public enum L10n {
   public static func screenWelcomeTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
   }
-  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.
+  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Verify it’s you
   public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }

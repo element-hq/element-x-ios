@@ -76,6 +76,15 @@ struct ComposerToolbarViewState: BindableState {
     
     var bindings: ComposerToolbarViewStateBindings
 
+    var isUploading: Bool {
+        switch composerMode {
+        case .previewVoiceMessage(_, _, let isUploading):
+            return isUploading
+        default:
+            return false
+        }
+    }
+
     var showSendButton: Bool {
         switch composerMode {
         case .recordVoiceMessage:

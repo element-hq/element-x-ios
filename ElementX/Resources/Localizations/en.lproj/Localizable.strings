@@ -188,6 +188,7 @@
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Failed loading messages";
 "error_failed_locating_user" = "%1$@ could not access your location. Please try again later.";
+"error_failed_uploading_voice_message" = "Failed to upload your voice message.";
 "error_missing_location_auth_ios" = "%1$@ does not have permission to access your location. You can enable access in Settings > Location";
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
@@ -539,7 +540,7 @@
 "screen_welcome_button" = "Let's go!";
 "screen_welcome_subtitle" = "Here’s what you need to know:";
 "screen_welcome_title" = "Welcome to %1$@!";
-"session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages moving forwards.";
+"session_verification_banner_message" = "Looks like you’re using a new device. Verify with another device to access your encrypted messages.";
 "session_verification_banner_title" = "Verify it’s you";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Detection threshold";

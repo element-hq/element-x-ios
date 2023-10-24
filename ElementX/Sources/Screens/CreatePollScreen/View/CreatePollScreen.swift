@@ -144,7 +144,7 @@ private struct CreatePollOptionView: View {
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
                 .disabled(!canDeleteItem)
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
                 .accessibilityLabel(L10n.actionRemove)
             }
             TextField(text: $text) {
