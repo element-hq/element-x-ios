@@ -42,7 +42,7 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
-    func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+    @MainActor func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
         guard await requestRecordPermission() else {
             return .failure(.recordPermissionNotGranted)
         }
@@ -69,14 +69,14 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         return .success(())
     }
     
-    func stopRecording() async {
+    @MainActor func stopRecording() async {
         guard let audioRecorder, audioRecorder.isRecording else {
             return
         }
         audioRecorder.stop()
     }
     
-    func deleteRecording() {
+    @MainActor func deleteRecording() {
         audioRecorder?.deleteRecording()
     }
         

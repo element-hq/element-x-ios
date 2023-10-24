@@ -242,10 +242,10 @@ struct ComposerToolbar: View {
             context.send(viewAction: .startVoiceMessageRecording)
         } stopRecording: {
             if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
-                context.send(viewAction: .cancelVoiceMessageRecording)
                 withAnimation {
                     showVoiceMessageRecordingTooltip = true
                 }
+                context.send(viewAction: .cancelVoiceMessageRecording)
             } else {
                 context.send(viewAction: .stopVoiceMessageRecording)
             }
