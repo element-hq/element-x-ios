@@ -120,7 +120,7 @@ public enum L10n {
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   public static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
-  /// Open settings
+  /// Settings
   public static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
   /// Open with
   public static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
