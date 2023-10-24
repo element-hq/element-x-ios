@@ -21,6 +21,8 @@ struct AppLockSetupPINScreenCoordinatorParameters {
     /// Whether the screen should start in create or unlock mode.
     /// Specifying confirm here will raise a fatal error.
     let initialMode: AppLockSetupPINScreenMode
+    /// Whether the screen is mandatory or can be cancelled by the user.
+    let isMandatory: Bool
     let appLockService: AppLockServiceProtocol
 }
 
@@ -46,6 +48,7 @@ final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
         
         self.parameters = parameters
         viewModel = AppLockSetupPINScreenViewModel(initialMode: parameters.initialMode,
+                                                   isMandatory: parameters.isMandatory,
                                                    appLockService: parameters.appLockService)
     }
     
@@ -56,9 +59,9 @@ final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .complete:
-                break
+                actionsSubject.send(.complete)
             case .cancel:
-                break
+                actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)

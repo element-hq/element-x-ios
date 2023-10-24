@@ -14,13 +14,10 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import Combine
 
 @MainActor
-class AppLockSettingsScreenUITests: XCTestCase {
-    func testScreen() async throws {
-        let app = Application.launch(.appLockSettingsScreen)
-        try await app.assertScreenshot(.appLockSettingsScreen)
-    }
+protocol AppLockSetupSettingsScreenViewModelProtocol {
+    var actions: AnyPublisher<AppLockSetupSettingsScreenViewModelAction, Never> { get }
+    var context: AppLockSetupSettingsScreenViewModelType.Context { get }
 }

@@ -127,7 +127,8 @@ class MockScreen: Identifiable {
                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                         appSettings: ServiceLocator.shared.settings,
                                                         analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                        appLockService: AppLockServiceMock())
             retainedState.append(coordinator)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -162,17 +163,11 @@ class MockScreen: Identifiable {
             let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService))
             return coordinator
         case .appLockSetupFlow:
-            // Use the flow coordinator once more screens are added and remove the settings screen below.
             let navigationStackCoordinator = NavigationStackCoordinator()
             let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: ServiceLocator.shared.settings)
-            let coordinator = AppLockSetupPINScreenCoordinator(parameters: .init(initialMode: .create, appLockService: appLockService))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .appLockSettingsScreen:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let appLockService = AppLockServiceMock.mock(biometryType: .faceID)
-            let coordinator = AppLockSettingsScreenCoordinator(parameters: .init(appLockService: appLockService))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
+            let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
+                                                          appLockService: appLockService,
+                                                          navigationStackCoordinator: navigationStackCoordinator)
             return navigationStackCoordinator
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()

@@ -27,6 +27,8 @@ enum AppLockServiceError: Error {
 
 @MainActor
 protocol AppLockServiceProtocol: AnyObject {
+    /// The use of a PIN code is mandatory for this device.
+    var isMandatory: Bool { get }
     /// The app has been configured to automatically lock with a PIN code.
     var isEnabled: Bool { get }
     /// The type of biometric authentication supported by the device.
@@ -56,9 +58,10 @@ protocol AppLockServiceProtocol: AnyObject {
 extension AppLockServiceProtocol { }
 
 extension AppLockServiceMock {
-    static func mock(pinCode: String? = "2023", biometryType: LABiometryType = .faceID) -> AppLockServiceMock {
+    static func mock(pinCode: String? = "2023", isMandatory: Bool = false, biometryType: LABiometryType = .faceID) -> AppLockServiceMock {
         let mock = AppLockServiceMock()
         mock.isEnabled = pinCode != nil
+        mock.isMandatory = isMandatory
         mock.underlyingBiometryType = biometryType
         mock.underlyingBiometricUnlockEnabled = biometryType != .none
         mock.unlockWithClosure = { $0 == pinCode }

@@ -371,7 +371,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                               navigationStackCoordinator: authenticationNavigationStackCoordinator,
                                                               appSettings: appSettings,
                                                               analytics: ServiceLocator.shared.analytics,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              appLockService: appLockFlowCoordinator.appLockService)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()

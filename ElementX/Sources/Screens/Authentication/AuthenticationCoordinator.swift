@@ -29,10 +29,12 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appLockService: AppLockServiceProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
     private var oidcPresenter: OIDCAuthenticationPresenter?
+    private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
@@ -40,12 +42,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
          navigationStackCoordinator: NavigationStackCoordinator,
          appSettings: AppSettings,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appLockService: AppLockServiceProtocol) {
         self.authenticationService = authenticationService
         self.navigationStackCoordinator = navigationStackCoordinator
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        self.appLockService = appLockService
     }
     
     func start() {
@@ -64,7 +68,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         
         oidcPresenter.handleUniversalLinkCallback(url)
     }
-        
+    
     // MARK: - Private
     
     private func showOnboarding() {
@@ -237,25 +241,46 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         appSettings.lastLoginDate = .now
         
-        showAnalyticsPromptIfNeeded { [weak self] in
-            guard let self else { return }
-            self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+        if appSettings.appLockIsMandatory, !appLockService.isEnabled {
+            showAppLockSetupFlow(userSession: userSession)
+        } else if analytics.shouldShowAnalyticsPrompt {
+            showAnalyticsPrompt(userSession: userSession)
+        } else {
+            delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
         }
     }
-
-    private func showAnalyticsPromptIfNeeded(completion: @escaping () -> Void) {
-        guard analytics.shouldShowAnalyticsPrompt else {
-            completion()
-            return
+    
+    private func showAppLockSetupFlow(userSession: UserSessionProtocol) {
+        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .authentication,
+                                                      appLockService: appLockService,
+                                                      navigationStackCoordinator: navigationStackCoordinator)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                appLockFlowCoordinator = nil
+                if analytics.shouldShowAnalyticsPrompt {
+                    showAnalyticsPrompt(userSession: userSession)
+                } else {
+                    delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+                }
+            }
         }
+        .store(in: &cancellables)
         
+        appLockFlowCoordinator = coordinator
+        coordinator.start()
+    }
+
+    private func showAnalyticsPrompt(userSession: UserSessionProtocol) {
         let coordinator = AnalyticsPromptScreenCoordinator(analytics: analytics, termsURL: appSettings.analyticsConfiguration.termsURL)
         
         coordinator.actions
-            .sink { action in
+            .sink { [weak self] action in
+                guard let self else { return }
                 switch action {
                 case .done:
-                    completion()
+                    delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
                 }
             }
             .store(in: &cancellables)

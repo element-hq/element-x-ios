@@ -19,12 +19,12 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class AppLockSettingsScreenViewModelTests: XCTestCase {
+class AppLockSetupSettingsScreenViewModelTests: XCTestCase {
     var appLockService: AppLockServiceProtocol!
     var keychainController: KeychainControllerMock!
-    var viewModel: AppLockSettingsScreenViewModelProtocol!
+    var viewModel: AppLockSetupSettingsScreenViewModelProtocol!
     
-    var context: AppLockSettingsScreenViewModelType.Context {
+    var context: AppLockSetupSettingsScreenViewModelType.Context {
         viewModel.context
     }
     
@@ -36,7 +36,7 @@ class AppLockSettingsScreenViewModelTests: XCTestCase {
         keychainController = KeychainControllerMock()
         appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         
-        viewModel = AppLockSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
+        viewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock())
     }
     
     override func tearDown() {

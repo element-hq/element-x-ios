@@ -17,36 +17,38 @@
 import Foundation
 import LocalAuthentication
 
-enum AppLockSettingsScreenViewModelAction {
+enum AppLockSetupSettingsScreenViewModelAction {
     /// The user would like to enter new PIN code.
     case changePINCode
-    case done
+    /// The user has disabled the App Lock feature.
+    case appLockDisabled
 }
 
-struct AppLockSettingsScreenViewState: BindableState {
+struct AppLockSetupSettingsScreenViewState: BindableState {
+    /// Whether App Lock is mandatory and can be disabled by the user.
+    let isMandatory: Bool
     let biometryType: LABiometryType
-    var bindings: AppLockSettingsScreenViewStateBindings
+    var bindings: AppLockSetupSettingsScreenViewStateBindings
     
     var supportsBiometry: Bool { biometryType != .none }
     var enableBiometryTitle: String { L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString) }
 }
 
-struct AppLockSettingsScreenViewStateBindings {
+struct AppLockSetupSettingsScreenViewStateBindings {
     var enableBiometrics: Bool
-    var alertInfo: AlertInfo<AppLockSettingsScreenAlertType>?
+    var alertInfo: AlertInfo<AppLockSetupSettingsScreenAlertType>?
 }
 
-enum AppLockSettingsScreenAlertType {
+enum AppLockSetupSettingsScreenAlertType {
     /// The alert shown to confirm the user would like to remove their PIN.
     case confirmRemovePINCode
 }
 
-enum AppLockSettingsScreenViewAction {
+enum AppLockSetupSettingsScreenViewAction {
     /// The user would like to enter a new PIN code.
     case changePINCode
     /// The user would like to disable the App Lock feature.
     case disable
     /// The user has toggled the biometrics setting.
     case enableBiometricsChanged
-    case done
 }

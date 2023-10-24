@@ -17,28 +17,31 @@
 import Combine
 import SwiftUI
 
-struct AppLockSettingsScreenCoordinatorParameters {
+struct AppLockSetupSettingsScreenCoordinatorParameters {
+    /// Whether App Lock is mandatory and can be disabled by the user.
+    let isMandatory: Bool
     let appLockService: AppLockServiceProtocol
 }
 
-enum AppLockSettingsScreenCoordinatorAction {
-    case done
+enum AppLockSetupSettingsScreenCoordinatorAction {
+    case changePINCode
+    case appLockDisabled
 }
 
-final class AppLockSettingsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: AppLockSettingsScreenCoordinatorParameters
-    private var viewModel: AppLockSettingsScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<AppLockSettingsScreenCoordinatorAction, Never> = .init()
+final class AppLockSetupSettingsScreenCoordinator: CoordinatorProtocol {
+    private let parameters: AppLockSetupSettingsScreenCoordinatorParameters
+    private var viewModel: AppLockSetupSettingsScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<AppLockSetupSettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<AppLockSettingsScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<AppLockSetupSettingsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: AppLockSettingsScreenCoordinatorParameters) {
+    init(parameters: AppLockSetupSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = AppLockSettingsScreenViewModel(appLockService: parameters.appLockService)
+        viewModel = AppLockSetupSettingsScreenViewModel(appLockService: parameters.appLockService)
     }
     
     func start() {
@@ -48,15 +51,15 @@ final class AppLockSettingsScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .changePINCode:
-                break
-            case .done:
-                self.actionsSubject.send(.done)
+                actionsSubject.send(.changePINCode)
+            case .appLockDisabled:
+                actionsSubject.send(.appLockDisabled)
             }
         }
         .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
-        AnyView(AppLockSettingsScreen(context: viewModel.context))
+        AnyView(AppLockSetupSettingsScreen(context: viewModel.context))
     }
 }

@@ -21,6 +21,8 @@ import SwiftUI
 struct AppLockSetupPINScreen: View {
     @ObservedObject var context: AppLockSetupPINScreenViewModel.Context
     
+    @FocusState private var textFieldFocus
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 48) {
@@ -28,6 +30,7 @@ struct AppLockSetupPINScreen: View {
                 
                 PINTextField(pinCode: $context.pinCode,
                              isSecure: context.viewState.mode == .unlock)
+                    .focused($textFieldFocus)
                     .onChange(of: context.pinCode) { newValue in
                         guard newValue.count == 4 else { return }
                         context.send(viewAction: .submitPINCode)
@@ -38,6 +41,12 @@ struct AppLockSetupPINScreen: View {
             .frame(maxWidth: .infinity)
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .toolbar { toolbar }
+        .toolbar(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden()
+        .interactiveDismissDisabled(context.viewState.isMandatory)
+        .alert(item: $context.alertInfo)
+        .onAppear { textFieldFocus = true }
     }
     
     var header: some View {
@@ -59,6 +68,17 @@ struct AppLockSetupPINScreen: View {
             }
         }
     }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        if !context.viewState.isMandatory {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Previews
@@ -66,9 +86,15 @@ struct AppLockSetupPINScreen: View {
 struct AppLockSetupPINScreen_Previews: PreviewProvider, TestablePreview {
     static let service = AppLockService(keychainController: KeychainControllerMock(),
                                         appSettings: ServiceLocator.shared.settings)
-    static let createViewModel = AppLockSetupPINScreenViewModel(initialMode: .create, appLockService: service)
-    static let confirmViewModel = AppLockSetupPINScreenViewModel(initialMode: .confirm, appLockService: service)
-    static let unlockViewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, appLockService: service)
+    static let createViewModel = AppLockSetupPINScreenViewModel(initialMode: .create,
+                                                                isMandatory: false,
+                                                                appLockService: service)
+    static let confirmViewModel = AppLockSetupPINScreenViewModel(initialMode: .confirm,
+                                                                 isMandatory: false,
+                                                                 appLockService: service)
+    static let unlockViewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock,
+                                                                isMandatory: false,
+                                                                appLockService: service)
     
     static var previews: some View {
         NavigationStack {

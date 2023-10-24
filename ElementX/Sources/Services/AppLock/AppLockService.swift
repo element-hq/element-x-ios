@@ -24,6 +24,8 @@ class AppLockService: AppLockServiceProtocol {
     
     private let timer: AppLockTimer
     
+    var isMandatory: Bool { appSettings.appLockIsMandatory }
+    
     var isEnabled: Bool {
         do {
             guard appSettings.appLockFlowEnabled else { return false }

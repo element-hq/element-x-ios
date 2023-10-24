@@ -122,6 +122,8 @@ final class AppSettings {
     
     // MARK: - Security
     
+    /// The app must be locked with a PIN code as part of the authentication flow.
+    let appLockIsMandatory = true
     /// The amount of time the app can remain in the background for without requesting the PIN/TouchID/FaceID.
     let appLockGracePeriod: TimeInterval = 180
     /// Any codes that the user isn't allowed to use for their PIN.

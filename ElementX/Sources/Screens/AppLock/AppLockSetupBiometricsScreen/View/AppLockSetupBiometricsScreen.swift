@@ -31,8 +31,10 @@ struct AppLockSetupBiometricsScreen: View {
             .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
             .frame(maxWidth: .infinity)
         }
-        .toolbar(.visible, for: .navigationBar)
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .toolbar(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden()
+        .interactiveDismissDisabled()
         .safeAreaInset(edge: .bottom) {
             buttons
                 .padding(.top, 16)

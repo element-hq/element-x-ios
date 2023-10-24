@@ -117,6 +117,11 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
     }
 }
 class AppLockServiceMock: AppLockServiceProtocol {
+    var isMandatory: Bool {
+        get { return underlyingIsMandatory }
+        set(value) { underlyingIsMandatory = value }
+    }
+    var underlyingIsMandatory: Bool!
     var isEnabled: Bool {
         get { return underlyingIsEnabled }
         set(value) { underlyingIsEnabled = value }
