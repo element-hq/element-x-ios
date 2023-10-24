@@ -78,6 +78,9 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             
             keyUploadWaitingTask = Task {
                 await secureBackupController.waitForKeyBackup()
+                
+                guard !Task.isCancelled else { return }
+                
                 actionsSubject.send(.logout)
             }
         } else {

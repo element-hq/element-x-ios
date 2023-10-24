@@ -21,8 +21,6 @@ import SwiftUI
 struct SecureBackupKeyBackupScreen: View {
     @ObservedObject var context: SecureBackupKeyBackupScreenViewModel.Context
     
-    @ScaledMetric private var iconSize = 70
-    
     var body: some View {
         mainContent
             .padding()

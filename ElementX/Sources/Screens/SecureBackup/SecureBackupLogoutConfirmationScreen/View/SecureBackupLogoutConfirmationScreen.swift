@@ -21,19 +21,18 @@ import SwiftUI
 struct SecureBackupLogoutConfirmationScreen: View {
     @ObservedObject var context: SecureBackupLogoutConfirmationScreenViewModel.Context
     
-    @ScaledMetric private var iconSize = 70
-    
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
-                header
-                content
-                Spacer()
-                footer
+            ScrollView {
+                VStack(spacing: 16) {
+                    header
+                    content
+                }
+                .padding()
             }
-            .padding()
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .safeAreaInset(edge: .bottom) { footer.padding() }
         }
     }
     
