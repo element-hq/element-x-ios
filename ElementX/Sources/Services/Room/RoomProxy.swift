@@ -152,7 +152,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var isCallOngoing: Bool {
-        false
+        room.hasActiveRoomCall()
     }
     
     var canonicalAlias: String? {
