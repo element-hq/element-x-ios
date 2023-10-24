@@ -84,9 +84,9 @@ targets:
           INSendMessageIntent
         ]
         NSCameraUsageDescription: To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.
-        NSMicrophoneUsageDescription: To take videos with audio and send them as a message $(APP_DISPLAY_NAME) needs access to the microphone.
+        NSMicrophoneUsageDescription: To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.
         NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
-        NSLocationWhenInUseUsageDescription: When you share your location to people, $(APP_DISPLAY_NAME) needs access to show them a map.
+        NSLocationWhenInUseUsageDescription: Grant location access so that $(APP_DISPLAY_NAME) can share your location.
         UIBackgroundModes: [
           fetch,
           audio,

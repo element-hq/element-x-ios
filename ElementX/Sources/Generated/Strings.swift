@@ -120,7 +120,7 @@ public enum L10n {
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   public static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
-  /// Open settings
+  /// Settings
   public static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
   /// Open with
   public static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
@@ -374,6 +374,8 @@ public enum L10n {
   public static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
+  /// Waiting for decryption key
+  public static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   public static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
@@ -382,8 +384,20 @@ public enum L10n {
   public static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
   public static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
+  /// Grant access in Settings -> Location.
+  public static var dialogPermissionLocationDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_location_description_ios") }
+  /// %1$@ does not have access to your location.
+  public static func dialogPermissionLocationTitleIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_location_title_ios", String(describing: p1))
+  }
   /// In order to let the application use the microphone, please grant the permission in the system settings.
   public static var dialogPermissionMicrophone: String { return L10n.tr("Localizable", "dialog_permission_microphone") }
+  /// Grant access so you can record and send messages with audio.
+  public static var dialogPermissionMicrophoneDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_microphone_description_ios") }
+  /// %1$@ needs permission to access your microphone.
+  public static func dialogPermissionMicrophoneTitleIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_microphone_title_ios", String(describing: p1))
+  }
   /// In order to let the application display notifications, please grant the permission in the system settings.
   public static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
   /// Confirmation
@@ -1002,6 +1016,10 @@ public enum L10n {
   public static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
   /// Confirm your recovery key
   public static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
+  /// Copied recovery key
+  public static var screenRecoveryKeyCopiedToClipboard: String { return L10n.tr("Localizable", "screen_recovery_key_copied_to_clipboard") }
+  /// Generating…
+  public static var screenRecoveryKeyGeneratingKey: String { return L10n.tr("Localizable", "screen_recovery_key_generating_key") }
   /// Save recovery key
   public static var screenRecoveryKeySaveAction: String { return L10n.tr("Localizable", "screen_recovery_key_save_action") }
   /// Write down your recovery key somewhere safe or save it in a password manager.
@@ -1086,8 +1104,10 @@ public enum L10n {
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Updating room…
   public static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
-  /// Message history is currently unavailable in this room
+  /// Message history is currently unavailable.
   public static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
+  /// Message history is unavailable in this room. Verify this device to see your message history.
+  public static var screenRoomEncryptedHistoryBannerUnverified: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner_unverified") }
   /// Failed processing media to upload, please try again.
   public static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
@@ -1238,10 +1258,6 @@ public enum L10n {
   }
   /// You’re signed out
   public static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
-  /// Please wait for this to complete before signing out.
-  public static var screenSignoutBackingUpSubtitle: String { return L10n.tr("Localizable", "screen_signout_backing_up_subtitle") }
-  /// Your keys are still being backed up
-  public static var screenSignoutBackingUpTitle: String { return L10n.tr("Localizable", "screen_signout_backing_up_title") }
   /// Are you sure you want to sign out?
   public static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
   /// Sign out
@@ -1250,12 +1266,28 @@ public enum L10n {
   public static var screenSignoutConfirmationDialogTitle: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_title") }
   /// Signing out…
   public static var screenSignoutInProgressDialogContent: String { return L10n.tr("Localizable", "screen_signout_in_progress_dialog_content") }
-  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
-  public static var screenSignoutLastSessionSubtitle: String { return L10n.tr("Localizable", "screen_signout_last_session_subtitle") }
-  /// Have you saved your recovery key?
-  public static var screenSignoutLastSessionTitle: String { return L10n.tr("Localizable", "screen_signout_last_session_title") }
+  /// You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.
+  public static var screenSignoutKeyBackupDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_subtitle") }
+  /// You have turned off backup
+  public static var screenSignoutKeyBackupDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_title") }
+  /// Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.
+  public static var screenSignoutKeyBackupOfflineSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_subtitle") }
+  /// Your keys are still being backed up
+  public static var screenSignoutKeyBackupOfflineTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_title") }
+  /// Please wait for this to complete before signing out.
+  public static var screenSignoutKeyBackupOngoingSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_subtitle") }
+  /// Your keys are still being backed up
+  public static var screenSignoutKeyBackupOngoingTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_title") }
   /// Sign out
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
+  /// You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.
+  public static var screenSignoutRecoveryDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_subtitle") }
+  /// Recovery not set up
+  public static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
+  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
+  public static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
+  /// Have you saved your recovery key?
+  public static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
   /// An error occurred when trying to start a chat
   public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Location

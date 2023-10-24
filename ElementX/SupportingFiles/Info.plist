@@ -67,9 +67,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>When you share your location to people, $(APP_DISPLAY_NAME) needs access to show them a map.</string>
+	<string>Grant location access so that $(APP_DISPLAY_NAME) can share your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To take videos with audio and send them as a message $(APP_DISPLAY_NAME) needs access to the microphone.</string>
+	<string>To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allows saving photos and videos to your library.</string>
 	<key>NSUserActivityTypes</key>
