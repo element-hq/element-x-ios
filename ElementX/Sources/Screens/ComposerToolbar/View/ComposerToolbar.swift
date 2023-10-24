@@ -265,7 +265,7 @@ struct ComposerToolbar: View {
                 .fixedSize()
                 .accessibilityLabel(L10n.a11yDelete)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
     
     private var voiceMessageRecordingButtonTooltipView: some View {
