@@ -19,6 +19,7 @@ import Combine
 import Foundation
 import XCTest
 
+@MainActor
 class MediaPlayerProviderTests: XCTestCase {
     private var mediaPlayerProvider: MediaPlayerProvider!
     
@@ -41,7 +42,7 @@ class MediaPlayerProviderTests: XCTestCase {
         }
 
         let mediaSourceVideo = MediaSourceProxy(url: someURL, mimeType: "video/mp4")
-        switch mediaPlayerProvider.player(for: mediaSourceWithoutMimeType) {
+        switch mediaPlayerProvider.player(for: mediaSourceVideo) {
         case .failure(.unsupportedMediaType):
             // Ok
             break
@@ -72,11 +73,11 @@ class MediaPlayerProviderTests: XCTestCase {
         // By default, there should be no player state
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
-        let audioPlayerState = await AudioPlayerState(id: audioPlayerStateId, duration: 10.0)
-        await mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
+        let audioPlayerState = AudioPlayerState(id: audioPlayerStateId, duration: 10.0)
+        mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
         XCTAssertEqual(audioPlayerState, mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
-        await mediaPlayerProvider.unregister(audioPlayerState: audioPlayerState)
+        mediaPlayerProvider.unregister(audioPlayerState: audioPlayerState)
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
     }
     
@@ -84,17 +85,17 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = await Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
-            await mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
-            await audioPlayerState.attachAudioPlayer(audioPlayer)
-            let isAttached = await audioPlayerState.isAttached
+            mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+            let isAttached = audioPlayerState.isAttached
             XCTAssertTrue(isAttached)
         }
         
-        await mediaPlayerProvider.detachAllStates(except: nil)
+        mediaPlayerProvider.detachAllStates(except: nil)
         for audioPlayerState in audioPlayerStates {
-            let isAttached = await audioPlayerState.isAttached
+            let isAttached = audioPlayerState.isAttached
             XCTAssertFalse(isAttached)
         }
     }
@@ -103,18 +104,18 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = await Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
-            await mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
-            await audioPlayerState.attachAudioPlayer(audioPlayer)
-            let isAttached = await audioPlayerState.isAttached
+            mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+            let isAttached = audioPlayerState.isAttached
             XCTAssertTrue(isAttached)
         }
         
         let exception = audioPlayerStates[1]
-        await mediaPlayerProvider.detachAllStates(except: exception)
+        mediaPlayerProvider.detachAllStates(except: exception)
         for audioPlayerState in audioPlayerStates {
-            let isAttached = await audioPlayerState.isAttached
+            let isAttached = audioPlayerState.isAttached
             if audioPlayerState == exception {
                 XCTAssertTrue(isAttached)
             } else {

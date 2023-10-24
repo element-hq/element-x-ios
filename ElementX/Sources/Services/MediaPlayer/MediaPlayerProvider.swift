@@ -48,7 +48,6 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         return audioPlayerStates[audioPlayerStateID]
     }
     
-    @MainActor
     func register(audioPlayerState: AudioPlayerState) {
         guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
             MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
@@ -57,7 +56,6 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         audioPlayerStates[audioPlayerStateID] = audioPlayerState
     }
     
-    @MainActor
     func unregister(audioPlayerState: AudioPlayerState) {
         guard let audioPlayerStateID = audioPlayerStateID(for: audioPlayerState.id) else {
             MXLog.error("Failed to build a key to register this audioPlayerState: \(audioPlayerState)")
@@ -66,12 +64,12 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
         audioPlayerStates[audioPlayerStateID] = nil
     }
     
-    func detachAllStates(except exception: AudioPlayerState?) async {
+    func detachAllStates(except exception: AudioPlayerState?) {
         for key in audioPlayerStates.keys {
             if let exception, key == audioPlayerStateID(for: exception.id) {
                 continue
             }
-            await audioPlayerStates[key]?.detachAudioPlayer()
+            audioPlayerStates[key]?.detachAudioPlayer()
         }
     }
     

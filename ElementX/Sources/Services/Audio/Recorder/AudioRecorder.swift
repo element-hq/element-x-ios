@@ -42,42 +42,38 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         audioRecorder?.isRecording ?? false
     }
     
+    private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
+    private var stopped = false
+    
     func record(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+        stopped = false
         guard await requestRecordPermission() else {
             return .failure(.recordPermissionNotGranted)
         }
-        
-        let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                        AVSampleRateKey: 48000,
-                        AVEncoderBitRateKey: 128_000,
-                        AVNumberOfChannelsKey: 1,
-                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-            let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
-            audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-            audioRecorder?.delegate = self
-            audioRecorder?.isMeteringEnabled = true
-            audioRecorder?.record()
+        let result = await startRecording(with: recordID)
+        switch result {
+        case .success:
             actionsSubject.send(.didStartRecording)
-        } catch {
-            MXLog.error("audio recording failed: \(error)")
+        case .failure(let error):
             actionsSubject.send(.didFailWithError(error: error))
         }
-        return .success(())
+        return result
     }
     
     func stopRecording() async {
-        guard let audioRecorder, audioRecorder.isRecording else {
-            return
+        await withCheckedContinuation { continuation in
+            stopRecording {
+                continuation.resume()
+            }
         }
-        audioRecorder.stop()
     }
     
-    func deleteRecording() {
-        audioRecorder?.deleteRecording()
+    func deleteRecording() async {
+        await withCheckedContinuation { continuation in
+            deleteRecording {
+                continuation.resume()
+            }
+        }
     }
         
     func peakPowerForChannelNumber(_ channelNumber: Int) -> Float {
@@ -121,7 +117,69 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
             }
         }
     }
-        
+    
+    // MARK: - Private
+    
+    private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+        await withCheckedContinuation { continuation in
+            startRecording(with: recordID) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    private func startRecording(with recordID: AudioRecordingIdentifier, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
+        dispatchQueue.async { [weak self] in
+            guard let self, !self.stopped else {
+                completion(.failure(.recordingCancelled))
+                return
+            }
+            let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                            AVSampleRateKey: 48000,
+                            AVEncoderBitRateKey: 128_000,
+                            AVNumberOfChannelsKey: 1,
+                            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
+            
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
+                audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+                audioRecorder?.delegate = self
+                audioRecorder?.isMeteringEnabled = true
+                audioRecorder?.record()
+                completion(.success(()))
+            } catch {
+                MXLog.error("audio recording failed: \(error)")
+                completion(.failure(.genericError))
+            }
+        }
+    }
+    
+    private func stopRecording(completion: @escaping () -> Void) {
+        dispatchQueue.async { [weak self] in
+            defer {
+                completion()
+            }
+            guard let self else { return }
+            stopped = true
+            guard let audioRecorder, audioRecorder.isRecording else {
+                return
+            }
+            audioRecorder.stop()
+        }
+    }
+    
+    private func deleteRecording(completion: @escaping () -> Void) {
+        dispatchQueue.async { [weak self] in
+            defer {
+                completion()
+            }
+            guard let self else { return }
+            audioRecorder?.deleteRecording()
+        }
+    }
+    
     // MARK: - AVAudioRecorderDelegate
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully success: Bool) {

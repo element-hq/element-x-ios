@@ -20,6 +20,7 @@ enum MediaPlayerProviderError: Error {
     case unsupportedMediaType
 }
 
+@MainActor
 protocol MediaPlayerProviderProtocol {
     func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>
     

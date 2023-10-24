@@ -243,7 +243,7 @@ struct ComposerToolbar: View {
         } stopRecording: {
             if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
                 context.send(viewAction: .cancelVoiceMessageRecording)
-                withAnimation {
+                withElementAnimation {
                     showVoiceMessageRecordingTooltip = true
                 }
             } else {
@@ -273,7 +273,7 @@ struct ComposerToolbar: View {
             .allowsHitTesting(false)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
-                    withAnimation {
+                    withElementAnimation {
                         showVoiceMessageRecordingTooltip = false
                     }
                 }

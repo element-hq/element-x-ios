@@ -447,11 +447,11 @@ class AudioRecorderMock: AudioRecorderProtocol {
     var deleteRecordingCalled: Bool {
         return deleteRecordingCallsCount > 0
     }
-    var deleteRecordingClosure: (() -> Void)?
+    var deleteRecordingClosure: (() async -> Void)?
 
-    func deleteRecording() {
+    func deleteRecording() async {
         deleteRecordingCallsCount += 1
-        deleteRecordingClosure?()
+        await deleteRecordingClosure?()
     }
     //MARK: - averagePowerForChannelNumber
 
