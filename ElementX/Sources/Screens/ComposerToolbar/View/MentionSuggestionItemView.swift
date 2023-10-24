@@ -25,7 +25,7 @@ struct MentionSuggestionItemView: View {
             LoadableAvatarImage(url: item.avatarURL,
                                 name: item.displayName,
                                 contentID: item.id,
-                                avatarSize: .custom(32),
+                                avatarSize: .user(on: .suggestions),
                                 imageProvider: imageProvider)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)

@@ -25,7 +25,7 @@ struct CompletionSuggestionView: View {
         static let topPadding: CGFloat = 8.0
         static let listItemPadding: CGFloat = 6.0
         // added by the list itself when presenting the divider
-        static let linePadding: CGFloat = 4.0
+        static let listItemSpacing: CGFloat = 4.0
         static let leadingPadding: CGFloat = 16.0
         static let maxVisibleRows = 4
     }
@@ -74,7 +74,7 @@ struct CompletionSuggestionView: View {
     }
     
     private func contentHeightForRowCount(_ count: Int) -> CGFloat {
-        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.linePadding) * CGFloat(count) + Constants.topPadding - Constants.linePadding / 2
+        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * CGFloat(count) - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
     }
 
     private struct ListItemPaddingModifier: ViewModifier {
@@ -85,7 +85,7 @@ struct CompletionSuggestionView: View {
         }
 
         func body(content: Content) -> some View {
-            var topPadding: CGFloat = isFirst ? Constants.listItemPadding + Constants.topPadding : Constants.listItemPadding
+            var topPadding: CGFloat = isFirst ? Constants.topPadding : Constants.listItemPadding
             var bottomPadding: CGFloat = Constants.listItemPadding
 
             return content
