@@ -64,12 +64,12 @@ class UserSession: UserSessionProtocol {
                 
                 tearDownSessionVerificationControllerWatchdog()
                 
-                if isVerified == false {
+                if !isVerified {
                     callbacks.send(.sessionVerificationNeeded)
                 }
-
+                
                 self.sessionVerificationController = sessionVerificationController
-
+                
                 sessionVerificationController.callbacks.sink { [weak self] callback in
                     switch callback {
                     case .finished:
