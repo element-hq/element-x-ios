@@ -309,6 +309,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if audioPlayer.state == .playing {
             audioPlayer.pause()
         } else {
+            audioPlayerState.attachAudioPlayer(audioPlayer)
             audioPlayer.play()
         }
     }
