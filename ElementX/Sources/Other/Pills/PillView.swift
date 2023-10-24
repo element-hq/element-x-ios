@@ -42,7 +42,6 @@ struct PillView: View {
         .padding(.trailing, 6)
         .padding(.vertical, 1)
         .background { Capsule().foregroundColor(backgroundColor) }
-        .frame(maxWidth: PillConstants.maxWidth)
         .onChange(of: context.viewState.displayText) { _ in
             didChangeText()
         }
@@ -55,18 +54,23 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadUser(isOwn: false))) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loading")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadUser(isOwn: true))) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loading Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loaded Long")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loaded Long Own")
         PillView(imageProvider: mockMediaProvider,
                  context: PillContext.mock(type: .allUsers)) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("All Users")
     }
 }

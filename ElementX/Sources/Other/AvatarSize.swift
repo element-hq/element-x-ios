@@ -51,6 +51,7 @@ enum UserAvatarSizeOnScreen {
     case inviteUsers
     case readReceipt
     case editUserDetails
+    case suggestions
 
     var value: CGFloat {
         switch self {
@@ -59,6 +60,8 @@ enum UserAvatarSizeOnScreen {
         case .timeline:
             return 32
         case .home:
+            return 32
+        case .suggestions:
             return 32
         case .settings:
             return 52

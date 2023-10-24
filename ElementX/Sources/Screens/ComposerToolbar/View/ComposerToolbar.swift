@@ -46,6 +46,8 @@ struct ComposerToolbar: View {
                 bottomBar
             }
         }
+        .padding(.leading, 5)
+        .padding(.trailing, 8)
         .background {
             ViewFrameReader(frame: $frame)
         }

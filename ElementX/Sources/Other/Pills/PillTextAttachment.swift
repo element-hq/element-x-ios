@@ -33,6 +33,7 @@ final class PillTextAttachment: NSTextAttachment {
         let fontData = pillData.fontData
         // Align the pill text vertically with the surrounding text.
         rect.origin.y = fontData.descender + (fontData.lineHeight - rect.height) / 2.0
+        rect.size.width = min(rect.size.width, lineFrag.width)
         return rect
     }
 }

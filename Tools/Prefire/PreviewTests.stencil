@@ -60,9 +60,7 @@ class PreviewTests: XCTestCase {
                                     file: file{% endif %},
                                     testName: testName)
 
-        if let failure,
-           !failure.contains("No reference was found on disk."),
-           !failure.contains("to test against the newly-recorded snapshot") {
+        if let failure {
             XCTFail(failure)
         }
 

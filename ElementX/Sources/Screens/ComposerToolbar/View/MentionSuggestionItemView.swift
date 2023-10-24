@@ -21,13 +21,13 @@ struct MentionSuggestionItemView: View {
     let item: MentionSuggestionItem
     
     var body: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .center, spacing: 16) {
             LoadableAvatarImage(url: item.avatarURL,
                                 name: item.displayName,
                                 contentID: item.id,
-                                avatarSize: .custom(42),
+                                avatarSize: .user(on: .suggestions),
                                 imageProvider: imageProvider)
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)

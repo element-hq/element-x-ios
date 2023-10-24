@@ -25,5 +25,6 @@ enum PillConstants {
     /// Used by the WYSIWYG as the urlString value to identify @room mentions
     static let composerAtRoomURLString = "#"
     
-    static let maxWidth: CGFloat = 235
+    /// Used only to mock the max width in previews since the real max width is calculated by the line fragment width
+    static let mockMaxWidth: CGFloat = 235
 }
