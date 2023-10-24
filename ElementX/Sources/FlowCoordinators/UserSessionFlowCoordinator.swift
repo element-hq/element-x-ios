@@ -34,6 +34,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
+    private let settingsFlowCoordinator: SettingsFlowCoordinator
     
     private var cancellables = Set<AnyCancellable>()
     private var migrationCancellable: AnyCancellable?
@@ -76,11 +77,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   appSettings: appSettings,
                                                   analytics: analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                
+        settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                            appLockService: appLockService,
+                                                                            bugReportService: bugReportService,
+                                                                            notificationSettings: userSession.clientProxy.notificationSettings,
+                                                                            secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            appSettings: appSettings,
+                                                                            navigationSplitCoordinator: navigationSplitCoordinator))
         
         setupStateMachine()
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
+            
             switch action {
             case .presentedRoom(let roomID):
                 analytics.signpost.beginRoomFlow(roomID)
@@ -90,6 +100,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 analytics.signpost.endRoomFlow()
             case .presentCallScreen(let roomProxy):
                 presentCallScreen(roomProxy: roomProxy)
+            }
+        }
+        .store(in: &cancellables)
+        
+        settingsFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentedSettings:
+                stateMachine.processEvent(.showSettingsScreen)
+            case .dismissedSettings:
+                stateMachine.processEvent(.dismissedSettingsScreen)
+            case .runLogoutFlow:
+                runLogoutFlow()
+            case .clearCache:
+                actionsSubject.send(.clearCache)
             }
         }
         .store(in: &cancellables)
@@ -131,6 +157,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
                 break
+            case .settings, .chatBackupSettings:
+                settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             }
         }
     }
@@ -193,7 +221,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
-                presentSettingsScreen(animated: animated)
+                break
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
                 
@@ -293,7 +321,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                         roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
                     }
                 case .presentSettingsScreen:
-                    stateMachine.processEvent(.showSettingsScreen)
+                    settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSessionVerificationScreen:
@@ -329,7 +357,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard secureBackupController.isLastSession else {
+        guard secureBackupController.isLastSession, appSettings.chatBackupEnabled else {
             ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
                                                                             title: L10n.screenSignoutRecoveryDisabledTitle,
                                                                             message: L10n.screenSignoutRecoveryDisabledSubtitle,
@@ -346,7 +374,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.presentSecureBackupSettingsScreen()
+                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                                                                             })
             return
         }
@@ -358,59 +386,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                                                 self?.actionsSubject.send(.logout)
                                                                             }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.presentSecureBackupSettingsScreen()
+                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                                                                             })
             return
         }
         
         presentSecureBackupConfirmationScreen()
     }
-    
-    // MARK: Settings
-    
-    private func presentSettingsScreen(animated: Bool) {
-        let settingsNavigationStackCoordinator = NavigationStackCoordinator()
-        
-        let userIndicatorController = UserIndicatorController(rootCoordinator: settingsNavigationStackCoordinator)
-        
-        let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
-                                                             userIndicatorController: userIndicatorController,
-                                                             userSession: userSession,
-                                                             appLockService: appLockService,
-                                                             bugReportService: bugReportService,
-                                                             notificationSettings: userSession.clientProxy.notificationSettings,
-                                                             secureBackupController: userSession.clientProxy.secureBackupController,
-                                                             appSettings: appSettings)
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
-        
-        settingsScreenCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .dismiss:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                case .logout:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                    
-                    // The settings sheet needs to be dismissed before the alert can be shown
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.runLogoutFlow()
-                    }
-                case .clearCache:
-                    actionsSubject.send(.clearCache)
-                }
-            }
-            .store(in: &cancellables)
-        
-        settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
-        
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedSettingsScreen)
-        }
-    }
-    
-    private func presentSecureBackupSettingsScreen() { }
     
     // MARK: Session verification
     
@@ -545,7 +527,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .cancel:
                     navigationSplitCoordinator.setSheetCoordinator(nil)
                 case .settings:
-                    presentSecureBackupSettingsScreen()
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .logout:
                     actionsSubject.send(.logout)
                 }

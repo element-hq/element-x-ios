@@ -32,6 +32,7 @@ enum SettingsScreenCoordinatorAction {
     case dismiss
     case logout
     case clearCache
+    case secureBackup
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -75,7 +76,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 case .sessionVerification:
                     presentSessionVerificationScreen()
                 case .secureBackup:
-                    presentSecureBackupScreen()
+                    actionsSubject.send(.secureBackup)
                 case .accountSessionsList:
                     presentAccountSessionsListURL()
                 case .notifications:
@@ -198,15 +199,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.setSheetCoordinator(coordinator) { [weak self] in
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
-    }
-    
-    private func presentSecureBackupScreen() {
-        let coordinator = SecureBackupScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                          secureBackupController: parameters.userSession.clientProxy.secureBackupController,
-                                                                          navigationStackCoordinator: parameters.navigationStackCoordinator,
-                                                                          userIndicatorController: parameters.userIndicatorController))
-        
-        parameters.navigationStackCoordinator?.push(coordinator)
     }
     
     private func presentNotificationSettings() {

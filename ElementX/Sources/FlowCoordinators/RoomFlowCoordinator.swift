@@ -106,9 +106,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     MXLog.error("[RoomFlowCoordinator] Failed to get member: RoomProxy is nil")
                 }
             }
-        case .invites:
-            break
-        case .genericCallLink, .oidcCallback:
+        case .invites, .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
     }
