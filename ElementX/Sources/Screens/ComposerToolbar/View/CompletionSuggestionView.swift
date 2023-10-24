@@ -23,19 +23,11 @@ struct CompletionSuggestionView: View {
     
     private enum Constants {
         static let topPadding: CGFloat = 8.0
-        static let listItemPadding: CGFloat = 4.0
-        static let lineSpacing: CGFloat = 10.0
-        static let maxHeight: CGFloat = 300.0
+        static let listItemPadding: CGFloat = 6.0
+        // added by the list itself when presenting the divider
+        static let linePadding: CGFloat = 4.0
+        static let leadingPadding: CGFloat = 16.0
         static let maxVisibleRows = 4
-
-        /*
-         As of iOS 16.0, SwiftUI's List uses `UICollectionView` instead
-         of `UITableView` internally, this value is an adjustment to apply
-         to the list items in order to be as close as possible as the
-         `UITableView` display.
-         */
-        @available(iOS 16.0, *)
-        static let collectionViewPaddingCorrection: CGFloat = -5.0
     }
 
     // MARK: Public
@@ -73,16 +65,17 @@ struct CompletionSuggestionView: View {
                 }
             }
             .modifier(ListItemPaddingModifier(isFirst: items.first?.id == item.id))
+            .listRowInsets(.init(top: 0, leading: Constants.leadingPadding, bottom: 0, trailing: 0))
         }
         .listStyle(PlainListStyle())
-        .frame(height: min(Constants.maxHeight,
-                           min(contentHeightForRowCount(Constants.maxVisibleRows),
-                               contentHeightForRowCount(items.count))))
+        .frame(height:
+            min(contentHeightForRowCount(Constants.maxVisibleRows),
+                contentHeightForRowCount(items.count)))
         .background(Color.compound.bgCanvasDefault)
     }
     
     private func contentHeightForRowCount(_ count: Int) -> CGFloat {
-        (prototypeListItemFrame.height + (Constants.listItemPadding * 2) + Constants.lineSpacing) * CGFloat(count) + Constants.topPadding
+        (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.linePadding) * CGFloat(count) + Constants.topPadding - Constants.linePadding / 2
     }
 
     private struct ListItemPaddingModifier: ViewModifier {
@@ -95,10 +88,6 @@ struct CompletionSuggestionView: View {
         func body(content: Content) -> some View {
             var topPadding: CGFloat = isFirst ? Constants.listItemPadding + Constants.topPadding : Constants.listItemPadding
             var bottomPadding: CGFloat = Constants.listItemPadding
-            if #available(iOS 16.0, *) {
-                topPadding += Constants.collectionViewPaddingCorrection
-                bottomPadding += Constants.collectionViewPaddingCorrection
-            }
 
             return content
                 .padding(.top, topPadding)
