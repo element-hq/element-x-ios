@@ -106,9 +106,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     MXLog.error("[RoomFlowCoordinator] Failed to get member: RoomProxy is nil")
                 }
             }
-        case .invites:
-            break
-        case .genericCallLink, .oidcCallback:
+        case .invites, .genericCallLink, .oidcCallback, .settings, .chatBackupSettings:
             break
         }
     }
@@ -347,7 +345,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider,
                                                                                            mediaPlayerProvider: mediaPlayerProvider,
-                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager)
+                                                                                           voiceMessageMediaManager: userSession.voiceMessageMediaManager,
+                                                                                           secureBackupController: userSession.clientProxy.secureBackupController)
         self.timelineController = timelineController
         
         analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)

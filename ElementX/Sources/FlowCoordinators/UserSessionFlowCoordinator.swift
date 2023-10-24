@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
-    case signOut
+    case logout
     case clearCache
 }
 
@@ -34,6 +34,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     private let roomFlowCoordinator: RoomFlowCoordinator
+    private let settingsFlowCoordinator: SettingsFlowCoordinator
     
     private var cancellables = Set<AnyCancellable>()
     private var migrationCancellable: AnyCancellable?
@@ -76,11 +77,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                   appSettings: appSettings,
                                                   analytics: analytics,
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                
+        settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                            appLockService: appLockService,
+                                                                            bugReportService: bugReportService,
+                                                                            notificationSettings: userSession.clientProxy.notificationSettings,
+                                                                            secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            appSettings: appSettings,
+                                                                            navigationSplitCoordinator: navigationSplitCoordinator))
         
         setupStateMachine()
         
         roomFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
+            
             switch action {
             case .presentedRoom(let roomID):
                 analytics.signpost.beginRoomFlow(roomID)
@@ -90,6 +100,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 analytics.signpost.endRoomFlow()
             case .presentCallScreen(let roomProxy):
                 presentCallScreen(roomProxy: roomProxy)
+            }
+        }
+        .store(in: &cancellables)
+        
+        settingsFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentedSettings:
+                stateMachine.processEvent(.showSettingsScreen)
+            case .dismissedSettings:
+                stateMachine.processEvent(.dismissedSettingsScreen)
+            case .runLogoutFlow:
+                runLogoutFlow()
+            case .clearCache:
+                actionsSubject.send(.clearCache)
             }
         }
         .store(in: &cancellables)
@@ -131,6 +157,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
             case .oidcCallback:
                 break
+            case .settings, .chatBackupSettings:
+                settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             }
         }
     }
@@ -193,7 +221,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .showSettingsScreen, .settingsScreen):
-                presentSettingsScreen(animated: animated)
+                break
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
                 
@@ -211,7 +239,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentInvitesList(animated: animated)
             case (.invitesScreen, .showInvitesScreen, .invitesScreen):
                 break
-            case (.invitesScreen, .closedInvitesScreen, .roomList):
+            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
+                break
+                
+            case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
+                presentSecureBackupConfirmationScreen()
+            case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
                 
             default:
@@ -288,15 +321,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                         roomFlowCoordinator.handleAppRoute(.roomList, animated: true)
                     }
                 case .presentSettingsScreen:
-                    stateMachine.processEvent(.showSettingsScreen)
+                    settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSessionVerificationScreen:
                     stateMachine.processEvent(.showSessionVerificationScreen)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .signOut:
-                    actionsSubject.send(.signOut)
+                case .logout:
+                    runLogoutFlow()
                 case .presentInvitesScreen:
                     stateMachine.processEvent(.showInvitesScreen)
                 }
@@ -321,44 +354,44 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // MARK: Settings
-    
-    private func presentSettingsScreen(animated: Bool) {
-        let settingsNavigationStackCoordinator = NavigationStackCoordinator()
+    private func runLogoutFlow() {
+        let secureBackupController = userSession.clientProxy.secureBackupController
         
-        let userIndicatorController = UserIndicatorController(rootCoordinator: settingsNavigationStackCoordinator)
-        
-        let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
-                                                             userIndicatorController: userIndicatorController,
-                                                             userSession: userSession,
-                                                             appLockService: appLockService,
-                                                             bugReportService: bugReportService,
-                                                             notificationSettings: userSession.clientProxy.notificationSettings,
-                                                             secureBackupController: userSession.clientProxy.secureBackupController,
-                                                             appSettings: appSettings)
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
-        
-        settingsScreenCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .dismiss:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                case .logout:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                    actionsSubject.send(.signOut)
-                case .clearCache:
-                    actionsSubject.send(.clearCache)
-                }
-            }
-            .store(in: &cancellables)
-        
-        settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
-        
-        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedSettingsScreen)
+        guard secureBackupController.isLastSession, appSettings.chatBackupEnabled else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            })
+            return
         }
+        
+        guard secureBackupController.recoveryKeyState.value == .enabled else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                                                                            })
+            return
+        }
+        
+        guard secureBackupController.keyBackupState.value == .enabled else {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.screenSignoutKeyBackupDisabledTitle,
+                                                                            message: L10n.screenSignoutKeyBackupDisabledSubtitle,
+                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                                self?.actionsSubject.send(.logout)
+                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                                                                            })
+            return
+        }
+        
+        presentSecureBackupConfirmationScreen()
     }
     
     // MARK: Session verification
@@ -457,7 +490,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.closedInvitesScreen)
+            self?.stateMachine.processEvent(.dismissedInvitesScreen)
         }
     }
     
@@ -478,5 +511,29 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+    }
+    
+    // MARK: Secure backup confirmation
+    
+    private func presentSecureBackupConfirmationScreen() {
+        let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                                            networkMonitor: ServiceLocator.shared.networkMonitor))
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .cancel:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .settings:
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                case .logout:
+                    actionsSubject.send(.logout)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: true)
     }
 }

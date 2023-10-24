@@ -1,5 +1,5 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
-struct EncryptedHistoryRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
-    let id: TimelineItemIdentifier
-    let isSessionVerified: Bool
-}
+@MainActor
+class SecureBackupLogoutConfirmationScreenUITests: XCTestCase { }

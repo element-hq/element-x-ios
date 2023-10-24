@@ -29,6 +29,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
         keyBackupStateSubject.asCurrentValuePublisher()
     }
     
+    var isLastSession: Bool {
+        #warning("FIXME")
+        return true
+    }
+    
     func enableBackup() async -> Result<Void, SecureBackupControllerError> {
         keyBackupStateSubject.send(.enabling)
         
@@ -75,5 +80,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
         recoveryKeyStateSubject.send(.enabled)
         
         return .success(())
+    }
+    
+    func waitForKeyBackup() async {
+        try? await Task.sleep(for: .seconds(5))
     }
 }

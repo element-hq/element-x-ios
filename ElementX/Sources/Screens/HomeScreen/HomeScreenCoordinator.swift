@@ -34,7 +34,7 @@ enum HomeScreenCoordinatorAction {
     case presentSessionVerificationScreen
     case presentStartChatScreen
     case presentInvitesScreen
-    case signOut
+    case logout
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -75,8 +75,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentSettingsScreen)
                 case .presentSessionVerificationScreen:
                     actionsSubject.send(.presentSessionVerificationScreen)
-                case .signOut:
-                    actionsSubject.send(.signOut)
+                case .logout:
+                    actionsSubject.send(.logout)
                 case .presentStartChatScreen:
                     actionsSubject.send(.presentStartChatScreen)
                 case .presentInvitesScreen:

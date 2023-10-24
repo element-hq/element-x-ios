@@ -46,6 +46,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Showing invites list screen
         case invitesScreen(selectedRoomID: String?)
+        
+        // Showing the logout flows
+        case logoutConfirmationScreen(selectedRoomID: String?)
     }
     
     struct EventUserInfo {
@@ -100,7 +103,12 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Request presentation of the invites screen
         case showInvitesScreen
         /// The invites screen has been dismissed
-        case closedInvitesScreen
+        case dismissedInvitesScreen
+        
+        /// Logout has been requested and this is the last sesion
+        case showLogoutConfirmationScreen
+        /// Logout has been cancelled
+        case dismissedLogoutConfirmationScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -157,11 +165,16 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.showInvitesScreen, .invitesScreen(let selectedRoomID)):
                 return .invitesScreen(selectedRoomID: selectedRoomID)
 
-            case (.closedInvitesScreen, .invitesScreen(let selectedRoomID)):
+            case (.dismissedInvitesScreen, .invitesScreen(let selectedRoomID)):
                 return .roomList(selectedRoomID: selectedRoomID)
 
             case (.presentWelcomeScreen, .roomList):
                 return .welcomeScreen
+                
+            case (.showLogoutConfirmationScreen, .roomList(let selectedRoomID)):
+                return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
+            case (.dismissedLogoutConfirmationScreen, .logoutConfirmationScreen(let selectedRoomID)):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
             default:
                 return nil

@@ -438,7 +438,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 guard let self else { return }
                 
                 switch action {
-                case .signOut:
+                case .logout:
                     stateMachine.processEvent(.signOut(isSoft: false))
                 case .clearCache:
                     stateMachine.processEvent(.clearCache)

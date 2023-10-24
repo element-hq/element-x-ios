@@ -26,3 +26,6 @@ protocol NetworkMonitorProtocol {
     var isCurrentConnectionExpensive: Bool { get }
     var isCurrentConnectionConstrained: Bool { get }
 }
+
+// sourcery: AutoMockable
+extension NetworkMonitorProtocol { }

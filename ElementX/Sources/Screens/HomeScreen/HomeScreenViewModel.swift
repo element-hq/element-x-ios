@@ -138,8 +138,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 actionsSubject.send(.presentFeedbackScreen)
             case .settings:
                 actionsSubject.send(.presentSettingsScreen)
-            case .signOut:
-                actionsSubject.send(.signOut)
+            case .logout:
+                actionsSubject.send(.logout)
             }
         case .verifySession:
             actionsSubject.send(.presentSessionVerificationScreen)

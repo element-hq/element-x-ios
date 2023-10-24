@@ -24,6 +24,8 @@ enum AppRoute: Equatable {
     case roomMemberDetails(userID: String)
     case invites
     case genericCallLink(url: URL)
+    case settings
+    case chatBackupSettings
 }
 
 struct AppRouteURLParser {
