@@ -49,7 +49,7 @@ struct VoiceMessagePreviewComposer: View {
     }
     
     var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || dragState.isDragging
+        playerState.playbackState == .playing || dragState.isActive
     }
             
     var body: some View {
@@ -65,6 +65,7 @@ struct VoiceMessagePreviewComposer: View {
             }
             waveformView
                 .waveformDragGesture($dragState)
+                .waveformProgressCursor(progress: playerState.progress, opacity: showWaveformCursor ? 1 : 0)
                 .onChange(of: dragState) { dragState in
                     switch dragState {
                     case .inactive:

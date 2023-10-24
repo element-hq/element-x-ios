@@ -74,18 +74,9 @@ struct VoiceMessageRoomPlaybackView: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
-            GeometryReader { geometry in
-                waveformView
-                    .overlay(alignment: .leading) {
-                        // Display a cursor
-                        RoundedRectangle(cornerRadius: 1)
-                            .fill(Color.compound.iconAccentTertiary)
-                            .offset(CGSize(width: playerState.progress * geometry.size.width, height: 0.0))
-                            .frame(width: waveformLineWidth, height: geometry.size.height)
-                            .opacity(showWaveformCursor ? 1 : 0)
-                    }
-                    .waveformDragGesture($dragState)
-            }
+            waveformView
+                .waveformDragGesture($dragState)
+                .waveformProgressCursor(progress: playerState.progress, width: waveformLineWidth, opacity: showWaveformCursor ? 1 : 0)
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {
