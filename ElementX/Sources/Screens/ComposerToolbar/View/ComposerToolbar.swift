@@ -242,10 +242,10 @@ struct ComposerToolbar: View {
             context.send(viewAction: .startVoiceMessageRecording)
         } stopRecording: {
             if let voiceMessageRecordingStartTime, Date.now.timeIntervalSince(voiceMessageRecordingStartTime) < voiceMessageMinimumRecordingDuration {
-                withAnimation {
+                context.send(viewAction: .cancelVoiceMessageRecording)
+                withElementAnimation {
                     showVoiceMessageRecordingTooltip = true
                 }
-                context.send(viewAction: .cancelVoiceMessageRecording)
             } else {
                 context.send(viewAction: .stopVoiceMessageRecording)
             }
@@ -273,7 +273,7 @@ struct ComposerToolbar: View {
             .allowsHitTesting(false)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
-                    withAnimation {
+                    withElementAnimation {
                         showVoiceMessageRecordingTooltip = false
                     }
                 }
