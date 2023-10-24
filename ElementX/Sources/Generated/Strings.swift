@@ -384,7 +384,7 @@ public enum L10n {
   public static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
   public static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
-  /// Provide access in Settings -> Location.
+  /// Grant access in Settings -> Location.
   public static var dialogPermissionLocationDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_location_description_ios") }
   /// %1$@ does not have access to your location.
   public static func dialogPermissionLocationTitleIos(_ p1: Any) -> String {
@@ -392,7 +392,7 @@ public enum L10n {
   }
   /// In order to let the application use the microphone, please grant the permission in the system settings.
   public static var dialogPermissionMicrophone: String { return L10n.tr("Localizable", "dialog_permission_microphone") }
-  /// Provide access so you can record and send messages with audio.
+  /// Grant access so you can record and send messages with audio.
   public static var dialogPermissionMicrophoneDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_microphone_description_ios") }
   /// %1$@ needs permission to access your microphone.
   public static func dialogPermissionMicrophoneTitleIos(_ p1: Any) -> String {
