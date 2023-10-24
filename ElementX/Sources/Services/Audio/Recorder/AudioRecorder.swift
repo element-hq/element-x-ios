@@ -50,21 +50,14 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         guard await requestRecordPermission() else {
             return .failure(.recordPermissionNotGranted)
         }
-        return await withCheckedContinuation { continuation in
-            startRecording(with: recordID) { [weak self] result in
-                guard let self else {
-                    continuation.resume(returning: .failure(.recordingCancelled))
-                    return
-                }
-                switch result {
-                case .success:
-                    actionsSubject.send(.didStartRecording)
-                case .failure(let error):
-                    actionsSubject.send(.didFailWithError(error: error))
-                }
-                continuation.resume(returning: result)
-            }
+        let result = await startRecording(with: recordID)
+        switch result {
+        case .success:
+            actionsSubject.send(.didStartRecording)
+        case .failure(let error):
+            actionsSubject.send(.didFailWithError(error: error))
         }
+        return result
     }
     
     func stopRecording() async {
@@ -126,6 +119,14 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
     }
     
     // MARK: - Private
+    
+    private func startRecording(with recordID: AudioRecordingIdentifier) async -> Result<Void, AudioRecorderError> {
+        await withCheckedContinuation { continuation in
+            startRecording(with: recordID) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
     
     private func startRecording(with recordID: AudioRecordingIdentifier, completion: @escaping (Result<Void, AudioRecorderError>) -> Void) {
         dispatchQueue.async { [weak self] in
