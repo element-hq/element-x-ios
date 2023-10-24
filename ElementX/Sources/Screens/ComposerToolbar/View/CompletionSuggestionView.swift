@@ -68,9 +68,8 @@ struct CompletionSuggestionView: View {
             .listRowInsets(.init(top: 0, leading: Constants.leadingPadding, bottom: 0, trailing: 0))
         }
         .listStyle(PlainListStyle())
-        .frame(height:
-            min(contentHeightForRowCount(Constants.maxVisibleRows),
-                contentHeightForRowCount(items.count)))
+        .frame(height: min(contentHeightForRowCount(Constants.maxVisibleRows),
+                           contentHeightForRowCount(items.count)))
         .background(Color.compound.bgCanvasDefault)
     }
     
