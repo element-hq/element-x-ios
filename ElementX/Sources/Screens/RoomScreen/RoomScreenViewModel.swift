@@ -255,6 +255,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard let self else { return }
                 self.state.roomTitle = roomProxy.roomTitle
                 self.state.roomAvatarURL = roomProxy.avatarURL
+                self.state.isCallOngoing = roomProxy.isCallOngoing
             }
             .store(in: &cancellables)
 
