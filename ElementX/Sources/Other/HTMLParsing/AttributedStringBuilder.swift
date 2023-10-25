@@ -213,7 +213,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case .atRoom:
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: typedMatch.match.range)
             case let .permalink(type):
-                var identifier = String(string[matchRange])
+                let identifier = String(string[matchRange])
                 
                 if let url = type.getPermalinkFrom(identifier: identifier, baseURL: permalinkBaseURL) {
                     attributedString.addAttribute(.link, value: url, range: typedMatch.match.range)
