@@ -43,9 +43,9 @@ struct VoiceMessageRecordingView: View {
     
     var body: some View {
         HStack {
-            Circle()
+            VoiceMessageRecordBadge()
                 .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
-                .foregroundColor(.red)
+
             Text(timeLabelContent)
                 .lineLimit(1)
                 .font(.compound.bodySMSemibold)
@@ -67,5 +67,20 @@ struct VoiceMessageRecordingView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VoiceMessageRecordingView(recorderState: recorderState)
             .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+private struct VoiceMessageRecordBadge: View {
+    @State private var opacity: CGFloat = 1
+
+    var body: some View {
+        Circle()
+            .foregroundColor(.red)
+            .opacity(opacity)
+            .onAppear {
+                withElementAnimation(.easeOut(duration: 1).repeatForever(autoreverses: true)) {
+                    opacity = 0.3
+                }
+            }
     }
 }
