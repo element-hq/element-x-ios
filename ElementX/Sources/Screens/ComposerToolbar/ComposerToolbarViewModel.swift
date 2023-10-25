@@ -230,7 +230,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .default:
             break
         case .recordVoiceMessage(let audioRecorderState):
-            state.bindings.composerFocused = false
             state.audioRecorderState = audioRecorderState
         case .previewVoiceMessage(let audioPlayerState, _, _):
             state.audioPlayerState = audioPlayerState

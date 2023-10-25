@@ -106,6 +106,15 @@ struct ComposerToolbarViewState: BindableState {
         }
         return composerEmpty
     }
+    
+    var isVoiceMessageModeActivated: Bool {
+        switch composerMode {
+        case .recordVoiceMessage, .previewVoiceMessage:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 struct ComposerToolbarViewStateBindings {

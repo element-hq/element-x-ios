@@ -73,7 +73,7 @@ struct ComposerToolbar: View {
     }
     
     private var topBar: some View {
-        HStack(alignment: .bottom, spacing: 5) {
+        topBarLayout {
             mainTopBarContent
 
             if !context.composerActionsEnabled {
@@ -105,31 +105,32 @@ struct ComposerToolbar: View {
                 .padding(.leading, 7)
         }
     }
+    
+    private var topBarLayout: some Layout {
+        HStackLayout(alignment: .bottom, spacing: 5)
+    }
 
     @ViewBuilder
     private var mainTopBarContent: some View {
-        switch context.viewState.composerMode {
-        case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
-            VoiceMessageRecordingComposer(recorderState: state)
-                .padding(.leading, 12)
-        case .previewVoiceMessage(let state, let waveform, let isUploading) where context.viewState.enableVoiceMessageComposer:
-            Group {
-                voiceMessageTrashButton
-                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
-            }
-            .disabled(isUploading)
-        default:
-            if !context.composerActionsEnabled {
-                RoomAttachmentPicker(context: context)
-            }
-            messageComposer
-                .environmentObject(context)
-                .onTapGesture {
-                    guard !composerFocused else { return }
-                    composerFocused = true
+        ZStack {
+            topBarLayout {
+                if !context.composerActionsEnabled {
+                    RoomAttachmentPicker(context: context)
                 }
-                .padding(.leading, context.composerActionsEnabled ? 7 : 0)
-                .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+                messageComposer
+                    .environmentObject(context)
+                    .onTapGesture {
+                        guard !composerFocused else { return }
+                        composerFocused = true
+                    }
+                    .padding(.leading, context.composerActionsEnabled ? 7 : 0)
+                    .padding(.trailing, context.composerActionsEnabled ? 4 : 0)
+            }
+            .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
+
+            if context.viewState.isVoiceMessageModeActivated {
+                voiceMessageContent
+            }
         }
     }
 
@@ -237,6 +238,24 @@ struct ComposerToolbar: View {
     
     // MARK: - Voice message
 
+    @ViewBuilder
+    private var voiceMessageContent: some View {
+        // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
+        switch context.viewState.composerMode {
+        case .recordVoiceMessage(let state) where context.viewState.enableVoiceMessageComposer:
+            VoiceMessageRecordingComposer(recorderState: state)
+                .padding(.leading, 12)
+        case .previewVoiceMessage(let state, let waveform, let isUploading) where context.viewState.enableVoiceMessageComposer:
+            topBarLayout {
+                voiceMessageTrashButton
+                voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
+            }
+            .disabled(isUploading)
+        default:
+            EmptyView()
+        }
+    }
+    
     private var voiceMessageRecordingButton: some View {
         VoiceMessageRecordingButton {
             showVoiceMessageRecordingTooltip = false
