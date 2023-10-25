@@ -70,6 +70,7 @@ struct MessageText: UIViewRepresentable {
             do {
                 attributedString = try AttributedString(textView.attributedText, including: \.elementX)
             } catch {
+                MXLog.error("[MessageText] Failed to update attributedString: \(error)]")
                 return
             }
         }
