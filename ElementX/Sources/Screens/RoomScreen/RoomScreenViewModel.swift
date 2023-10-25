@@ -158,11 +158,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await timelineController.playPauseAudio(for: itemID) }
         case .seekAudio(let itemID, let progress):
             Task { await timelineController.seekAudio(for: itemID, progress: progress) }
-        case .enableLongPress(let itemID):
-            guard state.longPressDisabledItemID == itemID else { return }
-            state.longPressDisabledItemID = nil
-        case .disableLongPress(let itemID):
-            state.longPressDisabledItemID = itemID
         case let .endPoll(pollStartID):
             state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                          title: L10n.actionEndPoll,

@@ -80,9 +80,6 @@ enum RoomScreenViewAction {
     
     case scrolledToBottom
     
-    case enableLongPress(itemID: TimelineItemIdentifier)
-    case disableLongPress(itemID: TimelineItemIdentifier)
-    
     case playPauseAudio(itemID: TimelineItemIdentifier)
     case seekAudio(itemID: TimelineItemIdentifier, progress: Double)
     
