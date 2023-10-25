@@ -24,7 +24,8 @@ struct VoiceMessageRecordingButtonTooltipView: View {
     var corners: UIRectCorner = .allCorners
     @ScaledMetric var pointerHeight: CGFloat = 6
     @ScaledMetric var pointerWidth: CGFloat = 10
-    @ScaledMetric var pointerOffset: CGFloat = 8
+    var pointerLocation: CGFloat = 10
+    var pointerLocationCoordinateSpace: CoordinateSpace = .local
 
     var body: some View {
         Text(text)
@@ -32,27 +33,35 @@ struct VoiceMessageRecordingButtonTooltipView: View {
             .foregroundColor(.compound.textOnSolidPrimary)
             .padding(6)
             .background(
-                TooltipShape(radius: radius,
-                             corners: corners,
-                             pointerHeight: pointerHeight,
-                             pointerWidth: pointerWidth,
-                             pointerOffset: pointerOffset)
-                    .fill(.compound.bgActionPrimaryRest)
+                GeometryReader { geometry in
+                    TooltipShape(radius: radius,
+                                 corners: corners,
+                                 pointerHeight: pointerHeight,
+                                 pointerWidth: pointerWidth,
+                                 pointerLocation: localPointerLocation(using: geometry))
+                        .fill(.compound.bgActionPrimaryRest)
+                }
             )
-            .padding(.trailing, 8)
+    }
+    
+    private func localPointerLocation(using geometry: GeometryProxy) -> CGFloat {
+        let frame = geometry.frame(in: pointerLocationCoordinateSpace)
+        let minX = radius + pointerWidth / 2
+        let maxX = geometry.size.width - radius - pointerWidth / 2
+        return min(max(minX, pointerLocation - frame.minX), maxX)
     }
 }
 
 private struct TooltipShape: Shape {
-    var radius: CGFloat = 4
-    var corners: UIRectCorner = .allCorners
-    var pointerHeight: CGFloat = 6
-    var pointerWidth: CGFloat = 10
-    var pointerOffset: CGFloat = 8
+    var radius: CGFloat
+    var corners: UIRectCorner
+    var pointerHeight: CGFloat
+    var pointerWidth: CGFloat
+    var pointerLocation: CGFloat
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-
+        
         let width = rect.size.width
         let height = rect.size.height
 
@@ -76,9 +85,9 @@ private struct TooltipShape: Shape {
         path.addArc(center: CGPoint(x: width - bottomRight, y: height - bottomRight), radius: bottomRight,
                     startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 90), clockwise: false)
 
-        path.addLine(to: CGPoint(x: width - pointerOffset, y: height))
-        path.addLine(to: CGPoint(x: width - pointerOffset - (pointerWidth / 2.0), y: height + pointerHeight))
-        path.addLine(to: CGPoint(x: width - pointerOffset - pointerWidth, y: height))
+        path.addLine(to: CGPoint(x: pointerLocation + (pointerWidth / 2.0), y: height))
+        path.addLine(to: CGPoint(x: pointerLocation, y: height + pointerHeight))
+        path.addLine(to: CGPoint(x: pointerLocation - (pointerWidth / 2.0), y: height))
         
         path.addLine(to: CGPoint(x: bottomLeft, y: height))
         path.addArc(center: CGPoint(x: bottomLeft, y: height - bottomLeft), radius: bottomLeft,

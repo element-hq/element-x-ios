@@ -32,12 +32,13 @@ struct ComposerToolbar: View {
     @State private var voiceMessageRecordingStartTime: Date?
     @State private var showVoiceMessageRecordingTooltip = false
     @ScaledMetric private var voiceMessageTooltipPointerHeight = 6
+    @State private var voiceMessageRecordingButtonFrame: CGRect = .zero
     
     private let voiceMessageMinimumRecordingDuration = 1.0
     private let voiceMessageTooltipDuration = 1.0
     
     @State private var frame: CGRect = .zero
-            
+    
     var body: some View {
         VStack(spacing: 8) {
             topBar
@@ -86,6 +87,9 @@ struct ComposerToolbar: View {
                         .padding(.leading, 3)
                 } else if context.viewState.enableVoiceMessageComposer {
                     voiceMessageRecordingButton
+                        .background(
+                            ViewFrameReader(frame: $voiceMessageRecordingButtonFrame, coordinateSpace: .global)
+                        )
                         .padding(.leading, 4)
                 }
             }
@@ -290,7 +294,10 @@ struct ComposerToolbar: View {
     }
     
     private var voiceMessageRecordingButtonTooltipView: some View {
-        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip, pointerHeight: voiceMessageTooltipPointerHeight)
+        VoiceMessageRecordingButtonTooltipView(text: L10n.screenRoomVoiceMessageTooltip,
+                                               pointerHeight: voiceMessageTooltipPointerHeight,
+                                               pointerLocation: voiceMessageRecordingButtonFrame.midX,
+                                               pointerLocationCoordinateSpace: .global)
             .allowsHitTesting(false)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + voiceMessageTooltipDuration) {
@@ -299,6 +306,7 @@ struct ComposerToolbar: View {
                     }
                 }
             }
+            .padding(.horizontal, 8)
     }
     
     private func voiceMessagePreviewComposer(audioPlayerState: AudioPlayerState, waveform: WaveformSource) -> some View {

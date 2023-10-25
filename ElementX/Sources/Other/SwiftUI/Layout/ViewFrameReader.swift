@@ -28,7 +28,7 @@ import SwiftUI
 /// ```
 struct ViewFrameReader: View {
     @Binding var frame: CGRect
-    let coordinateSpace: CoordinateSpace = .local
+    var coordinateSpace: CoordinateSpace = .local
     
     var body: some View {
         GeometryReader { geometry in
