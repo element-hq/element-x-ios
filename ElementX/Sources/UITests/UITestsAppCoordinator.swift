@@ -168,6 +168,7 @@ class MockScreen: Identifiable {
             let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
                                                           appLockService: appLockService,
                                                           navigationStackCoordinator: navigationStackCoordinator)
+            coordinator.start()
             return navigationStackCoordinator
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
