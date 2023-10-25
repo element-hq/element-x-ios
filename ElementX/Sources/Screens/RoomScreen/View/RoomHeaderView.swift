@@ -62,7 +62,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -78,7 +78,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

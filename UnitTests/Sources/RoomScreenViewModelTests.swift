@@ -56,7 +56,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -91,7 +91,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         
         // Then the messages should be grouped by sender.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
@@ -124,7 +124,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         
         // Then the first message should not be grouped but the other two should.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
@@ -154,7 +154,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         
         // Then the first and second messages should be grouped and the last one should not.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -184,7 +184,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         
         // Then the messages should be grouped together.
         XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
@@ -210,7 +210,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         viewModel.actions
             .sink { action in
                 switch action {
@@ -250,7 +250,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
                                             
         viewModel.actions
             .sink { action in
@@ -291,7 +291,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
         viewModel.actions
             .sink { _ in
                 XCTFail("Should not receive any action")
@@ -324,7 +324,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         viewModel.context.send(viewAction: .retrySend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test retry send id")))
         
@@ -345,7 +345,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         viewModel.context.send(viewAction: .retrySend(itemID: .random))
         
@@ -365,7 +365,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         viewModel.context.send(viewAction: .cancelSend(itemID: .init(timelineID: UUID().uuidString, transactionID: "test cancel send id")))
         
@@ -386,7 +386,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: ApplicationMock())
+                                            application: ApplicationMock.default)
 
         viewModel.context.send(viewAction: .cancelSend(itemID: .random))
 
@@ -511,8 +511,6 @@ class RoomScreenViewModelTests: XCTestCase {
         let notificationCenter = NotificationCenterMock()
         let roomProxy = RoomProxyMock(with: .init(displayName: ""))
         let timelineController = MockRoomTimelineController()
-        let applicationMock = ApplicationMock()
-        applicationMock.applicationState = .active
         
         roomProxy.sendReadReceiptForReturnValue = .success(())
         roomProxy.underlyingHasUnreadNotifications = true
@@ -526,7 +524,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             appSettings: ServiceLocator.shared.settings,
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: userIndicatorControllerMock,
-                                            application: applicationMock,
+                                            application: ApplicationMock.default,
                                             notificationCenterProtocol: notificationCenter)
         
         return (viewModel, roomProxy, timelineController, notificationCenter)

@@ -35,7 +35,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testInitAndStop() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName) else {
             XCTFail("Failed to setup test conditions")
@@ -53,7 +53,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testNotReusableInit() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
 
         //  create two not reusable task with the same name
@@ -70,7 +70,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testReusableInit() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
 
         //  create two reusable task with the same name
@@ -91,7 +91,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testMultipleStops() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
 
         //  create two reusable task with the same name
@@ -114,7 +114,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testNotValidReuse() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
 
         //  create two reusable task with the same name
@@ -136,7 +136,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testValidReuse() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockHealty
+            ApplicationMock.default
         }
 
         //  create two reusable task with the same name
@@ -162,7 +162,7 @@ class BackgroundTaskTests: XCTestCase {
 
     func testBrokenApp() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockBroken
+            ApplicationMock.mockBroken
         }
 
         //  create two reusable task with the same name
@@ -173,76 +173,12 @@ class BackgroundTaskTests: XCTestCase {
 
     func testNoTimeApp() {
         let service = UIKitBackgroundTaskService {
-            UIApplication.mockAboutToSuspend
+            ApplicationMock.mockAboutToSuspend
         }
 
         //  create two reusable task with the same name
         let task = service.startBackgroundTask(withName: Constants.bgTaskName)
 
         XCTAssertNil(task, "Task should not be created")
-    }
-}
-
-private extension UIApplication {
-    static var mockHealty: ApplicationProtocol {
-        MockApplication()
-    }
-
-    static var mockBroken: ApplicationProtocol {
-        MockApplication(withState: .inactive,
-                        backgroundTimeRemaining: 0,
-                        allowTasks: false)
-    }
-
-    static var mockAboutToSuspend: ApplicationProtocol {
-        MockApplication(withState: .background,
-                        backgroundTimeRemaining: 2,
-                        allowTasks: false)
-    }
-}
-
-private class MockApplication: ApplicationProtocol {
-    let applicationState: UIApplication.State
-    let backgroundTimeRemaining: TimeInterval
-    private let allowTasks: Bool
-
-    init(withState applicationState: UIApplication.State = .active,
-         backgroundTimeRemaining: TimeInterval = 10,
-         allowTasks: Bool = true) {
-        self.applicationState = applicationState
-        self.backgroundTimeRemaining = backgroundTimeRemaining
-        self.allowTasks = allowTasks
-    }
-
-    private static var bgTaskIdentifier = 0
-
-    private var bgTasks: [UIBackgroundTaskIdentifier: Bool] = [:]
-
-    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        guard allowTasks else {
-            return .invalid
-        }
-        return beginBackgroundTask(withName: nil, expirationHandler: handler)
-    }
-
-    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-        guard allowTasks else {
-            return .invalid
-        }
-        Self.bgTaskIdentifier += 1
-
-        let identifier = UIBackgroundTaskIdentifier(rawValue: Self.bgTaskIdentifier)
-        bgTasks[identifier] = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            handler?()
-        }
-        return identifier
-    }
-
-    func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier) {
-        guard allowTasks else {
-            return
-        }
-        bgTasks.removeValue(forKey: identifier)
     }
 }
