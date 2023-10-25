@@ -175,4 +175,47 @@ class AppLockServiceTests: XCTestCase {
         XCTAssertFalse(service.isEnabled, "The service should no longer be enabled.")
         XCTAssertFalse(service.unlock(with: pinCode), "The initial PIN shouldn't work any more.")
     }
+    
+    func testResetAttemptsOnUnlock() {
+        // Given a service that is enabled and has failed unlock attempts.
+        let pinCode = "2023"
+        guard case .success = service.setupPINCode(pinCode) else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        appSettings.appLockNumberOfPINAttempts = 2
+        appSettings.appLockNumberOfBiometricAttempts = 2
+        XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 2, "The initial conditions should be stored.")
+        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 2, "The initial conditions should be stored.")
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        
+        // When unlocking the service
+        XCTAssertTrue(service.unlock(with: pinCode), "The PIN should work.")
+        
+        // Then the attempts counts should both be reset.
+        XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 0, "The PIN attempts should be reset.")
+        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 0, "The biometric attempts should be reset.")
+    }
+    
+    func testResetAttemptsOnDisable() {
+        // Given a service that is enabled and has failed unlock attempts.
+        let pinCode = "2023"
+        guard case .success = service.setupPINCode(pinCode) else {
+            XCTFail("The PIN should be valid.")
+            return
+        }
+        appSettings.appLockNumberOfPINAttempts = 2
+        appSettings.appLockNumberOfBiometricAttempts = 2
+        XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 2, "The initial conditions should be stored.")
+        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 2, "The initial conditions should be stored.")
+        XCTAssertTrue(service.isEnabled, "The service should be enabled.")
+        
+        // When disabling the service
+        service.disable()
+        XCTAssertFalse(service.isEnabled, "The service should be disabled.")
+        
+        // Then the attempts counts should both be reset.
+        XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 0, "The PIN attempts should be reset.")
+        XCTAssertEqual(appSettings.appLockNumberOfBiometricAttempts, 0, "The biometric attempts should be reset.")
+    }
 }

@@ -144,6 +144,7 @@
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
 "common_shared_location" = "Shared location";
+"common_signing_out" = "Signing out";
 "common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";
@@ -297,7 +298,6 @@
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PINs don't match";
 "screen_app_lock_signout_alert_message" = "You’ll need to re-login and create a new PIN to proceed";
 "screen_app_lock_signout_alert_title" = "You are being signed out";
-"screen_app_lock_subtitle" = "You have 3 attempts to unlock";
 "screen_bug_report_attach_screenshot" = "Attach screenshot";
 "screen_bug_report_contact_me" = "You may contact me if you have any follow up questions.";
 "screen_bug_report_contact_me_title" = "Contact me";

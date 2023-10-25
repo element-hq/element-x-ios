@@ -30,9 +30,9 @@ class AppLockSetupPINScreenViewModel: AppLockSetupPINScreenViewModelType, AppLoc
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(initialMode: AppLockSetupPINScreenMode, appLockService: AppLockServiceProtocol) {
+    init(initialMode: AppLockSetupPINScreenMode, isMandatory: Bool, appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
-        super.init(initialViewState: AppLockSetupPINScreenViewState(mode: initialMode, bindings: .init(pinCode: "")))
+        super.init(initialViewState: AppLockSetupPINScreenViewState(mode: initialMode, isMandatory: isMandatory, bindings: .init(pinCode: "")))
     }
     
     // MARK: - Public

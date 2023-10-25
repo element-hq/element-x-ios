@@ -102,8 +102,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                             backgroundTaskService: backgroundTaskService)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
+        let appLockNavigationCoordinator = NavigationRootCoordinator()
+        let appLockFlowUserIndicatorController = UserIndicatorController(rootCoordinator: appLockNavigationCoordinator)
         appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
-                                                        navigationCoordinator: NavigationRootCoordinator())
+                                                        userIndicatorController: appLockFlowUserIndicatorController,
+                                                        navigationCoordinator: appLockNavigationCoordinator)
         
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
@@ -329,12 +332,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 // We can ignore signOut when already in the process of signing out,
                 // such as the SDK sending an authError due to token invalidation.
                 break
-            case (_, .signOut(let isSoft), .signingOut):
+            case (_, .signOut(let isSoft, _), .signingOut):
                 self.logout(isSoft: isSoft)
-            case (.signingOut, .completedSigningOut, .signedOut):
-                self.presentSplashScreen(isSoftLogout: false)
-            case (.signingOut, .showSoftLogout, .softLogout):
-                self.presentSplashScreen(isSoftLogout: true)
+            case (.signingOut(_, let disableAppLock), .completedSigningOut, .signedOut):
+                self.presentSplashScreen(isSoftLogout: false, disableAppLock: disableAppLock)
+            case (.signingOut(_, let disableAppLock), .showSoftLogout, .softLogout):
+                self.presentSplashScreen(isSoftLogout: true, disableAppLock: disableAppLock)
             case (.signedIn, .clearCache, .initial):
                 self.clearCache()
             default:
@@ -371,7 +374,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                                                               navigationStackCoordinator: authenticationNavigationStackCoordinator,
                                                               appSettings: appSettings,
                                                               analytics: ServiceLocator.shared.analytics,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              appLockService: appLockFlowCoordinator.appLockService)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()
@@ -410,7 +414,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                         stateMachine.processEvent(.createdUserSession)
                     case .clearAllData:
                         self.softLogoutCoordinator = nil
-                        stateMachine.processEvent(.signOut(isSoft: false))
+                        stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
                     }
                 }
                 .store(in: &cancellables)
@@ -439,7 +443,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 
                 switch action {
                 case .logout:
-                    stateMachine.processEvent(.signOut(isSoft: false))
+                    stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
                 case .clearCache:
                     stateMachine.processEvent(.clearCache)
                 }
@@ -512,13 +516,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         notificationManager.setUserSession(nil)
     }
     
-    private func presentSplashScreen(isSoftLogout: Bool = false) {
+    private func presentSplashScreen(isSoftLogout: Bool = false, disableAppLock: Bool = false) {
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
         if isSoftLogout {
             startAuthenticationSoftLogout()
         } else {
             startAuthentication()
+        }
+        
+        if disableAppLock {
+            Task {
+                // Ensure the navigation stack has settled.
+                try? await Task.sleep(for: .milliseconds(500))
+                appLockFlowCoordinator.appLockService.disable()
+                windowManager.switchToMain()
+            }
         }
     }
 
@@ -549,7 +562,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 guard let self else { return }
                 switch callback {
                 case .didReceiveAuthError(let isSoftLogout):
-                    stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
+                    stateMachine.processEvent(.signOut(isSoft: isSoftLogout, disableAppLock: false))
                 default:
                     break
                 }
@@ -583,6 +596,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
                 windowManager.switchToAlternate()
             case .unlockApp:
                 windowManager.switchToMain()
+            case .forceLogout:
+                stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
             }
         }
         .store(in: &cancellables)

@@ -25,6 +25,8 @@ struct AppLockScreenCoordinatorParameters {
 enum AppLockScreenCoordinatorAction {
     /// The user has successfully unlocked the app.
     case appUnlocked
+    /// The user failed to unlock the app (or forgot their PIN).
+    case forceLogout
 }
 
 final class AppLockScreenCoordinator: CoordinatorProtocol {
@@ -51,6 +53,8 @@ final class AppLockScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .appUnlocked:
                 self.actionsSubject.send(.appUnlocked)
+            case .forceLogout:
+                self.actionsSubject.send(.forceLogout)
             }
         }
         .store(in: &cancellables)

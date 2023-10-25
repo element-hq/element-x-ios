@@ -17,25 +17,26 @@
 import Combine
 import SwiftUI
 
-typealias AppLockSettingsScreenViewModelType = StateStoreViewModel<AppLockSettingsScreenViewState, AppLockSettingsScreenViewAction>
+typealias AppLockSetupSettingsScreenViewModelType = StateStoreViewModel<AppLockSetupSettingsScreenViewState, AppLockSetupSettingsScreenViewAction>
 
-class AppLockSettingsScreenViewModel: AppLockSettingsScreenViewModelType, AppLockSettingsScreenViewModelProtocol {
+class AppLockSetupSettingsScreenViewModel: AppLockSetupSettingsScreenViewModelType, AppLockSetupSettingsScreenViewModelProtocol {
     private let appLockService: AppLockServiceProtocol
-    private var actionsSubject: PassthroughSubject<AppLockSettingsScreenViewModelAction, Never> = .init()
+    private var actionsSubject: PassthroughSubject<AppLockSetupSettingsScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<AppLockSettingsScreenViewModelAction, Never> {
+    var actions: AnyPublisher<AppLockSetupSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
-        super.init(initialViewState: AppLockSettingsScreenViewState(biometryType: appLockService.biometryType,
-                                                                    bindings: .init(enableBiometrics: appLockService.biometricUnlockEnabled)))
+        super.init(initialViewState: AppLockSetupSettingsScreenViewState(isMandatory: appLockService.isMandatory,
+                                                                         biometryType: appLockService.biometryType,
+                                                                         bindings: .init(enableBiometrics: appLockService.biometricUnlockEnabled)))
     }
     
     // MARK: - Public
     
-    override func process(viewAction: AppLockSettingsScreenViewAction) {
+    override func process(viewAction: AppLockSetupSettingsScreenViewAction) {
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
@@ -45,8 +46,6 @@ class AppLockSettingsScreenViewModel: AppLockSettingsScreenViewModelType, AppLoc
             showRemovePINAlert()
         case .enableBiometricsChanged:
             appLockService.biometricUnlockEnabled = state.bindings.enableBiometrics
-        case .done:
-            actionsSubject.send(.done)
         }
     }
     
@@ -64,6 +63,6 @@ class AppLockSettingsScreenViewModel: AppLockSettingsScreenViewModelType, AppLoc
     /// Removes the user's PIN code, disabling the App Lock feature.
     private func completeRemovePIN() {
         appLockService.disable()
-        actionsSubject.send(.done)
+        actionsSubject.send(.appLockDisabled)
     }
 }

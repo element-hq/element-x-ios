@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import LocalAuthentication
 
 /// The service responsible for locking and unlocking the app.
@@ -23,6 +24,8 @@ class AppLockService: AppLockServiceProtocol {
     private let context = LAContext()
     
     private let timer: AppLockTimer
+    
+    var isMandatory: Bool { appSettings.appLockIsMandatory }
     
     var isEnabled: Bool {
         do {
@@ -37,6 +40,12 @@ class AppLockService: AppLockServiceProtocol {
     
     var biometryType: LABiometryType { context.biometryType }
     var biometricUnlockEnabled = false // Needs to be stored, not sure if in the keychain or defaults yet.
+    
+    var numberOfPINAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfPINAttempts }
+    var numberOfBiometricAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfBiometricAttempts }
+    
+    private var disabledSubject: PassthroughSubject<Void, Never> = .init()
+    var disabledPublisher: AnyPublisher<Void, Never> { disabledSubject.eraseToAnyPublisher() }
     
     init(keychainController: KeychainControllerProtocol, appSettings: AppSettings) {
         self.keychainController = keychainController
@@ -68,6 +77,9 @@ class AppLockService: AppLockServiceProtocol {
     func disable() {
         biometricUnlockEnabled = false
         keychainController.removePINCode()
+        appSettings.appLockNumberOfPINAttempts = 0
+        appSettings.appLockNumberOfBiometricAttempts = 0
+        disabledSubject.send()
     }
     
     func applicationDidEnterBackground() {
@@ -79,12 +91,20 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     func unlock(with pinCode: String) -> Bool {
-        guard pinCode == keychainController.pinCode() else { return false }
+        guard pinCode == keychainController.pinCode() else {
+            MXLog.warning("Wrong PIN entered.")
+            appSettings.appLockNumberOfPINAttempts += 1
+            return false
+        }
         return completeUnlock()
     }
     
     func unlockWithBiometrics() -> Bool {
-        guard biometryType != .none, biometricUnlockEnabled else { return false }
+        guard biometryType != .none, biometricUnlockEnabled else {
+            MXLog.warning("\(biometryType) failed.")
+            appSettings.appLockNumberOfBiometricAttempts += 1
+            return false
+        }
         return completeUnlock()
     }
     
@@ -103,6 +123,8 @@ class AppLockService: AppLockServiceProtocol {
     /// Shared logic for completing an unlock via a PIN or biometry.
     private func completeUnlock() -> Bool {
         timer.registerUnlock()
+        appSettings.appLockNumberOfPINAttempts = 0
+        appSettings.appLockNumberOfBiometricAttempts = 0
         return true
     }
 }

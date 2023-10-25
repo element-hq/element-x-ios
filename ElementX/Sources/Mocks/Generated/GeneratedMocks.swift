@@ -117,6 +117,11 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
     }
 }
 class AppLockServiceMock: AppLockServiceProtocol {
+    var isMandatory: Bool {
+        get { return underlyingIsMandatory }
+        set(value) { underlyingIsMandatory = value }
+    }
+    var underlyingIsMandatory: Bool!
     var isEnabled: Bool {
         get { return underlyingIsEnabled }
         set(value) { underlyingIsEnabled = value }
@@ -132,6 +137,21 @@ class AppLockServiceMock: AppLockServiceProtocol {
         set(value) { underlyingBiometricUnlockEnabled = value }
     }
     var underlyingBiometricUnlockEnabled: Bool!
+    var disabledPublisher: AnyPublisher<Void, Never> {
+        get { return underlyingDisabledPublisher }
+        set(value) { underlyingDisabledPublisher = value }
+    }
+    var underlyingDisabledPublisher: AnyPublisher<Void, Never>!
+    var numberOfPINAttempts: AnyPublisher<Int, Never> {
+        get { return underlyingNumberOfPINAttempts }
+        set(value) { underlyingNumberOfPINAttempts = value }
+    }
+    var underlyingNumberOfPINAttempts: AnyPublisher<Int, Never>!
+    var numberOfBiometricAttempts: AnyPublisher<Int, Never> {
+        get { return underlyingNumberOfBiometricAttempts }
+        set(value) { underlyingNumberOfBiometricAttempts = value }
+    }
+    var underlyingNumberOfBiometricAttempts: AnyPublisher<Int, Never>!
 
     //MARK: - setupPINCode
 

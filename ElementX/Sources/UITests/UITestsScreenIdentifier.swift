@@ -31,7 +31,6 @@ enum UITestsScreenIdentifier: String {
     case templateScreen
     case appLockScreen
     case appLockSetupFlow
-    case appLockSettingsScreen
     case home
     case settings
     case bugReport

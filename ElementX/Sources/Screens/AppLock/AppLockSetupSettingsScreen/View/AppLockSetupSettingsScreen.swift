@@ -17,16 +17,19 @@
 import Compound
 import SwiftUI
 
-struct AppLockSettingsScreen: View {
-    @ObservedObject var context: AppLockSettingsScreenViewModel.Context
+struct AppLockSetupSettingsScreen: View {
+    @ObservedObject var context: AppLockSetupSettingsScreenViewModel.Context
     
     var body: some View {
         Form {
             Section {
                 ListRow(label: .plain(title: L10n.screenAppLockSettingsChangePin),
                         kind: .button { context.send(viewAction: .changePINCode) })
-                ListRow(label: .plain(title: L10n.screenAppLockSettingsRemovePin, role: .destructive),
-                        kind: .button { context.send(viewAction: .disable) })
+                
+                if !context.viewState.isMandatory {
+                    ListRow(label: .plain(title: L10n.screenAppLockSettingsRemovePin, role: .destructive),
+                            kind: .button { context.send(viewAction: .disable) })
+                }
             }
             
             if context.viewState.supportsBiometry {
@@ -48,25 +51,25 @@ struct AppLockSettingsScreen: View {
 
 // MARK: - Previews
 
-struct AppLockSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let faceIDViewModel = AppLockSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .faceID))
-    static let touchIDViewModel = AppLockSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .touchID))
-    static let biometricsUnavailableViewModel = AppLockSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .none))
+struct AppLockSetupSettingsScreen_Previews: PreviewProvider, TestablePreview {
+    static let faceIDViewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .faceID))
+    static let touchIDViewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(isMandatory: true, biometryType: .touchID))
+    static let biometricsUnavailableViewModel = AppLockSetupSettingsScreenViewModel(appLockService: AppLockServiceMock.mock(biometryType: .none))
     
     static var previews: some View {
         NavigationStack {
-            AppLockSettingsScreen(context: faceIDViewModel.context)
+            AppLockSetupSettingsScreen(context: faceIDViewModel.context)
         }
         .previewDisplayName("Face ID")
         
         NavigationStack {
-            AppLockSettingsScreen(context: touchIDViewModel.context)
+            AppLockSetupSettingsScreen(context: touchIDViewModel.context)
         }
-        .previewDisplayName("Touch ID")
+        .previewDisplayName("Touch ID (Mandatory)")
         
         NavigationStack {
-            AppLockSettingsScreen(context: biometricsUnavailableViewModel.context)
+            AppLockSetupSettingsScreen(context: biometricsUnavailableViewModel.context)
         }
-        .previewDisplayName("No Biometrics")
+        .previewDisplayName("PIN only")
     }
 }

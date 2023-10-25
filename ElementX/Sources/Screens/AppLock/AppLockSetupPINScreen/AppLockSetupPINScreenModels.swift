@@ -35,6 +35,8 @@ enum AppLockSetupPINScreenMode {
 struct AppLockSetupPINScreenViewState: BindableState {
     /// The current mode that the screen is in.
     var mode: AppLockSetupPINScreenMode
+    /// Whether the screen is mandatory or can be cancelled.
+    let isMandatory: Bool
     
     var title: String {
         switch mode {

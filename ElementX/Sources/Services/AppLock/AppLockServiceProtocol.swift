@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import LocalAuthentication
 
 enum AppLockServiceError: Error {
@@ -27,12 +28,18 @@ enum AppLockServiceError: Error {
 
 @MainActor
 protocol AppLockServiceProtocol: AnyObject {
+    /// The use of a PIN code is mandatory for this device.
+    var isMandatory: Bool { get }
     /// The app has been configured to automatically lock with a PIN code.
     var isEnabled: Bool { get }
+    
     /// The type of biometric authentication supported by the device.
     var biometryType: LABiometryType { get }
     /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.
     var biometricUnlockEnabled: Bool { get set }
+    
+    /// A publisher that advertises when the service has been disabled.
+    var disabledPublisher: AnyPublisher<Void, Never> { get }
     
     /// Sets the user's PIN code used to unlock the app.
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
@@ -50,15 +57,23 @@ protocol AppLockServiceProtocol: AnyObject {
     func unlock(with pinCode: String) -> Bool
     /// Attempt to unlock the app using FaceID or TouchID.
     func unlockWithBiometrics() -> Bool
+    
+    /// The number of attempts the user had made to unlock with a PIN code.
+    var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
+    /// The number of attempts the user has made to unlock with Touch/Face ID.
+    var numberOfBiometricAttempts: AnyPublisher<Int, Never> { get }
 }
 
 // sourcery: AutoMockable
 extension AppLockServiceProtocol { }
 
 extension AppLockServiceMock {
-    static func mock(pinCode: String? = "2023", biometryType: LABiometryType = .faceID) -> AppLockServiceMock {
+    static func mock(pinCode: String? = "2023", isMandatory: Bool = false, biometryType: LABiometryType = .faceID) -> AppLockServiceMock {
         let mock = AppLockServiceMock()
         mock.isEnabled = pinCode != nil
+        mock.isMandatory = isMandatory
+        mock.numberOfPINAttempts = PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+        mock.numberOfBiometricAttempts = PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         mock.underlyingBiometryType = biometryType
         mock.underlyingBiometricUnlockEnabled = biometryType != .none
         mock.unlockWithClosure = { $0 == pinCode }

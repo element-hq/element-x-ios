@@ -39,6 +39,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     private let parameters: SettingsScreenCoordinatorParameters
     private var viewModel: SettingsScreenViewModelProtocol
     
+    private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
+    
     private let actionsSubject: PassthroughSubject<SettingsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
@@ -68,7 +70,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 case .analytics:
                     presentAnalyticsScreen()
                 case .appLock:
-                    presentAppLockSettingsScreen()
+                    presentAppLockSetupFlow()
                 case .reportBug:
                     presentBugReportScreen()
                 case .about:
@@ -146,9 +148,27 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.push(coordinator)
     }
     
-    private func presentAppLockSettingsScreen() {
-        let coordinator = AppLockSettingsScreenCoordinator(parameters: .init(appLockService: parameters.appLockService))
-        parameters.navigationStackCoordinator?.push(coordinator)
+    private func presentAppLockSetupFlow() {
+        guard let navigationStackCoordinator = parameters.navigationStackCoordinator else {
+            MXLog.error("The navigation stack has gone! 🌫️")
+            return
+        }
+        
+        let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
+                                                      appLockService: parameters.appLockService,
+                                                      navigationStackCoordinator: navigationStackCoordinator)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                // The flow coordinator tidies up the stack, no need to do anything.
+                appLockSetupFlowCoordinator = nil
+            }
+        }
+        .store(in: &cancellables)
+        
+        appLockSetupFlowCoordinator = coordinator
+        coordinator.start()
     }
     
     private func presentBugReportScreen() {

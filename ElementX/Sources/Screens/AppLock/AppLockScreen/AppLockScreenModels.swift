@@ -19,6 +19,8 @@ import Foundation
 enum AppLockScreenViewModelAction {
     /// The user has successfully unlocked the app.
     case appUnlocked
+    /// The user failed to unlock the app (or forgot their PIN).
+    case forceLogout
 }
 
 struct AppLockScreenViewState: BindableState {
@@ -36,7 +38,7 @@ struct AppLockScreenViewState: BindableState {
     /// The string shown in the screen's subtitle.
     var subtitle: String {
         if !isSubtitleWarning {
-            return L10n.screenAppLockSubtitle
+            return L10n.screenAppLockSubtitle(maximumAttempts)
         } else {
             return L10n.screenAppLockSubtitleWrongPin(maximumAttempts - numberOfPINAttempts)
         }
@@ -50,8 +52,8 @@ struct AppLockScreenViewStateBindings {
 }
 
 enum AppLockScreenAlertType {
-    /// The user has failed too many times, they're being signed out.
-    case forceSignOut
+    /// The user has failed too many times, they're being logged out.
+    case forcedLogout
     /// The user has forgotten their PIN, confirm they're happy to sign out.
     case confirmResetPIN
 }

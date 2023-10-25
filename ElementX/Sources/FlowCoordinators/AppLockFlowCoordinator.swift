@@ -22,11 +22,14 @@ enum AppLockFlowCoordinatorAction: Equatable {
     case lockApp
     /// Hide the unlock flow.
     case unlockApp
+    /// Forces a logout of the user.
+    case forceLogout
 }
 
 /// Coordinates the display of any screens shown when the app is locked.
 class AppLockFlowCoordinator: CoordinatorProtocol {
     let appLockService: AppLockServiceProtocol
+    let userIndicatorController: UserIndicatorController
     let navigationCoordinator: NavigationRootCoordinator
     
     private var cancellables: Set<AnyCancellable> = []
@@ -36,9 +39,17 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appLockService: AppLockServiceProtocol, navigationCoordinator: NavigationRootCoordinator) {
+    init(appLockService: AppLockServiceProtocol, userIndicatorController: UserIndicatorController, navigationCoordinator: NavigationRootCoordinator) {
         self.appLockService = appLockService
+        self.userIndicatorController = userIndicatorController
         self.navigationCoordinator = navigationCoordinator
+        
+        appLockService.disabledPublisher
+            .sink { [weak self] _ in
+                // When the service is disabled via a force logout, we need to remove the activity indicator.
+                self?.userIndicatorController.retractAllIndicators()
+            }
+            .store(in: &cancellables)
         
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
@@ -54,7 +65,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(navigationCoordinator.toPresentable())
+        AnyView(userIndicatorController.toPresentable())
     }
     
     // MARK: - App unlock
@@ -91,6 +102,9 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             switch action {
             case .appUnlocked:
                 actionsSubject.send(.unlockApp)
+            case .forceLogout:
+                userIndicatorController.submitIndicator(UserIndicator(type: .modal, title: L10n.commonSigningOut, persistent: true))
+                actionsSubject.send(.forceLogout)
             }
         }
         .store(in: &cancellables)
