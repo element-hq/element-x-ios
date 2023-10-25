@@ -555,6 +555,52 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(foundLink, url)
         XCTAssertEqual(foundAttachments, 2)
     }
+    
+    func testMultipleMentions2() {
+        guard let url = URL(string: "https://matrix.to/#/@test:matrix.org") else {
+            XCTFail("Invalid url")
+            return
+        }
+        
+        let string = "\(url) @room"
+        guard let attributedStringFromHTML = attributedStringBuilder.fromHTML(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        var foundAttachments = 0
+        var foundLink: URL?
+        for run in attributedStringFromHTML.runs {
+            if run.attachment != nil {
+                foundAttachments += 1
+            }
+            
+            if let link = run.link {
+                foundLink = link
+            }
+        }
+        XCTAssertEqual(foundLink, url)
+        XCTAssertEqual(foundAttachments, 2)
+        
+        guard let attributedStringFromPlain = attributedStringBuilder.fromPlain(string) else {
+            XCTFail("Attributed string is nil")
+            return
+        }
+        
+        foundAttachments = 0
+        foundLink = nil
+        for run in attributedStringFromPlain.runs {
+            if run.attachment != nil {
+                foundAttachments += 1
+            }
+            
+            if let link = run.link {
+                foundLink = link
+            }
+        }
+        XCTAssertEqual(foundLink, url)
+        XCTAssertEqual(foundAttachments, 2)
+    }
 
     // MARK: - Private
     

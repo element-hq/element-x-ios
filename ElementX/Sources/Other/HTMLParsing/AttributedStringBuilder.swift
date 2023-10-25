@@ -56,8 +56,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
-        addLinks(mutableAttributedString)
-        addAllUsersMention(mutableAttributedString)
+        addLinksAndMentions(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         
@@ -110,8 +109,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
-        addLinks(mutableAttributedString)
-        addAllUsersMention(mutableAttributedString)
+        addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         detectPermalinks(mutableAttributedString)
@@ -150,7 +148,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    func replaceMarkedCodeBlocks(_ attributedString: NSMutableAttributedString) {
+    private func replaceMarkedCodeBlocks(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if let value = value as? UIColor,
                value == temporaryCodeBlockMarkingColor {
@@ -175,7 +173,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func addLinks(_ attributedString: NSMutableAttributedString) {
+    private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
         let string = attributedString.string
         
         var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [])
@@ -187,11 +185,16 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let linkMatches = MatrixEntityRegex.linkRegex.matches(in: string, options: [])
         matches.append(contentsOf: linkMatches)
         
+        let allUserMentionsMatches = MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: [])
+        matches.append(contentsOf: allUserMentionsMatches)
+        
+        let allUsersMentionsCount = allUserMentionsMatches.count
+        
         guard matches.count > 0 else {
             return
         }
         // Sort the links by length so the longest one always takes priority
-        matches.sorted { $0.range.length > $1.range.length }.forEach { match in
+        matches.sorted { $0.range.length > $1.range.length }.enumerated().forEach { offset, match in
             guard let matchRange = Range(match.range, in: string) else {
                 return
             }
@@ -208,22 +211,18 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
-            var link = String(string[matchRange])
-            
-            if linkMatches.contains(match), !link.contains("://") {
-                link.insert(contentsOf: "https://", at: link.startIndex)
-            }
-            
-            if let url = URL(string: link) {
-                attributedString.addAttribute(.link, value: url, range: match.range)
-            }
-        }
-    }
-    
-    func addAllUsersMention(_ attributedString: NSMutableAttributedString) {
-        MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string, options: []).forEach { match in
-            if attributedString.attribute(.link, at: 0, longestEffectiveRange: nil, in: match.range) as? URL == nil {
+            if offset > matches.count - allUsersMentionsCount - 1 {
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
+            } else {
+                var link = String(string[matchRange])
+                
+                if linkMatches.contains(match), !link.contains("://") {
+                    link.insert(contentsOf: "https://", at: link.startIndex)
+                }
+                
+                if let url = URL(string: link) {
+                    attributedString.addAttribute(.link, value: url, range: match.range)
+                }
             }
         }
     }
