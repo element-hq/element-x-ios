@@ -32,6 +32,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let roomProxy: RoomProxyProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let application: ApplicationProtocol
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
@@ -48,6 +49,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
+         application: ApplicationProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
@@ -56,6 +58,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
         self.mediaPlayerProvider = mediaPlayerProvider
+        self.application = application
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
@@ -327,16 +330,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     /// The ID of the newest item in the room that the user has seen.
     /// This includes both event based items and virtual items.
     private var lastReadItemID: TimelineItemIdentifier?
-    private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async -> Result<Void, RoomTimelineControllerError> {
+    private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
+        guard application.applicationState == .active else { return }
+        
         guard lastReadItemID != lastVisibleItemID,
-              let eventItemID = eventBasedItem(nearest: lastVisibleItemID)
-        else { return .success(()) }
+              let eventItemID = eventBasedItem(nearest: lastVisibleItemID) else {
+            return
+        }
         
         // Make sure the item is newer than the item that was last marked as read.
         if let lastReadItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: lastReadItemID?.timelineID ?? ""),
            let lastVisibleItemIndex = state.timelineViewState.timelineIDs.firstIndex(of: eventItemID.timelineID),
            lastReadItemIndex > lastVisibleItemIndex {
-            return .success(())
+            return
         }
         
         // Update the last read item ID to avoid attempting duplicate requests.
@@ -348,10 +354,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         switch await timelineController.sendReadReceipt(for: eventItemID) {
-        case .success:
-            return .success(())
-        case .failure:
-            return .failure(.generic)
+        case .success():
+            break
+        case let .failure(error):
+            MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
         }
     }
     
@@ -1028,7 +1034,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func openSystemSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
+        application.open(url)
     }
 }
 
@@ -1061,7 +1067,8 @@ extension RoomScreenViewModel {
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          application: ApplicationMock.default)
 }
 
 private struct ReplyInfo {

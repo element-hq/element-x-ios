@@ -32,7 +32,8 @@ class PillContextTests: XCTestCase {
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                       application: ApplicationMock.default)
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -64,7 +65,8 @@ class PillContextTests: XCTestCase {
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                       application: ApplicationMock.default)
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
@@ -83,7 +85,8 @@ class PillContextTests: XCTestCase {
                                        roomProxy: proxyMock,
                                        appSettings: ServiceLocator.shared.settings,
                                        analytics: ServiceLocator.shared.analytics,
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                       application: ApplicationMock.default)
         let context = PillContext(roomContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
