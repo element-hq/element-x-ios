@@ -67,7 +67,12 @@ struct MessageText: UIViewRepresentable {
         let textView = MessageTextView(usingTextLayoutManager: false)
         textView.roomContext = viewModel
         textView.updateClosure = {
-            attributedString = AttributedString(textView.attributedText)
+            do {
+                attributedString = try AttributedString(textView.attributedText, including: \.elementX)
+            } catch {
+                MXLog.error("[MessageText] Failed to update attributedString: \(error)]")
+                return
+            }
         }
         textView.isEditable = false
         textView.isScrollEnabled = false
@@ -87,14 +92,16 @@ struct MessageText: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0
         textView.layoutManager.usesFontLeading = false
         textView.backgroundColor = .clear
-        textView.attributedText = NSAttributedString(attributedString)
+        if let attributedText = try? NSAttributedString(attributedString, including: \.elementX) {
+            textView.attributedText = attributedText
+        }
         textView.delegate = context.coordinator
         return textView
     }
 
     func updateUIView(_ uiView: MessageTextView, context: Context) {
-        let newAttributedText = NSAttributedString(attributedString)
-        if uiView.attributedText != newAttributedText {
+        if let newAttributedText = try? NSAttributedString(attributedString, including: \.elementX),
+           uiView.attributedText != newAttributedText {
             uiView.flushPills()
             uiView.attributedText = newAttributedText
         }

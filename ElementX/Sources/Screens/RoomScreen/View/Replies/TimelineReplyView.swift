@@ -126,8 +126,26 @@ struct TimelineReplyView: View {
         /// and render with a consistent font size. This conversion is done to avoid
         /// showing markdown characters in the preview for messages with formatting.
         var messagePreview: String {
-            guard let formattedBody else { return plainBody }
-            return String(formattedBody.characters)
+            guard let formattedBody,
+                  let attributedString = try? NSMutableAttributedString(formattedBody, including: \.elementX) else {
+                return plainBody
+            }
+            
+            let range = NSRange(location: 0, length: attributedString.length)
+            attributedString.enumerateAttributes(in: range) { attributes, range, _ in
+                if let userID = attributes[.MatrixUserID] as? String {
+                    if let displayName = context.viewState.members[userID]?.displayName {
+                        attributedString.replaceCharacters(in: range, with: "@\(displayName)")
+                    } else {
+                        attributedString.replaceCharacters(in: range, with: userID)
+                    }
+                }
+                
+                if attributes[.MatrixAllUsersMention] as? Bool == true {
+                    attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
+                }
+            }
+            return attributedString.string
         }
         
         var body: some View {
@@ -187,6 +205,18 @@ struct TimelineReplyView: View {
 struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = RoomScreenViewModel.mock
     
+    static let attributedStringWithMention = {
+        var attributedString = AttributedString("To be replaced")
+        attributedString.userID = "@alice:matrix.org"
+        return attributedString
+    }()
+    
+    static let attributedStringWithAtRoomMention = {
+        var attributedString = AttributedString("to be replaced")
+        attributedString.allUsersMention = true
+        return attributedString
+    }()
+    
     static var previewItems: [TimelineReplyView] {
         let imageSource = MediaSourceProxy(url: "https://mock.com", mimeType: "image/png")
 
@@ -204,7 +234,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 contentType: .emote(.init(body: "says hello")))),
             
             TimelineReplyView(placement: .timeline,
-                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bot"),
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
                                                                 contentType: .notice(.init(body: "Hello world")))),
             
             TimelineReplyView(placement: .timeline,
@@ -244,7 +274,13 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                           duration: 0,
                                                                                           waveform: nil,
                                                                                           source: nil,
-                                                                                          contentType: nil))))
+                                                                                          contentType: nil)))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                contentType: .notice(.init(body: "", formattedBody: attributedStringWithMention)))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                contentType: .notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))
         ]
     }
     

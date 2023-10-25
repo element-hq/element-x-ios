@@ -61,7 +61,7 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: font]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: font, .MatrixAllUsersMention: true]
         if let blockquote {
             // mentions can be in blockquotes, so if the replaced string was in one, we keep the attribute
             attachmentAttributes[.MatrixBlockquote] = blockquote
