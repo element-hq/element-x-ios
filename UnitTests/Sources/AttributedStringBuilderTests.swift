@@ -200,7 +200,7 @@ class AttributedStringBuilderTests: XCTestCase {
     func testRoomAliasLink() {
         let roomAlias = "#matrix:matrix.org"
         let string = "The room alias is \(roomAlias)."
-        let expectedLink = "\(permalinkBaseURL)/#/\(roomAlias)"
+        let expectedLink = "https://matrix.to/#/%23matrix%3Amatrix.org"
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }
@@ -208,7 +208,7 @@ class AttributedStringBuilderTests: XCTestCase {
     func testRoomIdLink() {
         let roomId = "!roomidentifier:matrix.org"
         let string = "The room is \(roomId)."
-        let expectedLink = "\(permalinkBaseURL)/#/\(roomId)"
+        let expectedLink = "https://matrix.to/#/!roomidentifier%3Amatrix.org"
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink, expectedRuns: 3)
     }

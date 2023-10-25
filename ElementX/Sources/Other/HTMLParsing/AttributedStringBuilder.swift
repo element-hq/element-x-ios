@@ -176,13 +176,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
         let string = attributedString.string
         
-        var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .mention) }
-        matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .mention) })
+        var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .permalink(type: .userID)) }
+        matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .permalink(type: .roomID)) })
         
         // As of right now we do not handle event id links in any way so there is no need to add them as links
         // matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: []))
         
-        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .mention) })
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .permalink(type: .roomAlias)) })
         
         matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []).map { TypedMatch(match: $0, type: .link) })
         
@@ -212,14 +212,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             switch typedMatch.type {
             case .atRoom:
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: typedMatch.match.range)
-            case .mention:
-                var link = String(string[matchRange])
+            case let .permalink(type):
+                var identifier = String(string[matchRange])
                 
-                if !link.contains(permalinkBaseURL.absoluteString) {
-                    link.insert(contentsOf: "\(permalinkBaseURL.absoluteString)/#/", at: link.startIndex)
-                }
-                
-                if let url = URL(string: link) {
+                if let url = type.getPermalinkFrom(identifier: identifier, baseURL: permalinkBaseURL) {
                     attributedString.addAttribute(.link, value: url, range: typedMatch.match.range)
                 }
             case .link:
@@ -332,9 +328,26 @@ protocol MentionBuilderProtocol {
 
 private struct TypedMatch {
     enum MatchType {
-        case mention
+        case permalink(type: MentionType)
         case link
         case atRoom
+    }
+    
+    enum MentionType {
+        case roomAlias
+        case roomID
+        case userID
+        
+        func getPermalinkFrom(identifier: String, baseURL: URL) -> URL? {
+            switch self {
+            case .roomAlias:
+                return try? PermalinkBuilder.permalinkTo(roomAlias: identifier, baseURL: baseURL)
+            case .roomID:
+                return try? PermalinkBuilder.permalinkTo(roomIdentifier: identifier, baseURL: baseURL)
+            case .userID:
+                return try? PermalinkBuilder.permalinkTo(userIdentifier: identifier, baseURL: baseURL)
+            }
+        }
     }
     
     let match: NSTextCheckingResult
