@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import LocalAuthentication
 
 enum AppLockServiceError: Error {
@@ -31,10 +32,14 @@ protocol AppLockServiceProtocol: AnyObject {
     var isMandatory: Bool { get }
     /// The app has been configured to automatically lock with a PIN code.
     var isEnabled: Bool { get }
+    
     /// The type of biometric authentication supported by the device.
     var biometryType: LABiometryType { get }
     /// Whether or not the user has enabled unlock via TouchID, FaceID or (possibly) OpticID.
     var biometricUnlockEnabled: Bool { get set }
+    
+    /// A publisher that advertises when the service has been disabled.
+    var disabledPublisher: AnyPublisher<Void, Never> { get }
     
     /// Sets the user's PIN code used to unlock the app.
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError>
@@ -52,6 +57,11 @@ protocol AppLockServiceProtocol: AnyObject {
     func unlock(with pinCode: String) -> Bool
     /// Attempt to unlock the app using FaceID or TouchID.
     func unlockWithBiometrics() -> Bool
+    
+    /// The number of attempts the user had made to unlock with a PIN code.
+    var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
+    /// The number of attempts the user has made to unlock with Touch/Face ID.
+    var numberOfBiometricAttempts: AnyPublisher<Int, Never> { get }
 }
 
 // sourcery: AutoMockable

@@ -33,7 +33,7 @@ class AppCoordinatorStateMachine {
         case signedIn
 
         /// Processing a sign out request
-        case signingOut(isSoft: Bool)
+        case signingOut(isSoft: Bool, disableAppLock: Bool)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -51,7 +51,7 @@ class AppCoordinatorStateMachine {
         case createdUserSession
         
         /// Request sign out.
-        case signOut(isSoft: Bool)
+        case signOut(isSoft: Bool, disableAppLock: Bool)
         /// Request the soft logout screen.
         case showSoftLogout
         /// Signing out completed.
@@ -80,16 +80,17 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
         
-        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(isSoft: false) => .signedOut])
-        stateMachine.addRoutes(event: .showSoftLogout, transitions: [.signingOut(isSoft: true) => .softLogout])
+        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(isSoft: false, disableAppLock: false) => .signedOut,
+                                                                          .signingOut(isSoft: false, disableAppLock: true) => .signedOut])
+        stateMachine.addRoutes(event: .showSoftLogout, transitions: [.signingOut(isSoft: true, disableAppLock: false) => .softLogout])
         
         stateMachine.addRoutes(event: .clearCache, transitions: [.signedIn => .initial])
 
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
-            case (.signOut(let isSoft), _):
-                return .signingOut(isSoft: isSoft)
+            case (.signOut(let isSoft, let disableAppLock), _):
+                return .signingOut(isSoft: isSoft, disableAppLock: disableAppLock)
             default:
                 return nil
             }

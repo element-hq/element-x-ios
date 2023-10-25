@@ -19,6 +19,8 @@ import Foundation
 enum AppLockScreenViewModelAction {
     /// The user has successfully unlocked the app.
     case appUnlocked
+    /// The user failed to unlock the app (or forgot their PIN).
+    case forceLogout
 }
 
 struct AppLockScreenViewState: BindableState {
@@ -50,8 +52,8 @@ struct AppLockScreenViewStateBindings {
 }
 
 enum AppLockScreenAlertType {
-    /// The user has failed too many times, they're being signed out.
-    case forceSignOut
+    /// The user has failed too many times, they're being logged out.
+    case forcedLogout
     /// The user has forgotten their PIN, confirm they're happy to sign out.
     case confirmResetPIN
 }

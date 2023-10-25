@@ -37,7 +37,7 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
     }
 
     func testCreatePIN() async throws {
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, appLockService: appLockService)
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
         XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
         
         let createDeferred = deferFulfillment(context.$viewState, message: "A valid PIN needs confirming.") { $0.mode == .confirm }
@@ -53,7 +53,7 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
     }
     
     func testCreateWeakPIN() async throws {
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, appLockService: appLockService)
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
         XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
         XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
         
@@ -65,7 +65,7 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
     }
     
     func testCreatePINMismatch() async throws {
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, appLockService: appLockService)
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: .create, isMandatory: false, appLockService: appLockService)
         XCTAssertEqual(context.viewState.mode, .create, "The mode should start as creation.")
         XCTAssertNil(context.alertInfo, "There shouldn't be an alert to begin with.")
         
@@ -83,7 +83,7 @@ class AppLockSetupPINScreenViewModelTests: XCTestCase {
     }
     
     func testUnlock() async throws {
-        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, appLockService: appLockService)
+        viewModel = AppLockSetupPINScreenViewModel(initialMode: .unlock, isMandatory: false, appLockService: appLockService)
         let pinCode = "2023"
         keychainController.pinCodeReturnValue = pinCode
         keychainController.containsPINCodeReturnValue = true

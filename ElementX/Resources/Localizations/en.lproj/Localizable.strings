@@ -144,6 +144,7 @@
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
 "common_shared_location" = "Shared location";
+"common_signing_out" = "Signing out";
 "common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";

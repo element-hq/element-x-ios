@@ -31,6 +31,12 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         self.appLockService = appLockService
         
         super.init(initialViewState: AppLockScreenViewState(bindings: .init()))
+        
+        appLockService.numberOfPINAttempts
+            .weakAssign(to: \.state.numberOfPINAttempts, on: self)
+            .store(in: &cancellables)
+        
+        showForceLogoutAlertIfNeeded()
     }
     
     // MARK: - Public
@@ -58,24 +64,21 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         state.bindings.alertInfo = .init(id: .confirmResetPIN,
                                          title: L10n.screenAppLockSignoutAlertTitle,
                                          message: L10n.screenAppLockSignoutAlertMessage,
-                                         primaryButton: .init(title: L10n.actionOk, action: forceSignOut),
+                                         primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) },
                                          secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
     private func handleInvalidPIN() {
         MXLog.warning("Invalid PIN code entered.")
-        state.numberOfPINAttempts += 1
-        
-        if state.numberOfPINAttempts == 3 {
-            state.bindings.alertInfo = .init(id: .forceSignOut,
-                                             title: L10n.screenAppLockSignoutAlertTitle,
-                                             message: L10n.screenAppLockSignoutAlertMessage,
-                                             primaryButton: .init(title: L10n.actionOk, action: nil))
-            forceSignOut()
-        }
+        showForceLogoutAlertIfNeeded()
     }
     
-    private func forceSignOut() {
-        // To be implemented.
+    private func showForceLogoutAlertIfNeeded() {
+        if state.numberOfPINAttempts >= 3 {
+            state.bindings.alertInfo = .init(id: .forcedLogout,
+                                             title: L10n.screenAppLockSignoutAlertTitle,
+                                             message: L10n.screenAppLockSignoutAlertMessage,
+                                             primaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.forceLogout) })
+        }
     }
 }

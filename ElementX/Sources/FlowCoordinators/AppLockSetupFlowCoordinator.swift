@@ -109,8 +109,11 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             case (.pinEntered, .unlock):
                 return .settings
             case (.pinEntered, .createPIN):
-                if presentingFlow == .authentication { return .biometricsPrompt }
-                return appLockService.biometricUnlockEnabled ? .settings : .biometricsPrompt
+                if presentingFlow == .authentication {
+                    return appLockService.biometryType != .none ? .biometricsPrompt : .complete
+                } else {
+                    return appLockService.biometricUnlockEnabled || appLockService.biometryType == .none ? .settings : .biometricsPrompt
+                }
             case (.biometricsSet, .biometricsPrompt):
                 return presentingFlow == .settings ? .settings : .complete
             case (.changePIN, .settings):

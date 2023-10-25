@@ -22,6 +22,9 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case hasShownWelcomeScreen
+        case appLockNumberOfPINAttempts
+        case appLockNumberOfBiometricAttempts
         case lastLoginDate
         case migratedAccounts
         case timelineStyle
@@ -38,7 +41,6 @@ final class AppSettings {
         case shouldCollapseRoomStateEvents
         case userSuggestionsEnabled
         case readReceiptsEnabled
-        case hasShownWelcomeScreen
         case swiftUITimelineEnabled
         case voiceMessageEnabled
         case mentionsEnabled
@@ -123,11 +125,17 @@ final class AppSettings {
     // MARK: - Security
     
     /// The app must be locked with a PIN code as part of the authentication flow.
-    let appLockIsMandatory = true
+    let appLockIsMandatory = false
     /// The amount of time the app can remain in the background for without requesting the PIN/TouchID/FaceID.
     let appLockGracePeriod: TimeInterval = 180
     /// Any codes that the user isn't allowed to use for their PIN.
     let appLockPINCodeBlockList = ["0000", "1234"]
+    /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
+    @UserPreference(key: UserDefaultsKeys.appLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
+    var appLockNumberOfPINAttempts: Int
+    /// The number of attempts the user has made to unlock the app with Touch/Face ID (resets when unlocked).
+    @UserPreference(key: UserDefaultsKeys.appLockNumberOfBiometricAttempts, defaultValue: 0, storageType: .userDefaults(store))
+    var appLockNumberOfBiometricAttempts: Int
     
     // MARK: - Authentication
     
