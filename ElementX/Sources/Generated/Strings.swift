@@ -726,8 +726,10 @@ public enum L10n {
   public static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
   /// You are being signed out
   public static var screenAppLockSignoutAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_title") }
-  /// You have 3 attempts to unlock
-  public static var screenAppLockSubtitle: String { return L10n.tr("Localizable", "screen_app_lock_subtitle") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenAppLockSubtitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_app_lock_subtitle", p1)
+  }
   /// Plural format key: "%#@COUNT@"
   public static func screenAppLockSubtitleWrongPin(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_app_lock_subtitle_wrong_pin", p1)
