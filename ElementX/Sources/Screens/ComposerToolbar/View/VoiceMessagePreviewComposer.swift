@@ -29,9 +29,7 @@ struct VoiceMessagePreviewComposer: View {
     let onPlay: () -> Void
     let onPause: () -> Void
     let onSeek: (Double) -> Void
-    
-    @ScaledMetric private var playPauseButtonSize = 32
-    @ScaledMetric private var playPauseImagePadding = 8
+
     @State var dragState: WaveformViewDragState = .inactive
     
     private static let elapsedTimeFormatter: DateFormatter = {
@@ -55,7 +53,9 @@ struct VoiceMessagePreviewComposer: View {
     var body: some View {
         HStack {
             HStack {
-                playPauseButton
+                VoiceMessageButton(state: .init(state: playerState.playbackState),
+                                   size: .small,
+                                   action: onPlayPause)
                 Text(timeLabelContent)
                     .lineLimit(1)
                     .font(.compound.bodySMSemibold)
@@ -112,32 +112,6 @@ struct VoiceMessagePreviewComposer: View {
         }
     }
 
-    @ViewBuilder
-    private var playPauseButton: some View {
-        Button {
-            onPlayPause()
-        } label: {
-            ZStack {
-                Circle()
-                    .foregroundColor(.compound.bgCanvasDefault)
-                if playerState.playbackState == .loading {
-                    ProgressView()
-                } else {
-                    Image(asset: playerState.playbackState == .playing ? Asset.Images.mediaPause : Asset.Images.mediaPlay)
-                        .resizable()
-                        .padding(playPauseImagePadding)
-                        .offset(x: playerState.playbackState == .playing ? 0 : 2)
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.compound.iconSecondary)
-                        .accessibilityLabel(playerState.playbackState == .playing ? L10n.a11yPause : L10n.a11yPlay)
-                }
-            }
-        }
-        .buttonStyle(.plain)
-        .disabled(playerState.playbackState == .loading)
-        .frame(width: playPauseButtonSize, height: playPauseButtonSize)
-    }
-    
     private func onPlayPause() {
         if playerState.playbackState == .playing {
             onPause()

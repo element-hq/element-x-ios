@@ -52,6 +52,7 @@ struct VoiceMessageButton: View {
             buttonLabel
                 .frame(width: buttonSize, height: buttonSize)
         }
+        .buttonStyle(.plain)
         .disabled(state == .loading)
         .background(Circle().foregroundColor(.compound.bgCanvasDefault))
     }
@@ -78,6 +79,19 @@ struct VoiceMessageButton: View {
     }
 }
 
+extension VoiceMessageButton.State {
+    init(state: AudioPlayerPlaybackState) {
+        switch state {
+        case .loading:
+            self = .loading
+        case .playing:
+            self = .playing
+        default:
+            self = .paused
+        }
+    }
+}
+
 struct VoiceMessageButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack {
@@ -88,10 +102,6 @@ struct VoiceMessageButton_Previews: PreviewProvider, TestablePreview {
             HStack {
                 VoiceMessageButton(state: .playing, size: .small, action: { })
                 VoiceMessageButton(state: .playing, size: .medium, action: { })
-            }
-            HStack {
-                VoiceMessageButton(state: .loading, size: .small, action: { })
-                VoiceMessageButton(state: .loading, size: .medium, action: { })
             }
         }
         .padding()

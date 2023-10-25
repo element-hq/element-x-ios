@@ -85,8 +85,8 @@ struct CompletionSuggestionView: View {
         }
 
         func body(content: Content) -> some View {
-            var topPadding: CGFloat = isFirst ? Constants.topPadding : Constants.listItemPadding
-            var bottomPadding: CGFloat = Constants.listItemPadding
+            let topPadding: CGFloat = isFirst ? Constants.topPadding : Constants.listItemPadding
+            let bottomPadding: CGFloat = Constants.listItemPadding
 
             return content
                 .padding(.top, topPadding)
