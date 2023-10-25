@@ -18,18 +18,15 @@ import Compound
 import SwiftUI
 
 extension View {
-    func waveformProgressCursor<CursorView: View>(progress: CGFloat,
-                                                  width: CGFloat = 2,
-                                                  cursorView: @escaping () -> CursorView) -> some View {
-        modifier(WaveformProgressCursorModifier(progress: progress,
-                                                width: width,
-                                                cursorView: cursorView))
+    func progressCursor<CursorView: View>(progress: CGFloat,
+                                          cursorView: @escaping () -> CursorView) -> some View {
+        modifier(ProgressCursorModifier(progress: progress,
+                                        cursorView: cursorView))
     }
 }
 
-private struct WaveformProgressCursorModifier<CursorView: View>: ViewModifier {
+private struct ProgressCursorModifier<CursorView: View>: ViewModifier {
     let progress: CGFloat
-    let width: CGFloat
     @ViewBuilder var cursorView: () -> CursorView
     
     func body(content: Content) -> some View {
@@ -37,8 +34,8 @@ private struct WaveformProgressCursorModifier<CursorView: View>: ViewModifier {
             content
                 .overlay(alignment: .leading) {
                     cursorView()
-                        .offset(CGSize(width: (progress * geometry.size.width) - width / 2, height: 0.0))
-                        .frame(width: width, height: geometry.size.height)
+                        .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
+                        .frame(height: geometry.size.height)
                 }
         }
     }
