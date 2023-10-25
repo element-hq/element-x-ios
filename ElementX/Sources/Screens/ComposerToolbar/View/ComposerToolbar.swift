@@ -73,7 +73,7 @@ struct ComposerToolbar: View {
     }
     
     private var topBar: some View {
-        mainContentLayout {
+        topBarLayout {
             mainTopBarContent
 
             if !context.composerActionsEnabled {
@@ -106,14 +106,14 @@ struct ComposerToolbar: View {
         }
     }
     
-    private var mainContentLayout: some Layout {
+    private var topBarLayout: some Layout {
         HStackLayout(alignment: .bottom, spacing: 5)
     }
 
     @ViewBuilder
     private var mainTopBarContent: some View {
         ZStack {
-            mainContentLayout {
+            topBarLayout {
                 if !context.composerActionsEnabled {
                     RoomAttachmentPicker(context: context)
                 }
@@ -246,7 +246,7 @@ struct ComposerToolbar: View {
             VoiceMessageRecordingComposer(recorderState: state)
                 .padding(.leading, 12)
         case .previewVoiceMessage(let state, let waveform, let isUploading) where context.viewState.enableVoiceMessageComposer:
-            mainContentLayout {
+            topBarLayout {
                 voiceMessageTrashButton
                 voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
             }
