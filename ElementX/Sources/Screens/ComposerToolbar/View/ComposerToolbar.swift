@@ -87,9 +87,9 @@ struct ComposerToolbar: View {
                         .padding(.leading, 3)
                 } else if context.viewState.enableVoiceMessageComposer {
                     voiceMessageRecordingButton
-                        .background(
+                        .background {
                             ViewFrameReader(frame: $voiceMessageRecordingButtonFrame, coordinateSpace: .global)
-                        )
+                        }
                         .padding(.leading, 4)
                 }
             }
