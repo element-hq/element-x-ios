@@ -17,16 +17,23 @@
 import Foundation
 import UIKit
 
+// sourcery: AutoMockable
 protocol ApplicationProtocol {
     func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
 
     func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
+    
+    func open(_ url: URL)
 
     var backgroundTimeRemaining: TimeInterval { get }
 
     var applicationState: UIApplication.State { get }
 }
 
-extension UIApplication: ApplicationProtocol { }
+extension UIApplication: ApplicationProtocol {
+    func open(_ url: URL) {
+        open(url, options: [:], completionHandler: nil)
+    }
+}

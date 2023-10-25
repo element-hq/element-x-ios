@@ -279,6 +279,85 @@ class AppLockServiceMock: AppLockServiceProtocol {
         }
     }
 }
+class ApplicationMock: ApplicationProtocol {
+    var backgroundTimeRemaining: TimeInterval {
+        get { return underlyingBackgroundTimeRemaining }
+        set(value) { underlyingBackgroundTimeRemaining = value }
+    }
+    var underlyingBackgroundTimeRemaining: TimeInterval!
+    var applicationState: UIApplication.State {
+        get { return underlyingApplicationState }
+        set(value) { underlyingApplicationState = value }
+    }
+    var underlyingApplicationState: UIApplication.State!
+
+    //MARK: - beginBackgroundTask
+
+    var beginBackgroundTaskExpirationHandlerCallsCount = 0
+    var beginBackgroundTaskExpirationHandlerCalled: Bool {
+        return beginBackgroundTaskExpirationHandlerCallsCount > 0
+    }
+    var beginBackgroundTaskExpirationHandlerReturnValue: UIBackgroundTaskIdentifier!
+    var beginBackgroundTaskExpirationHandlerClosure: (((() -> Void)?) -> UIBackgroundTaskIdentifier)?
+
+    func beginBackgroundTask(expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
+        beginBackgroundTaskExpirationHandlerCallsCount += 1
+        if let beginBackgroundTaskExpirationHandlerClosure = beginBackgroundTaskExpirationHandlerClosure {
+            return beginBackgroundTaskExpirationHandlerClosure(handler)
+        } else {
+            return beginBackgroundTaskExpirationHandlerReturnValue
+        }
+    }
+    //MARK: - beginBackgroundTask
+
+    var beginBackgroundTaskWithNameExpirationHandlerCallsCount = 0
+    var beginBackgroundTaskWithNameExpirationHandlerCalled: Bool {
+        return beginBackgroundTaskWithNameExpirationHandlerCallsCount > 0
+    }
+    var beginBackgroundTaskWithNameExpirationHandlerReturnValue: UIBackgroundTaskIdentifier!
+    var beginBackgroundTaskWithNameExpirationHandlerClosure: ((String?, (() -> Void)?) -> UIBackgroundTaskIdentifier)?
+
+    func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
+        beginBackgroundTaskWithNameExpirationHandlerCallsCount += 1
+        if let beginBackgroundTaskWithNameExpirationHandlerClosure = beginBackgroundTaskWithNameExpirationHandlerClosure {
+            return beginBackgroundTaskWithNameExpirationHandlerClosure(taskName, handler)
+        } else {
+            return beginBackgroundTaskWithNameExpirationHandlerReturnValue
+        }
+    }
+    //MARK: - endBackgroundTask
+
+    var endBackgroundTaskCallsCount = 0
+    var endBackgroundTaskCalled: Bool {
+        return endBackgroundTaskCallsCount > 0
+    }
+    var endBackgroundTaskReceivedIdentifier: UIBackgroundTaskIdentifier?
+    var endBackgroundTaskReceivedInvocations: [UIBackgroundTaskIdentifier] = []
+    var endBackgroundTaskClosure: ((UIBackgroundTaskIdentifier) -> Void)?
+
+    func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier) {
+        endBackgroundTaskCallsCount += 1
+        endBackgroundTaskReceivedIdentifier = identifier
+        endBackgroundTaskReceivedInvocations.append(identifier)
+        endBackgroundTaskClosure?(identifier)
+    }
+    //MARK: - open
+
+    var openCallsCount = 0
+    var openCalled: Bool {
+        return openCallsCount > 0
+    }
+    var openReceivedUrl: URL?
+    var openReceivedInvocations: [URL] = []
+    var openClosure: ((URL) -> Void)?
+
+    func open(_ url: URL) {
+        openCallsCount += 1
+        openReceivedUrl = url
+        openReceivedInvocations.append(url)
+        openClosure?(url)
+    }
+}
 class AudioConverterMock: AudioConverterProtocol {
 
     //MARK: - convertToOpusOgg

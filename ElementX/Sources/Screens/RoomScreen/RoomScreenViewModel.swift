@@ -32,6 +32,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let roomProxy: RoomProxyProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
+    private let application: ApplicationProtocol
     private unowned let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenterProtocol: NotificationCenterProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
@@ -48,6 +49,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
+         application: ApplicationProtocol,
          notificationCenterProtocol: NotificationCenterProtocol = NotificationCenter.default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
@@ -56,6 +58,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.userIndicatorController = userIndicatorController
         self.notificationCenterProtocol = notificationCenterProtocol
         self.mediaPlayerProvider = mediaPlayerProvider
+        self.application = application
         voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         super.init(initialViewState: RoomScreenViewState(roomID: timelineController.roomID,
@@ -328,7 +331,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     /// This includes both event based items and virtual items.
     private var lastReadItemID: TimelineItemIdentifier?
     private func sendReadReceiptIfNeeded(for lastVisibleItemID: TimelineItemIdentifier) async {
-        guard UIApplication.shared.applicationState == .active else { return }
+        guard application.applicationState == .active else { return }
         
         guard lastReadItemID != lastVisibleItemID,
               let eventItemID = eventBasedItem(nearest: lastVisibleItemID) else {
@@ -1031,7 +1034,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func openSystemSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
+        application.open(url)
     }
 }
 
@@ -1064,7 +1067,8 @@ extension RoomScreenViewModel {
                                           roomProxy: RoomProxyMock(with: .init(displayName: "Preview room")),
                                           appSettings: ServiceLocator.shared.settings,
                                           analytics: ServiceLocator.shared.analytics,
-                                          userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                          application: ApplicationMock())
 }
 
 private struct ReplyInfo {
