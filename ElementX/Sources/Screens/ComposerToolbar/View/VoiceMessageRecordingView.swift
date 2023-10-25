@@ -43,7 +43,7 @@ struct VoiceMessageRecordingView: View {
     
     var body: some View {
         HStack {
-            VoiceMessageRecordBadge()
+            VoiceMessageRecordingBadge()
                 .frame(width: recordingIndicatorSize, height: recordingIndicatorSize)
 
             Text(timeLabelContent)
@@ -61,16 +61,7 @@ struct VoiceMessageRecordingView: View {
     }
 }
 
-struct VoiceMessageRecordingView_Previews: PreviewProvider, TestablePreview {
-    static let recorderState = AudioRecorderState()
-    
-    static var previews: some View {
-        VoiceMessageRecordingView(recorderState: recorderState)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-}
-
-private struct VoiceMessageRecordBadge: View {
+private struct VoiceMessageRecordingBadge: View {
     @State private var opacity: CGFloat = 1
 
     var body: some View {
@@ -79,8 +70,17 @@ private struct VoiceMessageRecordBadge: View {
             .opacity(opacity)
             .onAppear {
                 withElementAnimation(.easeOut(duration: 1).repeatForever(autoreverses: true)) {
-                    opacity = 0.3
+                    opacity = 0
                 }
             }
+    }
+}
+
+struct VoiceMessageRecordingView_Previews: PreviewProvider, TestablePreview {
+    static let recorderState = AudioRecorderState()
+    
+    static var previews: some View {
+        VoiceMessageRecordingView(recorderState: recorderState)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
