@@ -19,18 +19,16 @@ import SwiftUI
 
 struct WaveformCursorView: View {
     var color: Color = .compound.iconAccentTertiary
-    var opacity: CGFloat = 1
 
     var body: some View {
         RoundedRectangle(cornerRadius: 1)
             .fill(color)
-            .opacity(opacity)
     }
 }
 
 struct WaveformCursorView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        WaveformCursorView(color: .compound.iconAccentTertiary, opacity: 1)
+        WaveformCursorView(color: .compound.iconAccentTertiary)
             .frame(width: 2, height: 25)
     }
 }
