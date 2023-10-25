@@ -73,7 +73,6 @@ struct VoiceMessageButton: View {
                 .scaledToFit()
                 .frame(width: imageWidth, height: imageHeight)
                 .offset(x: offset)
-                .aspectRatio(contentMode: .fit)
                 .foregroundColor(.compound.iconSecondary)
                 .accessibilityLabel(accessibilityLabel)
         }
