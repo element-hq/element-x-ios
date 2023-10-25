@@ -330,6 +330,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSessionVerificationScreen:
                     stateMachine.processEvent(.showSessionVerificationScreen)
+                case .presentSecureBackupSettings:
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .logout:

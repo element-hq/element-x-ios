@@ -380,6 +380,10 @@ public enum L10n {
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for decryption key
   public static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
+  /// Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup.
+  public static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
+  /// Confirm your recovery key
+  public static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   public static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
@@ -442,10 +446,6 @@ public enum L10n {
   }
   /// Failed to upload your voice message.
   public static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
-  /// %1$@ does not have permission to access your location. You can enable access in Settings > Location
-  public static func errorMissingLocationAuthIos(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "error_missing_location_auth_ios", String(describing: p1))
-  }
   /// No compatible app was found to handle this action.
   public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent
