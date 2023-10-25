@@ -62,7 +62,7 @@ struct VoiceMessageRecordingView: View {
 }
 
 private struct VoiceMessageRecordingBadge: View {
-    @State private var opacity: CGFloat = 1
+    @State private var opacity: CGFloat = 0
 
     var body: some View {
         Circle()
@@ -70,7 +70,7 @@ private struct VoiceMessageRecordingBadge: View {
             .opacity(opacity)
             .onAppear {
                 withElementAnimation(.easeOut(duration: 1).repeatForever(autoreverses: true)) {
-                    opacity = 0
+                    opacity = 1
                 }
             }
     }
