@@ -76,7 +76,9 @@ struct VoiceMessageRoomPlaybackView: View {
             }
             waveformView
                 .waveformDragGesture($dragState)
-                .waveformProgressCursor(progress: playerState.progress, width: waveformLineWidth, opacity: showWaveformCursor ? 1 : 0)
+                .waveformProgressCursor(progress: playerState.progress, width: waveformLineWidth) {
+                    WaveformCursorView(color: .compound.iconAccentTertiary, opacity: showWaveformCursor ? 1 : 0)
+                }
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {

@@ -18,39 +18,27 @@ import Compound
 import SwiftUI
 
 extension View {
-    func waveformProgressCursor(progress: CGFloat,
-                                color: Color = .compound.iconAccentTertiary,
-                                width: CGFloat = 2,
-                                opacity: CGFloat = 1.0) -> some View {
+    func waveformProgressCursor<CursorView: View>(progress: CGFloat,
+                                                  width: CGFloat = 2,
+                                                  cursorView: @escaping () -> CursorView) -> some View {
         modifier(WaveformProgressCursorModifier(progress: progress,
-                                                color: color,
                                                 width: width,
-                                                opacity: opacity))
+                                                cursorView: cursorView))
     }
 }
 
-private struct WaveformProgressCursorModifier: ViewModifier {
-    private let progress: CGFloat
-    private let color: Color
-    private let width: CGFloat
-    private let opacity: CGFloat
-    
-    init(progress: CGFloat, color: Color, width: CGFloat, opacity: CGFloat) {
-        self.progress = progress
-        self.color = color
-        self.width = width
-        self.opacity = opacity
-    }
+private struct WaveformProgressCursorModifier<CursorView: View>: ViewModifier {
+    let progress: CGFloat
+    let width: CGFloat
+    @ViewBuilder var cursorView: () -> CursorView
     
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
                 .overlay(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(color)
-                        .offset(CGSize(width: progress * geometry.size.width, height: 0.0))
+                    cursorView()
+                        .offset(CGSize(width: (progress * geometry.size.width) - width / 2, height: 0.0))
                         .frame(width: width, height: geometry.size.height)
-                        .opacity(opacity)
                 }
         }
     }
