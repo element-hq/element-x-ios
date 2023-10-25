@@ -119,6 +119,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .toggleReaction(let emoji, let itemId):
             Task { await timelineController.toggleReaction(emoji, to: itemId) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
+            guard UIApplication.shared.applicationState == .active else { return }
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .timelineItemMenu(let itemID):
             Task {
