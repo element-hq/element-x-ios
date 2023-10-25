@@ -90,8 +90,6 @@ struct VoiceMessagePreviewComposer: View {
             ZStack {
                 roundedRectangle
                     .fill(Color.compound.bgSubtleSecondary)
-                roundedRectangle
-                    .stroke(Color.compound._borderTextFieldFocused, lineWidth: 0.5)
             }
         }
         .frame(minHeight: 42)
