@@ -52,6 +52,7 @@ struct VoiceMessageButton: View {
             buttonLabel
                 .frame(width: buttonSize, height: buttonSize)
         }
+        .animation(nil, value: state)
         .buttonStyle(.plain)
         .disabled(state == .loading)
         .background(Circle().foregroundColor(.compound.bgCanvasDefault))
