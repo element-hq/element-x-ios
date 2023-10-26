@@ -144,14 +144,19 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
                 try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
                 try AVAudioSession.sharedInstance().setActive(true)
                 let url = URL.temporaryDirectory.appendingPathComponent("voice-message-\(recordID.identifier).m4a")
-                audioRecorder = try AVAudioRecorder(url: url, settings: settings)
-                audioRecorder?.delegate = self
-                audioRecorder?.isMeteringEnabled = true
-                audioRecorder?.record()
-                completion(.success(()))
+                let audioRecorder = try AVAudioRecorder(url: url, settings: settings)
+                audioRecorder.delegate = self
+                audioRecorder.isMeteringEnabled = true
+                if audioRecorder.record() {
+                    self.audioRecorder = audioRecorder
+                    completion(.success(()))
+                } else {
+                    MXLog.error("audio recording failed to start")
+                    completion(.failure(.recordingFailed))
+                }
             } catch {
-                MXLog.error("audio recording failed: \(error)")
-                completion(.failure(.genericError))
+                MXLog.error("audio recording failed to start. \(error)")
+                completion(.failure(.internalError(error: error)))
             }
         }
     }
@@ -187,12 +192,14 @@ class AudioRecorder: NSObject, AudioRecorderProtocol, AVAudioRecorderDelegate {
         if success {
             actionsSubject.send(.didStopRecording)
         } else {
+            MXLog.error("audio recorder did finish recording with an error.")
             actionsSubject.send(.didFailWithError(error: AudioRecorderError.genericError))
         }
     }
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         try? AVAudioSession.sharedInstance().setActive(false)
+        MXLog.error("audio recorder encode error did occur. \(error?.localizedDescription ?? "")")
         actionsSubject.send(.didFailWithError(error: error ?? AudioRecorderError.genericError))
     }
     
