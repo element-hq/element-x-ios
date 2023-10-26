@@ -64,6 +64,7 @@ class AppLockSetupSettingsScreenViewModel: AppLockSetupSettingsScreenViewModelTy
             if appLockService.biometryType == .faceID,
                await !appLockService.unlockWithBiometrics() {
                 MXLog.info("Confirmation failed. Disabling biometric unlock.")
+                state.bindings.enableBiometrics = false
                 appLockService.disableBiometricUnlock()
             }
         } else {

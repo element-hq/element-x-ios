@@ -22,7 +22,7 @@ extension LABiometryType {
     var systemSymbol: SFSymbol {
         switch self {
         case .none:
-            MXLog.error("Invalid presentation: Biometry not supported.")
+            MXLog.error("Invalid presentation: Biometrics not supported.")
             return .viewfinder
         case .touchID:
             return .touchid
@@ -40,7 +40,7 @@ extension LABiometryType {
     var localizedString: String {
         switch self {
         case .none:
-            MXLog.error("Invalid presentation: Biometry not supported.")
+            MXLog.error("Invalid presentation: Biometrics not supported.")
             return L10n.screenAppLockBiometricUnlock
         case .touchID:
             return L10n.commonTouchIdIos

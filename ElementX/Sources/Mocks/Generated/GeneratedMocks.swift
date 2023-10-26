@@ -935,71 +935,71 @@ class KeychainControllerMock: KeychainControllerProtocol {
         removePINCodeCallsCount += 1
         removePINCodeClosure?()
     }
-    //MARK: - containsPINCodeBiometryState
+    //MARK: - containsPINCodeBiometricState
 
-    var containsPINCodeBiometryStateCallsCount = 0
-    var containsPINCodeBiometryStateCalled: Bool {
-        return containsPINCodeBiometryStateCallsCount > 0
+    var containsPINCodeBiometricStateCallsCount = 0
+    var containsPINCodeBiometricStateCalled: Bool {
+        return containsPINCodeBiometricStateCallsCount > 0
     }
-    var containsPINCodeBiometryStateReturnValue: Bool!
-    var containsPINCodeBiometryStateClosure: (() -> Bool)?
+    var containsPINCodeBiometricStateReturnValue: Bool!
+    var containsPINCodeBiometricStateClosure: (() -> Bool)?
 
-    func containsPINCodeBiometryState() -> Bool {
-        containsPINCodeBiometryStateCallsCount += 1
-        if let containsPINCodeBiometryStateClosure = containsPINCodeBiometryStateClosure {
-            return containsPINCodeBiometryStateClosure()
+    func containsPINCodeBiometricState() -> Bool {
+        containsPINCodeBiometricStateCallsCount += 1
+        if let containsPINCodeBiometricStateClosure = containsPINCodeBiometricStateClosure {
+            return containsPINCodeBiometricStateClosure()
         } else {
-            return containsPINCodeBiometryStateReturnValue
+            return containsPINCodeBiometricStateReturnValue
         }
     }
-    //MARK: - setPINCodeBiometryState
+    //MARK: - setPINCodeBiometricState
 
-    var setPINCodeBiometryStateThrowableError: Error?
-    var setPINCodeBiometryStateCallsCount = 0
-    var setPINCodeBiometryStateCalled: Bool {
-        return setPINCodeBiometryStateCallsCount > 0
+    var setPINCodeBiometricStateThrowableError: Error?
+    var setPINCodeBiometricStateCallsCount = 0
+    var setPINCodeBiometricStateCalled: Bool {
+        return setPINCodeBiometricStateCallsCount > 0
     }
-    var setPINCodeBiometryStateReceivedState: Data?
-    var setPINCodeBiometryStateReceivedInvocations: [Data] = []
-    var setPINCodeBiometryStateClosure: ((Data) throws -> Void)?
+    var setPINCodeBiometricStateReceivedState: Data?
+    var setPINCodeBiometricStateReceivedInvocations: [Data] = []
+    var setPINCodeBiometricStateClosure: ((Data) throws -> Void)?
 
-    func setPINCodeBiometryState(_ state: Data) throws {
-        if let error = setPINCodeBiometryStateThrowableError {
+    func setPINCodeBiometricState(_ state: Data) throws {
+        if let error = setPINCodeBiometricStateThrowableError {
             throw error
         }
-        setPINCodeBiometryStateCallsCount += 1
-        setPINCodeBiometryStateReceivedState = state
-        setPINCodeBiometryStateReceivedInvocations.append(state)
-        try setPINCodeBiometryStateClosure?(state)
+        setPINCodeBiometricStateCallsCount += 1
+        setPINCodeBiometricStateReceivedState = state
+        setPINCodeBiometricStateReceivedInvocations.append(state)
+        try setPINCodeBiometricStateClosure?(state)
     }
-    //MARK: - pinCodeBiometryState
+    //MARK: - pinCodeBiometricState
 
-    var pinCodeBiometryStateCallsCount = 0
-    var pinCodeBiometryStateCalled: Bool {
-        return pinCodeBiometryStateCallsCount > 0
+    var pinCodeBiometricStateCallsCount = 0
+    var pinCodeBiometricStateCalled: Bool {
+        return pinCodeBiometricStateCallsCount > 0
     }
-    var pinCodeBiometryStateReturnValue: Data?
-    var pinCodeBiometryStateClosure: (() -> Data?)?
+    var pinCodeBiometricStateReturnValue: Data?
+    var pinCodeBiometricStateClosure: (() -> Data?)?
 
-    func pinCodeBiometryState() -> Data? {
-        pinCodeBiometryStateCallsCount += 1
-        if let pinCodeBiometryStateClosure = pinCodeBiometryStateClosure {
-            return pinCodeBiometryStateClosure()
+    func pinCodeBiometricState() -> Data? {
+        pinCodeBiometricStateCallsCount += 1
+        if let pinCodeBiometricStateClosure = pinCodeBiometricStateClosure {
+            return pinCodeBiometricStateClosure()
         } else {
-            return pinCodeBiometryStateReturnValue
+            return pinCodeBiometricStateReturnValue
         }
     }
-    //MARK: - removePINCodeBiometryState
+    //MARK: - removePINCodeBiometricState
 
-    var removePINCodeBiometryStateCallsCount = 0
-    var removePINCodeBiometryStateCalled: Bool {
-        return removePINCodeBiometryStateCallsCount > 0
+    var removePINCodeBiometricStateCallsCount = 0
+    var removePINCodeBiometricStateCalled: Bool {
+        return removePINCodeBiometricStateCallsCount > 0
     }
-    var removePINCodeBiometryStateClosure: (() -> Void)?
+    var removePINCodeBiometricStateClosure: (() -> Void)?
 
-    func removePINCodeBiometryState() {
-        removePINCodeBiometryStateCallsCount += 1
-        removePINCodeBiometryStateClosure?()
+    func removePINCodeBiometricState() {
+        removePINCodeBiometricStateCallsCount += 1
+        removePINCodeBiometricStateClosure?()
     }
 }
 class MediaPlayerMock: MediaPlayerProtocol {

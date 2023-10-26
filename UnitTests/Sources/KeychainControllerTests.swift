@@ -156,49 +156,49 @@ class KeychainControllerTests: XCTestCase {
         XCTAssertNil(keychain.pinCode(), "There shouldn't be a stored PIN code after removing it.")
     }
     
-    func testAddPINCodeBiometryState() throws {
+    func testAddPINCodeBiometricState() throws {
         // Given a keychain without any biometric state.
-        try XCTAssertFalse(keychain.containsPINCodeBiometryState(), "A new keychain shouldn't contain biometric state.")
-        XCTAssertNil(keychain.pinCodeBiometryState(), "A new keychain shouldn't return biometric state.")
+        try XCTAssertFalse(keychain.containsPINCodeBiometricState(), "A new keychain shouldn't contain biometric state.")
+        XCTAssertNil(keychain.pinCodeBiometricState(), "A new keychain shouldn't return biometric state.")
         
         // When setting the state.
         let data: Data! = "Face ID".data(using: .utf8)
-        try keychain.setPINCodeBiometryState(data)
+        try keychain.setPINCodeBiometricState(data)
         
         // Then the state should be stored.
-        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
-        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+        try XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state should match what was set.")
     }
     
-    func testUpdatePINCodeBiometryState() throws {
+    func testUpdatePINCodeBiometricState() throws {
         // Given a keychain that contains PIN code biometric state.
         let data: Data! = "😃".data(using: .utf8)
-        try keychain.setPINCodeBiometryState(data)
-        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
-        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+        try keychain.setPINCodeBiometricState(data)
+        try XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state should match what was set.")
         
         // When setting different state.
         let newData: Data! = "😎".data(using: .utf8)
-        try keychain.setPINCodeBiometryState(newData)
+        try keychain.setPINCodeBiometricState(newData)
         
         // Then the state should be updated.
-        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should still contain biometric state.")
-        XCTAssertNotEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state shouldn't match the old value.")
-        XCTAssertEqual(keychain.pinCodeBiometryState(), newData, "The stored biometric state should match the new value.")
+        try XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should still contain biometric state.")
+        XCTAssertNotEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state shouldn't match the old value.")
+        XCTAssertEqual(keychain.pinCodeBiometricState(), newData, "The stored biometric state should match the new value.")
     }
     
-    func testRemovePINCodeBiometryState() throws {
+    func testRemovePINCodeBiometricState() throws {
         // Given a keychain that contains PIN code biometric state.
         let data: Data! = "Face ID".data(using: .utf8)
-        try keychain.setPINCodeBiometryState(data)
-        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
-        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+        try keychain.setPINCodeBiometricState(data)
+        try XCTAssertTrue(keychain.containsPINCodeBiometricState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometricState(), data, "The stored biometric state should match what was set.")
         
         // When removing the state.
-        keychain.removePINCodeBiometryState()
+        keychain.removePINCodeBiometricState()
         
         // Then the state should no longer be stored.
-        try XCTAssertFalse(keychain.containsPINCodeBiometryState(), "The keychain should no longer contain the biometric state.")
-        XCTAssertNil(keychain.pinCodeBiometryState(), "There shouldn't be any stored biometric state after removing it.")
+        try XCTAssertFalse(keychain.containsPINCodeBiometricState(), "The keychain should no longer contain the biometric state.")
+        XCTAssertNil(keychain.pinCodeBiometricState(), "There shouldn't be any stored biometric state after removing it.")
     }
 }
