@@ -66,19 +66,16 @@ struct VoiceMessageRoomPlaybackView: View {
                             onSeek(max(0, min(progress, 1.0)))
                         })
                     .progressCursor(progress: playerState.progress) {
-                        WaveformCursorView(color: .compound.iconAccentTertiary)
-                            .opacity(showWaveformCursor ? 1 : 0)
-                            .frame(width: waveformLineWidth)
-                            .frame(width: 50)
-                            .contentShape(Rectangle())
-                            .offset(x: -25, y: 0)
-                            .gesture(DragGesture(coordinateSpace: .named("waveform"))
-                                .updating($isDragging) { dragGesture, isDragging, _ in
-                                    isDragging = true
-                                    let progress = dragGesture.location.x / geometry.size.width
-                                    onSeek(max(0, min(progress, 1.0)))
-                                }
-                            )
+                        if showWaveformCursor {
+                            WaveformCursorView(color: .compound.iconAccentTertiary)
+                                .gesture(DragGesture(coordinateSpace: .named("waveform"))
+                                    .updating($isDragging) { dragGesture, isDragging, _ in
+                                        isDragging = true
+                                        let progress = dragGesture.location.x / geometry.size.width
+                                        onSeek(max(0, min(progress, 1.0)))
+                                    }
+                                )
+                        }
                     }
             }
             .coordinateSpace(name: "waveform")
