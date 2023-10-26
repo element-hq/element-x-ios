@@ -197,6 +197,7 @@ targets:
     - package: SwiftOGG
     - package: DSWaveformImage
       product: DSWaveformImageViews
+    - package: ShowTime
 
     sources:
     - path: ../Sources

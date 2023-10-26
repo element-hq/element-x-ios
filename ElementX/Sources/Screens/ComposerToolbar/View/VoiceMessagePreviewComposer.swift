@@ -31,7 +31,8 @@ struct VoiceMessagePreviewComposer: View {
     let onSeek: (Double) -> Void
 
     @State var dragState: WaveformViewDragState = .inactive
-    
+    @State private var tappedProgress: CGFloat = 0
+
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "mm:ss"
@@ -64,7 +65,7 @@ struct VoiceMessagePreviewComposer: View {
                     .fixedSize(horizontal: true, vertical: true)
             }
             waveformView
-                .waveformDragGesture($dragState)
+                .progressTapGesture(progress: $tappedProgress)
                 .progressCursor(progress: playerState.progress) {
                     WaveformCursorView(color: .compound.iconAccentTertiary)
                         .opacity(showWaveformCursor ? 1 : 0)

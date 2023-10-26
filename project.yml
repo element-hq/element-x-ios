@@ -120,6 +120,8 @@ packages:
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
-
+  ShowTime:
+    url: https://github.com/KaneCheshire/ShowTime
+    exactVersion: 2.5.3
 
 

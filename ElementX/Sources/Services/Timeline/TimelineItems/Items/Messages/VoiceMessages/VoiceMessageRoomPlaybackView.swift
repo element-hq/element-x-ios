@@ -43,7 +43,10 @@ struct VoiceMessageRoomPlaybackView: View {
     }()
         
     @State var dragState: WaveformViewDragState = .inactive
-    
+
+    #warning("ag: fix me")
+    @State private var tappedProgress: CGFloat = 0
+
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
@@ -73,13 +76,27 @@ struct VoiceMessageRoomPlaybackView: View {
                     .monospacedDigit()
                     .fixedSize(horizontal: true, vertical: true)
             }
-            waveformView
-                .waveformDragGesture($dragState)
-                .progressCursor(progress: playerState.progress) {
-                    WaveformCursorView(color: .compound.iconAccentTertiary)
-                        .opacity(showWaveformCursor ? 1 : 0)
-                        .frame(width: waveformLineWidth)
-                }
+            GeometryReader { geometry in
+                waveformView
+                    .progressTapGesture(progress: $tappedProgress)
+                    .progressCursor(progress: playerState.progress) {
+                        WaveformCursorView(color: .compound.iconAccentTertiary)
+                            .opacity(showWaveformCursor ? 1 : 0)
+                            .frame(width: waveformLineWidth)
+                            .frame(width: 50)
+                            .contentShape(Rectangle())
+                            .offset(x: -25, y: 0)
+                            .gesture(DragGesture(coordinateSpace: .named("waveform")).onChanged { value in
+                                let progress = value.location.x / geometry.size.width
+                                MXLog.info("*** \(progress) - \(value.location)")
+                                tappedProgress = progress
+                            })
+                    }
+            }
+            .coordinateSpace(name: "waveform")
+        }
+        .onChange(of: tappedProgress) { newValue in
+            dragState = .dragging(progress: newValue)
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {
