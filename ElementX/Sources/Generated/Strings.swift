@@ -82,6 +82,8 @@ public enum L10n {
   public static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
   /// End poll
   public static var actionEndPoll: String { return L10n.tr("Localizable", "action_end_poll") }
+  /// Enter PIN
+  public static var actionEnterPin: String { return L10n.tr("Localizable", "action_enter_pin") }
   /// Forgot password?
   public static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
   /// Forward

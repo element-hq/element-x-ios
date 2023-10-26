@@ -33,6 +33,7 @@
 "action_edit" = "Edit";
 "action_enable" = "Enable";
 "action_end_poll" = "End poll";
+"action_enter_pin" = "Enter PIN";
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_invite" = "Invite";

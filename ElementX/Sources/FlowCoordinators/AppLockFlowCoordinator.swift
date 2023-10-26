@@ -32,6 +32,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     let userIndicatorController: UserIndicatorController
     let navigationCoordinator: NavigationRootCoordinator
     
+    /// A task used to await biometric unlock before showing the PIN screen.
+    private var unlockTask: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
     
     private let actionsSubject: PassthroughSubject<AppLockFlowCoordinatorAction, Never> = .init()
@@ -74,6 +76,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     // MARK: - App unlock
     
     private func applicationDidEnterBackground() {
+        unlockTask?.cancel()
+        
         guard appLockService.isEnabled else { return }
         
         appLockService.applicationDidEnterBackground()
@@ -89,20 +93,27 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             return
         }
         
-        Task { #warning("Handle bging and cancellation???")
-            if appLockService.biometricUnlockEnabled, appLockService.biometricUnlockTrusted {
-                showPlaceholder() // For the unlock background.
-                
-                if await appLockService.unlockWithBiometrics() {
-                    actionsSubject.send(.unlockApp)
-                    return
-                }
-            }
-            
-            guard !Task.isCancelled else { return }
-            
-            showUnlockScreen()
+        // Show the relevant unlock mechanism.
+        unlockTask = Task { [weak self] in
+            guard let self else { return }
+            await startUnlockFlow()
         }
+    }
+    
+    /// Runs the unlock flow, showing Touch ID/Face ID if available, transitioning to PIN unlock if it fails or isn't available.
+    private func startUnlockFlow() async {
+        if appLockService.biometricUnlockEnabled, appLockService.biometricUnlockTrusted {
+            showPlaceholder() // For the unlock background.
+            
+            if await appLockService.unlockWithBiometrics() {
+                actionsSubject.send(.unlockApp)
+                return
+            }
+        }
+        
+        guard !Task.isCancelled else { return }
+        
+        showUnlockScreen()
     }
     
     /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.

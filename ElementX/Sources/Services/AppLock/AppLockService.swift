@@ -148,6 +148,7 @@ class AppLockService: AppLockServiceProtocol {
         }
         
         do {
+            let context = unlockContext()
             guard try await context.evaluatePolicy(biometricPolicy, localizedReason: UntranslatedL10n.screenAppLockBiometricPromptReason) else {
                 MXLog.warning("\(biometryType) failed.")
                 return false
@@ -169,6 +170,18 @@ class AppLockService: AppLockServiceProtocol {
         if let error {
             MXLog.error("Biometrics error: \(error)")
         }
+    }
+    
+    /// Creates a context specifically for unlocking the app. The titles are customised,
+    /// and the fresh context ensures that the user is promoted to unlock based on
+    /// `timer.gracePeriod` rather than any system to defined grace period.
+    private func unlockContext() -> LAContext {
+        // Keep using the injected context for tests etc.
+        guard type(of: context) == LAContext.self else { return context }
+        
+        let context = LAContext()
+        context.localizedFallbackTitle = L10n.actionEnterPin
+        return context
     }
     
     /// Shared logic for completing an unlock via a PIN or biometry.
