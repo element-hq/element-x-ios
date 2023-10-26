@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import LocalAuthentication
 import XCTest
 
 @testable import ElementX
@@ -31,6 +30,7 @@ class AppLockServiceTests: XCTestCase {
         appSettings.appLockFlowEnabled = true
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        keychainController.resetSecrets()
         
         service = AppLockService(keychainController: keychainController, appSettings: appSettings)
         service.disable()
@@ -346,38 +346,5 @@ class AppLockServiceTests: XCTestCase {
         
         // Then the attempts counts should both be reset.
         XCTAssertEqual(appSettings.appLockNumberOfPINAttempts, 0, "The PIN attempts should be reset.")
-    }
-}
-
-// MARK: - Mocks
-
-/// A customised context that allows injecting a few mock values but otherwise behaves as expected.
-/// It works as the actual context does and won't update the return values of `biometryType` and
-/// `evaluatedPolicyDomainStateValue` until either `canEvaluatePolicy` or
-/// `evaluatePolicy` have been called.
-private class LAContextMock: LAContext {
-    var biometryTypeValue: LABiometryType!
-    private var internalBiometryTypeValue: LABiometryType!
-    override var biometryType: LABiometryType { internalBiometryTypeValue }
-    
-    var evaluatedPolicyDomainStateValue: Data?
-    private var internalEvaluatedPolicyDomainStateValue: Data?
-    override var evaluatedPolicyDomainState: Data? { internalEvaluatedPolicyDomainStateValue }
-    
-    override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
-        let result = super.canEvaluatePolicy(policy, error: error)
-        updateInternalValues()
-        return result
-    }
-    
-    var evaluatePolicyReturnValue: Bool!
-    override func evaluatePolicy(_ policy: LAPolicy, localizedReason: String) async throws -> Bool {
-        updateInternalValues()
-        return evaluatePolicyReturnValue
-    }
-    
-    private func updateInternalValues() {
-        internalBiometryTypeValue = biometryTypeValue
-        internalEvaluatedPolicyDomainStateValue = evaluatedPolicyDomainStateValue
     }
 }
