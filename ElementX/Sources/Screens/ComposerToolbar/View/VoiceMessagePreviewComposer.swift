@@ -33,18 +33,12 @@ struct VoiceMessagePreviewComposer: View {
     @State var dragState: WaveformViewDragState = .inactive
     @State private var tappedProgress: CGFloat = 0
 
-    private static let elapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "mm:ss"
-        return dateFormatter
-    }()
-        
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
         let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
         // If the duration is greater or equal 10 minutes, use the long format
         let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
-        return Self.elapsedTimeFormatter.string(from: elapsed)
+        return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
     }
     
     var showWaveformCursor: Bool {
@@ -134,6 +128,14 @@ struct VoiceMessagePreviewComposer: View {
             }
         }
     }
+}
+
+private extension DateFormatter {
+    static let elapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        return dateFormatter
+    }()
 }
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {

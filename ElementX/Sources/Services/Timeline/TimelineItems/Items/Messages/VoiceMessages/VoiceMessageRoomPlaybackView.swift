@@ -26,18 +26,6 @@ struct VoiceMessageRoomPlaybackView: View {
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
-    
-    private static let elapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "m:ss"
-        return dateFormatter
-    }()
-    
-    private static let longElapsedTimeFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "mm:ss"
-        return dateFormatter
-    }()
         
     @GestureState var dragState: WaveformViewDragState = .inactive
 
@@ -47,9 +35,9 @@ struct VoiceMessageRoomPlaybackView: View {
         // If the duration is greater or equal 10 minutes, use the long format
         let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
         if playerState.duration >= 600 {
-            return Self.longElapsedTimeFormatter.string(from: elapsed)
+            return DateFormatter.longElapsedTimeFormatter.string(from: elapsed)
         } else {
-            return Self.elapsedTimeFormatter.string(from: elapsed)
+            return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
         }
     }
     
@@ -131,37 +119,18 @@ struct VoiceMessageRoomPlaybackView: View {
     }
 }
 
-private enum DragState: Equatable {
-    case inactive
-    case pressing(progress: Double)
-    case dragging(progress: Double)
-    
-    var progress: Double {
-        switch self {
-        case .inactive, .pressing:
-            return .zero
-        case .dragging(let progress):
-            return progress
-        }
-    }
-    
-    var isActive: Bool {
-        switch self {
-        case .inactive:
-            return false
-        case .pressing, .dragging:
-            return true
-        }
-    }
-    
-    var isDragging: Bool {
-        switch self {
-        case .inactive, .pressing:
-            return false
-        case .dragging:
-            return true
-        }
-    }
+private extension DateFormatter {
+    static let elapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "m:ss"
+        return dateFormatter
+    }()
+
+    static let longElapsedTimeFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        return dateFormatter
+    }()
 }
 
 struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
