@@ -291,7 +291,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
         if oldVersion < Version(1, 1, 0) {
             MXLog.info("Migrating to v1.1.0, signing out the user.")
             // Version 1.1.0 switched the Rust crypto store to SQLite
-            // There are no migrations in place so we need to reset everything
+            // There are no migrations in place so we need to sign the user out
             wipeUserData()
         }
         
@@ -308,6 +308,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationCoordinatorDelegate,
     private func wipeUserData(includingSettings: Bool = false) {
         if includingSettings {
             AppSettings.reset()
+            appLockFlowCoordinator.appLockService.disable()
         }
         userSessionStore.reset()
     }

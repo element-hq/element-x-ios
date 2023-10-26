@@ -39,12 +39,15 @@ class AppLockSetupBiometricsScreenViewModel: AppLockSetupBiometricsScreenViewMod
         
         switch viewAction {
         case .allow:
-            MXLog.info("Enable biometric unlock.")
-            appLockService.biometricUnlockEnabled = true
+            guard case .success = appLockService.enableBiometricUnlock() else {
+                MXLog.error("Enabling biometric unlock failed.")
+                return
+            }
+            MXLog.info("Biometric unlock enabled.")
             actionsSubject.send(.continue)
         case .skip:
-            MXLog.info("Disable biometric unlock.")
-            appLockService.biometricUnlockEnabled = false
+            appLockService.disableBiometricUnlock()
+            MXLog.info("Biometric unlock disabled.")
             actionsSubject.send(.continue)
         }
     }

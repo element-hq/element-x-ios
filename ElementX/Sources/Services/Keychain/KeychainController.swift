@@ -39,6 +39,7 @@ class KeychainController: KeychainControllerProtocol {
     
     private enum Key: String {
         case pinCode
+        case pinCodeBiometryState
     }
 
     init(service: KeychainControllerService, accessGroup: String) {
@@ -150,6 +151,36 @@ class KeychainController: KeychainControllerProtocol {
             try mainKeychain.remove(Key.pinCode.rawValue)
         } catch {
             MXLog.error("Failed removing the PIN code.")
+        }
+    }
+    
+    func containsPINCodeBiometryState() -> Bool {
+        do {
+            return try mainKeychain.contains(Key.pinCodeBiometryState.rawValue)
+        } catch {
+            MXLog.error("Failed checking for biometry state.")
+            return false // No need to re-throw the error, we can fall back to the PIN code.
+        }
+    }
+    
+    func setPINCodeBiometryState(_ state: Data) throws {
+        try mainKeychain.set(state, key: Key.pinCodeBiometryState.rawValue)
+    }
+    
+    func pinCodeBiometryState() -> Data? {
+        do {
+            return try mainKeychain.getData(Key.pinCodeBiometryState.rawValue)
+        } catch {
+            MXLog.error("Failed setting the PIN code biometry state.")
+            return nil
+        }
+    }
+    
+    func removePINCodeBiometryState() {
+        do {
+            try mainKeychain.remove(Key.pinCodeBiometryState.rawValue)
+        } catch {
+            MXLog.error("Failed removing the PIN code biometry state.")
         }
     }
 }

@@ -87,6 +87,7 @@ targets:
         NSMicrophoneUsageDescription: To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.
         NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
         NSLocationWhenInUseUsageDescription: Grant location access so that $(APP_DISPLAY_NAME) can share your location.
+        NSFaceIDUsageDescription: Face ID is used to access your app.
         UIBackgroundModes: [
           fetch,
           audio,

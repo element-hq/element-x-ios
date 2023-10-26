@@ -133,9 +133,6 @@ final class AppSettings {
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
     @UserPreference(key: UserDefaultsKeys.appLockNumberOfPINAttempts, defaultValue: 0, storageType: .userDefaults(store))
     var appLockNumberOfPINAttempts: Int
-    /// The number of attempts the user has made to unlock the app with Touch/Face ID (resets when unlocked).
-    @UserPreference(key: UserDefaultsKeys.appLockNumberOfBiometricAttempts, defaultValue: 0, storageType: .userDefaults(store))
-    var appLockNumberOfBiometricAttempts: Int
     
     // MARK: - Authentication
     

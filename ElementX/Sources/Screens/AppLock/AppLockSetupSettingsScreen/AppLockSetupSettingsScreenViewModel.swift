@@ -45,11 +45,25 @@ class AppLockSetupSettingsScreenViewModel: AppLockSetupSettingsScreenViewModelTy
         case .disable:
             showRemovePINAlert()
         case .enableBiometricsChanged:
-            appLockService.biometricUnlockEnabled = state.bindings.enableBiometrics
+            toggleBiometrics()
         }
     }
     
     // MARK: - Private
+    
+    private func toggleBiometrics() {
+        if state.bindings.enableBiometrics {
+            guard case .success = appLockService.enableBiometricUnlock() else {
+                MXLog.error("Enabling biometric unlock failed.")
+                state.bindings.enableBiometrics = false
+                return
+            }
+            MXLog.info("Biometric unlock enabled.")
+        } else {
+            appLockService.disableBiometricUnlock()
+            MXLog.info("Biometric unlock disabled.")
+        }
+    }
     
     /// Shows a confirmation alert to the user before removing their PIN code.
     private func showRemovePINAlert() {

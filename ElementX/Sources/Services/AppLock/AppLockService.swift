@@ -21,9 +21,10 @@ import LocalAuthentication
 class AppLockService: AppLockServiceProtocol {
     private let keychainController: KeychainControllerProtocol
     private let appSettings: AppSettings
-    private let context = LAContext()
+    private let context: LAContext
     
     private let timer: AppLockTimer
+    private let biometricPolicy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
     
     var isMandatory: Bool { appSettings.appLockIsMandatory }
     
@@ -38,21 +39,34 @@ class AppLockService: AppLockServiceProtocol {
         }
     }
     
-    var biometryType: LABiometryType { context.biometryType }
-    var biometricUnlockEnabled = false // Needs to be stored, not sure if in the keychain or defaults yet.
+    var biometryType: LABiometryType {
+        updateBiometrics()
+        guard context.evaluatedPolicyDomainState != nil else { return .none }
+        return context.biometryType
+    }
+    
+    var biometricUnlockEnabled: Bool {
+        keychainController.containsPINCodeBiometryState()
+    }
+    
+    var biometricUnlockTrusted: Bool {
+        guard let state = keychainController.pinCodeBiometryState() else { return false }
+        updateBiometrics()
+        return state == context.evaluatedPolicyDomainState
+    }
     
     var numberOfPINAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfPINAttempts }
-    var numberOfBiometricAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfBiometricAttempts }
     
     private var disabledSubject: PassthroughSubject<Void, Never> = .init()
     var disabledPublisher: AnyPublisher<Void, Never> { disabledSubject.eraseToAnyPublisher() }
     
-    init(keychainController: KeychainControllerProtocol, appSettings: AppSettings) {
+    init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, context: LAContext = .init()) {
         self.keychainController = keychainController
         self.appSettings = appSettings
+        self.context = context
         timer = AppLockTimer(gracePeriod: appSettings.appLockGracePeriod)
         
-        configureBiometrics()
+        updateBiometrics()
     }
     
     func setupPINCode(_ pinCode: String) -> Result<Void, AppLockServiceError> {
@@ -74,11 +88,27 @@ class AppLockService: AppLockServiceProtocol {
         return .success(())
     }
     
+    func enableBiometricUnlock() -> Result<Void, AppLockServiceError> {
+        guard isEnabled else { return .failure(.pinNotSet) }
+        guard let state = context.evaluatedPolicyDomainState else { return .failure(.biometricUnlockNotSupported) }
+        
+        do {
+            try keychainController.setPINCodeBiometryState(state)
+            return .success(())
+        } catch {
+            MXLog.error("Keychain access error: \(error)")
+            return .failure(.keychainError)
+        }
+    }
+    
+    func disableBiometricUnlock() {
+        keychainController.removePINCodeBiometryState()
+    }
+    
     func disable() {
-        biometricUnlockEnabled = false
         keychainController.removePINCode()
+        keychainController.removePINCodeBiometryState()
         appSettings.appLockNumberOfPINAttempts = 0
-        appSettings.appLockNumberOfBiometricAttempts = 0
         disabledSubject.send()
     }
     
@@ -96,24 +126,45 @@ class AppLockService: AppLockServiceProtocol {
             appSettings.appLockNumberOfPINAttempts += 1
             return false
         }
+        
+        if biometricUnlockEnabled, !biometricUnlockTrusted {
+            MXLog.info("Fixing trust for biometric unlock.")
+            updateBiometrics()
+            _ = enableBiometricUnlock()
+        }
+        
         return completeUnlock()
     }
     
-    func unlockWithBiometrics() -> Bool {
+    func unlockWithBiometrics() async -> Bool {
         guard biometryType != .none, biometricUnlockEnabled else {
-            MXLog.warning("\(biometryType) failed.")
-            appSettings.appLockNumberOfBiometricAttempts += 1
+            MXLog.error("Biometric unlock not setup.")
             return false
         }
-        return completeUnlock()
+        
+        guard biometricUnlockTrusted else {
+            MXLog.error("Biometrics have changed. PIN should be shown.")
+            return false
+        }
+        
+        do {
+            guard try await context.evaluatePolicy(biometricPolicy, localizedReason: UntranslatedL10n.screenAppLockBiometricPromptReason) else {
+                MXLog.warning("\(biometryType) failed.")
+                return false
+            }
+            return completeUnlock()
+        } catch {
+            MXLog.error("\(biometryType) failed.")
+            return false
+        }
     }
     
     // MARK: - Private
     
-    /// Queries the context for supported biometrics.
-    private func configureBiometrics() {
+    /// Queries the context for supported biometrics and enrolment state.
+    private func updateBiometrics() {
         var error: NSError?
-        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        context.canEvaluatePolicy(biometricPolicy, error: &error)
         
         if let error {
             MXLog.error("Biometrics error: \(error)")
@@ -124,7 +175,6 @@ class AppLockService: AppLockServiceProtocol {
     private func completeUnlock() -> Bool {
         timer.registerUnlock()
         appSettings.appLockNumberOfPINAttempts = 0
-        appSettings.appLockNumberOfBiometricAttempts = 0
         return true
     }
 }

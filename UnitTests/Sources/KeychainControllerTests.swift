@@ -123,7 +123,7 @@ class KeychainControllerTests: XCTestCase {
         // When setting a PIN code.
         try keychain.setPINCode("0000")
         
-        // The the PIN code should be stored.
+        // Then the PIN code should be stored.
         try XCTAssertTrue(keychain.containsPINCode(), "The keychain should contain the PIN code.")
         XCTAssertEqual(keychain.pinCode(), "0000", "The stored PIN code should match what was set.")
     }
@@ -137,7 +137,7 @@ class KeychainControllerTests: XCTestCase {
         // When setting a different PIN code.
         try keychain.setPINCode("1234")
         
-        // The the PIN code should be updated.
+        // Then the PIN code should be updated.
         try XCTAssertTrue(keychain.containsPINCode(), "The keychain should still contain the PIN code.")
         XCTAssertEqual(keychain.pinCode(), "1234", "The stored PIN code should match the new value.")
     }
@@ -151,8 +151,54 @@ class KeychainControllerTests: XCTestCase {
         // When removing the PIN code.
         keychain.removePINCode()
         
-        // The the PIN code should no longer be stored.
+        // Then the PIN code should no longer be stored.
         try XCTAssertFalse(keychain.containsPINCode(), "The keychain should no longer contain the PIN code.")
         XCTAssertNil(keychain.pinCode(), "There shouldn't be a stored PIN code after removing it.")
+    }
+    
+    func testAddPINCodeBiometryState() throws {
+        // Given a keychain without any biometric state.
+        try XCTAssertFalse(keychain.containsPINCodeBiometryState(), "A new keychain shouldn't contain biometric state.")
+        XCTAssertNil(keychain.pinCodeBiometryState(), "A new keychain shouldn't return biometric state.")
+        
+        // When setting the state.
+        let data: Data! = "Face ID".data(using: .utf8)
+        try keychain.setPINCodeBiometryState(data)
+        
+        // Then the state should be stored.
+        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+    }
+    
+    func testUpdatePINCodeBiometryState() throws {
+        // Given a keychain that contains PIN code biometric state.
+        let data: Data! = "😃".data(using: .utf8)
+        try keychain.setPINCodeBiometryState(data)
+        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+        
+        // When setting different state.
+        let newData: Data! = "😎".data(using: .utf8)
+        try keychain.setPINCodeBiometryState(newData)
+        
+        // Then the state should be updated.
+        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should still contain biometric state.")
+        XCTAssertNotEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state shouldn't match the old value.")
+        XCTAssertEqual(keychain.pinCodeBiometryState(), newData, "The stored biometric state should match the new value.")
+    }
+    
+    func testRemovePINCodeBiometryState() throws {
+        // Given a keychain that contains PIN code biometric state.
+        let data: Data! = "Face ID".data(using: .utf8)
+        try keychain.setPINCodeBiometryState(data)
+        try XCTAssertTrue(keychain.containsPINCodeBiometryState(), "The keychain should contain the biometric state.")
+        XCTAssertEqual(keychain.pinCodeBiometryState(), data, "The stored biometric state should match what was set.")
+        
+        // When removing the state.
+        keychain.removePINCodeBiometryState()
+        
+        // Then the state should no longer be stored.
+        try XCTAssertFalse(keychain.containsPINCodeBiometryState(), "The keychain should no longer contain the biometric state.")
+        XCTAssertNil(keychain.pinCodeBiometryState(), "There shouldn't be any stored biometric state after removing it.")
     }
 }

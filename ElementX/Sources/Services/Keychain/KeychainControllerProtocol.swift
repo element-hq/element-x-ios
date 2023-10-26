@@ -44,4 +44,12 @@ protocol KeychainControllerProtocol: ClientSessionDelegate {
     func pinCode() -> String?
     /// Removes the App Lock PIN code.
     func removePINCode()
+    /// Whether or not PIN code biometry state has been set.
+    func containsPINCodeBiometryState() -> Bool
+    /// Sets the PIN code biometry state for App Lock.
+    func setPINCodeBiometryState(_ state: Data) throws
+    /// The PIN code biometry state required to use Touch/Face ID to unlock the app.
+    func pinCodeBiometryState() -> Data?
+    /// Removes the App Lock PIN code biometry state.
+    func removePINCodeBiometryState()
 }

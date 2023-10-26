@@ -44,6 +44,9 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         self.userIndicatorController = userIndicatorController
         self.navigationCoordinator = navigationCoordinator
         
+        // Set the initial background state.
+        showPlaceholder()
+        
         appLockService.disabledPublisher
             .sink { [weak self] _ in
                 // When the service is disabled via a force logout, we need to remove the activity indicator.
@@ -80,11 +83,25 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     private func applicationWillEnterForeground() {
         guard appLockService.isEnabled else { return }
         
-        if appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) {
-            showUnlockScreen()
-        } else {
+        guard appLockService.computeNeedsUnlock(willEnterForegroundAt: .now) else {
             // Reveal the app again if within the grace period.
             actionsSubject.send(.unlockApp)
+            return
+        }
+        
+        Task { #warning("Handle bging and cancellation???")
+            if appLockService.biometricUnlockEnabled, appLockService.biometricUnlockTrusted {
+                showPlaceholder() // For the unlock background.
+                
+                if await appLockService.unlockWithBiometrics() {
+                    actionsSubject.send(.unlockApp)
+                    return
+                }
+            }
+            
+            guard !Task.isCancelled else { return }
+            
+            showUnlockScreen()
         }
     }
     

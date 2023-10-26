@@ -31,7 +31,7 @@ class AppLockTimer {
     /// Creates a new timer.
     /// - Parameter gracePeriod: The amount of time the app should remain unlocked for whilst backgrounded.
     init(gracePeriod: TimeInterval) {
-        self.gracePeriod = 180
+        self.gracePeriod = gracePeriod
     }
     
     /// Signals to the timer to track how long the app will be backgrounded for.

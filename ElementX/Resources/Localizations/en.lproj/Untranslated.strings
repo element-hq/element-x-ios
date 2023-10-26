@@ -4,6 +4,8 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+"screen_app_lock_biometric_prompt_reason" = "Authentication is needed to access your app";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
