@@ -18,26 +18,17 @@ import Compound
 import SwiftUI
 
 struct WaveformCursorView: View {
-    @ScaledMetric private var visibleWidth = 2.0
-    private let interactiveWidth: CGFloat = 50
     var color: Color = .compound.iconAccentTertiary
 
     var body: some View {
-        Rectangle()
-            .foregroundColor(.clear)
-            .frame(width: visibleWidth)
-            .overlay {
-                RoundedRectangle(cornerRadius: 1).fill(color)
-            }
-            .frame(width: interactiveWidth)
-            .contentShape(Rectangle())
-            .offset(x: -interactiveWidth / 2, y: 0)
+        RoundedRectangle(cornerRadius: 1)
+            .fill(color)
     }
 }
 
 struct WaveformCursorView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         WaveformCursorView(color: .compound.iconAccentTertiary)
-            .frame(height: 25)
+            .frame(width: 2, height: 25)
     }
 }

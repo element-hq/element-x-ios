@@ -57,27 +57,11 @@ struct VoiceMessagePreviewComposer: View {
                     .fixedSize(horizontal: true, vertical: true)
             }
 
-            GeometryReader { geometry in
-                waveformView
-                    .gesture(SpatialTapGesture()
-                        .onEnded { tapGesture in
-                            let progress = tapGesture.location.x / geometry.size.width
-                            onSeek(max(0, min(progress, 1.0)))
-                        })
-                    .progressCursor(progress: playerState.progress) {
-                        if showWaveformCursor {
-                            WaveformCursorView(color: .compound.iconAccentTertiary)
-                                .gesture(DragGesture(coordinateSpace: .named(Self.namespaceName))
-                                    .updating($isDragging) { dragGesture, isDragging, _ in
-                                        isDragging = true
-                                        let progress = dragGesture.location.x / geometry.size.width
-                                        onSeek(max(0, min(progress, 1.0)))
-                                    }
-                                )
-                        }
-                    }
-            }
-            .coordinateSpace(name: Self.namespaceName)
+            waveformView
+                .waveformInteraction(isDragging: $isDragging,
+                                     progress: playerState.progress,
+                                     showCursor: showWaveformCursor,
+                                     onSeek: onSeek)
         }
         .padding(.vertical, 4.0)
         .padding(.horizontal, 6.0)
@@ -129,8 +113,6 @@ struct VoiceMessagePreviewComposer: View {
             }
         }
     }
-
-    private static let namespaceName = "voice-message-waveform"
 }
 
 private extension DateFormatter {
