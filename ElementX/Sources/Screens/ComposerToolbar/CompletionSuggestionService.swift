@@ -18,6 +18,7 @@ import Combine
 import Foundation
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
+    private let roomProxy: RoomProxyProtocol
     private var canMentionAllUsers = false
     let areSuggestionsEnabled: Bool
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
@@ -25,6 +26,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionPattern?, Never>(nil)
     
     init(roomProxy: RoomProxyProtocol, areSuggestionsEnabled: Bool) {
+        self.roomProxy = roomProxy
         self.areSuggestionsEnabled = areSuggestionsEnabled
         guard areSuggestionsEnabled else {
             return
@@ -32,7 +34,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         suggestionsPublisher = suggestionTriggerSubject
             .combineLatest(roomProxy.members)
             .map { [weak self] suggestionPattern, members -> [SuggestionItem] in
-                guard let suggestionPattern else {
+                guard let self,
+                      let suggestionPattern else {
                     return []
                 }
                 
@@ -47,10 +50,11 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             }
                             return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
                         }
-                    if self?.canMentionAllUsers == true,
+                    if self.canMentionAllUsers,
+                       self.roomProxy.isEncryptedOneToOneRoom == false,
                        Self.isIncluded(searchText: suggestionPattern.text, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
                         membersSuggestion
-                            .append(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: roomProxy.avatarURL)))
+                            .insert(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: self.roomProxy.avatarURL)), at: 0)
                     }
                     return membersSuggestion
                 }
