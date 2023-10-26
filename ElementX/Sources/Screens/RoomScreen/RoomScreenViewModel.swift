@@ -349,7 +349,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         switch await timelineController.sendReadReceipt(for: eventItemID) {
-        case .success():
+        case .success:
             break
         case let .failure(error):
             MXLog.error("[TimelineViewController] Failed to send read receipt: \(error)")
@@ -1025,6 +1025,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func seekRecordedVoiceMessage(to progress: Double) async {
+        await mediaPlayerProvider.detachAllStates(except: voiceMessageRecorder.previewAudioPlayerState)
         await voiceMessageRecorder.seekPlayback(to: progress)
     }
     

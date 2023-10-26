@@ -30,6 +30,7 @@ struct VoiceMessagePreviewComposer: View {
     let onPlay: () -> Void
     let onPause: () -> Void
     let onSeek: (Double) -> Void
+    let onScrubbing: (Bool) -> Void
 
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
@@ -39,10 +40,6 @@ struct VoiceMessagePreviewComposer: View {
         return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
     }
     
-    var showWaveformCursor: Bool {
-        playerState.playbackState == .playing || isDragging
-    }
-            
     var body: some View {
         HStack {
             HStack {
@@ -60,8 +57,11 @@ struct VoiceMessagePreviewComposer: View {
             waveformView
                 .waveformInteraction(isDragging: $isDragging,
                                      progress: playerState.progress,
-                                     showCursor: showWaveformCursor,
+                                     showCursor: playerState.showProgressIndicator,
                                      onSeek: onSeek)
+        }
+        .onChange(of: isDragging) { isDragging in
+            onScrubbing(isDragging)
         }
         .padding(.vertical, 4.0)
         .padding(.horizontal, 6.0)
@@ -133,7 +133,7 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VStack {
-            VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in })
+            VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in }, onScrubbing: { _ in })
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
