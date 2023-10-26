@@ -263,6 +263,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
+        MXLog.info("Toggle play/pause audio for itemID \(itemID)")
         guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
             fatalError("TimelineItem \(itemID) not found")
         }
@@ -283,15 +284,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         let audioPlayerState = audioPlayerState(for: itemID)
         
+        // Detach all other states
+        await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
+        // Ensure this one is attached
+        if !audioPlayerState.isAttached {
+            audioPlayerState.attachAudioPlayer(audioPlayer)
+        }
+
         guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
             audioPlayer.stop()
             
-            await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
-            
-            audioPlayerState.attachAudioPlayer(audioPlayer)
-
             // Load content
             do {
+                MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
                 let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
@@ -309,7 +314,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if audioPlayer.state == .playing {
             audioPlayer.pause()
         } else {
-            audioPlayerState.attachAudioPlayer(audioPlayer)
             audioPlayer.play()
         }
     }
