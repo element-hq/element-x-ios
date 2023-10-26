@@ -31,20 +31,17 @@ struct PillView: View {
     }
         
     var body: some View {
-        HStack(spacing: 2) {
-            LoadableAvatarImage(url: context.viewState.avatarURL, name: context.viewState.name, contentID: context.viewState.contentID, avatarSize: .custom(16), imageProvider: imageProvider)
-            Text(context.viewState.displayText)
-                .font(.compound.bodyLGSemibold)
-                .foregroundColor(textColor)
-                .lineLimit(1)
-        }
-        .padding(.leading, 4)
-        .padding(.trailing, 6)
-        .padding(.vertical, 1)
-        .background { Capsule().foregroundColor(backgroundColor) }
-        .onChange(of: context.viewState.displayText) { _ in
-            didChangeText()
-        }
+        Text(context.viewState.displayText)
+            .font(.compound.bodyLGSemibold)
+            .foregroundColor(textColor)
+            .lineLimit(1)
+            .padding(.leading, 4)
+            .padding(.trailing, 6)
+            .padding(.vertical, 1)
+            .background { Capsule().foregroundColor(backgroundColor) }
+            .onChange(of: context.viewState.displayText) { _ in
+                didChangeText()
+            }
     }
 }
 

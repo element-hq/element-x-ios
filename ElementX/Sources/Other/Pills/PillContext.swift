@@ -20,11 +20,8 @@ import Foundation
 @MainActor
 final class PillContext: ObservableObject {
     struct PillViewState: Equatable {
-        let contentID: String
         let isOwnMention: Bool
-        let name: String?
         let displayText: String
-        let avatarURL: URL?
     }
     
     @Published private(set) var viewState: PillViewState
@@ -36,23 +33,29 @@ final class PillContext: ObservableObject {
         case let .user(id):
             let isOwnMention = id == roomContext.viewState.ownUserID
             if let profile = roomContext.viewState.members[id] {
-                let name = profile.displayName ?? id
-                viewState = PillViewState(contentID: id, isOwnMention: isOwnMention, name: name, displayText: name, avatarURL: profile.avatarURL)
+                var name = id
+                if let displayName = profile.displayName {
+                    name = "@\(displayName)"
+                }
+                viewState = PillViewState(isOwnMention: isOwnMention, displayText: name)
             } else {
-                viewState = PillViewState(contentID: id, isOwnMention: isOwnMention, name: nil, displayText: id, avatarURL: nil)
+                viewState = PillViewState(isOwnMention: isOwnMention, displayText: id)
                 cancellable = roomContext.$viewState.sink { [weak self] viewState in
                     guard let self else {
                         return
                     }
                     if let profile = viewState.members[id] {
-                        let name = profile.displayName ?? id
-                        self.viewState = PillViewState(contentID: id, isOwnMention: isOwnMention, name: name, displayText: name, avatarURL: profile.avatarURL)
+                        var name = id
+                        if let displayName = profile.displayName {
+                            name = "@\(displayName)"
+                        }
+                        self.viewState = PillViewState(isOwnMention: isOwnMention, displayText: name)
                         cancellable = nil
                     }
                 }
             }
         case .allUsers:
-            viewState = PillViewState(contentID: roomContext.viewState.roomID, isOwnMention: true, name: roomContext.viewState.roomTitle, displayText: PillConstants.atRoom, avatarURL: roomContext.viewState.roomAvatarURL)
+            viewState = PillViewState(isOwnMention: true, displayText: PillConstants.atRoom)
         }
     }
 }
@@ -71,16 +74,16 @@ extension PillContext {
         case .loadUser(let isOwn):
             pillType = .user(userID: testID)
             let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
-            viewModel.viewState = PillViewState(contentID: testID, isOwnMention: isOwn, name: nil, displayText: testID, avatarURL: nil)
+            viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: testID)
             Task {
                 try? await Task.sleep(for: .seconds(2))
-                viewModel.viewState = PillViewState(contentID: "@test:test.com", isOwnMention: isOwn, name: nil, displayText: "Test Long Display Text", avatarURL: URL.documentsDirectory)
+                viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: "@Test Long Display Text")
             }
             return viewModel
         case .loadedUser(let isOwn):
             pillType = .user(userID: "@test:test.com")
             let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
-            viewModel.viewState = PillViewState(contentID: "@test:test.com", isOwnMention: isOwn, name: nil, displayText: "Very Very Long Test Display Text", avatarURL: URL.documentsDirectory)
+            viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: "@Very Very Long Test Display Text")
             return viewModel
         case .allUsers:
             pillType = .allUsers
