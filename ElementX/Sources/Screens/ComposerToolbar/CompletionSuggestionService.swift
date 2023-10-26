@@ -51,7 +51,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             return SuggestionItem.user(item: .init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
                         }
                     if self.canMentionAllUsers,
-                       self.roomProxy.isEncryptedOneToOneRoom == false,
+                       !self.roomProxy.isEncryptedOneToOneRoom,
                        Self.isIncluded(searchText: suggestionPattern.text, userID: PillConstants.atRoom, displayName: PillConstants.everyone) {
                         membersSuggestion
                             .insert(SuggestionItem.allUsers(item: .allUsersMention(roomAvatar: self.roomProxy.avatarURL)), at: 0)
