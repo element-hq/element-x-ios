@@ -30,6 +30,7 @@ private struct WaveformInteractionModifier: ViewModifier {
 
     @ScaledMetric private var cursorVisibleWidth = 2.0
     private let cursorInteractiveWidth: CGFloat = 50
+    private let feedbackGenerator = UISelectionFeedbackGenerator()
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
@@ -37,6 +38,7 @@ private struct WaveformInteractionModifier: ViewModifier {
                 .gesture(SpatialTapGesture()
                     .onEnded { tapGesture in
                         let progress = tapGesture.location.x / geometry.size.width
+                        feedbackGenerator.selectionChanged()
                         onSeek(max(0, min(progress, 1.0)))
                     })
                 .progressCursor(progress: progress) {
@@ -49,6 +51,7 @@ private struct WaveformInteractionModifier: ViewModifier {
                             .updating(isDragging) { dragGesture, isDragging, _ in
                                 isDragging = true
                                 let progress = dragGesture.location.x / geometry.size.width
+                                feedbackGenerator.selectionChanged()
                                 onSeek(max(0, min(progress, 1.0)))
                             }
                         )
