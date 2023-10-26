@@ -26,9 +26,6 @@ struct VoiceMessageRoomPlaybackView: View {
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
-
-    private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    @State private var sendFeedback = false
     
     private static let elapsedTimeFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -42,10 +39,7 @@ struct VoiceMessageRoomPlaybackView: View {
         return dateFormatter
     }()
         
-    @State var dragState: WaveformViewDragState = .inactive
-
-    #warning("ag: fix me")
-    @State private var tappedProgress: CGFloat = 0
+    @GestureState var dragState: WaveformViewDragState = .inactive
 
     var timeLabelContent: String {
         // Display the duration if progress is 0.0
@@ -78,7 +72,11 @@ struct VoiceMessageRoomPlaybackView: View {
             }
             GeometryReader { geometry in
                 waveformView
-                    .progressTapGesture(progress: $tappedProgress)
+                    .gesture(SpatialTapGesture()
+                        .updating($dragState) { tapGesture, dragState, _ in
+                            let progress = tapGesture.location.x / geometry.size.width
+                            dragState = .pressing(progress: progress)
+                        })
                     .progressCursor(progress: playerState.progress) {
                         WaveformCursorView(color: .compound.iconAccentTertiary)
                             .opacity(showWaveformCursor ? 1 : 0)
@@ -86,31 +84,25 @@ struct VoiceMessageRoomPlaybackView: View {
                             .frame(width: 50)
                             .contentShape(Rectangle())
                             .offset(x: -25, y: 0)
-                            .gesture(DragGesture(coordinateSpace: .named("waveform")).onChanged { value in
-                                let progress = value.location.x / geometry.size.width
-                                MXLog.info("*** \(progress) - \(value.location)")
-                                tappedProgress = progress
-                            })
+                            .gesture(DragGesture(coordinateSpace: .named("waveform"))
+                                .updating($dragState) { dragGesture, dragState, _ in
+                                    let progress = dragGesture.location.x / geometry.size.width
+                                    dragState = .dragging(progress: progress)
+                                }
+                            )
                     }
             }
             .coordinateSpace(name: "waveform")
-        }
-        .onChange(of: tappedProgress) { newValue in
-            dragState = .dragging(progress: newValue)
         }
         .onChange(of: dragState) { newDragState in
             switch newDragState {
             case .inactive:
                 onScrubbing(false)
-            case .pressing:
+            case .pressing(let progress):
                 onScrubbing(true)
-                feedbackGenerator.prepare()
-                sendFeedback = true
+                onSeek(max(0, min(progress, 1.0)))
             case .dragging(let progress):
-                if sendFeedback {
-                    feedbackGenerator.impactOccurred()
-                    sendFeedback = false
-                }
+                onScrubbing(true)
                 onSeek(max(0, min(progress, 1.0)))
             }
         }

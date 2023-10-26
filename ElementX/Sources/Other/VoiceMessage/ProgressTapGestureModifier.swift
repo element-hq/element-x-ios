@@ -18,6 +18,7 @@ import DSWaveformImageViews
 import Foundation
 import SwiftUI
 
+#warning("Delete me?")
 private struct ProgressTapGestureModifier: ViewModifier {
     @Binding var progress: CGFloat
 
