@@ -14,31 +14,6 @@
 // limitations under the License.
 //
 
-import DSWaveformImageViews
-import Foundation
-import SwiftUI
-
-#warning("Delete me?")
-private struct ProgressTapGestureModifier: ViewModifier {
-    @Binding var progress: CGFloat
-
-    func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            content
-                .gesture(SpatialTapGesture()
-                    .onEnded { tapGesture in
-                        progress = tapGesture.location.x / geometry.size.width
-                    })
-        }
-    }
-}
-
-extension View {
-    func progressTapGesture(progress: Binding<CGFloat>) -> some View {
-        modifier(ProgressTapGestureModifier(progress: progress))
-    }
-}
-
 enum WaveformViewDragState: Equatable {
     case inactive
     case pressing(progress: Double)
