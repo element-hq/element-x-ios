@@ -959,20 +959,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .failure(let error):
             switch error {
             case .audioRecorderError(.recordPermissionNotGranted):
+                MXLog.info("permission to record audio has not been granted.")
                 state.bindings.confirmationAlertInfo = .init(id: .init(),
                                                              title: L10n.dialogPermissionMicrophoneTitleIos(InfoPlistReader.main.bundleDisplayName),
                                                              message: L10n.dialogPermissionMicrophoneDescriptionIos,
                                                              primaryButton: .init(title: L10n.commonSettings, action: { [weak self] in self?.openSystemSettings() }),
                                                              secondaryButton: .init(title: L10n.actionNotNow, role: .cancel, action: nil))
             default:
-                MXLog.error("failed to start voice message recording: \(error)")
+                MXLog.error("failed to start voice message recording. \(error)")
             }
         }
     }
     
     private func stopRecordingVoiceMessage() async {
         if case .failure(let error) = await voiceMessageRecorder.stopRecording() {
-            MXLog.error("failed to stop the recording", context: error)
+            MXLog.error("failed to stop the recording. \(error)")
             return
         }
 
@@ -1012,7 +1013,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):
-            MXLog.error("failed to send the voice message", context: error)
+            MXLog.error("failed to send the voice message. \(error)")
             actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
             displayError(.alert(L10n.errorFailedUploadingVoiceMessage))
         }
@@ -1020,7 +1021,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func startPlayingRecordedVoiceMessage() async {
         if case .failure(let error) = await voiceMessageRecorder.startPlayback() {
-            MXLog.error("failed to play recorded voice message", context: error)
+            MXLog.error("failed to play recorded voice message. \(error)")
         }
     }
     

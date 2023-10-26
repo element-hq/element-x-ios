@@ -35,7 +35,7 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         do {
             try cacheFile(source: fileURL, destination: url, move: move)
         } catch {
-            MXLog.error("Failed storing file in cache", context: error)
+            MXLog.error("Failed storing file in cache. \(error)")
             return .failure(.failedStoringFileInCache)
         }
         return .success(url)
@@ -46,7 +46,7 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
             do {
                 try FileManager.default.removeItem(at: temporaryFilesFolderURL)
             } catch {
-                MXLog.error("Failed clearing cached disk files", context: error)
+                MXLog.error("Failed clearing cached disk files. \(error)")
             }
         }
     }

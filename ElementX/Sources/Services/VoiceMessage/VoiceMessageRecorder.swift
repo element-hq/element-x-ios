@@ -130,7 +130,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             // linearly normalized to [0, 1] (1 -> -50 dB)
             waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
         } catch {
-            MXLog.error("Waveform analysis failed: \(error)")
+            MXLog.error("Waveform analysis failed. \(error)")
         }
         return .success(waveformData)
     }
@@ -154,7 +154,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         do {
             size = try UInt64(FileManager.default.sizeForItem(at: oggFile))
         } catch {
-            MXLog.error("Failed to get the recording file size", context: error)
+            MXLog.error("Failed to get the recording file size. \(error)")
             return .failure(.failedSendingVoiceMessage)
         }
         let audioInfo = AudioInfo(duration: recordingDuration, size: size, mimetype: "audio/ogg")
@@ -170,7 +170,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         try? FileManager.default.removeItem(at: oggFile)
         
         if case .failure(let error) = result {
-            MXLog.error("Failed to send the voice message.", context: error)
+            MXLog.error("Failed to send the voice message. \(error)")
             return .failure(.failedSendingVoiceMessage)
         }
         
