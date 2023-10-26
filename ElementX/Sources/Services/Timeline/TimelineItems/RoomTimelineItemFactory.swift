@@ -98,7 +98,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .emote(content: let content):
             return buildEmoteTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
         case .audio(let content):
-            if appSettings.voiceMessageEnabled, content.voice != nil {
+            if content.voice != nil {
                 return buildVoiceTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
             } else {
                 return buildAudioTimelineItem(for: eventItemProxy, messageTimelineItem, content, isOutgoing, isThreaded)
@@ -634,7 +634,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .message:
                 switch timelineItem.asMessage()?.msgtype() {
                 case .audio(let content):
-                    if appSettings.voiceMessageEnabled, content.voice != nil {
+                    if content.voice != nil {
                         replyContent = .voice(buildAudioTimelineItemContent(content))
                     } else {
                         replyContent = .audio(buildAudioTimelineItemContent(content))
