@@ -19,6 +19,7 @@ import SwiftUI
 struct CompletionSuggestionView: View {
     let imageProvider: ImageProviderProtocol?
     let items: [SuggestionItem]
+    var showBackgroundShadow = true
     let onTap: (SuggestionItem) -> Void
     
     private enum Constants {
@@ -32,7 +33,6 @@ struct CompletionSuggestionView: View {
 
     // MARK: Public
     
-    var showBackgroundShadow = true
     @State private var prototypeListItemFrame: CGRect = .zero
     
     var body: some View {

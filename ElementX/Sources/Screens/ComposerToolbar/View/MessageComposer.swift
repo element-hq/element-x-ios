@@ -62,13 +62,19 @@ struct MessageComposer: View {
     }
 
     // MARK: - Private
+    
+    @State private var composerFrame = CGRect.zero
 
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: -6) {
             header
-
-            composerView
-                .frame(minHeight: composerHeight, alignment: .top)
+            Color.clear
+                .overlay(alignment: .top) {
+                    composerView
+                        .background(ViewFrameReader(frame: $composerFrame))
+                }
+                .frame(maxHeight: max(composerHeight, composerFrame.height),
+                       alignment: .top)
                 .tint(.compound.iconAccentTertiary)
                 .padding(.vertical, 10)
                 .focused($focused)

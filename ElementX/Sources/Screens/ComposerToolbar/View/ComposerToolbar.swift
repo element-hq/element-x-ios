@@ -44,6 +44,11 @@ struct ComposerToolbar: View {
             topBar
             
             if context.composerActionsEnabled {
+                if context.viewState.areSuggestionsEnabled, context.composerExpanded {
+                    suggestionView
+                        .padding(.leading, -5)
+                        .padding(.trailing, -8)
+                }
                 bottomBar
             }
         }
@@ -53,7 +58,7 @@ struct ComposerToolbar: View {
             ViewFrameReader(frame: $frame)
         }
         .overlay(alignment: .bottom) {
-            if context.viewState.areSuggestionsEnabled {
+            if context.viewState.areSuggestionsEnabled, !context.composerExpanded {
                 suggestionView
                     .offset(y: -frame.height)
             }
@@ -68,7 +73,9 @@ struct ComposerToolbar: View {
     }
     
     private var suggestionView: some View {
-        CompletionSuggestionView(imageProvider: context.imageProvider, items: context.viewState.suggestions) { suggestion in
+        CompletionSuggestionView(imageProvider: context.imageProvider,
+                                 items: context.viewState.suggestions,
+                                 showBackgroundShadow: !context.composerExpanded) { suggestion in
             context.send(viewAction: .selectedSuggestion(suggestion))
         }
     }
