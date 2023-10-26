@@ -26,7 +26,7 @@ struct WaveformCursorView: View {
         Rectangle()
             .foregroundColor(.clear)
             .frame(width: visibleWidth)
-            .background {
+            .overlay {
                 RoundedRectangle(cornerRadius: 1).fill(color)
             }
             .frame(width: interactiveWidth)

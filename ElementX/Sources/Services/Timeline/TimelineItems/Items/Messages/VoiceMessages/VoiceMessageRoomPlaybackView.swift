@@ -68,7 +68,7 @@ struct VoiceMessageRoomPlaybackView: View {
                     .progressCursor(progress: playerState.progress) {
                         if showWaveformCursor {
                             WaveformCursorView(color: .compound.iconAccentTertiary)
-                                .gesture(DragGesture(coordinateSpace: .named("waveform"))
+                                .gesture(DragGesture(coordinateSpace: .named(Self.namespaceName))
                                     .updating($isDragging) { dragGesture, isDragging, _ in
                                         isDragging = true
                                         let progress = dragGesture.location.x / geometry.size.width
@@ -78,7 +78,7 @@ struct VoiceMessageRoomPlaybackView: View {
                         }
                     }
             }
-            .coordinateSpace(name: "waveform")
+            .coordinateSpace(name: Self.namespaceName)
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
@@ -106,6 +106,8 @@ struct VoiceMessageRoomPlaybackView: View {
                               waveform: playerState.waveform,
                               progress: playerState.progress)
     }
+
+    private static let namespaceName = "voice-message-waveform"
 }
 
 private extension DateFormatter {
